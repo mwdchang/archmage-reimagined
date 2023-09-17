@@ -92,7 +92,7 @@ export const spaceForUnits = (mage: Mage) => {
   return Math.ceil(space);
 }
 
-export const maxMana= (mage: Mage) => {
+export const maxMana = (mage: Mage) => {
   return mage.nodes * 1000;
 }
 
@@ -137,7 +137,7 @@ export const manaStorage = (mage: Mage) => {
 export const researchPoints = (mage: Mage) => {
   let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
   // return 10 + Math.floor(rawPoints);
-  return 99999 + Math.floor(rawPoints);
+  return 99999 + Math.floor(rawPoints); // FIXME just testing
 }
 
 export const manaIncome = (mage: Mage) => {

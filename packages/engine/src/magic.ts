@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Spell } from 'shared/types/magic';
 import { UnitSummonEffect } from 'shared/types/effects';
-import { magicAlignmentTable } from './config';
+import { magicAlignmentTable, spellRankTable } from './config';
 import { Mage } from 'shared/types/mage';
 import { getUnitById } from './army';
 
@@ -10,6 +10,13 @@ export const spellMap = new Map<string, Spell>();
 export const researchTree = new Map<string, Map<string, string[]>>;
 
 const spellList: Spell[] = [];
+const maxSpellLevels = {
+  ascendant: 0,
+  verdant: 0,
+  eradication: 0,
+  nether: 0,
+  phantasm: 0
+};
 
 export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
@@ -56,12 +63,43 @@ export const initializeResearchTree = () => {
       const researchOrder = tree.get(researchMagicType);
       researchRanks.forEach((rank: string) => {
         const researchableSpells = spellList.filter(d => d.magic === researchMagicType && d.rank === rank);
+
+        // Calculate and cache max spell level for each color
+        const spellLevel = spellRankTable[rank] * researchableSpells.length;
+        maxSpellLevels[magicType] += spellLevel;
+
         _.shuffle(researchableSpells).forEach(spell => {
           researchOrder.push(spell.id);
         });
       });
     })
   });
+
+  console.log('debug', maxSpellLevels);
+}
+
+// Get normal max spell level, given the research tech tree
+export const maxSpellLevel = (mage: Mage) => {
+  console.log('test', mage.magic, maxSpellLevels);
+  return maxSpellLevels[mage.magic];
+}
+
+export const currentSpellLevel = (mage: Mage) => {
+  let result = 0;
+  const addSpellPower = (id: string) => {
+    const spell = getSpellById(id);
+    const rankPower = spellRankTable[spell.rank];
+    result += rankPower;
+  }
+
+  mage.spellbook.ascendant.forEach(addSpellPower);
+  mage.spellbook.verdant.forEach(addSpellPower);
+  mage.spellbook.eradication.forEach(addSpellPower);
+  mage.spellbook.nether.forEach(addSpellPower);
+  mage.spellbook.phantasm.forEach(addSpellPower);
+
+  // TODO: others
+  return result;
 }
 
 // Do research, 
