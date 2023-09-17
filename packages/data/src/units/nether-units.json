@@ -1,0 +1,163 @@
+[
+  {
+    "id": "skeleton",
+    "name": "Skeleton",
+    "magic": "nether",
+    "powerRank": 10,
+    "hitPoints": 70,
+    "race": ["undead"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.005,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 100,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "holy" }
+    ]
+  },
+  {
+    "id": "zombie",
+    "name": "Zombie",
+    "magic": "nether",
+    "powerRank": 15,
+    "hitPoints": 170,
+    "race": ["undead"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 100,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "holy" },
+      { "name": "clumsiness", "extra": null }
+    ]
+  },
+  {
+    "id": "shadow",
+    "name": "Shadow",
+    "magic": "nether",
+    "powerRank": 40,
+    "hitPoints": 250,
+    "race": ["undead"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 600,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.05,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 100,
+      "fire": 0,
+      "poison": 40,
+      "breath": 0,
+      "magic": 0,
+      "melee": 100,
+      "ranged": 20,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 25,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "holy" },
+      { "name": "stealLife", "extra": 5 }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "slow",
+    "name": "Slow",
+    "magic": "phantasm",
+    "rank": "complex",
+    "description": "This spell will cause enemy units to slow down dramatically as their mind and body become less aware of the passage of time. Slower creatures will not be able to attack at all for the duration of the battle",
+    "attributes": ["battle"],
+    "researchCost": 8000,
+    "castingCost": 4000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "absolute",
+                "magic": {
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

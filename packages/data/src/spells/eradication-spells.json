@@ -1,0 +1,149 @@
+[
+  {
+    "id": "blaze",
+    "name": "Blaze",
+    "magic": "eradication",
+    "rank": "simple",
+    "description": "This basic eradication spell shoots blazes of fire towards your enemy. The blaze automatically seeks out the enemy and never misses, though it does not do much damage to more powerful units. At night you can see bright light glowing, as the blazes of fire fly cut through the sky.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 1000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "random",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["fire"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 100 },
+              "verdant": { "value": 180 },
+              "eradication": { "value": 250 },
+              "nether": { "value": 180 },
+              "phantasm": { "value": 100 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "callLizardmen",
+    "name": "Call Lizardmen",
+    "magic": "eradication",
+    "rank": "simple",
+    "description": "This spell will create lizardmen, who are half-human, half-lizard monstrosities. These abominations will serve mostly as ground fodder troops in the battleground, their casaulties usually ignored by eradication mages.",
+    "attributes": ["summon"],
+    "researchCost": 400,
+    "castingCost": 6800,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["lizardman"],
+        "summonType": "all",
+        "summonNetPower": 50000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "flameArrow",
+    "name": "Flame Arrow",
+    "magic": "eradication",
+    "rank": "simple",
+    "description": "This spell will cause your arrows and missiles to burst in flames when they hit the target, causing heavy fire damages. Area of effect: all units with missile attack.",
+    "attributes": ["battle"],
+    "researchCost": 400,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "randomSingle",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackType,secondaryAttackType": {
+                "rule": "add",
+                "has": "missile",
+                "magic": {
+                  "ascendant": { "value": "fire" },
+                  "verdant": { "value": "fire" },
+                  "eradication": { "value": "fire" },
+                  "nether": { "value": "fire" },
+                  "phantasm": { "value": "fire" }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forceBolt",
+    "name": "Force Bolt",
+    "magic": "eradication",
+    "rank": "simple",
+    "description": "This basic spell will cause flashing lightning bolts to fly towards your enemy. The impact will kill and stun enemy units, making them fight less effectively.",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "randomSingle",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["lightning"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 80 },
+              "verdant": { "value": 150 },
+              "eradication": { "value": 200 },
+              "nether": { "value": 150 },
+              "phantasm": { "value": 80 }
+            }
+          },
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -0.00005 },
+                  "verdant": { "value": -0.00007 },
+                  "eradication": { "value": -0.0001 },
+                  "nether": { "value": -0.00007 },
+                  "phantasm": { "value": -0.00005 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "name": "archmage-revival",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/engine",
+    "packages/shared",
+    "packages/server",
+    "packages/client",
+    "packages/data-adapter",
+    "packages/data"
+  ],
+  "scripts": {
+    "serverX": "ts-node-esm packages/server/src/server.ts",
+    "server": "export UNITS_FILE=$PWD/packages/data/plain-units.json && yarn workspace server run dev",
+    "client": "yarn workspace client run dev"
+  }
+}

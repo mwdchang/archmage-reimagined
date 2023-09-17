@@ -1,0 +1,16 @@
+{
+  "name": "data-adapter",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "typescript": "^5.1.3"
+  },
+  "scripts": {
+  }
+}

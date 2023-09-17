@@ -1,0 +1,55 @@
+[
+  {
+    "id": "lizardman",
+    "name": "Lizardman",
+    "magic": "eradication",
+    "powerRank": 36,
+    "hitPoints": 250,
+    "race": ["reptile"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 300,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 60,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 1.20,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "scales", "extra": null }
+    ]
+  }
+]

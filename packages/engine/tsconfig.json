@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule":true,
+    "paths":{
+      "shared/*": ["../../shared/*"],
+      "data/*": ["../../data/*"],
+      "data-adapter/*": ["../../data-adapter/*"]
+    }
+  }
+}

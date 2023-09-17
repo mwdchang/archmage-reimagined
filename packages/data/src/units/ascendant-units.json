@@ -1,0 +1,599 @@
+[
+  {
+    "id": "pegasus",
+    "name": "Pegasus",
+    "magic": "ascendant",
+    "powerRank": 40,
+    "hitPoints": 290,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 300,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 3.20,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "flying", "extra": null }
+    ]
+  },
+  {
+    "id": "soulSpeaker",
+    "name": "Soul Speaker",
+    "magic": "ascendant",
+    "powerRank": 27,
+    "hitPoints": 75,
+    "race": ["astral"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 280,
+    "primaryAttackType": ["ranged", "psychic"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.92,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 35,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 20,
+      "melee": 40,
+      "ranged": 0,
+      "lightning": 40,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 30,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "astralMagician",
+    "name": "Astral Magician",
+    "magic": "ascendant",
+    "powerRank": 170,
+    "hitPoints": 750,
+    "race": ["astral"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 1200,
+    "primaryAttackType": ["ranged", "magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 1200,
+    "secondaryAttackType": ["ranged", "lightning"],
+    "secondaryAttackInit": 4,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 0.2,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 30,
+      "nether": 60,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 40,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 45,
+      "melee": 30,
+      "ranged": 40,
+      "lightning": 65,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 45,
+      "holy": 20
+    },
+    "abilities": [
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "angel",
+    "name": "Angel",
+    "magic": "ascendant",
+    "powerRank": 193,
+    "hitPoints": 1000,
+    "race": ["angel"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 800,
+    "primaryAttackType": ["holy"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 200,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 0.225,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 65,
+      "phantasm":15 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 50,
+      "poison": 0,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 50,
+      "cold": 50,
+      "paralyse": 0,
+      "psychic": 50,
+      "holy": 25
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "beauty", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "unicorn",
+    "name": "Unicorn",
+    "magic": "ascendant",
+    "powerRank": 375,
+    "hitPoints": 2500,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 4000,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 800,
+
+    "secondaryAttackPower": 1000,
+    "secondaryAttackType": ["melee"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 48.0,
+      "mana": 0.4,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 40,
+      "nether": 65,
+      "phantasm": 20  
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 60,
+      "poison": 100,
+      "breath": 0,
+      "magic": 50,
+      "melee": 30,
+      "ranged": 30,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 60,
+      "psychic": 60,
+      "holy": 30 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "spiritWarrior",
+    "name": "Spirit Warrior",
+    "magic": "ascendant",
+    "powerRank": 475,
+    "hitPoints": 2600,
+    "race": ["astral"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2900,
+    "primaryAttackType": ["melee", "holy"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 600,
+
+    "secondaryAttackPower": 2300,
+    "secondaryAttackType": ["holy"],
+    "secondaryAttackInit": 2,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 52.0,
+      "mana": 0.375,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 30,
+      "nether": 75,
+      "phantasm": 15  
+    },
+    "attackResistances": {
+      "missile": 60,
+      "fire": 40,
+      "poison": 0,
+      "breath": 40,
+      "magic": 50,
+      "melee": 35,
+      "ranged": 25,
+      "lightning": 70,
+      "cold": 0,
+      "paralyse": 45,
+      "psychic": 40,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "charm", "extra": null },
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "archangel",
+    "name": "Archangel",
+    "magic": "ascendant",
+    "powerRank": 750,
+    "hitPoints": 5000,
+    "race": ["angel"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 4000,
+    "primaryAttackType": ["holy"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 400,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 1.25,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 45,
+      "nether": 70,
+      "phantasm": 30  
+    },
+    "attackResistances": {
+      "missile": 70,
+      "fire": 70,
+      "poison": 0,
+      "breath": 0,
+      "magic": 70,
+      "melee": 70,
+      "ranged": 70,
+      "lightning": 70,
+      "cold": 70,
+      "paralyse": 0,
+      "psychic": 70,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "empyreanInquisitor",
+    "name": "Empyrean Inquisitor",
+    "magic": "ascendant",
+    "powerRank": 2500,
+    "hitPoints": 9000,
+    "race": ["astral"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 13500,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 4,
+    "counterAttackPower": 1500,
+
+    "secondaryAttackPower": 2500,
+    "secondaryAttackType": ["melee"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 100.0,
+      "mana": 6.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 75,
+      "eradication": 30,
+      "nether": 50,
+      "phantasm": 20
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 75,
+      "poison": 0,
+      "breath": 35,
+      "magic": 75,
+      "melee": 80,
+      "ranged": 80,
+      "lightning": 20,
+      "cold": 10,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 30
+    },
+    "abilities": [
+      { "name": "charm", "extra": null },
+      { "name": "fear", "extra": null }
+    ]
+  },
+  {
+    "id": "nagaQueen",
+    "name": "Naga Queen",
+    "magic": "ascendant",
+    "powerRank": 2700,
+    "hitPoints": 10500,
+    "race": ["reptile"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 13000,
+    "primaryAttackType": ["melee", "lightning"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 2500,
+
+    "secondaryAttackPower": 17600,
+    "secondaryAttackType": ["lightning"],
+    "secondaryAttackInit": 2,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 215,
+      "mana": 2.75,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 85,
+      "eradication": 85,
+      "nether": 0,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 70,
+      "fire": 30,
+      "poison": 90,
+      "breath": 50,
+      "magic": 80,
+      "melee": 95,
+      "ranged": 70,
+      "lightning": 0,
+      "cold": 80,
+      "paralyse": 90,
+      "psychic": 90,
+      "holy": 30
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null },
+      { "name": "scales", "extra": null }
+    ]
+  },
+  {
+    "id": "titan",
+    "name": "Titan",
+    "magic": "ascendant",
+    "powerRank": 50000,
+    "hitPoints": 85000,
+    "race": ["giant"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["melee", "holy"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 50000,
+
+    "secondaryAttackPower": 250000,
+    "secondaryAttackType": ["ranged", "lightning"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 8000,
+      "mana": 50,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 85,
+      "eradication": 85,
+      "nether": 85,
+      "phantasm": 85 
+    },
+    "attackResistances": {
+      "missile": 85,
+      "fire": 75,
+      "poison": 85,
+      "breath": 80,
+      "magic": 80,
+      "melee": 90,
+      "ranged": 95,
+      "lightning": 100,
+      "cold": 85,
+      "paralyse": 85,
+      "psychic": 95,
+      "holy": 75
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null },
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "siege", "extra": null }
+    ]
+  },
+  {
+    "id": "dominion",
+    "name": "Dominion",
+    "magic": "ascendant",
+    "powerRank": 39013,
+    "hitPoints": 80000,
+    "race": ["angel"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["holy"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 30000,
+
+    "secondaryAttackPower": 250000,
+    "secondaryAttackType": ["holy"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 72.5,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80,
+      "nether": 80,
+      "phantasm": 50 
+    },
+    "attackResistances": {
+      "missile": 85,
+      "fire": 85,
+      "poison": 85,
+      "breath": 85,
+      "magic": 85,
+      "melee": 85,
+      "ranged": 85,
+      "lightning": 85,
+      "cold": 85,
+      "paralyse": 85,
+      "psychic": 85,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}

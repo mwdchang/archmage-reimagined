@@ -1,0 +1,86 @@
+[
+  {
+    "id": "animateSkeleton",
+    "name": "Animate Skeleton",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "This spell will animate the bones of the dead into walking skeletons that obey your commands. They are weak, but they come in great numbers, and they are immune to most mind-affecting effects. By stealing from Death in the graveyard, you create life in the battlefield.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 2500,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["skeleton"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "animateZombie",
+    "name": "Animate Zombie",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "This spell will animate freshly dead corpses into zombies to fight for you. Although they are clumsy, they are tougher than skeletons.",
+    "attributes": ["summon"],
+    "researchCost": 1000,
+    "castingCost": 5100,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["zombie"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonShadow",
+    "name": "Summon Shadow",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "This spell summons Shadows, creatures of the night, to your army. They posses some magical abilities, and incorporeal body which makes them immune to melee and missile attacks. Those slain by shadows will become shadows as well.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 2500,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["shadow"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  }
+]

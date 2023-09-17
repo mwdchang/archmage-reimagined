@@ -1,0 +1,19 @@
+{
+  "name": "engine",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@types/lodash": "^4.14.198",
+    "@types/node": "^20.3.1",
+    "lodash": "^4.17.21",
+    "typescript": "^5.1.3"
+  }
+}

@@ -1,0 +1,95 @@
+[
+  {
+    "id": "bless",
+    "name": "Bless",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "A basic spell of priestly magic, grants God's blessing on your units; Your troops are fighting with better accuracy when blessed with this spell.",
+    "attributes": ["battle"],
+    "researchCost": 700,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "randomSingle",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "spellLevel",
+                "magic": {
+                  "ascendant": { "value": 0.02 },
+                  "verdant": { "value": 0.006 },
+                  "eradication": { "value": 0.006 },
+                  "nether": { "value": 0.003 },
+                  "phantasm": { "value": 0.003 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "summonPegasus",
+    "name": "Summon Pegasus",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "This spell will call the legendary winged horse, Pegasus, to join your forces in battle. The number of horses which are summoned vary by the proficiency or level of your spell.",
+    "attributes": ["summon"],
+    "researchCost": 600,
+    "castingCost": 6300,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["pegasus"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonSoulSpeaker",
+    "name": "Summon Soul Speaker",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "By praying to the Heavens, these beautiful ascended beings join your army. Altough soul speakers do not look especially powerful, they posses limited clairvoyance abilities, allowing them forsee outcome of battle. That makes their psychic attacks very effective.",
+    "attributes": ["summon"],
+    "researchCost": 600,
+    "castingCost": 6300,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["soulSpeaker"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  }
+]

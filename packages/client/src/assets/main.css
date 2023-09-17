@@ -1,0 +1,69 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  padding: 2rem;
+  font-weight: normal;
+  line-height: 1.5rem;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    justify-content: center;
+    /* place-items: center; */
+  }
+
+  /*
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+  */
+}
+
+table { 
+  border: 1px solid #888;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #888;
+  padding: 3px;
+}
+
+button {
+  padding: 5px 20px;
+  border-radius: 4px;
+  margin: 1px 1px;
+  cursor: pointer;
+}
+
+select {
+  font-size: 1.0rem;
+  padding: 1px 4px;
+  margin: 1px 1px;
+}

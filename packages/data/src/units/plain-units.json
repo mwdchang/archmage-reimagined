@@ -1,0 +1,271 @@
+[
+  {
+    "id": "militia",
+    "name": "Militia",
+    "magic": "plain",
+    "powerRank": 9,
+    "hitPoints": 80,
+    "race": ["human"],
+    "attributes": ["basic"],
+
+    "primaryAttackPower": 80,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 20,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 20,
+      "mana": 0,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 0.32,
+      "mana": 0,
+      "population": 0 
+    },
+
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "recruitSpeed", "extra": 100 }
+    ]
+  },
+  {
+    "id": "archer",
+    "name": "Archer",
+    "magic": "plain",
+    "powerRank": 12,
+    "hitPoints": 80,
+    "race": ["human"],
+    "attributes": ["basic"],
+
+    "primaryAttackPower": 80,
+    "primaryAttackType": ["missile", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 40,
+      "mana": 0,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 0.64,
+      "mana": 0,
+      "population": 0 
+    },
+
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  },
+  {
+    "id": "phalanx",
+    "name": "Phalanx",
+    "magic": "plain",
+    "powerRank": 14,
+    "hitPoints": 100,
+    "race": ["human"],
+    "attributes": ["basic"],
+
+    "primaryAttackPower": 90,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 30,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 38,
+      "mana": 0,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 0.80,
+      "mana": 0,
+      "population": 0 
+    },
+
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "largeShield", "extra": null }
+    ]
+  },
+  {
+    "id": "pikeman",
+    "name": "Pikeman",
+    "magic": "plain",
+    "powerRank": 12,
+    "hitPoints": 90,
+    "race": ["human"],
+    "attributes": ["basic"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 36,
+      "mana": 0,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 0.72,
+      "mana": 0,
+      "population": 0 
+    },
+
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "pike", "extra": null }
+    ]
+  },
+  {
+    "id": "calvary",
+    "name": "Calvary",
+    "magic": "plain",
+    "powerRank": 18,
+    "hitPoints": 120,
+    "race": ["human"],
+    "attributes": ["basic"],
+
+    "primaryAttackPower": 180,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 30,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 70,
+      "mana": 0,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 1.44,
+      "mana": 0,
+      "population": 0 
+    },
+
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  }
+]
