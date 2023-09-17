@@ -17,3 +17,17 @@ export interface Spell {
   } | null,
   effects: Effect[]
 }
+
+export interface Item {
+  id: string,
+  name: string,
+  description: string,
+  attributes: string[],
+  chargeTurns: number,
+  upkeep: {
+    geld: number,
+    mana: number,
+    population: number
+  } | null,
+  effects: Effect[]
+}

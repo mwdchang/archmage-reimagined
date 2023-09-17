@@ -377,70 +377,17 @@ const battleSpell = (
       }
     }
   });
-
-  /*
-  casterSpell.effects.forEach(effect => {
-    if (effect.effectType === 'UnitEffect') {
-      const eff = effect as UnitEffect;
-      const army = eff.target === 'self' ? casterBattleStack: defenderBattleStack;
-
-      // TODO: filters
-      const filteredArmy = army;
-
-      const armyToRecieveEffect = eff.stack === 'random' ? 
-        [filteredArmy[randomInt(filteredArmy.length)]] :
-        filteredArmy;
-
-      // Loop through each affected attributes
-      Object.keys(eff.attributeMap).forEach(attrKey => {
-        const attr = eff.attributeMap[attrKey];
-
-        // Magic colour does not get this effect
-        if (!attr.magic[casterMagic]) return;
-
-        let effectValue: any;
-        if (attr.rule === 'spellLevel') {
-          effectValue = attr.magic[casterMagic].value * caster.mage.currentSpellLevel;
-        } else {
-          effectValue = attr.magic[casterMagic].value; 
-        }
-
-        // Finally apply effects
-        armyToRecieveEffect.forEach(stack => {
-          if (attrKey === 'accuracy') {
-            stack.accuracy += effectValue;
-          } else {
-            const fields = attrKey.split(',').map(d => d.trim());
-            fields.forEach(field => {
-              if (_.isArray(stack.unit[field]) && attr.has && stack.unit[field].includes(attr.has)) {
-                stack.unit[field].push(effectValue);
-              } else {
-                stack.unit[field] += effectValue;
-              }
-            });
-          }
-        });
-      });
-    } else if (effect.effectType === 'BattleDamageEffect') {
-      const eff = effect as BattleDamageEffect;
-      const army = eff.target === 'self' ? casterBattleStack: defenderBattleStack;
-      const armyToRecieveEffect = eff.stack === 'random' ? 
-        [army[randomInt(army.length)]] :
-        army;
-
-      if (!eff.magic[casterMagic]) return;
-
-      armyToRecieveEffect.forEach(stack => {
-        if (eff.rule === 'spellLevel') {
-          const damage = caster.mage.currentSpellLevel * eff.magic[casterMagic].value;
-          console.log(`damage against ${stack.unit.name} = `, damage);
-        }
-      })
-    }
-  });
-  */
   console.groupEnd();
 }
+
+const battleItem = (
+  caster: Combatant,
+  casterBattleStack: BattleStack[],
+  defender: Combatant,
+  defenderBattleStack: BattleStack[]) => {
+
+}
+
 
 
 /**

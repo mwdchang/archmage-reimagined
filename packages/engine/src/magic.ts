@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Spell } from 'shared/types/magic';
+import { Spell, Item } from 'shared/types/magic';
 import { UnitSummonEffect } from 'shared/types/effects';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { Mage } from 'shared/types/mage';
@@ -8,8 +8,11 @@ import { getUnitById } from './army';
 export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
 export const spellMap = new Map<string, Spell>();
 export const researchTree = new Map<string, Map<string, string[]>>;
+export const itemMap = new Map<string, Item>();
 
 const spellList: Spell[] = [];
+const itemList: Item[] = [];
+
 const maxSpellLevels = {
   ascendant: 0,
   verdant: 0,
@@ -31,6 +34,20 @@ export const getSpellById = (id: string): Spell => {
   if (!spell) throw new Error(`Cannot find spell ${id}`);
   return _.cloneDeep(spell);
 }
+
+export const loadItemData = (items: Item[]) => {
+  for (let i = 0; i < items.length; i++) {
+    itemMap.set(items[i].id, items[i]);
+    console.log(`Item[${items[i].name}] loaded`);
+  }
+}
+
+export const getItemById = (id: string): Item => {
+  const item = itemMap.get(id);
+  if (!item) throw new Error(`Cannot find item ${id}`);
+  return _.cloneDeep(item);
+}
+
 
 export const getReserchTree = () => {
   return _.cloneDeep(researchTree);

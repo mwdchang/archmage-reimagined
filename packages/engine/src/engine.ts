@@ -24,6 +24,7 @@ import { loadUnitData } from './army';
 import { 
   loadSpellData,
   getSpellById,
+  loadItemData,
   initializeResearchTree, 
   doResearch,
   summonUnit
@@ -44,6 +45,8 @@ import verdantSpells from 'data/src/spells/verdant-spells.json';
 import eradicationSpells from 'data/src/spells/eradication-spells.json';
 import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
+
+import lesserItems from 'data/src/items/lesser.json';
 
 
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -67,6 +70,8 @@ class Engine {
     loadSpellData(netherSpells);
     loadSpellData(phantasmSpells);
     initializeResearchTree();
+
+    loadItemData(lesserItems);
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {

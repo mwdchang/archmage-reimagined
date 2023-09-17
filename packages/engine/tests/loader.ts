@@ -11,7 +11,10 @@ import eradicationUnits from 'data/src/units/eradication-units.json';
 import netherUnits from 'data/src/units/nether-units.json';
 import phantasmUnits from 'data/src/units/phantasm-units.json';
 
-import { loadSpellData } from '../src/magic';
+import lesserItems from 'data/src/items/lesser.json';
+
+
+import { loadSpellData, loadItemData } from '../src/magic';
 import { loadUnitData } from '../src/army';
 
 export const loadUnitsAndSpells = () => {
@@ -27,4 +30,6 @@ export const loadUnitsAndSpells = () => {
   loadSpellData(eradicationSpells);
   loadSpellData(netherSpells);
   loadSpellData(phantasmSpells);
+
+  loadItemData(lesserItems);
 }

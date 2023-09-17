@@ -1,0 +1,35 @@
+[
+  {
+    "id": "potionOfValor",
+    "name": "Potion of Valor",
+    "description": "This small bottle contains a pink liquid. When a mage drinks it all at once, he/she will begin to act brave, as a hero does, therefore inspiring his/her followers and enhancing their performance for a period of time.",
+    "attributes": ["battle", "onUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "percentage",
+                "magic": {
+                  "ascendant": 0.20,
+                  "verdant": 0.20,
+                  "eradication": 0.20,
+                  "nether": 0.20,
+                  "phantasm": 0.20
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
