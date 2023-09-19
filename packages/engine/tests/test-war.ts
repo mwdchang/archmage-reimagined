@@ -27,7 +27,7 @@ const defender: Combatant = {
   army: [
     { id: 'archer', size: 2000000 }
   ],
-  spellId: 'flameArrow',
+  spellId: 'bless',
   itemId: ''
 };
 

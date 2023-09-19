@@ -38,6 +38,7 @@ export const getSpellById = (id: string): Spell => {
 export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
     itemMap.set(items[i].id, items[i]);
+    itemList.push(items[i]);
     console.log(`Item[${items[i].name}] loaded`);
   }
 }
@@ -102,6 +103,9 @@ export const maxSpellLevel = (mage: Mage) => {
 }
 
 export const currentSpellLevel = (mage: Mage) => {
+  // For testing
+  if (mage.currentSpellLevel) return mage.currentSpellLevel;
+
   let result = 0;
   const addSpellPower = (id: string) => {
     const spell = getSpellById(id);
