@@ -59,7 +59,14 @@ const getPowerModifier = (u: Unit) => {
 };
 
 
-// Returns the stacks in ranking order
+/**
+ * Returns the stacks in power ranking order
+ *
+ * As determined by primary attack type and unit abilities
+ * - flying units have a 2.25 multiplier
+ * - ground, none-ranged units have 1.5 multiplier
+ * - ranged has 1.0 multipiler
+ */
 const prepareBattleStack = (army: ArmyUnit[], role: string) => {
   const battleStack: BattleStack[] = army.map(stack => {
     const u = getUnitById(stack.id);
@@ -169,10 +176,15 @@ interface BattleOrder {
   attackInit: number
 }
 
-// Calculate the order of attacks
+/**
+ * Calculate the order of attacks for both sides.
+ * First put both primary and secondary attack inits to a list, then shuffe
+ * and re-sort
+ */
 const calcBattleOrders = (attackingArmy: BattleStack[], defendingArmy: BattleStack[]) => {
   let battleOrders: BattleOrder[] = [];
 
+  // Helper
   const extractAttacks = (army: BattleStack[], side: string) => {
     for (let i = 0; i < army.length; i++) {
       const u = army[i];
@@ -235,7 +247,6 @@ const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, attackTy
   if (hasAbility(defendingUnit, 'scales')) {
     multiplier *= 0.75;
   }
-
   return multiplier;
 }
 
@@ -268,7 +279,21 @@ const calcAccuracyModifier = (attackingUnit: Unit, defendingUnit: Unit) => {
 }
 
 
-
+/**
+ * Apply effect that can alter unit attributes as outlined in Unit typing definition.
+ *
+ * The general grammar is: "Apply X to unit that match condition Y with rule Z"
+ * Where
+ *  - X is an attribute like primaryAttackPower, or attackReistances.cold
+ *  - Y is filtering rule, like matching all units with melee attacks 
+ *  - Z determines how the final value is calculate; scale with spell-level, percentage .. etc
+ *
+ *  Finally there a magic multiplier. Generally speaking if you cast other schools's spell it will
+ *  become a weaker version of the same spell casted by a mage whose magic is innate to that school.
+ *
+ *  e.g. Ascendant mages get better bonuses casting Blinding-Flash than a Nether mage casting the 
+ *  same spell.
+ */
 const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy: BattleStack[]) => {
   const casterMagic = caster.mage.magic;
   const casterSpellLevel = currentSpellLevel(caster.mage);
@@ -289,21 +314,31 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
       let baseValue = attr.magic[casterMagic].value;
       let finalValue: any = null;
 
-      fields.forEach(field => {
+      fields.forEach(rawField => {
+        // Resolve nesting
+        let root = unit;
+        let field = rawField;
+        if (rawField.includes('.')) {
+          const [t1, t2] = rawField.split('.'); 
+          root = unit[t1];
+          field = t2;
+        }
+
         // Figure out the value to add
         if (rule === 'spellLevel') {
           finalValue = baseValue * casterSpellLevel;
         } else if (rule === 'spellLevelPercentage') {
-          // TODO: compound
-          finalValue = baseValue * casterSpellLevel * unit[field];
+          finalValue = baseValue * casterSpellLevel * root[field];
+        } else if (rule === 'percentage') {
+          finalValue = baseValue * root[field];
         } else { // add, remove
           finalValue = baseValue;
         }
 
         // Finally apply
-        if (_.isArray(unit[field])) {
-          if (attr.has && unit[field].includes(attr.has)) {
-            unit[field].push(finalValue);
+        if (_.isArray(root[field])) {
+          if (attr.has && root[field].includes(attr.has)) {
+            root[field].push(finalValue);
           }
         } else {
           if (field === 'accuracy') {
@@ -311,7 +346,7 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
           } else if (field === 'efficiency') {
             stack.efficiency += finalValue;
           } else {
-            unit[field] += finalValue;
+            root[field] += Math.floor(finalValue);
           }
         }
       });
@@ -320,6 +355,9 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
 };
 
 
+/**
+ * Apply direct damage to target stacks
+ */
 const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affectedArmy: BattleStack[]) => {
   const casterMagic = caster.mage.magic;
   const casterSpellLevel = currentSpellLevel(caster.mage);
@@ -346,8 +384,16 @@ const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affect
 };
 
 
-
-
+/**
+ * Entry point for casting battle spells. This ensures the correct caster and affected army
+ * are in-place before handing off the actual calculation to helper effects functions.
+ *
+ * The stack attribute determines how the affected army is chosen, there are several options.
+ * - random: If the spell has multiple effects, each effect targets a random stack
+ * - randomSingle: A random stack is chosen and receives all effects. This is used to model 
+ *   spells that have both UnitEffect and DamageEffect and wants to target the same unit.
+ * - all: All stacks get all effects
+ */
 const battleSpell = (
   caster: Combatant,
   casterBattleStack: BattleStack[],
@@ -457,7 +503,7 @@ const battleItem = (
   });
 }
 
-
+// Debugging pretty print
 const LPretty = (v: any, n: number = 20) => {
   const str = '' + v;
   return str + ' '.repeat(n - str.length);
@@ -466,7 +512,6 @@ const RPretty = (v: any, n: number = 10) => {
   const str = '' + v;
   return ' '.repeat(n - str.length) + str;
 };
-
 
 
 /**
@@ -566,7 +611,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       RPretty(stack.unit.hitPoints),
       RPretty(stack.accuracy)
     );
-
   });
 
 
