@@ -11,8 +11,11 @@ import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
 import { API } from './api/api';
-import { loadUnitData } from 'engine/src/army';
-import { loadSpellData, initializeResearchTree } from 'engine/src/magic';
+import { 
+  loadUnitData,
+  loadSpellData, 
+  initializeResearchTree 
+} from 'engine/src/base/references';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';

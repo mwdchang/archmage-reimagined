@@ -173,22 +173,27 @@
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { 
-  totalLand,
-  totalUnits,
   maxPopulation,
   maxFood,
-  maxMana,
   spaceForUnits,
-  totalNetPower,
   calcResistance,
-  manaIncome,
   geldIncome,
   populationIncome,
   armyUpkeep
 } from 'engine/src/interior';
 
-import { getUnitById } from 'engine/src/army';
-import { maxSpellLevel, currentSpellLevel } from 'engine/src/magic';
+import { getUnitById } from 'engine/src/base/references';
+import { 
+  totalLand,
+  totalUnits,
+  totalNetPower
+} from 'engine/src/base/mage';
+import { 
+  maxSpellLevel,
+  currentSpellLevel, 
+  manaIncome,
+  maxMana
+} from 'engine/src/magic';
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);

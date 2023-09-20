@@ -1,5 +1,16 @@
-import _, { filter } from 'lodash';
-import { createMage } from './create-mage';
+import _  from 'lodash';
+import { 
+  loadUnitData,
+  loadSpellData,
+  loadItemData,
+  getSpellById,
+  initializeResearchTree, 
+} from './base/references';
+import { 
+  createMage, 
+  totalLand,
+  totalNetPower,
+} from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import { Mage } from 'shared/types/mage';
 import { 
@@ -10,26 +21,18 @@ import {
   explore,
   explorationRate,
   maxPopulation,
-  totalLand,
   buildingTypes,
   buildingRate,
-  totalNetPower,
-  researchPoints,
-  manaIncome,
-  manaStorage,
   populationIncome,
   geldIncome
 } from './interior';
 import { 
-  loadUnitData,
-  loadSpellData,
-  loadItemData,
-  getSpellById,
-  initializeResearchTree, 
-} from './references';
-import { 
   doResearch,
-  summonUnit
+  summonUnit,
+  researchPoints,
+  manaIncome,
+  manaStorage,
+
 } from './magic';
 import { battle, Combatant } from './war';
 

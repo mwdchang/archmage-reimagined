@@ -2,10 +2,10 @@
   <table v-if="mageStore.mage" class="header-info">
     <tr>
       <td> Turns {{ mageStore.mage.currentTurn }} / {{ mageStore.mage.maxTurn }} </td>
-      <td> Land {{ interior.totalLand(mageStore.mage) }} </td>
+      <td> Land {{ totalLand(mageStore.mage) }} </td>
     </tr>
     <tr>
-      <td> Magic {{ mageStore.mage.currentMana }} / {{ interior.manaStorage(mageStore.mage) }} </td>
+      <td> Magic {{ mageStore.mage.currentMana }} / {{ manaStorage(mageStore.mage) }} </td>
       <td> Geld {{ mageStore.mage.currentGeld }} </td>
     </tr>
     <tr>
@@ -19,6 +19,8 @@
 <script setup lang="ts">
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
+import { totalLand } from 'engine/src/base/mage';
+import { manaStorage } from 'engine/src/magic';
 const mageStore = useMageStore();
 </script>
 

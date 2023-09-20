@@ -2,6 +2,7 @@ import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
 import { productionTable } from "./base/config";
+import { totalLand } from "./base/mage";
 
 export interface Building {
   id: string,
@@ -19,7 +20,6 @@ export const buildingTypes: Building[] = [
   { id: 'fortresses', geldCost: 3000, manaCost: 0 },
   { id: 'barriers', geldCost: 50, manaCost: 0 }
 ];
-
 
 export const buildingRate = (mage: Mage, buildType: string) => {
   if (buildType === 'farms') return (mage.workshops + 1) / 5;
@@ -111,8 +111,11 @@ export const calcResistance = (mage: Mage) => {
     phantasm: 0
   };
 
-  // Max barrier is 2.5% of the land
-  const land = totalLand(mage);
-
+  // Max barrier is 2.5% of the land, max normal barrier is 75
+  if (mage.barriers > 0) {
+    const land = 0.025 * totalLand(mage);
+    const barrier = Math.floor((mage.barriers / land) * 75);
+    resistance.barrier = barrier;
+  }
   return resistance;
 }

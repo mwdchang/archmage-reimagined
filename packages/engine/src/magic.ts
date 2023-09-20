@@ -11,6 +11,7 @@ import {
   getMaxSpellLevels,
   getResearchTree
 } from './base/references';
+import { totalLand } from './base/mage';
 
 
 // Get normal max spell level, given the research tech tree

@@ -5,7 +5,7 @@
     <br>
     <section>
       <div class="row">
-        <div>Land</div><div>{{ interior.totalLand(mageStore.mage) }} </div>
+        <div>Land</div><div>{{ totalLand(mageStore.mage) }} </div>
       </div>
       <div class="row">
         <div>Fortress</div><div>{{ mageStore.mage.fortresses }} </div>
@@ -17,7 +17,7 @@
         <div>Population</div><div>{{ mageStore.mage.currentPopulation}} / {{ interior.maxPopulation(mageStore.mage) }}</div>
       </div>
       <div class="row">
-        <div>Magic</div><div>{{ mageStore.mage.currentMana}} / {{ interior.manaStorage(mageStore.mage) }}</div>
+        <div>Magic</div><div>{{ mageStore.mage.currentMana}} / {{ manaStorage(mageStore.mage) }}</div>
       </div>
       <div class="row">
         <div>Items</div><div>0</div>
@@ -48,6 +48,8 @@
 import { RouterLink } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
+import { totalLand } from 'engine/src/base/mage';
+import { manaStorage } from 'engine/src/magic';
 const mageStore = useMageStore();
 
 </script>
