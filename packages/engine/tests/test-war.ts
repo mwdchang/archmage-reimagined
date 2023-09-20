@@ -14,7 +14,7 @@ const attacker: Combatant = {
   army: [
     { id: 'nagaQueen', size: 2000 }
   ],
-  spellId: 'forceBolt',
+  spellId: 'healing',
   itemId: 'potionOfValor'
 };
 
@@ -25,10 +25,11 @@ const defender: Combatant = {
     currentSpellLevel: 400
   } as Mage,
   army: [
-    { id: 'archer', size: 2000000 }
+    { id: 'archer', size: 2000000 },
+    { id: 'militia', size: 70000 }
   ],
-  spellId: 'flameArrow',
-  itemId: 'oilFlasks'
+  spellId: 'healing',
+  itemId: ''
 };
 
 battle('siege', attacker, defender);

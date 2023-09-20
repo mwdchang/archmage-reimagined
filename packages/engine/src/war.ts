@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
-import { UnitEffect, DamageEffect, BattleEffect } from 'shared/types/effects';
+import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById } from './base/references';
@@ -44,6 +44,9 @@ interface BattleStack {
   sustainedDamage: number,
   loss: number,
 
+  healingPoints: number,
+  healingPercentage: number,
+
   // For faster calculation
   netPower: number,
 }
@@ -80,6 +83,8 @@ const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       accuracy: 30,
       efficiency: 100,
       sustainedDamage: 0,
+      healingPoints: 0,
+      healingPercentage: 0,
       loss: 0,
       netPower: u.powerRank * stack.size
     }
@@ -115,13 +120,13 @@ const calculateParing = (a: BattleStack[], b: BattleStack[]) => {
   log('');
   log('=== Calculate parings ===');
   // 1. Fnd viable targets with similar net power
-  a.forEach((aStack, _aIdx) => {
+  a.forEach((aStack, aIdx) => {
     log(`calculating by power`, aStack.unit.name);
     b.forEach((bStack, bIdx) => {
       if (aStack.targetIdx > -1 ) return;
 
       log('\tchecking target', bStack.unit.name);
-      if ((bStack.netPower / aStack.netPower) <= 4.0) {
+      if ((bStack.netPower / aStack.netPower) <= 4.0 || aIdx === 0) {
         const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
         log('\tCan attack', canAttack);
         if (canAttack && bStack.isTarget === false) {
@@ -384,6 +389,24 @@ const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affect
 };
 
 
+const applyHealEffect = (caster: Combatant, healEffect: HealEffect, affectedArmy: BattleStack[]) => {
+  const casterMagic = caster.mage.magic;
+  const casterSpellLevel = currentSpellLevel(caster.mage);
+  const healType = healEffect.healType;
+  const rule = healEffect.rule;
+
+  let healBase = 0;
+  if (rule === 'spellLevel') {
+    healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
+  }
+
+  affectedArmy.forEach(stack => {
+    if (healType === 'points') {
+      stack.healingPoints += stack.size * healBase;
+    }
+  });
+};
+
 /**
  * Entry point for casting battle spells. This ensures the correct caster and affected army
  * are in-place before handing off the actual calculation to helper effects functions.
@@ -440,6 +463,9 @@ const battleSpell = (
       } else if (eff.name === 'DamageEffect') {
         const damageEffect = eff as DamageEffect;
         applyDamageEffect(caster, damageEffect, affectedArmy);
+      } else if (eff.name === 'HealEffect') {
+        const healEffect = eff as HealEffect;
+        applyHealEffect(caster, healEffect, affectedArmy);
       }
     }
   });
@@ -750,7 +776,28 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   } // end battleOrders
 
 
+  // Post battle, healing calculation
+
+  // Attacker healing
+  console.log('=== Post battle attacker ===');
+  attackingArmy.forEach(stack => {
+    if (stack.healingPoints > 0) {
+      const unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    }
+  });
+
+  // Defender healing
+  console.log('=== Post battle defender ===');
+  defendingArmy.forEach(stack => {
+    if (stack.healingPoints > 0) {
+      const unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    }
+  });
+
   // Calculate combat result
+  console.log('');
   console.log('=== Attacker summary ===');
   let attackerPowerLoss = 0;
   attackingArmy.forEach(stack => {
