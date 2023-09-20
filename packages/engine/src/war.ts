@@ -3,8 +3,8 @@ import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
 import { UnitEffect, DamageEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { getUnitById, isFlying, isRanged, hasAbility } from "./army";
-import { getSpellById, getItemById } from './magic';
+import { isFlying, isRanged, hasAbility } from "./base/unit";
+import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 
 ////////////////////////////////////////////////////////////////////////////////

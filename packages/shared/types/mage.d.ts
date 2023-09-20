@@ -45,8 +45,7 @@ export interface Mage {
 
   // magic
   magic: string;
-  currentSpellLevel: number;
-  maxSpellLevel: number;
+  currentSpellLevel: number; // For testing only
 
   spellbook: {
     ascendant: string[],

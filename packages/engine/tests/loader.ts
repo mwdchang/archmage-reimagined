@@ -13,9 +13,12 @@ import phantasmUnits from 'data/src/units/phantasm-units.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 
-
-import { loadSpellData, loadItemData } from '../src/magic';
-import { loadUnitData } from '../src/army';
+import { 
+  loadSpellData,
+  loadItemData,
+  loadUnitData,
+  initializeResearchTree
+} from '../src/base/references';
 
 export const loadUnitsAndSpells = () => {
   loadUnitData(plainUnits);
@@ -30,6 +33,7 @@ export const loadUnitsAndSpells = () => {
   loadSpellData(eradicationSpells);
   loadSpellData(netherSpells);
   loadSpellData(phantasmSpells);
+  initializeResearchTree();
 
   loadItemData(lesserItems);
 }

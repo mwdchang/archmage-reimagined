@@ -20,12 +20,14 @@ import {
   populationIncome,
   geldIncome
 } from './interior';
-import { loadUnitData } from './army';
 import { 
+  loadUnitData,
   loadSpellData,
-  getSpellById,
   loadItemData,
+  getSpellById,
   initializeResearchTree, 
+} from './references';
+import { 
   doResearch,
   summonUnit
 } from './magic';

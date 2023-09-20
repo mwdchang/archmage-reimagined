@@ -1,6 +1,6 @@
 import { Mage } from 'shared/types/mage';
-import { createStackByNumber } from './army';
-import { researchTree, getSpellById } from './magic';
+import { createStackByNumber } from './unit';
+import { researchTree, getSpellById, getUnitById } from './references';
 import { mageStartTable, magicAlignmentTable } from './config';
 
 let _id = 0;
@@ -12,7 +12,6 @@ export const createMage = (name: string, magic: string): Mage => {
 
     magic: magic,
     currentSpellLevel: 0,
-    maxSpellLevel: 1000,
 
     spellbook: {
       ascendant: [],
@@ -78,3 +77,59 @@ export const createMage = (name: string, magic: string): Mage => {
 
   return mage;
 }
+
+export const totalNetPower = (mage: Mage) => {
+  let netpower = 0;
+
+  // Land
+  netpower += 1000 * (
+    mage.wilderness +
+    mage.farms + 
+    mage.towns + 
+    mage.workshops + 
+    mage.barracks + 
+    mage.nodes + 
+    mage.libraries + 
+    mage.fortresses + 
+    mage.barriers);
+  netpower += mage.fortresses * 19360;
+  netpower += mage.barriers * 6500;
+
+  // Mana, geld, items ... etc 
+  netpower += Math.floor(0.05 * mage.currentMana);
+  netpower += Math.floor(0.0005 * mage.currentGeld);
+  netpower += Math.floor(0.02 * mage.currentPopulation);
+  netpower += 1000 * mage.currentSpellLevel;
+  netpower += 1000 * mage.items.length;
+
+  // Army
+  mage.army.forEach(stack => {
+    const u = getUnitById(stack.id);
+    netpower += u.powerRank + stack.size;
+  });
+
+  // TODO: allies and heroes??
+  return netpower;
+}
+
+// Calculate total land
+export const totalLand = (mage: Mage) => {
+  return mage.farms + 
+    mage.towns + 
+    mage.barracks +
+    mage.workshops +
+    mage.nodes + 
+    mage.libraries + 
+    mage.fortresses + 
+    mage.barriers + 
+    mage.wilderness;
+}
+
+export const totalUnits = (mage: Mage) => {
+  let num = 0;
+  mage.army.forEach(unit => {
+    num += unit.size;
+  });
+  return num;
+}
+
