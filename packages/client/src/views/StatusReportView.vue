@@ -26,6 +26,24 @@
       <td>Turns Left</td>
       <td>{{ mageStore.mage.currentTurn }}</td>
     </tr>
+    <tr>
+      <td colspan="2">Spell Level</td>
+      <td colspan="2"> 
+        {{ currentSpellLevel(mageStore.mage) }} / {{ maxSpellLevel(mageStore.mage) }} 
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">Population</td>
+      <td colspan="2"> 
+        {{ mageStore.mage.currentPopulation }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">Magic Power</td>
+      <td colspan="2"> 
+        {{ mageStore.mage.currentMana }} / {{ maxMana(mageStore.mage) }}
+      </td>
+    </tr>
   </table>
 
   <div class="section-header">Spell Resistance</div>
@@ -155,20 +173,27 @@
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { 
-  totalLand,
-  totalUnits,
   maxPopulation,
   maxFood,
   spaceForUnits,
-  totalNetPower,
   calcResistance,
-  manaIncome,
   geldIncome,
   populationIncome,
   armyUpkeep
 } from 'engine/src/interior';
 
-import { getUnitById } from 'engine/src/army';
+import { getUnitById } from 'engine/src/base/references';
+import { 
+  totalLand,
+  totalUnits,
+  totalNetPower
+} from 'engine/src/base/mage';
+import { 
+  maxSpellLevel,
+  currentSpellLevel, 
+  manaIncome,
+  maxMana
+} from 'engine/src/magic';
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);

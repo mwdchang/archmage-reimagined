@@ -1,5 +1,16 @@
-import _, { filter } from 'lodash';
-import { createMage } from './create-mage';
+import _  from 'lodash';
+import { 
+  loadUnitData,
+  loadSpellData,
+  loadItemData,
+  getSpellById,
+  initializeResearchTree, 
+} from './base/references';
+import { 
+  createMage, 
+  totalLand,
+  totalNetPower,
+} from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import { Mage } from 'shared/types/mage';
 import { 
@@ -10,23 +21,18 @@ import {
   explore,
   explorationRate,
   maxPopulation,
-  totalLand,
   buildingTypes,
   buildingRate,
-  totalNetPower,
-  researchPoints,
-  manaIncome,
-  manaStorage,
   populationIncome,
   geldIncome
 } from './interior';
-import { loadUnitData } from './army';
 import { 
-  loadSpellData,
-  getSpellById,
-  initializeResearchTree, 
   doResearch,
-  summonUnit
+  summonUnit,
+  researchPoints,
+  manaIncome,
+  manaStorage,
+
 } from './magic';
 import { battle, Combatant } from './war';
 
@@ -44,6 +50,8 @@ import verdantSpells from 'data/src/spells/verdant-spells.json';
 import eradicationSpells from 'data/src/spells/eradication-spells.json';
 import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
+
+import lesserItems from 'data/src/items/lesser.json';
 
 
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -67,6 +75,8 @@ class Engine {
     loadSpellData(netherSpells);
     loadSpellData(phantasmSpells);
     initializeResearchTree();
+
+    loadItemData(lesserItems);
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {

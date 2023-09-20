@@ -27,7 +27,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { totalLand, buildingTypes, buildingRate } from 'engine/src/interior';
+import { buildingTypes, buildingRate } from 'engine/src/interior';
+import { totalLand } from 'engine/src/base/mage';
 
 const mageStore = useMageStore();
 const emit = defineEmits(['build']);

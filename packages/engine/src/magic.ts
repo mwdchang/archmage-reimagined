@@ -1,72 +1,50 @@
 import _ from 'lodash';
-import { Spell } from 'shared/types/magic';
 import { UnitSummonEffect } from 'shared/types/effects';
-import { magicAlignmentTable } from './config';
+import { 
+  magicAlignmentTable, spellRankTable, productionTable 
+} from './base/config';
 import { Mage } from 'shared/types/mage';
-import { getUnitById } from './army';
+import { 
+  magicTypes,
+  getUnitById,
+  getSpellById,
+  getMaxSpellLevels,
+  getResearchTree
+} from './base/references';
+import { totalLand } from './base/mage';
 
-export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
-export const spellMap = new Map<string, Spell>();
-export const researchTree = new Map<string, Map<string, string[]>>;
 
-const spellList: Spell[] = [];
+// Get normal max spell level, given the research tech tree
+export const maxSpellLevel = (mage: Mage) => {
+  const maxSpellLevels = getMaxSpellLevels();
+  return maxSpellLevels[mage.magic];
+}
 
-export const loadSpellData = (spells: Spell[]) => {
-  for (let i = 0; i < spells.length; i++) {
-    spellMap.set(spells[i].id, spells[i]);
-    spellList.push(spells[i]);
-    console.log(`Spell[${spells[i].magic}] ${spells[i].name} loaded`);
+export const currentSpellLevel = (mage: Mage) => {
+  // For testing
+  if (mage.currentSpellLevel) return mage.currentSpellLevel;
+
+  let result = 0;
+  const addSpellPower = (id: string) => {
+    const spell = getSpellById(id);
+    const rankPower = spellRankTable[spell.rank];
+    result += rankPower;
   }
-}
 
-export const getSpellById = (id: string): Spell => {
-  const spell = spellMap.get(id);
-  if (!spell) throw new Error(`Cannot find spell ${id}`);
-  return _.cloneDeep(spell);
-}
+  mage.spellbook.ascendant.forEach(addSpellPower);
+  mage.spellbook.verdant.forEach(addSpellPower);
+  mage.spellbook.eradication.forEach(addSpellPower);
+  mage.spellbook.nether.forEach(addSpellPower);
+  mage.spellbook.phantasm.forEach(addSpellPower);
 
-export const getReserchTree = () => {
-  return _.cloneDeep(researchTree);
-}
-
-export const initializeResearchTree = () => {
-  if (spellMap.size === 0) throw new Error('No spells available');
-
-  const magicTypes = Object.keys(magicAlignmentTable);
-
-  // Reset research tree
-  researchTree.clear();
-  magicTypes.forEach(magicType => {
-    const m = new Map<string, string[]>();
-    m.set('ascendant', []);
-    m.set('verdant', []);
-    m.set('eradication', []);
-    m.set('nether', []);
-    m.set('phantasm', []);
-    researchTree.set(magicType, m);
-  });
-
-  // Create research tree, shuffle the order at each rank
-  magicTypes.forEach(magicType => {
-    const research = magicAlignmentTable[magicType].research;
-    const tree = researchTree.get(magicType);
-
-    magicTypes.forEach(researchMagicType => {
-      const researchRanks = research[researchMagicType]; 
-      const researchOrder = tree.get(researchMagicType);
-      researchRanks.forEach((rank: string) => {
-        const researchableSpells = spellList.filter(d => d.magic === researchMagicType && d.rank === rank);
-        _.shuffle(researchableSpells).forEach(spell => {
-          researchOrder.push(spell.id);
-        });
-      });
-    })
-  });
+  // TODO: others
+  return result;
 }
 
 // Do research, 
 // This assumes that spell takes at least one turn to research despite the points generated
 export const doResearch = (mage: Mage, points: number) => {
+  const researchTree = getResearchTree();
   const currentResearch = mage.currentResearch;
 
   // Apply points to current research
@@ -144,3 +122,27 @@ export const summonUnit = (mage: Mage, spellId: string) => {
   });
   return result;
 }
+
+export const maxMana = (mage: Mage) => {
+  return mage.nodes * 1000;
+}
+
+export const manaStorage = (mage: Mage) => {
+  return mage.nodes * productionTable.manaStorage;
+}
+
+export const researchPoints = (mage: Mage) => {
+  let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
+  // return 10 + Math.floor(rawPoints);
+  return 99999 + Math.floor(rawPoints); // FIXME just testing
+}
+
+export const manaIncome = (mage: Mage) => {
+  const land = totalLand(mage);
+  const nodes = mage.nodes;
+
+  const x = Math.floor(nodes * 100 / land);
+  const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
+  return Math.floor(manaYield);
+}
+

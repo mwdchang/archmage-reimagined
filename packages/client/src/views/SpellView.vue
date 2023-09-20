@@ -19,8 +19,8 @@
 import { API } from '@/api/api';
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { getSpellById } from 'engine/src/magic';
-import { magicAlignmentTable } from 'engine/src/config';
+import { getSpellById } from 'engine/src/base/references';
+import { magicAlignmentTable } from 'engine/src/base/config';
 import { Spell } from 'shared/types/magic';
 import Magic from '@/components/magic.vue';
 

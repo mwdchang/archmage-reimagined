@@ -1,7 +1,8 @@
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
-import { getUnitById } from "./army";
-import { productionTable } from "./config";
+import { getUnitById } from "./base/references";
+import { productionTable } from "./base/config";
+import { totalLand } from "./base/mage";
 
 export interface Building {
   id: string,
@@ -19,7 +20,6 @@ export const buildingTypes: Building[] = [
   { id: 'fortresses', geldCost: 3000, manaCost: 0 },
   { id: 'barriers', geldCost: 50, manaCost: 0 }
 ];
-
 
 export const buildingRate = (mage: Mage, buildType: string) => {
   if (buildType === 'farms') return (mage.workshops + 1) / 5;
@@ -62,27 +62,6 @@ export const maxFood = (mage: Mage) => {
   return food;
 }
 
-// Calculate total land
-export const totalLand = (mage: Mage) => {
-  return mage.farms + 
-    mage.towns + 
-    mage.barracks +
-    mage.workshops +
-    mage.nodes + 
-    mage.libraries + 
-    mage.fortresses + 
-    mage.barriers + 
-    mage.wilderness;
-}
-
-export const totalUnits = (mage: Mage) => {
-  let num = 0;
-  mage.army.forEach(unit => {
-    num += unit.size;
-  });
-  return num;
-}
-
 export const spaceForUnits = (mage: Mage) => {
   let space = 0;
   mage.army.forEach(u => {
@@ -92,62 +71,6 @@ export const spaceForUnits = (mage: Mage) => {
   return Math.ceil(space);
 }
 
-export const maxMana= (mage: Mage) => {
-  return mage.nodes * 1000;
-}
-
-export const totalNetPower = (mage: Mage) => {
-  let netpower = 0;
-
-  // Land
-  netpower += 1000 * (
-    mage.wilderness +
-    mage.farms + 
-    mage.towns + 
-    mage.workshops + 
-    mage.barracks + 
-    mage.nodes + 
-    mage.libraries + 
-    mage.fortresses + 
-    mage.barriers);
-  netpower += mage.fortresses * 19360;
-  netpower += mage.barriers * 6500;
-
-  // Mana, geld, items ... etc 
-  netpower += Math.floor(0.05 * mage.currentMana);
-  netpower += Math.floor(0.0005 * mage.currentGeld);
-  netpower += Math.floor(0.02 * mage.currentPopulation);
-  netpower += 1000 * mage.currentSpellLevel;
-  netpower += 1000 * mage.items.length;
-
-  // Army
-  mage.army.forEach(stack => {
-    const u = getUnitById(stack.id);
-    netpower += u.powerRank + stack.size;
-  });
-
-  // TODO: allies and heroes??
-  return netpower;
-}
-
-export const manaStorage = (mage: Mage) => {
-  return mage.nodes * productionTable.manaStorage;
-}
-
-export const researchPoints = (mage: Mage) => {
-  let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
-  // return 10 + Math.floor(rawPoints);
-  return 99999 + Math.floor(rawPoints);
-}
-
-export const manaIncome = (mage: Mage) => {
-  const land = totalLand(mage);
-  const nodes = mage.nodes;
-
-  const x = Math.floor(nodes * 100 / land);
-  const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
-  return Math.floor(manaYield);
-}
 
 export const populationIncome = (mage: Mage) => {
   return Math.floor(mage.currentPopulation * 1.05 + 50);
@@ -188,8 +111,11 @@ export const calcResistance = (mage: Mage) => {
     phantasm: 0
   };
 
-  // Max barrier is 2.5% of the land
-  const land = totalLand(mage);
-
+  // Max barrier is 2.5% of the land, max normal barrier is 75
+  if (mage.barriers > 0) {
+    const land = 0.025 * totalLand(mage);
+    const barrier = Math.floor((mage.barriers / land) * 75);
+    resistance.barrier = barrier;
+  }
   return resistance;
 }

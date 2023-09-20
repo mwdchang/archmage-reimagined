@@ -1,0 +1,68 @@
+[
+  {
+    "id": "potionOfValor",
+    "name": "Potion of Valor",
+    "description": "This small bottle contains a pink liquid. When a mage drinks it all at once, he/she will begin to act brave, as a hero does, therefore inspiring his/her followers and enhancing their performance for a period of time.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "percentage",
+                "magic": {
+                  "ascendant": { "value": 0.20 },
+                  "verdant": { "value": 0.20 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.20 },
+                  "phantasm": { "value": 0.20 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "oilFlasks",
+    "name": "Oil Flasks",
+    "description": "Different kinds of oils are stored in glass flasks. When these flasks of oil are thrown at the enemy, the glass breaks and oil spills out, making it easier to ignite them",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "attackResistances.fire": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -40 },
+                  "verdant": { "value": -40 },
+                  "eradication": { "value": -40 },
+                  "nether": { "value": -40 },
+                  "phantasm": { "value": -40 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

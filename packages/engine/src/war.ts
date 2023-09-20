@@ -3,8 +3,9 @@ import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
 import { UnitEffect, DamageEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { getUnitById, isFlying, isRanged, hasAbility } from "./army";
-import { getSpellById } from './magic';
+import { isFlying, isRanged, hasAbility } from "./base/unit";
+import { getSpellById, getItemById, getUnitById } from './base/references';
+import { currentSpellLevel } from './magic';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +59,14 @@ const getPowerModifier = (u: Unit) => {
 };
 
 
-// Returns the stacks in ranking order
+/**
+ * Returns the stacks in power ranking order
+ *
+ * As determined by primary attack type and unit abilities
+ * - flying units have a 2.25 multiplier
+ * - ground, none-ranged units have 1.5 multiplier
+ * - ranged has 1.0 multipiler
+ */
 const prepareBattleStack = (army: ArmyUnit[], role: string) => {
   const battleStack: BattleStack[] = army.map(stack => {
     const u = getUnitById(stack.id);
@@ -168,10 +176,15 @@ interface BattleOrder {
   attackInit: number
 }
 
-// Calculate the order of attacks
+/**
+ * Calculate the order of attacks for both sides.
+ * First put both primary and secondary attack inits to a list, then shuffe
+ * and re-sort
+ */
 const calcBattleOrders = (attackingArmy: BattleStack[], defendingArmy: BattleStack[]) => {
   let battleOrders: BattleOrder[] = [];
 
+  // Helper
   const extractAttacks = (army: BattleStack[], side: string) => {
     for (let i = 0; i < army.length; i++) {
       const u = army[i];
@@ -234,7 +247,6 @@ const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, attackTy
   if (hasAbility(defendingUnit, 'scales')) {
     multiplier *= 0.75;
   }
-
   return multiplier;
 }
 
@@ -267,7 +279,121 @@ const calcAccuracyModifier = (attackingUnit: Unit, defendingUnit: Unit) => {
 }
 
 
+/**
+ * Apply effect that can alter unit attributes as outlined in Unit typing definition.
+ *
+ * The general grammar is: "Apply X to unit that match condition Y with rule Z"
+ * Where
+ *  - X is an attribute like primaryAttackPower, or attackReistances.cold
+ *  - Y is filtering rule, like matching all units with melee attacks 
+ *  - Z determines how the final value is calculate; scale with spell-level, percentage .. etc
+ *
+ *  Finally there a magic multiplier. Generally speaking if you cast other schools's spell it will
+ *  become a weaker version of the same spell casted by a mage whose magic is innate to that school.
+ *
+ *  e.g. Ascendant mages get better bonuses casting Blinding-Flash than a Nether mage casting the 
+ *  same spell.
+ */
+const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy: BattleStack[]) => {
+  const casterMagic = caster.mage.magic;
+  const casterSpellLevel = currentSpellLevel(caster.mage);
 
+  Object.keys(unitEffect.attributeMap).forEach(attrKey => {
+    const attr = unitEffect.attributeMap[attrKey];
+    const fields = attrKey.split(',').map(d => d.trim());
+
+    console.log(`processing ${fields}`);
+
+    // Caster colour does not get this effect
+    if (!attr.magic[casterMagic]) return;
+
+    // Finally apply effects
+    affectedArmy.forEach(stack => {
+      const unit = stack.unit;
+      const rule = attr.rule;
+      let baseValue = attr.magic[casterMagic].value;
+      let finalValue: any = null;
+
+      fields.forEach(rawField => {
+        // Resolve nesting
+        let root = unit;
+        let field = rawField;
+        if (rawField.includes('.')) {
+          const [t1, t2] = rawField.split('.'); 
+          root = unit[t1];
+          field = t2;
+        }
+
+        // Figure out the value to add
+        if (rule === 'spellLevel') {
+          finalValue = baseValue * casterSpellLevel;
+        } else if (rule === 'spellLevelPercentage') {
+          finalValue = baseValue * casterSpellLevel * root[field];
+        } else if (rule === 'percentage') {
+          finalValue = baseValue * root[field];
+        } else { // add, remove
+          finalValue = baseValue;
+        }
+
+        // Finally apply
+        if (_.isArray(root[field])) {
+          if (attr.has && root[field].includes(attr.has)) {
+            root[field].push(finalValue);
+          }
+        } else {
+          if (field === 'accuracy') {
+            stack.accuracy += finalValue;
+          } else if (field === 'efficiency') {
+            stack.efficiency += finalValue;
+          } else {
+            root[field] += Math.floor(finalValue);
+          }
+        }
+      });
+    });
+  });
+};
+
+
+/**
+ * Apply direct damage to target stacks
+ */
+const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affectedArmy: BattleStack[]) => {
+  const casterMagic = caster.mage.magic;
+  const casterSpellLevel = currentSpellLevel(caster.mage);
+
+  const damageType = damageEffect.damageType;
+  let rawDamage = 0;
+
+  if (!damageEffect.magic[casterMagic]) return;
+
+  affectedArmy.forEach(stack => {
+    const rule = damageEffect.rule;
+    if (rule === 'spellLevel') {
+      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
+    } else {
+      rawDamage = damageEffect.magic[casterMagic].value;
+    }
+
+    const resistance = calcResistance(stack.unit, damageType);
+    const damage = rawDamage * ((100 - resistance) / 100);
+    const unitLoss = Math.floor(damage / stack.unit.hitPoints);
+    
+    console.log(`dealing rawDamage=${damage} actualDamage=${damage} units=${unitLoss}`);
+  });
+};
+
+
+/**
+ * Entry point for casting battle spells. This ensures the correct caster and affected army
+ * are in-place before handing off the actual calculation to helper effects functions.
+ *
+ * The stack attribute determines how the affected army is chosen, there are several options.
+ * - random: If the spell has multiple effects, each effect targets a random stack
+ * - randomSingle: A random stack is chosen and receives all effects. This is used to model 
+ *   spells that have both UnitEffect and DamageEffect and wants to target the same unit.
+ * - all: All stacks get all effects
+ */
 const battleSpell = (
   caster: Combatant,
   casterBattleStack: BattleStack[],
@@ -278,7 +404,6 @@ const battleSpell = (
   console.group(`=== Spell ${caster.mage.name} : ${caster.spellId} ===`);
 
   const casterSpell = getSpellById(caster.spellId);
-  const casterMagic = caster.mage.magic;
 
   casterSpell.effects.forEach(effect => {
     if (effect.effectType !== 'BattleEffect') return;
@@ -311,136 +436,82 @@ const battleSpell = (
 
       if (eff.name === 'UnitEffect') {
         const unitEffect = eff as UnitEffect;
-        Object.keys(unitEffect.attributeMap).forEach(attrKey => {
-          const attr = unitEffect.attributeMap[attrKey];
-          const fields = attrKey.split(',').map(d => d.trim());
-
-          console.log(`processing ${fields}`);
-
-          // Caster colour does not get this effect
-          if (!attr.magic[casterMagic]) return;
-
-          // Finally apply effects
-          affectedArmy.forEach(stack => {
-            const unit = stack.unit;
-            const rule = attr.rule;
-            let baseValue = attr.magic[casterMagic].value;
-            let finalValue: any = null;
-
-            fields.forEach(field => {
-              // Figure out the value to add
-              if (rule === 'spellLevel') {
-                finalValue = baseValue * caster.mage.currentSpellLevel;
-              } else if (rule === 'spellLevelPercentage') {
-                // TODO: compound
-                finalValue = baseValue * caster.mage.currentSpellLevel * unit[field];
-              } else { // add, remove
-                finalValue = baseValue;
-              }
-
-              // Finally apply
-              if (_.isArray(unit[field])) {
-                if (attr.has && unit[field].includes(attr.has)) {
-                  unit[field].push(finalValue);
-                }
-              } else {
-                if (field === 'accuracy') {
-                  stack.accuracy += finalValue;
-                } else if (field === 'efficiency') {
-                  stack.efficiency += finalValue;
-                } else {
-                  unit[field] += finalValue;
-                }
-              }
-            });
-          });
-        });
+        applyUnitEffect(caster, unitEffect, affectedArmy);
       } else if (eff.name === 'DamageEffect') {
         const damageEffect = eff as DamageEffect;
-        const damageType = damageEffect.damageType;
-        let rawDamage = 0;
-
-        if (!damageEffect.magic[casterMagic]) return;
-
-        affectedArmy.forEach(stack => {
-          const rule = damageEffect.rule;
-          if (rule === 'spellLevel') {
-            rawDamage = damageEffect.magic[casterMagic].value * caster.mage.currentSpellLevel;
-          } else {
-            rawDamage = damageEffect.magic[casterMagic].value;
-          }
-
-          const resistance = calcResistance(stack.unit, damageType);
-          const damage = rawDamage * ((100 - resistance) / 100);
-          console.log(`dealing rawDamage=${damage} actualDamage=${damage}`);
-        });
+        applyDamageEffect(caster, damageEffect, affectedArmy);
       }
     }
   });
-
-  /*
-  casterSpell.effects.forEach(effect => {
-    if (effect.effectType === 'UnitEffect') {
-      const eff = effect as UnitEffect;
-      const army = eff.target === 'self' ? casterBattleStack: defenderBattleStack;
-
-      // TODO: filters
-      const filteredArmy = army;
-
-      const armyToRecieveEffect = eff.stack === 'random' ? 
-        [filteredArmy[randomInt(filteredArmy.length)]] :
-        filteredArmy;
-
-      // Loop through each affected attributes
-      Object.keys(eff.attributeMap).forEach(attrKey => {
-        const attr = eff.attributeMap[attrKey];
-
-        // Magic colour does not get this effect
-        if (!attr.magic[casterMagic]) return;
-
-        let effectValue: any;
-        if (attr.rule === 'spellLevel') {
-          effectValue = attr.magic[casterMagic].value * caster.mage.currentSpellLevel;
-        } else {
-          effectValue = attr.magic[casterMagic].value; 
-        }
-
-        // Finally apply effects
-        armyToRecieveEffect.forEach(stack => {
-          if (attrKey === 'accuracy') {
-            stack.accuracy += effectValue;
-          } else {
-            const fields = attrKey.split(',').map(d => d.trim());
-            fields.forEach(field => {
-              if (_.isArray(stack.unit[field]) && attr.has && stack.unit[field].includes(attr.has)) {
-                stack.unit[field].push(effectValue);
-              } else {
-                stack.unit[field] += effectValue;
-              }
-            });
-          }
-        });
-      });
-    } else if (effect.effectType === 'BattleDamageEffect') {
-      const eff = effect as BattleDamageEffect;
-      const army = eff.target === 'self' ? casterBattleStack: defenderBattleStack;
-      const armyToRecieveEffect = eff.stack === 'random' ? 
-        [army[randomInt(army.length)]] :
-        army;
-
-      if (!eff.magic[casterMagic]) return;
-
-      armyToRecieveEffect.forEach(stack => {
-        if (eff.rule === 'spellLevel') {
-          const damage = caster.mage.currentSpellLevel * eff.magic[casterMagic].value;
-          console.log(`damage against ${stack.unit.name} = `, damage);
-        }
-      })
-    }
-  });
-  */
   console.groupEnd();
 }
+
+/**
+ * Use a battle item. The process is similar to battleSpell, however items cannot be resisted or
+ * reflected by opposing forces at the mage level. Item effects also cannot be resisted at the 
+ * unit level.
+ */
+const battleItem = (
+  caster: Combatant,
+  casterBattleStack: BattleStack[],
+  defender: Combatant,
+  defenderBattleStack: BattleStack[]) => {
+
+  const casterItem = getItemById(caster.itemId);
+
+  console.log('');
+  console.group(`=== Item ${caster.mage.name} : ${caster.itemId} ===`);
+  console.groupEnd();
+
+  casterItem.effects.forEach(effect => {
+    if (effect.effectType !== 'BattleEffect') return;
+
+    const battleEffect = effect as BattleEffect;
+    const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
+
+    // TODO: filters
+    const filteredArmy = army;
+    const stackType = battleEffect.stack;
+
+    let randomSingleIdx = -1;
+    if (stackType === 'randomSingle') {
+      randomSingleIdx = randomInt(filteredArmy.length);
+    }
+
+    for (let i = 0; i < battleEffect.effects.length; i++) {
+      let affectedArmy: BattleStack[] = [];
+      if (stackType === 'randomSingle') {
+        affectedArmy = [filteredArmy[randomSingleIdx]];
+      } else if (stackType === 'random') {
+        let idx = randomInt(filteredArmy.length);
+        affectedArmy = [filteredArmy[idx]];
+      } else {
+        affectedArmy = filteredArmy;
+      }
+
+      const eff = battleEffect.effects[i];
+      console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
+
+      if (eff.name === 'UnitEffect') {
+        const unitEffect = eff as UnitEffect;
+        applyUnitEffect(caster, unitEffect, affectedArmy);
+      } else if (eff.name === 'DamageEffect') {
+        const damageEffect = eff as DamageEffect;
+        applyDamageEffect(caster, damageEffect, affectedArmy);
+      }
+    }
+  });
+}
+
+// Debugging pretty print
+const LPretty = (v: any, n: number = 20) => {
+  const str = '' + v;
+  return str + ' '.repeat(n - str.length);
+};
+const RPretty = (v: any, n: number = 10) => {
+  const str = '' + v;
+  return ' '.repeat(n - str.length) + str;
+};
 
 
 /**
@@ -471,8 +542,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   if (attacker.spellId) {
     battleSpell(attacker, attackingArmy, defender, defendingArmy);
   }
+  if (attacker.itemId) {
+    battleItem(attacker, attackingArmy, defender, defendingArmy);
+  }
+
   if (defender.spellId) {
     battleSpell(defender, defendingArmy, attacker, attackingArmy);
+  }
+  if (defender.itemId) {
+    battleItem(defender, defendingArmy, attacker, attackingArmy);
   }
 
   // Find pairing
@@ -490,13 +568,49 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log(`\tDefender use ${defender.itemId}`);
 
   console.log('=== Attacking army ===');
+  console.log(
+    LPretty('name'),
+    RPretty('size'),
+    RPretty('Attack'),
+    RPretty('Extra'),
+    RPretty('Counter'),
+    RPretty('Hitpoints'),
+    RPretty('Accuracy')
+  );
+
   attackingArmy.forEach(stack => {
-    console.log('\t', stack.unit.name, stack.size, stack.netPower, stack.targetIdx);
+    console.log(
+      LPretty(stack.unit.name),
+      RPretty(stack.size),
+      RPretty(stack.unit.primaryAttackPower),
+      RPretty(stack.unit.secondaryAttackPower),
+      RPretty(stack.unit.counterAttackPower),
+      RPretty(stack.unit.hitPoints),
+      RPretty(stack.accuracy)
+    );
   });
 
   console.log('=== Defending army ===');
+  console.log(
+    LPretty('name'),
+    RPretty('size'),
+    RPretty('Attack'),
+    RPretty('Extra'),
+    RPretty('Counter'),
+    RPretty('Hitpoints'),
+    RPretty('Accuracy')
+  );
+
   defendingArmy.forEach(stack => {
-    console.log('\t', stack.unit.name, stack.size, stack.netPower, stack.targetIdx);
+    console.log(
+      LPretty(stack.unit.name),
+      RPretty(stack.size),
+      RPretty(stack.unit.primaryAttackPower),
+      RPretty(stack.unit.secondaryAttackPower),
+      RPretty(stack.unit.counterAttackPower),
+      RPretty(stack.unit.hitPoints),
+      RPretty(stack.accuracy)
+    );
   });
 
 

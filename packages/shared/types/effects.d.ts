@@ -24,6 +24,22 @@ export interface BattleEffect extends Effect {
   effects: (UnitEffect | DamageEffect)[]
 }
 
+/**
+ * The "rule" field dictates how the attributeMap fields are to be modified by the magic value.
+ *
+ * The general grammar is:
+ *   "Change unit's XYZ if it matches criteria by RULE and magic VALUE
+ *
+ * The rule types are:
+ *
+ * - add: Add value to array fields, e.g. abilities, attack types
+ * - remove: Remove value to array fields, e.g. abilities, attack types
+ *
+ * - spellLevel: X = X + mage.spellLevel * value
+ * - spellLevelPercentage: X = X + (X * mage.spellLevel * value)
+ *
+ * - percentage: X = X + X * value
+**/
 export interface UnitEffect {
   name: string,
   attributeMap: {
