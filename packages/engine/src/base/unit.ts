@@ -7,6 +7,14 @@ export const hasAbility = (u:Unit, abilityStr: string) => {
   return u.abilities.map(d => d.name).includes(abilityStr);
 }
 
+export const hasHealing = (u: Unit) => {
+  return u.abilities.map(d => d.name).includes('healing');
+}
+
+export const hasRegeneration = (u: Unit) => {
+  return u.abilities.map(d => d.name).includes('regeneration');
+}
+
 export const isFlying = (u: Unit) => {
   return u.abilities.map(d => d.name).includes('flying');
 }

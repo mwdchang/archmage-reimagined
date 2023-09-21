@@ -9,10 +9,10 @@ const attacker: Combatant = {
   mage: { 
     name: 'attacker', 
     magic: 'ascendant',
-    currentSpellLevel: 400
+    currentSpellLevel: 800
   } as Mage,
   army: [
-    { id: 'nagaQueen', size: 2000 }
+    { id: 'archangel', size: 2000 }
   ],
   spellId: 'healing',
   itemId: 'potionOfValor'

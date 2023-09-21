@@ -3,7 +3,7 @@ import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { isFlying, isRanged, hasAbility } from "./base/unit";
+import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
 import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 
@@ -45,7 +45,7 @@ interface BattleStack {
   loss: number,
 
   healingPoints: number,
-  healingPercentage: number,
+  healingBuffer: number[],
 
   // For faster calculation
   netPower: number,
@@ -84,7 +84,7 @@ const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       efficiency: 100,
       sustainedDamage: 0,
       healingPoints: 0,
-      healingPercentage: 0,
+      healingBuffer: [],
       loss: 0,
       netPower: u.powerRank * stack.size
     }
@@ -193,6 +193,8 @@ const calcBattleOrders = (attackingArmy: BattleStack[], defendingArmy: BattleSta
   const extractAttacks = (army: BattleStack[], side: string) => {
     for (let i = 0; i < army.length; i++) {
       const u = army[i];
+      if (u.targetIdx === NONE) continue;
+
       if (u.unit.primaryAttackInit > 0) {
         battleOrders.push({
           side,
@@ -779,22 +781,77 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Post battle, healing calculation
 
   // Attacker healing
+  console.log('');
   console.log('=== Post battle attacker ===');
   attackingArmy.forEach(stack => {
-    if (stack.healingPoints > 0) {
-      const unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+    if (stack.healingPoints > 0 && stack.loss > 0) {
+      let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+      if (unitsHealed >= stack.loss) {
+        unitsHealed = stack.loss;
+      }
+      stack.loss -= unitsHealed;
+      stack.size += unitsHealed;
+      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    }
+    if (hasHealing(stack.unit)) {
+      stack.healingBuffer.push(30);
+    }
+    if (hasRegeneration(stack.unit)) {
+      stack.healingBuffer.push(20);
+    }
+    if (stack.healingBuffer.length > 0 && stack.loss > 0) {
+      let heal = 1.0;
+      stack.healingBuffer.forEach(hValue => {
+        heal = heal * (100 - hValue) / 100;
+      });
+      heal = 1 - heal;
+
+      let unitsHealed = Math.floor(heal * stack.loss);
+      if (unitsHealed >= stack.loss) {
+        unitsHealed = stack.loss;
+      }
+      stack.loss -= unitsHealed;
+      stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
     }
   });
 
   // Defender healing
+  console.log('');
   console.log('=== Post battle defender ===');
   defendingArmy.forEach(stack => {
-    if (stack.healingPoints > 0) {
-      const unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+    if (stack.healingPoints > 0 && stack.loss > 0) {
+      let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
+      if (unitsHealed >= stack.loss) {
+        unitsHealed = stack.loss;
+      }
+      stack.loss -= unitsHealed;
+      stack.size += unitsHealed;
+      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    }
+    if (hasHealing(stack.unit)) {
+      stack.healingBuffer.push(30);
+    }
+    if (hasRegeneration(stack.unit)) {
+      stack.healingBuffer.push(20);
+    }
+    if (stack.healingBuffer.length > 0 && stack.loss > 0) {
+      let heal = 1.0;
+      stack.healingBuffer.forEach(hValue => {
+        heal = heal * (100 - hValue) / 100;
+      });
+      heal = 1 - heal;
+
+      let unitsHealed = Math.floor(heal * stack.loss);
+      if (unitsHealed >= stack.loss) {
+        unitsHealed = stack.loss;
+      }
+      stack.loss -= unitsHealed;
+      stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
     }
   });
+
 
   // Calculate combat result
   console.log('');
