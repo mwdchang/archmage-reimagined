@@ -87,9 +87,9 @@ export const armyUpkeep = (mage: Mage) => {
 
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
-    mana += u.upkeepCost.mana * stack.size;
-    pop += u.upkeepCost.population * stack.size;
-    geld += u.upkeepCost.geld * stack.size;
+    mana += Math.ceil(u.upkeepCost.mana * stack.size);
+    pop += Math.ceil(u.upkeepCost.population * stack.size);
+    geld += Math.ceil(u.upkeepCost.geld * stack.size);
   });
 
   console.log(mana, pop, geld);

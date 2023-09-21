@@ -4,6 +4,7 @@
       <td> (#{{ rank.id }}) {{ rank.name }} </td>
       <td> <magic :magic="rank.magic" /> </td>
       <td> {{ rank.land }} </td>
+      <td> {{ rank.fortresses }} </td>
       <td> {{ rank.netPower }} </td>
       <td> 
         <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
@@ -26,3 +27,9 @@ onMounted(async () => {
 });
 
 </script>
+
+<style scoped>
+table > tr > td {
+  min-width: 2rem;
+}
+</style>

@@ -225,6 +225,7 @@ class Engine {
         id: mage.id,
         name: mage.name,
         magic: mage.magic,
+        fortresses: mage.fortresses,
         land: totalLand(mage),
         netPower: totalNetPower(mage)
       }

@@ -221,9 +221,9 @@ const unitsStatus = computed(() => {
     totalArmyPower.value += stackPower;
 
     const upkeep = {
-      geld: stack.size * u.upkeepCost.geld,
-      mana: stack.size * u.upkeepCost.mana,
-      population: stack.size * u.upkeepCost.population
+      geld: Math.ceil(stack.size * u.upkeepCost.geld),
+      mana: Math.ceil(stack.size * u.upkeepCost.mana),
+      population: Math.ceil(stack.size * u.upkeepCost.population)
     };
     result.push({
       id: stack.id,
