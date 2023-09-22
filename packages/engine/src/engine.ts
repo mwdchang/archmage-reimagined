@@ -33,7 +33,7 @@ import {
   researchPoints,
   manaIncome,
   manaStorage,
-
+  doItemGeneration
 } from './magic';
 import { battle, Combatant } from './war';
 
@@ -116,7 +116,7 @@ class Engine {
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
-    if (mage.currentPopulation > maxPopulation(mage)) {
+    if (mage.currentPopulation >= maxPopulation(mage)) {
       mage.currentPopulation = maxPopulation(mage);
     }
     if (mage.currentMana > manaStorage(mage)) {
@@ -125,6 +125,7 @@ class Engine {
 
     // 3. calculate research, if applicable
     doResearch(mage, researchPoints(mage));
+    doItemGeneration(mage);
 
     // 4. calculate upkeep
     
@@ -137,7 +138,7 @@ class Engine {
     }
     let landGained = 0;
     for (let i = 0; i < num; i++) {
-      const rate = explorationRate(totalLand(mage));
+      const rate = explorationRate(mage);
       const exploredLand = explore(rate);
       mage.wilderness += exploredLand;
       landGained += exploredLand;
@@ -162,10 +163,8 @@ class Engine {
       Object.keys(res).forEach(key => {
         const stack = mage.army.find(d => d.id === key); 
         if (stack) {
-          console.log('\t\t existing');
           stack.size += res[key];
         } else {
-          console.log('\t\t new stack');
           mage.army.push({
             id: key,
             size: res[key]
@@ -181,7 +180,6 @@ class Engine {
   }
 
   async build(mage: Mage, payload: BuildPayload) {
-    console.log(mage, payload);
     let landUsed = 0;
     let turnsUsed = 0;
 
@@ -208,8 +206,6 @@ class Engine {
   }
 
   async destroy(mage: Mage, payload: DestroyPayload) {
-    console.log(mage, payload);
-
     buildingTypes.forEach(b => {
       const num = payload[b.id];
       mage[b.id] -= num;
@@ -235,10 +231,7 @@ class Engine {
   }
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
-    console.log('getting defender mage', targetId);
     const defenderMage = this.getMage(targetId);
-
-    console.log(defenderMage);
 
     // Make battle stacks
     const attacker: Combatant =  {
@@ -267,15 +260,22 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+
     return { user: res.user, mage };
   }
 
   async login(username: string, password: string) {
     // 1. check login
     const res = await this.adapter.login(username, password);
+    if (!res) {
+      return { user: null, mage: null }
+    }
 
     // 2. return mage
     const mage = this.adapter.getMageByUser(username);
+    if (!mage) {
+      return { user: res.user, mage: null }
+    }
     return { user: res.user, mage };
   }
 

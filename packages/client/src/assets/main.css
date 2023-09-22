@@ -67,3 +67,8 @@ select {
   padding: 1px 4px;
   margin: 1px 1px;
 }
+
+table > tr.active {
+  background: #53A;
+}
+

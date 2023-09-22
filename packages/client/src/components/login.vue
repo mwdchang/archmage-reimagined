@@ -6,6 +6,8 @@
     Password: <input name="password" type="password" v-model="loginData.password">
     <br>
     <button @click="login">Login</button>
+    <br>
+    <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
   </main>
 </template>
 
@@ -18,18 +20,25 @@ import { API } from '@/api/api';
 const loginData = ref({ username: '', password: '', magic: 'ascendant' });
 const router = useRouter();
 const mageStore = useMageStore();
+const error = ref('');
 
 const login = async () => {
   const r = await API.post('/login', { 
     username: loginData.value.username,
     password: loginData.value.password
   });
-  if (r) {
+  if (!r.data) {
+    error.value = `Cannot login with ${loginData.value.username}`;
+    return;
+  }
+
+  if (r && r.data) {
+    error.value = '';
     mageStore.setLoginStatus(1);
     mageStore.setMage(r.data.mage);
     setTimeout(() => {
       router.push({ name: 'about' });
-    }, 500);
+    }, 600);
   }
 };
 </script>

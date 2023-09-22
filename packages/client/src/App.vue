@@ -2,8 +2,8 @@
   <main style="display: flex; flex-direction: column; align-items: center">
     <header-info v-if="mageStore.mage && !hideHeader.includes(route.name as string)" />
 
-    <RouterView v-if="route.name === 'about'" />
-    <RouterView v-if="route.name !== 'about' && mageStore.mage" />
+    <RouterView v-if="route.name === 'home'" />
+    <RouterView v-if="mageStore.mage" />
   </main>
 </template>
 

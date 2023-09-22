@@ -74,7 +74,7 @@ export const spaceForUnits = (mage: Mage) => {
 }
 
 export const populationIncome = (mage: Mage) => {
-  return Math.floor(mage.currentPopulation * 1.05 + 50);
+  return Math.floor(mage.currentPopulation * 0.015 + 50);
 }
 
 export const geldIncome = (mage: Mage) => {
@@ -92,8 +92,6 @@ export const armyUpkeep = (mage: Mage) => {
     pop += Math.ceil(u.upkeepCost.population * stack.size);
     geld += Math.ceil(u.upkeepCost.geld * stack.size);
   });
-
-  console.log(mana, pop, geld);
 
   return {
     mana: mana, 

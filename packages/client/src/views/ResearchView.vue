@@ -2,7 +2,7 @@
   <main v-if="mageStore.mage">
     <h3>Research</h3>
     <p> 
-      You are generating {{ rp }} per turn.
+      You are generating {{ rp }} research points per turn.
     </p>
     <table>
       <tr>
@@ -12,7 +12,7 @@
         <td>Turns</td>
       </tr>
       <tr v-for="(magic, idx) in filteredMagicTypes" :key="magic" 
-        :class="{}"
+        :class="{active: currentResearch[magic].active}"
         @click="toggle(magic)">
         <td> <magic :magic="magic" /></td>
         <td>
@@ -49,5 +49,17 @@ const filteredMagicTypes = computed(() => {
   });
 });
 
+const toggle = (magic: string) => {
+  filteredMagicTypes.value.forEach(d => {
+    currentResearch.value[d].active = false;
+  });
+  currentResearch.value[magic].active = true;
+}
 
 </script>
+
+<style scoped>
+table > tr {
+  cursor: pointer;
+}
+</style>

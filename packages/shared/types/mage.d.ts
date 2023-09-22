@@ -3,10 +3,12 @@ export interface ArmyUnit {
   size: number;
 }
 
+/*
 export interface Item {
   id: number;
   type: string;
 }
+*/
 
 export interface Hero {
   id: number;
@@ -85,7 +87,7 @@ export interface Mage {
   wilderness: number;
 
   army: ArmyUnit[];
-  items: Item[];
+  items: { [key: string]: number },
   heroes: Hero[];
   enchantments: Enchantment[];
 }

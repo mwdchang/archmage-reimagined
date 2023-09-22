@@ -69,6 +69,7 @@ export class SimpleDataAdapter extends DataAdapter {
   createMage(username: string, mage: Mage) {
     this.userMageMap.set(username, mage.id);
     this.mageMap.set(mage.id, mage);
+    this.saveState();
   }
 
   updateMage(mage: Mage) {
@@ -94,9 +95,12 @@ export class SimpleDataAdapter extends DataAdapter {
         mage.currentTurn ++;
       }
     })
+    this.saveState();
+  }
 
+  saveState() {
     // Write out to disk to save state
-    console.log('saving');
+    console.log('saving state');
     writeFileSync('userAuth.sav', JSON.stringify(Array.from(this.userAuthMap.entries())));
     writeFileSync('mage.sav', JSON.stringify(Array.from(this.mageMap.entries())));
     writeFileSync('userMage.sav', JSON.stringify(Array.from(this.userMageMap.entries())));

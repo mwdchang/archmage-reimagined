@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Unit } from 'shared/types/unit';
 import { Spell, Item } from 'shared/types/magic';
 import { magicAlignmentTable, spellRankTable } from './config';
+import { randomInt } from '../random';
 
 export const unitMap = new Map<string, Unit>();
 export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
@@ -58,6 +59,10 @@ export const getItemById = (id: string): Item => {
   const item = itemMap.get(id);
   if (!item) throw new Error(`Cannot find item ${id}`);
   return _.cloneDeep(item);
+}
+
+export const getRandomItem = () => {
+  return itemList[randomInt(itemList.length)];
 }
 
 export const initializeResearchTree = () => {

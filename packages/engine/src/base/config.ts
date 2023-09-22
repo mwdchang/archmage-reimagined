@@ -1,5 +1,6 @@
 /* Various configuration and rules */
 
+
 export const explorationLimit = 6000;
 
 
@@ -141,4 +142,8 @@ export const spellRankTable = {
   average: 5,
   complex: 7,
   ultimate: 20
+}
+
+export const itemProductionTable = {
+  itemGenerationRate: 0.1
 }

@@ -105,6 +105,11 @@ router.post('/api/register', async (req, res) => {
 router.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   const { user, mage } = await engine.login(username, password);
+
+  if (!user || !mage) {
+    return res.status(200).json(null);
+  }
+
   res.cookie('amr-jwt', user.token, {
     httpOnly: true,
     maxAge: MAX_AGE * 1000

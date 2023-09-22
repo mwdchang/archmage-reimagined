@@ -30,8 +30,8 @@ export const createMage = (name: string, magic: string): Mage => {
     },
 
     netPower: 0,
-    currentTurn: 100,
-    maxTurn: 1000,
+    currentTurn: 2000,
+    maxTurn: 2000,
 
     currentPopulation: 1000,
     currentMana: 1000,
@@ -47,7 +47,7 @@ export const createMage = (name: string, magic: string): Mage => {
     barriers: 0,
     wilderness: 181,
     army: [],
-    items: [],
+    items: {},
     heroes: [],
     enchantments: []
   };
@@ -100,7 +100,10 @@ export const totalNetPower = (mage: Mage) => {
   netpower += Math.floor(0.0005 * mage.currentGeld);
   netpower += Math.floor(0.02 * mage.currentPopulation);
   netpower += 1000 * mage.currentSpellLevel;
-  netpower += 1000 * mage.items.length;
+
+  Object.keys(mage.items).forEach(key => {
+    netpower += 1000 * mage.items[key];
+  });
 
   // Army
   mage.army.forEach(stack => {

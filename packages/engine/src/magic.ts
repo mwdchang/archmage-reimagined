@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { UnitSummonEffect } from 'shared/types/effects';
 import { 
-  magicAlignmentTable, spellRankTable, productionTable 
+  magicAlignmentTable, spellRankTable, productionTable, itemProductionTable
 } from './base/config';
 import { Mage } from 'shared/types/mage';
 import { 
@@ -9,7 +9,8 @@ import {
   getUnitById,
   getSpellById,
   getMaxSpellLevels,
-  getResearchTree
+  getResearchTree,
+  getRandomItem
 } from './base/references';
 import { totalLand } from './base/mage';
 
@@ -38,6 +39,26 @@ export const currentSpellLevel = (mage: Mage) => {
 
   // TODO: others
   return result;
+}
+
+export const itemGenerationRate = (mage: Mage) => {
+  const land = totalLand(mage);
+  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.libraries / land);
+  return rate;
+}
+
+export const doItemGeneration = (mage: Mage) => {
+  const rate = itemGenerationRate(mage);
+  if (Math.random() <= rate) {
+    const item = getRandomItem();
+    console.log('Found an item!!!', item.name);
+
+    if (!mage.items[item.id]) {
+      mage.items[item.id] = 1;
+    } else {
+      mage.items[item.id] ++;
+    }
+  }
 }
 
 // Do research, 
@@ -133,7 +154,7 @@ export const manaStorage = (mage: Mage) => {
 export const researchPoints = (mage: Mage) => {
   let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
   // return 10 + Math.floor(rawPoints);
-  return 99999 + Math.floor(rawPoints); // FIXME just testing
+  return Math.floor(rawPoints); // FIXME just testing
 }
 
 export const manaIncome = (mage: Mage) => {

@@ -5,7 +5,12 @@
       <td>Country</td><td>{{ mageSummary.name }} (# {{ mageSummary.id }}) </td>
     </tr>
     <tr>
-      <td>Magic</td><td>{{ mageSummary.magic }} </td>
+      <td>Magic</td>
+      <td>
+        <div style="display: flex">
+        <magic :magic="mageSummary.magic" />{{ mageSummary.magic }} 
+        </div>
+      </td>
     </tr>
     <tr>
       <td>Power</td><td>{{ mageSummary.netPower }} </td>
@@ -21,6 +26,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 
 const props = defineProps({

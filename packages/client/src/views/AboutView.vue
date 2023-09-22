@@ -10,7 +10,7 @@
           <div>Magic</div><div>{{ mageStore.mage.currentMana}} / {{ manaStorage(mageStore.mage) }}</div>
         </div>
         <div class="row">
-          <div>Items</div><div>0</div>
+          <div>Items</div><div>{{ numItems }}</div>
         </div>
 
         <br>
@@ -22,7 +22,7 @@
         <img v-if="mageStore.mage.magic==='ascendant'" src="@/assets/images/ascendant.jpeg" />
         <img v-if="mageStore.mage.magic==='verdant'" src="@/assets/images/verdant.jpeg" />
         <img v-if="mageStore.mage.magic==='eradication'" src="@/assets/images/eradication.jpeg" />
-        <img v-if="mageStore.mage.magic==='nether'" src="@/assets/images/netehr.jpeg" />
+        <img v-if="mageStore.mage.magic==='nether'" src="@/assets/images/nether.jpeg" />
         <img v-if="mageStore.mage.magic==='phantasm'" src="@/assets/images/phantasm.jpeg" />
       </section>
       <section>
@@ -63,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
@@ -70,6 +71,15 @@ import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
 
 const mageStore = useMageStore();
+
+const numItems = computed(() => {
+  const keys = Object.keys(mageStore.mage.items);
+  let num = 0;
+  keys.forEach(key => {
+    num += mageStore.mage.items[key];
+  });
+  return num;
+});
 
 </script>
 
