@@ -5,6 +5,7 @@ import {
   loadItemData,
   getSpellById,
   initializeResearchTree, 
+  magicTypes
 } from './base/references';
 import { 
   createMage, 
@@ -80,7 +81,7 @@ class Engine {
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
-      const magic = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'][randomInt(5)];
+      const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
       const mage = createMage(name, magic);
       this.adapter.createMage(name, mage);
@@ -136,7 +137,7 @@ class Engine {
     }
     let landGained = 0;
     for (let i = 0; i < num; i++) {
-      const rate = explorationRate(totalLand(mage), 5000);
+      const rate = explorationRate(totalLand(mage));
       const exploredLand = explore(rate);
       mage.wilderness += exploredLand;
       landGained += exploredLand;

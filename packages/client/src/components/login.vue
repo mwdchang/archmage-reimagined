@@ -27,7 +27,9 @@ const login = async () => {
   if (r) {
     mageStore.setLoginStatus(1);
     mageStore.setMage(r.data.mage);
-    router.push({ name: 'about' });
+    setTimeout(() => {
+      router.push({ name: 'about' });
+    }, 500);
   }
 };
 </script>

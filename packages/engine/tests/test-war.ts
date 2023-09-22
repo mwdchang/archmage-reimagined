@@ -12,7 +12,8 @@ const attacker: Combatant = {
     currentSpellLevel: 800
   } as Mage,
   army: [
-    { id: 'archangel', size: 2000 }
+    { id: 'archangel', size: 2000 },
+    { id: 'dominion', size: 5}
   ],
   spellId: 'healing',
   itemId: 'potionOfValor'
@@ -28,7 +29,7 @@ const defender: Combatant = {
     { id: 'archer', size: 2000000 },
     { id: 'militia', size: 70000 }
   ],
-  spellId: 'healing',
+  spellId: 'blaze',
   itemId: ''
 };
 

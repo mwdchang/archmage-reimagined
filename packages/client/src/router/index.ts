@@ -10,6 +10,7 @@ import SpellView from '@/views/SpellView.vue';
 import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
+import ResearchView from '@/views/ResearchView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -74,6 +75,11 @@ const router = createRouter({
       path: '/battle',
       name: 'battle',
       component: BattleView
+    },
+    {
+      path: '/research',
+      name: 'research',
+      component: ResearchView 
     }
   ]
 })

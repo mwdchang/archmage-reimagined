@@ -6,6 +6,7 @@ import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
 import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
+import { LPretty, RPretty } from './util';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -456,6 +457,17 @@ const battleSpell = (
         affectedArmy = filteredArmy;
       }
 
+      if (battleEffect.target !== 'self') {
+        affectedArmy = affectedArmy.filter(stack => {
+          const roll = Math.random() * 100;
+          if (roll > stack.unit.spellResistances[casterSpell.magic]) {
+            return true;
+          }
+          console.log(`${stack.unit.name} resisted ${stack.unit.spellResistances[casterSpell.magic]}`);
+          return false;
+        });
+      }
+
       const eff = battleEffect.effects[i];
       console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
 
@@ -530,17 +542,6 @@ const battleItem = (
     }
   });
 }
-
-// Debugging pretty print
-const LPretty = (v: any, n: number = 20) => {
-  const str = '' + v;
-  return str + ' '.repeat(n - str.length);
-};
-const RPretty = (v: any, n: number = 10) => {
-  const str = '' + v;
-  return ' '.repeat(n - str.length) + str;
-};
-
 
 /**
  * Handles siege and regular battles. The battle phase goes as follows

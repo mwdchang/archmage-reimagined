@@ -13,7 +13,6 @@ import {
 } from './base/references';
 import { totalLand } from './base/mage';
 
-
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
   const maxSpellLevels = getMaxSpellLevels();
@@ -145,4 +144,3 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
   return Math.floor(manaYield);
 }
-

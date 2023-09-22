@@ -1,7 +1,7 @@
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
-import { productionTable } from "./base/config";
+import { productionTable, explorationLimit } from "./base/config";
 import { totalLand } from "./base/mage";
 
 export interface Building {
@@ -34,16 +34,18 @@ export const buildingRate = (mage: Mage, buildType: string) => {
 }
 
 // Returns an approximate exploration rate
-export const explorationRate = (current: number, max: number) => {
-  if (current >= max) return 0;
+export const explorationRate = (mage: Mage) => {
+  const current = totalLand(mage);
+  if (current >= explorationLimit) return 0;
 
   // return 1 + (1/ current) * 2500;
-  return Math.sqrt(max - current) / 3; 
+  return Math.sqrt(explorationLimit - current) / 3; 
 }
 
 export const explore = (rate: number) => {
-  if (rate < 0) return 0;
-  return Math.floor(randomBM() * rate);
+  if (rate <= 0) return 0;
+
+  return Math.floor(0.75 * rate + randomBM() * 0.25 * rate);
 }
 
 export const maxPopulation = (mage: Mage) => {
@@ -70,7 +72,6 @@ export const spaceForUnits = (mage: Mage) => {
   });
   return Math.ceil(space);
 }
-
 
 export const populationIncome = (mage: Mage) => {
   return Math.floor(mage.currentPopulation * 1.05 + 50);

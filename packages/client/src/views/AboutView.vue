@@ -14,7 +14,9 @@
         </div>
 
         <br>
-        <router-link to="/spell">Spells</router-link>
+        <router-link to="/spell">Cast Spell</router-link>
+        <br>
+        <router-link to="/research">Research</router-link>
       </section>
       <section>
         <img v-if="mageStore.mage.magic==='ascendant'" src="@/assets/images/ascendant.jpeg" />
