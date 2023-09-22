@@ -33,7 +33,8 @@ import {
   researchPoints,
   manaIncome,
   manaStorage,
-  doItemGeneration
+  doItemGeneration,
+maxMana
 } from './magic';
 import { battle, Combatant } from './war';
 
@@ -145,6 +146,40 @@ class Engine {
       this.useTurn(mage);
     }
     return landGained
+  }
+
+  // geld for num turns
+  async gelding(mage: Mage, num: number) {
+    if (num > mage.currentTurn) {
+      return;
+    }
+
+    let geldGained = 0;
+    for (let i = 0; i < num; i++) {
+      const gain = geldIncome(mage);
+      geldGained += gain;
+      mage.currentGeld += gain;
+      this.useTurn(mage);
+    }
+    return geldGained;
+  }
+
+  async manaCharge(mage: Mage, num: number) {
+    if (num > mage.currentTurn) {
+      return;
+    }
+
+    let manaGained = 0;
+    for (let i = 0; i < num; i++) {
+      const gain = manaIncome(mage);
+      manaGained += gain;
+      mage.currentMana += gain;
+      if (mage.currentMana > maxMana(mage)) {
+        mage.currentMana = maxMana(mage);
+      }
+      this.useTurn(mage);
+    }
+    return manaGained;
   }
 
   async summon(mage: Mage, spellId: string, num: number) {
