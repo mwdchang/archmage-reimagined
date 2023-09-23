@@ -597,6 +597,113 @@
     ]
   },
   {
+    "id": "preacher",
+    "name": "Preacher",
+    "magic": "ascendant",
+    "powerRank": 16,
+    "hitPoints": 133,
+    "race": ["human"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 10,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 4.0,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 75,
+      "nether": 75,
+      "phantasm": 50 
+    },
+    "attackResistances": {
+      "missile": 75,
+      "fire": 75,
+      "poison": 75,
+      "breath": 75,
+      "magic": 75,
+      "melee": 75,
+      "ranged": 75,
+      "lightning": 75,
+      "cold": 75,
+      "paralyse": 75,
+      "psychic": 100,
+      "holy": 75 
+    },
+    "abilities": [
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "crusader",
+    "name": "Crusader",
+    "magic": "ascendant",
+    "powerRank": 14,
+    "hitPoints": 130,
+    "race": ["human"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 160,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 50,
+      "mana": 0.05,
+      "population": 1.00 
+    },
+    "upkeepCost": {
+      "geld": 2.0,
+      "mana": 0.005,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "largeShield", "extra": null },
+      { "name": "recruitSpeed", "extra": 50 }
+    ]
+  },
+  {
     "id": "knight",
     "name": "Knight",
     "magic": "ascendant",
@@ -638,6 +745,60 @@
       "breath": 0,
       "magic": 0,
       "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "largeShield", "extra": null },
+      { "name": "recruitSpeed", "extra": -15 }
+    ]
+  },
+  {
+    "id": "paladin",
+    "name": "Paladin",
+    "magic": "ascendant",
+    "powerRank": 32,
+    "hitPoints": 240,
+    "race": ["human"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 360,
+    "primaryAttackType": ["melee", "holy"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 60,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 140,
+      "mana": 0.15,
+      "population": 2.00 
+    },
+    "upkeepCost": {
+      "geld": 6.4,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 25,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 33,
       "ranged": 0,
       "lightning": 0,
       "cold": 0,
