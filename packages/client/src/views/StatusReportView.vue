@@ -113,6 +113,14 @@
         <td> {{ armyUpkeepStatus.mana }} </td>
         <td> {{ armyUpkeepStatus.population }} </td>
       </tr>
+      <tr>
+        <td> Buiding upkeep </td>
+        <td> {{ buildingUpkeepStatus.geld }} </td>
+        <td> {{ buildingUpkeepStatus.mana }} </td>
+        <td> {{ buildingUpkeepStatus.population }} </td>
+      </tr>
+
+
     </table>
 
   <div class="section-header">Building Info</div>
@@ -180,7 +188,8 @@ import {
   calcResistance,
   geldIncome,
   populationIncome,
-  armyUpkeep
+  armyUpkeep,
+  buildingUpkeep
 } from 'engine/src/interior';
 
 import { getUnitById } from 'engine/src/base/references';
@@ -211,6 +220,10 @@ const resistanceStatus = computed(() => {
 
 const armyUpkeepStatus = computed(() => {
   return armyUpkeep(mageStore.mage);
+});
+
+const buildingUpkeepStatus = computed(() => {
+  return buildingUpkeep(mageStore.mage);
 });
 
 const unitsStatus = computed(() => {

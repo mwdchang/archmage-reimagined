@@ -107,7 +107,19 @@ export const buildingUpkeep = (mage: Mage) => {
     population: 0
   };
 
+  result.geld += 20 * mage.farms;
+  result.geld += 50 * mage.towns
+  result.geld += 20 * mage.workshops;
+  result.geld += 20 * mage.barracks;
+  result.geld += 30 * mage.libraries;
 
+  const n = mage.fortresses;
+  result.geld += (240 * n + 30 * n * (n + 1));
+
+
+  result.mana += 30 * mage.barriers;
+
+  return result;
 }
 
 export const calcResistance = (mage: Mage) => {

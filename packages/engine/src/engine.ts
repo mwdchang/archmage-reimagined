@@ -26,7 +26,8 @@ import {
   buildingRate,
   populationIncome,
   geldIncome,
-  armyUpkeep
+  armyUpkeep,
+buildingUpkeep
 } from './interior';
 import { 
   doResearch,
@@ -134,8 +135,15 @@ class Engine {
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
     mage.currentPopulation -= armyCost.population;
-    
-    // 5. enchantmentR
+
+    const buildingCost = buildingUpkeep(mage);
+    mage.currentGeld -= buildingCost.geld;
+    mage.currentMana -= buildingCost.mana;
+    mage.currentPopulation -= buildingCost.population;
+
+    if (mage.currentGeld < 0) mage.currentGeld = 0;
+    if (mage.currentMana < 0) mage.currentMana = 0;
+    if (mage.currentPopulation < 0) mage.currentPopulation = 0;
   }
 
   async exploreLand(mage: Mage, num: number) {
