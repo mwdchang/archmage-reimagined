@@ -100,6 +100,16 @@ export const armyUpkeep = (mage: Mage) => {
   };
 }
 
+export const buildingUpkeep = (mage: Mage) => {
+  const result = {
+    mana: 0,
+    geld: 0,
+    population: 0
+  };
+
+
+}
+
 export const calcResistance = (mage: Mage) => {
   const resistance: { [key: string]: number } = {
     barrier: 0,

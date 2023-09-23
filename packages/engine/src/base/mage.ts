@@ -49,7 +49,14 @@ export const createMage = (name: string, magic: string): Mage => {
     army: [],
     items: {},
     heroes: [],
-    enchantments: []
+    enchantments: [],
+
+    assignment: {
+      spellId: -1,
+      spellCondition: 0,
+      itemId: -1,
+      itemCondition: 0,
+    }
   };
 
   // Set starting army

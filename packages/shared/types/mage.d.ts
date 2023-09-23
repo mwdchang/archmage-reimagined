@@ -3,12 +3,13 @@ export interface ArmyUnit {
   size: number;
 }
 
-/*
-export interface Item {
-  id: number;
-  type: string;
+export interface Assignment {
+  spellId: string,
+  spellCondition: number,
+
+  itemId: string,
+  itemCondition: number,
 }
-*/
 
 export interface Hero {
   id: number;
@@ -85,6 +86,8 @@ export interface Mage {
   fortresses: number;
   barriers: number;
   wilderness: number;
+
+  assignment: Assignment;
 
   army: ArmyUnit[];
   items: { [key: string]: number },

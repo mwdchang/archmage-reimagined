@@ -2,7 +2,7 @@
   <main style="display: flex; flex-direction: column; align-items: center">
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <RouterView v-if="route.name === 'home'" />
-    <RouterView v-if="mage" />
+    <RouterView v-if="mage && route.name !== 'home'" />
   </main>
 </template>
 

@@ -14,6 +14,10 @@
   <select v-model="selected">
     <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
   </select>
+
+  <div>Target</div> 
+  <input type="text" />
+
   <button @click="castSpell">Cast spell</button>
 </template>
 

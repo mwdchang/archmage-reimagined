@@ -25,7 +25,8 @@ import {
   buildingTypes,
   buildingRate,
   populationIncome,
-  geldIncome
+  geldIncome,
+  armyUpkeep
 } from './interior';
 import { 
   doResearch,
@@ -129,6 +130,10 @@ class Engine {
     doItemGeneration(mage);
 
     // 4. calculate upkeep
+    const armyCost = armyUpkeep(mage);
+    mage.currentGeld -= armyCost.geld;
+    mage.currentMana -= armyCost.mana;
+    mage.currentPopulation -= armyCost.population;
     
     // 5. enchantmentR
   }
@@ -224,6 +229,13 @@ class Engine {
     });
     turnsUsed = Math.ceil(turnsUsed);
     landUsed = Math.ceil(landUsed);
+
+    if (landUsed > mage.wilderness) {
+      return;
+    }
+    if (turnsUsed > mage.currentTurn) {
+      return;
+    }
 
     // 1. Build first using the current rates
     buildingTypes.forEach(b => {
