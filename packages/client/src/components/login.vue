@@ -35,10 +35,10 @@ const login = async () => {
   if (r && r.data) {
     error.value = '';
     mageStore.setLoginStatus(1);
-    mageStore.setMage(r.data.mage);
+    mageStore.setMage(r.data);
     setTimeout(() => {
       router.push({ name: 'about' });
-    }, 600);
+    }, 400);
   }
 };
 </script>

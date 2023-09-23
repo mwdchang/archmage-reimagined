@@ -1,9 +1,8 @@
 <template>
   <main style="display: flex; flex-direction: column; align-items: center">
-    <header-info v-if="mageStore.mage && !hideHeader.includes(route.name as string)" />
-
+    <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <RouterView v-if="route.name === 'home'" />
-    <RouterView v-if="mageStore.mage" />
+    <RouterView v-if="mage" />
   </main>
 </template>
 
@@ -12,6 +11,7 @@ import { onMounted } from 'vue';
 import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
+import { storeToRefs } from 'pinia'
 import { API } from './api/api';
 import { 
   loadUnitData,
@@ -36,6 +36,8 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 const mageStore = useMageStore();
 const router = useRouter();
 const route = useRoute();
+const { mage } = storeToRefs(mageStore);
+
 
 const hideHeader = ['status', 'test'];
 

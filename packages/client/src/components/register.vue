@@ -35,7 +35,7 @@ const register = async () => {
     mageStore.setMage(r.data);
     setTimeout(() => {
       router.push({ name: 'about' });
-    }, 550);
+    }, 400);
   }
 };
 </script>

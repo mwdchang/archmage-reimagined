@@ -52,9 +52,22 @@ const engine = new Engine(new SimpleDataAdapter());
 router.post('/api/explore', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { turns } = req.body;
-  console.log('/api/explore', turns);
   const landGained = await engine.exploreLand(mage, turns);
   res.status(200).json({ mage, landGained });
+});
+
+router.post('/api/geld', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { turns } = req.body;
+  const geldGained = await engine.gelding(mage, turns);
+  res.status(200).json({ mage, geldGained });
+});
+
+router.post('/api/charge', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { turns } = req.body;
+  const manaGained = await engine.manaCharge(mage, turns);
+  res.status(200).json({ mage, manaGained });
 });
 
 router.post('/api/build', async (req: any, res) => {
@@ -84,7 +97,6 @@ router.post('/api/summon', async (req: any, res) => {
 });
 
 router.post('/api/war', async (req: any, res) => {
-  console.log('!!!!!!!!!!! WAR !!!!!!!!!!!!!!!!!!!!1');
   const mage = engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId } = req.body;
   const r = await engine.doBattle(mage, +targetId, stackIds, spellId, itemId);

@@ -1,53 +1,53 @@
 <template>
   <h2>Status Report</h2>
   <div class="section-header">General Info</div>
-  <table v-if="mageStore.mage">
+  <table v-if="mage">
     <tr>
       <td>Rank</td>
       <td>???</td>
       <td>Power</td>
-      <td>{{ totalNetPower(mageStore.mage) }} </td>
+      <td>{{ totalNetPower(mage) }} </td>
     </tr>
     <tr>
       <td>Land</td>
-      <td>{{ totalLand(mageStore.mage) }}</td>
+      <td>{{ totalLand(mage) }}</td>
       <td>Fortress</td>
-      <td>{{ mageStore.mage.fortresses }}</td>
+      <td>{{ mage.fortresses }}</td>
     </tr>
     <tr>
       <td>Geld</td>
-      <td>{{ mageStore.mage.currentGeld }}</td>
+      <td>{{ mage.currentGeld }}</td>
       <td>Items</td>
-      <td>{{ mageStore.mage.items.length }}</td>
+      <td>{{ mage.items.length }}</td>
     </tr>
     <tr>
       <td>Units</td>
-      <td>{{ totalUnits(mageStore.mage) }}</td>
+      <td>{{ totalUnits(mage) }}</td>
       <td>Turns Left</td>
-      <td>{{ mageStore.mage.currentTurn }}</td>
+      <td>{{ mage.currentTurn }}</td>
     </tr>
     <tr>
       <td colspan="2">Spell Level</td>
       <td colspan="2"> 
-        {{ currentSpellLevel(mageStore.mage) }} / {{ maxSpellLevel(mageStore.mage) }} 
+        {{ currentSpellLevel(mage) }} / {{ maxSpellLevel(mage) }} 
       </td>
     </tr>
     <tr>
       <td colspan="2">Population</td>
       <td colspan="2"> 
-        {{ mageStore.mage.currentPopulation }}
+        {{ mage.currentPopulation }}
       </td>
     </tr>
     <tr>
       <td colspan="2">Magic Power</td>
       <td colspan="2"> 
-        {{ mageStore.mage.currentMana }} / {{ maxMana(mageStore.mage) }}
+        {{ mage.currentMana }} / {{ maxMana(mage) }}
       </td>
     </tr>
   </table>
 
   <div class="section-header">Spell Resistance</div>
-  <table v-if="mageStore.mage">
+  <table v-if="mage">
     <tr>
       <td> Barrier </td> <td> {{ resistanceStatus.barrier }} </td>
     </tr>
@@ -70,14 +70,14 @@
 
   <div class="section-header">Relation with Gods</div>
   <div class="section-header">Residential Info</div>
-  <table v-if="mageStore.mage">
+  <table v-if="mage">
     <tr>
       <td>Max Residential Space</td>
-      <td>{{ maxPopulation(mageStore.mage) }}</td>
+      <td>{{ maxPopulation(mage) }}</td>
     </tr>
     <tr>
       <td>Food Production</td>
-      <td>{{ maxFood(mageStore.mage) }}</td>
+      <td>{{ maxFood(mage) }}</td>
     </tr>
     <tr>
       <td>Max Population Available</td>
@@ -85,7 +85,7 @@
     </tr>
     <tr>
       <td>Space for Units</td>
-      <td>{{ spaceForUnits(mageStore.mage) }}</td>
+      <td>{{ spaceForUnits(mage) }}</td>
     </tr>
     <tr>
       <td>Real Max Population</td>
@@ -94,7 +94,7 @@
   </table>
 
   <div class="section-header">Interior Info</div>
-    <table v-if="mageStore.mage">
+    <table v-if="mage">
       <tr>
         <td>&nbsp;</td>
         <td>Geld</td>
@@ -103,9 +103,9 @@
       </tr>
       <tr>
         <td> Income </td>
-        <td> {{ geldIncome(mageStore.mage) }} </td>
-        <td> {{ manaIncome(mageStore.mage) }} </td>
-        <td> {{ populationIncome(mageStore.mage) }} </td>
+        <td> {{ geldIncome(mage) }} </td>
+        <td> {{ manaIncome(mage) }} </td>
+        <td> {{ populationIncome(mage) }} </td>
       </tr>
       <tr>
         <td> Unit upkeep </td>
@@ -116,50 +116,50 @@
     </table>
 
   <div class="section-header">Building Info</div>
-  <table v-if="mageStore.mage">
+  <table v-if="mage">
     <tr>
       <td> Land </td>
-      <td> {{ totalLand(mageStore.mage) }} </td>
+      <td> {{ totalLand(mage) }} </td>
       <td> Wilderness </td>
-      <td> {{ mageStore.mage.wilderness }} </td>
+      <td> {{ mage.wilderness }} </td>
     </tr>
     <tr>
       <td>Farms</td>
-      <td> {{ mageStore.mage.farms }} </td>
+      <td> {{ mage.farms }} </td>
       <td>Towns</td>
-      <td> {{ mageStore.mage.towns}} </td>
+      <td> {{ mage.towns}} </td>
     </tr>
     <tr>
       <td>Workshops</td>
-      <td> {{ mageStore.mage.workshops }} </td>
+      <td> {{ mage.workshops }} </td>
       <td>Barracks</td>
-      <td> {{ mageStore.mage.barracks}} </td>
+      <td> {{ mage.barracks}} </td>
     </tr>
     <tr>
       <td>Nodes</td>
-      <td> {{ mageStore.mage.nodes }} </td>
+      <td> {{ mage.nodes }} </td>
       <td>Library</td>
-      <td> {{ mageStore.mage.libraries }} </td>
+      <td> {{ mage.libraries }} </td>
     </tr>
     <tr>
       <td>Fortress</td>
-      <td> {{ mageStore.mage.fortresses }} </td>
+      <td> {{ mage.fortresses }} </td>
       <td>Barriers</td>
-      <td> {{ mageStore.mage.barriers }} </td>
+      <td> {{ mage.barriers }} </td>
     </tr>
   </table>
 
   <div class="section-header">Enchantments</div>
   <div class="section-header">Defence Assignment</div>
   <div class="section-header">Researching</div>
-    <div v-if="mageStore.mage && researchStatus.length > 0">
+    <div v-if="mage && researchStatus.length > 0">
       {{ researchStatus[0].id }}, {{ researchStatus[0].remainingCost }} points remaining
     </div>
 
   <div class="section-header">Recruiting</div>
   <div class="section-header">Skills</div>
   <div class="section-header">Units</div>
-  <table v-if="mageStore.mage">
+  <table v-if="mage">
     <tr v-for="(u, _idx) of unitsStatus" :key="u.id">
       <td> {{ u.name }} </td>
       <td> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
@@ -172,6 +172,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
+import { storeToRefs } from 'pinia'
 import { 
   maxPopulation,
   maxFood,
@@ -197,6 +198,7 @@ import {
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);
+const { mage } = storeToRefs(mageStore);
 
 const researchStatus = computed(() => {
   const mage = mageStore.mage;
