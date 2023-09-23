@@ -2,8 +2,6 @@
   <main class="about" v-if="mageStore.mage">
     <h2>Kingdom {{ mageStore.mage.name }} (# {{mageStore.mage.id}})</h2>
     <br>
-
-
     <main style="display: flex; flex-direction: row">
       <section>
         <div class="row">

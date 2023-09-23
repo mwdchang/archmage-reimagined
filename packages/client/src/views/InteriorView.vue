@@ -8,7 +8,10 @@
         Your income is about {{ geldIncome(mageStore.mage) }} geld
       </p>
       <input type="number" placeholder="# turns" size="10" v-model="turnsToTax">
-      <button> Tax </button>
+      <button @click="geld"> Tax </button>
+      <div>
+        {{ geldMsg }}
+      </div>
     </section>
     <br>
     <section> 
@@ -41,12 +44,20 @@ const exploreRate = computed(() => {
 });
 
 const exploreMsg = ref('');
+const geldMsg = ref('');
 
 const exploreLand = async () => {
   const res = await API.post('/explore', { turns: turnsToExplore.value });
   mageStore.setMage(res.data.mage);
   exploreMsg.value = `You used ${turnsToExplore.value} and found ${res.data.landGained} wilderness.`
 };
+
+const geld = async () => {
+  const res = await API.post('/geld', { turns: turnsToTax.value });
+  mageStore.setMage(res.data.mage);
+  geldMsg.value = `You used ${turnsToTax.value} turn and taxed ${res.data.geldGained} geld.`
+};
+
 
 onMounted(() => {
   exploreMsg.value = '';
