@@ -64,5 +64,29 @@
         ]
       }
     ]
+  },
+  {
+    "id": "hornOfValhalla",
+    "name": "Horn of Valhalla",
+    "description": "The possessor of the Horn of Valhalla has the power to summon knight troops to his/her side in battle. When the horn is blown, it draws the attention of knight troops nearby, who join in on the glory of battle.",
+    "attributes": ["oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["knight"],
+        "summonType": "all",
+        "summonNetPower": 100000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
   }
 ]

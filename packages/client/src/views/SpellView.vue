@@ -1,4 +1,6 @@
 <template>
+  <div class="section-header">Spells in your Spellbook</div>
+  <br>
   <table>
     <tr v-for="spell of spells" :key="spell.id">
       <td>{{ spell.name }}</td>

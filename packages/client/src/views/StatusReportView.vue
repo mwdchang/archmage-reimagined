@@ -243,10 +243,6 @@ const unitsStatus = computed(() => {
 
 
 <style scoped>
-.section-header {
-  color: #F80
-}
-
 table {
   border: none;
 }

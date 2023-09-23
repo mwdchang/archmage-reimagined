@@ -11,6 +11,7 @@ import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
 import ResearchView from '@/views/ResearchView.vue';
+import ItemView from '@/views/ItemView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -59,6 +60,11 @@ const router = createRouter({
       path: '/spell',
       name: 'spell',
       component: SpellView
+    },
+    {
+      path: '/item',
+      name: 'item',
+      component: ItemView 
     },
     {
       path: '/test',

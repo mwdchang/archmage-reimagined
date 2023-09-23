@@ -12,7 +12,9 @@
         </div>
 
         <br>
-        <router-link to="/spell">Cast Spell</router-link>
+        <router-link to="/spell">Cast Spells</router-link>
+        <br>
+        <router-link to="/item">Use Items</router-link>
         <br>
         <router-link to="/research">Research</router-link>
       </section>

@@ -16,6 +16,7 @@ import { API } from './api/api';
 import { 
   loadUnitData,
   loadSpellData, 
+  loadItemData,
   initializeResearchTree 
 } from 'engine/src/base/references';
 
@@ -32,6 +33,8 @@ import verdantSpells from 'data/src/spells/verdant-spells.json';
 import eradicationSpells from 'data/src/spells/eradication-spells.json';
 import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
+
+import lesserItems from 'data/src/items/lesser.json';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -62,6 +65,8 @@ onMounted(async () => {
   loadSpellData(netherSpells);
   loadSpellData(phantasmSpells);
   initializeResearchTree();
+
+  loadItemData(lesserItems);
 
   try {
     const r = await API.get('mage');

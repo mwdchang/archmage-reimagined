@@ -595,5 +595,59 @@
       { "name": "flying", "extra": null },
       { "name": "healing", "extra": null }
     ]
+  },
+  {
+    "id": "knight",
+    "name": "Knight",
+    "magic": "ascendant",
+    "powerRank": 23,
+    "hitPoints": 200,
+    "race": ["human"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 250,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 50,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 120,
+      "mana": 0.10,
+      "population": 1.00 
+    },
+    "upkeepCost": {
+      "geld": 2.8,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "largeShield", "extra": null },
+      { "name": "recruitSpeed", "extra": -15 }
+    ]
   }
 ]
