@@ -1,10 +1,12 @@
 <template>
   <main>
     <h2>Login</h2>
-    Username: <input name="username" type="text" v-model="loginData.username">
-    <br>
-    Password: <input name="password" type="password" v-model="loginData.password">
-    <br>
+    <div class="row">
+      <span style="width:5rem">Username:</span> <input name="username" type="text" v-model="loginData.username">
+    </div>
+    <div class="row">
+      <span style="width:5rem">Password:</span> <input name="password" type="password" v-model="loginData.password">
+    </div>
     <button @click="login">Login</button>
     <br>
     <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
@@ -42,4 +44,13 @@ const login = async () => {
   }
 };
 </script>
+
+<style>
+.row {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  justify-items: flex-end;
+  display: flex;
+}
+</style>
 
