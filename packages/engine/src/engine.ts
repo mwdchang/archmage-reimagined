@@ -57,8 +57,11 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 
-
 const TICK = 1000 * 60 * 2; // Every two minute
+
+interface GameError {
+  message: string
+}
 
 class Engine {
   adapter: DataAdapter;

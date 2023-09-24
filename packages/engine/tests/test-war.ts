@@ -30,7 +30,7 @@ const defender: Combatant = {
     { id: 'militia', size: 70000 }
   ],
   spellId: 'blaze',
-  itemId: ''
+  itemId: 'carpetOfFlying'
 };
 
 battle('siege', attacker, defender);

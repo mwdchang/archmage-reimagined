@@ -105,7 +105,7 @@
             "name": "UnitEffect",
             "attributeMap": {
               "abilities": {
-                "rule": "absolute",
+                "rule": "add",
                 "magic": {
                   "ascendant": { "value": { "name": "bloodCurse", "extra": null } },
                   "verdant": { "value": { "name": "bloodCurse", "extra": null } },

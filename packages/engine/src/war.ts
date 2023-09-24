@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import { ArmyUnit, Mage } from "shared/types/mage";
-import { Unit } from "shared/types/unit";
+import { Unit, UnitAbility } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
 import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
+import { warn } from 'console';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +49,10 @@ interface BattleStack {
   healingPoints: number,
   healingBuffer: number[],
 
+  // Temporary buffer to sort out conflicting effects from items/spells
+  addedAbilities: UnitAbility[],
+  removedAbilities: UnitAbility[],
+
   // For faster calculation
   netPower: number,
 }
@@ -84,8 +89,13 @@ const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       accuracy: 30,
       efficiency: 100,
       sustainedDamage: 0,
+
       healingPoints: 0,
       healingBuffer: [],
+
+      addedAbilities: [],
+      removedAbilities: [],
+
       loss: 0,
       netPower: u.powerRank * stack.size
     }
@@ -339,14 +349,23 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
           finalValue = baseValue * casterSpellLevel * root[field];
         } else if (rule === 'percentage') {
           finalValue = baseValue * root[field];
-        } else { // add, remove
+        } else {
           finalValue = baseValue;
         }
 
         // Finally apply
         if (_.isArray(root[field])) {
-          if (attr.has && root[field].includes(attr.has)) {
-            root[field].push(finalValue);
+          // Resolve this later
+          if (field === 'abilities') {
+            if (rule === 'add') {
+              stack.addedAbilities.push(finalValue);
+            } else {
+              stack.removedAbilities.push(finalValue);
+            }
+          } else {
+            if (attr.has && root[field].includes(attr.has)) {
+              root[field].push(finalValue);
+            }
           }
         } else {
           if (field === 'accuracy') {
@@ -543,6 +562,34 @@ const battleItem = (
   });
 }
 
+
+/**
+ * Resolve conflicting abilities, e.g. a unit can gain flying and lose flying. Any negative
+ * cancels out all positive.
+ */
+const resolveUnitAbilities = (stack: BattleStack[]) => {
+  stack.forEach(stack => {
+    const addedAbilities = stack.addedAbilities;
+    const removedAbilities = stack.removedAbilities;
+
+    // 1. jdd first, so negatives can cancel
+    for (let i = 0; i < addedAbilities.length; i++) {
+      const ability = addedAbilities[i];
+      if (!stack.unit.abilities.find(d => d.name === ability.name)) {
+        stack.unit.abilities.push(ability);
+      }
+    }
+    
+    // 2. then remove if there are conflicts
+    for (let i = 0; i < removedAbilities.length; i++) {
+      const ability = removedAbilities[i];
+      if (stack.unit.abilities.find(d => d.name === ability.name)) {
+        stack.unit.abilities = _.remove(stack.unit.abilities, d => d.name === ability.name);
+      }
+    }
+  });
+}
+
 /**
  * Handles siege and regular battles. The battle phase goes as follows
  * - Prepare battle stacks from chosen armies from both sides, this is used to track progress
@@ -582,6 +629,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     battleItem(defender, defendingArmy, attacker, attackingArmy);
   }
 
+  resolveUnitAbilities(attackingArmy);
+  resolveUnitAbilities(defendingArmy);
+
   // Find pairing
   calculateParing(attackingArmy, defendingArmy);
   calculateParing(defendingArmy, attackingArmy);
@@ -604,7 +654,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     RPretty('Extra'),
     RPretty('Counter'),
     RPretty('Hitpoints'),
-    RPretty('Accuracy')
+    RPretty('Accuracy'),
+    LPretty('Abilities'),
   );
 
   attackingArmy.forEach(stack => {
@@ -615,7 +666,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy)
+      RPretty(stack.accuracy),
+      (stack.unit.abilities.map(d => d.name))
     );
   });
 
@@ -627,7 +679,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     RPretty('Extra'),
     RPretty('Counter'),
     RPretty('Hitpoints'),
-    RPretty('Accuracy')
+    RPretty('Accuracy'),
+    LPretty('Abilities'),
   );
 
   defendingArmy.forEach(stack => {
@@ -638,7 +691,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy)
+      RPretty(stack.accuracy),
+      (stack.unit.abilities.map(d => d.name))
     );
   });
 

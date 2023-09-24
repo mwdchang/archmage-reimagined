@@ -50,7 +50,7 @@
             "name": "UnitEffect",
             "attributeMap": {
               "attackResistances.fire": {
-                "rule": "add",
+                "rule": "",
                 "magic": {
                   "ascendant": { "value": -40 },
                   "verdant": { "value": -40 },
@@ -86,6 +86,39 @@
           "nether": { "value": 1.0 },
           "phantasm": { "value": 1.0 }
         }
+      }
+    ]
+  },
+  {
+    "id": "carpetOfFlying",
+    "name": "Carpet of Flying",
+    "description": "This magical Oriental rug is woven with special magical techniques, which enable it to fly. On command, it will fly through the air carrying whatever the magician wishes.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "flying", "extra": null } },
+                  "verdant": { "value": { "name": "flying", "extra": null } },
+                  "eradication": { "value": { "name": "flying", "extra": null } },
+                  "nether": { "value": { "name": "flying", "extra": null } },
+                  "phantasm": { "value": { "name": "flying", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   }
