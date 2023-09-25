@@ -7,7 +7,7 @@
       <td> (#{{ rank.id }}) {{ rank.name }} </td>
       <td> <magic :magic="rank.magic" /> </td>
       <td> {{ rank.land }} </td>
-      <td> {{ rank.fortresses }} </td>
+      <td> {{ rank.forts }} </td>
       <td> {{ rank.netPower }} </td>
       <td> 
         <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>

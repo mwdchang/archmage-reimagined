@@ -11,8 +11,8 @@
     <tr>
       <td>Land</td>
       <td>{{ totalLand(mage) }}</td>
-      <td>Fortress</td>
-      <td>{{ mage.fortresses }}</td>
+      <td>Forts</td>
+      <td>{{ mage.forts}}</td>
     </tr>
     <tr>
       <td>Geld</td>
@@ -150,8 +150,8 @@
       <td> {{ mage.libraries }} </td>
     </tr>
     <tr>
-      <td>Fortress</td>
-      <td> {{ mage.fortresses }} </td>
+      <td>Forts</td>
+      <td> {{ mage.forts }} </td>
       <td>Barriers</td>
       <td> {{ mage.barriers }} </td>
     </tr>

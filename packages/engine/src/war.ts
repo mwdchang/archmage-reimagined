@@ -641,7 +641,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Apply fort bonus to defender
   const defenderLand = totalLand(defender.mage);
-  const defenderFortresses = defender.mage.fortresses;
+  const defenderForts = defender.mage.forts;
 
   if (attackType === 'regular') {
     let base = 10;

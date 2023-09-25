@@ -19,7 +19,7 @@
       <td>Land</td><td>{{ mageSummary.land }} </td>
     </tr>
     <tr>
-      <td>Fortresses</td><td>{{ mageSummary.fortresses }} </td>
+      <td>Forts</td><td>{{ mageSummary.forts }} </td>
     </tr>
   </table>
 </template>

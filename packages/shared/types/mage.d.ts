@@ -83,7 +83,7 @@ export interface Mage {
   nodes: number;
   barracks: number;
   libraries: number;
-  fortresses: number;
+  forts: number;
   barriers: number;
   wilderness: number;
 

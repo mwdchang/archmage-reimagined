@@ -30,7 +30,7 @@
           <div>Land</div><div>{{ totalLand(mageStore.mage) }} </div>
         </div>
         <div class="row">
-          <div>Fortress</div><div>{{ mageStore.mage.fortresses }} </div>
+          <div>Forts</div><div>{{ mageStore.mage.forts }} </div>
         </div>
         <div class="row">
           <div>Geld</div><div>{{ mageStore.mage.currentGeld }} </div>

@@ -280,7 +280,7 @@ class Engine {
         id: mage.id,
         name: mage.name,
         magic: mage.magic,
-        fortresses: mage.fortresses,
+        forts: mage.forts,
         land: totalLand(mage),
         netPower: totalNetPower(mage)
       }
@@ -350,7 +350,7 @@ class Engine {
       magic: m.magic,
       land: totalLand(m),
       netPower: totalNetPower(m),
-      fortresses: m.fortresses
+      forts: m.forts
     };
   }
 

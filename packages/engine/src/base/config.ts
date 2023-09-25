@@ -29,7 +29,7 @@ export const productionTable = {
     towns: 1000,
     workshops: 30,
     barracks: 20,
-    fortresses: 500,
+    forts: 500,
     wilderness: 10
   },
   research: 10,
