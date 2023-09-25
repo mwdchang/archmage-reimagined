@@ -26,8 +26,8 @@ const defender: Combatant = {
     currentSpellLevel: 400
   } as Mage,
   army: [
-    { id: 'archer', size: 2000000 },
-    { id: 'militia', size: 70000 }
+    { id: 'archer', size: 200000 },
+    { id: 'militia', size: 7000 }
   ],
   spellId: 'blaze',
   itemId: 'carpetOfFlying'

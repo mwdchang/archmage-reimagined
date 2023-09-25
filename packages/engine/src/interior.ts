@@ -118,25 +118,7 @@ export const buildingUpkeep = (mage: Mage) => {
 
 
   result.mana += 30 * mage.barriers;
-
   return result;
 }
 
-export const calcResistance = (mage: Mage) => {
-  const resistance: { [key: string]: number } = {
-    barrier: 0,
-    ascendant: 0,
-    verdant: 0,
-    eradication: 0,
-    nether: 0,
-    phantasm: 0
-  };
 
-  // Max barrier is 2.5% of the land, max normal barrier is 75
-  if (mage.barriers > 0) {
-    const land = 0.025 * totalLand(mage);
-    const barrier = Math.floor((mage.barriers / land) * 75);
-    resistance.barrier = barrier;
-  }
-  return resistance;
-}

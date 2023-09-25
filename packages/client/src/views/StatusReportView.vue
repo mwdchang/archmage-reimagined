@@ -185,7 +185,6 @@ import {
   maxPopulation,
   maxFood,
   spaceForUnits,
-  calcResistance,
   geldIncome,
   populationIncome,
   armyUpkeep,
@@ -196,7 +195,8 @@ import { getUnitById } from 'engine/src/base/references';
 import { 
   totalLand,
   totalUnits,
-  totalNetPower
+  totalNetPower,
+  calcKingdomResistance,
 } from 'engine/src/base/mage';
 import { 
   maxSpellLevel,
@@ -215,7 +215,7 @@ const researchStatus = computed(() => {
 });
 
 const resistanceStatus = computed(() => {
-  return calcResistance(mageStore.mage);
+  return calcKingdomResistance(mageStore.mage);
 });
 
 const armyUpkeepStatus = computed(() => {

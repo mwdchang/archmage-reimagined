@@ -7,7 +7,6 @@ import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./b
 import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
-import { warn } from 'console';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +28,26 @@ enum StackType {
   REINFORCEMENT,
   TEMPORARY
 }
+
+export interface BattleReport {
+  timetamp: number,
+  attackType: string,
+  attacker: {
+    id: number,
+    spellId: string | null,
+    itemId: string | null
+  }
+  defender: {
+    id: number,
+    spellId: string | null,
+    itemId: string | null
+  },
+
+  // Save a bit of space, we don't need to copy all fields
+  attackerArmy: Partial<BattleStack>[],
+  defenderArmy: Partial<BattleStack>[],
+}
+
 
 interface BattleStack {
   unit: Unit,
@@ -595,8 +614,10 @@ const resolveUnitAbilities = (stack: BattleStack[]) => {
  * - Prepare battle stacks from chosen armies from both sides, this is used to track progress
  * - Apply spells
  * - Apply items
+ * - Resolve conflicting effects
  * - Calculate unit pairings
  * - Calculte battle order
+ * - Calculate healing factors
 **/
 export const battle = (attackType: string, attacker: Combatant, defender: Combatant) => {
   console.log(`war ${attackType}`, attackType, attacker.army.length, defender.army.length);
@@ -909,6 +930,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
 
   // Calculate combat result
+  let attackerStartingNP = 0;
+  let defenderStartingNP = 0;
+  attackingArmy.forEach(stack => attackerStartingNP += stack.netPower);
+  defendingArmy.forEach(stack => defenderStartingNP += stack.netPower);
+
   console.log('');
   console.log('=== Attacker summary ===');
   let attackerPowerLoss = 0;
@@ -918,17 +944,26 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
   console.log('');
-  console.log('Total loss', attackerPowerLoss);
+  console.log('Total loss', attackerPowerLoss, (100 * attackerPowerLoss/attackerStartingNP).toFixed(2));
   console.log('');
 
   console.log('=== Defender summary ===');
   let defenderPowerLoss = 0;
   defendingArmy.forEach(stack => {
     const np = stack.unit.powerRank * stack.loss;
-    attackerPowerLoss += np;
+    defenderPowerLoss += np;
     console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
   console.log('');
-  console.log('Total loss', attackerPowerLoss);
+  console.log('Total loss', defenderPowerLoss, (100 * defenderPowerLoss/defenderStartingNP).toFixed(2));
   console.log('');
+
+
+  // Calculate winner
+
+  if (attackerPowerLoss < defenderPowerLoss && defenderPowerLoss >= 0.1 * defenderStartingNP) {
+    console.log(`Attacker ${attacker.mage.name} won the battle `);
+  } else {
+    console.log(`Defener ${defender.mage.name} won the battle `);
+  }
 }
