@@ -7,6 +7,7 @@ import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./b
 import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
+import { totalLand } from './base/mage';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -351,13 +352,18 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
       let baseValue = attr.magic[casterMagic].value;
       let finalValue: any = null;
 
+      let originalUnit = getUnitById(unit.id);
+
       fields.forEach(rawField => {
         // Resolve nesting
         let root = unit;
+        let originalRoot = originalUnit;
         let field = rawField;
+
         if (rawField.includes('.')) {
           const [t1, t2] = rawField.split('.'); 
           root = unit[t1];
+          originalRoot = originalUnit[t1];
           field = t2;
         }
 
@@ -365,9 +371,9 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
         if (rule === 'spellLevel') {
           finalValue = baseValue * casterSpellLevel;
         } else if (rule === 'spellLevelPercentage') {
-          finalValue = baseValue * casterSpellLevel * root[field];
+          finalValue = baseValue * casterSpellLevel * originalRoot[field];
         } else if (rule === 'percentage') {
-          finalValue = baseValue * root[field];
+          finalValue = baseValue * originalRoot[field];
         } else {
           finalValue = baseValue;
         }
@@ -628,12 +634,21 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   ////////////////////////////////////////////////////////////////////////////////
   // TODO: 
-  // 1. Enchantment modifiers
-  // 2. Spell modifiers
-  // 3. Item modifiers
-  // 4. Hero effects
+  // - Enchantment modifiers
+  // - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
   
+
+  // Apply fort bonus to defender
+  const defenderLand = totalLand(defender.mage);
+  const defenderFortresses = defender.mage.fortresses;
+
+  if (attackType === 'regular') {
+    let base = 10;
+  } else if (attackType === 'siege') {
+    let base = 20;
+  }
+
   // Spells
   // TODO: check barriers and success
   if (attacker.spellId) {
