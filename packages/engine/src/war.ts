@@ -615,6 +615,12 @@ const resolveUnitAbilities = (stack: BattleStack[]) => {
   });
 }
 
+// TODO
+export interface BattleOptions {
+  useFortBonus: boolean,
+  useEnchantments: boolean
+}
+
 /**
  * Handles siege and regular battles. The battle phase goes as follows
  * - Prepare battle stacks from chosen armies from both sides, this is used to track progress

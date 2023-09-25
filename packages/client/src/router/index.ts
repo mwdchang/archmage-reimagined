@@ -12,6 +12,8 @@ import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
 import ResearchView from '@/views/ResearchView.vue';
 import ItemView from '@/views/ItemView.vue';
+import DisplayUnitView from '@/views/DisplayUnitView.vue';
+import DisplaySpellView from '@/views/DisplaySpellView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -86,7 +88,21 @@ const router = createRouter({
       path: '/research',
       name: 'research',
       component: ResearchView 
+    },
+    // Misc
+    {
+      path: '/view-unit/:id',
+      name: 'viewUnit',
+      component: DisplayUnitView,
+      props: true
+    },
+    {
+      path: '/spell-unit/:id',
+      name: 'viewSpell',
+      component: DisplaySpellView,
+      props: true
     }
+
   ]
 })
 

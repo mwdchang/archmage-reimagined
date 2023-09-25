@@ -169,7 +169,9 @@
   <div class="section-header">Units</div>
   <table v-if="mage">
     <tr v-for="(u, _idx) of unitsStatus" :key="u.id">
-      <td> {{ u.name }} </td>
+      <td> 
+        <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
+      </td>
       <td> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
       <td class="text-right" style="padding-left: 10px"> {{ u.size }} </td>
       <td class="text-right"> {{ (100 * u.power / totalArmyPower).toFixed(2) }}%</td>
