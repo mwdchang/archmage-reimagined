@@ -642,12 +642,24 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Apply fort bonus to defender
   const defenderLand = totalLand(defender.mage);
   const defenderForts = defender.mage.forts;
+  const fortsMin = 0.0067;
+  const fortsMax = 0.0250;
+  const fortsRatio = Math.min((defenderForts / defenderLand), fortsMax);
 
-  if (attackType === 'regular') {
-    let base = 10;
-  } else if (attackType === 'siege') {
-    let base = 20;
+  let base = attackType === 'regular' ? 10 : 20;
+  if (attackType === 'regular' && fortsRatio > fortsMin) {
+    const additionalBonus = 27.5 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
+    base += additionalBonus;
+  } 
+
+  if (attackType === 'siege' && fortsRatio > fortsMin) {
+    const additionalBonus = 55 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
+    base += additionalBonus;
   }
+  defendingArmy.forEach(stack => {
+    stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
+  });
+
 
   // Spells
   // TODO: check barriers and success

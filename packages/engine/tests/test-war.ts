@@ -5,11 +5,25 @@ import { loadUnitsAndSpells } from './loader';
 
 loadUnitsAndSpells();
 
+const dummyLand = {
+  farms: 0,
+  towns: 0,
+  workshops: 0,
+  barracks: 0,
+  nodes: 0,
+  libraries: 0,
+  barriers: 0,
+  forts: 0,
+  wilderness: 2000
+}
+
 const attacker: Combatant = {
   mage: { 
     name: 'attacker', 
     magic: 'ascendant',
-    currentSpellLevel: 800
+    currentSpellLevel: 800,
+    ...dummyLand,
+    forts: 10,
   } as Mage,
   army: [
     { id: 'archangel', size: 2000 },
@@ -23,7 +37,9 @@ const defender: Combatant = {
   mage: { 
     name: 'defender', 
     magic: 'phantasm',
-    currentSpellLevel: 400
+    currentSpellLevel: 400,
+    ...dummyLand,
+    forts: 100,
   } as Mage,
   army: [
     { id: 'archer', size: 200000 },
