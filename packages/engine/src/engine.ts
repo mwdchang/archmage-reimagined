@@ -27,7 +27,7 @@ import {
   populationIncome,
   geldIncome,
   armyUpkeep,
-buildingUpkeep
+  buildingUpkeep
 } from './interior';
 import { 
   doResearch,
@@ -36,7 +36,7 @@ import {
   manaIncome,
   manaStorage,
   doItemGeneration,
-maxMana
+  maxMana
 } from './magic';
 import { battle, Combatant } from './war';
 
@@ -196,6 +196,18 @@ class Engine {
       this.useTurn(mage);
     }
     return manaGained;
+  }
+
+  async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    mage.currentResearch[magic].active = true;
+    mage.focusResearch = focus;
+
+    if (turns && turns > 0) {
+      for (let i = 0; i < num; i++) {
+        doResearch(mage, researchPoints(mage));
+        this.useTurn(mage);
+      }
+    }
   }
 
   async summon(mage: Mage, spellId: string, num: number) {

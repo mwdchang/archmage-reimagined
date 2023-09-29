@@ -28,6 +28,7 @@ export const createMage = (name: string, magic: string): Mage => {
       nether: null,
       phantasm: null
     },
+    focusResearch: false,
 
     netPower: 0,
     currentTurn: 2000,

@@ -26,12 +26,23 @@
         </td>
       </tr>
     </table>
+    <div style="display: flex; align-items: center; margin-top: 10px">
+      <input type="checkbox" v-model="focusResearch" style="width:18px; height: 18px" />
+      &nbsp;Research all spells of this magic
+    </div>
+    <div style="display: flex; align-items: center; margin-top: 10px">
+      Spend&nbsp;<input type="number" style="width: 4rem" />&nbsp;turns to reearch faster.
+    </div>
+    <div style="display: flex; align-items: center; margin-top: 10px">
+      <button @click="submitResearch"> Research </button>
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import magic from '@/components/magic.vue';
+import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { magicTypes } from 'engine/src/base/references';
 import { researchPoints } from 'engine/src/magic';
@@ -41,7 +52,8 @@ const rp = computed(() => {
   return researchPoints(mageStore.mage);
 });
 
-const currentResearch = ref(mageStore.mage.currentResearch);
+const currentResearch = ref(mageStore.mage?.currentResearch);
+const focusResearch = ref(mageStore.mage?.currentResearchFocus ? true : false);
 
 const filteredMagicTypes = computed(() => {
   return magicTypes.filter(m => {
@@ -55,6 +67,21 @@ const toggle = (magic: string) => {
   });
   currentResearch.value[magic].active = true;
 }
+
+const submitResearch = async () => {
+  let magic: any = null;
+  filteredMagicTypes.value.forEach(m => {
+    if (currentResearch.value[m].active === true) {
+      magic = m;
+    }
+  });
+  const result = await API.post('research', {
+    magic,
+    focus: focusResearch,
+    turns: 0
+  });
+  console.log(result.data);
+};
 
 </script>
 

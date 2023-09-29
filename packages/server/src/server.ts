@@ -96,6 +96,15 @@ router.post('/api/summon', async (req: any, res) => {
   res.status(200).json({ r, mage });
 });
 
+
+router.post('/api/research', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { magic, focus, turns } = req.body;
+  const r = await engine.research(mage, magic, focus, turns);
+  res.status(200).json({ r, mage });
+
+});
+
 router.post('/api/war', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId } = req.body;

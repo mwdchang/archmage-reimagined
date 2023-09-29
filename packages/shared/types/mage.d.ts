@@ -65,6 +65,7 @@ export interface Mage {
     nether: ResearchItem | null,
     phantasm: ResearchItem | null
   },
+  focusResearch: boolean,
 
   netPower: number;
 
