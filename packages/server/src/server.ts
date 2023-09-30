@@ -89,10 +89,10 @@ router.get('/api/ranklist', async (_req: any, res) => {
   res.status(200).json({ rankList });
 });
 
-router.post('/api/summon', async (req: any, res) => {
+router.post('/api/spell', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
-  const { spellId, num } = req.body;
-  const r = await engine.summon(mage, spellId, num);
+  const { spellId, num, target } = req.body;
+  const r = await engine.castSpell(mage, spellId, num, target);
   res.status(200).json({ r, mage });
 });
 

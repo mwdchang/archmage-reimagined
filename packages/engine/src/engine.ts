@@ -1,4 +1,5 @@
 import _  from 'lodash';
+import { magicAlignmentTable } from './base/config';
 import { 
   loadUnitData,
   loadSpellData,
@@ -59,8 +60,9 @@ import lesserItems from 'data/src/items/lesser.json';
 
 const TICK = 1000 * 60 * 2; // Every two minute
 
-interface GameError {
-  message: string
+interface GameMsg {
+  type: string,
+  message: string,
 }
 
 class Engine {
@@ -203,23 +205,50 @@ class Engine {
     mage.focusResearch = focus;
 
     if (turns && turns > 0) {
-      for (let i = 0; i < num; i++) {
+      for (let i = 0; i < turns; i++) {
         doResearch(mage, researchPoints(mage));
         this.useTurn(mage);
       }
     }
   }
 
+  async castSpell(mage: Mage, spellId: string, num: number, target: number) {
+    const spell = getSpellById(spellId);
+    if (spell.attributes.includes('summon')) {
+      return this.summon(mage, spellId, num);
+    }
+    // TODO: enchantments, offensive spells
+  }
+
   async summon(mage: Mage, spellId: string, num: number) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
-    const castingCost = spell.castingCost;
+    let castingCost = spell.castingCost;
+    const result: GameMsg[] = [];
+    const magic = mage.magic;
 
-    const result = [];
+    const costModifier = magicAlignmentTable[magic].costModifier[spell.magic];
+    castingCost *= costModifier;
+
     for (let i = 0; i < num; i++) {
+      if (mage.currentMana < castingCost) {
+        result.push({
+          type: 'error',
+          message: `Spell costs ${castingCost} mana, you only have ${mage.currentMana}`
+        });
+        continue;
+      }
+      if (mage.currentTurn < castingTurn) {
+        result.push({
+          type: 'error',
+          message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
+        });
+        continue;
+      }
+
       const res = summonUnit(mage, spellId);
-      result.push(res);
-      mage.currentMana -= castingCost; // TODO: magic modifiers
+      // result.push(res);
+      mage.currentMana -= castingCost;
       mage.currentTurn -= castingTurn;
 
       // Add to existing army
@@ -233,6 +262,10 @@ class Engine {
             size: res[key]
           });
         }
+        result.push({
+          type: 'log',
+          message: `Summoned ${res[key]} ${key} into your army`
+        });
       });
 
       for (let j = 0; j < castingTurn; j++) {

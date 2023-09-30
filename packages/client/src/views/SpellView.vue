@@ -15,8 +15,11 @@
     <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
   </select>
 
-  <div>Target</div> 
-  <input type="text" />
+  <div>Turns</div>
+  <input type="text" v-model="turns" />
+
+  <div># of times</div> 
+  <input type="text" v-model="target" />
 
   <button @click="castSpell">Cast spell</button>
 </template>
@@ -33,6 +36,8 @@ import Magic from '@/components/magic.vue';
 const mageStore = useMageStore();
 
 const selected = ref<string>('');
+const turns = ref<number>(1);
+const target = ref<string>('');
 
 const spellDisplay = (spell: Spell, magic: string) => {
   return {
@@ -80,12 +85,10 @@ const castingSpells = computed(() => {
   return spells.value.filter(d => d.castingTurn > 0);
 })
 
-
 const castSpell = async () => {
-  const res = (await API.post('summon', { spellId: selected.value, num: 1 })).data;
+  const res = (await API.post('spell', { spellId: selected.value, num: turns.value, target: target.value })).data;
   if (res.mage) {
     mageStore.setMage(res.mage);
-    console.log('!!', res.r);
   }
 }
 

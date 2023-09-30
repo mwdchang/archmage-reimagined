@@ -31,7 +31,7 @@
       &nbsp;Research all spells of this magic
     </div>
     <div style="display: flex; align-items: center; margin-top: 10px">
-      Spend&nbsp;<input type="number" style="width: 4rem" />&nbsp;turns to reearch faster.
+      Spend&nbsp;<input type="number" v-model="turns" style="width: 4rem" />&nbsp;turns to reearch faster.
     </div>
     <div style="display: flex; align-items: center; margin-top: 10px">
       <button @click="submitResearch"> Research </button>
@@ -54,6 +54,7 @@ const rp = computed(() => {
 
 const currentResearch = ref(mageStore.mage?.currentResearch);
 const focusResearch = ref(mageStore.mage?.currentResearchFocus ? true : false);
+const turns = ref(0);
 
 const filteredMagicTypes = computed(() => {
   return magicTypes.filter(m => {
@@ -77,10 +78,13 @@ const submitResearch = async () => {
   });
   const result = await API.post('research', {
     magic,
-    focus: focusResearch,
-    turns: 0
+    focus: focusResearch.value,
+    turns: turns.value
   });
-  console.log(result.data);
+
+  mageStore.setMage(result.data.mage as Mage);
+  currentResearch.value = mageStore.mage.currentResearch;
+  focusResearch.value = mageStore.mage.focusResearch;
 };
 
 </script>
