@@ -14,6 +14,7 @@ export class SimpleDataAdapter extends DataAdapter {
   userAuthMap: Map<string, User> = new Map();
   mageMap: Map<number, Mage> = new Map();
   userMageMap: Map<string, number> = new Map();
+  brMap: Map<string, any> = new Map();
 
   constructor() {
     super();
@@ -88,6 +89,12 @@ export class SimpleDataAdapter extends DataAdapter {
   getAllMages(): Mage[] {
     return [...this.mageMap.values()];
   }
+
+  // getBattleReport(id: string) {
+  // }
+
+  // saveBattleReport(id: string, report: any) {
+  // }
 
   nextTurn() {
     this.mageMap.forEach((mage, _username) => {

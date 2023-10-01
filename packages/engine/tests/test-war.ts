@@ -19,6 +19,7 @@ const dummyLand = {
 
 const attacker: Combatant = {
   mage: { 
+    id: 1,
     name: 'attacker', 
     magic: 'ascendant',
     currentSpellLevel: 800,
@@ -35,6 +36,7 @@ const attacker: Combatant = {
 
 const defender: Combatant = {
   mage: { 
+    id: 2,
     name: 'defender', 
     magic: 'phantasm',
     currentSpellLevel: 400,

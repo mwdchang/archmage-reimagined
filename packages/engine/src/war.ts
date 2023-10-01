@@ -31,22 +31,24 @@ enum StackType {
 }
 
 export interface BattleReport {
-  timetamp: number,
+  timestamp: number,
   attackType: string,
   attacker: {
     id: number,
     spellId: string | null,
-    itemId: string | null
+    itemId: string | null,
+    army: BattleStack[]
   }
   defender: {
     id: number,
     spellId: string | null,
-    itemId: string | null
+    itemId: string | null,
+    army: BattleStack[]
   },
 
-  // Save a bit of space, we don't need to copy all fields
-  attackerArmy: Partial<BattleStack>[],
-  defenderArmy: Partial<BattleStack>[],
+  preBattleLogs: any[],
+  battleLogs: any[],
+  postBattleLogs: any[],
 }
 
 
@@ -666,6 +668,26 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
   });
 
+  const battleReport: BattleReport = {
+    timestamp: Date.now(),
+    attackType: attackType,
+    attacker: {
+      id: attacker.mage.id,
+      spellId: attacker.spellId,
+      itemId: attacker.itemId,
+      army: []
+    },
+    defender: {
+      id: defender.mage.id,
+      spellId: defender.spellId,
+      itemId: defender.itemId,
+      army: []
+    },
+    preBattleLogs: [],
+    battleLogs: [],
+    postBattleLogs: []
+  };
+
 
   // Spells
   // TODO: check barriers and success
@@ -682,6 +704,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   if (defender.itemId) {
     battleItem(defender, defendingArmy, attacker, attackingArmy);
   }
+
+  // TODO: Prebattle logs
 
   resolveUnitAbilities(attackingArmy);
   resolveUnitAbilities(defendingArmy);
@@ -750,6 +774,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     );
   });
 
+  battleReport.attacker.army = _.clone(attackingArmy);
+  battleReport.defender.army = _.clone(defendingArmy);
+
 
   console.log('=== Engagement ===');
   for (let i = 0; i < battleOrders.length; i++) {
@@ -765,6 +792,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
     const aUnit = attackingStack.unit;
     const dUnit = defendingStack.unit;
+
+    const attackingMage = side === 'attacker' ? attacker.mage : defender.mage;
+    const defendingMage = side === 'attacker' ? defender.mage : attacker.mage;
 
     /////////// Primary //////////
     if (attackType === 'primary') {
@@ -796,6 +826,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         defenderUnitLoss = defendingStack.size;
       }
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
+
+      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
+      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
+
 
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) { 
@@ -839,6 +873,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
+        battleReport.battleLogs.push(`${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} struck back ${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name}`)
+        battleReport.battleLogs.push(`${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} slew ${attackingMage.name}(#${attackingMage.id})'s ${attackerUnitLoss} ${attackingStack.unit.name}`)
+
+
         // Accumulate or clear partial damage
         if (attackerUnitLoss > 0) { 
           attackingStack.sustainedDamage = 0;
@@ -875,6 +913,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
+      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
+      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
 
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) { 
@@ -999,4 +1039,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   } else {
     console.log(`Defener ${defender.mage.name} won the battle `);
   }
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
+  console.log(battleReport);
 }
