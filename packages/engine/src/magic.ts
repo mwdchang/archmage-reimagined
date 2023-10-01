@@ -74,7 +74,6 @@ export const doResearch = (mage: Mage, points: number) => {
   magicTypes.forEach(magic => {
     if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
       currentResearch[magic].remainingCost -= points;
-      console.log(`!!!!! mage ${mage.name} researching ${currentResearch[magic].id} ${currentResearch[magic].remainingCost}`);
       if (currentResearch[magic].remainingCost <= 0 ) {
         magicToAdvance = magic;
         console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);

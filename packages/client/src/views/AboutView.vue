@@ -1,6 +1,7 @@
 <template>
   <main class="about" v-if="mageStore.mage">
-    <h2>Kingdom {{ mageStore.mage.name }} (# {{mageStore.mage.id}})</h2>
+    <h2>{{ mageStore.mage.name }} (# {{mageStore.mage.id}})</h2>
+    <h4>Ranking {{ mageStore.mage.rank }}, Net power {{ totalNetPower(mageStore.mage) }} </h4>
     <br>
     <main style="display: flex; flex-direction: row">
       <section>
@@ -69,6 +70,7 @@ import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
+import { totalNetPower } from 'engine/src/base/mage';
 
 const mageStore = useMageStore();
 

@@ -48,12 +48,32 @@ export const explore = (rate: number) => {
   return Math.floor(0.75 * rate + randomBM() * 0.25 * rate);
 }
 
+export const spacesForUnits = (mage: Mage) => {
+  return mage.barracks * 150;
+}
+
 export const maxPopulation = (mage: Mage) => {
   let space = 0
   Object.keys(productionTable.space).forEach(key => {
     space += mage[key] * productionTable.space[key];
   });
   return space;
+}
+
+export const realMaxPopulation = (mage: Mage) => {
+  let armySpaceAndPopulation = 0;
+  mage.army.forEach(d => {
+    const unit = getUnitById(d.id);
+    armySpaceAndPopulation += (d.size * unit.upkeepCost.population);
+  });
+
+  const max = maxPopulation(mage);
+
+  armySpaceAndPopulation -= spacesForUnits(mage);
+  if (armySpaceAndPopulation <= 0) {
+    return max;
+  }
+  return max - armySpaceAndPopulation;
 }
 
 export const maxFood = (mage: Mage) => {
@@ -64,14 +84,14 @@ export const maxFood = (mage: Mage) => {
   return food;
 }
 
-export const spaceForUnits = (mage: Mage) => {
-  let space = 0;
-  mage.army.forEach(u => {
-    const unit = getUnitById(u.id);
-    space += (unit.upkeepCost.population * u.size);
-  });
-  return Math.ceil(space);
-}
+// export const spaceForUnits = (mage: Mage) => {
+//   let space = 0;
+//   mage.army.forEach(u => {
+//     const unit = getUnitById(u.id);
+//     space += (unit.upkeepCost.population * u.size);
+//   });
+//   return Math.ceil(space);
+// }
 
 export const populationIncome = (mage: Mage) => {
   return Math.floor(mage.currentPopulation * 0.015 + 50);

@@ -45,6 +45,7 @@ export interface Enchantment {
 export interface Mage {
   id: number;
   name: string;
+  rank?: number;
 
   // magic
   magic: string;

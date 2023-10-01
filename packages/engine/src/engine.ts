@@ -22,13 +22,13 @@ import {
 import { 
   explore,
   explorationRate,
-  maxPopulation,
   buildingTypes,
   buildingRate,
   populationIncome,
   geldIncome,
   armyUpkeep,
-  buildingUpkeep
+  buildingUpkeep,
+realMaxPopulation
 } from './interior';
 import { 
   doResearch,
@@ -95,6 +95,8 @@ class Engine {
       this.adapter.createMage(name, mage);
     }
 
+    this.updateRankList();
+
     // Start loop
     setTimeout(() => {
       this.updateLoop();
@@ -110,6 +112,8 @@ class Engine {
      */
     console.log(`=== Server turn ===`);
     this.adapter.nextTurn(); 
+    this.updateRankList();
+
     setTimeout(() => {
       this.updateLoop()
     }, TICK);
@@ -124,8 +128,10 @@ class Engine {
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
-    if (mage.currentPopulation >= maxPopulation(mage)) {
-      mage.currentPopulation = maxPopulation(mage);
+
+    const maxPop = realMaxPopulation(mage);
+    if (mage.currentPopulation >= maxPop) {
+      mage.currentPopulation = maxPop;
     }
     if (mage.currentMana > manaStorage(mage)) {
       mage.currentMana = manaStorage(mage);
@@ -315,6 +321,22 @@ class Engine {
       mage.wilderness += num;
     });
     this.useTurn(mage);
+  }
+
+  async updateRankList() {
+    const mages = this.adapter.getAllMages();
+    const ranks = mages.map(mage => {
+      return {
+        id: mage.id,
+        name: mage.name,
+        netPower: totalNetPower(mage)
+      };
+    });
+
+    const orderedRanks = _.orderBy(ranks, d => -d.netPower);
+    orderedRanks.forEach((d, rankIdx) => {
+      this.getMage(d.id).rank = (1 + rankIdx);
+    });
   }
 
   async rankList(_listingType: string) {

@@ -4,7 +4,7 @@
   <table v-if="mage">
     <tr>
       <td>Rank</td>
-      <td>???</td>
+      <td>{{ mage.rank }}</td>
       <td>Power</td>
       <td>{{ totalNetPower(mage) }} </td>
     </tr>
@@ -18,7 +18,7 @@
       <td>Geld</td>
       <td>{{ mage.currentGeld }}</td>
       <td>Items</td>
-      <td>{{ mage.items.length }}</td>
+      <td>{{ numItems }}</td>
     </tr>
     <tr>
       <td>Units</td>
@@ -79,17 +79,19 @@
       <td>Food Production</td>
       <td>{{ maxFood(mage) }}</td>
     </tr>
+    <!--
     <tr>
       <td>Max Population Available</td>
       <td>???</td>
     </tr>
+    -->
     <tr>
       <td>Space for Units</td>
-      <td>{{ spaceForUnits(mage) }}</td>
+      <td>{{ spacesForUnits(mage) }}</td>
     </tr>
     <tr>
       <td>Real Max Population</td>
-      <td>???</td>
+      <td>{{ realMaxPopulation(mage) }}</td>
     </tr>
   </table>
 
@@ -186,11 +188,12 @@ import { storeToRefs } from 'pinia'
 import { 
   maxPopulation,
   maxFood,
-  spaceForUnits,
+  spacesForUnits,
   geldIncome,
   populationIncome,
   armyUpkeep,
-  buildingUpkeep
+  buildingUpkeep,
+  realMaxPopulation
 } from 'engine/src/interior';
 
 import { getUnitById } from 'engine/src/base/references';
@@ -210,6 +213,15 @@ import {
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);
 const { mage } = storeToRefs(mageStore);
+
+const numItems = computed(() => {
+  const keys = Object.keys(mage.value.items);
+  let num = 0;
+  keys.forEach(key => {
+    num += mage.value.items[key];
+  });
+  return num;
+});
 
 const researchStatus = computed(() => {
   const mage = mageStore.mage;
