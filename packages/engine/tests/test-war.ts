@@ -1,5 +1,5 @@
 import { Mage } from 'shared/types/mage';
-import { battle, Combatant } from '../src/war';
+import { battle, resolveBattleAftermath, Combatant } from '../src/war';
 
 import { loadUnitsAndSpells } from './loader';
 
@@ -27,8 +27,8 @@ const attacker: Combatant = {
     forts: 10,
   } as Mage,
   army: [
-    { id: 'archangel', size: 2000 },
-    { id: 'dominion', size: 5}
+    { id: 'archangel', size: 5000 },
+    { id: 'archer', size: 500000 }
   ],
   spellId: 'healing',
   itemId: 'potionOfValor'
@@ -44,11 +44,14 @@ const defender: Combatant = {
     forts: 100,
   } as Mage,
   army: [
-    { id: 'archer', size: 200000 },
-    { id: 'militia', size: 7000 }
+    { id: 'militia', size: 500000 }
   ],
   spellId: 'blaze',
   itemId: 'carpetOfFlying'
 };
 
-battle('siege', attacker, defender);
+const report = battle('siege', attacker, defender);
+resolveBattleAftermath('siege', attacker.mage, defender.mage, report);
+
+console.log('');
+console.log(defender);

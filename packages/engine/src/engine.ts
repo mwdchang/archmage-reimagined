@@ -28,7 +28,7 @@ import {
   geldIncome,
   armyUpkeep,
   buildingUpkeep,
-realMaxPopulation
+  realMaxPopulation
 } from './interior';
 import { 
   doResearch,
@@ -39,7 +39,7 @@ import {
   doItemGeneration,
   maxMana
 } from './magic';
-import { battle, Combatant } from './war';
+import { battle, resolveBattleAftermath, Combatant } from './war';
 
 import { randomInt } from './random';
 
@@ -373,7 +373,9 @@ class Engine {
       itemId: '',
       army: defenderMage.army
     };
-    battle('siege', attacker, defender);
+
+    const battleReport = battle('siege', attacker, defender);
+    resolveBattleAftermath('siege', mage, defenderMage, battleReport);
   }
 
   async register(username: string, password: string, magic: string) {
