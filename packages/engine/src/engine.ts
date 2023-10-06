@@ -65,6 +65,8 @@ interface GameMsg {
   message: string,
 }
 
+const battleMap = new Map<string, any>();
+
 class Engine {
   adapter: DataAdapter;
 
@@ -375,7 +377,15 @@ class Engine {
     };
 
     const battleReport = battle('siege', attacker, defender);
+    battleMap.set(battleReport.id, battleReport);
+
     resolveBattleAftermath('siege', mage, defenderMage, battleReport);
+    return battleReport;
+  }
+
+  async getBattleReport(mage: Mage, reportId: string) {
+    // TODO: Obfuscate based on which side
+    return battleMap.get(reportId);
   }
 
   async register(username: string, password: string, magic: string) {

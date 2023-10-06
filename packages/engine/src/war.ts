@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit, UnitAbility } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
@@ -31,6 +32,7 @@ enum StackType {
 }
 
 export interface BattleReport {
+  id: string,
   timestamp: number,
   attackType: string,
   attacker: {
@@ -675,6 +677,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   });
 
   const battleReport: BattleReport = {
+    id: uuidv4(),
     timestamp: Date.now(),
     attackType: attackType,
     attacker: {
