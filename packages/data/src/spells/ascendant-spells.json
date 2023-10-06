@@ -91,5 +91,39 @@
         }
       }
     ]
+  },
+  {
+    "id": "healing",
+    "name": "Healing",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "This is the basic spell of priestly healing magics. With this spell, lost hit points of your troops are healed. The spell is cheap but effective in battle and may prove to be indispensable in the case of an emergency.",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 500,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "HealEffect",
+            "healType": "points",
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 0.01 },
+              "verdant": { "value": 0.005 },
+              "eradication": { "value": 0.003 },
+              "nether": { "value": 0.003 },
+              "phantasm": { "value": 0.005 }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

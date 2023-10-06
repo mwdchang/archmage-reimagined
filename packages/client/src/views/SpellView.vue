@@ -1,4 +1,6 @@
 <template>
+  <div class="section-header">Spells in your Spellbook</div>
+  <br>
   <table>
     <tr v-for="spell of spells" :key="spell.id">
       <td>{{ spell.name }}</td>
@@ -12,7 +14,20 @@
   <select v-model="selected">
     <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
   </select>
+
+  <div>Target</div>
+  <input type="text" v-model="target" />
+
+  <div># of times</div> 
+  <input type="text" v-model="turns" />
+
   <button @click="castSpell">Cast spell</button>
+
+  <div v-if="spellResult.length">
+    <div v-for="(d, idx) of spellResult" :key="idx">
+      {{ d.message }}
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -27,6 +42,10 @@ import Magic from '@/components/magic.vue';
 const mageStore = useMageStore();
 
 const selected = ref<string>('');
+const turns = ref<number>(1);
+const target = ref<string>('');
+
+const spellResult = ref<any[]>([]);
 
 const spellDisplay = (spell: Spell, magic: string) => {
   return {
@@ -74,12 +93,15 @@ const castingSpells = computed(() => {
   return spells.value.filter(d => d.castingTurn > 0);
 })
 
-
 const castSpell = async () => {
-  const res = (await API.post('summon', { spellId: selected.value, num: 1 })).data;
+  const res = (await API.post('spell', { spellId: selected.value, num: turns.value, target: target.value })).data;
+
+  if (res.r) {
+    spellResult.value = res.r;
+  }
+
   if (res.mage) {
     mageStore.setMage(res.mage);
-    console.log('!!', res.r);
   }
 }
 

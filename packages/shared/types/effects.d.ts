@@ -21,7 +21,7 @@ export interface BattleEffect extends Effect {
     [key: string]: any 
   },
   stack: string,       // random, randomSingle, all
-  effects: (UnitEffect | DamageEffect)[]
+  effects: (UnitEffect | DamageEffect | HealEffect)[]
 }
 
 /**
@@ -66,5 +66,13 @@ export interface DamageEffect {
   }
 }
 
-export interface BattleHealingEffect extends Effect {
+export interface HealEffect {
+  name: string,
+  healType: string,
+  rule: string,
+  magic: {
+    [key: string]: {
+      value: any
+    }
+  }
 }

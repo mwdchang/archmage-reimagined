@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { UnitSummonEffect } from 'shared/types/effects';
 import { 
-  magicAlignmentTable, spellRankTable, productionTable 
+  magicAlignmentTable, spellRankTable, productionTable, itemProductionTable
 } from './base/config';
 import { Mage } from 'shared/types/mage';
 import { 
@@ -9,10 +9,11 @@ import {
   getUnitById,
   getSpellById,
   getMaxSpellLevels,
-  getResearchTree
+  getResearchTree,
+  getRandomItem
 } from './base/references';
 import { totalLand } from './base/mage';
-
+import { randomBM } from './random';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -41,11 +42,31 @@ export const currentSpellLevel = (mage: Mage) => {
   return result;
 }
 
+export const itemGenerationRate = (mage: Mage) => {
+  const land = totalLand(mage);
+  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.libraries / land);
+  return rate;
+}
+
+export const doItemGeneration = (mage: Mage) => {
+  const rate = itemGenerationRate(mage);
+  if (Math.random() <= rate) {
+    const item = getRandomItem();
+    console.log('Found an item!!!', item.name);
+
+    if (!mage.items[item.id]) {
+      mage.items[item.id] = 1;
+    } else {
+      mage.items[item.id] ++;
+    }
+  }
+}
+
 // Do research, 
-// This assumes that spell takes at least one turn to research despite the points generated
 export const doResearch = (mage: Mage, points: number) => {
   const researchTree = getResearchTree();
   const currentResearch = mage.currentResearch;
+  let spillOverPoints = 0;
 
   // Apply points to current research
   let done = false;
@@ -53,10 +74,10 @@ export const doResearch = (mage: Mage, points: number) => {
   magicTypes.forEach(magic => {
     if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
       currentResearch[magic].remainingCost -= points;
-      console.log(`!!!!! mage ${mage.name} researching ${currentResearch[magic].id} ${currentResearch[magic].remainingCost}`);
       if (currentResearch[magic].remainingCost <= 0 ) {
         magicToAdvance = magic;
         console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
+        spillOverPoints = Math.abs(currentResearch[magic].remainingCost);
       }
       done = true;
     }
@@ -66,7 +87,7 @@ export const doResearch = (mage: Mage, points: number) => {
 
   // Add to spellbook
   mage.spellbook[magicToAdvance].push(currentResearch[magicToAdvance].id);
-  currentResearch[magicToAdvance] = null;
+  currentResearch[magicToAdvance] = null; // Temporary reset
 
   // Set next spell
   const spellList = researchTree.get(mage.magic).get(magicToAdvance);
@@ -84,16 +105,25 @@ export const doResearch = (mage: Mage, points: number) => {
     }
   }
 
-  // Set next active, pick the least turns for now
-  let researchables = Object.values(currentResearch);
-  researchables = researchables
-    .filter(d => d !== null)
-    .sort((a, b) => {
-      return a.remainingCost - b.remainingCost;
-    });
+  if (mage.focusResearch === true && currentResearch[magicToAdvance]) {
+    currentResearch[magicToAdvance].active = true;
+  } else {
+    // Set next active, pick the least turns for now
+    let researchables = Object.values(currentResearch);
+    researchables = researchables
+      .filter(d => d !== null)
+      .sort((a, b) => {
+        return a.remainingCost - b.remainingCost;
+      });
 
-  if (researchables.length > 0) {
-    researchables[0].active = true;
+    if (researchables.length > 0) {
+      researchables[0].active = true;
+    }
+  }
+
+  // Spend remaining points
+  if (spillOverPoints > 0) {
+    doResearch(mage, spillOverPoints);
   }
 }
 
@@ -109,7 +139,13 @@ export const summonUnit = (mage: Mage, spellId: string) => {
 
   effects.forEach(effect => {
     const unitIds = effect.unitIds;
-    const power = effect.summonNetPower;
+    let power = effect.summonNetPower;
+
+    // Randomness
+    power *= (0.5 + 0.75 * randomBM());
+
+    // Spell level
+    power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
 
     unitIds.forEach(unitId => {
       const unit = getUnitById(unitId);
@@ -134,7 +170,7 @@ export const manaStorage = (mage: Mage) => {
 export const researchPoints = (mage: Mage) => {
   let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
   // return 10 + Math.floor(rawPoints);
-  return 99999 + Math.floor(rawPoints); // FIXME just testing
+  return Math.floor(rawPoints); // FIXME just testing
 }
 
 export const manaIncome = (mage: Mage) => {
@@ -145,4 +181,3 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
   return Math.floor(manaYield);
 }
-

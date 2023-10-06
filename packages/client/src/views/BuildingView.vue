@@ -1,5 +1,8 @@
 <template>
-  <h3>Build</h3>
+  <h3 class="section-header">Build</h3>
+  <p v-if="mageStore">
+    You have {{ mageStore.mage.wilderness }} acres of wilderness.
+  </p>
   <build-table @build="build($event)" />
 </template>
 

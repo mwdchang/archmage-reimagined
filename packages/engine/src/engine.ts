@@ -1,10 +1,12 @@
 import _  from 'lodash';
+import { magicAlignmentTable } from './base/config';
 import { 
   loadUnitData,
   loadSpellData,
   loadItemData,
   getSpellById,
   initializeResearchTree, 
+  magicTypes
 } from './base/references';
 import { 
   createMage, 
@@ -20,11 +22,13 @@ import {
 import { 
   explore,
   explorationRate,
-  maxPopulation,
   buildingTypes,
   buildingRate,
   populationIncome,
-  geldIncome
+  geldIncome,
+  armyUpkeep,
+  buildingUpkeep,
+  realMaxPopulation
 } from './interior';
 import { 
   doResearch,
@@ -32,9 +36,10 @@ import {
   researchPoints,
   manaIncome,
   manaStorage,
-
+  doItemGeneration,
+  maxMana
 } from './magic';
-import { battle, Combatant } from './war';
+import { battle, resolveBattleAftermath, Combatant } from './war';
 
 import { randomInt } from './random';
 
@@ -53,8 +58,12 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 
-
 const TICK = 1000 * 60 * 2; // Every two minute
+
+interface GameMsg {
+  type: string,
+  message: string,
+}
 
 class Engine {
   adapter: DataAdapter;
@@ -80,11 +89,13 @@ class Engine {
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
-      const magic = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'][randomInt(5)];
+      const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
       const mage = createMage(name, magic);
       this.adapter.createMage(name, mage);
     }
+
+    this.updateRankList();
 
     // Start loop
     setTimeout(() => {
@@ -101,6 +112,8 @@ class Engine {
      */
     console.log(`=== Server turn ===`);
     this.adapter.nextTurn(); 
+    this.updateRankList();
+
     setTimeout(() => {
       this.updateLoop()
     }, TICK);
@@ -115,8 +128,10 @@ class Engine {
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
-    if (mage.currentPopulation > maxPopulation(mage)) {
-      mage.currentPopulation = maxPopulation(mage);
+
+    const maxPop = realMaxPopulation(mage);
+    if (mage.currentPopulation >= maxPop) {
+      mage.currentPopulation = maxPop;
     }
     if (mage.currentMana > manaStorage(mage)) {
       mage.currentMana = manaStorage(mage);
@@ -124,10 +139,22 @@ class Engine {
 
     // 3. calculate research, if applicable
     doResearch(mage, researchPoints(mage));
+    doItemGeneration(mage);
 
     // 4. calculate upkeep
-    
-    // 5. enchantmentR
+    const armyCost = armyUpkeep(mage);
+    mage.currentGeld -= armyCost.geld;
+    mage.currentMana -= armyCost.mana;
+    mage.currentPopulation -= armyCost.population;
+
+    const buildingCost = buildingUpkeep(mage);
+    mage.currentGeld -= buildingCost.geld;
+    mage.currentMana -= buildingCost.mana;
+    mage.currentPopulation -= buildingCost.population;
+
+    if (mage.currentGeld < 0) mage.currentGeld = 0;
+    if (mage.currentMana < 0) mage.currentMana = 0;
+    if (mage.currentPopulation < 0) mage.currentPopulation = 0;
   }
 
   async exploreLand(mage: Mage, num: number) {
@@ -136,7 +163,7 @@ class Engine {
     }
     let landGained = 0;
     for (let i = 0; i < num; i++) {
-      const rate = explorationRate(totalLand(mage), 5000);
+      const rate = explorationRate(mage);
       const exploredLand = explore(rate);
       mage.wilderness += exploredLand;
       landGained += exploredLand;
@@ -145,31 +172,106 @@ class Engine {
     return landGained
   }
 
+  // geld for num turns
+  async gelding(mage: Mage, num: number) {
+    if (num > mage.currentTurn) {
+      return;
+    }
+
+    let geldGained = 0;
+    for (let i = 0; i < num; i++) {
+      const gain = geldIncome(mage);
+      geldGained += gain;
+      mage.currentGeld += gain;
+      this.useTurn(mage);
+    }
+    return geldGained;
+  }
+
+  async manaCharge(mage: Mage, num: number) {
+    if (num > mage.currentTurn) {
+      return;
+    }
+
+    let manaGained = 0;
+    for (let i = 0; i < num; i++) {
+      const gain = manaIncome(mage);
+      manaGained += gain;
+      mage.currentMana += gain;
+      if (mage.currentMana > maxMana(mage)) {
+        mage.currentMana = maxMana(mage);
+      }
+      this.useTurn(mage);
+    }
+    return manaGained;
+  }
+
+  async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    mage.currentResearch[magic].active = true;
+    mage.focusResearch = focus;
+
+    if (turns && turns > 0) {
+      for (let i = 0; i < turns; i++) {
+        doResearch(mage, researchPoints(mage));
+        this.useTurn(mage);
+      }
+    }
+  }
+
+  async castSpell(mage: Mage, spellId: string, num: number, target: number) {
+    const spell = getSpellById(spellId);
+    if (spell.attributes.includes('summon')) {
+      return this.summon(mage, spellId, num);
+    }
+    // TODO: enchantments, offensive spells
+  }
+
   async summon(mage: Mage, spellId: string, num: number) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
-    const castingCost = spell.castingCost;
+    let castingCost = spell.castingCost;
+    const result: GameMsg[] = [];
+    const magic = mage.magic;
 
-    const result = [];
+    const costModifier = magicAlignmentTable[magic].costModifier[spell.magic];
+    castingCost *= costModifier;
+
     for (let i = 0; i < num; i++) {
+      if (mage.currentMana < castingCost) {
+        result.push({
+          type: 'error',
+          message: `Spell costs ${castingCost} mana, you only have ${mage.currentMana}`
+        });
+        continue;
+      }
+      if (mage.currentTurn < castingTurn) {
+        result.push({
+          type: 'error',
+          message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
+        });
+        continue;
+      }
+
       const res = summonUnit(mage, spellId);
-      result.push(res);
-      mage.currentMana -= castingCost; // TODO: magic modifiers
+      // result.push(res);
+      mage.currentMana -= castingCost;
       mage.currentTurn -= castingTurn;
 
       // Add to existing army
       Object.keys(res).forEach(key => {
         const stack = mage.army.find(d => d.id === key); 
         if (stack) {
-          console.log('\t\t existing');
           stack.size += res[key];
         } else {
-          console.log('\t\t new stack');
           mage.army.push({
             id: key,
             size: res[key]
           });
         }
+        result.push({
+          type: 'log',
+          message: `Summoned ${res[key]} ${key} into your army`
+        });
       });
 
       for (let j = 0; j < castingTurn; j++) {
@@ -180,7 +282,6 @@ class Engine {
   }
 
   async build(mage: Mage, payload: BuildPayload) {
-    console.log(mage, payload);
     let landUsed = 0;
     let turnsUsed = 0;
 
@@ -190,6 +291,13 @@ class Engine {
     });
     turnsUsed = Math.ceil(turnsUsed);
     landUsed = Math.ceil(landUsed);
+
+    if (landUsed > mage.wilderness) {
+      return;
+    }
+    if (turnsUsed > mage.currentTurn) {
+      return;
+    }
 
     // 1. Build first using the current rates
     buildingTypes.forEach(b => {
@@ -207,14 +315,28 @@ class Engine {
   }
 
   async destroy(mage: Mage, payload: DestroyPayload) {
-    console.log(mage, payload);
-
     buildingTypes.forEach(b => {
       const num = payload[b.id];
       mage[b.id] -= num;
       mage.wilderness += num;
     });
     this.useTurn(mage);
+  }
+
+  async updateRankList() {
+    const mages = this.adapter.getAllMages();
+    const ranks = mages.map(mage => {
+      return {
+        id: mage.id,
+        name: mage.name,
+        netPower: totalNetPower(mage)
+      };
+    });
+
+    const orderedRanks = _.orderBy(ranks, d => -d.netPower);
+    orderedRanks.forEach((d, rankIdx) => {
+      this.getMage(d.id).rank = (1 + rankIdx);
+    });
   }
 
   async rankList(_listingType: string) {
@@ -225,6 +347,7 @@ class Engine {
         id: mage.id,
         name: mage.name,
         magic: mage.magic,
+        forts: mage.forts,
         land: totalLand(mage),
         netPower: totalNetPower(mage)
       }
@@ -233,10 +356,7 @@ class Engine {
   }
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
-    console.log('getting defender mage', targetId);
     const defenderMage = this.getMage(targetId);
-
-    console.log(defenderMage);
 
     // Make battle stacks
     const attacker: Combatant =  {
@@ -253,7 +373,9 @@ class Engine {
       itemId: '',
       army: defenderMage.army
     };
-    battle('siege', attacker, defender);
+
+    const battleReport = battle('siege', attacker, defender);
+    resolveBattleAftermath('siege', mage, defenderMage, battleReport);
   }
 
   async register(username: string, password: string, magic: string) {
@@ -265,15 +387,22 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+
     return { user: res.user, mage };
   }
 
   async login(username: string, password: string) {
     // 1. check login
     const res = await this.adapter.login(username, password);
+    if (!res) {
+      return { user: null, mage: null }
+    }
 
     // 2. return mage
     const mage = this.adapter.getMageByUser(username);
+    if (!mage) {
+      return { user: res.user, mage: null }
+    }
     return { user: res.user, mage };
   }
 
@@ -290,7 +419,7 @@ class Engine {
       magic: m.magic,
       land: totalLand(m),
       netPower: totalNetPower(m),
-      fortresses: m.fortresses
+      forts: m.forts
     };
   }
 

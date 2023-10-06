@@ -50,13 +50,70 @@
             "name": "UnitEffect",
             "attributeMap": {
               "attackResistances.fire": {
-                "rule": "add",
+                "rule": "",
                 "magic": {
                   "ascendant": { "value": -40 },
                   "verdant": { "value": -40 },
                   "eradication": { "value": -40 },
                   "nether": { "value": -40 },
                   "phantasm": { "value": -40 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hornOfValhalla",
+    "name": "Horn of Valhalla",
+    "description": "The possessor of the Horn of Valhalla has the power to summon knight troops to his/her side in battle. When the horn is blown, it draws the attention of knight troops nearby, who join in on the glory of battle.",
+    "attributes": ["oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["knight"],
+        "summonType": "all",
+        "summonNetPower": 100000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "carpetOfFlying",
+    "name": "Carpet of Flying",
+    "description": "This magical Oriental rug is woven with special magical techniques, which enable it to fly. On command, it will fly through the air carrying whatever the magician wishes.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "flying", "extra": null } },
+                  "verdant": { "value": { "name": "flying", "extra": null } },
+                  "eradication": { "value": { "name": "flying", "extra": null } },
+                  "nether": { "value": { "name": "flying", "extra": null } },
+                  "phantasm": { "value": { "name": "flying", "extra": null } }
                 }
               }
             }

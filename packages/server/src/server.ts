@@ -52,9 +52,22 @@ const engine = new Engine(new SimpleDataAdapter());
 router.post('/api/explore', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { turns } = req.body;
-  console.log('/api/explore', turns);
   const landGained = await engine.exploreLand(mage, turns);
   res.status(200).json({ mage, landGained });
+});
+
+router.post('/api/geld', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { turns } = req.body;
+  const geldGained = await engine.gelding(mage, turns);
+  res.status(200).json({ mage, geldGained });
+});
+
+router.post('/api/charge', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { turns } = req.body;
+  const manaGained = await engine.manaCharge(mage, turns);
+  res.status(200).json({ mage, manaGained });
 });
 
 router.post('/api/build', async (req: any, res) => {
@@ -76,15 +89,23 @@ router.get('/api/ranklist', async (_req: any, res) => {
   res.status(200).json({ rankList });
 });
 
-router.post('/api/summon', async (req: any, res) => {
+router.post('/api/spell', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
-  const { spellId, num } = req.body;
-  const r = await engine.summon(mage, spellId, num);
+  const { spellId, num, target } = req.body;
+  const r = await engine.castSpell(mage, spellId, num, target);
   res.status(200).json({ r, mage });
 });
 
+
+router.post('/api/research', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { magic, focus, turns } = req.body;
+  const r = await engine.research(mage, magic, focus, turns);
+  res.status(200).json({ r, mage });
+
+});
+
 router.post('/api/war', async (req: any, res) => {
-  console.log('!!!!!!!!!!! WAR !!!!!!!!!!!!!!!!!!!!1');
   const mage = engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId } = req.body;
   const r = await engine.doBattle(mage, +targetId, stackIds, spellId, itemId);
@@ -105,6 +126,11 @@ router.post('/api/register', async (req, res) => {
 router.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   const { user, mage } = await engine.login(username, password);
+
+  if (!user || !mage) {
+    return res.status(200).json(null);
+  }
+
   res.cookie('amr-jwt', user.token, {
     httpOnly: true,
     maxAge: MAX_AGE * 1000

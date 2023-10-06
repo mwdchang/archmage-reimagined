@@ -1,5 +1,7 @@
 <template>
   <main>
+    <h1> Archmage Reimagined </h1>
+    <br>
     <div v-if="mode === 'registerMode'">
       <Register /> 
       <div> <a @click="mode = 'loginMode'">Login</a> </div>

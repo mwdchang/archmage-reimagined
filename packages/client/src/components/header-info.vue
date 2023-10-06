@@ -3,14 +3,12 @@
     <tr>
       <td> Turns {{ mageStore.mage.currentTurn }} / {{ mageStore.mage.maxTurn }} </td>
       <td> Land {{ totalLand(mageStore.mage) }} </td>
-    </tr>
-    <tr>
-      <td> Magic {{ mageStore.mage.currentMana }} / {{ manaStorage(mageStore.mage) }} </td>
+      <td> Mana {{ mageStore.mage.currentMana }} / {{ manaStorage(mageStore.mage) }} </td>
       <td> Geld {{ mageStore.mage.currentGeld }} </td>
+      <td> Pop. {{ mageStore.mage.currentPopulation }} / {{ interior.maxPopulation(mageStore.mage) }}</td>
     </tr>
     <tr>
-      <td> Enchants </td>
-      <td> Population {{ mageStore.mage.currentPopulation }} / {{ interior.maxPopulation(mageStore.mage) }}</td>
+      <td colspan="5"> Enchants </td>
     </tr>
   </table>
   <br>
@@ -26,11 +24,14 @@ const mageStore = useMageStore();
 
 <style scoped>
 .header-info {
-  width: 70vw;
+  width: 75vw;
+  font-size: 80%;
 }
 
 table > tr > td {
-  padding: 1px;
-  width: 50%;
+  padding: 0px;
+  padding-left: 2px;
+  line-height: 1.25rem;
+  width: 20%;
 }
 </style>

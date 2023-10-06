@@ -1,6 +1,9 @@
 /* Various configuration and rules */
 
 
+export const explorationLimit = 6000;
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Kingdom
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +29,7 @@ export const productionTable = {
     towns: 1000,
     workshops: 30,
     barracks: 20,
-    fortresses: 500,
+    forts: 500,
     wilderness: 10
   },
   research: 10,
@@ -139,4 +142,15 @@ export const spellRankTable = {
   average: 5,
   complex: 7,
   ultimate: 20
+}
+
+export const itemProductionTable = {
+  itemGenerationRate: 0.1
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// War
+////////////////////////////////////////////////////////////////////////////////
+export const defenderBonusTable = {
 }

@@ -82,5 +82,42 @@
         }
       }
     ]
+  },
+  {
+    "id": "bloodCurse",
+    "name": "Blood Curse",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "Using your own blood as a medium, you lay a powerful enchantment upon your armies. Wounds inflicted by your troops will be cursed, leaving behind injuries that will never close or heal over, thus preventing any healing or regeneration effect.",
+    "attributes": ["battle"],
+    "researchCost": 6000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "bloodCurse", "extra": null } },
+                  "verdant": { "value": { "name": "bloodCurse", "extra": null } },
+                  "eradication": { "value": { "name": "bloodCurse", "extra": null } },
+                  "nether": { "value": { "name": "bloodCurse", "extra": null } },
+                  "phantasm": { "value": { "name": "bloodCurse", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

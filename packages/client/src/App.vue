@@ -1,7 +1,8 @@
 <template>
   <main style="display: flex; flex-direction: column; align-items: center">
-    <header-info v-if="mageStore.mage && !hideHeader.includes(route.name as string)" />
-    <RouterView />
+    <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
+    <RouterView v-if="route.name === 'home'" />
+    <RouterView v-if="mage && route.name !== 'home'" />
   </main>
 </template>
 
@@ -10,10 +11,12 @@ import { onMounted } from 'vue';
 import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
+import { storeToRefs } from 'pinia'
 import { API } from './api/api';
 import { 
   loadUnitData,
   loadSpellData, 
+  loadItemData,
   initializeResearchTree 
 } from 'engine/src/base/references';
 
@@ -31,9 +34,13 @@ import eradicationSpells from 'data/src/spells/eradication-spells.json';
 import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
+import lesserItems from 'data/src/items/lesser.json';
+
 const mageStore = useMageStore();
 const router = useRouter();
 const route = useRoute();
+const { mage } = storeToRefs(mageStore);
+
 
 const hideHeader = ['status', 'test'];
 
@@ -58,6 +65,8 @@ onMounted(async () => {
   loadSpellData(netherSpells);
   loadSpellData(phantasmSpells);
   initializeResearchTree();
+
+  loadItemData(lesserItems);
 
   try {
     const r = await API.get('mage');

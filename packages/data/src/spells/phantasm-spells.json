@@ -21,7 +21,7 @@
             "name": "UnitEffect",
             "attributeMap": {
               "primaryAttackInit,secondaryAttackInit": {
-                "rule": "absolute",
+                "rule": "",
                 "magic": {
                   "phantasm": { "value": -1 }
                 }

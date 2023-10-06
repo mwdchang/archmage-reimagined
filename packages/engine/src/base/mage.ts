@@ -28,10 +28,11 @@ export const createMage = (name: string, magic: string): Mage => {
       nether: null,
       phantasm: null
     },
+    focusResearch: false,
 
     netPower: 0,
-    currentTurn: 100,
-    maxTurn: 1000,
+    currentTurn: 2000,
+    maxTurn: 2000,
 
     currentPopulation: 1000,
     currentMana: 1000,
@@ -43,13 +44,20 @@ export const createMage = (name: string, magic: string): Mage => {
     nodes: 30,
     barracks: 10,
     libraries: 10,
-    fortresses: 9,
+    forts: 9,
     barriers: 0,
     wilderness: 181,
     army: [],
-    items: [],
+    items: {},
     heroes: [],
-    enchantments: []
+    enchantments: [],
+
+    assignment: {
+      spellId: -1,
+      spellCondition: 0,
+      itemId: -1,
+      itemCondition: 0,
+    }
   };
 
   // Set starting army
@@ -90,9 +98,9 @@ export const totalNetPower = (mage: Mage) => {
     mage.barracks + 
     mage.nodes + 
     mage.libraries + 
-    mage.fortresses + 
+    mage.forts + 
     mage.barriers);
-  netpower += mage.fortresses * 19360;
+  netpower += mage.forts * 19360;
   netpower += mage.barriers * 6500;
 
   // Mana, geld, items ... etc 
@@ -100,7 +108,10 @@ export const totalNetPower = (mage: Mage) => {
   netpower += Math.floor(0.0005 * mage.currentGeld);
   netpower += Math.floor(0.02 * mage.currentPopulation);
   netpower += 1000 * mage.currentSpellLevel;
-  netpower += 1000 * mage.items.length;
+
+  Object.keys(mage.items).forEach(key => {
+    netpower += 1000 * mage.items[key];
+  });
 
   // Army
   mage.army.forEach(stack => {
@@ -120,7 +131,7 @@ export const totalLand = (mage: Mage) => {
     mage.workshops +
     mage.nodes + 
     mage.libraries + 
-    mage.fortresses + 
+    mage.forts + 
     mage.barriers + 
     mage.wilderness;
 }
@@ -133,3 +144,21 @@ export const totalUnits = (mage: Mage) => {
   return num;
 }
 
+export const calcKingdomResistance = (mage: Mage) => {
+  const resistance: { [key: string]: number } = {
+    barrier: 0,
+    ascendant: 0,
+    verdant: 0,
+    eradication: 0,
+    nether: 0,
+    phantasm: 0
+  };
+
+  // Max barrier is 2.5% of the land, max normal barrier is 75
+  if (mage.barriers > 0) {
+    const land = 0.025 * totalLand(mage);
+    const barrier = Math.floor((mage.barriers / land) * 75);
+    resistance.barrier = barrier;
+  }
+  return resistance;
+}

@@ -10,6 +10,12 @@ import SpellView from '@/views/SpellView.vue';
 import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
+import ResearchView from '@/views/ResearchView.vue';
+import ItemView from '@/views/ItemView.vue';
+import BattleResultView from '@/views/BattleResultView.vue';
+
+import DisplayUnitView from '@/views/DisplayUnitView.vue';
+import DisplaySpellView from '@/views/DisplaySpellView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -60,6 +66,11 @@ const router = createRouter({
       component: SpellView
     },
     {
+      path: '/item',
+      name: 'item',
+      component: ItemView 
+    },
+    {
       path: '/test',
       name: 'test',
       component: TestView
@@ -74,7 +85,32 @@ const router = createRouter({
       path: '/battle',
       name: 'battle',
       component: BattleView
+    },
+    {
+      path: '/research',
+      name: 'research',
+      component: ResearchView 
+    },
+    {
+      path: '/battle-result/:id',
+      name: 'battleResult',
+      component: BattleResultView,
+      props: true
+    },
+    // Misc
+    {
+      path: '/view-unit/:id',
+      name: 'viewUnit',
+      component: DisplayUnitView,
+      props: true
+    },
+    {
+      path: '/spell-unit/:id',
+      name: 'viewSpell',
+      component: DisplaySpellView,
+      props: true
     }
+
   ]
 })
 

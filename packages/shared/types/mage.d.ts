@@ -3,9 +3,12 @@ export interface ArmyUnit {
   size: number;
 }
 
-export interface Item {
-  id: number;
-  type: string;
+export interface Assignment {
+  spellId: string,
+  spellCondition: number,
+
+  itemId: string,
+  itemCondition: number,
 }
 
 export interface Hero {
@@ -42,6 +45,7 @@ export interface Enchantment {
 export interface Mage {
   id: number;
   name: string;
+  rank?: number;
 
   // magic
   magic: string;
@@ -62,6 +66,7 @@ export interface Mage {
     nether: ResearchItem | null,
     phantasm: ResearchItem | null
   },
+  focusResearch: boolean,
 
   netPower: number;
 
@@ -80,12 +85,14 @@ export interface Mage {
   nodes: number;
   barracks: number;
   libraries: number;
-  fortresses: number;
+  forts: number;
   barriers: number;
   wilderness: number;
 
+  assignment: Assignment;
+
   army: ArmyUnit[];
-  items: Item[];
+  items: { [key: string]: number },
   heroes: Hero[];
   enchantments: Enchantment[];
 }
