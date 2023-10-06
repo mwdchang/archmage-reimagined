@@ -1059,6 +1059,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   return battleReport;
 }
 
+/**
+ * Resolves the battle aftermath
+ *
+ * - update land lost and gained
+ * - update army compositions
+ */
 export const resolveBattleAftermath = (attackType: string, attacker: Mage, defender: Mage, battleReport: BattleReport) => {
   const attackerStartingNP = battleReport.attacker.startingNetPower;
   const attackerLossNP = battleReport.attacker.lossNetPower;
@@ -1067,6 +1073,7 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
   const defenderLossNP = battleReport.defender.lossNetPower;
 
   const landModifier = 0.1;
+  const attackerGain = 0.33;
 
   if (attackerLossNP < defenderLossNP && defenderLossNP >= 0.1 * defenderStartingNP) {
     console.log(`Attacker ${attacker.name} won the battle `);
@@ -1138,10 +1145,58 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     while (landsToDestroy > 0 && defender.barriers > 0) { defender.barriers; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.wilderness > 0) { defender.wilderness; landsToDestroy--; }
 
-    console.log('!! lost', landTaken);
-    console.log('!! forts lost', fortsLost);
-    console.log('!! wilderness lost', wildernessLost);
-    console.log('!! ...', landsToDestroy);
+    // Land transfer to attacker
+    let winnerLand = Math.ceil(landTaken * attackerGain);
+    console.log('attacker gets', winnerLand);
+
+    let fortsGained = Math.ceil(fortsLost * attackerGain * 0.5);
+    attacker.forts += fortsGained;
+    winnerLand -= fortsGained;
+
+    let farmsGained = Math.ceil(farmsLost * attackerGain * Math.random() * 0.5);
+    attacker.farms += farmsGained;
+    winnerLand -= farmsGained;
+
+    let townsGained = Math.ceil(townsLost * attackerGain * Math.random() * 0.5);
+    attacker.towns += townsGained;
+    winnerLand -= townsGained;
+
+    let workshopsGained = Math.ceil(workshopsLost * attackerGain * Math.random() * 0.5);
+    attacker.workshops += workshopsGained;
+    winnerLand -= workshopsGained;
+
+    let barracksGained = Math.ceil(barracksLost * attackerGain * Math.random() * 0.5);
+    attacker.barracks += barracksGained;
+    winnerLand -= barracksGained;
+
+    let nodesGained = Math.ceil(nodesLost * attackerGain * Math.random() * 0.5);
+    attacker.nodes += nodesGained;
+    winnerLand -= nodesGained;
+
+    let librariesGained = Math.ceil(librariesLost * attackerGain * Math.random() * 0.5);
+    attacker.libraries += librariesGained;
+    winnerLand -= librariesGained;
+
+    let barriersGaiend = Math.ceil(barriersLost * attackerGain * Math.random() * 0.25);
+    attacker.barriers += barriersGaiend;
+    winnerLand -= barriersGaiend;
+
+    attacker.wilderness += winnerLand;
+
+    // Do units
+    const attackerArmy = battleReport.attacker.army;
+    attackerArmy.forEach(stack => {
+      attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
+    });
+    console.log(attacker.army);
+    attacker.army = attacker.army.filter(d => d.size > 0);
+
+    const defenerArmy = battleReport.defender.army;
+    defenerArmy.forEach(stack => {
+      defender.army.find(d => d.id === stack.unit.id).size = stack.size;
+    });
+    console.log(defender.army);
+    defender.army = defender.army.filter(d => d.size > 0);
 
   } else {
     console.log('defender defended');
