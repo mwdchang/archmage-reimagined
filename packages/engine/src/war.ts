@@ -269,7 +269,7 @@ const calcResistance = (u: Unit, attackTypes: string[]) => {
   }
   resist /= attackTypes.length;
 
-  if (hasAbility(u, 'largeShield')) {
+  if (hasAbility(u, 'largeShield') && attackTypes.includes('ranged')) {
     resist += 50;
   }
 

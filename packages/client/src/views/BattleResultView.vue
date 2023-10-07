@@ -1,5 +1,5 @@
 <template>
-  {{ report.battleLogs }}
+  {{ report.attacker }}
 </template>
 
 <script setup lang="ts">

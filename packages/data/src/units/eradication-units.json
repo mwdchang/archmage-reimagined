@@ -51,5 +51,113 @@
     "abilities": [
       { "name": "scales", "extra": null }
     ]
+  },
+  {
+    "id": "dwarvenDeathSeeker",
+    "name": "Dwarven Death Seeker",
+    "magic": "eradication",
+    "powerRank": 40,
+    "hitPoints": 250,
+    "race": ["dwarf"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 275,
+    "primaryAttackType": ["poison", "melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 1.60,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 80,
+      "breath": 0,
+      "magic": 0,
+      "melee": 30,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "bursting", "extra": { "type": ["poison"], "value": 300 } }
+    ]
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "magic": "eradication",
+    "powerRank": 13,
+    "hitPoints": 150,
+    "race": ["orc"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 125,
+    "primaryAttackType": [ "melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 50,
+
+    "secondaryAttackPower": 75,
+    "secondaryAttackType": ["missile", "ranged"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 1.00,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 25,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 25,
+      "fire": 50,
+      "poison": 50,
+      "breath": 0,
+      "magic": 0,
+      "melee": 50,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy":25 
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "weakness", "extra": "psychic" },
+      { "name": "racialEnemy", "extra": { "type": ["human"], "value": 100 } }
+    ]
   }
 ]

@@ -77,7 +77,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["knight"],
         "summonType": "all",
-        "summonNetPower": 100000,
+        "summonNetPower": 150000,
         "rule": "absolute",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -114,6 +114,72 @@
                   "eradication": { "value": { "name": "flying", "extra": null } },
                   "nether": { "value": { "name": "flying", "extra": null } },
                   "phantasm": { "value": { "name": "flying", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "satchelOfMist",
+    "name": "Satchel of Mist",
+    "description": "The Satchel of Mist cloaks the battlefield with mist, reducing the accuracy of both the attacker and the defender by 10 percent.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -10 },
+                  "verdant": { "value": -10 },
+                  "eradication": { "value": -10 },
+                  "nether": { "value": -10 },
+                  "phantasm": { "value":  -10 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "theSpidersWeb",
+    "name": "The Spider's Web",
+    "description": "The Spider's Web ejects a sticky liquid from a metal tube, when the button is pressed. The sticky liquid transforms into a thick web, which strikes every enemy units, slowing down that unit's attack. The technological mystery of how to enclose such webs inside a small tube, as well as the material of the tube and the web itself, suggest an alien origin for this item",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -1 },
+                  "verdant": { "value": -1 },
+                  "eradication": { "value": -1 },
+                  "nether": { "value": -1 },
+                  "phantasm": { "value":  -1 }
                 }
               }
             }
