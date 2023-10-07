@@ -125,5 +125,42 @@
         ]
       }
     ]
+  },
+  {
+    "id": "armorOfLight",
+    "name": "Armor of Light",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "All units under effect of this spell will feel courageous and inspired in the battle again unholy beings. Armor of light also grants them certain immunity to undead units attacks. This is very effective spell when fighting undead beings.",
+    "attributes": ["battle"],
+    "researchCost": 700,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "random",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "verdant": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "eradication": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "nether": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "phantasm": { "value": { "name": "racialEnemy", "extra": "undead" } }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

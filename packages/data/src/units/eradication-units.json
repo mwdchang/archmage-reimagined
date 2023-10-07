@@ -157,7 +157,7 @@
     "abilities": [
       { "name": "clumsiness", "extra": null },
       { "name": "weakness", "extra": "psychic" },
-      { "name": "racialEnemy", "extra": { "type": ["human"], "value": 100 } }
+      { "name": "racialEnemy", "extra": "human" }
     ]
   }
 ]
