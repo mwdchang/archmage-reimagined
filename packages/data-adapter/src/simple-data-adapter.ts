@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { DataAdapter } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
@@ -10,11 +10,17 @@ interface User {
   token: string
 }
 
+const REPORT_DIR = 'reports';
+
 export class SimpleDataAdapter extends DataAdapter {
   userAuthMap: Map<string, User> = new Map();
+
+  // Mage data
   mageMap: Map<number, Mage> = new Map();
   userMageMap: Map<string, number> = new Map();
-  brMap: Map<string, any> = new Map();
+
+  // Battle reports datas
+  mageBattleMap: Map<number, any[]> = new Map();
 
   constructor() {
     super();
@@ -33,6 +39,15 @@ export class SimpleDataAdapter extends DataAdapter {
       let data = readFileSync('userMage.sav', { encoding: 'utf-8' });
       this.userMageMap.clear();
       this.userMageMap = new Map<string, number>(JSON.parse(data));
+    }
+    if (existsSync('mageBattle.sav')) {
+      let data = readFileSync('mageBattle.sav', { encoding: 'utf-8' });
+      this.mageBattleMap.clear();
+      this.mageBattleMap = new Map<number, any[]>(JSON.parse(data));
+    }
+    if (!existsSync(REPORT_DIR)) {
+      console.log('creating report directory');
+      mkdirSync(REPORT_DIR);
     }
   }
 
@@ -90,11 +105,28 @@ export class SimpleDataAdapter extends DataAdapter {
     return [...this.mageMap.values()];
   }
 
-  // getBattleReport(id: string) {
-  // }
+  getMageBattles(id: number, options: any) {
+    if (this.mageBattleMap.has(id)) {
+      return this.mageBattleMap.get(id);
+    }
+    return []
+  }
 
-  // saveBattleReport(id: string, report: any) {
-  // }
+  getBattleReport(id: string) {
+    if (existsSync(`${REPORT_DIR}/${id}`)) {
+      let data = readFileSync('mageBattle.sav', { encoding: 'utf-8' });
+      return data;
+    }
+    return null;
+  }
+
+  saveBattleReport(id: number, reportId: string, report: any) {
+    if (!this.mageBattleMap.has(id)) {
+      this.mageBattleMap.set(id, [])
+    }
+    this.mageBattleMap.get(id).push(reportId);
+    writeFileSync(`${REPORT_DIR}/${reportId}`, JSON.stringify(report))
+  }
 
   nextTurn() {
     this.mageMap.forEach((mage, _username) => {
@@ -111,5 +143,6 @@ export class SimpleDataAdapter extends DataAdapter {
     writeFileSync('userAuth.sav', JSON.stringify(Array.from(this.userAuthMap.entries())));
     writeFileSync('mage.sav', JSON.stringify(Array.from(this.mageMap.entries())));
     writeFileSync('userMage.sav', JSON.stringify(Array.from(this.userMageMap.entries())));
+    writeFileSync('mageBattle.sav', JSON.stringify(Array.from(this.mageBattleMap.entries())));
   }
 }

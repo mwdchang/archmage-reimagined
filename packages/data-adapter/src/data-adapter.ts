@@ -17,8 +17,9 @@ export abstract class DataAdapter {
   abstract getAllMages(): Mage[];
 
   // Battle reports
-  // abstract getBattleReport(id: string): any
-  // abstract saveBattleReport(id: string, report: any): void
+  abstract getMageBattles(id: number, options: any): any
+  abstract getBattleReport(id: string): any
+  abstract saveBattleReport(id: number, reportId: string, report: any): void
 
   abstract nextTurn(): void
 }
