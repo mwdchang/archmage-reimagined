@@ -12,6 +12,9 @@ interface User {
 
 const REPORT_DIR = 'reports';
 
+/**
+ * This is a simple in-memory/file-based data adapter - not performant if there are hundreds of mages
+**/
 export class SimpleDataAdapter extends DataAdapter {
   userAuthMap: Map<string, User> = new Map();
 
@@ -46,7 +49,7 @@ export class SimpleDataAdapter extends DataAdapter {
       this.mageBattleMap = new Map<number, any[]>(JSON.parse(data));
     }
     if (!existsSync(REPORT_DIR)) {
-      console.log('creating report directory');
+      console.log('Creating report directory', REPORT_DIR);
       mkdirSync(REPORT_DIR);
     }
   }
@@ -114,7 +117,7 @@ export class SimpleDataAdapter extends DataAdapter {
 
   getBattleReport(id: string) {
     if (existsSync(`${REPORT_DIR}/${id}`)) {
-      let data = readFileSync('mageBattle.sav', { encoding: 'utf-8' });
+      let data = readFileSync(`${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
       return data;
     }
     return null;

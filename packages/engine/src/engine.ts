@@ -15,6 +15,7 @@ import {
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import { Mage } from 'shared/types/mage';
+import { BattleReport } from 'shared/types/battle';
 import { 
   BuildPayload,
   DestroyPayload
@@ -376,7 +377,7 @@ class Engine {
     };
 
     const battleReport = battle('siege', attacker, defender);
-    this.adapter.saveBattleReport(battleReport.id, battleReport);
+    this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport);
 
     resolveBattleAftermath('siege', mage, defenderMage, battleReport);
     return battleReport;
@@ -384,7 +385,17 @@ class Engine {
 
   async getBattleReport(mage: Mage, reportId: string) {
     // TODO: Obfuscate based on which side
-    return this.adapter.getBattleReport(reportId);
+
+    const report = this.adapter.getBattleReport(reportId);
+    if (report) {
+      return JSON.parse(report) as BattleReport;
+    } else {
+      return null;
+    }
+  }
+
+  async getMageBattles(mage: Mage) {
+    return this.adapter.getMageBattles(mage.id, {});
   }
 
   async register(username: string, password: string, magic: string) {

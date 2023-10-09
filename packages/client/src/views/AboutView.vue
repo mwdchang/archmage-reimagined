@@ -53,6 +53,7 @@
     <router-link to="/status">Status Report</router-link>
     <router-link to="/battle">Battle</router-link>
     <router-link to="/rankList">Ranks</router-link>
+    <router-link to="/chronicles">Chronicles</router-link>
     <div> 
       <!--
       <router-link to="/build">Recruit</router-link> 

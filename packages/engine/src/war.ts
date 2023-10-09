@@ -1191,14 +1191,12 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     attackerArmy.forEach(stack => {
       attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
     });
-    console.log(attacker.army);
     attacker.army = attacker.army.filter(d => d.size > 0);
 
     const defenerArmy = battleReport.defender.army;
     defenerArmy.forEach(stack => {
       defender.army.find(d => d.id === stack.unit.id).size = stack.size;
     });
-    console.log(defender.army);
     defender.army = defender.army.filter(d => d.size > 0);
 
   } else {

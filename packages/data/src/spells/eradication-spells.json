@@ -51,11 +51,11 @@
         "summonNetPower": 50000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
+          "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.6 },
-          "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
         }
       }
     ]

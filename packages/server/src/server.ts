@@ -119,6 +119,12 @@ router.get('/api/report/:id', async (req, res) => {
   res.status(200).json({ report });
 });
 
+router.get('/api/mage-battles', async (req, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const battles = await engine.getMageBattles(mage);
+  console.log('battles', battles);
+  res.status(200).json({ battles });
+});
 
 router.post('/api/register', async (req, res) => {
   const { username, password, magic } = req.body;

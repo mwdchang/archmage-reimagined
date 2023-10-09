@@ -57,7 +57,7 @@
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
           "nether": { "value": 0.2 },
           "phantasm": { "value": 0.6 }
         }
@@ -85,7 +85,7 @@
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
           "nether": { "value": 0.2 },
           "phantasm": { "value": 0.6 }
         }
