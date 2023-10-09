@@ -9,6 +9,7 @@ import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
+import { BattleReport, BattleStack } from 'shared/types/battle';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,62 +30,6 @@ enum StackType {
   NORMAL,
   REINFORCEMENT,
   TEMPORARY
-}
-
-export interface BattleReport {
-  id: string,
-  timestamp: number,
-  attackType: string,
-  attacker: {
-    id: number,
-    spellId: string | null,
-    itemId: string | null,
-    army: BattleStack[],
-
-    startingNetPower: number,
-    lossNetPower: number
-  }
-  defender: {
-    id: number,
-    spellId: string | null,
-    itemId: string | null,
-    army: BattleStack[]
-
-    startingNetPower: number,
-    lossNetPower: number
-  },
-
-  preBattleLogs: any[],
-  battleLogs: any[],
-  postBattleLogs: any[],
-}
-
-
-interface BattleStack {
-  unit: Unit,
-  size: number,
-
-  stackType: StackType,
-  role: string,
-
-  isTarget: boolean,
-  targetIdx: number,
-
-  // Battle calcs
-  accuracy: number,
-  efficiency: number,
-  sustainedDamage: number,
-  loss: number,
-
-  healingPoints: number,
-  healingBuffer: number[],
-
-  // Temporary buffer to sort out conflicting effects from items/spells
-  addedAbilities: UnitAbility[],
-  removedAbilities: UnitAbility[],
-
-  // For faster calculation
-  netPower: number,
 }
 
 // Returns power modifiers
