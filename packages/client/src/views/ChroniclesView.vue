@@ -1,9 +1,13 @@
 <template>
   <h3> Previous engagements </h3>
   <div v-for="(d, idx) of chronicles" :key="idx" @click="openReport(d)"> 
-    {{ d }}
-
-    <router-link :to="{ name: 'battleResult', params: { id: d }}"> {{ d }} </router-link>
+    <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
+      {{ new Date(d.timestamp) }} 
+      <br>
+      {{ d.summaryLogs.join(' ') }}
+    </router-link>
+    <br>
+    <br>
   </div>
 </template>
 

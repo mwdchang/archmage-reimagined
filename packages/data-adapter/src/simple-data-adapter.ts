@@ -10,6 +10,7 @@ interface User {
   token: string
 }
 
+const DATA_DIR = 'game-data';
 const REPORT_DIR = 'reports';
 
 /**
@@ -28,29 +29,32 @@ export class SimpleDataAdapter extends DataAdapter {
   constructor() {
     super();
 
-    if (existsSync('userAuth.sav')) {
-      let data = readFileSync('userAuth.sav', { encoding: 'utf-8' });
+    if (!existsSync(`${DATA_DIR}`)) {
+      mkdirSync(`${DATA_DIR}`);
+    }
+    if (existsSync(`${DATA_DIR}/userAuth.sav`)) {
+      let data = readFileSync(`${DATA_DIR}/userAuth.sav`, { encoding: 'utf-8' });
       this.userAuthMap.clear();
       this.userAuthMap = new Map<string, User>(JSON.parse(data));
     }
-    if (existsSync('mage.sav')) {
-      let data = readFileSync('mage.sav', { encoding: 'utf-8' });
+    if (existsSync(`${DATA_DIR}/mage.sav`)) {
+      let data = readFileSync(`${DATA_DIR}/mage.sav`, { encoding: 'utf-8' });
       this.mageMap.clear();
       this.mageMap = new Map<number, Mage>(JSON.parse(data));
     }
-    if (existsSync('userMage.sav')) {
-      let data = readFileSync('userMage.sav', { encoding: 'utf-8' });
+    if (existsSync(`${DATA_DIR}/userMage.sav`)) {
+      let data = readFileSync(`${DATA_DIR}/userMage.sav`, { encoding: 'utf-8' });
       this.userMageMap.clear();
       this.userMageMap = new Map<string, number>(JSON.parse(data));
     }
-    if (existsSync('mageBattle.sav')) {
-      let data = readFileSync('mageBattle.sav', { encoding: 'utf-8' });
+    if (existsSync(`${DATA_DIR}/mageBattle.sav`)) {
+      let data = readFileSync(`${DATA_DIR}/mageBattle.sav`, { encoding: 'utf-8' });
       this.mageBattleMap.clear();
       this.mageBattleMap = new Map<number, any[]>(JSON.parse(data));
     }
-    if (!existsSync(REPORT_DIR)) {
+    if (!existsSync(`${DATA_DIR}/${REPORT_DIR}`)) {
       console.log('Creating report directory', REPORT_DIR);
-      mkdirSync(REPORT_DIR);
+      mkdirSync(`${DATA_DIR}/${REPORT_DIR}`);
     }
   }
 
@@ -117,18 +121,18 @@ export class SimpleDataAdapter extends DataAdapter {
 
   getBattleReport(id: string) {
     if (existsSync(`${REPORT_DIR}/${id}`)) {
-      let data = readFileSync(`${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
+      let data = readFileSync(`${DATA_DIR}/${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
       return data;
     }
     return null;
   }
 
-  saveBattleReport(id: number, reportId: string, report: any) {
+  saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
     if (!this.mageBattleMap.has(id)) {
       this.mageBattleMap.set(id, [])
     }
-    this.mageBattleMap.get(id).push(reportId);
-    writeFileSync(`${REPORT_DIR}/${reportId}`, JSON.stringify(report))
+    this.mageBattleMap.get(id).push(reportSummary);
+    writeFileSync(`${DATA_DIR}/${REPORT_DIR}/${reportId}`, JSON.stringify(report))
   }
 
   nextTurn() {
@@ -143,9 +147,9 @@ export class SimpleDataAdapter extends DataAdapter {
   saveState() {
     // Write out to disk to save state
     console.log('saving state');
-    writeFileSync('userAuth.sav', JSON.stringify(Array.from(this.userAuthMap.entries())));
-    writeFileSync('mage.sav', JSON.stringify(Array.from(this.mageMap.entries())));
-    writeFileSync('userMage.sav', JSON.stringify(Array.from(this.userMageMap.entries())));
-    writeFileSync('mageBattle.sav', JSON.stringify(Array.from(this.mageBattleMap.entries())));
+    writeFileSync(`${DATA_DIR}/userAuth.sav`, JSON.stringify(Array.from(this.userAuthMap.entries())));
+    writeFileSync(`${DATA_DIR}/mage.sav`, JSON.stringify(Array.from(this.mageMap.entries())));
+    writeFileSync(`${DATA_DIR}/userMage.sav`, JSON.stringify(Array.from(this.userMageMap.entries())));
+    writeFileSync(`${DATA_DIR}/mageBattle.sav`, JSON.stringify(Array.from(this.mageBattleMap.entries())));
   }
 }

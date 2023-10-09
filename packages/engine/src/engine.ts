@@ -15,7 +15,7 @@ import {
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import { Mage } from 'shared/types/mage';
-import { BattleReport } from 'shared/types/battle';
+import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { 
   BuildPayload,
   DestroyPayload
@@ -377,9 +377,18 @@ class Engine {
     };
 
     const battleReport = battle('siege', attacker, defender);
-    this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport);
-
     resolveBattleAftermath('siege', mage, defenderMage, battleReport);
+
+    const reportSummary: BattleReportSummary = {
+      id: battleReport.id,
+      timestamp: battleReport.timestamp,
+      attackType: 'siege',
+      attackerId: battleReport.attacker.id,
+      defenderId: battleReport.defender.id,
+      summaryLogs: battleReport.summaryLogs
+    };
+
+    this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     return battleReport;
   }
 

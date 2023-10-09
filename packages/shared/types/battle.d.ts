@@ -38,7 +38,8 @@ export interface BattleReportSummary {
   timestamp: number,
   attackType: string
   attackerId: number,
-  defenderId: number
+  defenderId: number,
+  summaryLogs: any[]
 }
 
 export interface BattleReport {

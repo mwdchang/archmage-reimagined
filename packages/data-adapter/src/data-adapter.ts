@@ -19,7 +19,7 @@ export abstract class DataAdapter {
   // Battle reports
   abstract getMageBattles(id: number, options: any): any
   abstract getBattleReport(id: string): any
-  abstract saveBattleReport(id: number, reportId: string, report: any): void
+  abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): void
 
   abstract nextTurn(): void
 }
