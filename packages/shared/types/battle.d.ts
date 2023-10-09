@@ -33,6 +33,14 @@ export interface BattleStack {
   netPower: number,
 }
 
+export interface BattleReportSummary {
+  id: string,
+  timestamp: number,
+  attackType: string
+  attackerId: number,
+  defenderId: number
+}
+
 export interface BattleReport {
   id: string,
   timestamp: number,
@@ -59,4 +67,5 @@ export interface BattleReport {
   preBattleLogs: any[],
   battleLogs: any[],
   postBattleLogs: any[],
+  summaryLogs: any[]
 }
