@@ -4,7 +4,9 @@ Archmage Reimagined is both a modern take and a re-imagination of the  classic o
 Archmage was a rich and complex game enjoyed by those who likes deep strategy games. However, it is not easy to play, especialy for new players and those with limited time. This project will try tp address these limitations and introduce new ideas to keep the game fresh.
 
 ### News
-We are about 75% done on version 0.0, please see the project [roadmap](./docs/roadmap.md)
+We are building out version 0.1, please see the project [roadmap](./docs/roadmap.md)
+
+- October 2023: Finished "version-0", functional core mechanics, some units and spells added for testing.
 
 ### Development
 You will need to meet the following prerequisites
