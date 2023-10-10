@@ -10,7 +10,7 @@
     <tr v-for="(bType) of buildingTypes" :key="bType.id">
       <td>-</td>
       <td>{{ bType.id }}</td>
-      <td>{{ mage[bType.id] }} </td>
+      <td class="text-right">{{ mage[bType.id] }} </td>
       <td> <input type="number" size="6" v-model="userInput[bType.id]"> </td>
     </tr>
   </table>
@@ -36,3 +36,10 @@ const destroy = () => {
 };
 
 </script>
+
+<style scoped>
+input {
+  width: 5rem;
+  text-align: right;
+}
+</style>

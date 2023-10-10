@@ -2,7 +2,7 @@
   <main v-if="mageStore.mage">
     <h3>Research</h3>
     <p> 
-      You are generating {{ rp }} research points per turn.
+      You are generating {{ rp }} research points per turn. Your magic item generation rate is {{ itemRate }}%.
     </p>
     <table>
       <tr>
@@ -18,10 +18,10 @@
         <td>
           {{ currentResearch[magic].id }}
         </td>
-        <td>
+        <td class="text-right">
           {{ currentResearch[magic].remainingCost }}
         </td>
-        <td>
+        <td class="text-right">
           {{ Math.ceil(currentResearch[magic].remainingCost / rp) }}
         </td>
       </tr>
@@ -45,11 +45,15 @@ import magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { magicTypes } from 'engine/src/base/references';
-import { researchPoints } from 'engine/src/magic';
+import { itemGenerationRate, researchPoints } from 'engine/src/magic';
 const mageStore = useMageStore();
 
 const rp = computed(() => {
   return researchPoints(mageStore.mage);
+});
+
+const itemRate = computed(() => {
+  return (100 * itemGenerationRate(mageStore.mage)).toFixed(2);
 });
 
 const currentResearch = ref(mageStore.mage?.currentResearch);

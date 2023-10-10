@@ -13,11 +13,11 @@
     <tr v-for="(bType) of buildingTypes" :key="bType.id">
       <td>-</td>
       <td> {{ bType.id }} </td>
-      <td> {{ mage[bType.id] }} </td>
-      <td> {{ (mage[bType.id] / land).toFixed(2) }} </td>
-      <td> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
-      <td> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
-      <td> <input type="number" size="4" v-model="userInput[bType.id]"> </td>
+      <td class="text-right"> {{ mage[bType.id] }} </td>
+      <td class="text-right"> {{ (mage[bType.id] / land).toFixed(2) }} </td>
+      <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
+      <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
+      <td> <input type="number" v-model="userInput[bType.id]"> </td>
     </tr>
   </table>
   <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
@@ -58,3 +58,10 @@ const build = () => {
 };
 
 </script>
+
+<style scoped>
+input {
+  width: 5rem;
+  text-align: right;
+}
+</style>
