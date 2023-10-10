@@ -1,5 +1,164 @@
 <template>
-  {{ unit }}
+  <main v-if="unit">
+    <table>
+      <tr style="background: #333">
+        <td colspan="2">Unit Statistics</td>
+      </tr>
+
+      <tr style="border-top: solid 2px">
+        <td>Name</td>
+        <td>{{ unit.name }}</td>
+      </tr>
+      <tr>
+        <td>Magic</td>
+        <td>{{ unit.magic }}</td>
+      </tr>
+      <tr>
+        <td>Race</td>
+        <td>{{ unit.race }}</td>
+      </tr>
+      <tr>
+        <td>Attributes</td>
+        <td>{{ unit.attributes }}</td>
+      </tr>
+      <tr>
+        <td>Power Rank</td>
+        <td class="text-right">{{ unit.powerRank }}</td>
+      </tr>
+
+      <tr style="border-top: solid 2px">
+        <td>Attack Power</td>
+        <td class="text-right">{{ unit.primaryAttackPower }}</td>
+      </tr>
+      <tr>
+        <td>Attack Type</td>
+        <td>{{ unit.primaryAttackType }}</td>
+      </tr>
+      <tr>
+        <td>Attack Initiative</td>
+        <td class="text-right">{{ unit.primaryAttackInit }}</td>
+      </tr>
+      <tr>
+        <td>Counter Power</td>
+        <td class="text-right">{{ unit.counterAttackPower}}</td>
+      </tr>
+
+      <tr style="border-top: solid 2px">
+        <td>Extra Attack Power</td>
+        <td class="text-right">{{ unit.secondaryAttackPower }}</td>
+      </tr>
+      <tr>
+        <td>Extra Attack Type</td>
+        <td>{{ unit.secondaryAttackType }}</td>
+      </tr>
+      <tr>
+        <td>Extra Attack Initiative</td>
+        <td class="text-right">{{ unit.secondaryAttackInit }}</td>
+      </tr>
+
+      <tr style="border-top: solid 2px">
+        <td>Hit Points</td>
+        <td class="text-right">{{ unit.hitPoints }}</td>
+      </tr>
+      <tr>
+        <td>Recruiting Cost</td>
+        <td>{{ unit.recruitCost }}</td>
+      </tr>
+      <tr>
+        <td>Upkeep Cost</td>
+        <td>{{ unit.upkeepCost }}</td>
+      </tr>
+
+      <tr style="border-top: solid 2px">
+        <td>Abilities</td>
+        <td> 
+          <div v-for="(ability, idx) of unit.abilities" :key="idx">
+            {{ ability.name }}
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div style="width: 2rem">&nbsp;</div>
+
+    <table>
+      <tr style="background: #333">
+        <td colspan="2">Spell Resistances</td>
+      </tr>
+      <tr style="border-top: solid 2px">
+        <td>Ascendant</td>
+        <td>{{ unit.spellResistances.ascendant }}</td>
+      </tr>
+      <tr>
+        <td>Verdant</td>
+        <td>{{ unit.spellResistances.verdant }}</td>
+      </tr>
+      <tr>
+        <td>Eradication</td>
+        <td>{{ unit.spellResistances.eradication }}</td>
+      </tr>
+      <tr>
+        <td>Nether</td>
+        <td>{{ unit.spellResistances.nether }}</td>
+      </tr>
+      <tr>
+        <td>Phantasm</td>
+        <td>{{ unit.spellResistances.phantasm }}</td>
+      </tr>
+
+      <tr style="background: #333">
+        <td colspan="2">Attack Resistances</td>
+      </tr>
+      <tr style="border-top: solid 2px">
+        <td>Missile</td>
+        <td>{{ unit.attackResistances.missile }}</td>
+      </tr>
+      <tr> 
+        <td>Fire</td>
+        <td>{{ unit.attackResistances.fire }}</td>
+      </tr>
+      <tr> 
+        <td>Poison</td>
+        <td>{{ unit.attackResistances.poison }}</td>
+      </tr>
+      <tr> 
+        <td>Breath</td>
+        <td>{{ unit.attackResistances.breath }}</td>
+      </tr>
+      <tr> 
+        <td>Magic</td>
+        <td>{{ unit.attackResistances.magic }}</td>
+      </tr>
+      <tr> 
+        <td>Melee</td>
+        <td>{{ unit.attackResistances.melee }}</td>
+      </tr>
+      <tr> 
+        <td>Ranged</td>
+        <td>{{ unit.attackResistances.ranged }}</td>
+      </tr>
+      <tr> 
+        <td>Lightning</td>
+        <td>{{ unit.attackResistances.lightning }}</td>
+      </tr>
+      <tr> 
+        <td>Cold</td>
+        <td>{{ unit.attackResistances.cold }}</td>
+      </tr>
+      <tr> 
+        <td>Paralyse</td>
+        <td>{{ unit.attackResistances.paralyse }}</td>
+      </tr>
+      <tr> 
+        <td>Psychic</td>
+        <td>{{ unit.attackResistances.psychic }}</td>
+      </tr>
+      <tr> 
+        <td>Holy</td>
+        <td>{{ unit.attackResistances.holy }}</td>
+      </tr>
+    </table>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -15,3 +174,11 @@ onMounted(() => {
   unit.value = getUnitById(props.id);
 });
 </script>
+
+<style scoped>
+main {
+  display: flex;
+  flex-direction: row;
+}
+
+</style>

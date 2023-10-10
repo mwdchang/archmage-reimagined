@@ -322,5 +322,116 @@
       { "name": "flying", "extra": null },
       { "name": "endurance", "extra": null }
     ]
+  },
+  {
+    "id": "hydra",
+    "name": "Hydra",
+    "magic": "eradication",
+    "powerRank": 457,
+    "hitPoints": 3000,
+    "race": ["reptile"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 3000,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 800,
+
+    "secondaryAttackPower": 2500,
+    "secondaryAttackType": [ "poison", "breath" ],
+    "secondaryAttackInit": 2,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 32.0,
+      "mana": 0.4,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 33,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 80 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 45,
+      "breath": 0,
+      "magic": 45,
+      "melee": 80,
+      "ranged": 45,
+      "lightning": 45,
+      "cold": 0,
+      "paralyse": 45,
+      "psychic": 45,
+      "holy": 50
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "scales", "extra": null },
+      { "name": "weakness", "extra": "fre" }
+    ]
+  },
+  {
+    "id": "chimera",
+    "name": "Chimera",
+    "magic": "eradication",
+    "powerRank": 391,
+    "hitPoints": 2200,
+    "race": ["dragon"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2500,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 300,
+
+    "secondaryAttackPower": 5000,
+    "secondaryAttackType": [ "fire", "breath" ],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 40.0,
+      "mana": 0.65,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 33,
+      "breath": 33,
+      "magic": 15,
+      "melee": 50,
+      "ranged": 33,
+      "lightning": 15,
+      "cold": 0,
+      "paralyse": 33,
+      "psychic": 0,
+      "holy": 50
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "scales", "extra": null }
+    ]
   }
 ]
