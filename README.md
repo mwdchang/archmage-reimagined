@@ -10,9 +10,10 @@ We are building out version 0.1, please see the project [roadmap](./docs/roadmap
 
 ### Development
 You will need to meet the following prerequisites
-- nodeJS version 18 or higher
+- nodeJS version 20 or higher
 - yarn version 1.22.19 or higher
 
+Code is written in [Typescript](https://www.typescriptlang.org/), with the UI written in [Vue 3](https://vuejs.org/).
 
 #### Running locally
 This setup has been tested on \*nix-based machines, it should work on Windows with a few tweaks to setup.sh file.
