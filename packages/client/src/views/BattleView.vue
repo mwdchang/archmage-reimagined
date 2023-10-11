@@ -10,7 +10,9 @@
 import { ref } from 'vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const mageStore = useMageStore();
 const targetId = ref('');
 
@@ -20,14 +22,23 @@ const doBattle = async () => {
 
   const stackIds = mageStore.mage.army.map(d => d.id);
 
-  console.log('!!', targetId.value);
-
   const res = await API.post('/war', { 
     targetId: targetId.value,
     spellId: '',
     itemId: '',
     stackIds
   });
+
+
+  if (res.data.reportId) {
+    console.log('battle report', res.data.reportId);
+    router.push({
+      name: 'battleResult',
+      params: {
+        id: res.data.reportId
+      }
+    });
+  }
 };
 
 </script>

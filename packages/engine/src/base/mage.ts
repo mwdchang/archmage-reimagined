@@ -9,6 +9,7 @@ export const createMage = (name: string, magic: string): Mage => {
   const mage: Mage = {
     id: ++_id,
     name: name,
+    status: '',
 
     magic: magic,
     currentSpellLevel: 0,

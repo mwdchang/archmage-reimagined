@@ -109,9 +109,22 @@ router.post('/api/war', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId } = req.body;
   const r = await engine.doBattle(mage, +targetId, stackIds, spellId, itemId);
-  res.status(200).json({ r, mage });
+  res.status(200).json({ reportId: r.id, mage });
 });
 
+router.get('/api/report/:id', async (req, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const reportId = req.params.id;
+  const report = await engine.getBattleReport(mage, reportId);
+  res.status(200).json({ report });
+});
+
+router.get('/api/mage-battles', async (req, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const battles = await engine.getMageBattles(mage);
+  console.log('battles', battles);
+  res.status(200).json({ battles });
+});
 
 router.post('/api/register', async (req, res) => {
   const { username, password, magic } = req.body;

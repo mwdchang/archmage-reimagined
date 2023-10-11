@@ -51,5 +51,387 @@
     "abilities": [
       { "name": "scales", "extra": null }
     ]
+  },
+  {
+    "id": "dwarvenDeathSeeker",
+    "name": "Dwarven Death Seeker",
+    "magic": "eradication",
+    "powerRank": 40,
+    "hitPoints": 250,
+    "race": ["dwarf"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 275,
+    "primaryAttackType": ["poison", "melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 1.60,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 80,
+      "breath": 0,
+      "magic": 0,
+      "melee": 30,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "bursting", "extra": { "type": ["poison"], "value": 300 } }
+    ]
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "magic": "eradication",
+    "powerRank": 13,
+    "hitPoints": 150,
+    "race": ["orc"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 125,
+    "primaryAttackType": [ "melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 50,
+
+    "secondaryAttackPower": 75,
+    "secondaryAttackType": ["missile", "ranged"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 1.00,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 25,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 25,
+      "fire": 50,
+      "poison": 50,
+      "breath": 0,
+      "magic": 0,
+      "melee": 50,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy":25 
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "weakness", "extra": "psychic" },
+      { "name": "racialEnemy", "extra": "human" }
+    ]
+  },
+  {
+    "id": "hellHound",
+    "name": "Hell Hound",
+    "magic": "eradication",
+    "powerRank": 150,
+    "hitPoints": 700,
+    "race": ["demon"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": [ "melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 300,
+
+    "secondaryAttackPower": 1800,
+    "secondaryAttackType": ["fire", "breath"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 10.0,
+      "mana": 0.12,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 25,
+      "fire": 100,
+      "poison": 50,
+      "breath": 0,
+      "magic": 25,
+      "melee": 35,
+      "ranged": 25,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 25,
+      "holy":10 
+    },
+    "abilities": [
+      { "name": "fear", "extra": null },
+      { "name": "weakness", "extra": "cold" }
+    ]
+  },
+  {
+    "id": "salamander",
+    "name": "Salamander",
+    "magic": "eradication",
+    "powerRank": 188,
+    "hitPoints": 1000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 3000,
+    "primaryAttackType": [ "fire"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 500,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 14.0,
+      "mana": 0.115,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 100,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 25
+    },
+    "abilities": [
+      { "name": "scales", "extra": null },
+      { "name": "weakness", "extra": "cold" }
+    ]
+  },
+  {
+    "id": "wyvern",
+    "name": "Wyvern",
+    "magic": "eradication",
+    "powerRank": 190,
+    "hitPoints": 1000,
+    "race": ["dragon"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 800,
+    "primaryAttackType": [ "melee", "poison" ],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 600,
+    "secondaryAttackType": [ "melee" ],
+    "secondaryAttackInit": 2,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 8.0,
+      "mana": 0.175,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 20,
+      "nether": 25,
+      "phantasm": 20 
+    },
+    "attackResistances": {
+      "missile": 40,
+      "fire": 40,
+      "poison": 50,
+      "breath": 0,
+      "magic": 0,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 25
+    },
+    "abilities": [
+      { "name": "scales", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "hydra",
+    "name": "Hydra",
+    "magic": "eradication",
+    "powerRank": 457,
+    "hitPoints": 3000,
+    "race": ["reptile"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 3000,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 800,
+
+    "secondaryAttackPower": 2500,
+    "secondaryAttackType": [ "poison", "breath" ],
+    "secondaryAttackInit": 2,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 32.0,
+      "mana": 0.4,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 33,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 80 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 45,
+      "breath": 0,
+      "magic": 45,
+      "melee": 80,
+      "ranged": 45,
+      "lightning": 45,
+      "cold": 0,
+      "paralyse": 45,
+      "psychic": 45,
+      "holy": 50
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "scales", "extra": null },
+      { "name": "weakness", "extra": "fre" }
+    ]
+  },
+  {
+    "id": "chimera",
+    "name": "Chimera",
+    "magic": "eradication",
+    "powerRank": 391,
+    "hitPoints": 2200,
+    "race": ["dragon"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2500,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 300,
+
+    "secondaryAttackPower": 5000,
+    "secondaryAttackType": [ "fire", "breath" ],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 40.0,
+      "mana": 0.65,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 33,
+      "breath": 33,
+      "magic": 15,
+      "melee": 50,
+      "ranged": 33,
+      "lightning": 15,
+      "cold": 0,
+      "paralyse": 33,
+      "psychic": 0,
+      "holy": 50
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "scales", "extra": null }
+    ]
   }
 ]

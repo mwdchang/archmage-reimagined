@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import { ArmyUnit, Mage } from "shared/types/mage";
 import { Unit, UnitAbility } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
@@ -8,6 +9,7 @@ import { getSpellById, getItemById, getUnitById } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
+import { BattleReport, BattleStack } from 'shared/types/battle';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,61 +30,6 @@ enum StackType {
   NORMAL,
   REINFORCEMENT,
   TEMPORARY
-}
-
-export interface BattleReport {
-  timestamp: number,
-  attackType: string,
-  attacker: {
-    id: number,
-    spellId: string | null,
-    itemId: string | null,
-    army: BattleStack[],
-
-    startingNetPower: number,
-    lossNetPower: number
-  }
-  defender: {
-    id: number,
-    spellId: string | null,
-    itemId: string | null,
-    army: BattleStack[]
-
-    startingNetPower: number,
-    lossNetPower: number
-  },
-
-  preBattleLogs: any[],
-  battleLogs: any[],
-  postBattleLogs: any[],
-}
-
-
-interface BattleStack {
-  unit: Unit,
-  size: number,
-
-  stackType: StackType,
-  role: string,
-
-  isTarget: boolean,
-  targetIdx: number,
-
-  // Battle calcs
-  accuracy: number,
-  efficiency: number,
-  sustainedDamage: number,
-  loss: number,
-
-  healingPoints: number,
-  healingBuffer: number[],
-
-  // Temporary buffer to sort out conflicting effects from items/spells
-  addedAbilities: UnitAbility[],
-  removedAbilities: UnitAbility[],
-
-  // For faster calculation
-  netPower: number,
 }
 
 // Returns power modifiers
@@ -267,7 +214,7 @@ const calcResistance = (u: Unit, attackTypes: string[]) => {
   }
   resist /= attackTypes.length;
 
-  if (hasAbility(u, 'largeShield')) {
+  if (hasAbility(u, 'largeShield') && attackTypes.includes('ranged')) {
     resist += 50;
   }
 
@@ -675,6 +622,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   });
 
   const battleReport: BattleReport = {
+    id: uuidv4(),
     timestamp: Date.now(),
     attackType: attackType,
     attacker: {
@@ -695,7 +643,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     },
     preBattleLogs: [],
     battleLogs: [],
-    postBattleLogs: []
+    postBattleLogs: [],
+    summaryLogs: []
   };
 
 
@@ -943,6 +892,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('');
   console.log('=== Post battle attacker ===');
   attackingArmy.forEach(stack => {
+    battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
+
     if (stack.healingPoints > 0 && stack.loss > 0) {
       let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
       if (unitsHealed >= stack.loss) {
@@ -951,6 +902,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+      battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
     if (hasHealing(stack.unit)) {
       stack.healingBuffer.push(30);
@@ -972,6 +924,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+      battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
   });
 
@@ -979,6 +932,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('');
   console.log('=== Post battle defender ===');
   defendingArmy.forEach(stack => {
+    battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
+
     if (stack.healingPoints > 0 && stack.loss > 0) {
       let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
       if (unitsHealed >= stack.loss) {
@@ -987,6 +942,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+      battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
     if (hasHealing(stack.unit)) {
       stack.healingBuffer.push(30);
@@ -1008,6 +964,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+      battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
   });
 
@@ -1053,9 +1010,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // } else {
   //   console.log(`Defener ${defender.mage.name} won the battle `);
   // }
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
-  console.log(battleReport);
-
+  // console.log(battleReport);
   return battleReport;
 }
 
@@ -1147,6 +1102,7 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
 
     // Land transfer to attacker
     let winnerLand = Math.ceil(landTaken * attackerGain);
+    let reportLandGain = winnerLand;
     console.log('attacker gets', winnerLand);
 
     let fortsGained = Math.ceil(fortsLost * attackerGain * 0.5);
@@ -1188,17 +1144,21 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     attackerArmy.forEach(stack => {
       attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
     });
-    console.log(attacker.army);
     attacker.army = attacker.army.filter(d => d.size > 0);
 
     const defenerArmy = battleReport.defender.army;
     defenerArmy.forEach(stack => {
       defender.army.find(d => d.id === stack.unit.id).size = stack.size;
     });
-    console.log(defender.army);
     defender.army = defender.army.filter(d => d.size > 0);
 
+    const t = attackType === 'siege' ? 'sieged' : 'attacked'; 
+    battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
+    battleReport.summaryLogs.push(`The attack was successful and ${attacker.name} (#${attacker.id}) gained ${reportLandGain} land.`);
   } else {
     console.log('defender defended');
+    const t = attackType === 'siege' ? 'sieged' : 'attacked'; 
+    battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
+    battleReport.summaryLogs.push(`The attack failed and achieved nothing`);
   }
 }

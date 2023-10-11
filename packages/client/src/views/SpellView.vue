@@ -5,8 +5,8 @@
     <tr v-for="spell of spells" :key="spell.id">
       <td>{{ spell.name }}</td>
       <td><magic :magic="spell.magic" /></td>
-      <td>{{ spell.castingTurn }}</td>
-      <td>{{ spell.castingCost }}</td>
+      <td class="text-right">{{ spell.castingTurn }}</td>
+      <td class="text-right">{{ spell.castingCost }}</td>
     </tr>
   </table>
 

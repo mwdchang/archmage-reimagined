@@ -13,6 +13,7 @@ import BattleView from '@/views/BattleView.vue';
 import ResearchView from '@/views/ResearchView.vue';
 import ItemView from '@/views/ItemView.vue';
 import BattleResultView from '@/views/BattleResultView.vue';
+import ChroniclesView from '@/views/ChroniclesView.vue';
 
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
@@ -96,6 +97,11 @@ const router = createRouter({
       name: 'battleResult',
       component: BattleResultView,
       props: true
+    },
+    {
+      path: '/chronicles',
+      name: 'chronicles',
+      component: ChroniclesView
     },
     // Misc
     {

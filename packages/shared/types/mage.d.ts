@@ -46,6 +46,7 @@ export interface Mage {
   id: number;
   name: string;
   rank?: number;
+  status: string;
 
   // magic
   magic: string;

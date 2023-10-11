@@ -33,6 +33,7 @@ const attacker: Combatant = {
   spellId: 'healing',
   itemId: 'potionOfValor'
 };
+attacker.mage.army = attacker.army;
 
 const defender: Combatant = {
   mage: { 
@@ -49,9 +50,9 @@ const defender: Combatant = {
   spellId: 'blaze',
   itemId: 'carpetOfFlying'
 };
+defender.mage.army = defender.army;
 
 const report = battle('siege', attacker, defender);
 resolveBattleAftermath('siege', attacker.mage, defender.mage, report);
 
 console.log('');
-console.log(defender);

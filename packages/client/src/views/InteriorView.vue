@@ -70,4 +70,8 @@ onMounted(() => {
 input {
   text-align: right;
 }
+
+main {
+  max-width: 30rem;
+}
 </style>
