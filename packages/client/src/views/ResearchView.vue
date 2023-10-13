@@ -97,4 +97,8 @@ const submitResearch = async () => {
 table > tr {
   cursor: pointer;
 }
+
+tr:nth-child(odd) {
+  background: #333;
+}
 </style>

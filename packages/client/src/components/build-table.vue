@@ -63,5 +63,11 @@ const build = () => {
 input {
   width: 5rem;
   text-align: right;
+  background: #eee;
 }
+
+tr:nth-child(odd) {
+  background: #333;
+}
+
 </style>

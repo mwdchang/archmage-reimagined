@@ -2,10 +2,10 @@
   <main>
     <h2>Login</h2>
     <div class="row">
-      <span style="width:5rem">Username:</span> <input name="username" type="text" v-model="loginData.username">
+      <span style="width:5rem">Username:</span> <input @keyup.enter="login" name="username" type="text" v-model="loginData.username">
     </div>
     <div class="row">
-      <span style="width:5rem">Password:</span> <input name="password" type="password" v-model="loginData.password">
+      <span style="width:5rem">Password:</span> <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
     </div>
     <button @click="login">Login</button>
     <br>

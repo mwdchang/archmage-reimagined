@@ -106,3 +106,9 @@ const castSpell = async () => {
 }
 
 </script>
+
+<style scoped>
+tr:nth-child(odd) {
+  background: #333;
+}
+</style>

@@ -89,7 +89,6 @@ const numItems = computed(() => {
 <style scoped>
 
 section {
-  border: 1px solid #555;
   padding: 5px;
 }
 

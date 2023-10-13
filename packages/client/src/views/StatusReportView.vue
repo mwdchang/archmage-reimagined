@@ -4,27 +4,27 @@
   <table v-if="mage">
     <tr>
       <td>Rank</td>
-      <td>{{ mage.rank }}</td>
+      <td class="text-right">{{ mage.rank }}</td>
       <td>Power</td>
-      <td>{{ totalNetPower(mage) }} </td>
+      <td class="text-right">{{ totalNetPower(mage) }} </td>
     </tr>
     <tr>
       <td>Land</td>
-      <td>{{ totalLand(mage) }}</td>
+      <td class="text-right">{{ totalLand(mage) }}</td>
       <td>Forts</td>
-      <td>{{ mage.forts}}</td>
+      <td class="text-right">{{ mage.forts}}</td>
     </tr>
     <tr>
       <td>Geld</td>
-      <td>{{ mage.currentGeld }}</td>
+      <td class="text-right">{{ mage.currentGeld }}</td>
       <td>Items</td>
-      <td>{{ numItems }}</td>
+      <td class="text-right">{{ numItems }}</td>
     </tr>
     <tr>
       <td>Units</td>
-      <td>{{ totalUnits(mage) }}</td>
+      <td class="text-right">{{ totalUnits(mage) }}</td>
       <td>Turns Left</td>
-      <td>{{ mage.currentTurn }}</td>
+      <td class="text-right">{{ mage.currentTurn }}</td>
     </tr>
     <tr>
       <td colspan="2">Spell Level</td>
