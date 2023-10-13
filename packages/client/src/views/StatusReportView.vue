@@ -49,22 +49,28 @@
   <div class="section-header">Spell Resistance</div>
   <table v-if="mage">
     <tr>
-      <td> Barrier </td> <td> {{ resistanceStatus.barrier }} </td>
+      <td> Barrier </td> 
+      <td class="text-right"> {{ resistanceStatus.barrier }} </td>
     </tr>
     <tr>
-      <td> Ascendant </td> <td> {{ resistanceStatus.ascendant }} </td>
+      <td> Ascendant </td> 
+      <td class="text-right"> {{ resistanceStatus.ascendant }} </td>
     </tr>
     <tr>
-      <td> Verdant </td> <td> {{ resistanceStatus.verdant }} </td>
+      <td> Verdant </td> 
+      <td class="text-right"> {{ resistanceStatus.verdant }} </td>
     </tr>
     <tr>
-      <td> Eradication </td> <td> {{ resistanceStatus.eradication }} </td>
+      <td> Eradication </td> 
+      <td class="text-right"> {{ resistanceStatus.eradication }} </td>
     </tr>
     <tr>
-      <td> Nether </td> <td> {{ resistanceStatus.nether }} </td>
+      <td> Nether </td> 
+      <td class="text-right"> {{ resistanceStatus.nether }} </td>
     </tr>
     <tr>
-      <td> Phantasm </td> <td> {{ resistanceStatus.phantasm }} </td>
+      <td> Phantasm </td> 
+      <td class="text-right"> {{ resistanceStatus.phantasm }} </td>
     </tr>
   </table>
 
@@ -73,11 +79,11 @@
   <table v-if="mage">
     <tr>
       <td>Max Residential Space</td>
-      <td>{{ maxPopulation(mage) }}</td>
+      <td class="text-right">{{ maxPopulation(mage) }}</td>
     </tr>
     <tr>
       <td>Food Production</td>
-      <td>{{ maxFood(mage) }}</td>
+      <td class="text-right">{{ maxFood(mage) }}</td>
     </tr>
     <!--
     <tr>
@@ -87,11 +93,11 @@
     -->
     <tr>
       <td>Space for Units</td>
-      <td>{{ spacesForUnits(mage) }}</td>
+      <td class="text-right">{{ spacesForUnits(mage) }}</td>
     </tr>
     <tr>
       <td>Real Max Population</td>
-      <td>{{ realMaxPopulation(mage) }}</td>
+      <td class="text-right">{{ realMaxPopulation(mage) }}</td>
     </tr>
   </table>
 
@@ -105,57 +111,55 @@
       </tr>
       <tr>
         <td> Income </td>
-        <td> {{ geldIncome(mage) }} </td>
-        <td> {{ manaIncome(mage) }} </td>
-        <td> {{ populationIncome(mage) }} </td>
+        <td class="text-right"> {{ geldIncome(mage) }} </td>
+        <td class="text-right"> {{ manaIncome(mage) }} </td>
+        <td class="text-right"> {{ populationIncome(mage) }} </td>
       </tr>
       <tr>
         <td> Unit upkeep </td>
-        <td> {{ armyUpkeepStatus.geld }} </td>
-        <td> {{ armyUpkeepStatus.mana }} </td>
-        <td> {{ armyUpkeepStatus.population }} </td>
+        <td class="text-right"> {{ armyUpkeepStatus.geld }} </td>
+        <td class="text-right"> {{ armyUpkeepStatus.mana }} </td>
+        <td class="text-right"> {{ armyUpkeepStatus.population }} </td>
       </tr>
       <tr>
         <td> Buiding upkeep </td>
-        <td> {{ buildingUpkeepStatus.geld }} </td>
-        <td> {{ buildingUpkeepStatus.mana }} </td>
-        <td> {{ buildingUpkeepStatus.population }} </td>
+        <td class="text-right"> {{ buildingUpkeepStatus.geld }} </td>
+        <td class="text-right"> {{ buildingUpkeepStatus.mana }} </td>
+        <td class="text-right"> {{ buildingUpkeepStatus.population }} </td>
       </tr>
-
-
     </table>
 
   <div class="section-header">Building Info</div>
   <table v-if="mage">
     <tr>
       <td> Land </td>
-      <td> {{ totalLand(mage) }} </td>
+      <td class="text-right"> {{ totalLand(mage) }} </td>
       <td> Wilderness </td>
-      <td> {{ mage.wilderness }} </td>
+      <td class="text-right"> {{ mage.wilderness }} </td>
     </tr>
     <tr>
       <td>Farms</td>
-      <td> {{ mage.farms }} </td>
+      <td class="text-right"> {{ mage.farms }} </td>
       <td>Towns</td>
-      <td> {{ mage.towns}} </td>
+      <td class="text-right"> {{ mage.towns}} </td>
     </tr>
     <tr>
       <td>Workshops</td>
-      <td> {{ mage.workshops }} </td>
+      <td class="text-right"> {{ mage.workshops }} </td>
       <td>Barracks</td>
-      <td> {{ mage.barracks}} </td>
+      <td class="text-right"> {{ mage.barracks}} </td>
     </tr>
     <tr>
       <td>Nodes</td>
-      <td> {{ mage.nodes }} </td>
+      <td class="text-right"> {{ mage.nodes }} </td>
       <td>Guilds</td>
-      <td> {{ mage.guilds }} </td>
+      <td class="text-right"> {{ mage.guilds }} </td>
     </tr>
     <tr>
       <td>Forts</td>
-      <td> {{ mage.forts }} </td>
+      <td class="text-right"> {{ mage.forts }} </td>
       <td>Barriers</td>
-      <td> {{ mage.barriers }} </td>
+      <td class="text-right"> {{ mage.barriers }} </td>
     </tr>
   </table>
 
