@@ -162,5 +162,33 @@
         ]
       }
     ]
+  },
+  {
+    "id": "descentOfHolyBeing",
+    "name": "Descent Of Holy Being",
+    "magic": "ascendant",
+    "rank": "ultimate",
+    "description": "This prayer asks for the favour of the God and His direct divine intervention. Dominion, the most powerful of angels, will descend from the heavens to aid you in battle.",
+    "attributes": ["summon"],
+    "researchCost": 35000,
+    "castingCost": 300000,
+    "castingTurn": 9,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dominion"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
   }
 ]

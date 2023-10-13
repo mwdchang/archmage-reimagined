@@ -181,3 +181,39 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
   return Math.floor(manaYield);
 }
+
+/**
+ * Whether the spell can be successfully cast by the mage
+*/
+export const successCastingRate = (mage:Mage, spellId: string) => {
+  const max = maxSpellLevel(mage);
+  const current = currentSpellLevel(mage);
+  const spell = getSpellById(spellId);
+
+  const spellRank = spell.rank;
+  const spellMagic = spell.magic;
+
+  // Spell rank and level
+  let rankModifier = 0;
+  if (spellRank === 'simple') rankModifier = 140;
+  if (spellRank === 'average') rankModifier = 130;
+  if (spellRank === 'complex') rankModifier = 90;
+  if (spellRank === 'ultimate') rankModifier = 80;
+  if (spellRank === 'ancient') rankModifier = 85;
+
+  let successRate = 0.1 * current + rankModifier;
+
+  // Adjacent and opposiite casting
+  if (mage.magic !== spellMagic) {
+    if (magicAlignmentTable[mage.magic].adjacent.includes(spellMagic)) {
+      successRate *= 0.53;
+    } else {
+      successRate *= 0.45;
+    }
+  }
+
+  console.log('spell lvl', current);
+  console.log('success casting rate:', successRate);
+
+  return successRate;
+}
