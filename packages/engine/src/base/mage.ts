@@ -44,7 +44,7 @@ export const createMage = (name: string, magic: string): Mage => {
     workshops: 150,
     nodes: 30,
     barracks: 10,
-    libraries: 10,
+    guilds: 10,
     forts: 9,
     barriers: 0,
     wilderness: 181,
@@ -98,7 +98,7 @@ export const totalNetPower = (mage: Mage) => {
     mage.workshops + 
     mage.barracks + 
     mage.nodes + 
-    mage.libraries + 
+    mage.guilds + 
     mage.forts + 
     mage.barriers);
   netpower += mage.forts * 19360;
@@ -131,7 +131,7 @@ export const totalLand = (mage: Mage) => {
     mage.barracks +
     mage.workshops +
     mage.nodes + 
-    mage.libraries + 
+    mage.guilds + 
     mage.forts + 
     mage.barriers + 
     mage.wilderness;

@@ -44,7 +44,7 @@ export const currentSpellLevel = (mage: Mage) => {
 
 export const itemGenerationRate = (mage: Mage) => {
   const land = totalLand(mage);
-  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.libraries / land);
+  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.guilds / land);
   return rate;
 }
 
@@ -168,7 +168,7 @@ export const manaStorage = (mage: Mage) => {
 }
 
 export const researchPoints = (mage: Mage) => {
-  let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
+  let rawPoints = Math.sqrt(mage.guilds ) * productionTable.research;
   // return 10 + Math.floor(rawPoints);
   return Math.floor(rawPoints); // FIXME just testing
 }

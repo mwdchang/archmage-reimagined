@@ -3,6 +3,10 @@ export interface Effect {
   effectType: string
 }
 
+
+export interface KingdomEffect extends Effect {
+}
+
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
   summonType: string, // random, all

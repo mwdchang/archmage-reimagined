@@ -148,8 +148,8 @@
     <tr>
       <td>Nodes</td>
       <td> {{ mage.nodes }} </td>
-      <td>Library</td>
-      <td> {{ mage.libraries }} </td>
+      <td>Guilds</td>
+      <td> {{ mage.guilds }} </td>
     </tr>
     <tr>
       <td>Forts</td>

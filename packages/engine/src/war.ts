@@ -1080,22 +1080,22 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     landsToDestroy -= barriersLost;
     defender.barriers -= barriersLost;
 
-    let librariesLost = Math.floor(defender.libraries * landModifier);
-    librariesLost = Math.min(librariesLost, landsToDestroy);
-    landsToDestroy -= librariesLost;
-    defender.libraries -= librariesLost;
+    let guildsLost = Math.floor(defender.guilds * landModifier);
+    guildsLost = Math.min(guildsLost, landsToDestroy);
+    landsToDestroy -= guildsLost;
+    defender.guilds -= guildsLost;
 
     let nodesLost = Math.floor(defender.nodes * landModifier);
     nodesLost = Math.min(nodesLost, landsToDestroy);
     landsToDestroy -= nodesLost;
-    defender.nodes -= librariesLost;
+    defender.nodes -= guildsLost;
 
     // Resolve any spill overs
     while (landsToDestroy > 0 && defender.farms > 0) { defender.farms--; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.towns > 0) { defender.towns--; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.workshops > 0) { defender.workshops--; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.barracks > 0) { defender.barracks--; landsToDestroy--; }
-    while (landsToDestroy > 0 && defender.libraries > 0) { defender.libraries; landsToDestroy--; }
+    while (landsToDestroy > 0 && defender.guilds > 0) { defender.guilds; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.nodes > 0) { defender.nodes--; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.barriers > 0) { defender.barriers; landsToDestroy--; }
     while (landsToDestroy > 0 && defender.wilderness > 0) { defender.wilderness; landsToDestroy--; }
@@ -1129,9 +1129,9 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     attacker.nodes += nodesGained;
     winnerLand -= nodesGained;
 
-    let librariesGained = Math.ceil(librariesLost * attackerGain * Math.random() * 0.5);
-    attacker.libraries += librariesGained;
-    winnerLand -= librariesGained;
+    let guildsGained = Math.ceil(guildsLost * attackerGain * Math.random() * 0.5);
+    attacker.guilds += guildsGained;
+    winnerLand -= guildsGained;
 
     let barriersGaiend = Math.ceil(barriersLost * attackerGain * Math.random() * 0.25);
     attacker.barriers += barriersGaiend;

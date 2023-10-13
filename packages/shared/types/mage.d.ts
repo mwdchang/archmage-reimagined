@@ -85,7 +85,7 @@ export interface Mage {
   workshops: number;
   nodes: number;
   barracks: number;
-  libraries: number;
+  guilds: number;
   forts: number;
   barriers: number;
   wilderness: number;
