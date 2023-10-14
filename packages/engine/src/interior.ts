@@ -3,6 +3,12 @@ import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
 import { productionTable, explorationLimit } from "./base/config";
 import { totalLand } from "./base/mage";
+import { 
+  getSpellById,
+} from './base/references';
+
+import { currentSpellLevel } from "./magic";
+import { KingdomProductioneffect } from 'shared/types/effects';
 
 export interface Building {
   id: string,
@@ -81,6 +87,22 @@ export const maxFood = (mage: Mage) => {
   Object.keys(productionTable.food).forEach(key => {
     food += mage[key] * productionTable.food[key];
   });
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'KingdomProductioneffect') return;
+
+      const productionEffect = effect as KingdomProductioneffect;
+      if (productionEffect.production !== 'farms') return;
+
+      if (productionEffect.rule === 'spellLevel') {
+        food += mage.farms * currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+      }
+    });
+  })
   return food;
 }
 

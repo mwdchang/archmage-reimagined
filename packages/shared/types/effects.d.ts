@@ -3,7 +3,6 @@ export interface Effect {
   effectType: string
 }
 
-
 export interface KingdomResistanceEffect extends Effect {
   rule: string,
   resistance: string,
@@ -16,7 +15,7 @@ export interface KingdomResistanceEffect extends Effect {
 
 export interface KingdomProductioneffect extends Effect {
   rule: string,
-  productionType: string,
+  production: string,
   magic: {
     [key: string]: {
       value: number

@@ -103,6 +103,7 @@ export const doResearch = (mage: Mage, points: number) => {
         remainingCost: spell.researchCost * researchCostModifier,
         active: false
       };
+      break;
     }
   }
 

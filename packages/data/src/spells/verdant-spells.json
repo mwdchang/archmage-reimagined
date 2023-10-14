@@ -40,5 +40,35 @@
         }
       }
     ]
+  },
+  {
+    "id": "weatherSummoning",
+    "name": "Weather Summoning",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell will change the weather to the most favorable one, thus producing more fruit crop production and generating more income for your country.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 5000,
+    "castingCost": 50000,
+    "castingTurn": 8,
+    "upkeep": {
+      "geld": 0,
+      "mana": 200,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "KingdomProductioneffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "ascendant": { "value": 0.140 },
+          "verdant": { "value": 0.313 },
+          "eradication": { "value": 0.140 },
+          "nether": { "value": 0.072 },
+          "phantasm": { "value": 0.072 }
+        }
+      }
+    ]
   }
 ]

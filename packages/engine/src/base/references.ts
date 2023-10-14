@@ -104,6 +104,7 @@ export const initializeResearchTree = () => {
     })
   });
   console.log('debug', maxSpellLevels);
+  console.log(researchTree);
 }
 
 export const getResearchTree = () => {

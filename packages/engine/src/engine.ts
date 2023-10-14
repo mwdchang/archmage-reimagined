@@ -6,7 +6,8 @@ import {
   loadItemData,
   getSpellById,
   initializeResearchTree, 
-  magicTypes
+  magicTypes,
+  getMaxSpellLevels
 } from './base/references';
 import { 
   createMage, 
@@ -90,6 +91,8 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+
+    console.log('!!', getMaxSpellLevels());
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {

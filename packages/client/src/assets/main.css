@@ -69,7 +69,7 @@ select {
 }
 
 table > tr.active {
-  background: #53A;
+  background: #53A !important;
 }
 
 .section-header {
