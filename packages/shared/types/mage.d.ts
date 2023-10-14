@@ -42,6 +42,19 @@ export interface Enchantment {
   duration: number
 }
 
+export interface Enchantment {
+  casterId: number;
+  targetId: number;
+
+  spellId: string;
+  spellMagic: string;
+  spellLevel: number;
+
+  isPermanent: boolean;
+  life: number;
+}
+
+
 export interface Mage {
   id: number;
   name: string;

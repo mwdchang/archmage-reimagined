@@ -4,8 +4,26 @@ export interface Effect {
 }
 
 
-export interface KingdomEffect extends Effect {
+export interface KingdomResistanceEffect extends Effect {
+  rule: string,
+  resistance: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
 }
+
+export interface KingdomProductioneffect extends Effect {
+  rule: string,
+  productionType: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
 
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],

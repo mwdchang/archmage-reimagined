@@ -164,6 +164,36 @@
     ]
   },
   {
+    "id": "protectionFromEvil",
+    "name": "Protection From Evil",
+    "magic": "ascendant",
+    "rank": "average",
+    "description": "This enchantment spell will call forth the power of the God to protect you and your troops from the dark arts. It will increase your resistance to Nether magic.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 2000,
+    "castingCost": 10000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "nether",
+        "magic": {
+          "ascendant": 0.12,
+          "verdant": 0.034,
+          "eradication": 0.03,
+          "nether": 0.03,
+          "phantasm": 0.034
+        }
+      }
+    ]
+  },
+  {
     "id": "descentOfHolyBeing",
     "name": "Descent Of Holy Being",
     "magic": "ascendant",
