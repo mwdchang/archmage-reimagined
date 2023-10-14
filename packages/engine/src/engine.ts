@@ -42,7 +42,8 @@ import {
   doItemGeneration,
   maxMana,
   successCastingRate,
-currentSpellLevel
+currentSpellLevel,
+enchantmentUpkeep
 } from './magic';
 import { battle, resolveBattleAftermath, Combatant } from './war';
 import { UnitSummonEffect } from 'shared/types/effects';
@@ -93,8 +94,6 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
-
-    console.log('!!', getMaxSpellLevels());
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
@@ -166,6 +165,11 @@ class Engine {
     mage.currentGeld -= buildingCost.geld;
     mage.currentMana -= buildingCost.mana;
     mage.currentPopulation -= buildingCost.population;
+
+    const spellCost = enchantmentUpkeep(mage);
+    mage.currentGeld -= spellCost.geld;
+    mage.currentMana -= spellCost.mana;
+    mage.currentPopulation -= spellCost.population;
 
     if (mage.currentGeld < 0) mage.currentGeld = 0;
     if (mage.currentMana < 0) mage.currentMana = 0;

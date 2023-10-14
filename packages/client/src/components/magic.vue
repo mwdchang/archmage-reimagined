@@ -1,5 +1,5 @@
 <template>
-  <div class="magic-glyph" :class="{ small: 'small' }" :style="{ 'background-image': color }"></div>
+  <div class="magic-glyph" :class="{ 'small': props.small }" :style="{ 'background-image': color }"></div>
 </template>
 
 <script setup lang="ts">
@@ -33,8 +33,8 @@ const color = computed(() => {
 
 <style scoped>
 .magic-glyph {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 48%;
   border: 1px solid #999999;
   padding: 2px;

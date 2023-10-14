@@ -173,6 +173,15 @@
     </table>
 
     <div class="section-header">Enchantments</div>
+    <table v-if="mage">
+      <tr v-for="(e, _idx) of mage.enchantments" :key="idx">
+        <td> {{ e.spellId }} </td>
+        <td class="text-right"> {{ e.spellLevel }} </td>
+        <td class="text-right"> {{ e.life ? e.life : '-' }} </td>
+      </tr>
+    </table>
+
+
     <div class="section-header">Defence Assignment</div>
     <div class="section-header">Researching</div>
       <div v-if="mage && researchStatus.length > 0">
@@ -293,7 +302,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #444;
+  background: #333;
   padding: 0.5rem;
 }
 

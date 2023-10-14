@@ -156,30 +156,6 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
 }
 
 /*
-export const summonUnitFromItem = (mage: Mage, itemId: string) => {
-  const item = getItemById(itemId);
-  const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
-
-  const result: { [key: string]: number } = {};
-
-  effects.forEach(effect => {
-    const unitIds = effect.unitIds;
-    let power = effect.summonNetPower;
-
-    unitIds.forEach(unitId => {
-      const unit = getUnitById(unitId);
-      const unitPower = unit.powerRank;
-      const unitsSummoned = Math.floor(power / unitPower);
-      console.log(`Summoned ${unitsSummoned} ${unit.name}, cost = 0`);
-      if (!result[unit.id]) result[unit.id] = 0;
-      result[unit.id] += unitsSummoned;
-    });
-  });
-  return result;
-}
-*/
-
-/*
 export const summonUnit = (mage: Mage, spellId: string) => {
   const spell = getSpellById(spellId);
   const spellMagic = spell.magic;
