@@ -1,12 +1,13 @@
 <template>
-  <div class="magic-glyph" :style="{ 'background-image': color }"></div>
+  <div class="magic-glyph" :class="{ small: 'small' }" :style="{ 'background-image': color }"></div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 
 const props = defineProps({
-  magic: String
+  magic: String,
+  small: Boolean
 });
 
 const color = computed(() => {
@@ -38,5 +39,10 @@ const color = computed(() => {
   border: 1px solid #999999;
   padding: 2px;
   margin: 2px;
+}
+
+.small {
+  width: 12px;
+  height: 12px;
 }
 </style>

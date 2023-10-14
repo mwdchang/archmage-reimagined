@@ -14,6 +14,7 @@ import {
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM } from './random';
+import { KingdomResistanceEffect } from 'shared/types/effects';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -216,4 +217,38 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   console.log('success casting rate:', successRate);
 
   return successRate;
+}
+
+export const calcKingdomResistance = (mage: Mage) => {
+  const resistance: { [key: string]: number } = {
+    barrier: 0,
+    ascendant: 0,
+    verdant: 0,
+    eradication: 0,
+    nether: 0,
+    phantasm: 0
+  };
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'KingdomResistanceEffect') return;
+
+      const resistEffect = effect as KingdomResistanceEffect;
+      if (resistEffect.rule === 'spellLevel') {
+        resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
+      }
+    });
+  });
+
+
+  // Max barrier is 2.5% of the land, max normal barrier is 75
+  if (mage.barriers > 0) {
+    const land = 0.025 * totalLand(mage);
+    const barrier = Math.floor((mage.barriers / land) * 75);
+    resistance.barrier = barrier;
+  }
+  return resistance;
 }

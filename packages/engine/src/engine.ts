@@ -272,7 +272,7 @@ class Engine {
     }
 
     // Spell already exists and not from 0
-    if (mage.enchantments.filter(d => d.spellId === spellId && d.casterId !== 0)) {
+    if (mage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
       result.push({
         type: 'error',
         message: `The spell is alrady in effect, your attempt fizzled`

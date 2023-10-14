@@ -204,14 +204,14 @@ import { getUnitById } from 'engine/src/base/references';
 import { 
   totalLand,
   totalUnits,
-  totalNetPower,
-  calcKingdomResistance,
+  totalNetPower
 } from 'engine/src/base/mage';
 import { 
   maxSpellLevel,
   currentSpellLevel, 
   manaIncome,
-  maxMana
+  maxMana,
+  calcKingdomResistance,
 } from 'engine/src/magic';
 
 const mageStore = useMageStore();

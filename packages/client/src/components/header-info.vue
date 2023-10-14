@@ -8,7 +8,13 @@
       <td> Pop. {{ mageStore.mage.currentPopulation }} / {{ interior.maxPopulation(mageStore.mage) }}</td>
     </tr>
     <tr>
-      <td colspan="5"> Enchants </td>
+      <td colspan="5"> 
+        <span style="display: flex; align-items: center;">Spell &nbsp;
+        <span v-for="(enchant, idx) of mageStore.mage.enchantments" :key="idx" alt="abcdefg">
+          <magic :magic="enchant.spellMagic" small />
+        </span>
+        </span>
+      </td>
     </tr>
   </table>
   <br>
@@ -19,6 +25,7 @@ import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
+import magic from './magic.vue';
 const mageStore = useMageStore();
 </script>
 

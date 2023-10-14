@@ -54,9 +54,9 @@ export const createMage = (name: string, magic: string): Mage => {
     enchantments: [],
 
     assignment: {
-      spellId: -1,
+      spellId: '',
       spellCondition: 0,
-      itemId: -1,
+      itemId: '',
       itemCondition: 0,
     }
   };
@@ -145,21 +145,4 @@ export const totalUnits = (mage: Mage) => {
   return num;
 }
 
-export const calcKingdomResistance = (mage: Mage) => {
-  const resistance: { [key: string]: number } = {
-    barrier: 0,
-    ascendant: 0,
-    verdant: 0,
-    eradication: 0,
-    nether: 0,
-    phantasm: 0
-  };
 
-  // Max barrier is 2.5% of the land, max normal barrier is 75
-  if (mage.barriers > 0) {
-    const land = 0.025 * totalLand(mage);
-    const barrier = Math.floor((mage.barriers / land) * 75);
-    resistance.barrier = barrier;
-  }
-  return resistance;
-}

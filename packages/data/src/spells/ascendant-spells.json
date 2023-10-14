@@ -184,11 +184,11 @@
         "rule": "spellLevel",
         "resistance": "nether",
         "magic": {
-          "ascendant": 0.12,
-          "verdant": 0.034,
-          "eradication": 0.03,
-          "nether": 0.03,
-          "phantasm": 0.034
+          "ascendant": { "value": 0.12 },
+          "verdant": { "value": 0.034 },
+          "eradication": { "value": 0.03 },
+          "nether": { "value": 0.03 },
+          "phantasm": { "value": 0.034 }
         }
       }
     ]

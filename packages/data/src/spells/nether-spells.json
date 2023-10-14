@@ -119,5 +119,35 @@
         ]
       }
     ]
+  },
+  {
+    "id": "shroudOfDarkness",
+    "name": "Shroud Of Darkness",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will cover your whole kingdom under a veil of darkness to protect your troops from Ascendant magic.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 1500,
+    "castingCost": 10000,
+    "castingTurn": 4,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "ascendant",
+        "magic": {
+          "ascendant": { "value": 0.03 },
+          "verdant": { "value": 0.03 },
+          "eradication": { "value": 0.034 },
+          "nether": { "value": 0.12 },
+          "phantasm": { "value": 0.034 }
+        }
+      }
+    ]
   }
 ]
