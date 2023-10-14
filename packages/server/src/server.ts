@@ -96,6 +96,13 @@ router.post('/api/spell', async (req: any, res) => {
   res.status(200).json({ r, mage });
 });
 
+router.post('/api/item', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const { itemId, num, target } = req.body;
+  const r = await engine.useItem(mage, itemId, num, target);
+  res.status(200).json({ r, mage });
+});
+
 
 router.post('/api/research', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);

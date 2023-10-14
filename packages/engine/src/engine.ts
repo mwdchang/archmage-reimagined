@@ -5,6 +5,7 @@ import {
   loadSpellData,
   loadItemData,
   getSpellById,
+  getItemById,
   initializeResearchTree, 
   magicTypes,
   getMaxSpellLevels
@@ -44,6 +45,7 @@ import {
 currentSpellLevel
 } from './magic';
 import { battle, resolveBattleAftermath, Combatant } from './war';
+import { UnitSummonEffect } from 'shared/types/effects';
 
 import { randomInt } from './random';
 
@@ -231,6 +233,13 @@ class Engine {
     }
   }
 
+  async useItem(mage: Mage, itemId: string, num: number, target: number) {
+    const item = getItemById(itemId);
+    if (item.attributes.includes('summon')) {
+      return this.summonByItem(mage, itemId, num);
+    }
+  }
+
   async castSpell(mage: Mage, spellId: string, num: number, target: number) {
     const spell = getSpellById(spellId);
     if (spell.attributes.includes('summon')) {
@@ -298,6 +307,36 @@ class Engine {
     mage.enchantments.push(enchantment);
   }
 
+  async summonByItem(mage: Mage, itemId: string, num: number) {
+    const item = getItemById(itemId);
+
+    const result: GameMsg[] = [];
+    for (let i = 0; i < num; i++) {
+      const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
+      effects.forEach(effect => {
+        const res = summonUnit(mage, effect);
+        // Add to existing army
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key); 
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
+            });
+          }
+          result.push({
+            type: 'log',
+            message: `Summoned ${res[key]} ${key} into your army`
+          });
+        });
+      });
+      this.useTurn(mage);
+    }
+    return result;
+  }
+
   async summon(mage: Mage, spellId: string, num: number) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
@@ -324,7 +363,6 @@ class Engine {
         continue;
       }
 
-      const res = summonUnit(mage, spellId);
       // result.push(res);
       mage.currentMana -= castingCost;
 
@@ -335,20 +373,24 @@ class Engine {
           message: `You lost your concentration`
         });
       } else {
-        // Add to existing army
-        Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key); 
-          if (stack) {
-            stack.size += res[key];
-          } else {
-            mage.army.push({
-              id: key,
-              size: res[key]
+        const effects: UnitSummonEffect[] = spell.effects as UnitSummonEffect[];
+        effects.forEach(effect => {
+          const res = summonUnit(mage, effect);
+          // Add to existing army
+          Object.keys(res).forEach(key => {
+            const stack = mage.army.find(d => d.id === key); 
+            if (stack) {
+              stack.size += res[key];
+            } else {
+              mage.army.push({
+                id: key,
+                size: res[key]
+              });
+            }
+            result.push({
+              type: 'log',
+              message: `Summoned ${res[key]} ${key} into your army`
             });
-          }
-          result.push({
-            type: 'log',
-            message: `Summoned ${res[key]} ${key} into your army`
           });
         });
       }

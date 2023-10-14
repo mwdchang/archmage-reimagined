@@ -10,7 +10,8 @@ import {
   getSpellById,
   getMaxSpellLevels,
   getResearchTree,
-  getRandomItem
+  getRandomItem,
+getItemById
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM } from './random';
@@ -129,6 +130,56 @@ export const doResearch = (mage: Mage, points: number) => {
   }
 }
 
+
+export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
+  const result: { [key: string]: number } = {};
+  const unitIds = effect.unitIds;
+  let power = effect.summonNetPower;
+
+  if (effect.rule === 'spellLevel') {
+    // Randomness
+    power *= (0.5 + 0.75 * randomBM());
+
+    // Spell level
+    power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
+  }
+
+  unitIds.forEach(unitId => {
+    const unit = getUnitById(unitId);
+    const unitPower = unit.powerRank;
+    const unitsSummoned = Math.floor(power / unitPower);
+    console.log(`Summoned ${unitsSummoned} ${unit.name}`);
+    if (!result[unit.id]) result[unit.id] = 0;
+    result[unit.id] += unitsSummoned;
+  });
+  return result;
+}
+
+/*
+export const summonUnitFromItem = (mage: Mage, itemId: string) => {
+  const item = getItemById(itemId);
+  const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
+
+  const result: { [key: string]: number } = {};
+
+  effects.forEach(effect => {
+    const unitIds = effect.unitIds;
+    let power = effect.summonNetPower;
+
+    unitIds.forEach(unitId => {
+      const unit = getUnitById(unitId);
+      const unitPower = unit.powerRank;
+      const unitsSummoned = Math.floor(power / unitPower);
+      console.log(`Summoned ${unitsSummoned} ${unit.name}, cost = 0`);
+      if (!result[unit.id]) result[unit.id] = 0;
+      result[unit.id] += unitsSummoned;
+    });
+  });
+  return result;
+}
+*/
+
+/*
 export const summonUnit = (mage: Mage, spellId: string) => {
   const spell = getSpellById(spellId);
   const spellMagic = spell.magic;
@@ -160,6 +211,7 @@ export const summonUnit = (mage: Mage, spellId: string) => {
   });
   return result;
 }
+*/
 
 export const maxMana = (mage: Mage) => {
   return mage.nodes * 1000;
@@ -252,4 +304,24 @@ export const calcKingdomResistance = (mage: Mage) => {
     resistance.barrier = barrier;
   }
   return resistance;
+}
+
+export const enchantmentUpkeep = (mage: Mage) => {
+  const upkeep = {
+    geld: 0,
+    mana: 0,
+    population: 0
+  };
+
+  mage.enchantments.forEach(enchant => {
+    if (enchant.targetId !== mage.id) return;
+
+    const spell = getSpellById(enchant.spellId);
+    if (spell.upkeep) {
+      upkeep.geld += spell.upkeep.geld;
+      upkeep.mana += spell.upkeep.mana;
+      upkeep.population += spell.upkeep.population;
+    }
+  });
+  return upkeep;
 }
