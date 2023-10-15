@@ -94,7 +94,11 @@ const castingSpells = computed(() => {
 })
 
 const castSpell = async () => {
-  const res = (await API.post('spell', { spellId: selected.value, num: turns.value, target: target.value })).data;
+  const res = (await API.post('spell', { 
+    spellId: selected.value, 
+    num: turns.value, 
+    target: target.value 
+  })).data;
 
   if (res.r) {
     spellResult.value = res.r;

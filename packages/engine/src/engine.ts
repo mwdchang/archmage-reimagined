@@ -316,9 +316,25 @@ class Engine {
 
     const result: GameMsg[] = [];
     for (let i = 0; i < num; i++) {
+      // Check if items are availble for use
+      if (mage.items[itemId] && mage.items[itemId] > 0) {
+        mage.items[itemId] --;
+        result.push({
+          type: 'log',
+          message: `You used ${item.name}, it is destroyed after use`
+        });
+      } else {
+        result.push({
+          type: 'log',
+          message: `You do not have ${item.name} in your inventory`
+        });
+        break;
+      }
+
       const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
       effects.forEach(effect => {
         const res = summonUnit(mage, effect);
+
         // Add to existing army
         Object.keys(res).forEach(key => {
           const stack = mage.army.find(d => d.id === key); 

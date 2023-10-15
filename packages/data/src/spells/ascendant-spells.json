@@ -231,6 +231,34 @@
     ]
   },
   {
+    "id": "summonArchangel",
+    "name": "Summon Archangel",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This is an advanced version of the Summon Angel spell, and will summon powerful Archangels for your holy war.",
+    "attributes": ["summon"],
+    "researchCost": 4000,
+    "castingCost": 52000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["archangel"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "summonTitan",
     "name": "Summon Titan",
     "magic": "ascendant",
