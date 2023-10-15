@@ -36,17 +36,9 @@ export interface ResearchItem {
 }
 
 
-/*
-export interface Enchantment {
-  casterId: number,
-  spellId: string,
-  spellLevel: number,
-  duration: number
-}
-*/
-
 export interface Enchantment {
   casterId: number;
+  casterMagic: string;
   targetId: number;
 
   spellId: string;

@@ -300,7 +300,9 @@ class Engine {
     // Success
     const enchantment: Enchantment = {
       casterId: mage.id,
+      casterMagic: mage.magic,
       targetId: mage.id,
+
       spellId: spell.id,
       spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),

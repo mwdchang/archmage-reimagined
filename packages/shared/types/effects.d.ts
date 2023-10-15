@@ -28,7 +28,7 @@ export interface ProductionEffect extends Effect {
  * - summon
  * - castingRate
  */
-export interface SpellCastingEffect extends Effect {
+export interface CastingEffect extends Effect {
   rule: string,
   type: string,
   magic: {

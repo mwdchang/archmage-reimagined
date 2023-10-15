@@ -17,7 +17,8 @@ import { totalLand } from './base/mage';
 import { randomBM } from './random';
 import { 
   ProductionEffect,
-  ResistanceEffect 
+  ResistanceEffect,
+  CastingEffect
 } from 'shared/types/effects';
 
 // Get normal max spell level, given the research tech tree
@@ -236,7 +237,6 @@ export const manaIncome = (mage: Mage) => {
  * Whether the spell can be successfully cast by the mage
 */
 export const successCastingRate = (mage:Mage, spellId: string) => {
-  const max = maxSpellLevel(mage);
   const current = currentSpellLevel(mage);
   const spell = getSpellById(spellId);
 
@@ -253,6 +253,25 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
 
   let successRate = 0.1 * current + rankModifier;
 
+  // Enchantments
+  const enchantments = mage.enchantments;
+  let modifier = 0;
+  enchantments.forEach(enchant => {
+    const spell = getSpellById(enchant.spellId);
+    const spellLevel = enchant.spellLevel;
+
+    spell.effects.forEach(effect => {
+      if (effect.effectType !== 'CastingEffect') return;
+
+      const castingEffect = effect as CastingEffect;
+      if (castingEffect.type !== 'castingSuccess') return;
+
+      const value = castingEffect.magic[enchant.casterMagic].value;
+      modifier += (value * spellLevel);
+    });
+  });
+  console.log('\tenchant modifier:', modifier);
+
   // Adjacent and opposiite casting
   if (mage.magic !== spellMagic) {
     if (magicAlignmentTable[mage.magic].adjacent.includes(spellMagic)) {
@@ -264,7 +283,6 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
 
   console.log('spell lvl', current);
   console.log('success casting rate:', successRate);
-
   return successRate;
 }
 

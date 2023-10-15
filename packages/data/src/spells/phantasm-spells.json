@@ -1,5 +1,35 @@
 [
   {
+    "id": "confuse",
+    "name": "Confuse",
+    "magic": "phantasm",
+    "rank": "average",
+    "description": "This enchantment will leave your enemy in a state of perpetual confusion. Your enemy will have difficulty casting spells as they cannot concentrate on their enchantments. It will also hinder his dispel ability.",
+    "attributes": ["enchantment"],
+    "researchCost": 2000,
+    "castingCost": 10000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 300,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "CastingEffect",
+        "rule": "spellLevel",
+        "type": "castingSuccess",
+        "magic": {
+          "ascendant": { "value": -0.03 },
+          "verdant": { "value": -0.02 },
+          "eradication": { "value": -0.02 },
+          "nether": { "value": -0.03 },
+          "phantasm": { "value": -0.07 }
+        }
+      }
+    ]
+  },
+  {
     "id": "concentration",
     "name": "Concentration",
     "magic": "phantasm",
@@ -28,6 +58,16 @@
         }
       },
       {
+        "effectType": "CastingEffect",
+        "rule": "spellLevel",
+        "type": "castingSuccess",
+        "magic": {
+          "ascendant": { "value": 0.02 },
+          "verdant": { "value": 0.01 },
+          "eradication": { "value": 0.01 },
+          "nether": { "value": 0.02 },
+          "phantasm": { "value": 0.05 }
+        }
       }
     ]
   },
