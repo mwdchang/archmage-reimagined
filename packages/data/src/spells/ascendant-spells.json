@@ -194,6 +194,71 @@
     ]
   },
   {
+    "id": "blindingFlash",
+    "name": "Blinding Flash",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This spell will create a sudden flash of intense bright light, which blinds the enemy troops and hinders their ability to fight well for the duration of the battle.",
+    "attributes": ["battle"],
+    "researchCost": 3500,
+    "castingCost": 3500,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -0.06315 },
+                  "verdant": { "value": -0.0337488 }, 
+                  "eradication": { "value": -0.0172366 },
+                  "nether": { "value": -0.0172366 },
+                  "phantasm": { "value": -0.0337488 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "summonTitan",
+    "name": "Summon Titan",
+    "magic": "ascendant",
+    "rank": "ultimate",
+    "description": "Using this spell will bring forth the ancient giants of Terra. Wielding javelins of lightning and giant blessed hammers, they will decimate all your opponents.",
+    "attributes": ["summon"],
+    "researchCost": 35000,
+    "castingCost": 300000,
+    "castingTurn": 9,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["titan"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 0.0 },
+          "nether": { "value": 0.0 },
+          "phantasm": { "value": 0.0 }
+        }
+      }
+    ]
+  },
+  {
     "id": "descentOfHolyBeing",
     "name": "Descent Of Holy Being",
     "magic": "ascendant",
@@ -213,10 +278,10 @@
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
-          "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 0.0 },
+          "nether": { "value": 0.0 },
+          "phantasm": { "value": 0.0 }
         }
       }
     ]

@@ -5,7 +5,7 @@ export const explorationLimit = 6000;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Kingdom
+// Kingdom start statistics
 ////////////////////////////////////////////////////////////////////////////////
 export const mageStartTable = {
   army: [
@@ -14,7 +14,18 @@ export const mageStartTable = {
     { id: 'pikeman', size: 300 }, 
     { id: 'archer', size: 300 }, 
     { id: 'calvary', size: 100 } 
-  ]
+  ],
+  buildings: {
+    farms: 150,
+    towns: 60,
+    workshops: 150,
+    nodes: 30,
+    barracks: 10,
+    guilds: 10,
+    forts: 9,
+    barriers: 0,
+    wilderness: 181
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

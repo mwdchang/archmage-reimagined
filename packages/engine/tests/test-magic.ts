@@ -12,8 +12,8 @@ import { loadUnitsAndSpells } from './loader';
 
 loadUnitsAndSpells();
 
-const spell = getSpellById('bless');
-console.log(spell.id);
+// const spell = getSpellById('bless');
+// console.log(spell.id);
 
 // const tree = getResearchTree();
 // console.log(tree);
@@ -21,6 +21,6 @@ console.log(spell.id);
 // console.log(summonUnit({ magic: 'ascendant' } as any, 'summonPegasus'));
 //
 
-summonUnit({ magic: 'ascendant', currentSpellLevel: 40 } as any, 'descentOfHolyBeing');
+// summonUnit({ magic: 'ascendant', currentSpellLevel: 40 } as any, 'descentOfHolyBeing');
 const r = successCastingRate({ magic: 'ascendant', currentSpellLevel: 40 } as any, 'descentOfHolyBeing');
 console.log('success rate', r);
