@@ -23,6 +23,20 @@ export interface ProductionEffect extends Effect {
   }
 }
 
+/**
+ * type can be one of
+ * - summon
+ * - castingRate
+ */
+export interface SpellCastingEffect extends Effect {
+  rule: string,
+  type: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
 
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],

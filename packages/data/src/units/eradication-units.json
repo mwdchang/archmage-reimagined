@@ -596,5 +596,117 @@
       { "name": "endurance", "extra": null },
       { "name": "marksmanship", "extra": null }
     ]
+  },
+  {
+    "id": "redDragon",
+    "name": "Red Dragon",
+    "magic": "eradication",
+    "powerRank": 82378,
+    "hitPoints": 120000,
+    "race": ["dragon"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 250000,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 50000,
+
+    "secondaryAttackPower": 500000,
+    "secondaryAttackType": [ "fire", "breath" ],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 16000.0,
+      "mana": 25,
+      "population": 180 
+    },
+    "spellResistances": {
+      "ascendant": 90,
+      "verdant": 90,
+      "eradication": 90,
+      "nether": 90,
+      "phantasm": 90 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 100,
+      "poison": 90,
+      "breath": 60,
+      "magic": 91,
+      "melee": 95,
+      "ranged": 90,
+      "lightning": 60,
+      "cold": 30,
+      "paralyse": 90,
+      "psychic": 90,
+      "holy": 75
+    },
+    "abilities": [
+      { "name": "racialEnemy", "extra": "elf" },
+      { "name": "endurance", "extra": null },
+      { "name": "fear", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "scales", "extra": null },
+      { "name": "weakness", "extra": "cold" }
+    ]
+  },
+  {
+    "id": "fireElemental",
+    "name": "Fire Elemental",
+    "magic": "eradication",
+    "powerRank": 21000,
+    "hitPoints": 85000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100000,
+    "primaryAttackType": [ "fire" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 9000,
+
+    "secondaryAttackPower": 300000,
+    "secondaryAttackType": [ "fire", "ranged" ],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 37.5,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 80,
+      "eradication": 80,
+      "nether": 80,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 100,
+      "fire": 100,
+      "poison": 95,
+      "breath": 100,
+      "magic": 50,
+      "melee": 85,
+      "ranged": 75,
+      "lightning": 60,
+      "cold": 20,
+      "paralyse": 100,
+      "psychic": 40,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null },
+      { "name": "weakness", "extra": "cold" }
+    ]
   }
 ]

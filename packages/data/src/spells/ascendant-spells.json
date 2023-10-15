@@ -259,6 +259,118 @@
     ]
   },
   {
+    "id": "summonSpiritWarrior",
+    "name": "Summon Spirit Warrior",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "By chanting this spell, you bring back the spirits of Terra's greatest warriors to aid you in battle. These ghost fighters are one of the most powerful Ascendant troops, with holy attack deadly to any undead creature, and incorporeal bodies that makes them very resistant to most attacks.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 30000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["spiritWarrior"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonUnicorn",
+    "name": "Summon Unicorn",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This spell summons the mystical and legendary unicorns to join your battle. Unicorns increase your attack by attacking and spearing the enemy troops with their horns.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 30000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["unicorn"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callEmpyreanInquisitor",
+    "name": "Call Empyrean Inquisitor",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This spell calls the astral Empyrean Inquisitors to join your army. These ethereal beings seek to hunt out and destroy all evil forces in the world. They attack with remarkable speed and have great resistances to most conventional forms of attack, they are however weak to the more nefarious methods of evil doers such as poisons, paralysis and attacks of the mind.",
+    "attributes": ["summon"],
+    "researchCost": 5000,
+    "castingCost": 60000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["empyreanInquisitor"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonNagaQueen",
+    "name": "Summon Naga Queen",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This spell summons the snake-like Naga Queens to your army. These powerful creatures are very resistant to many forms of damage and can attack their enemies with lightning.",
+    "attributes": ["summon"],
+    "researchCost": 4000,
+    "castingCost": 40000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["nagaQueen"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "summonTitan",
     "name": "Summon Titan",
     "magic": "ascendant",
