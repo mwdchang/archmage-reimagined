@@ -8,7 +8,7 @@ import {
 } from './base/references';
 
 import { currentSpellLevel } from "./magic";
-import { KingdomProductionEffect } from 'shared/types/effects';
+import { ProductionEffect } from 'shared/types/effects';
 
 export interface Building {
   id: string,
@@ -93,9 +93,9 @@ export const maxFood = (mage: Mage) => {
     const effects = spell.effects;
 
     effects.forEach(effect => {
-      if (effect.effectType !== 'KingdomProductionEffect') return;
+      if (effect.effectType !== 'ProductionEffect') return;
 
-      const productionEffect = effect as KingdomProductionEffect;
+      const productionEffect = effect as ProductionEffect;
       if (productionEffect.production !== 'farms') return;
 
       if (productionEffect.rule === 'spellLevel') {

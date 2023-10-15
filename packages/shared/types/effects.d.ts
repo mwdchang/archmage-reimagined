@@ -3,7 +3,7 @@ export interface Effect {
   effectType: string
 }
 
-export interface KingdomResistanceEffect extends Effect {
+export interface ResistanceEffect extends Effect {
   rule: string,
   resistance: string,
   magic: {
@@ -13,7 +13,7 @@ export interface KingdomResistanceEffect extends Effect {
   }
 }
 
-export interface KingdomProductionEffect extends Effect {
+export interface ProductionEffect extends Effect {
   rule: string,
   production: string,
   magic: {

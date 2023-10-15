@@ -35,12 +35,15 @@ export interface ResearchItem {
   active: boolean
 }
 
+
+/*
 export interface Enchantment {
   casterId: number,
   spellId: string,
   spellLevel: number,
   duration: number
 }
+*/
 
 export interface Enchantment {
   casterId: number;

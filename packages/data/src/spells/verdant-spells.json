@@ -16,7 +16,7 @@
     },
     "effects": [
       {
-        "effectType": "KingdomResistanceEffect",
+        "effectType": "ResistanceEffect",
         "rule": "spellLevel",
         "resistance": "nether",
         "magic": {

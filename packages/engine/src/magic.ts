@@ -11,11 +11,14 @@ import {
   getMaxSpellLevels,
   getResearchTree,
   getRandomItem,
-getItemById
+  getItemById
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM } from './random';
-import { KingdomResistanceEffect } from 'shared/types/effects';
+import { 
+  ProductionEffect,
+  ResistanceEffect 
+} from 'shared/types/effects';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -198,7 +201,24 @@ export const manaStorage = (mage: Mage) => {
 }
 
 export const researchPoints = (mage: Mage) => {
-  let rawPoints = Math.sqrt(mage.guilds ) * productionTable.research;
+  let modifier = 0.0;
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'ProductionEffect') return;
+      const productionEffect = effect as ProductionEffect;
+      if (productionEffect.production !== 'guilds') return;
+
+      if (productionEffect.rule === 'spellLevel') {
+        modifier += currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+      }
+    });
+  });
+  let rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
+
   // return 10 + Math.floor(rawPoints);
   return Math.floor(rawPoints); // FIXME just testing
 }
@@ -263,9 +283,9 @@ export const calcKingdomResistance = (mage: Mage) => {
     const effects = spell.effects;
 
     effects.forEach(effect => {
-      if (effect.effectType !== 'KingdomResistanceEffect') return;
+      if (effect.effectType !== 'ResistanceEffect') return;
 
-      const resistEffect = effect as KingdomResistanceEffect;
+      const resistEffect = effect as ResistanceEffect;
       if (resistEffect.rule === 'spellLevel') {
         resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
       }
