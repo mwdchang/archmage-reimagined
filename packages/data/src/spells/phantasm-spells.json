@@ -1,5 +1,89 @@
 [
   {
+    "id": "summonSprite",
+    "name": "Summon Sprite",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will summon playful sprites from nearly springs and fountains. These pretty elfin creatures can be very irritating as they are elusive like a butterfly but sting like a bee.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 6600,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["sprite"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonPsychicWisp",
+    "name": "Summon Psychic Wisp",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "By chanting this incantation, you summon swarms of Psychic Wisps into your army. Striking from a distance with mind warping psychic attacks, these energy beings swiftly decimate your enemies.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 6600,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["psychicWisp"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonSylph",
+    "name": "Summon Sylph",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will summon beautiful sylphs from crystal blue lakes in nearby mountains. The enemy soldiers will stand smitten and mesmerized as their limbs get torn apart by these heartless creatures.",
+    "attributes": ["summon"],
+    "researchCost": 1500,
+    "castingCost": 8100,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["psychicWisp"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "confuse",
     "name": "Confuse",
     "magic": "phantasm",
@@ -24,7 +108,7 @@
           "verdant": { "value": -0.02 },
           "eradication": { "value": -0.02 },
           "nether": { "value": -0.03 },
-          "phantasm": { "value": -0.07 }
+          "phantasm": { "value": -0.08 }
         }
       }
     ]
