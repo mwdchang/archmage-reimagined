@@ -1,1 +1,163 @@
-[]
+[
+  {
+    "id": "dryad",
+    "name": "Dryad",
+    "magic": "verdant",
+    "powerRank": 23,
+    "hitPoints": 70,
+    "race": ["pixie"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 240,
+    "primaryAttackType": ["magic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.8,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 30,
+      "fire": 0,
+      "poison": 20,
+      "breath": 0,
+      "magic": 20,
+      "melee": 40,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 30,
+      "psychic": 40,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "charm", "extra": null }
+    ]
+  },
+  {
+    "id": "gorilla",
+    "name": "Gorilla",
+    "magic": "verdant",
+    "powerRank": 34,
+    "hitPoints": 450,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 240,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 80,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 2.7,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  },
+  {
+    "id": "creepingVines",
+    "name": "Creeping Vines",
+    "magic": "verdant",
+    "powerRank": 40,
+    "hitPoints": 336,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 336,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 118,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 2.0,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "regeneration", "extra": null },
+      { "name": "stealLife", "extra": 5 },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  }
+]
