@@ -14,6 +14,7 @@ import ResearchView from '@/views/ResearchView.vue';
 import ItemView from '@/views/ItemView.vue';
 import BattleResultView from '@/views/BattleResultView.vue';
 import ChroniclesView from '@/views/ChroniclesView.vue';
+import AssignmentView from '@/views/AssignmentView.vue';
 
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
@@ -70,6 +71,11 @@ const router = createRouter({
       path: '/item',
       name: 'item',
       component: ItemView 
+    },
+    {
+      path: '/assignment',
+      name: 'assignment',
+      component: AssignmentView 
     },
     {
       path: '/test',
