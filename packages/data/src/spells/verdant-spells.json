@@ -84,6 +84,90 @@
     ]
   },
   {
+    "id": "summonWerebear",
+    "name": "Summon Werebear",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell will summon fierce werebears--part human, part bear, and all power-- to join your army. The enormously powerful creatures are so ferocious warriors that frighten your soldiers as much as they frighten the enemy!",
+    "attributes": ["summon"],
+    "researchCost": 1800,
+    "castingCost": 29500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["werebear"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonNymph",
+    "name": "Summon Nymph",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell will call a number of water spirits, nymphs, from their lakes to come to your side in battle. The highly magical nymphs are terrific warriors and cast their own magical influence over enemies. Although they appear as incredibly beautiful women, they posses magic of great power and often use it with great cruelty against their enemies.",
+    "attributes": ["summon"],
+    "researchCost": 1400,
+    "castingCost": 7900,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["nymph"],
+        "summonType": "all",
+        "summonNetPower": 130000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonMandrake",
+    "name": "Summon Mandrake",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "Though composed entirely of plant matter, mandrakes are highly intelligent, and can understand every nuance of speech from both elven and human language from birth. Originally they were enchanted by renowned elf-bard Sylii the Songstress' sweet voice and harmonious aura. After listening to her many tales of the world's woes, the mandrakes all agreed to assist the cause of the verdant mages and spread word to all of their kindred throughout Terra. Now, for a small expenditure of mana to carry the words of power through the surrounding lands, the mandrakes can be called to fight alongside and verdant mage.",
+    "attributes": ["summon"],
+    "researchCost": 1800,
+    "castingCost": 29500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["mandrake"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "sunray",
     "name": "Sunray",
     "magic": "verdant",

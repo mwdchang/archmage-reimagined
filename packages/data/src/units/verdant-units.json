@@ -159,5 +159,169 @@
       { "name": "stealLife", "extra": 5 },
       { "name": "weakness", "extra": "fire" }
     ]
+  },
+  {
+    "id": "nymph",
+    "name": "Nymph",
+    "magic": "verdant",
+    "powerRank": 62,
+    "hitPoints": 150,
+    "race": ["pixie"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 940,
+    "primaryAttackType": ["psychic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 0.075,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm":15 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 40,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "charm", "extra": null }
+    ]
+  },
+  {
+    "id": "werebear",
+    "name": "Werebear",
+    "magic": "verdant",
+    "powerRank": 161,
+    "hitPoints": 1500,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2300,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 300,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 20.80,
+      "mana": 0.15,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 67,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 75,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null },
+      { "name": "piercing", "extra": null }
+    ]
+  },
+  {
+    "id": "mandrake",
+    "name": "Mandrake",
+    "magic": "verdant",
+    "powerRank": 180,
+    "hitPoints": 1344,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 1680,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 672,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.42,
+      "mana": 0.21,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 80,
+      "breath": 0,
+      "magic": 40,
+      "melee": 45,
+      "ranged": 35,
+      "lightning": 0,
+      "cold": 40,
+      "paralyse": 50,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "weakness", "extra": "fire" }
+    ]
   }
 ]
