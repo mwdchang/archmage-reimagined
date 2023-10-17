@@ -3,7 +3,7 @@
   <p> All attack type cost 2 turns </p>
   <input type="text" placeholder="mage id" v-model="targetId" /> 
   <br>
-  <button @click="doBattle"> War </button>
+  <button @click="prepBattle"> War </button>
 </template>
 
 <script setup lang="ts">
@@ -15,6 +15,18 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const mageStore = useMageStore();
 const targetId = ref('');
+
+const prepBattle = async () => {
+  if (!mageStore.mage) return;
+  if (!targetId.value || targetId.value === '') return;
+
+  router.push({
+    name: 'battlePrep',
+    params: {
+      targetId: targetId.value
+    }
+  });
+};
 
 const doBattle = async () => {
   if (!mageStore.mage) return;
