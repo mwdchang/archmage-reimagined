@@ -8,7 +8,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter } from 'vue-router';
 
@@ -26,31 +25,6 @@ const prepBattle = async () => {
       targetId: targetId.value
     }
   });
-};
-
-const doBattle = async () => {
-  if (!mageStore.mage) return;
-  if (!targetId.value || targetId.value === '') return;
-
-  const stackIds = mageStore.mage.army.map(d => d.id);
-
-  const res = await API.post('/war', { 
-    targetId: targetId.value,
-    spellId: '',
-    itemId: '',
-    stackIds
-  });
-
-
-  if (res.data.reportId) {
-    console.log('battle report', res.data.reportId);
-    router.push({
-      name: 'battleResult',
-      params: {
-        id: res.data.reportId
-      }
-    });
-  }
 };
 
 </script>

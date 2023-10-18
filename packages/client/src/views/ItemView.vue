@@ -40,14 +40,7 @@ import { API } from '@/api/api';
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMageStore } from '@/stores/mage';
-import { getItemById } from 'engine/src/base/references';
-
-interface MageItem {
-  id: string,
-  name: string,
-  attributes: string[],
-  amount: number
-}
+import { getItems } from '@/util/util';
 
 const selected = ref('');
 const turns = ref<number>(1);
@@ -60,16 +53,7 @@ const { mage } = storeToRefs(mageStore);
 const itemList = computed(() => {
   if (!mage.value) return [];
 
-  let result: MageItem[] = [];
-  Object.keys(mage.value.items).forEach(key => {
-    const item = getItemById(key);
-    result.push({
-      id: key,
-      name: item.name,
-      attributes: item.attributes,
-      amount: mage.value?.items[key] as number
-    });
-  });
+  let result = getItems(mage.value);
   return result;
 });
 
@@ -79,7 +63,6 @@ const usableItems = computed(() => {
     return attrs.includes('oneUse') && !attrs.includes('battle');
   });
 });
-
 
 const useItem = async () => {
   const res = (await API.post('item', { 
