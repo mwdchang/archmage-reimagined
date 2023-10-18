@@ -1139,18 +1139,6 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
 
     attacker.wilderness += winnerLand;
 
-    // Do units
-    const attackerArmy = battleReport.attacker.army;
-    attackerArmy.forEach(stack => {
-      attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
-    });
-    attacker.army = attacker.army.filter(d => d.size > 0);
-
-    const defenerArmy = battleReport.defender.army;
-    defenerArmy.forEach(stack => {
-      defender.army.find(d => d.id === stack.unit.id).size = stack.size;
-    });
-    defender.army = defender.army.filter(d => d.size > 0);
 
     const t = attackType === 'siege' ? 'sieged' : 'attacked'; 
     battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
@@ -1161,4 +1149,17 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
     battleReport.summaryLogs.push(`The attack failed and achieved nothing`);
   }
+
+  // Handle units
+  const attackerArmy = battleReport.attacker.army;
+  attackerArmy.forEach(stack => {
+    attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
+  });
+  attacker.army = attacker.army.filter(d => d.size > 0);
+
+  const defenerArmy = battleReport.defender.army;
+  defenerArmy.forEach(stack => {
+    defender.army.find(d => d.id === stack.unit.id).size = stack.size;
+  });
+  defender.army = defender.army.filter(d => d.size > 0);
 }

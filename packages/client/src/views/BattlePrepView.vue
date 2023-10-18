@@ -31,7 +31,9 @@
       <tr>
         <td>Item</td>
         <td>
-          <select></select>
+          <select>
+            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+          </select>
         </td>
       </tr>
     </table>
@@ -49,7 +51,7 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
-import { getSpells } from '@/util/util';
+import { getSpells, getItems } from '@/util/util';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -76,6 +78,13 @@ const battleSpells = computed(() => {
   return result;
 });
 
+const battleItems = computed(() => {
+  const mage = mageStore.mage; 
+  if (!mage) return [];
+
+  let result = getItems(mage);
+  return result;
+});
 
 const doBattle = async () => {
   if (!mageStore.mage) return;
