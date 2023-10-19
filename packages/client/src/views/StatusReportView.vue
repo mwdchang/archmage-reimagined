@@ -196,9 +196,9 @@
         <td> 
           <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
         </td>
-        <td> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
+        <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
         <td class="text-right" style="padding-left: 10px"> {{ u.size }} </td>
-        <td class="text-right"> {{ (100 * u.power / totalArmyPower).toFixed(2) }}%</td>
+        <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
       </tr>
     </table>
   </main>
@@ -219,7 +219,6 @@ import {
   realMaxPopulation
 } from 'engine/src/interior';
 
-import { getUnitById } from 'engine/src/base/references';
 import { 
   totalLand,
   totalUnits,
@@ -233,6 +232,9 @@ import {
   calcKingdomResistance,
 enchantmentUpkeep,
 } from 'engine/src/magic';
+import {
+  getArmy, ArmyItem
+} from '@/util/util';
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);
@@ -269,29 +271,10 @@ const enchantmentUpkeepStatus = computed(() => {
 });
 
 const unitsStatus = computed(() => {
-  const result: any[] = [];
   if (!mageStore.mage) return []
+  let rawArmy = getArmy(mageStore.mage);
 
-  mageStore.mage.army.forEach(stack => {
-    const u = getUnitById(stack.id);
-    const stackPower = u.powerRank * stack.size;
-    totalArmyPower.value += stackPower;
-
-    const upkeep = {
-      geld: Math.ceil(stack.size * u.upkeepCost.geld),
-      mana: Math.ceil(stack.size * u.upkeepCost.mana),
-      population: Math.ceil(stack.size * u.upkeepCost.population)
-    };
-    result.push({
-      id: stack.id,
-      name: u.name,
-      upkeep,
-      size: stack.size,
-      power: stackPower
-    });
-  });
-
-  return result;
+  return rawArmy.sort((a, b) => b.power - a.power);
 });
 
 </script>

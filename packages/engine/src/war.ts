@@ -733,9 +733,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     );
   });
 
-  battleReport.attacker.army = _.clone(attackingArmy);
-  battleReport.defender.army = _.clone(defendingArmy);
-
+  // Snapshot the army for reporting before engagement starts
+  battleReport.attacker.army = _.cloneDeep(attackingArmy);
+  battleReport.defender.army = _.cloneDeep(defendingArmy);
 
   console.log('=== Engagement ===');
   for (let i = 0; i < battleOrders.length; i++) {
@@ -1013,6 +1013,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // console.log(battleReport);
   return battleReport;
 }
+
 
 /**
  * Resolves the battle aftermath

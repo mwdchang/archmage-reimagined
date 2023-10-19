@@ -14,7 +14,7 @@
       <td>-</td>
       <td> {{ bType.id }} </td>
       <td class="text-right"> {{ mage[bType.id] }} </td>
-      <td class="text-right"> {{ (mage[bType.id] / land).toFixed(2) }} </td>
+      <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
       <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
       <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
       <td> <input type="number" v-model="userInput[bType.id]"> </td>
@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { buildingTypes, buildingRate } from 'engine/src/interior';
@@ -54,7 +55,10 @@ buildingTypes.forEach(b => {
 });
 
 const build = () => {
-  emit('build', userInput.value);
+  emit('build', _.clone(userInput.value));
+  buildingTypes.forEach(b => {
+    userInput.value[b.id] = 0;
+  });
 };
 
 </script>
