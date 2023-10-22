@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { ArmyUnit, Mage } from "shared/types/mage";
-import { Unit, UnitAbility } from "shared/types/unit";
+import { Unit } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
@@ -24,6 +24,12 @@ export interface Combatant {
 
   // Different than mage.army as you don't send all stacks
   army: ArmyUnit[], 
+}
+
+export interface EffectOrigin {
+  id: number,
+  magic: string,
+  spellLevel: number
 }
 
 enum StackType {
@@ -287,9 +293,14 @@ const calcAccuracyModifier = (attackingUnit: Unit, defendingUnit: Unit) => {
  *  e.g. Ascendant mages get better bonuses casting Blinding-Flash than a Nether mage casting the 
  *  same spell.
  */
-const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy: BattleStack[]) => {
-  const casterMagic = caster.mage.magic;
-  const casterSpellLevel = currentSpellLevel(caster.mage);
+const applyUnitEffect = (
+  // caster: Combatant, 
+  origin: EffectOrigin,
+  unitEffect: UnitEffect, 
+  affectedArmy: BattleStack[]
+) => {
+  const casterMagic = origin.magic;
+  const casterSpellLevel = origin.spellLevel;
 
   Object.keys(unitEffect.attributeMap).forEach(attrKey => {
     const attr = unitEffect.attributeMap[attrKey];
@@ -365,9 +376,13 @@ const applyUnitEffect = (caster: Combatant, unitEffect: UnitEffect, affectedArmy
 /**
  * Apply direct damage to target stacks
  */
-const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affectedArmy: BattleStack[]) => {
-  const casterMagic = caster.mage.magic;
-  const casterSpellLevel = currentSpellLevel(caster.mage);
+const applyDamageEffect = (
+  origin: EffectOrigin,
+  damageEffect: DamageEffect, 
+  affectedArmy: BattleStack[]
+) => {
+  const casterMagic = origin.magic;
+  const casterSpellLevel = origin.spellLevel;
 
   const damageType = damageEffect.damageType;
   let rawDamage = 0;
@@ -391,9 +406,13 @@ const applyDamageEffect = (caster: Combatant, damageEffect: DamageEffect, affect
 };
 
 
-const applyHealEffect = (caster: Combatant, healEffect: HealEffect, affectedArmy: BattleStack[]) => {
-  const casterMagic = caster.mage.magic;
-  const casterSpellLevel = currentSpellLevel(caster.mage);
+const applyHealEffect = (
+  origin: EffectOrigin,
+  healEffect: HealEffect, 
+  affectedArmy: BattleStack[]
+) => {
+  const casterMagic = origin.magic;
+  const casterSpellLevel = origin.spellLevel;
   const healType = healEffect.healType;
   const rule = healEffect.rule;
 
@@ -408,6 +427,7 @@ const applyHealEffect = (caster: Combatant, healEffect: HealEffect, affectedArmy
     }
   });
 };
+
 
 /**
  * Entry point for casting battle spells. This ensures the correct caster and affected army
@@ -430,6 +450,12 @@ const battleSpell = (
 
   const casterSpell = getSpellById(caster.spellId);
 
+  const effectOrigin: EffectOrigin = {
+    id: caster.mage.id,
+    magic: caster.mage.magic,
+    spellLevel: currentSpellLevel(caster.mage)
+  };
+
   casterSpell.effects.forEach(effect => {
     if (effect.effectType !== 'BattleEffect') return;
 
@@ -444,6 +470,7 @@ const battleSpell = (
     if (stackType === 'randomSingle') {
       randomSingleIdx = randomInt(filteredArmy.length);
     }
+  
 
     for (let i = 0; i < battleEffect.effects.length; i++) {
       let affectedArmy: BattleStack[] = [];
@@ -470,15 +497,16 @@ const battleSpell = (
       const eff = battleEffect.effects[i];
       console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
 
+
       if (eff.name === 'UnitEffect') {
         const unitEffect = eff as UnitEffect;
-        applyUnitEffect(caster, unitEffect, affectedArmy);
+        applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
       } else if (eff.name === 'DamageEffect') {
         const damageEffect = eff as DamageEffect;
-        applyDamageEffect(caster, damageEffect, affectedArmy);
+        applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
       } else if (eff.name === 'HealEffect') {
         const healEffect = eff as HealEffect;
-        applyHealEffect(caster, healEffect, affectedArmy);
+        applyHealEffect(effectOrigin, healEffect, affectedArmy);
       }
     }
   });
@@ -501,6 +529,12 @@ const battleItem = (
   console.log('');
   console.group(`=== Item ${caster.mage.name} : ${caster.itemId} ===`);
   console.groupEnd();
+
+  const effectOrigin: EffectOrigin = {
+    id: caster.mage.id,
+    magic: caster.mage.magic,
+    spellLevel: currentSpellLevel(caster.mage)
+  };
 
   casterItem.effects.forEach(effect => {
     if (effect.effectType !== 'BattleEffect') return;
@@ -533,10 +567,10 @@ const battleItem = (
 
       if (eff.name === 'UnitEffect') {
         const unitEffect = eff as UnitEffect;
-        applyUnitEffect(caster, unitEffect, affectedArmy);
+        applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
       } else if (eff.name === 'DamageEffect') {
         const damageEffect = eff as DamageEffect;
-        applyDamageEffect(caster, damageEffect, affectedArmy);
+        applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
       }
     }
   });
@@ -599,6 +633,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
   
+
+  // Enchantments effects are equivalent to spell effects, but the
+  // efficacy is the enchantment spell level, and not that of the caster's
+  // current spell level
+  defender.mage.enchantments.forEach(enchant => {
+  });
+
 
   // Apply fort bonus to defender
   const defenderLand = totalLand(defender.mage);

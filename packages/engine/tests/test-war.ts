@@ -2,52 +2,46 @@ import { Mage } from 'shared/types/mage';
 import { battle, resolveBattleAftermath, Combatant } from '../src/war';
 
 import { loadUnitsAndSpells } from './loader';
+import { createMage } from '../src/base/mage';
 
 loadUnitsAndSpells();
 
-const dummyLand = {
-  farms: 0,
-  towns: 0,
-  workshops: 0,
-  barracks: 0,
-  nodes: 0,
-  libraries: 0,
-  barriers: 0,
-  forts: 0,
-  wilderness: 2000
-}
+
+const attackerMage = createMage('attacker', 'ascendant');
+const defenderMage = createMage('defender', 'verdant');
+
+attackerMage.currentSpellLevel = 200;
+defenderMage.currentSpellLevel = 200;
+
+defenderMage.enchantments.push({
+  casterId: defenderMage.id,
+  casterMagic: defenderMage.magic,
+  targetId: defenderMage.id,
+
+  spellId: 'plantGrowth',
+  spellMagic: 'verdant',
+  spellLevel: 200,
+
+  isPermanent: true,
+  life: 0
+});
 
 const attacker: Combatant = {
-  mage: { 
-    id: 1,
-    name: 'attacker', 
-    magic: 'ascendant',
-    currentSpellLevel: 800,
-    ...dummyLand,
-    forts: 10,
-  } as Mage,
+  mage:  attackerMage,
   army: [
-    { id: 'archangel', size: 5000 },
-    { id: 'archer', size: 500000 }
+    { id: 'archangel', size: 5000 }
   ],
-  spellId: 'healing',
-  itemId: 'potionOfValor'
+  spellId: '',
+  itemId: ''
 };
 attacker.mage.army = attacker.army;
 
 const defender: Combatant = {
-  mage: { 
-    id: 2,
-    name: 'defender', 
-    magic: 'phantasm',
-    currentSpellLevel: 400,
-    ...dummyLand,
-    forts: 100,
-  } as Mage,
+  mage: defenderMage,
   army: [
-    { id: 'militia', size: 500000 }
+    { id: 'mandrake', size: 50000 }
   ],
-  spellId: 'blaze',
+  spellId: '',
   itemId: 'carpetOfFlying'
 };
 defender.mage.army = defender.army;

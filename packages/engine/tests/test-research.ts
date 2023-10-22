@@ -16,6 +16,7 @@ mageB.currentSpellLevel = 600;
 
 mageB.enchantments.push({
   casterId: mageA.id,
+  casterMagic: mageA.magic,
   targetId: mageA.id,
 
   spellId: 'concentration',

@@ -238,5 +238,44 @@
         }
       }
     ]
+  },
+  {
+    "id": "plantGrowth",
+    "name": "Plant Growth",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This powerful spell is able to affect only treefolk creatures. It uses the energy of nature to make them grow to a considerable size, and maintain that size for as long as the spell is still in effect.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 30000,
+    "castingTurn": 3,
+    "upkeep": {
+      "geld": 0,
+      "mana": 250,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": {
+          "race": ["treefolk"]
+        },
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,counterAttackPower,hitPoints": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "verdant": { "value": 0.9524 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
