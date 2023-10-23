@@ -18,11 +18,11 @@
         "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
@@ -46,11 +46,11 @@
         "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
@@ -74,11 +74,11 @@
         "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
@@ -102,11 +102,11 @@
         "summonNetPower": 150000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
@@ -130,11 +130,11 @@
         "summonNetPower": 130000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
@@ -158,11 +158,123 @@
         "summonNetPower": 150000,
         "rule": "spellLevel",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.6 },
-          "eradication": { "value": 0.2 },
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
           "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.6 }
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callTreant",
+    "name": "Call Treant",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell will summon a number of treants to join your army. These ancient guardians of the forest are legendary for their fortitude and ferocity in battle and are a favorite among verdant mages.",
+    "attributes": ["summon"],
+    "researchCost": 3000,
+    "castingCost": 34600,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["treant"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callVenusFlyTraps",
+    "name": "Call Venus Flytraps",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell calls Venus Flytraps to join your army. These plant creatures are particularly deceptive, somehow making their enemies attacks less effective before lashing out at them with deadly poison. As with all Treefolk, these plants are especially vulnerable to fire.",
+    "attributes": ["summon"],
+    "researchCost": 3200,
+    "castingCost": 45000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["venusFlytrap"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callHighElves",
+    "name": "Call High Elves",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 2900,
+    "castingCost": 40000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["highElf"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callElvenBladeDancers",
+    "name": "Call Elven Blade Dancers",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 3100,
+    "castingCost": 45000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["elvenBladeDancer"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
         }
       }
     ]
