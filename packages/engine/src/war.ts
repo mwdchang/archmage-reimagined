@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { ArmyUnit, Mage } from "shared/types/mage";
+import { ArmyUnit, Enchantment, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
 import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
-import { getSpellById, getItemById, getUnitById } from './base/references';
+import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import { currentSpellLevel } from './magic';
 import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
@@ -301,6 +301,7 @@ const applyUnitEffect = (
 ) => {
   const casterMagic = origin.magic;
   const casterSpellLevel = origin.spellLevel;
+  const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
   Object.keys(unitEffect.attributeMap).forEach(attrKey => {
     const attr = unitEffect.attributeMap[attrKey];
@@ -337,7 +338,8 @@ const applyUnitEffect = (
         if (rule === 'spellLevel') {
           finalValue = baseValue * casterSpellLevel;
         } else if (rule === 'spellLevelPercentage') {
-          finalValue = baseValue * casterSpellLevel * originalRoot[field];
+          const ratio = casterSpellLevel / casterMaxSpellLevel;
+          finalValue = baseValue * ratio * originalRoot[field];
         } else if (rule === 'percentage') {
           finalValue = baseValue * originalRoot[field];
         } else {
@@ -429,6 +431,7 @@ const applyHealEffect = (
 };
 
 
+
 /**
  * Entry point for casting battle spells. This ensures the correct caster and affected army
  * are in-place before handing off the actual calculation to helper effects functions.
@@ -443,18 +446,28 @@ const battleSpell = (
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
-  defenderBattleStack: BattleStack[]) => {
+  defenderBattleStack: BattleStack[],
+  enchantment: Enchantment = null
+) => {
+  const casterSpell = enchantment ? 
+    getSpellById(enchantment.spellId) :
+    getSpellById(caster.spellId);
 
   console.log('');
   console.group(`=== Spell ${caster.mage.name} : ${caster.spellId} ===`);
 
-  const casterSpell = getSpellById(caster.spellId);
-
-  const effectOrigin: EffectOrigin = {
+  let effectOrigin: EffectOrigin = {
     id: caster.mage.id,
     magic: caster.mage.magic,
     spellLevel: currentSpellLevel(caster.mage)
   };
+
+  // Override default if calculating enchantment
+  if (enchantment) {
+    effectOrigin.id = enchantment.casterId;
+    effectOrigin.magic = enchantment.casterMagic;
+    effectOrigin.spellLevel = enchantment.spellLevel;
+  }
 
   casterSpell.effects.forEach(effect => {
     if (effect.effectType !== 'BattleEffect') return;
@@ -470,7 +483,6 @@ const battleSpell = (
     if (stackType === 'randomSingle') {
       randomSingleIdx = randomInt(filteredArmy.length);
     }
-  
 
     for (let i = 0; i < battleEffect.effects.length; i++) {
       let affectedArmy: BattleStack[] = [];
@@ -496,7 +508,6 @@ const battleSpell = (
 
       const eff = battleEffect.effects[i];
       console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
-
 
       if (eff.name === 'UnitEffect') {
         const unitEffect = eff as UnitEffect;
@@ -637,7 +648,22 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Enchantments effects are equivalent to spell effects, but the
   // efficacy is the enchantment spell level, and not that of the caster's
   // current spell level
+  attacker.mage.enchantments.forEach(enchant => {
+    battleSpell(
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy,
+      enchant);
+
+  });
   defender.mage.enchantments.forEach(enchant => {
+    battleSpell(
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy,
+      enchant);
   });
 
 
@@ -745,7 +771,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
       RPretty(stack.accuracy),
-      (stack.unit.abilities.map(d => d.name))
+      JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   });
 
@@ -770,7 +796,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
       RPretty(stack.accuracy),
-      (stack.unit.abilities.map(d => d.name))
+      JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   });
 
@@ -935,6 +961,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   attackingArmy.forEach(stack => {
     battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
 
+    if (stack.size <= 0) return;
+
     if (stack.healingPoints > 0 && stack.loss > 0) {
       let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
       if (unitsHealed >= stack.loss) {
@@ -974,6 +1002,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('=== Post battle defender ===');
   defendingArmy.forEach(stack => {
     battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
+
+    if (stack.size <= 0) return;
 
     if (stack.healingPoints > 0 && stack.loss > 0) {
       let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
