@@ -545,5 +545,113 @@
       { "name": "racialEnemy", "extra": "angel" },
       { "name": "bursting", "extra": { "type": ["melee"], "value": 3000 } }
     ]
+  },
+  {
+    "id": "earthElemental",
+    "name": "Earth Elemental",
+    "magic": "verdant",
+    "powerRank": 22000,
+    "hitPoints": 100000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100000,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 15000,
+
+    "secondaryAttackPower": 550000,
+    "secondaryAttackType": ["ranged", "magic"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 36.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 40,
+      "eradication": 50,
+      "nether": 60,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 50,
+      "poison": 100,
+      "breath": 60,
+      "magic": 50,
+      "melee": 90,
+      "ranged": 70,
+      "lightning": 50,
+      "cold": 40,
+      "paralyse": 95,
+      "psychic": 80,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "phoenix",
+    "name": "Phoenix",
+    "magic": "verdant",
+    "powerRank": 36883,
+    "hitPoints": 70000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40000,
+
+    "secondaryAttackPower": 600000,
+    "secondaryAttackType": ["ranged", "magic"],
+    "secondaryAttackInit": 5,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 60.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80,
+      "nether": 75,
+      "phantasm": 50 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 100,
+      "poison": 80,
+      "breath": 80,
+      "magic": 80,
+      "melee": 90,
+      "ranged": 80,
+      "lightning": 80,
+      "cold": 80,
+      "paralyse": 80,
+      "psychic": 80,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "bursting", "extra": { "type": ["fire"], "value": 50000 } }
+    ]
   }
 ]
