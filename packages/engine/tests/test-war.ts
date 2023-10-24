@@ -39,7 +39,7 @@ attacker.mage.army = attacker.army;
 const defender: Combatant = {
   mage: defenderMage,
   army: [
-    { id: 'mandrake', size: 50000 }
+    { id: 'earthElemental', size: 2000 }
   ],
   spellId: '',
   itemId: 'carpetOfFlying'

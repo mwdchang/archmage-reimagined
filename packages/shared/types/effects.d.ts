@@ -52,7 +52,7 @@ export interface UnitSummonEffect extends Effect {
 
 export interface BattleEffect extends Effect {
   target: string,         // self, opponent
-  fiilter: {
+  filter: {
     [key: string]: any 
   },
   stack: string,       // random, randomSingle, all

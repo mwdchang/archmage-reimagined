@@ -476,7 +476,39 @@ const battleSpell = (
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
 
     // TODO: filters
-    const filteredArmy = army;
+    console.log('!!!!!!'); 
+    console.log(battleEffect.filter);
+    console.log('!!!!!!'); 
+    // const filteredArmy = army;
+
+    const filterKeys = Object.keys(battleEffect.filter);
+    const filteredArmy = army.filter(stack => {
+      let match = true;
+      const unit = stack.unit;
+
+      for (const key of filterKeys) {
+        if (match === false) break;
+        const matchValues = battleEffect.filter[key];
+
+        if (key === 'abilities') {
+          const len = matchValues.filter((val: any) => {
+            return unit.abilities.find(d => d.name === val);
+          }).length;
+          if (len === 0) match = false;
+        } else if (key.includes('.')) {
+        } else {
+          console.log('hihihi', key, matchValues);
+          const len = matchValues.filter((val: any) => {
+            return unit[key].includes(val);
+          }).length;
+          console.log('!!!!!! length=', len);
+          if (len === 0) match = false;
+        }
+      }
+      return match;
+    });
+
+
     const stackType = battleEffect.stack;
 
     let randomSingleIdx = -1;
@@ -851,8 +883,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         totalDamage = defendingStack.size * dUnit.hitPoints;
         defenderUnitLoss = defendingStack.size;
       }
-      console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
 
+      console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
       battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
       battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
 
@@ -882,6 +914,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           efficiency = Math.max(0, efficiency);
         }
 
+
         let damage = dUnit.counterAttackPower *
           defendingStack.size * 
           (accuracy / 100) *
@@ -897,6 +930,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           totalDamage = attackingStack.size * aUnit.hitPoints;
           attackerUnitLoss = attackingStack.size;
         }
+
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
         battleReport.battleLogs.push(`${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} struck back ${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name}`)
@@ -919,11 +953,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (attackingStack.unit.secondaryAttackInit < 1 || attackingStack.size <= 0) continue;
 
       let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
-      let resistance = calcResistance(dUnit, aUnit.primaryAttackType);
+      let resistance = calcResistance(dUnit, aUnit.secondaryAttackType);
       let damageVariance = calcDamageVariance(aUnit.secondaryAttackType);
       let damageMultiplier = calcDamageMultiplier(aUnit, dUnit, aUnit.secondaryAttackType);
 
-      let damage = aUnit.primaryAttackPower *
+      let damage = aUnit.secondaryAttackPower *
         attackingStack.size * 
         (accuracy / 100) *
         ((100 - resistance) / 100) *
@@ -1235,3 +1269,6 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
   });
   defender.army = defender.army.filter(d => d.size > 0);
 }
+
+
+
