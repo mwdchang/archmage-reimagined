@@ -1,5 +1,74 @@
 [
   {
+    "id": "phantasmMagic",
+    "name": "Phantasm Magic",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will create shadows that will strike the enemy. These shadows do not have corporeal forms and are mere illusions. However, those who fail to disbelieve the illusion will fall dead and never recover",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 800,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "random",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["psychic"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 140 },
+              "verdant": { "value": 90 },
+              "eradication": { "value": 90 },
+              "nether": { "value": 140 },
+              "phantasm": { "value": 230 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fogCloud",
+    "name": "Fog Clound",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will fill the battleground with a thick mist of fog, reducing visibility for the armies. All units will suffer as they will have difficulty finding their enemies.",
+    "attributes": ["battle"],
+    "researchCost": 900,
+    "castingCost": 950,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "all",
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.0497705 },
+                  "verdant": { "value": 0.02488525 },
+                  "eradication": { "value": 0.02488525 },
+                  "nether": { "value": 0.0497705 },
+                  "phantasm": { "value": 0.099541 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "summonSprite",
     "name": "Summon Sprite",
     "magic": "phantasm",
@@ -152,6 +221,39 @@
           "nether": { "value": 0.02 },
           "phantasm": { "value": 0.05 }
         }
+      }
+    ]
+  },
+  {
+    "id": "mentalThrash",
+    "name": "Mental Thrash",
+    "magic": "phantasm",
+    "rank": "average",
+    "description": "This spell will blast the mind of enemy troops with overwhelming mental force, causing their brains to burst and resulting in painful death. This phantasm spell is very effective against weak creatures.",
+    "attributes": ["battle"],
+    "researchCost": 2500,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "random",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["psychic"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 1000 },
+              "verdant": { "value": 700 },
+              "eradication": { "value": 700 },
+              "nether": { "value": 1000 },
+              "phantasm": { "value": 1600 }
+            }
+          }
+        ]
       }
     ]
   },

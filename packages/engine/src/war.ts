@@ -421,11 +421,15 @@ const applyHealEffect = (
   let healBase = 0;
   if (rule === 'spellLevel') {
     healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
+  } else {
+    healBase = healEffect.magic[casterMagic].value; 
   }
 
   affectedArmy.forEach(stack => {
     if (healType === 'points') {
       stack.healingPoints += stack.size * healBase;
+    } else if (healType === 'percentage') {
+      stack.healingBuffer.push(healBase);
     }
   });
 };
@@ -475,12 +479,6 @@ const battleSpell = (
     const battleEffect = effect as BattleEffect;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
 
-    // TODO: filters
-    console.log('!!!!!!'); 
-    console.log(battleEffect.filter);
-    console.log('!!!!!!'); 
-    // const filteredArmy = army;
-
     const filterKeys = Object.keys(battleEffect.filter);
     const filteredArmy = army.filter(stack => {
       let match = true;
@@ -496,12 +494,12 @@ const battleSpell = (
           }).length;
           if (len === 0) match = false;
         } else if (key.includes('.')) {
+          // TODO: filters
         } else {
           console.log('hihihi', key, matchValues);
           const len = matchValues.filter((val: any) => {
             return unit[key].includes(val);
           }).length;
-          console.log('!!!!!! length=', len);
           if (len === 0) match = false;
         }
       }
