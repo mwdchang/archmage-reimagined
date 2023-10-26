@@ -321,5 +321,224 @@
       { "name": "stealLife", "extra": 5 },
       { "name": "weakness", "extra": "holy" }
     ]
+  },
+  {
+    "id": "vampire",
+    "name": "Vampire",
+    "magic": "nether",
+    "powerRank": 2058,
+    "hitPoints": 4500,
+    "race": ["undead"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 9000,
+    "primaryAttackType": ["magic", "paralyse"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 2000,
+
+    "secondaryAttackPower": 12000,
+    "secondaryAttackType": ["magic", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 1.25,
+      "population": 5.0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 50,
+      "phantasm": 25 
+    },
+    "attackResistances": {
+      "missile": 95,
+      "fire": 75,
+      "poison": 75,
+      "breath": 50,
+      "magic": 50,
+      "melee": 95,
+      "ranged": 95,
+      "lightning": 50,
+      "cold": 50,
+      "paralyse": 75,
+      "psychic": 75,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "stealLife", "extra": 5 },
+      { "name": "weakness", "extra": "holy" },
+      { "name": "charm", "extra": null },
+      { "name": "marksmanship", "extra": null },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "lich",
+    "name": "Lich",
+    "magic": "nether",
+    "powerRank": 2027,
+    "hitPoints": 7500,
+    "race": ["undead"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 5500,
+    "primaryAttackType": ["cold", "ranged"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 2000,
+
+    "secondaryAttackPower": 16000,
+    "secondaryAttackType": ["magic", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 2.5,
+      "population": 2.5
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 65,
+      "nether": 65,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 95,
+      "fire": 75,
+      "poison": 50,
+      "breath": 25,
+      "magic": 75,
+      "melee": 95,
+      "ranged": 95,
+      "lightning": 50,
+      "cold": 75,
+      "paralyse": 75,
+      "psychic": 75,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "holy" },
+      { "name": "fear", "extra": null }
+    ]
+  },
+  {
+    "id": "bulwarkHorror",
+    "name": "Bulwark Horror",
+    "magic": "nether",
+    "powerRank": 2018,
+    "hitPoints": 10750,
+    "race": ["demon"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 13600,
+    "primaryAttackType": ["melee", "poison"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 4500,
+
+    "secondaryAttackPower": 9000,
+    "secondaryAttackType": ["cold", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 4.75,
+      "population": 2.5
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 75,
+      "eradication": 75,
+      "nether": 0,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 40,
+      "fire": 60,
+      "poison": 50,
+      "breath": 70,
+      "magic": 20,
+      "melee": 90,
+      "ranged": 40,
+      "lightning": 30,
+      "cold": 40,
+      "paralyse": 0,
+      "psychic": 30,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null },
+      { "name": "largeShield", "extra": null },
+      { "name": "pike", "extra": null }
+    ]
+  },
+  {
+    "id": "darkElfMagician",
+    "name": "Dark Elf Magician",
+    "magic": "nether",
+    "powerRank": 666,
+    "hitPoints": 4500,
+    "race": ["elf"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 4500,
+    "primaryAttackType": ["fire", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 3000,
+    "secondaryAttackType": ["lightning", "ranged"],
+    "secondaryAttackInit": 4,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 45,
+      "mana": 0.9,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 50,
+      "verdant": 80,
+      "eradication": 80,
+      "nether": 0,
+      "phantasm": 25 
+    },
+    "attackResistances": {
+      "missile": 85,
+      "fire": 70,
+      "poison": 0,
+      "breath": 0,
+      "magic": 90,
+      "melee": 90,
+      "ranged": 75,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 40,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null }
+    ]
   }
 ]
