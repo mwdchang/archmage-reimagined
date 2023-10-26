@@ -164,4 +164,8 @@ export const itemProductionTable = {
 // War
 ////////////////////////////////////////////////////////////////////////////////
 export const defenderBonusTable = {
+  regular: {
+  },
+  siege: {
+  }
 }

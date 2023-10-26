@@ -670,7 +670,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   ////////////////////////////////////////////////////////////////////////////////
   // TODO: 
-  // - Enchantment modifiers
   // - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
   
@@ -685,7 +684,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defender,
       defendingArmy,
       enchant);
-
   });
   defender.mage.enchantments.forEach(enchant => {
     battleSpell(
@@ -888,7 +886,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
       battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
 
-
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) { 
         defendingStack.sustainedDamage = 0;
@@ -896,6 +893,40 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
       defendingStack.size -= defenderUnitLoss;
       defendingStack.loss += defenderUnitLoss;
+
+
+      // Additonal Strike ability
+      if (hasAbility(aUnit, 'additionalStrike')) {
+        let damageVariance = calcDamageVariance(aUnit.primaryAttackType);
+        let damage = aUnit.primaryAttackPower *
+          attackingStack.size * 
+          (accuracy / 100) *
+          (efficiency / 100) *
+          ((100 - resistance) / 100) *
+          damageVariance;
+        damage = Math.floor(damage * damageMultiplier);
+        let sustainedDamage = defendingStack.sustainedDamage;
+        let totalDamage = damage + sustainedDamage;
+
+        let defenderUnitLoss = Math.floor(totalDamage / dUnit.hitPoints);
+        if (defenderUnitLoss >= defendingStack.size) {
+          totalDamage = defendingStack.size * dUnit.hitPoints;
+          defenderUnitLoss = defendingStack.size;
+        }
+
+        console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
+        battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} again`)
+        battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
+
+        // Accumulate or clear partial damage
+        if (defenderUnitLoss > 0) { 
+          defendingStack.sustainedDamage = 0;
+        }
+        defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
+        defendingStack.size -= defenderUnitLoss;
+        defendingStack.loss += defenderUnitLoss;
+      } // end Additional Strike
+
 
       // Counter attack
       if (aUnit.primaryAttackType.includes('paralyse')) {
@@ -945,6 +976,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attackingStack.size -= attackerUnitLoss;
         attackingStack.loss += attackerUnitLoss;
       }
+
+      // Fatigue
+      attackingStack.efficiency -= hasAbility(aUnit, 'endurance') ? 10 : 15;
+      if (attackingStack.efficiency < 0) attackingStack.efficiency = 0;
+
+      defendingStack.efficiency -= hasAbility(dUnit, 'endurance') ? 10 : 15;
+      if (defendingStack.efficiency < 0) defendingStack.efficiency = 0;
     }
 
 

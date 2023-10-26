@@ -29,7 +29,18 @@ defenderMage.enchantments.push({
 const attacker: Combatant = {
   mage:  attackerMage,
   army: [
-    { id: 'archangel', size: 5000 }
+    { id: 'archangel', size: 5000 },
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5},
+    { id: 'archer', size: 5}
   ],
   spellId: '',
   itemId: ''
@@ -39,7 +50,7 @@ attacker.mage.army = attacker.army;
 const defender: Combatant = {
   mage: defenderMage,
   army: [
-    { id: 'mandrake', size: 2000 }
+    { id: 'mandrake', size: 8000 }
   ],
   spellId: '',
   itemId: 'carpetOfFlying'
