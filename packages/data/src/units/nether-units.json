@@ -159,5 +159,167 @@
       { "name": "weakness", "extra": "holy" },
       { "name": "stealLife", "extra": 5 }
     ]
+  },
+  {
+    "id": "ghoul",
+    "name": "Ghoul",
+    "magic": "nether",
+    "powerRank": 35,
+    "hitPoints": 400,
+    "race": ["undead"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 600,
+    "primaryAttackType": ["melee", "paralyse"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 200,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.05,
+      "population": 0.03 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 100,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "holy" },
+      { "name": "stealLife", "extra": 5 }
+    ]
+  },
+  {
+    "id": "hornedDemon",
+    "name": "Horned Demon",
+    "magic": "nether",
+    "powerRank": 170,
+    "hitPoints": 950,
+    "race": ["demon"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 2750,
+    "primaryAttackType": ["melee", "poison"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 450,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.125,
+      "population": 0.2 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 50,
+      "poison": 75,
+      "breath": 0,
+      "magic": 25,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 20,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "wraith",
+    "name": "Wraith",
+    "magic": "nether",
+    "powerRank": 160,
+    "hitPoints": 1000,
+    "race": ["undead"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 2400,
+    "primaryAttackType": ["magic", "paralyse"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.00,
+      "mana": 0.15,
+      "population": 0.2 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 40,
+      "fire": 0,
+      "poison": 50,
+      "breath": 0,
+      "magic": 20,
+      "melee": 60,
+      "ranged": 40,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 50,
+      "psychic": 50,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "stealLife", "extra": 5 },
+      { "name": "weakness", "extra": "holy" }
+    ]
   }
 ]

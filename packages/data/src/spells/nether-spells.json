@@ -84,6 +84,90 @@
     ]
   },
   {
+    "id": "animateGhoul",
+    "name": "Animate Ghoul",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will animate fresh corpses into flesh eating ghouls. The touch of these ghouls can paralyze your enemy, and they are deadly in battle.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 15600,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["ghoul"],
+        "summonType": "all",
+        "summonNetPower": 110000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonHornedDemon",
+    "name": "Summon Horned Demon",
+    "magic": "nether",
+    "rank": "average",
+    "description": "By casting this summon, most violent Demons will join your ranks. Those horned abominations bring panic to the battlefield, slaughtering enemies without mercy. As their more powerful cousins Devils, they will ravage the battle collecting souls.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 35500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["hornedDemon"],
+        "summonType": "all",
+        "summonNetPower": 170000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonWraith",
+    "name": "Summon Wraith",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will summon the ancient undead spirits to join your forces. Their touch means death.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 35500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["wraith"],
+        "summonType": "all",
+        "summonNetPower": 170000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "bloodCurse",
     "name": "Blood Curse",
     "magic": "nether",
