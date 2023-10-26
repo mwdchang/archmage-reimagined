@@ -1,5 +1,263 @@
 [
   {
+    "id": "phantasmMagic",
+    "name": "Phantasm Magic",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will create shadows that will strike the enemy. These shadows do not have corporeal forms and are mere illusions. However, those who fail to disbelieve the illusion will fall dead and never recover",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 800,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "random",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["psychic"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 140 },
+              "verdant": { "value": 90 },
+              "eradication": { "value": 90 },
+              "nether": { "value": 140 },
+              "phantasm": { "value": 230 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fogCloud",
+    "name": "Fog Clound",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will fill the battleground with a thick mist of fog, reducing visibility for the armies. All units will suffer as they will have difficulty finding their enemies.",
+    "attributes": ["battle"],
+    "researchCost": 900,
+    "castingCost": 950,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "all",
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.0497705 },
+                  "verdant": { "value": 0.02488525 },
+                  "eradication": { "value": 0.02488525 },
+                  "nether": { "value": 0.0497705 },
+                  "phantasm": { "value": 0.099541 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "summonSprite",
+    "name": "Summon Sprite",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will summon playful sprites from nearly springs and fountains. These pretty elfin creatures can be very irritating as they are elusive like a butterfly but sting like a bee.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 6600,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["sprite"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonPsychicWisp",
+    "name": "Summon Psychic Wisp",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "By chanting this incantation, you summon swarms of Psychic Wisps into your army. Striking from a distance with mind warping psychic attacks, these energy beings swiftly decimate your enemies.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 6600,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["psychicWisp"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonSylph",
+    "name": "Summon Sylph",
+    "magic": "phantasm",
+    "rank": "simple",
+    "description": "This spell will summon beautiful sylphs from crystal blue lakes in nearby mountains. The enemy soldiers will stand smitten and mesmerized as their limbs get torn apart by these heartless creatures.",
+    "attributes": ["summon"],
+    "researchCost": 1500,
+    "castingCost": 8100,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["psychicWisp"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "confuse",
+    "name": "Confuse",
+    "magic": "phantasm",
+    "rank": "average",
+    "description": "This enchantment will leave your enemy in a state of perpetual confusion. Your enemy will have difficulty casting spells as they cannot concentrate on their enchantments. It will also hinder his dispel ability.",
+    "attributes": ["enchantment"],
+    "researchCost": 2000,
+    "castingCost": 10000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 300,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "CastingEffect",
+        "rule": "spellLevel",
+        "type": "castingSuccess",
+        "magic": {
+          "ascendant": { "value": -0.03 },
+          "verdant": { "value": -0.02 },
+          "eradication": { "value": -0.02 },
+          "nether": { "value": -0.03 },
+          "phantasm": { "value": -0.08 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "concentration",
+    "name": "Concentration",
+    "magic": "phantasm",
+    "rank": "average",
+    "description": "This is one of the most important spells for Phantasm mage. This enchantment will allow a mage to achieve a perfect equilibrium of mind. It will enhance the mage's ability of casting spells, researching and summoning effectivness.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 10000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "guilds",
+        "magic": {
+          "ascendant": { "value": 0.0035 },
+          "verdant": { "value": 0.001 },
+          "eradication": { "value": 0.001 },
+          "nether": { "value": 0.0035 },
+          "phantasm": { "value": 0.011 }
+        }
+      },
+      {
+        "effectType": "CastingEffect",
+        "rule": "spellLevel",
+        "type": "castingSuccess",
+        "magic": {
+          "ascendant": { "value": 0.02 },
+          "verdant": { "value": 0.01 },
+          "eradication": { "value": 0.01 },
+          "nether": { "value": 0.02 },
+          "phantasm": { "value": 0.05 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mentalThrash",
+    "name": "Mental Thrash",
+    "magic": "phantasm",
+    "rank": "average",
+    "description": "This spell will blast the mind of enemy troops with overwhelming mental force, causing their brains to burst and resulting in painful death. This phantasm spell is very effective against weak creatures.",
+    "attributes": ["battle"],
+    "researchCost": 2500,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "stack": "random",
+        "effects": [
+          {
+            "name": "DamageEffect",
+            "damageType": ["psychic"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 1000 },
+              "verdant": { "value": 700 },
+              "eradication": { "value": 700 },
+              "nether": { "value": 1000 },
+              "phantasm": { "value": 1600 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "slow",
     "name": "Slow",
     "magic": "phantasm",

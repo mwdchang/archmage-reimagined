@@ -34,9 +34,7 @@
 import { API } from '@/api/api';
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { getSpellById } from 'engine/src/base/references';
-import { magicAlignmentTable } from 'engine/src/base/config';
-import { Spell } from 'shared/types/magic';
+import { getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
 
 const mageStore = useMageStore();
@@ -47,44 +45,11 @@ const target = ref<string>('');
 
 const spellResult = ref<any[]>([]);
 
-const spellDisplay = (spell: Spell, magic: string) => {
-  return {
-    id: spell.id,
-    magic: spell.magic,
-    name: spell.name,
-    castingCost: spell.castingCost * magicAlignmentTable[magic].costModifier[spell.magic],
-    castingTurn: spell.castingTurn
-  };
-}
-
 const spells = computed(() => {
   const mage = mageStore.mage; 
   if (!mage) return [];
 
-  const result: any = [];
-  mage.spellbook.ascendant.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.verdant.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.eradication.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.nether.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.phantasm.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-
-  if (result.length) selected.value = result[0].id;
-
+  const result = getSpells(mage);
   return result;
 });
 
@@ -94,7 +59,11 @@ const castingSpells = computed(() => {
 })
 
 const castSpell = async () => {
-  const res = (await API.post('spell', { spellId: selected.value, num: turns.value, target: target.value })).data;
+  const res = (await API.post('spell', { 
+    spellId: selected.value, 
+    num: turns.value, 
+    target: target.value 
+  })).data;
 
   if (res.r) {
     spellResult.value = res.r;
@@ -106,3 +75,9 @@ const castSpell = async () => {
 }
 
 </script>
+
+<style scoped>
+tr:nth-child(odd) {
+  background: #333;
+}
+</style>

@@ -1,1 +1,657 @@
-[]
+[
+  {
+    "id": "dryad",
+    "name": "Dryad",
+    "magic": "verdant",
+    "powerRank": 23,
+    "hitPoints": 70,
+    "race": ["pixie"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 240,
+    "primaryAttackType": ["magic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.8,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 30,
+      "fire": 0,
+      "poison": 20,
+      "breath": 0,
+      "magic": 20,
+      "melee": 40,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 30,
+      "psychic": 40,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "charm", "extra": null }
+    ]
+  },
+  {
+    "id": "gorilla",
+    "name": "Gorilla",
+    "magic": "verdant",
+    "powerRank": 34,
+    "hitPoints": 450,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 240,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 80,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 2.7,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  },
+  {
+    "id": "creepingVines",
+    "name": "Creeping Vines",
+    "magic": "verdant",
+    "powerRank": 40,
+    "hitPoints": 336,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 336,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 118,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 2.0,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "regeneration", "extra": null },
+      { "name": "stealLife", "extra": 5 },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "nymph",
+    "name": "Nymph",
+    "magic": "verdant",
+    "powerRank": 62,
+    "hitPoints": 150,
+    "race": ["pixie"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 940,
+    "primaryAttackType": ["psychic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 0.075,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm":15 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 40,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "charm", "extra": null }
+    ]
+  },
+  {
+    "id": "werebear",
+    "name": "Werebear",
+    "magic": "verdant",
+    "powerRank": 161,
+    "hitPoints": 1500,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2300,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 300,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 20.80,
+      "mana": 0.15,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 67,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 75,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null },
+      { "name": "piercing", "extra": null }
+    ]
+  },
+  {
+    "id": "mandrake",
+    "name": "Mandrake",
+    "magic": "verdant",
+    "powerRank": 180,
+    "hitPoints": 1344,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 1680,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 672,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.42,
+      "mana": 0.21,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 0,
+      "poison": 80,
+      "breath": 0,
+      "magic": 40,
+      "melee": 45,
+      "ranged": 35,
+      "lightning": 0,
+      "cold": 40,
+      "paralyse": 50,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "treant",
+    "name": "Treant",
+    "magic": "verdant",
+    "powerRank": 423,
+    "hitPoints": 4200,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 4200,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 1680,
+
+    "secondaryAttackPower": 2500,
+    "secondaryAttackType": ["melee"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 0.63,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 80 
+    },
+    "attackResistances": {
+      "missile": 67,
+      "fire": 0,
+      "poison": 90,
+      "breath": 0,
+      "magic": 50,
+      "melee": 67,
+      "ranged": 67,
+      "lightning": 0,
+      "cold": 80,
+      "paralyse": 75,
+      "psychic": 75,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "venusFlytrap",
+    "name": "Venus Flytrap",
+    "magic": "verdant",
+    "powerRank": 380,
+    "hitPoints": 1344,
+    "race": ["treefolk"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 1754,
+    "primaryAttackType": ["ranged", "poison"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 336,
+
+    "secondaryAttackPower": 3000,
+    "secondaryAttackType": ["ranged", "poison"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 2.85,
+      "mana": 0.82,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 40,
+      "eradication": 0,
+      "nether": 40,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 67,
+      "fire": 0,
+      "poison": 90,
+      "breath": 20,
+      "magic": 50,
+      "melee": 67,
+      "ranged": 67,
+      "lightning": 40,
+      "cold": 40,
+      "paralyse": 75,
+      "psychic": 85,
+      "holy": 40 
+    },
+    "abilities": [
+      { "name": "charm", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "highElf",
+    "name": "High Elf",
+    "magic": "verdant",
+    "powerRank": 1542,
+    "hitPoints": 5000,
+    "race": ["elf"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 13000,
+    "primaryAttackType": ["ranged", "paralyse"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 7500,
+    "secondaryAttackType": ["ranged", "lightning"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 38.0,
+      "mana": 1.43,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 75,
+      "nether": 50,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 70,
+      "fire": 70,
+      "poison": 20,
+      "breath": 50,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 70,
+      "lightning": 70,
+      "cold": 20,
+      "paralyse": 70,
+      "psychic": 50,
+      "holy": 40 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "elvenBladeDancer",
+    "name": "Elven Blade Dancer",
+    "magic": "verdant",
+    "powerRank": 1850,
+    "hitPoints": 6500,
+    "race": ["elf"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 9000,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 4,
+    "counterAttackPower": 1500,
+
+    "secondaryAttackPower": 13500,
+    "secondaryAttackType": ["ranged", "paralyse"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 45.0,
+      "mana": 3.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 80,
+      "eradication": 80,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 75,
+      "fire": 70,
+      "poison": 0,
+      "breath": 75,
+      "magic": 55,
+      "melee": 100,
+      "ranged": 75,
+      "lightning": 20,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 40,
+      "holy": 20 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "additionalStrike", "extra": null },
+      { "name": "weakness", "extra": "cold" },
+      { "name": "racialEnemy", "extra": "angel" },
+      { "name": "bursting", "extra": { "type": ["melee"], "value": 3000 } }
+    ]
+  },
+  {
+    "id": "earthElemental",
+    "name": "Earth Elemental",
+    "magic": "verdant",
+    "powerRank": 22000,
+    "hitPoints": 100000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 100000,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 15000,
+
+    "secondaryAttackPower": 550000,
+    "secondaryAttackType": ["ranged", "magic"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 36.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 40,
+      "eradication": 50,
+      "nether": 60,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 50,
+      "poison": 100,
+      "breath": 60,
+      "magic": 50,
+      "melee": 90,
+      "ranged": 70,
+      "lightning": 50,
+      "cold": 40,
+      "paralyse": 95,
+      "psychic": 80,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "phoenix",
+    "name": "Phoenix",
+    "magic": "verdant",
+    "powerRank": 36883,
+    "hitPoints": 70000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 40000,
+
+    "secondaryAttackPower": 600000,
+    "secondaryAttackType": ["ranged", "magic"],
+    "secondaryAttackInit": 5,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 60.0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80,
+      "nether": 75,
+      "phantasm": 50 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 100,
+      "poison": 80,
+      "breath": 80,
+      "magic": 80,
+      "melee": 90,
+      "ranged": 80,
+      "lightning": 80,
+      "cold": 80,
+      "paralyse": 80,
+      "psychic": 80,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "regeneration", "extra": null },
+      { "name": "bursting", "extra": { "type": ["fire"], "value": 50000 } }
+    ]
+  }
+]

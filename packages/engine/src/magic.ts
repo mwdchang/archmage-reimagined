@@ -10,10 +10,16 @@ import {
   getSpellById,
   getMaxSpellLevels,
   getResearchTree,
-  getRandomItem
+  getRandomItem,
+  getItemById
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM } from './random';
+import { 
+  ProductionEffect,
+  ResistanceEffect,
+  CastingEffect
+} from 'shared/types/effects';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -44,7 +50,7 @@ export const currentSpellLevel = (mage: Mage) => {
 
 export const itemGenerationRate = (mage: Mage) => {
   const land = totalLand(mage);
-  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.libraries / land);
+  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.guilds / land);
   return rate;
 }
 
@@ -102,6 +108,7 @@ export const doResearch = (mage: Mage, points: number) => {
         remainingCost: spell.researchCost * researchCostModifier,
         active: false
       };
+      break;
     }
   }
 
@@ -127,6 +134,32 @@ export const doResearch = (mage: Mage, points: number) => {
   }
 }
 
+
+export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
+  const result: { [key: string]: number } = {};
+  const unitIds = effect.unitIds;
+  let power = effect.summonNetPower;
+
+  if (effect.rule === 'spellLevel') {
+    // Randomness
+    power *= (0.5 + 0.75 * randomBM());
+
+    // Spell level
+    power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
+  }
+
+  unitIds.forEach(unitId => {
+    const unit = getUnitById(unitId);
+    const unitPower = unit.powerRank;
+    const unitsSummoned = Math.floor(power / unitPower);
+    console.log(`Summoned ${unitsSummoned} ${unit.name}`);
+    if (!result[unit.id]) result[unit.id] = 0;
+    result[unit.id] += unitsSummoned;
+  });
+  return result;
+}
+
+/*
 export const summonUnit = (mage: Mage, spellId: string) => {
   const spell = getSpellById(spellId);
   const spellMagic = spell.magic;
@@ -158,6 +191,7 @@ export const summonUnit = (mage: Mage, spellId: string) => {
   });
   return result;
 }
+*/
 
 export const maxMana = (mage: Mage) => {
   return mage.nodes * 1000;
@@ -168,7 +202,24 @@ export const manaStorage = (mage: Mage) => {
 }
 
 export const researchPoints = (mage: Mage) => {
-  let rawPoints = Math.sqrt(mage.libraries) * productionTable.research;
+  let modifier = 0.0;
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'ProductionEffect') return;
+      const productionEffect = effect as ProductionEffect;
+      if (productionEffect.production !== 'guilds') return;
+
+      if (productionEffect.rule === 'spellLevel') {
+        modifier += currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+      }
+    });
+  });
+  let rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
+
   // return 10 + Math.floor(rawPoints);
   return Math.floor(rawPoints); // FIXME just testing
 }
@@ -180,4 +231,111 @@ export const manaIncome = (mage: Mage) => {
   const x = Math.floor(nodes * 100 / land);
   const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
   return Math.floor(manaYield);
+}
+
+/**
+ * Whether the spell can be successfully cast by the mage
+*/
+export const successCastingRate = (mage:Mage, spellId: string) => {
+  const current = currentSpellLevel(mage);
+  const spell = getSpellById(spellId);
+
+  const spellRank = spell.rank;
+  const spellMagic = spell.magic;
+
+  // Spell rank and level
+  let rankModifier = 0;
+  if (spellRank === 'simple') rankModifier = 140;
+  if (spellRank === 'average') rankModifier = 130;
+  if (spellRank === 'complex') rankModifier = 90;
+  if (spellRank === 'ultimate') rankModifier = 80;
+  if (spellRank === 'ancient') rankModifier = 85;
+
+  let successRate = 0.1 * current + rankModifier;
+
+  // Enchantments
+  const enchantments = mage.enchantments;
+  let modifier = 0;
+  enchantments.forEach(enchant => {
+    const spell = getSpellById(enchant.spellId);
+    const spellLevel = enchant.spellLevel;
+
+    spell.effects.forEach(effect => {
+      if (effect.effectType !== 'CastingEffect') return;
+
+      const castingEffect = effect as CastingEffect;
+      if (castingEffect.type !== 'castingSuccess') return;
+
+      const value = castingEffect.magic[enchant.casterMagic].value;
+      modifier += (value * spellLevel);
+    });
+  });
+  console.log('\tenchant modifier:', modifier);
+
+  // Adjacent and opposiite casting
+  if (mage.magic !== spellMagic) {
+    if (magicAlignmentTable[mage.magic].adjacent.includes(spellMagic)) {
+      successRate *= 0.53;
+    } else {
+      successRate *= 0.45;
+    }
+  }
+
+  console.log('spell lvl', current);
+  console.log('success casting rate:', successRate);
+  return successRate;
+}
+
+export const calcKingdomResistance = (mage: Mage) => {
+  const resistance: { [key: string]: number } = {
+    barrier: 0,
+    ascendant: 0,
+    verdant: 0,
+    eradication: 0,
+    nether: 0,
+    phantasm: 0
+  };
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'ResistanceEffect') return;
+
+      const resistEffect = effect as ResistanceEffect;
+      if (resistEffect.rule === 'spellLevel') {
+        resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
+      }
+    });
+  });
+
+
+  // Max barrier is 2.5% of the land, max normal barrier is 75
+  if (mage.barriers > 0) {
+    const land = 0.025 * totalLand(mage);
+    const barrier = Math.floor((mage.barriers / land) * 75);
+    resistance.barrier = barrier;
+  }
+  return resistance;
+}
+
+export const enchantmentUpkeep = (mage: Mage) => {
+  const upkeep = {
+    geld: 0,
+    mana: 0,
+    population: 0
+  };
+
+  mage.enchantments.forEach(enchant => {
+    if (enchant.targetId !== mage.id) return;
+
+    const spell = getSpellById(enchant.spellId);
+    if (spell.upkeep) {
+      upkeep.geld += spell.upkeep.geld;
+      upkeep.mana += spell.upkeep.mana;
+      upkeep.population += spell.upkeep.population;
+    }
+  });
+  return upkeep;
 }

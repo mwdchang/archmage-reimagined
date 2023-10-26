@@ -4,10 +4,10 @@
     <section style="display: flex; align-items: center">
       <div>
         <div class="row">
-          <span style="width: 5rem">Username:</span> <input name="username" type="text" v-model="registerData.username">
+          <span style="width: 5rem">Username:</span> <input @keyup.enter="register" name="username" type="text" v-model="registerData.username">
         </div>
         <div class="row">
-          <span style="width: 5rem">Password:</span> <input name="password" type="password" v-model="registerData.password">
+          <span style="width: 5rem">Password:</span> <input @keyup.enter="register" name="password" type="password" v-model="registerData.password">
         </div>
         <div class="row">
           <span style="width: 5rem">Magic: </span>

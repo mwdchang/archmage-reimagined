@@ -39,24 +39,25 @@ export const createMage = (name: string, magic: string): Mage => {
     currentMana: 1000,
     currentGeld: 2000000,
 
-    farms: 150,
-    towns: 60,
-    workshops: 150,
-    nodes: 30,
-    barracks: 10,
-    libraries: 10,
-    forts: 9,
-    barriers: 0,
-    wilderness: 181,
+    farms: mageStartTable.buildings.farms,
+    towns: mageStartTable.buildings.towns,
+    workshops: mageStartTable.buildings.workshops,
+    nodes: mageStartTable.buildings.nodes,
+    barracks: mageStartTable.buildings.barracks,
+    guilds: mageStartTable.buildings.guilds,
+    forts: mageStartTable.buildings.forts,
+    barriers: mageStartTable.buildings.barriers,
+    wilderness: mageStartTable.buildings.wilderness,
+
     army: [],
     items: {},
     heroes: [],
     enchantments: [],
 
     assignment: {
-      spellId: -1,
+      spellId: '',
       spellCondition: 0,
-      itemId: -1,
+      itemId: '',
       itemCondition: 0,
     }
   };
@@ -98,7 +99,7 @@ export const totalNetPower = (mage: Mage) => {
     mage.workshops + 
     mage.barracks + 
     mage.nodes + 
-    mage.libraries + 
+    mage.guilds + 
     mage.forts + 
     mage.barriers);
   netpower += mage.forts * 19360;
@@ -131,7 +132,7 @@ export const totalLand = (mage: Mage) => {
     mage.barracks +
     mage.workshops +
     mage.nodes + 
-    mage.libraries + 
+    mage.guilds + 
     mage.forts + 
     mage.barriers + 
     mage.wilderness;
@@ -145,21 +146,4 @@ export const totalUnits = (mage: Mage) => {
   return num;
 }
 
-export const calcKingdomResistance = (mage: Mage) => {
-  const resistance: { [key: string]: number } = {
-    barrier: 0,
-    ascendant: 0,
-    verdant: 0,
-    eradication: 0,
-    nether: 0,
-    phantasm: 0
-  };
 
-  // Max barrier is 2.5% of the land, max normal barrier is 75
-  if (mage.barriers > 0) {
-    const land = 0.025 * totalLand(mage);
-    const barrier = Math.floor((mage.barriers / land) * 75);
-    resistance.barrier = barrier;
-  }
-  return resistance;
-}

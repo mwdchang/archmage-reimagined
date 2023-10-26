@@ -103,7 +103,8 @@ export const initializeResearchTree = () => {
       });
     })
   });
-  console.log('debug', maxSpellLevels);
+  console.log('Debug max spell levels', maxSpellLevels);
+  // console.log(researchTree);
 }
 
 export const getResearchTree = () => {

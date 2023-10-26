@@ -1,20 +1,29 @@
 import { 
-  getSpellById, 
-  getResearchTree 
-} from '../src/base/references';
-
-import { 
-  summonUnit
+  successCastingRate
 } from '../src/magic';
 
 import { loadUnitsAndSpells } from './loader';
-
 loadUnitsAndSpells();
 
-const spell = getSpellById('bless');
-console.log(spell.id);
 
-const tree = getResearchTree();
-console.log(tree);
+import { createMage } from '../src/base/mage';
 
-console.log(summonUnit({ magic: 'ascendant' } as any, 'summonPegasus'));
+const mage = createMage('test', 'ascendant');
+mage.currentSpellLevel = 400;
+
+mage.enchantments.push({
+  casterId: mage.id,
+  casterMagic: mage.magic,
+  targetId: mage.id,
+
+  spellId: 'concentration',
+  spellMagic: 'phantasm',
+  spellLevel: 400,
+
+  isPermanent: true,
+  life: 0
+});
+
+
+const r = successCastingRate(mage, 'descentOfHolyBeing');
+console.log('success rate', r);

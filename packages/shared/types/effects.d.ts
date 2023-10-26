@@ -3,6 +3,41 @@ export interface Effect {
   effectType: string
 }
 
+export interface ResistanceEffect extends Effect {
+  rule: string,
+  resistance: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
+export interface ProductionEffect extends Effect {
+  rule: string,
+  production: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
+/**
+ * type can be one of
+ * - summon
+ * - castingRate
+ */
+export interface CastingEffect extends Effect {
+  rule: string,
+  type: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
   summonType: string, // random, all
@@ -17,7 +52,7 @@ export interface UnitSummonEffect extends Effect {
 
 export interface BattleEffect extends Effect {
   target: string,         // self, opponent
-  fiilter: {
+  filter: {
     [key: string]: any 
   },
   stack: string,       // random, randomSingle, all

@@ -3,6 +3,12 @@ import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
 import { productionTable, explorationLimit } from "./base/config";
 import { totalLand } from "./base/mage";
+import { 
+  getSpellById,
+} from './base/references';
+
+import { currentSpellLevel } from "./magic";
+import { ProductionEffect } from 'shared/types/effects';
 
 export interface Building {
   id: string,
@@ -16,7 +22,7 @@ export const buildingTypes: Building[] = [
   { id: 'workshops', geldCost: 100, manaCost: 0 },
   { id: 'barracks', geldCost: 50, manaCost: 0 },
   { id: 'nodes', geldCost: 300, manaCost: 0 },
-  { id: 'libraries', geldCost: 200, manaCost: 0 },
+  { id: 'guilds', geldCost: 200, manaCost: 0 },
   { id: 'forts', geldCost: 3000, manaCost: 0 },
   { id: 'barriers', geldCost: 50, manaCost: 0 }
 ];
@@ -27,7 +33,7 @@ export const buildingRate = (mage: Mage, buildType: string) => {
   if (buildType === 'workshops') return (mage.workshops + 1 ) / 10;
   if (buildType === 'barracks') return (mage.workshops + 1) / 5;
   if (buildType === 'nodes') return (mage.workshops + 1) / 30;
-  if (buildType === 'libraries') return (mage.workshops + 1) / 20;
+  if (buildType === 'guilds') return (mage.workshops + 1) / 20;
   if (buildType === 'forts') return (mage.workshops + 1) / 300;
   if (buildType === 'barriers') return 1;
   return 0;
@@ -81,6 +87,22 @@ export const maxFood = (mage: Mage) => {
   Object.keys(productionTable.food).forEach(key => {
     food += mage[key] * productionTable.food[key];
   });
+
+  mage.enchantments.forEach(enchantment => {
+    const spell = getSpellById(enchantment.spellId);
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'ProductionEffect') return;
+
+      const productionEffect = effect as ProductionEffect;
+      if (productionEffect.production !== 'farms') return;
+
+      if (productionEffect.rule === 'spellLevel') {
+        food += mage.farms * currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+      }
+    });
+  })
   return food;
 }
 
@@ -131,7 +153,7 @@ export const buildingUpkeep = (mage: Mage) => {
   result.geld += 50 * mage.towns
   result.geld += 20 * mage.workshops;
   result.geld += 20 * mage.barracks;
-  result.geld += 30 * mage.libraries;
+  result.geld += 30 * mage.guilds;
 
   const n = mage.forts;
   result.geld += (240 * n + 30 * n * (n + 1));

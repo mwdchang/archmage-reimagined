@@ -1,1 +1,449 @@
-[]
+[
+  {
+    "id": "animalSummoning",
+    "name": "Animal Summoning",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "This spell will summon fierce, powerful gorillas from the jungle to join your army. The gorillas are fiercely loyal and understand the commands of your officers. The number of gorillas summoned depends on your proficiency in magick.",
+    "attributes": ["summon"],
+    "researchCost": 500,
+    "castingCost": 5600,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["gorilla"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonDryad",
+    "name": "Summon Dryad",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "This spell calls upon the spirit of the trees, the dryads, from the forest to join your troops in battle. The dryads are especially good warriors of the forests and will server their magic to protect forest-lands.",
+    "attributes": ["summon"],
+    "researchCost": 900,
+    "castingCost": 3000,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dryad"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callCreepingVines",
+    "name": "Call Creeping Vines",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "A Verdant mage can commune not only with the animal kingdom, but the very forest as well. With a mere thought, scores of thorny vines creep stealthily and silently from the forest and through the battlefield to ensnare and strangle man and beast alike.",
+    "attributes": ["summon"],
+    "researchCost": 900,
+    "castingCost": 3000,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["creepingVines"],
+        "summonType": "all",
+        "summonNetPower": 70000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonWerebear",
+    "name": "Summon Werebear",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell will summon fierce werebears--part human, part bear, and all power-- to join your army. The enormously powerful creatures are so ferocious warriors that frighten your soldiers as much as they frighten the enemy!",
+    "attributes": ["summon"],
+    "researchCost": 1800,
+    "castingCost": 29500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["werebear"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonNymph",
+    "name": "Summon Nymph",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell will call a number of water spirits, nymphs, from their lakes to come to your side in battle. The highly magical nymphs are terrific warriors and cast their own magical influence over enemies. Although they appear as incredibly beautiful women, they posses magic of great power and often use it with great cruelty against their enemies.",
+    "attributes": ["summon"],
+    "researchCost": 1400,
+    "castingCost": 7900,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["nymph"],
+        "summonType": "all",
+        "summonNetPower": 130000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonMandrake",
+    "name": "Summon Mandrake",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "Though composed entirely of plant matter, mandrakes are highly intelligent, and can understand every nuance of speech from both elven and human language from birth. Originally they were enchanted by renowned elf-bard Sylii the Songstress' sweet voice and harmonious aura. After listening to her many tales of the world's woes, the mandrakes all agreed to assist the cause of the verdant mages and spread word to all of their kindred throughout Terra. Now, for a small expenditure of mana to carry the words of power through the surrounding lands, the mandrakes can be called to fight alongside and verdant mage.",
+    "attributes": ["summon"],
+    "researchCost": 1800,
+    "castingCost": 29500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["mandrake"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callTreant",
+    "name": "Call Treant",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell will summon a number of treants to join your army. These ancient guardians of the forest are legendary for their fortitude and ferocity in battle and are a favorite among verdant mages.",
+    "attributes": ["summon"],
+    "researchCost": 3000,
+    "castingCost": 34600,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["treant"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callVenusFlyTraps",
+    "name": "Call Venus Flytraps",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell calls Venus Flytraps to join your army. These plant creatures are particularly deceptive, somehow making their enemies attacks less effective before lashing out at them with deadly poison. As with all Treefolk, these plants are especially vulnerable to fire.",
+    "attributes": ["summon"],
+    "researchCost": 3200,
+    "castingCost": 45000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["venusFlytrap"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callHighElves",
+    "name": "Call High Elves",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 2900,
+    "castingCost": 40000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["highElf"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "callElvenBladeDancers",
+    "name": "Call Elven Blade Dancers",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 3100,
+    "castingCost": 45000,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["elvenBladeDancer"],
+        "summonType": "all",
+        "summonNetPower": 400000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "sunray",
+    "name": "Sunray",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This enchantment spell will make the sun shine brighter in your country, thus giving mages higher resistance to dark or illusionary magic. It will increase your Nether and Phantasm resistances.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 5000,
+    "castingCost": 50000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 50,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "ResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "nether",
+        "magic": {
+          "ascendant": { "value": 0.02 },
+          "verdant": { "value": 0.085 },
+          "eradication": { "value": 0.02 },
+          "nether": { "value": 0.007 },
+          "phantasm": { "value": 0.007 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "phantasm",
+        "magic": {
+          "ascendant": { "value": 0.02 },
+          "verdant": { "value": 0.085 },
+          "eradication": { "value": 0.02 },
+          "nether": { "value": 0.007 },
+          "phantasm": { "value": 0.007 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "weatherSummoning",
+    "name": "Weather Summoning",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell will change the weather to the most favorable one, thus producing more fruit crop production and generating more income for your country.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 5000,
+    "castingCost": 50000,
+    "castingTurn": 8,
+    "upkeep": {
+      "geld": 0,
+      "mana": 200,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "KingdomProductionEffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "ascendant": { "value": 0.140 },
+          "verdant": { "value": 0.313 },
+          "eradication": { "value": 0.140 },
+          "nether": { "value": 0.072 },
+          "phantasm": { "value": 0.072 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "plantGrowth",
+    "name": "Plant Growth",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This powerful spell is able to affect only treefolk creatures. It uses the energy of nature to make them grow to a considerable size, and maintain that size for as long as the spell is still in effect.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 30000,
+    "castingTurn": 3,
+    "upkeep": {
+      "geld": 0,
+      "mana": 250,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": {
+          "race": ["treefolk"]
+        },
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,counterAttackPower,hitPoints": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "verdant": { "value": 0.9524 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "callPhoenix",
+    "name": "Call Phoenix",
+    "magic": "verdant",
+    "rank": "ultimate",
+    "description": "This spell will summon the fire bird phoenix from its remote hiding place to join your army.",
+    "attributes": ["summon"],
+    "researchCost": 30000,
+    "castingCost": 300000,
+    "castingTurn": 8,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["phoenix"],
+        "summonType": "all",
+        "summonNetPower": 2000000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonEarthElemental",
+    "name": "Summon Earth Elemental",
+    "magic": "verdant",
+    "rank": "ultimate",
+    "description": "This spell summons Earth Elementals to your army. Born of the mother earth, these beings embody natures fury. The ground trembles with anticipation at the archmages call for the mountains to again rise up to the clash of a new war. The beauty of stone and the passion of soil have been embraced in the creation of these battle ready warriors, that only the strongest verdant trained mage can attain.",
+    "attributes": ["summon"],
+    "researchCost": 30000,
+    "castingCost": 300000,
+    "castingTurn": 8,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["earthElemental"],
+        "summonType": "all",
+        "summonNetPower": 2000000, 
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.6 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  }
+]

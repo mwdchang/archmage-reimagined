@@ -35,12 +35,20 @@ export interface ResearchItem {
   active: boolean
 }
 
+
 export interface Enchantment {
-  casterId: number,
-  spellId: string,
-  spellLevel: number,
-  duration: number
+  casterId: number;
+  casterMagic: string;
+  targetId: number;
+
+  spellId: string;
+  spellMagic: string;
+  spellLevel: number;
+
+  isPermanent: boolean;
+  life: number;
 }
+
 
 export interface Mage {
   id: number;
@@ -85,7 +93,7 @@ export interface Mage {
   workshops: number;
   nodes: number;
   barracks: number;
-  libraries: number;
+  guilds: number;
   forts: number;
   barriers: number;
   wilderness: number;

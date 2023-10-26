@@ -51,6 +51,7 @@ export interface BattleReport {
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[],
+    armyLosses: { id: string, size: number }[],
 
     startingNetPower: number,
     lossNetPower: number
@@ -60,6 +61,7 @@ export interface BattleReport {
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[]
+    armyLosses: { id: string, size: number }[],
 
     startingNetPower: number,
     lossNetPower: number

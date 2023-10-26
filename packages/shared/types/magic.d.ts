@@ -1,5 +1,6 @@
 import type { Effect } from './effects.d.ts';
 
+
 export interface Spell {
   id: string,
   name: string,
@@ -10,6 +11,7 @@ export interface Spell {
   researchCost: number,
   castingCost: number,
   castingTurn: number,
+  life?: number,
   upkeep: {
     geld: number,
     mana: number,

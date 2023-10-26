@@ -23,6 +23,12 @@ export const isRanged = (u: Unit) => {
   return u.primaryAttackType.includes('ranged');
 }
 
+export const npMultiplier = (u: Unit) => {
+  if (isFlying(u)) return 2.25;
+  if (!isRanged(u)) return 1.5;
+  return 1.0;
+}
+
 // Create a stack by number of units
 export const createStackByNumber = (id: string, num: number): ArmyUnit => {
   const unit = getUnitById(id);

@@ -10,10 +10,12 @@ import SpellView from '@/views/SpellView.vue';
 import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
+import BattlePrepView from '@/views/BattlePrepView.vue';
 import ResearchView from '@/views/ResearchView.vue';
 import ItemView from '@/views/ItemView.vue';
 import BattleResultView from '@/views/BattleResultView.vue';
 import ChroniclesView from '@/views/ChroniclesView.vue';
+import AssignmentView from '@/views/AssignmentView.vue';
 
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
@@ -72,6 +74,11 @@ const router = createRouter({
       component: ItemView 
     },
     {
+      path: '/assignment',
+      name: 'assignment',
+      component: AssignmentView 
+    },
+    {
       path: '/test',
       name: 'test',
       component: TestView
@@ -86,6 +93,12 @@ const router = createRouter({
       path: '/battle',
       name: 'battle',
       component: BattleView
+    },
+    {
+      path: '/battle-prep/:targetId',
+      name: 'battlePrep',
+      component: BattlePrepView,
+      props: true
     },
     {
       path: '/research',

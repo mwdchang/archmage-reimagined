@@ -35,6 +35,7 @@ export interface UnitAbility {
 export interface Unit {
   id: string,
   name: string,
+  description?: string,
   magic: string,
   powerRank: number,
   race: string[],

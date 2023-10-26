@@ -4,7 +4,7 @@
     <p> 
       You are generating {{ rp }} research points per turn. Your magic item generation rate is {{ itemRate }}%.
     </p>
-    <table>
+    <table v-if="currentResearch">
       <tr>
         <td>&nbsp;</td>
         <td>Spell</td>
@@ -96,5 +96,9 @@ const submitResearch = async () => {
 <style scoped>
 table > tr {
   cursor: pointer;
+}
+
+tr:nth-child(odd) {
+  background: #333;
 }
 </style>

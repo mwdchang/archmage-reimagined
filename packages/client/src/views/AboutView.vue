@@ -9,6 +9,9 @@
           <div>Magic</div><div>{{ mageStore.mage.currentMana}} / {{ manaStorage(mageStore.mage) }}</div>
         </div>
         <div class="row">
+          <div>Spell Level</div><div>{{ spellLevel }}</div>
+        </div>
+        <div class="row">
           <div>Items</div><div>{{ numItems }}</div>
         </div>
 
@@ -18,6 +21,8 @@
         <router-link to="/item">Use Items</router-link>
         <br>
         <router-link to="/research">Research</router-link>
+        <br>
+        <router-link to="/assignment">Assignment</router-link>
       </section>
       <section>
         <img v-if="mageStore.mage.magic==='ascendant'" src="@/assets/images/ascendant.jpeg" />
@@ -72,6 +77,7 @@ import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
 import { totalNetPower } from 'engine/src/base/mage';
+import { currentSpellLevel } from 'engine/src/magic';
 
 const mageStore = useMageStore();
 
@@ -84,12 +90,15 @@ const numItems = computed(() => {
   return num;
 });
 
+const spellLevel = computed(() => {
+  return currentSpellLevel(mageStore.mage);
+});
+
 </script>
 
 <style scoped>
 
 section {
-  border: 1px solid #555;
   padding: 5px;
 }
 
