@@ -727,6 +727,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       spellId: attacker.spellId,
       itemId: attacker.itemId,
       army: [],
+      armyLosses: [],
       startingNetPower: 0,
       lossNetPower: 0
     },
@@ -735,6 +736,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       spellId: defender.spellId,
       itemId: defender.itemId,
       army: [],
+      armyLosses: [],
       startingNetPower: 0,
       lossNetPower: 0
     },
@@ -1071,7 +1073,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     }
   });
 
-
   // Calculate combat result
   let attackerStartingNP = 0;
   let defenderStartingNP = 0;
@@ -1107,13 +1108,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   battleReport.attacker.lossNetPower = attackerPowerLoss;
   battleReport.defender.lossNetPower = defenderPowerLoss;
 
-  // Calculate winner
-  // if (attackerPowerLoss < defenderPowerLoss && defenderPowerLoss >= 0.1 * defenderStartingNP) {
-  //   console.log(`Attacker ${attacker.mage.name} won the battle `);
-  // } else {
-  //   console.log(`Defener ${defender.mage.name} won the battle `);
-  // }
-  // console.log(battleReport);
+
+  battleReport.attacker.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.size}));
+  battleReport.defender.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.size}));
+
   return battleReport;
 }
 
@@ -1254,16 +1252,23 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
     battleReport.summaryLogs.push(`The attack failed and achieved nothing`);
   }
 
+  console.log('updating armies');
+
   // Handle units
-  const attackerArmy = battleReport.attacker.army;
-  attackerArmy.forEach(stack => {
-    attacker.army.find(d => d.id === stack.unit.id).size = stack.size;
+  const attackerLosses = battleReport.attacker.armyLosses;
+  attackerLosses.forEach(stack => {
+    const f = attacker.army.find(d => {
+      return d.id === stack.id
+    })
+    if (f) {
+      f.size = stack.size;
+    }
   });
   attacker.army = attacker.army.filter(d => d.size > 0);
 
-  const defenerArmy = battleReport.defender.army;
-  defenerArmy.forEach(stack => {
-    defender.army.find(d => d.id === stack.unit.id).size = stack.size;
+  const defenderLosses = battleReport.defender.armyLosses;
+  defenderLosses.forEach(stack => {
+    defender.army.find(d => d.id === stack.id).size = stack.size;
   });
   defender.army = defender.army.filter(d => d.size > 0);
 }

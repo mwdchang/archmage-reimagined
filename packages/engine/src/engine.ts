@@ -498,6 +498,8 @@ class Engine {
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
     const defenderMage = this.getMage(targetId);
 
+    console.log('debug', stackIds);
+
     // Make battle stacks
     const attacker: Combatant =  {
       mage: mage,

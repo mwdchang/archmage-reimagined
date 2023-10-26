@@ -1,5 +1,12 @@
 <template>
   <table v-if="mageStore.mage" class="header-info">
+    <tr style="background: #338">
+      <td colspan="5">
+        Archmage Reimagined is in early stages of development, for more
+        info, and if you want to help, out please visit:
+        <a style="font-size: 1rem" target="_blank" href="https://github.com/mwdchang/archmage-reimagined"> Here </a>
+      </td>
+    </tr>
     <tr>
       <td> Turns {{ mageStore.mage.currentTurn }} / {{ mageStore.mage.maxTurn }} </td>
       <td> Land {{ totalLand(mageStore.mage) }} </td>

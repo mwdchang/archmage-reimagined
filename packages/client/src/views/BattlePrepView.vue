@@ -61,7 +61,6 @@ const props = defineProps<{ targetId: string }>();
 
 const targetSummary = ref<any>(null);
 const armySelection = ref<BattleArmyItem[]>([]);
-const armyPower = ref(0);
 
 const battleSpells = computed(() => {
   const mage = mageStore.mage; 
@@ -83,7 +82,11 @@ const doBattle = async () => {
   if (!mageStore.mage) return;
   if (!props.targetId || props.targetId === '') return;
 
-  const stackIds = mageStore.mage.army.map(d => d.id);
+  // const stackIds = mageStore.mage.army.map(d => d.id);
+  const stackIds = armySelection.value.filter(d => d.active === true).map(d => d.id);
+  if (stackIds.length === 0) {
+    return;
+  }
 
   const res = await API.post('/war', { 
     targetId: props.targetId,
@@ -94,7 +97,8 @@ const doBattle = async () => {
 
   if (res.data.reportId) {
     mageStore.setMage(res.data.mage);
-    console.log('battle report', res.data.reportId);
+    console.log('battle report 1', res.data.reportId);
+    console.log('battle report 2', res.data.mage);
     router.push({
       name: 'battleResult',
       params: {
