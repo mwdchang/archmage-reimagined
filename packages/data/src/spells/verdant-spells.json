@@ -84,6 +84,45 @@
     ]
   },
   {
+    "id": "eyeOfTheEagle",
+    "name": "Eye Of The Eagle",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "This is a special spell that affects only elves, granting them the incredible eyesight of an eagle. All affected elves fight with higher efficiency and greater accuracy.",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 600,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": {
+          "race": ["elf"]
+        },
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "accuracy": {
+                "rule": "",
+                "magic": {
+                  "ascendant": { "value": 10 },
+                  "verdant": { "value": 10 },
+                  "eradication": { "value": 10 },
+                  "nether": { "value": 10 },
+                  "phantasm": { "value": 10 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "summonWerebear",
     "name": "Summon Werebear",
     "magic": "verdant",
@@ -382,6 +421,49 @@
                 "rule": "spellLevelPercentage",
                 "magic": {
                   "verdant": { "value": 0.9524 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enlargeAnimal",
+    "name": "Enlarge Animal",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell only affects animal units. It will temporary enlarge all your animal units, thus making them much more powerful. This is very effective spell when used on army with many animals.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 15000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": {
+          "race": ["animal"]
+        },
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,counterAttackPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.04708 },
+                  "verdant": { "value": 0.4708 },
+                  "eradication": { "value": 0.04708 },
+                  "nether": { "value": 0.02354 },
+                  "phantasm": { "value": 0.02354 }
                 }
               }
             }
