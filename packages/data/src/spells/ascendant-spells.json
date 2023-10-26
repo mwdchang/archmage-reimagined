@@ -459,5 +459,35 @@
         }
       }
     ]
+  },
+  {
+    "id": "miracle",
+    "name": "Miracle",
+    "magic": "ascendant",
+    "rank": "ultimate",
+    "description": "The gates of heaven open, and a holy light bathes the battlefield. You feel at peace even in the heat of battle. This spell will cause direct intervention of God and will bring back to life many of your units that have fallen during the battle.",
+    "attributes": ["battle"],
+    "researchCost": 50000,
+    "castingCost": 1000000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "HealEffect",
+            "healType": "percentage",
+            "rule": "",
+            "magic": {
+              "ascendant": { "value": 50 }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
