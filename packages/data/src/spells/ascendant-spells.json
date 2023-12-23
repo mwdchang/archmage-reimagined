@@ -405,6 +405,97 @@
     ]
   },
   {
+    "id": "resistElements",
+    "name": "Resist Elements",
+    "magic": "ascendant",
+    "rank": "comlex",
+    "description": "Through intense concentration, this spell will create an invisible barrier that increases all your units resistance to enemy eradication spells. Once they're enchanted, they receive effective protection against elemental spells.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 8000, 
+    "castingTurn": 12,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": null,
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "resistance.eradication": {
+                "rule": "spellLevel",
+                "magic": {
+                  "ascendant": { "value": 0.05 },
+                  "verdant": { "value": 0.02 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.02 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "swordOfLight",
+    "name": "Sword Of Light",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "By being blessed with the blessings of the God, all your troops' melee weapons are bathed with a holy light that gives them higher attack power, which is especially effective against the undead",
+    "attributes": ["battle"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "filter": {
+          "primaryAttackType,secondaryAttackType": ["melee", "holy"]
+        },
+        "stack": "all",
+        "effects": [
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.045 },
+                  "verdant": { "value": 0.021 },
+                  "eradication": { "value": 0.009 },
+                  "nether": { "value": 0.009 },
+                  "phantasm": { "value": 0.021 }
+                }
+              }
+            }
+          },
+          {
+            "name": "UnitEffect",
+            "attributeMap": {
+              "primaryAttackType": {
+                "rule": "",
+                "magic": {
+                  "ascendant": { "value": "holy" },
+                  "verdant": { "value": "holy" },
+                  "eradication": { "value": "holy" },
+                  "nether": { "value": "holy" },
+                  "phantasm": { "value": "holy"  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "summonTitan",
     "name": "Summon Titan",
     "magic": "ascendant",

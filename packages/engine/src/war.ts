@@ -233,6 +233,9 @@ const calcResistance = (u: Unit, attackTypes: string[]) => {
 const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, attackType: string[]) => {
   let multiplier = 1.0;
 
+
+  // TODO: racial enemy
+
   // Check weaknesses
   defendingUnit.abilities.forEach(ability => {
     if (ability.name === 'weakness') {
