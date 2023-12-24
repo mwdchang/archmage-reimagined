@@ -22,7 +22,7 @@ export interface Combatant {
   spellId: string,
   itemId: string,
 
-  // Different than mage.army as you don't send all stacks
+  // Army sent into battle, this is different than mage.army as you don't send all stacks
   army: ArmyUnit[], 
 }
 
@@ -741,31 +741,43 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       startingNetPower: 0,
       lossNetPower: 0
     },
+
+    // Tracking spells, heros, ... etc
     preBattleLogs: [],
+
+    // Tracking engagement
     battleLogs: [],
+
+    // Units lost/gained
     postBattleLogs: [],
+
+    // Summary
     summaryLogs: []
   };
 
 
   // Spells
   // TODO: check barriers and success
+  // TODO: Prebattle logs
   if (attacker.spellId) {
-    battleSpell(attacker, attackingArmy, defender, defendingArmy);
+    battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+    battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
   }
   if (attacker.itemId) {
     battleItem(attacker, attackingArmy, defender, defendingArmy);
+    battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
   }
 
   if (defender.spellId) {
-    battleSpell(defender, defendingArmy, attacker, attackingArmy);
+    battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+    battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
   }
   if (defender.itemId) {
     battleItem(defender, defendingArmy, attacker, attackingArmy);
+    battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
   }
 
-  // TODO: Prebattle logs
-
+  // Resolving contradicting ability states
   resolveUnitAbilities(attackingArmy);
   resolveUnitAbilities(defendingArmy);
 
@@ -1313,6 +1325,5 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
   });
   defender.army = defender.army.filter(d => d.size > 0);
 }
-
 
 

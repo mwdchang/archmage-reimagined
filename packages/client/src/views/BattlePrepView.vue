@@ -23,7 +23,7 @@
       <tr>
         <td>Spell</td>
         <td>
-          <select>
+          <select v-model="battleSpell">
             <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
           </select>
         </td>
@@ -31,7 +31,7 @@
       <tr>
         <td>Item</td>
         <td>
-          <select>
+          <select v-model="battleItem">
             <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
           </select>
         </td>
@@ -61,6 +61,8 @@ const props = defineProps<{ targetId: string }>();
 
 const targetSummary = ref<any>(null);
 const armySelection = ref<BattleArmyItem[]>([]);
+const battleSpell = ref('');
+const battleItem = ref('');
 
 const battleSpells = computed(() => {
   const mage = mageStore.mage; 
@@ -69,6 +71,18 @@ const battleSpells = computed(() => {
   const result = getSpells(mage).filter(spell => {
     return spell.attributes.includes('battle');
   });
+
+  // Add none option
+  const noSpell = {
+    id: '',
+    magic: '',
+    name: 'None',
+    castingCost: 0,
+    castingTurn: 0,
+    attributes: []
+  };
+  result.unshift(noSpell);
+
   return result;
 });
 
@@ -76,9 +90,18 @@ const battleItems = computed(() => {
   const mage = mageStore.mage; 
   if (!mage) return [];
 
-  let result = getItems(mage).filter(item => {
+  const result = getItems(mage).filter(item => {
     return item.attributes.includes('battle');
   });
+
+  // Add none option
+  const noItem = {
+    id: '',
+    name: 'None',
+    attributes: [],
+    amount: 0
+  }
+  result.unshift(noItem);
 
   return result;
 });
@@ -95,15 +118,15 @@ const doBattle = async () => {
 
   const res = await API.post('/war', { 
     targetId: props.targetId,
-    spellId: '',
-    itemId: '',
+    spellId: battleSpell.value,
+    itemId: battleItem.value,
     stackIds
   });
 
   if (res.data.reportId) {
     mageStore.setMage(res.data.mage);
-    console.log('battle report 1', res.data.reportId);
-    console.log('battle report 2', res.data.mage);
+    // console.log('battle report 1', res.data.reportId);
+    // console.log('battle report 2', res.data.mage);
     router.push({
       name: 'battleResult',
       params: {

@@ -13,12 +13,12 @@
       </tr>
       <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
         <td>{{ stack.unit.name }}</td>
-        <td>{{ stack.size }}</td>
-        <td>{{ stack.unit.primaryAttackPower }}</td>
-        <td>{{ stack.unit.secondaryAttackPower }}</td>
-        <td>{{ stack.unit.counterAttackPower }}</td>
-        <td>{{ stack.unit.hitPoints }}</td>
-        <td>{{ stack.accuracy }}</td>
+        <td class="text-right">{{ stack.size }}</td>
+        <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.counterAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.hitPoints }}</td>
+        <td class="text-right">{{ stack.accuracy }}</td>
       </tr>
     </table>
     <br>
@@ -36,17 +36,20 @@
       </tr>
       <tr v-for="(stack, idx) of report.defender.army" :key="idx">
         <td>{{ stack.unit.name }}</td>
-        <td>{{ stack.size }}</td>
-        <td>{{ stack.unit.primaryAttackPower }}</td>
-        <td>{{ stack.unit.secondaryAttackPower }}</td>
-        <td>{{ stack.unit.counterAttackPower }}</td>
-        <td>{{ stack.unit.hitPoints }}</td>
-        <td>{{ stack.accuracy }}</td>
+        <td class="text-right">{{ stack.size }}</td>
+        <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.counterAttackPower }}</td>
+        <td class="text-right">{{ stack.unit.hitPoints }}</td>
+        <td class="text-right">{{ stack.accuracy }}</td>
       </tr>
     </table>
     <br>
 
     <h3>Spells and items</h3>
+    <div v-for="(log, idx) of report.preBattleLogs" :key="idx">
+      {{ log }}
+    </div>
     <br>
 
     <h3>Assault</h3>
