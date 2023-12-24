@@ -21,7 +21,8 @@ export const spellDisplay = (spell: Spell, magic: string) => {
     magic: spell.magic,
     name: spell.name,
     castingCost: spell.castingCost * magicAlignmentTable[magic].costModifier[spell.magic],
-    castingTurn: spell.castingTurn
+    castingTurn: spell.castingTurn,
+    attributes: spell.attributes
   };
 }
 
@@ -52,7 +53,7 @@ export const getSpells = (mage: Mage) => {
   return result;
 }
 
-export const getItems = (mage: Mage) => {
+export const getItems = (mage: Mage): MageItem[] => {
   let result: MageItem[] = [];
   Object.keys(mage.items).forEach(key => {
     const item = getItemById(key);

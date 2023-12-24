@@ -5,7 +5,7 @@
     </h3>
     <br>
     <table>
-      <tr v-for="(stack, idx) of armySelection" :key="stack.id"
+      <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
         @click="stack.active = !stack.active">
         <td> {{ stack.name }} </td>
         <td class="text-right"> {{ stack.size }} </td>
@@ -66,7 +66,9 @@ const battleSpells = computed(() => {
   const mage = mageStore.mage; 
   if (!mage) return [];
 
-  const result = getSpells(mage);
+  const result = getSpells(mage).filter(spell => {
+    return spell.attributes.includes('battle');
+  });
   return result;
 });
 
@@ -74,7 +76,10 @@ const battleItems = computed(() => {
   const mage = mageStore.mage; 
   if (!mage) return [];
 
-  let result = getItems(mage);
+  let result = getItems(mage).filter(item => {
+    return item.attributes.includes('battle');
+  });
+
   return result;
 });
 
