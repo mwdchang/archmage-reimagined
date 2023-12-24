@@ -13,9 +13,12 @@
 
     <br>
 
-    <select v-model="selected">
+    <select v-model="selected" v-if="itemList.length > 0">
       <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
     </select>
+    <p v-if="itemList.length === 0">
+      You have no items.
+    </p>
 
     <div>Target</div>
     <input type="text" v-model="target" />

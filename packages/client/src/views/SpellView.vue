@@ -11,9 +11,12 @@
   </table>
 
   <br>
-  <select v-model="selected">
+  <select v-model="selected" v-if="spells.length > 0">
     <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
   </select>
+  <p v-if="spells.length === 0">
+    You have no spells available.
+  </p>
 
   <div>Target</div>
   <input type="text" v-model="target" />
