@@ -482,7 +482,7 @@ const battleSpell = (
     const battleEffect = effect as BattleEffect;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
 
-    const filterKeys = Object.keys(battleEffect.filter);
+    const filterKeys = Object.keys(battleEffect.filter || {});
     const filteredArmy = army.filter(stack => {
       let match = true;
       const unit = stack.unit;
@@ -1138,9 +1138,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('');
   console.log('=== Attacker summary ===');
   let attackerPowerLoss = 0;
+  let attackerUnitLoss = 0;
   attackingArmy.forEach(stack => {
     const np = stack.unit.powerRank * stack.loss;
     attackerPowerLoss += np;
+    attackerUnitLoss += stack.loss;
     console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
   console.log('');
@@ -1149,9 +1151,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   console.log('=== Defender summary ===');
   let defenderPowerLoss = 0;
+  let defenderUnitLoss = 0;
   defendingArmy.forEach(stack => {
     const np = stack.unit.powerRank * stack.loss;
     defenderPowerLoss += np;
+    defenderUnitLoss += stack.loss;
     console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
   console.log('');
@@ -1161,6 +1165,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   battleReport.attacker.lossNetPower = attackerPowerLoss;
   battleReport.defender.lossNetPower = defenderPowerLoss;
 
+
+  battleReport.summaryLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) lost ${attackerUnitLoss} units`);
+  battleReport.summaryLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) lost ${attackerPowerLoss} power`);
+
+  battleReport.summaryLogs.push(`${defender.mage.name}(#${defender.mage.id}) lost ${defenderUnitLoss} units`);
+  battleReport.summaryLogs.push(`${defender.mage.name}(#${defender.mage.id}) lost ${defenderPowerLoss} power`);
 
   battleReport.attacker.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.size}));
   battleReport.defender.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.size}));

@@ -59,6 +59,16 @@
     <br>
 
     <h3>Assault Result</h3>
+    <div v-for="(log, idx) of report.postBattleLogs" :key="idx">
+      {{ log }}
+    </div>
+    <br>
+
+    <div v-for="(log, idx) of report.summaryLogs" :key="idx">
+      {{ log }}
+    </div>
+    <br>
+
 
   </main>
 </template>
@@ -76,3 +86,12 @@ onMounted(async () => {
 });
 
 </script>
+
+<style scoped>
+td:nth-child(odd) {
+  background: #202020;
+}
+td:nth-child(even) {
+  background: #282828;
+}
+</style>
