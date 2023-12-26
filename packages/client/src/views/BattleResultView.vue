@@ -4,6 +4,7 @@
     <table>
       <tr>
         <td>Name</td>
+        <td>-</td>
         <td># units</td>
         <td>Attack</td>
         <td>Extra</td>
@@ -13,6 +14,7 @@
       </tr>
       <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
         <td>{{ stack.unit.name }}</td>
+        <td><magic :magic="stack.unit.magic" /></td>
         <td class="text-right">{{ stack.size }}</td>
         <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
         <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
@@ -27,6 +29,7 @@
     <table>
       <tr>
         <td>Name</td>
+        <td>-</td>
         <td># units</td>
         <td>Attack</td>
         <td>Extra</td>
@@ -36,6 +39,7 @@
       </tr>
       <tr v-for="(stack, idx) of report.defender.army" :key="idx">
         <td>{{ stack.unit.name }}</td>
+        <td><magic :magic="stack.unit.magic" /></td>
         <td class="text-right">{{ stack.size }}</td>
         <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
         <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
@@ -75,6 +79,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 
 const props = defineProps<{ id: string }>(); 

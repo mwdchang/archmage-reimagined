@@ -23,8 +23,10 @@ const color = computed(() => {
     return `radial-gradient(#ff1133, ${c2})`;
   } else if (m === 'nether') {
     return `radial-gradient(#552255, ${c2})`;
-  } else {
+  } else if (m === 'phantasm') {
     return `radial-gradient(#2299ff, ${c2})`;
+  } else {
+    return `radial-gradient(#555, #555)`;
   }
 });
 
