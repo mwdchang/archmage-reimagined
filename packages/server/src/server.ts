@@ -96,6 +96,14 @@ router.post('/api/spell', async (req: any, res) => {
   res.status(200).json({ r, mage });
 });
 
+router.post('/api/defence-assignment', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const assignment = req.body;
+
+  await engine.setAssignment(mage, assignment);
+  res.status(200).json({ mage });
+});
+
 router.post('/api/item', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { itemId, num, target } = req.body;

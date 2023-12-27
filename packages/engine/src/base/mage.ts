@@ -56,9 +56,9 @@ export const createMage = (name: string, magic: string): Mage => {
 
     assignment: {
       spellId: '',
-      spellCondition: 0,
+      spellCondition: -1,
       itemId: '',
-      itemCondition: 0,
+      itemCondition: -1,
     }
   };
 

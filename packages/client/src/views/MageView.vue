@@ -13,13 +13,13 @@
       </td>
     </tr>
     <tr>
-      <td>Power</td><td>{{ mageSummary.netPower }} </td>
+      <td>Power</td><td class="text-right">{{ mageSummary.netPower }} </td>
     </tr>
     <tr>
-      <td>Land</td><td>{{ mageSummary.land }} </td>
+      <td>Land</td><td class="text-right">{{ mageSummary.land }} </td>
     </tr>
     <tr>
-      <td>Forts</td><td>{{ mageSummary.forts }} </td>
+      <td>Forts</td><td class="text-right">{{ mageSummary.forts }} </td>
     </tr>
   </table>
 </template>

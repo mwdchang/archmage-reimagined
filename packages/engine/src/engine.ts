@@ -16,7 +16,7 @@ import {
   totalNetPower,
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
-import { Enchantment, Mage } from 'shared/types/mage';
+import { Assignment, Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { 
   BuildPayload,
@@ -463,6 +463,10 @@ class Engine {
     this.useTurn(mage);
   }
 
+  async setAssignment(mage: Mage, payload: Assignment) {
+    mage.assignment = _.cloneDeep(payload);
+  }
+
   async updateRankList() {
     const mages = this.adapter.getAllMages();
     const ranks = mages.map(mage => {
@@ -494,6 +498,7 @@ class Engine {
     });
     return _.orderBy(ranks, d => -d.netPower);
   }
+
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
     const defenderMage = this.getMage(targetId);

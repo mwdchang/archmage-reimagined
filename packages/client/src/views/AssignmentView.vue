@@ -5,14 +5,16 @@
     <tr>
       <td> Spell for defence </td>
       <td>
-        <select></select>
+        <select v-model="selectedSpellId" @change="setAssignment()">
+          <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} </option>
+        </select>
       </td>
     </tr>
     <tr>
       <td> Condition</td>
       <td>
-        <select>
-          <option v-for="c of activateConditions" :key="c" :value="c">{{ c }} %</option>
+        <select v-model="selectedSpellCondition" @change="setAssignment()">
+          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
         </select>
       </td>
     </tr>
@@ -20,7 +22,7 @@
     <tr>
       <td> Item for defence </td>
       <td>
-        <select>
+        <select v-model="selectedItemId" @change="setAssignment()">
           <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }} )</option>
         </select>
       </td>
@@ -28,8 +30,8 @@
     <tr>
       <td> Condition </td>
       <td>
-        <select>
-          <option v-for="c of activateConditions" :key="c" :value="c">{{ c }} %</option>
+        <select v-model="selectedItemCondition" @change="setAssignment()">
+          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
         </select>
       </td>
     </tr>
@@ -38,15 +40,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia'
 import { getItemById } from 'engine/src/base/references';
+import { MageItem, getSpells } from '@/util/util';
+import { Mage } from '../../../shared/types/mage';
+import { API } from '@/api/api';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
 
-const activateConditions = [0, 25, 50, 75, 100];
+const selectedSpellId = ref(mage.value?.assignment.spellId);
+const selectedSpellCondition = ref(mage.value?.assignment.spellCondition);
+const selectedItemId = ref(mage.value?.assignment.itemId);
+const selectedItemCondition = ref(mage.value?.assignment.itemCondition);
+
+const activateConditions = [-1, 0, 25, 50, 75, 100];
+
+const conditionString = (v: number) => {
+  if (v < 0) return 'Never';
+  if (v === 0) return 'Always';
+
+  return `Greater than ${v}%`;
+}
 
 // FIXME: composable
 const itemList = computed(() => {
@@ -66,11 +83,53 @@ const itemList = computed(() => {
 });
 
 const usableItems = computed(() => {
-  return itemList.value.filter(item => {
+  const result = itemList.value.filter(item => {
     const attrs = item.attributes;
     return attrs.includes('oneUse') && attrs.includes('battle');
   });
+
+  // Add none option
+  const noItem = {
+    id: '',
+    name: 'None',
+    attributes: [],
+    amount: 0
+  }
+  result.unshift(noItem);
+
+  return result;
 });
 
+const usableSpells = computed(() => {
+  const mage = mageStore.mage; 
+  if (!mage) return [];
+  const result = getSpells(mage).filter((spell: any) => spell.attributes.includes('battle'));
+
+  // Add none option
+  const noSpell = {
+    id: '',
+    magic: '',
+    name: 'None',
+    castingCost: 0,
+    castingTurn: 0,
+    attributes: []
+  };
+  result.unshift(noSpell);
+
+  return result;
+});
+
+const setAssignment = async () => {
+  const res = await API.post('/defence-assignment', {
+    spellId: selectedSpellId.value,
+    spellCondition: selectedSpellCondition.value,
+    itemId: selectedItemId.value,
+    itemCondition: selectedItemCondition.value
+  });
+
+  if (res.data) {
+    mageStore.setMage(res.data.mage as Mage);
+  }
+};
 
 </script>

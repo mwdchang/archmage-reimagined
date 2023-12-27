@@ -8,7 +8,7 @@ import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
 import { Mage } from 'shared/types/mage';
 
-interface MageItem {
+export interface MageItem {
   id: string,
   name: string,
   attributes: string[],
