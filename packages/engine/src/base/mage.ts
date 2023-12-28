@@ -88,6 +88,7 @@ export const createMage = (name: string, magic: string): Mage => {
   return mage;
 }
 
+
 export const totalNetPower = (mage: Mage) => {
   let netpower = 0;
 

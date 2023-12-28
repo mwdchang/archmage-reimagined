@@ -648,10 +648,11 @@ const resolveUnitAbilities = (stack: BattleStack[]) => {
   });
 }
 
-// TODO
+// For debugging different scenarios
 export interface BattleOptions {
   useFortBonus: boolean,
-  useEnchantments: boolean
+  useEnchantments: boolean,
+  useUnlimitedResources: boolean,
 }
 
 /**
@@ -758,14 +759,16 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Spells
   // TODO: check barriers and success
-  // TODO: Prebattle logs
   if (attacker.spellId) {
     battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
     battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
   }
   if (attacker.itemId) {
-    battleItem(attacker, attackingArmy, defender, defendingArmy);
-    battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
+    if (attacker.mage.items[attacker.itemId] > 0) {
+      attacker.mage.items[attacker.itemId] --;
+      battleItem(attacker, attackingArmy, defender, defendingArmy);
+      battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
+    }
   }
 
   if (defender.spellId) {
@@ -773,8 +776,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
   }
   if (defender.itemId) {
-    battleItem(defender, defendingArmy, attacker, attackingArmy);
-    battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
+    if (defender.mage.items[defender.itemId] > 0) {
+      defender.mage.items[defender.itemId] --;
+      battleItem(defender, defendingArmy, attacker, attackingArmy);
+      battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
+    }
   }
 
   // Resolving contradicting ability states

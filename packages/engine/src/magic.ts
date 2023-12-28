@@ -11,7 +11,6 @@ import {
   getMaxSpellLevels,
   getResearchTree,
   getRandomItem,
-  getItemById
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM } from './random';
@@ -284,6 +283,19 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   console.log('spell lvl', current);
   console.log('success casting rate:', successRate);
   return successRate;
+}
+
+
+export const castingCost = (mage: Mage, spellId: string) => {
+  const spell = getSpellById(spellId);
+  const mageMagic = mage.magic;
+  const spellMagic = spell.magic;
+
+  let castingCost = spell.castingCost;
+  const costModifier = magicAlignmentTable[mageMagic].costModifier[spellMagic];
+  castingCost *= costModifier;
+
+  return castingCost;
 }
 
 export const calcKingdomResistance = (mage: Mage) => {
