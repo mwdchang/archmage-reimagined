@@ -124,3 +124,14 @@ export const getBattleArmy = (mage: Mage) => {
   });
   return result;
 }
+
+/**
+ * Human readable string for spell and item assignment conditions
+**/
+export const conditionString = (v: number) => {
+  if (v < 0) return 'Never';
+  if (v === 0) return 'Always';
+
+  return `Greater than ${v}%`;
+}
+

@@ -27,6 +27,7 @@
         <td>Turns Left</td>
         <td class="text-right">{{ mage.currentTurn }}</td>
       </tr>
+      <tr><td colspan="4">&nbsp;</td></tr>
       <tr>
         <td colspan="2">Spell Level</td>
         <td colspan="2"> 
@@ -76,6 +77,9 @@
     </table>
 
     <div class="section-header">Relation with Gods</div>
+    <div>--</div>
+
+
     <div class="section-header">Residential Info</div>
     <table v-if="mage">
       <tr>
@@ -174,7 +178,7 @@
 
     <div class="section-header">Enchantments</div>
     <table v-if="mage">
-      <tr v-for="(e, _idx) of mage.enchantments" :key="idx">
+      <tr v-for="(e, idx) of mage.enchantments" :key="idx">
         <td> {{ e.spellId }} </td>
         <td class="text-right"> {{ e.spellLevel }} </td>
         <td class="text-right"> {{ e.life ? e.life : '-' }} </td>
@@ -183,13 +187,33 @@
 
 
     <div class="section-header">Defence Assignment</div>
+    <table v-if="mage">
+      <tr>
+        <td> Defense spell </td><td> {{ mage.assignment.spellId }} </td>
+      </tr>
+      <tr>
+        <td> Spell condition</td><td> {{ conditionString(mage.assignment.spellCondition) }} </td>
+      </tr>
+      <tr>
+        <td> Defense item</td><td> {{ mage.assignment.itemId }} </td>
+      </tr>
+      <tr>
+        <td> Item condition</td><td> {{ conditionString(mage.assignment.itemCondition) }} </td>
+      </tr>
+    </table>
+
+
     <div class="section-header">Researching</div>
-      <div v-if="mage && researchStatus.length > 0">
-        {{ researchStatus[0].id }}, {{ researchStatus[0].remainingCost }} points remaining
-      </div>
+    <div v-if="mage && researchStatus.length > 0">
+      {{ researchStatus[0].id }}, {{ researchStatus[0].remainingCost }} points remaining
+    </div>
 
     <div class="section-header">Recruiting</div>
+    <div>--</div>
+
     <div class="section-header">Skills</div>
+    <div>--</div>
+
     <div class="section-header">Units</div>
     <table v-if="mage">
       <tr v-for="(u, _idx) of unitsStatus" :key="u.id">
@@ -233,7 +257,7 @@ import {
 enchantmentUpkeep,
 } from 'engine/src/magic';
 import {
-  getArmy, ArmyItem
+  getArmy, conditionString
 } from '@/util/util';
 
 const mageStore = useMageStore();

@@ -44,7 +44,7 @@ import { ref, computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia'
 import { getItemById } from 'engine/src/base/references';
-import { MageItem, getSpells } from '@/util/util';
+import { MageItem, getSpells, conditionString } from '@/util/util';
 import { Mage } from '../../../shared/types/mage';
 import { API } from '@/api/api';
 
@@ -57,13 +57,6 @@ const selectedItemId = ref(mage.value?.assignment.itemId);
 const selectedItemCondition = ref(mage.value?.assignment.itemCondition);
 
 const activateConditions = [-1, 0, 25, 50, 75, 100];
-
-const conditionString = (v: number) => {
-  if (v < 0) return 'Never';
-  if (v === 0) return 'Always';
-
-  return `Greater than ${v}%`;
-}
 
 // FIXME: composable
 const itemList = computed(() => {

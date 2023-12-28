@@ -774,6 +774,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       attacker.mage.currentMana -= cost;
       battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
       battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
+    } else {
+      console.log('attacker insufficient mana');
     }
   }
   if (attacker.itemId) {
@@ -781,6 +783,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       attacker.mage.items[attacker.itemId] --;
       battleItem(attacker, attackingArmy, defender, defendingArmy);
       battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
+    } else {
+      console.log('attacker insufficient item');
     }
   }
 
@@ -790,6 +794,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defender.mage.currentMana -= cost;
       battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
       battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
+    } else {
+      console.log('defender insufficient mana');
     }
   }
   if (defender.itemId) {
@@ -797,6 +803,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defender.mage.items[defender.itemId] --;
       battleItem(defender, defendingArmy, attacker, attackingArmy);
       battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
+    } else {
+      console.log('defender insufficient item');
     }
   }
 

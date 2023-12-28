@@ -1,6 +1,6 @@
 <template>
   <main v-if="report">
-    <h3> Attacker #{{ report.attacker.id }} </h3>
+    <h3 class="section-header"> Attacker #{{ report.attacker.id }} </h3>
     <table>
       <tr>
         <td>Name</td>
@@ -25,7 +25,7 @@
     </table>
     <br>
 
-    <h3> Defender #{{ report.defender.id }} </h3>
+    <h3 class="section-header"> Defender #{{ report.defender.id }} </h3>
     <table>
       <tr>
         <td>Name</td>
@@ -50,30 +50,32 @@
     </table>
     <br>
 
-    <h3>Spells and items</h3>
+    <h3 class="section-header">Spells and items</h3>
     <div v-for="(log, idx) of report.preBattleLogs" :key="idx">
       {{ log }}
     </div>
     <br>
 
-    <h3>Assault</h3>
+    <h3 class="section-header">Assault</h3>
     <div v-for="(log, idx) of report.battleLogs" :key="idx">
       {{ log }}
     </div>
     <br>
 
-    <h3>Assault Result</h3>
+    <h3 class="section-header">Assault Result</h3>
     <div v-for="(log, idx) of report.postBattleLogs" :key="idx">
       {{ log }}
     </div>
     <br>
 
+    <h3 class="section-header">Summary</h3>
     <div v-for="(log, idx) of report.summaryLogs" :key="idx">
       {{ log }}
     </div>
     <br>
 
 
+    <router-link to="/about">Main</router-link>
   </main>
 </template>
 
@@ -93,6 +95,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+td {
+  padding: 0 5px;
+}
 td:nth-child(odd) {
   background: #202020;
 }
