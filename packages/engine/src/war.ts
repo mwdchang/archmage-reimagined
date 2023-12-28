@@ -6,7 +6,10 @@ import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
-import { currentSpellLevel } from './magic';
+import { 
+  currentSpellLevel, 
+  castingCost
+} from './magic';
 import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
@@ -655,6 +658,12 @@ export interface BattleOptions {
   useUnlimitedResources: boolean,
 }
 
+const battleOptions: BattleOptions = {
+  useFortBonus: true,
+  useEnchantments: true,
+  useUnlimitedResources: true
+};
+
 /**
  * Handles siege and regular battles. The battle phase goes as follows
  * - Prepare battle stacks from chosen armies from both sides, this is used to track progress
@@ -677,7 +686,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
   
-
   // Enchantments effects are equivalent to spell effects, but the
   // efficacy is the enchantment spell level, and not that of the caster's
   // current spell level
@@ -698,27 +706,28 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       enchant);
   });
 
-
   // Apply fort bonus to defender
-  const defenderLand = totalLand(defender.mage);
-  const defenderForts = defender.mage.forts;
-  const fortsMin = 0.0067;
-  const fortsMax = 0.0250;
-  const fortsRatio = Math.min((defenderForts / defenderLand), fortsMax);
+  if (battleOptions.useFortBonus === true) {
+    const defenderLand = totalLand(defender.mage);
+    const defenderForts = defender.mage.forts;
+    const fortsMin = 0.0067;
+    const fortsMax = 0.0250;
+    const fortsRatio = Math.min((defenderForts / defenderLand), fortsMax);
 
-  let base = attackType === 'regular' ? 10 : 20;
-  if (attackType === 'regular' && fortsRatio > fortsMin) {
-    const additionalBonus = 27.5 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
-    base += additionalBonus;
-  } 
+    let base = attackType === 'regular' ? 10 : 20;
+    if (attackType === 'regular' && fortsRatio > fortsMin) {
+      const additionalBonus = 27.5 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
+      base += additionalBonus;
+    } 
 
-  if (attackType === 'siege' && fortsRatio > fortsMin) {
-    const additionalBonus = 55 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
-    base += additionalBonus;
+    if (attackType === 'siege' && fortsRatio > fortsMin) {
+      const additionalBonus = 55 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
+      base += additionalBonus;
+    }
+    defendingArmy.forEach(stack => {
+      stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
+    });
   }
-  defendingArmy.forEach(stack => {
-    stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
-  });
 
   const battleReport: BattleReport = {
     id: uuidv4(),
@@ -760,11 +769,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Spells
   // TODO: check barriers and success
   if (attacker.spellId) {
-    battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
-    battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
+    const cost = castingCost(attacker.mage, attacker.spellId);
+    if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
+      attacker.mage.currentMana -= cost;
+      battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+      battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
+    }
   }
   if (attacker.itemId) {
-    if (attacker.mage.items[attacker.itemId] > 0) {
+    if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
       battleItem(attacker, attackingArmy, defender, defendingArmy);
       battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
@@ -772,11 +785,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   }
 
   if (defender.spellId) {
-    battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
-    battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
+    const cost = castingCost(defender.mage, defender.spellId);
+    if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
+      defender.mage.currentMana -= cost;
+      battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+      battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
+    }
   }
   if (defender.itemId) {
-    if (defender.mage.items[defender.itemId] > 0) {
+    if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
       battleItem(defender, defendingArmy, attacker, attackingArmy);
       battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
