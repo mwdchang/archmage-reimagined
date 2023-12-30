@@ -107,8 +107,12 @@ class Engine {
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
-      const mage = createMage(name, magic);
-      this.adapter.createMage(name, mage);
+
+      if (!this.getMageByUser(name)) {
+        console.log('creating test mage', name);
+        const mage = createMage(name, magic);
+        this.adapter.createMage(name, mage);
+      }
     }
 
     this.updateRankList();

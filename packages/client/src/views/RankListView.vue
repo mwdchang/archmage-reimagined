@@ -1,5 +1,15 @@
 <template>
   <table v-if="mageStore.mage">
+    <tr>
+      <td>Ranking</td>
+      <td>Name</td>
+      <td>&nbsp;</td>
+      <td>Land</td>
+      <td>Fort</td>
+      <td>Power</td>
+      <td>Status</td>
+      <td>-</td>
+    </tr>
     <tr v-for="(rank, idx) of rankList" 
       :class="{active: rank.id === mageStore.mage.id}"
       :key="idx">
@@ -9,6 +19,7 @@
       <td class="text-right"> {{ rank.land }} </td>
       <td class="text-right"> {{ rank.forts }} </td>
       <td class="text-right"> {{ rank.netPower }} </td>
+      <td>NA</td>
       <td> 
         <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
       </td>
