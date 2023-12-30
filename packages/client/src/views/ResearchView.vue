@@ -8,7 +8,7 @@
       <tr>
         <td>&nbsp;</td>
         <td>Spell</td>
-        <td>Cost</td>
+        <td>Cost (points)</td>
         <td>Turns</td>
       </tr>
       <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
