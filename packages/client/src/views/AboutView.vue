@@ -9,7 +9,7 @@
           <div>Magic</div><div>{{ mageStore.mage.currentMana}} / {{ manaStorage(mageStore.mage) }}</div>
         </div>
         <div class="row">
-          <div>Spell Level</div><div>{{ spellLevel }}</div>
+          <div>Spell Level</div><div>{{ spellLevel }} / {{ maxSpellLevel(mageStore.mage) }} </div>
         </div>
         <div class="row">
           <div>Items</div><div>{{ numItems }}</div>
@@ -77,7 +77,7 @@ import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
 import { totalNetPower } from 'engine/src/base/mage';
-import { currentSpellLevel } from 'engine/src/magic';
+import { currentSpellLevel, maxSpellLevel } from 'engine/src/magic';
 
 const mageStore = useMageStore();
 
