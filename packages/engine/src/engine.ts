@@ -234,6 +234,12 @@ class Engine {
   }
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    magicTypes.forEach(m => {
+      if (mage.currentResearch[m]) {
+        mage.currentResearch[m].active = false;
+      }
+    });
+
     mage.currentResearch[magic].active = true;
     mage.focusResearch = focus;
 

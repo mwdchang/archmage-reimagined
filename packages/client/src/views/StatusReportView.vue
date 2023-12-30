@@ -52,27 +52,39 @@
     <table v-if="mage">
       <tr>
         <td> Barrier </td> 
-        <td class="text-right"> {{ resistanceStatus.barrier }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.barrier) }} 
+        </td>
       </tr>
       <tr>
         <td> Ascendant </td> 
-        <td class="text-right"> {{ resistanceStatus.ascendant }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.ascendant) }} 
+        </td>
       </tr>
       <tr>
         <td> Verdant </td> 
-        <td class="text-right"> {{ resistanceStatus.verdant }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.verdant) }} 
+        </td>
       </tr>
       <tr>
         <td> Eradication </td> 
-        <td class="text-right"> {{ resistanceStatus.eradication }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.eradication) }} 
+        </td>
       </tr>
       <tr>
         <td> Nether </td> 
-        <td class="text-right"> {{ resistanceStatus.nether }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.nether) }} 
+        </td>
       </tr>
       <tr>
         <td> Phantasm </td> 
-        <td class="text-right"> {{ resistanceStatus.phantasm }} </td>
+        <td class="text-right"> 
+          {{ numberFormatter(resistanceStatus.phantasm) }} 
+        </td>
       </tr>
     </table>
 
@@ -263,6 +275,10 @@ import {
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);
 const { mage } = storeToRefs(mageStore);
+
+const numberFormatter = (v: number) => {
+  return v.toFixed(2);
+}
 
 const numItems = computed(() => {
   const keys = Object.keys(mage.value.items);

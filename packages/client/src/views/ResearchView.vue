@@ -11,7 +11,7 @@
         <td>Cost</td>
         <td>Turns</td>
       </tr>
-      <tr v-for="(magic, idx) in filteredMagicTypes" :key="magic" 
+      <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
         :class="{active: currentResearch[magic].active}"
         @click="toggle(magic)">
         <td> <magic :magic="magic" /></td>
@@ -89,6 +89,7 @@ const submitResearch = async () => {
 
   mageStore.setMage(result.data.mage as Mage);
   currentResearch.value = mageStore.mage?.currentResearch;
+  console.log('doh', currentResearch.value);
   focusResearch.value = mageStore.mage?.focusResearch as boolean;
 };
 
