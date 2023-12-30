@@ -137,7 +137,7 @@ export class SimpleDataAdapter extends DataAdapter {
 
   nextTurn() {
     this.mageMap.forEach((mage, _username) => {
-      if (mage.currentTurn <= mage.maxTurn) {
+      if (mage.currentTurn < mage.maxTurn) {
         mage.currentTurn ++;
       }
     })

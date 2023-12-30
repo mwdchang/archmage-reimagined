@@ -1,5 +1,4 @@
 import _  from 'lodash';
-import { magicAlignmentTable } from './base/config';
 import { 
   loadUnitData,
   loadSpellData,
@@ -8,15 +7,15 @@ import {
   getItemById,
   initializeResearchTree, 
   magicTypes,
-  getMaxSpellLevels
+  getUnitById,
 } from './base/references';
 import { 
   createMage, 
   totalLand,
-  totalNetPower,
+  totalNetPower
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
-import { Enchantment, Mage } from 'shared/types/mage';
+import { ArmyUnit, Assignment, Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { 
   BuildPayload,
@@ -41,9 +40,10 @@ import {
   manaStorage,
   doItemGeneration,
   maxMana,
+  castingCost,
   successCastingRate,
-currentSpellLevel,
-enchantmentUpkeep
+  currentSpellLevel,
+  enchantmentUpkeep
 } from './magic';
 import { battle, resolveBattleAftermath, Combatant } from './war';
 import { UnitSummonEffect } from 'shared/types/effects';
@@ -72,6 +72,14 @@ interface GameMsg {
   message: string,
 }
 
+const totalArmyPower = (army: ArmyUnit[]) => {
+  let netpower = 0;
+  army.forEach(stack => {
+    const u = getUnitById(stack.id);
+    netpower += u.powerRank + stack.size;
+  });
+  return netpower;
+}
 
 class Engine {
   adapter: DataAdapter;
@@ -226,6 +234,12 @@ class Engine {
   }
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    magicTypes.forEach(m => {
+      if (mage.currentResearch[m]) {
+        mage.currentResearch[m].active = false;
+      }
+    });
+
     mage.currentResearch[magic].active = true;
     mage.focusResearch = focus;
 
@@ -258,24 +272,19 @@ class Engine {
   async enchant(mage: Mage, spellId: string, target: number) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
-    let castingCost = spell.castingCost;
+    let cost = castingCost(mage, spellId);
     const result: GameMsg[] = [];
-    const magic = mage.magic;
-
-    const costModifier = magicAlignmentTable[magic].costModifier[spell.magic];
-    castingCost *= costModifier;
-
     const rate = successCastingRate(mage, spellId);
 
     // Insufficient mana
-    if (mage.currentMana < castingCost) {
+    if (mage.currentMana < cost) {
       result.push({
         type: 'error',
-        message: `Spell costs ${castingCost} mana, you only have ${mage.currentMana}`
+        message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
       });
       return result;
     }
-    mage.currentMana -= castingCost;
+    mage.currentMana -= cost;
 
     // Casting failed
     if (Math.random() * 100 > rate) {
@@ -362,18 +371,14 @@ class Engine {
   async summon(mage: Mage, spellId: string, num: number) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
-    let castingCost = spell.castingCost;
+    const cost = castingCost(mage, spellId);
     const result: GameMsg[] = [];
-    const magic = mage.magic;
-
-    const costModifier = magicAlignmentTable[magic].costModifier[spell.magic];
-    castingCost *= costModifier;
 
     for (let i = 0; i < num; i++) {
-      if (mage.currentMana < castingCost) {
+      if (mage.currentMana < cost) {
         result.push({
           type: 'error',
-          message: `Spell costs ${castingCost} mana, you only have ${mage.currentMana}`
+          message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
         });
         continue;
       }
@@ -386,7 +391,7 @@ class Engine {
       }
 
       // result.push(res);
-      mage.currentMana -= castingCost;
+      mage.currentMana -= cost;
 
       const rate = successCastingRate(mage, spellId);
       if (Math.random() * 100 > rate) {
@@ -463,6 +468,10 @@ class Engine {
     this.useTurn(mage);
   }
 
+  async setAssignment(mage: Mage, payload: Assignment) {
+    mage.assignment = _.cloneDeep(payload);
+  }
+
   async updateRankList() {
     const mages = this.adapter.getAllMages();
     const ranks = mages.map(mage => {
@@ -495,10 +504,9 @@ class Engine {
     return _.orderBy(ranks, d => -d.netPower);
   }
 
+
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
     const defenderMage = this.getMage(targetId);
-
-    console.log('debug', stackIds);
 
     // Make battle stacks
     const attacker: Combatant =  {
@@ -508,13 +516,28 @@ class Engine {
       army: mage.army.filter(s => stackIds.includes(s.id))
     };
 
-    // FIXME: do assignment
     const defender: Combatant = {
       mage: defenderMage,
       spellId: '',
       itemId: '',
       army: defenderMage.army
     };
+
+    // Check if defense assignment is triggered
+    const attackerArmyNP = totalArmyPower(attacker.army);
+    const defenderArmyNP = totalArmyPower(defender.army);
+    const ratio = 100 * (attackerArmyNP / defenderArmyNP);
+
+    console.log('Attacker to defender army ratio', ratio.toFixed(4));
+
+    const assignment = defender.mage.assignment;
+
+    if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
+      defender.spellId = assignment.spellId;
+    }
+    if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
+      defender.itemId = assignment.itemId;
+    }
 
     const battleReport = battle('siege', attacker, defender);
     resolveBattleAftermath('siege', mage, defenderMage, battleReport);

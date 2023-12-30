@@ -1,4 +1,5 @@
 <template>
+  <h2 v-if="unit">{{unit.name}}</h2>
   <main v-if="unit">
     <table>
       <tr style="background: #333">
@@ -15,11 +16,11 @@
       </tr>
       <tr>
         <td>Race</td>
-        <td>{{ unit.race }}</td>
+        <td>{{ unit.race.join(' ') }}</td>
       </tr>
       <tr>
         <td>Attributes</td>
-        <td>{{ unit.attributes }}</td>
+        <td>{{ unit.attributes.join(' ') }}</td>
       </tr>
       <tr>
         <td>Power Rank</td>
@@ -32,7 +33,7 @@
       </tr>
       <tr>
         <td>Attack Type</td>
-        <td>{{ unit.primaryAttackType }}</td>
+        <td>{{ unit.primaryAttackType.join(' ') }}</td>
       </tr>
       <tr>
         <td>Attack Initiative</td>
@@ -49,7 +50,7 @@
       </tr>
       <tr>
         <td>Extra Attack Type</td>
-        <td>{{ unit.secondaryAttackType }}</td>
+        <td>{{ unit.secondaryAttackType.join(' ') }}</td>
       </tr>
       <tr>
         <td>Extra Attack Initiative</td>
@@ -87,23 +88,23 @@
       </tr>
       <tr style="border-top: solid 2px">
         <td>Ascendant</td>
-        <td>{{ unit.spellResistances.ascendant }}</td>
+        <td class="text-right">{{ unit.spellResistances.ascendant }}</td>
       </tr>
       <tr>
         <td>Verdant</td>
-        <td>{{ unit.spellResistances.verdant }}</td>
+        <td class="text-right">{{ unit.spellResistances.verdant }}</td>
       </tr>
       <tr>
         <td>Eradication</td>
-        <td>{{ unit.spellResistances.eradication }}</td>
+        <td class="text-right">{{ unit.spellResistances.eradication }}</td>
       </tr>
       <tr>
         <td>Nether</td>
-        <td>{{ unit.spellResistances.nether }}</td>
+        <td class="text-right">{{ unit.spellResistances.nether }}</td>
       </tr>
       <tr>
         <td>Phantasm</td>
-        <td>{{ unit.spellResistances.phantasm }}</td>
+        <td class="text-right">{{ unit.spellResistances.phantasm }}</td>
       </tr>
 
       <tr style="background: #333">
@@ -111,51 +112,51 @@
       </tr>
       <tr style="border-top: solid 2px">
         <td>Missile</td>
-        <td>{{ unit.attackResistances.missile }}</td>
+        <td class="text-right">{{ unit.attackResistances.missile }}</td>
       </tr>
       <tr> 
         <td>Fire</td>
-        <td>{{ unit.attackResistances.fire }}</td>
+        <td class="text-right">{{ unit.attackResistances.fire }}</td>
       </tr>
       <tr> 
         <td>Poison</td>
-        <td>{{ unit.attackResistances.poison }}</td>
+        <td class="text-right">{{ unit.attackResistances.poison }}</td>
       </tr>
       <tr> 
         <td>Breath</td>
-        <td>{{ unit.attackResistances.breath }}</td>
+        <td class="text-right">{{ unit.attackResistances.breath }}</td>
       </tr>
       <tr> 
         <td>Magic</td>
-        <td>{{ unit.attackResistances.magic }}</td>
+        <td class="text-right">{{ unit.attackResistances.magic }}</td>
       </tr>
       <tr> 
         <td>Melee</td>
-        <td>{{ unit.attackResistances.melee }}</td>
+        <td class="text-right">{{ unit.attackResistances.melee }}</td>
       </tr>
       <tr> 
         <td>Ranged</td>
-        <td>{{ unit.attackResistances.ranged }}</td>
+        <td class="text-right">{{ unit.attackResistances.ranged }}</td>
       </tr>
       <tr> 
         <td>Lightning</td>
-        <td>{{ unit.attackResistances.lightning }}</td>
+        <td class="text-right">{{ unit.attackResistances.lightning }}</td>
       </tr>
       <tr> 
         <td>Cold</td>
-        <td>{{ unit.attackResistances.cold }}</td>
+        <td class="text-right">{{ unit.attackResistances.cold }}</td>
       </tr>
       <tr> 
         <td>Paralyse</td>
-        <td>{{ unit.attackResistances.paralyse }}</td>
+        <td class="text-right">{{ unit.attackResistances.paralyse }}</td>
       </tr>
       <tr> 
         <td>Psychic</td>
-        <td>{{ unit.attackResistances.psychic }}</td>
+        <td class="text-right">{{ unit.attackResistances.psychic }}</td>
       </tr>
       <tr> 
         <td>Holy</td>
-        <td>{{ unit.attackResistances.holy }}</td>
+        <td class="text-right">{{ unit.attackResistances.holy }}</td>
       </tr>
     </table>
   </main>

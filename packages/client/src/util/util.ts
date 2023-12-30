@@ -8,7 +8,7 @@ import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
 import { Mage } from 'shared/types/mage';
 
-interface MageItem {
+export interface MageItem {
   id: string,
   name: string,
   attributes: string[],
@@ -21,7 +21,8 @@ export const spellDisplay = (spell: Spell, magic: string) => {
     magic: spell.magic,
     name: spell.name,
     castingCost: spell.castingCost * magicAlignmentTable[magic].costModifier[spell.magic],
-    castingTurn: spell.castingTurn
+    castingTurn: spell.castingTurn,
+    attributes: spell.attributes
   };
 }
 
@@ -52,7 +53,7 @@ export const getSpells = (mage: Mage) => {
   return result;
 }
 
-export const getItems = (mage: Mage) => {
+export const getItems = (mage: Mage): MageItem[] => {
   let result: MageItem[] = [];
   Object.keys(mage.items).forEach(key => {
     const item = getItemById(key);
@@ -123,3 +124,14 @@ export const getBattleArmy = (mage: Mage) => {
   });
   return result;
 }
+
+/**
+ * Human readable string for spell and item assignment conditions
+**/
+export const conditionString = (v: number) => {
+  if (v < 0) return 'Never';
+  if (v === 0) return 'Always';
+
+  return `Greater than ${v}%`;
+}
+

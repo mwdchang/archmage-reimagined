@@ -6,9 +6,9 @@
       <td> {{ idx + 1 }} </td>
       <td> (#{{ rank.id }}) {{ rank.name }} </td>
       <td> <magic :magic="rank.magic" /> </td>
-      <td> {{ rank.land }} </td>
-      <td> {{ rank.forts }} </td>
-      <td> {{ rank.netPower }} </td>
+      <td class="text-right"> {{ rank.land }} </td>
+      <td class="text-right"> {{ rank.forts }} </td>
+      <td class="text-right"> {{ rank.netPower }} </td>
       <td> 
         <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
       </td>

@@ -11,7 +11,7 @@
         <td>Cost</td>
         <td>Turns</td>
       </tr>
-      <tr v-for="(magic, idx) in filteredMagicTypes" :key="magic" 
+      <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
         :class="{active: currentResearch[magic].active}"
         @click="toggle(magic)">
         <td> <magic :magic="magic" /></td>
@@ -46,14 +46,15 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { magicTypes } from 'engine/src/base/references';
 import { itemGenerationRate, researchPoints } from 'engine/src/magic';
+import { Mage } from '../../../shared/types/mage';
 const mageStore = useMageStore();
 
 const rp = computed(() => {
-  return researchPoints(mageStore.mage);
+  return researchPoints(mageStore.mage as Mage);
 });
 
 const itemRate = computed(() => {
-  return (100 * itemGenerationRate(mageStore.mage)).toFixed(2);
+  return (100 * itemGenerationRate(mageStore.mage as Mage)).toFixed(2);
 });
 
 const currentResearch = ref(mageStore.mage?.currentResearch);
@@ -62,7 +63,7 @@ const turns = ref(0);
 
 const filteredMagicTypes = computed(() => {
   return magicTypes.filter(m => {
-    return mageStore.mage.currentResearch[m];
+    return mageStore.mage?.currentResearch[m];
   });
 });
 
@@ -87,8 +88,9 @@ const submitResearch = async () => {
   });
 
   mageStore.setMage(result.data.mage as Mage);
-  currentResearch.value = mageStore.mage.currentResearch;
-  focusResearch.value = mageStore.mage.focusResearch;
+  currentResearch.value = mageStore.mage?.currentResearch;
+  console.log('doh', currentResearch.value);
+  focusResearch.value = mageStore.mage?.focusResearch as boolean;
 };
 
 </script>

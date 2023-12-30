@@ -12,19 +12,19 @@ const props = defineProps({
 
 const color = computed(() => {
   const m = props.magic;
-  // const c2 = '#123456';
-  const c2 = '#423434';
 
   if (m === 'ascendant') {
-    return `radial-gradient(#eeeeff, ${c2})`;
+    return `radial-gradient(#eeeeff, #888888)`;
   } else if (m === 'verdant') {
-    return `radial-gradient(#22FF22, ${c2})`;
+    return `radial-gradient(#22FF22, #888888)`;
   } else if (m === 'eradication') {
-    return `radial-gradient(#ff1133, ${c2})`;
+    return `radial-gradient(#ff1100, #ff9900)`;
   } else if (m === 'nether') {
-    return `radial-gradient(#552255, ${c2})`;
+    return `radial-gradient(#331133, #223322)`;
+  } else if (m === 'phantasm') {
+    return `radial-gradient(#2299ff, #2255ee)`;
   } else {
-    return `radial-gradient(#2299ff, ${c2})`;
+    return `radial-gradient(#555, #555)`;
   }
 });
 

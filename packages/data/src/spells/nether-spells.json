@@ -84,6 +84,120 @@
     ]
   },
   {
+    "id": "animateGhoul",
+    "name": "Animate Ghoul",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will animate fresh corpses into flesh eating ghouls. The touch of these ghouls can paralyze your enemy, and they are deadly in battle.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 15600,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["ghoul"],
+        "summonType": "all",
+        "summonNetPower": 110000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonHornedDemon",
+    "name": "Summon Horned Demon",
+    "magic": "nether",
+    "rank": "average",
+    "description": "By casting this summon, most violent Demons will join your ranks. Those horned abominations bring panic to the battlefield, slaughtering enemies without mercy. As their more powerful cousins Devils, they will ravage the battle collecting souls.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 35500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["hornedDemon"],
+        "summonType": "all",
+        "summonNetPower": 170000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonWraith",
+    "name": "Summon Wraith",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will summon the ancient undead spirits to join your forces. Their touch means death.",
+    "attributes": ["summon"],
+    "researchCost": 2500,
+    "castingCost": 35500,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["wraith"],
+        "summonType": "all",
+        "summonNetPower": 170000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "shroudOfDarkness",
+    "name": "Shroud Of Darkness",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will cover your whole kingdom under a veil of darkness to protect your troops from Ascendant magic.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 1500,
+    "castingCost": 10000,
+    "castingTurn": 4,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "ResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "ascendant",
+        "magic": {
+          "ascendant": { "value": 0.03 },
+          "verdant": { "value": 0.03 },
+          "eradication": { "value": 0.034 },
+          "nether": { "value": 0.12 },
+          "phantasm": { "value": 0.034 }
+        }
+      }
+    ]
+  },
+  {
     "id": "bloodCurse",
     "name": "Blood Curse",
     "magic": "nether",
@@ -121,31 +235,113 @@
     ]
   },
   {
-    "id": "shroudOfDarkness",
-    "name": "Shroud Of Darkness",
+    "id": "summonVampire",
+    "name": "Summon Vampire",
     "magic": "nether",
-    "rank": "average",
-    "description": "This spell will cover your whole kingdom under a veil of darkness to protect your troops from Ascendant magic.",
-    "attributes": ["enchantment", "selfOnly"],
-    "researchCost": 1500,
-    "castingCost": 10000,
-    "castingTurn": 4,
-    "upkeep": {
-      "geld": 0,
-      "mana": 150,
-      "population": 0
-    },
+    "rank": "complex",
+    "description": "This spell will summon vampires to join your rank. All they want is blood. With their incredible magic power they will decimate your enemies, turning them into vampires as well. As long as you feed them virgins, they will serve under your command.",
+    "attributes": ["summon"],
+    "researchCost": 10000,
+    "castingCost": 77700,
+    "castingTurn": 6,
+    "upkeep": null,
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["vampire"],
+        "summonType": "all",
+        "summonNetPower": 400000,
         "rule": "spellLevel",
-        "resistance": "ascendant",
         "magic": {
-          "ascendant": { "value": 0.03 },
-          "verdant": { "value": 0.03 },
-          "eradication": { "value": 0.034 },
-          "nether": { "value": 0.12 },
-          "phantasm": { "value": 0.034 }
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonLich",
+    "name": "Summon Lich",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This spell will summon the ancient and powerful liches to join your undead ranks. Their touch is cold and deadly, and their magic strikes fear into hearts of your opponents.",
+    "attributes": ["summon"],
+    "researchCost": 10000,
+    "castingCost": 79900,
+    "castingTurn": 6,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["lich"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonBulwarkHorror",
+    "name": "Summon Buklwark Horror",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This spell calls forth evil Bulwark Horrors to join your army, these heavily armoured monstrosities are particularly adept at deflecting ranged attacks with their shields.",
+    "attributes": ["summon"],
+    "researchCost": 10000,
+    "castingCost": 80000,
+    "castingTurn": 6,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["bulwarkHorror"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonDarkElfMagician",
+    "name": "Summon Dark Elf Magician",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 9000,
+    "castingCost": 75000,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["darkElfMagician"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
         }
       }
     ]

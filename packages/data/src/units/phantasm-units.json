@@ -55,7 +55,7 @@
     ]
   },
   {
-    "id": "psyhicWisp",
+    "id": "psychicWisp",
     "name": "Psychic Wisp",
     "magic": "phantasm",
     "powerRank": 40,
@@ -429,6 +429,166 @@
     "abilities": [
       { "name": "flying", "extra": null },
       { "name": "marksmanship", "extra": null }
+    ]
+  },
+  {
+    "id": "airElemental",
+    "name": "Air Elemental",
+    "magic": "phantasm",
+    "powerRank": 25000,
+    "hitPoints": 65000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 300000,
+    "primaryAttackType": ["lightning", "ranged"],
+    "primaryAttackInit": 4,
+    "counterAttackPower": 6500,
+
+    "secondaryAttackPower": 200000,
+    "secondaryAttackType": ["magic"],
+    "secondaryAttackInit": 1,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 34,
+      "population": 0.0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80, 
+      "nether": 75,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 95,
+      "fire": 50,
+      "poison": 0,
+      "breath": 70,
+      "magic": 55,
+      "melee": 95,
+      "ranged": 95,
+      "lightning": 100,
+      "cold": 0,
+      "paralyse": 20,
+      "psychic": 50,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "iceElemental",
+    "name": "Ice Elemental",
+    "magic": "phantasm",
+    "powerRank": 21800,
+    "hitPoints": 90000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["cold", "ranged"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 10000,
+
+    "secondaryAttackPower": 300000,
+    "secondaryAttackType": ["cold", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 35,
+      "population": 0.0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80, 
+      "nether": 75,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 85,
+      "fire": 0,
+      "poison": 100,
+      "breath": 0,
+      "magic": 75,
+      "melee": 85,
+      "ranged": 85,
+      "lightning": 80,
+      "cold": 100,
+      "paralyse": 100,
+      "psychic": 50,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "waterElemental",
+    "name": "Water Elemental",
+    "magic": "phantasm",
+    "powerRank": 19406,
+    "hitPoints": 72000,
+    "race": ["elemental"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 400000,
+    "primaryAttackType": ["poison", "ranged"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 5000,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0.0,
+      "mana": 30,
+      "population": 0.0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 80, 
+      "nether": 75,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 100,
+      "fire": 50,
+      "poison": 100,
+      "breath": 0,
+      "magic": 50,
+      "melee": 100,
+      "ranged": 75,
+      "lightning": 100,
+      "cold": 25,
+      "paralyse": 100,
+      "psychic": 50,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "endurance", "extra": null }
     ]
   }
 ]

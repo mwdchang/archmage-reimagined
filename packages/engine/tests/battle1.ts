@@ -1,51 +1,22 @@
-import { Mage } from 'shared/types/mage';
 import { battle, resolveBattleAftermath, Combatant } from '../src/war';
-
 import { loadUnitsAndSpells } from './loader';
 import { createMage } from '../src/base/mage';
 
 loadUnitsAndSpells();
 
-
 const attackerMage = createMage('attacker', 'ascendant');
 const defenderMage = createMage('defender', 'verdant');
-
-attackerMage.currentSpellLevel = 200;
-defenderMage.currentSpellLevel = 200;
-
-defenderMage.enchantments.push({
-  casterId: defenderMage.id,
-  casterMagic: defenderMage.magic,
-  targetId: defenderMage.id,
-
-  spellId: 'plantGrowth',
-  spellMagic: 'verdant',
-  spellLevel: 200,
-
-  isPermanent: true,
-  life: 0
-});
 
 const attacker: Combatant = {
   mage:  attackerMage,
   army: [
-    { id: 'archangel', size: 5000 },
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5},
-    { id: 'archer', size: 5}
+    { id: 'archangel', size: 5000 }
   ],
   spellId: '',
   itemId: ''
 };
 attacker.mage.army = attacker.army;
+attackerMage.currentSpellLevel = 200;
 
 const defender: Combatant = {
   mage: defenderMage,
@@ -56,8 +27,11 @@ const defender: Combatant = {
   itemId: 'carpetOfFlying'
 };
 defender.mage.army = defender.army;
+defenderMage.currentSpellLevel = 200;
 
 const report = battle('siege', attacker, defender);
 resolveBattleAftermath('siege', attacker.mage, defender.mage, report);
 
 console.log('');
+console.log('');
+console.log(report);
