@@ -52,6 +52,11 @@
           <span class="spacer"/>
           <router-link to="/destroy">Destroy</router-link> 
         </div>
+        <div> 
+          <router-link to="/recruit">Recruit</router-link> 
+          <span class="spacer"/>
+          <router-link to="/disband">Disband</router-link> 
+        </div>
       </section>
     </main>
 
