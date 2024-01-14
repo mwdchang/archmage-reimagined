@@ -476,6 +476,11 @@ class Engine {
     mage.assignment = _.cloneDeep(payload);
   }
 
+  async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
+    mage.recruitments = _.cloneDeep(payload);
+  }
+
+
   async updateRankList() {
     const mages = this.adapter.getAllMages();
     const ranks = mages.map(mage => {
