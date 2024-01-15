@@ -171,6 +171,14 @@ class Engine {
 
     // 4. recruiting barrack units
     const speed = 1.0;
+    const doRecruit = (id: string, size: number) => {
+      if (mage.army.find(d => d.id === id)) {
+        mage.army.find(d => d.id === id).size += size;
+      } else {
+        mage.army.push({ id, size });
+      }
+    };
+
     let recruitGeldCapacity = 100 * mage.barracks * speed;
 
     for (let i = 0; i < mage.recruitments.length; i++) {
@@ -179,14 +187,9 @@ class Engine {
 
       // consumes all capacity
       if (unitMax <= au.size) {
+        doRecruit(au.id, unitMax);
         au.size -= unitMax;
-
-        if (mage.army.find(d => d.id === au.id)) {
-          mage.army.find(d => d.id === au.id).size += unitMax;
-        } else {
-          mage.army.push({ id: au.id, size: unitMax });
-        }
-        console.log(`\trecruited ${au.size} ${au.id}`);
+        console.log(`\trecruited ${unitMax} ${au.id}`);
         break;
       }
 
@@ -196,12 +199,9 @@ class Engine {
         if (recruitGeldCapacity < recruitGeld) break;
 
         recruitGeldCapacity -= recruitGeld;
-        if (mage.army.find(d => d.id === au.id)) {
-          mage.army.find(d => d.id === au.id).size += au.size;
-        } else {
-          mage.army.push({ id: au.id, size: au.size });
-        }
+        doRecruit(au.id, au.size);
         au.size = 0;
+        console.log(`\trecruited ${au.size} ${au.id}`);
       }
     }
     // Clean up
