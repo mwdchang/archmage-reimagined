@@ -127,7 +127,6 @@ router.post('/api/research', async (req: any, res) => {
   const { magic, focus, turns } = req.body;
   const r = await engine.research(mage, magic, focus, turns);
   res.status(200).json({ r, mage });
-
 });
 
 router.post('/api/war', async (req: any, res) => {

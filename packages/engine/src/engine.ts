@@ -30,7 +30,8 @@ import {
   geldIncome,
   armyUpkeep,
   buildingUpkeep,
-  realMaxPopulation
+  realMaxPopulation,
+  recruitmentAmount
 } from './interior';
 import { 
   doResearch,
@@ -167,7 +168,47 @@ class Engine {
     doResearch(mage, researchPoints(mage));
     doItemGeneration(mage);
 
-    // 4. calculate upkeep
+
+    // 4. recruiting barrack units
+    const speed = 1.0;
+    let recruitGeldCapacity = 100 * mage.barracks * speed;
+
+    for (let i = 0; i < mage.recruitments.length; i++) {
+      const au = mage.recruitments[i];
+      const unitMax = recruitmentAmount(mage, au.id);
+
+      // consumes all capacity
+      if (unitMax <= au.size) {
+        au.size -= unitMax;
+
+        if (mage.army.find(d => d.id === au.id)) {
+          mage.army.find(d => d.id === au.id).size += unitMax;
+        } else {
+          mage.army.push({ id: au.id, size: unitMax });
+        }
+        console.log(`\trecruited ${au.size} ${au.id}`);
+        break;
+      }
+
+      // partially consumes, need to rollover to next recruitment
+      if (unitMax > au.size) {
+        const recruitGeld = au.size * getUnitById(au.id).recruitCost.geld;
+        if (recruitGeldCapacity < recruitGeld) break;
+
+        recruitGeldCapacity -= recruitGeld;
+        if (mage.army.find(d => d.id === au.id)) {
+          mage.army.find(d => d.id === au.id).size += au.size;
+        } else {
+          mage.army.push({ id: au.id, size: au.size });
+        }
+        au.size = 0;
+      }
+    }
+    // Clean up
+    mage.recruitments = mage.recruitments.filter(d => d.size > 0);
+    
+
+    // 5. calculate upkeep
     const armyCost = armyUpkeep(mage);
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
@@ -479,7 +520,6 @@ class Engine {
   async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
     mage.recruitments = _.cloneDeep(payload);
   }
-
 
   async updateRankList() {
     const mages = this.adapter.getAllMages();

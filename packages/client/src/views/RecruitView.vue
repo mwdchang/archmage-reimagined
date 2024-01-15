@@ -23,14 +23,14 @@
     &nbsp;
     <input type="text" v-model="rsize" size="8">
     &nbsp;
-    <button @click="add">Add</button>
+    <button @click="addOrder">Add</button>
   </div>
   <br>
   <table>
     <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
       <td>{{ r.id }}</td>
       <td>{{ r.size }}</td>
-      <td> <button @click="del(idx)">Remove</button></td>
+      <td> <button @click="deleteOrder(idx)">Remove</button></td>
     </tr>
   </table>
 
@@ -48,8 +48,8 @@ import { ArmyUnit } from 'shared/types/mage';
 
 const mageStore = useMageStore();
 
-const rselect = ref('');
-const rsize = ref(0);
+const rselect = ref(''); // Selected unit
+const rsize = ref(0);    // Recruitment size
 const currentRecruitments = ref<ArmyUnit[]>([]);
 
 const recruitableUnits = ref<Unit[]>([]);
@@ -59,7 +59,7 @@ const resourceDisplay = (v: any) => {
   return `${v.geld.toFixed(2)}/${v.mana.toFixed(2)}/${v.population.toFixed(2)}`;
 };
 
-const add = () => {
+const addOrder = () => {
   const v = +rsize.value;
   if (v <= 0) return;
 
@@ -70,7 +70,7 @@ const add = () => {
   update();
 }
 
-const del = (idx: number) => {
+const deleteOrder = (idx: number) => {
   currentRecruitments.value.splice(idx, 1);
   update();
 }
