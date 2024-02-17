@@ -30,7 +30,7 @@ const computedStyle = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
 .sidebar {
   border: 1px solid #888;
   padding: 1px 1px;

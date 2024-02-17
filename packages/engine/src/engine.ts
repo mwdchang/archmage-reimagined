@@ -30,7 +30,8 @@ import {
   geldIncome,
   armyUpkeep,
   buildingUpkeep,
-  realMaxPopulation
+  realMaxPopulation,
+  recruitmentAmount
 } from './interior';
 import { 
   doResearch,
@@ -107,8 +108,12 @@ class Engine {
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
-      const mage = createMage(name, magic);
-      this.adapter.createMage(name, mage);
+
+      if (!this.getMageByUser(name)) {
+        console.log('creating test mage', name);
+        const mage = createMage(name, magic);
+        this.adapter.createMage(name, mage);
+      }
     }
 
     this.updateRankList();
@@ -163,7 +168,47 @@ class Engine {
     doResearch(mage, researchPoints(mage));
     doItemGeneration(mage);
 
-    // 4. calculate upkeep
+
+    // 4. recruiting barrack units
+    const speed = 1.0;
+    const doRecruit = (id: string, size: number) => {
+      if (mage.army.find(d => d.id === id)) {
+        mage.army.find(d => d.id === id).size += size;
+      } else {
+        mage.army.push({ id, size });
+      }
+    };
+
+    let recruitGeldCapacity = 100 * mage.barracks * speed;
+
+    for (let i = 0; i < mage.recruitments.length; i++) {
+      const au = mage.recruitments[i];
+      const unitMax = recruitmentAmount(mage, au.id);
+
+      // consumes all capacity
+      if (unitMax <= au.size) {
+        doRecruit(au.id, unitMax);
+        au.size -= unitMax;
+        console.log(`\trecruited ${unitMax} ${au.id}`);
+        break;
+      }
+
+      // partially consumes, need to rollover to next recruitment
+      if (unitMax > au.size) {
+        const recruitGeld = au.size * getUnitById(au.id).recruitCost.geld;
+        if (recruitGeldCapacity < recruitGeld) break;
+
+        recruitGeldCapacity -= recruitGeld;
+        doRecruit(au.id, au.size);
+        au.size = 0;
+        console.log(`\trecruited ${au.size} ${au.id}`);
+      }
+    }
+    // Clean up
+    mage.recruitments = mage.recruitments.filter(d => d.size > 0);
+    
+
+    // 5. calculate upkeep
     const armyCost = armyUpkeep(mage);
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
@@ -470,6 +515,10 @@ class Engine {
 
   async setAssignment(mage: Mage, payload: Assignment) {
     mage.assignment = _.cloneDeep(payload);
+  }
+
+  async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
+    mage.recruitments = _.cloneDeep(payload);
   }
 
   async updateRankList() {

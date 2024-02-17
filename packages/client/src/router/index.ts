@@ -16,6 +16,7 @@ import ItemView from '@/views/ItemView.vue';
 import BattleResultView from '@/views/BattleResultView.vue';
 import ChroniclesView from '@/views/ChroniclesView.vue';
 import AssignmentView from '@/views/AssignmentView.vue';
+import RecruitView from '@/views/RecruitView.vue';
 
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
@@ -77,6 +78,11 @@ const router = createRouter({
       path: '/assignment',
       name: 'assignment',
       component: AssignmentView 
+    },
+    {
+      path: '/recruit',
+      name: 'recruit',
+      component: RecruitView
     },
     {
       path: '/test',

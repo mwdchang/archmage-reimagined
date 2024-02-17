@@ -35,7 +35,6 @@ export interface ResearchItem {
   active: boolean
 }
 
-
 export interface Enchantment {
   casterId: number;
   casterMagic: string;
@@ -48,7 +47,6 @@ export interface Enchantment {
   isPermanent: boolean;
   life: number;
 }
-
 
 export interface Mage {
   id: number;
@@ -100,6 +98,7 @@ export interface Mage {
 
   assignment: Assignment;
 
+  recruitments: ArmyUnit[];
   army: ArmyUnit[];
   items: { [key: string]: number },
   heroes: Hero[];
