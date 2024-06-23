@@ -104,6 +104,16 @@ router.post('/api/defence-assignment', async (req: any, res) => {
   res.status(200).json({ mage });
 });
 
+
+router.post('/api/recruitments', async (req: any, res) => {
+  const mage = engine.getMageByUser(req.user.username);
+  const body = req.body;
+
+  await engine.setRecruitments(mage, body.recruitments);
+  res.status(200).json({ mage });
+});
+
+
 router.post('/api/item', async (req: any, res) => {
   const mage = engine.getMageByUser(req.user.username);
   const { itemId, num, target } = req.body;
@@ -117,7 +127,6 @@ router.post('/api/research', async (req: any, res) => {
   const { magic, focus, turns } = req.body;
   const r = await engine.research(mage, magic, focus, turns);
   res.status(200).json({ r, mage });
-
 });
 
 router.post('/api/war', async (req: any, res) => {

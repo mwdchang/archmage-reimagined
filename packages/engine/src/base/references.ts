@@ -33,6 +33,17 @@ export const getUnitById = (id: string): Unit => {
   return _.cloneDeep(unit);
 }
 
+export const getRecruitableUnits = (magic: string): Unit[] => {
+  const recruitables: Unit[] = [];
+
+  unitMap.forEach((unit: Unit) => {
+    if (unit.attributes.includes('special') && unit.magic === magic) {
+      recruitables.push(_.cloneDeep(unit));
+    }
+  });
+  return recruitables;
+}
+
 export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
     spellMap.set(spells[i].id, spells[i]);

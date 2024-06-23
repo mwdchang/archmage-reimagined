@@ -45,7 +45,7 @@ const login = async () => {
 };
 </script>
 
-<style>
+<style scoped>
 .row {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;

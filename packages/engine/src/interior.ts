@@ -106,6 +106,13 @@ export const maxFood = (mage: Mage) => {
   return food;
 }
 
+export const recruitmentAmount = (mage: Mage, unitId: string) => {
+  const unit = getUnitById(unitId);
+  const speed = 1.0;
+  const amt = ((100 / unit.recruitCost.geld) * mage.barracks * speed);
+  return Math.floor(amt);
+}
+
 // export const spaceForUnits = (mage: Mage) => {
 //   let space = 0;
 //   mage.army.forEach(u => {
