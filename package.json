@@ -1,5 +1,6 @@
 {
-  "name": "archmage-revival",
+  "name": "archmage-reimagined",
+  "description": "A re-imagination of MMORPG game Archmage",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,

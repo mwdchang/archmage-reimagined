@@ -50,6 +50,7 @@ export const createMage = (name: string, magic: string): Mage => {
     wilderness: mageStartTable.buildings.wilderness,
 
     army: [],
+    recruitments: [],
     items: {},
     heroes: [],
     enchantments: [],

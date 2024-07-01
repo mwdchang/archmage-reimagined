@@ -1,5 +1,6 @@
 <template>
   <h2 v-if="unit">{{unit.name}}</h2>
+  <p style="margin: 1rem 10rem; line-height: 120%" v-if="unit">{{ unit.description }} </p>
   <main v-if="unit">
     <table>
       <tr style="background: #333">
