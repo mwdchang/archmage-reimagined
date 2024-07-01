@@ -10,4 +10,4 @@ updates:
     open-pull-requests-limit: 10
     versioning-strategy: increase    
     schedule:
-      interval: "weekly"
+      interval: "monthly"
