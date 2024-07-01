@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { ArmyUnit, Enchantment, Mage } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
-import { UnitEffect, DamageEffect, HealEffect, BattleEffect } from 'shared/types/effects';
+import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
 import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
@@ -13,6 +13,7 @@ import {
 import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
+import { filterIncludesStack } from './filter-includes-stack';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -302,15 +303,15 @@ const calcAccuracyModifier = (attackingUnit: Unit, defendingUnit: Unit) => {
 const applyUnitEffect = (
   // caster: Combatant, 
   origin: EffectOrigin,
-  unitEffect: UnitEffect, 
+  unitEffect: UnitAttrEffect, 
   affectedArmy: BattleStack[]
 ) => {
   const casterMagic = origin.magic;
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
-  Object.keys(unitEffect.attributeMap).forEach(attrKey => {
-    const attr = unitEffect.attributeMap[attrKey];
+  Object.keys(unitEffect.attributes).forEach(attrKey => {
+    const attr = unitEffect.attributes[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
 
     console.log(`processing ${fields}`);
@@ -361,11 +362,7 @@ const applyUnitEffect = (
             } else {
               stack.removedAbilities.push(finalValue);
             }
-          } else {
-            if (attr.has && root[field].includes(attr.has)) {
-              root[field].push(finalValue);
-            }
-          }
+          } 
         } else {
           if (field === 'accuracy') {
             stack.accuracy += finalValue;
@@ -386,7 +383,7 @@ const applyUnitEffect = (
  */
 const applyDamageEffect = (
   origin: EffectOrigin,
-  damageEffect: DamageEffect, 
+  damageEffect: UnitDamageEffect, 
   affectedArmy: BattleStack[]
 ) => {
   const casterMagic = origin.magic;
@@ -416,7 +413,7 @@ const applyDamageEffect = (
 
 const applyHealEffect = (
   origin: EffectOrigin,
-  healEffect: HealEffect, 
+  healEffect: UnitHealEffect, 
   affectedArmy: BattleStack[]
 ) => {
   const casterMagic = origin.magic;
@@ -477,6 +474,11 @@ const battleSpell = (
     effectOrigin.id = enchantment.casterId;
     effectOrigin.magic = enchantment.casterMagic;
     effectOrigin.spellLevel = enchantment.spellLevel;
+  }
+
+  const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
+  for (const battleEffect of battleEffects) {
+    const effects = battleEffect.effects;
   }
 
   casterSpell.effects.forEach(effect => {

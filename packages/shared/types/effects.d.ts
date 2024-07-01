@@ -1,3 +1,14 @@
+/**
+ * Effect hierarchy
+ *
+ * - Effect
+ *   - BattleEffect
+ *     - UnitAttrEffect
+ *     - UnitHealeffect
+ *     - UnitDamageEffect
+ *   - UnitSummonEffect
+**/
+
 export interface Effect {
   // Expect the effectType to be one of the sub interfaces
   effectType: string
@@ -51,12 +62,7 @@ export interface UnitSummonEffect extends Effect {
 }
 
 export interface BattleEffect extends Effect {
-  target: string,         // self, opponent
-  filter: {
-    [key: string]: any 
-  },
-  stack: string,       // random, randomSingle, all
-  effects: (UnitEffect | DamageEffect | HealEffect)[]
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
 }
 
 /**
@@ -75,12 +81,21 @@ export interface BattleEffect extends Effect {
  *
  * - percentage: X = X + X * value
 **/
+
+type EffectTarget = 'self' | 'opponent' | 'all';
+type EffectStack = 'all' | 'random';
+
 export interface UnitEffect {
-  name: string,
-  attributeMap: {
+  effectType: string,
+  target: EffectTarget,
+  stack: EffectStack,
+  filters: any,
+}
+
+export interface UnitAttrEffect {
+  attributes: {
     [key: string]: {
       rule: string,
-      has: any,
       magic: {
         [key: string]: {
           value: any
@@ -90,10 +105,11 @@ export interface UnitEffect {
   }
 }
 
-export interface DamageEffect { 
-  name: string,
+export interface UnitDamageEffect { 
   damageType: string[],
   rule: string,
+  minTimes: number,
+  maxtimes: number,
   magic: {
     [key: string]: {
       value: any
@@ -101,8 +117,7 @@ export interface DamageEffect {
   }
 }
 
-export interface HealEffect {
-  name: string,
+export interface UnitHealEffect {
   healType: string,
   rule: string,
   magic: {
