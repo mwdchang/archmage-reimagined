@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "scripts": {
   }
