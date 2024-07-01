@@ -14,10 +14,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "stack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "name": "DamageEffect",
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "minTimes": 1,
+            "maxTimes": 1,
             "damageType": ["fire"],
             "rule": "spellLevel",
             "magic": {
@@ -75,15 +78,15 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "randomSingle",
+        "filters": null,
+        "affectedStack": "randomSingle",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "primaryAttackType,secondaryAttackType": {
                 "rule": "add",
-                "has": "missile",
                 "magic": {
                   "ascendant": { "value": "fire" },
                   "verdant": { "value": "fire" },
@@ -113,10 +116,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "stack": "randomSingle",
+        "affectedStack": "randomSingle",
         "effects": [
           {
-            "name": "DamageEffect",
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "minTimes": 1,
+            "maxTimes": 1,
             "damageType": ["lightning"],
             "rule": "spellLevel",
             "magic": {
@@ -128,7 +134,8 @@
             }
           },
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
             "attributeMap": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",

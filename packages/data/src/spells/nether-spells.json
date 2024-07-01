@@ -212,11 +212,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "abilities": {
                 "rule": "add",

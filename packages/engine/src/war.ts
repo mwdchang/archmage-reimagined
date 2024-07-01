@@ -478,62 +478,31 @@ const battleSpell = (
 
   const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
   for (const battleEffect of battleEffects) {
+    const affectedStack = battleEffect.affectedStack;
     const effects = battleEffect.effects;
-  }
-
-  casterSpell.effects.forEach(effect => {
-    if (effect.effectType !== 'BattleEffect') return;
-
-    const battleEffect = effect as BattleEffect;
+    const filters = battleEffect.filters;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
-
-    const filterKeys = Object.keys(battleEffect.filter || {});
     const filteredArmy = army.filter(stack => {
-      let match = true;
-      const unit = stack.unit;
-
-      for (const key of filterKeys) {
-        if (match === false) break;
-        const matchValues = battleEffect.filter[key];
-
-        if (key === 'abilities') {
-          const len = matchValues.filter((val: any) => {
-            return unit.abilities.find(d => d.name === val);
-          }).length;
-          if (len === 0) match = false;
-        } else if (key.includes('.')) {
-          // TODO: filters
-        } else {
-          console.log('hihihi', key, matchValues);
-          const len = matchValues.filter((val: any) => {
-            return unit[key].includes(val);
-          }).length;
-          if (len === 0) match = false;
-        }
-      }
-      return match;
+      return filterIncludesStack(filters, stack);
     });
 
-
-    const stackType = battleEffect.stack;
-
     let randomSingleIdx = -1;
-    if (stackType === 'randomSingle') {
+    if (affectedStack === 'randomSingle') {
       randomSingleIdx = randomInt(filteredArmy.length);
     }
 
-    for (let i = 0; i < battleEffect.effects.length; i++) {
+    for (const effect of effects) {
       let affectedArmy: BattleStack[] = [];
-      if (stackType === 'randomSingle') {
+      if (affectedStack === 'randomSingle') {
         affectedArmy = [filteredArmy[randomSingleIdx]];
-      } else if (stackType === 'random') {
+      } else if (affectedStack === 'random') {
         let idx = randomInt(filteredArmy.length);
         affectedArmy = [filteredArmy[idx]];
       } else {
         affectedArmy = filteredArmy;
       }
 
-      if (battleEffect.target !== 'self') {
+      if (effect.checkResistance === true) {
         affectedArmy = affectedArmy.filter(stack => {
           const roll = Math.random() * 100;
           if (roll > stack.unit.spellResistances[casterSpell.magic]) {
@@ -543,22 +512,21 @@ const battleSpell = (
           return false;
         });
       }
+      console.log(`Applying effect to ${affectedArmy.map(d => d.unit.name)}`);
 
-      const eff = battleEffect.effects[i];
-      console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
-
-      if (eff.name === 'UnitEffect') {
-        const unitEffect = eff as UnitEffect;
-        applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
-      } else if (eff.name === 'DamageEffect') {
-        const damageEffect = eff as DamageEffect;
+      if (effect.effectType === 'UnitAttrEffect') {
+        const unitAttrEffect = effect as UnitAttrEffect;
+        applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
+      } else if (effect.effectType === 'DamageEffect') {
+        const damageEffect = effect as UnitDamageEffect;
         applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
-      } else if (eff.name === 'HealEffect') {
-        const healEffect = eff as HealEffect;
+      } else if (effect.effectType === 'HealEffect') {
+        const healEffect = effect as UnitHealEffect;
         applyHealEffect(effectOrigin, healEffect, affectedArmy);
       }
     }
-  });
+  }
+
   console.groupEnd();
 }
 
@@ -593,7 +561,7 @@ const battleItem = (
 
     // TODO: filters
     const filteredArmy = army;
-    const stackType = battleEffect.stack;
+    const stackType = battleEffect.affectedStack;
 
     let randomSingleIdx = -1;
     if (stackType === 'randomSingle') {
@@ -612,13 +580,13 @@ const battleItem = (
       }
 
       const eff = battleEffect.effects[i];
-      console.log(`Applying effect ${i+1} (${eff.name}) to ${affectedArmy.map(d => d.unit.name)}`);
+      console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
-      if (eff.name === 'UnitEffect') {
-        const unitEffect = eff as UnitEffect;
+      if (eff.effectType === 'UnitAttrEffect') {
+        const unitEffect = eff as UnitAttrEffect;
         applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
-      } else if (eff.name === 'DamageEffect') {
-        const damageEffect = eff as DamageEffect;
+      } else if (eff.effectType === 'UnitDamageEffect') {
+        const damageEffect = eff as UnitDamageEffect;
         applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
       }
     }

@@ -10,9 +10,30 @@
 **/
 
 export interface Effect {
-  // Expect the effectType to be one of the sub interfaces
   effectType: string
 }
+
+type EffectTarget = 'self' | 'opponent';
+type AffectedStack = 'all' | 'random' | 'randomSingle';
+export interface BattleEffect extends Effect {
+  affectedStack: AffectedStack,
+  target: EffectTarget,
+  filters: any,
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[],
+}
+
+export interface UnitSummonEffect extends Effect {
+  unitIds: string[],
+  summonType: string, // random, all
+  summonNetPower: number,
+  rule: string,
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
 
 export interface ResistanceEffect extends Effect {
   rule: string,
@@ -49,50 +70,16 @@ export interface CastingEffect extends Effect {
   }
 }
 
-export interface UnitSummonEffect extends Effect {
-  unitIds: string[],
-  summonType: string, // random, all
-  summonNetPower: number,
-  rule: string,
-  magic: {
-    [key: string]: {
-      value: number
-    }
-  }
+
+////////////////////////////////////////////////////////////////////////////////
+// Sub effects
+////////////////////////////////////////////////////////////////////////////////
+
+export interface UnitEffect extends Effect {
+  checkResistance: boolean,
 }
 
-export interface BattleEffect extends Effect {
-  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
-}
-
-/**
- * The "rule" field dictates how the attributeMap fields are to be modified by the magic value.
- *
- * The general grammar is:
- *   "Change unit's XYZ if it matches criteria by RULE and magic VALUE
- *
- * The rule types are:
- *
- * - add: Add value to array fields, e.g. abilities, attack types
- * - remove: Remove value to array fields, e.g. abilities, attack types
- *
- * - spellLevel: X = X + mage.spellLevel * value
- * - spellLevelPercentage: X = X + (X * mage.spellLevel * value)
- *
- * - percentage: X = X + X * value
-**/
-
-type EffectTarget = 'self' | 'opponent' | 'all';
-type EffectStack = 'all' | 'random';
-
-export interface UnitEffect {
-  effectType: string,
-  target: EffectTarget,
-  stack: EffectStack,
-  filters: any,
-}
-
-export interface UnitAttrEffect {
+export interface UnitAttrEffect extends UnitEffect {
   attributes: {
     [key: string]: {
       rule: string,
@@ -105,11 +92,11 @@ export interface UnitAttrEffect {
   }
 }
 
-export interface UnitDamageEffect { 
+export interface UnitDamageEffect extends UnitEffect { 
   damageType: string[],
   rule: string,
   minTimes: number,
-  maxtimes: number,
+  maxTimes: number,
   magic: {
     [key: string]: {
       value: any
@@ -117,7 +104,7 @@ export interface UnitDamageEffect {
   }
 }
 
-export interface UnitHealEffect {
+export interface UnitHealEffect extends UnitEffect {
   healType: string,
   rule: string,
   magic: {
