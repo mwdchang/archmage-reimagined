@@ -4,7 +4,7 @@ import { BattleStack } from 'shared/types/battle';
 /**
  * Check if a stack matches effect filter criteria
 **/
-export const filterIncludesStack = (filters: any, stack: BattleStack) => {
+export const filtersIncludesStack = (filters: any, stack: BattleStack) => {
   const filterKeys = Object.keys(filters || {});
   let matched = false;
   const unit = stack.unit;
