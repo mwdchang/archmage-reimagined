@@ -588,6 +588,8 @@ const battleOptions: BattleOptions = {
   useUnlimitedResources: true
 };
 
+// TODO: Redo report structure
+
 /**
  * Handles siege and regular battles. The battle phase goes as follows
  * - Prepare battle stacks from chosen armies from both sides, this is used to track progress
@@ -677,7 +679,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     },
 
     // Tracking spells, heros, ... etc
-    preBattleLogs: [],
+    preBattleLogs: {
+      attackerSpellResult: null,
+      attackerItemResult: null,
+      attackerLogs: [],
+
+      defenderSpellResult: null,
+      defenderItemResult: null,
+      defenderLogs: []
+    },
 
     // Tracking engagement
     battleLogs: [],
@@ -695,19 +705,20 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
       attacker.mage.currentMana -= cost;
+
+      battleReport.preBattleLogs.attackerSpellResult = 'success';
       battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
-      battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) cast ${attacker.spellId}`);
     } else {
-      console.log('attacker insufficient mana');
+      battleReport.preBattleLogs.attackerSpellResult = 'noMana';
     }
   }
   if (attacker.itemId) {
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
       battleItem(attacker, attackingArmy, defender, defendingArmy);
-      battleReport.preBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) use ${attacker.itemId}`);
+      battleReport.preBattleLogs.attackerItemResult = 'success';
     } else {
-      console.log('attacker insufficient item');
+      battleReport.preBattleLogs.attackerItemResult = 'noItem';
     }
   }
 
@@ -715,19 +726,20 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const cost = castingCost(defender.mage, defender.spellId);
     if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
+
+      battleReport.preBattleLogs.defenderSpellResult = 'success';
       battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
-      battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) cast ${defender.spellId}`);
     } else {
-      console.log('defender insufficient mana');
+      battleReport.preBattleLogs.defenderSpellResult = 'noMana';
     }
   }
   if (defender.itemId) {
     if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
       battleItem(defender, defendingArmy, attacker, attackingArmy);
-      battleReport.preBattleLogs.push(`${defender.mage.name}(#${defender.mage.id}) use ${defender.itemId}`);
+      battleReport.preBattleLogs.defenderItemResult = 'success';
     } else {
-      console.log('defender insufficient item');
+      battleReport.preBattleLogs.defenderItemResult = 'noItem';
     }
   }
 

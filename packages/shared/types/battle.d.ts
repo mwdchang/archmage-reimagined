@@ -42,6 +42,14 @@ export interface BattleReportSummary {
   summaryLogs: any[]
 }
 
+/*
+export interface BattleReportSpellItem {
+}
+*/
+
+export type BattleSpellResult = 'success' | 'lostConcentration' | 'barrier' | 'reflected' | 'noMana' | null;
+export type BattleItemResult = 'success' | 'barrier' | 'noItem' | null; 
+
 export interface BattleReport {
   id: string,
   timestamp: number,
@@ -67,8 +75,18 @@ export interface BattleReport {
     lossNetPower: number
   },
 
-  preBattleLogs: any[],
+  preBattleLogs: {
+    attackerSpellResult: BattleSpellResult,
+    attackerItemResult: BattleItemResult,
+    attackerLogs: any[],
+
+    defenderSpellResult: BattleSpellResult,
+    defenerItemResult: BattleItemResult,
+    defenderLogs: any[],
+  },
+
   battleLogs: any[],
   postBattleLogs: any[],
-  summaryLogs: any[]
+  summaryLogs: any[],
+
 }
