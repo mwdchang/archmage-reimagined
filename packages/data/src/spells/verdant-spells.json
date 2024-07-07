@@ -98,13 +98,13 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
+        "filters": {
           "race": ["elf"]
         },
-        "stack": "all",
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "name": "UnitAttrEffect",
             "attributeMap": {
               "accuracy": {
                 "rule": "",
@@ -409,13 +409,13 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
+        "filters": {
           "race": ["treefolk"]
         },
-        "stack": "all",
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "name": "UnitAttrEffect",
             "attributeMap": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
                 "rule": "spellLevelPercentage",
@@ -448,13 +448,13 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
+        "filters": {
           "race": ["animal"]
         },
-        "stack": "all",
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "name": "UnitAttrEffect",
             "attributeMap": {
               "primaryAttackPower,counterAttackPower": {
                 "rule": "spellLevelPercentage",

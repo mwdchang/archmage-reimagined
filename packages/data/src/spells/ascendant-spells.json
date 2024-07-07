@@ -14,11 +14,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "randomSingle",
+        "filters": null,
+        "affectedStack": "random",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "accuracy": {
                 "rule": "spellLevel",
@@ -107,11 +108,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "HealEffect",
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
             "healType": "points",
             "rule": "spellLevel",
             "magic": {
@@ -141,11 +143,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "random",
+        "filters": null,
+        "affectedStack": "random",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "abilities": {
                 "rule": "add",
@@ -208,11 +211,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "HealEffect",
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
             "healType": "percentage",
             "rule": "",
             "magic": {
@@ -242,11 +246,12 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
             "attributeMap": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
@@ -419,11 +424,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "resistance.eradication": {
                 "rule": "spellLevel",
@@ -456,13 +462,14 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
+        "filters": {
           "primaryAttackType,secondaryAttackType": ["melee", "holy"]
         },
-        "stack": "all",
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
@@ -477,7 +484,8 @@
             }
           },
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributeMap": {
               "primaryAttackType": {
                 "rule": "",
@@ -566,11 +574,12 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "HealEffect",
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
             "healType": "percentage",
             "rule": "",
             "magic": {

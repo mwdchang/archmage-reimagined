@@ -14,10 +14,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "stack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "name": "DamageEffect",
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "minTimes": 1,
+            "maxTimes": 1,
             "damageType": ["psychic"],
             "rule": "spellLevel",
             "magic": {
@@ -46,11 +49,12 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "all",
-        "stack": "all",
+        "target": "opponent",
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
             "attributeMap": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
@@ -239,10 +243,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "stack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "name": "DamageEffect",
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "minTimes": 1,
+            "maxTimes": 1,
             "damageType": ["psychic"],
             "rule": "spellLevel",
             "magic": {
@@ -272,11 +279,12 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filter": null,
-        "stack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitEffect",
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
             "attributeMap": {
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "",
