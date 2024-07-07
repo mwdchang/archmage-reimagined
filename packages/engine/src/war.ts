@@ -14,15 +14,17 @@ import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
 
-// Helpers
+// Various battle helpers
 import { filtersIncludesStack } from './battle/filters-includes-stack';
 import { calcBattleOrders } from './battle/calc-battle-orders';
 import { calcAccuracyModifier } from './battle/calc-accuracy-modifier';
+import { calcResistance } from './battle/calc-resistance';
+import { calcDamageMultiplier } from './battle/calc-damage-multiplier';
+import { calcPairings } from './battle/calc-pairings';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-const DEBUG = true;
 const NONE = -1;
 
 export interface Combatant {
@@ -95,122 +97,6 @@ const prepareBattleStack = (army: ArmyUnit[], role: string) => {
   });
 };
 
-
-// Check if a can attack b
-const canAttackPrimary = (a: Unit, b: Unit) => {
-  if (isRanged(a) || isFlying(a)) return true;
-  if (isFlying(b)) return false;
-  return true;
-}
-const canAttackSecondary = (a: Unit, b: Unit) => {
-  const isSecondaryRanged = a.secondaryAttackType.includes('ranged');
-  if (isSecondaryRanged || isFlying(a)) return true;
-  if (isFlying(b)) return false;
-  return true;
-}
-
-const log = (...args: any) => {
-  if (DEBUG === true) {
-    console.log.apply(console, args);
-  }
-};
-
-const calculateParing = (a: BattleStack[], b: BattleStack[]) => {
-  log('');
-  log('=== Calculate parings ===');
-  // 1. Fnd viable targets with similar net power
-  a.forEach((aStack, aIdx) => {
-    log(`calculating by power`, aStack.unit.name);
-    b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
-
-      log('\tchecking target', bStack.unit.name);
-      if ((bStack.netPower / aStack.netPower) <= 4.0 || aIdx === 0) {
-        const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
-        log('\tCan attack', canAttack);
-        if (canAttack && bStack.isTarget === false) {
-          log('\tsetting to', bIdx);
-          aStack.targetIdx = bIdx;
-          bStack.isTarget = true;
-        }
-      }
-    });
-  });
-
-  // 2. Match remaining units
-  a.forEach((aStack, _aIdx) => {
-    if (aStack.targetIdx > -1) return;
-    log(`calculating by availability`, aStack.unit.name);
-    b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
-      log('\tchecking target', bStack.unit.name);
-      const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
-      log('\tCan attack', canAttack);
-      if (canAttack) {
-        log('\tsetting to', bIdx);
-        aStack.targetIdx = bIdx;
-        bStack.isTarget = true;
-      }
-    });
-  });
-
-  // 3. Match possible targets for secondary-only attacks
-  a.forEach((aStack, _aIdx) => {
-    if (aStack.targetIdx > -1) return;
-    log(`calculating by availability`, aStack.unit.name);
-    b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
-      log('\tchecking target', bStack.unit.name);
-      const canAttack = canAttackSecondary(aStack.unit, bStack.unit);
-      log('\tCan attack', canAttack);
-      if (canAttack) {
-        log('\tsetting to', bIdx);
-        aStack.targetIdx = bIdx;
-        bStack.isTarget = true;
-      }
-    });
-  });
-}
-
-const calcResistance = (u: Unit, attackTypes: string[]) => {
-  let resist = 0;
-  for (const at of attackTypes) {
-    resist += u.attackResistances[at];
-  }
-  resist /= attackTypes.length;
-
-  if (hasAbility(u, 'largeShield') && attackTypes.includes('ranged')) {
-    resist += 50;
-  }
-
-  if (hasAbility(u, 'piercing')) {
-    resist -= 10;
-  }
-  return Math.min(100, resist);
-}
-
-const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, attackType: string[]) => {
-  let multiplier = 1.0;
-
-
-  // TODO: racial enemy
-
-  // Check weaknesses
-  defendingUnit.abilities.forEach(ability => {
-    if (ability.name === 'weakness') {
-      const weakType = ability.extra as string;
-      if (attackType.includes(weakType)) {
-        multiplier *= 2.0;
-      }
-    }
-  });
-
-  if (hasAbility(defendingUnit, 'scales')) {
-    multiplier *= 0.75;
-  }
-  return multiplier;
-}
-
 const calcDamageVariance = (attackType: String[]) => {
   let randomModifier = randomBM();
   if (attackType.includes('magic') || attackType.includes('psychic')) {
@@ -218,8 +104,6 @@ const calcDamageVariance = (attackType: String[]) => {
   }
   return randomModifier;
 }
-
-
 
 /**
  * Apply effect that can alter unit attributes as outlined in Unit typing definition.
@@ -313,7 +197,6 @@ const applyUnitEffect = (
   });
 };
 
-
 /**
  * Apply direct damage to target stacks
  */
@@ -347,7 +230,6 @@ const applyDamageEffect = (
   });
 };
 
-
 const applyHealEffect = (
   origin: EffectOrigin,
   healEffect: UnitHealEffect, 
@@ -373,7 +255,6 @@ const applyHealEffect = (
     }
   });
 };
-
 
 
 /**
@@ -463,7 +344,6 @@ const battleSpell = (
       }
     }
   }
-
   console.groupEnd();
 }
 
@@ -732,8 +612,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   resolveUnitAbilities(defendingArmy);
 
   // Find pairing
-  calculateParing(attackingArmy, defendingArmy);
-  calculateParing(defendingArmy, attackingArmy);
+  calcPairings(attackingArmy, defendingArmy);
+  calcPairings(defendingArmy, attackingArmy);
 
   // Sort out attacking order
   const battleOrders = calcBattleOrders(attackingArmy, defendingArmy);
