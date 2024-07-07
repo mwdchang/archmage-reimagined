@@ -17,6 +17,7 @@ import { BattleReport, BattleStack } from 'shared/types/battle';
 // Helpers
 import { filtersIncludesStack } from './battle/filters-includes-stack';
 import { calcBattleOrders } from './battle/calc-battle-orders';
+import { calcAccuracyModifier } from './battle/calc-accuracy-modifier';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,25 +219,6 @@ const calcDamageVariance = (attackType: String[]) => {
   return randomModifier;
 }
 
-const calcAccuracyModifier = (attackingUnit: Unit, defendingUnit: Unit) => {
-  let modifier = 0;
-  if (hasAbility(attackingUnit, 'clumsiness')) {
-    modifier -= 10;
-  }
-  if (hasAbility(defendingUnit, 'swift')) {
-    modifier -= 10;
-  }
-  if (hasAbility(defendingUnit, 'beauty')) {
-    modifier -= 5;
-  }
-  if (hasAbility(defendingUnit, 'fear') && !hasAbility(attackingUnit, 'fear')) {
-    modifier -= 15;
-  }
-  if (hasAbility(attackingUnit, 'marksmanship')) {
-    modifier += 10;
-  }
-  return modifier;
-}
 
 
 /**
@@ -666,7 +648,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       army: [],
       armyLosses: [],
       startingNetPower: 0,
-      lossNetPower: 0
+      lossNetPower: 0,
+      lossUnit: 0,
     },
     defender: {
       id: defender.mage.id,
@@ -675,7 +658,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       army: [],
       armyLosses: [],
       startingNetPower: 0,
-      lossNetPower: 0
+      lossNetPower: 0,
+      lossUnit: 0,
     },
 
     // Tracking spells, heros, ... etc
@@ -811,7 +795,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     );
   });
 
-  // Snapshot the army for reporting before engagement starts
+  // FIXME: Snapshot the army for reporting before engagement starts ???
   battleReport.attacker.army = _.cloneDeep(attackingArmy);
   battleReport.defender.army = _.cloneDeep(defendingArmy);
 
@@ -1039,6 +1023,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       });
       heal = 1 - heal;
 
+
       let unitsHealed = Math.floor(heal * stack.loss);
       if (unitsHealed >= stack.loss) {
         unitsHealed = stack.loss;
@@ -1129,17 +1114,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('');
 
   battleReport.attacker.lossNetPower = attackerPowerLoss;
+  battleReport.attacker.lossUnit = attackerUnitLoss;
+  battleReport.attacker.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
+
   battleReport.defender.lossNetPower = defenderPowerLoss;
-
-
-  battleReport.summaryLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) lost ${attackerUnitLoss} units`);
-  battleReport.summaryLogs.push(`${attacker.mage.name}(#${attacker.mage.id}) lost ${attackerPowerLoss} power`);
-
-  battleReport.summaryLogs.push(`${defender.mage.name}(#${defender.mage.id}) lost ${defenderUnitLoss} units`);
-  battleReport.summaryLogs.push(`${defender.mage.name}(#${defender.mage.id}) lost ${defenderPowerLoss} power`);
-
-  battleReport.attacker.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.size}));
-  battleReport.defender.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.size}));
+  battleReport.defender.lossUnit = defenderUnitLoss;
+  battleReport.defender.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
   return battleReport;
 }

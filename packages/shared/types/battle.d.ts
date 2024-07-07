@@ -62,7 +62,8 @@ export interface BattleReport {
     armyLosses: { id: string, size: number }[],
 
     startingNetPower: number,
-    lossNetPower: number
+    lossNetPower: number,
+    lossUnit: number,
   }
   defender: {
     id: number,
@@ -72,7 +73,8 @@ export interface BattleReport {
     armyLosses: { id: string, size: number }[],
 
     startingNetPower: number,
-    lossNetPower: number
+    lossNetPower: number,
+    lossUnit: number,
   },
 
   preBattleLogs: {
@@ -81,7 +83,7 @@ export interface BattleReport {
     attackerLogs: any[],
 
     defenderSpellResult: BattleSpellResult,
-    defenerItemResult: BattleItemResult,
+    defenderItemResult: BattleItemResult,
     defenderLogs: any[],
   },
 
