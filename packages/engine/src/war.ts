@@ -134,8 +134,6 @@ const applyUnitEffect = (
     const attr = unitEffect.attributeMap[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
 
-    console.log(`processing ${fields}`);
-
     // Caster colour does not get this effect
     if (!attr.magic[casterMagic]) return;
 
@@ -278,9 +276,6 @@ const battleSpell = (
     getSpellById(enchantment.spellId) :
     getSpellById(caster.spellId);
 
-  console.log('');
-  console.group(`=== Spell ${caster.mage.name} : ${caster.spellId} ===`);
-
   let effectOrigin: EffectOrigin = {
     id: caster.mage.id,
     magic: caster.mage.magic,
@@ -344,7 +339,6 @@ const battleSpell = (
       }
     }
   }
-  console.groupEnd();
 }
 
 /**
@@ -359,10 +353,6 @@ const battleItem = (
   defenderBattleStack: BattleStack[]) => {
 
   const casterItem = getItemById(caster.itemId);
-
-  console.log('');
-  console.group(`=== Item ${caster.mage.name} : ${caster.itemId} ===`);
-  console.groupEnd();
 
   const effectOrigin: EffectOrigin = {
     id: caster.mage.id,
@@ -830,8 +820,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Post battle, healing calculation
 
   // Attacker healing
-  console.log('');
-  console.log('=== Post battle attacker ===');
   attackingArmy.forEach(stack => {
     let startingStackLoss = stack.loss;
     let totalUnitsHealed = 0;
@@ -882,8 +870,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   });
 
   // Defender healing
-  console.log('');
-  console.log('=== Post battle defender ===');
   defendingArmy.forEach(stack => {
     let startingStackLoss = stack.loss;
     let totalUnitsHealed = 0;
