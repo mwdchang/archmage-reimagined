@@ -67,7 +67,7 @@ export const prettyPrintBR = (br: BattleReport) => {
   })
 
   console.log('');
-  console.log('=== Spells/Items ===');
+  console.log('=== Engage ===');
   console.log(`${attackerStr} casts ${br.attacker.spellId}`);
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
 
@@ -75,20 +75,28 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
 
   console.log('');
-  console.log('=== Battle ===');
+  console.log('=== Assault note ===');
 
   br.battleLogs.forEach(entry => {
     if (entry.type === 'primary' || entry.type === 'secondary') {
       console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} attacks ${mageMap[entry.defender.id]}'s ${entry.defender.unitId}`);
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitLoss} ${entry.defender.unitId}`);
+      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
     } else if (entry.type === 'additionalStrike') {
       console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} attacks ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} again`);
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitLoss} ${entry.defender.unitId}`);
+      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
     } else if (entry.type === 'counter') {
       console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} struck back ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId}`);
-      console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.defender.unitLoss} ${entry.attacker.unitId}`);
+      console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.defender.unitsLoss} ${entry.attacker.unitId}`);
     }
     console.log('');
   })
+
+  console.log('=== Assault result ===');
+  br.postBattleLogs.forEach(entry => {
+    console.log(`${mageMap[entry.id]}'s ${entry.unitsLoss} ${entry.unitId} where slain during battle`);
+    console.log(`${mageMap[entry.id]}'s ${entry.unitsHealed} ${entry.unitId} are resurrected from death`);
+    console.log(``);
+  })
+  console.log('=== Power loss ===');
 
 }

@@ -10,7 +10,7 @@ import {
   currentSpellLevel, 
   castingCost
 } from './magic';
-import { totalLand } from './base/mage';
+import { totalLand, totalUnits } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
 
 // Various battle helpers
@@ -130,8 +130,6 @@ const applyUnitEffect = (
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
-  console.log('debug', unitEffect);
-
   Object.keys(unitEffect.attributeMap).forEach(attrKey => {
     const attr = unitEffect.attributeMap[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
@@ -226,9 +224,9 @@ const applyDamageEffect = (
 
     const resistance = calcResistance(stack.unit, damageType);
     const damage = rawDamage * ((100 - resistance) / 100);
-    const unitLoss = Math.floor(damage / stack.unit.hitPoints);
+    const unitsLoss = Math.floor(damage / stack.unit.hitPoints);
     
-    console.log(`dealing rawDamage=${damage} actualDamage=${damage} units=${unitLoss}`);
+    console.log(`dealing rawDamage=${damage} actualDamage=${damage} units=${unitsLoss}`);
   });
 };
 
@@ -652,12 +650,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attacker: {
           id: attackingMage.id,
           unitId: attackingStack.unit.id,
-          unitLoss: 0
+          unitsLoss: 0
         },
         defender: {
           id: defendingMage.id,
           unitId: defendingStack.unit.id,
-          unitLoss: defenderUnitLoss
+          unitsLoss: defenderUnitLoss
         }
       });
 
@@ -694,12 +692,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           attacker: {
             id: attackingMage.id,
             unitId: attackingStack.unit.id,
-            unitLoss: 0
+            unitsLoss: 0
           },
           defender: {
             id: defendingMage.id,
             unitId: defendingStack.unit.id,
-            unitLoss: defenderUnitLoss
+            unitsLoss: defenderUnitLoss
           }
         });
 
@@ -752,12 +750,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           attacker: {
             id: attackingMage.id,
             unitId: attackingStack.unit.id,
-            unitLoss: attackerUnitLoss
+            unitsLoss: attackerUnitLoss
           },
           defender: {
             id: defendingMage.id,
             unitId: defendingStack.unit.id,
-            unitLoss: 0
+            unitsLoss: 0
           }
         });
 
@@ -809,12 +807,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attacker: {
           id: attackingMage.id,
           unitId: attackingStack.unit.id,
-          unitLoss: 0
+          unitsLoss: 0
         },
         defender: {
           id: defendingMage.id,
           unitId: defendingStack.unit.id,
-          unitLoss: defenderUnitLoss
+          unitsLoss: defenderUnitLoss
         }
       });
 
@@ -835,7 +833,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   console.log('');
   console.log('=== Post battle attacker ===');
   attackingArmy.forEach(stack => {
-    battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
+    let startingStackLoss = stack.loss;
+    let totalUnitsHealed = 0;
 
     if (stack.size <= 0) return;
 
@@ -846,8 +845,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
+      totalUnitsHealed += unitsHealed;
+
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-      battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
     if (hasHealing(stack.unit)) {
       stack.healingBuffer.push(30);
@@ -868,16 +868,25 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
+      totalUnitsHealed += unitsHealed;
+
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-      battleReport.postBattleLogs.push(`${attacker.mage.name}(#${attacker.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
+
+    battleReport.postBattleLogs.push({
+      id: attacker.mage.id,
+      unitId: stack.unit.id,
+      unitsLoss: startingStackLoss,
+      unitsHealed: totalUnitsHealed
+    });
   });
 
   // Defender healing
   console.log('');
   console.log('=== Post battle defender ===');
   defendingArmy.forEach(stack => {
-    battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${stack.loss} ${stack.unit.name} were slain during battle`);
+    let startingStackLoss = stack.loss;
+    let totalUnitsHealed = 0;
 
     if (stack.size <= 0) return;
 
@@ -888,8 +897,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
+      totalUnitsHealed += unitsHealed;
+
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-      battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
     if (hasHealing(stack.unit)) {
       stack.healingBuffer.push(30);
@@ -910,9 +920,18 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       stack.loss -= unitsHealed;
       stack.size += unitsHealed;
+      totalUnitsHealed += unitsHealed;
+
       console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-      battleReport.postBattleLogs.push(`${defender.mage.name}(#${defender.mage.id})'s ${unitsHealed} ${stack.unit.name} are resurrected from death`);
     }
+
+    battleReport.postBattleLogs.push({
+      id: defender.mage.id,
+      unitId: stack.unit.id,
+      unitsLoss: startingStackLoss,
+      unitsHealed: totalUnitsHealed
+    });
+
   });
 
   // Calculate combat result

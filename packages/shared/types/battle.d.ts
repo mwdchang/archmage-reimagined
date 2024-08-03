@@ -93,17 +93,23 @@ export interface BattleReport {
   battleLogs: {
     type: string,
     attacker: {
-      id: string,
+      id: number,
       unitId: string,
-      unitLoss: number
+      unitsLoss: number
     },
     defender: {
-      id: string,
+      id: number,
       unitId: string,
-      unitLoss: number
+      unitsLoss: number
     }
   }[],
-  postBattleLogs: any[],
-  summaryLogs: any[],
 
+  postBattleLogs: {
+    id: number,
+    unitId: string,
+    unitsLoss: number,
+    unitsHealed: number
+  }[],
+
+  summaryLogs: any[],
 }
