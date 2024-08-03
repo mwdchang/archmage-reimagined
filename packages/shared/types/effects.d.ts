@@ -80,7 +80,7 @@ export interface UnitEffect extends Effect {
 }
 
 export interface UnitAttrEffect extends UnitEffect {
-  attributes: {
+  attributeMap: {
     [key: string]: {
       rule: string,
       magic: {

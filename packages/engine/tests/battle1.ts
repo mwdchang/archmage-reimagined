@@ -1,6 +1,7 @@
 import { battle, resolveBattleAftermath, Combatant } from '../src/war';
 import { loadUnitsAndSpells } from './loader';
 import { createMage } from '../src/base/mage';
+import { prettyPrintBR } from '../src/battle/pretty-print';
 
 loadUnitsAndSpells();
 
@@ -34,4 +35,4 @@ resolveBattleAftermath('siege', attacker.mage, defender.mage, report);
 
 console.log('');
 console.log('');
-console.log(report);
+prettyPrintBR(report);

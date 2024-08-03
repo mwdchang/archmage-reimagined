@@ -10,7 +10,6 @@ import {
   currentSpellLevel, 
   castingCost
 } from './magic';
-import { LPretty, RPretty } from './util';
 import { totalLand } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
 
@@ -131,8 +130,10 @@ const applyUnitEffect = (
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
-  Object.keys(unitEffect.attributes).forEach(attrKey => {
-    const attr = unitEffect.attributes[attrKey];
+  console.log('debug', unitEffect);
+
+  Object.keys(unitEffect.attributeMap).forEach(attrKey => {
+    const attr = unitEffect.attributeMap[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
 
     console.log(`processing ${fields}`);
@@ -497,6 +498,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     attackType: attackType,
     attacker: {
       id: attacker.mage.id,
+      name: attacker.mage.name,
       spellId: attacker.spellId,
       itemId: attacker.itemId,
       army: [],
@@ -507,6 +509,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     },
     defender: {
       id: defender.mage.id,
+      name: defender.mage.name,
       spellId: defender.spellId,
       itemId: defender.itemId,
       army: [],
@@ -517,14 +520,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     },
 
     // Tracking spells, heros, ... etc
-    preBattleLogs: {
-      attackerSpellResult: null,
-      attackerItemResult: null,
-      attackerLogs: [],
-
-      defenderSpellResult: null,
-      defenderItemResult: null,
-      defenderLogs: []
+    preBattle: {
+      attacker: {
+        spellResult: null,
+        itemResult: null,
+      },
+      defender: {
+        spellResult: null,
+        itemResult: null,
+      }
     },
 
     // Tracking engagement
@@ -543,20 +547,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
       attacker.mage.currentMana -= cost;
-
-      battleReport.preBattleLogs.attackerSpellResult = 'success';
+      battleReport.preBattle.attacker.spellResult = 'success';
       battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
     } else {
-      battleReport.preBattleLogs.attackerSpellResult = 'noMana';
+      battleReport.preBattle.attacker.spellResult = 'noMana';
     }
   }
   if (attacker.itemId) {
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
       battleItem(attacker, attackingArmy, defender, defendingArmy);
-      battleReport.preBattleLogs.attackerItemResult = 'success';
+      battleReport.preBattle.attacker.itemResult = 'success';
     } else {
-      battleReport.preBattleLogs.attackerItemResult = 'noItem';
+      battleReport.preBattle.attacker.itemResult = 'noItem';
     }
   }
 
@@ -565,19 +568,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
 
-      battleReport.preBattleLogs.defenderSpellResult = 'success';
+      battleReport.preBattle.defender.spellResult = 'success';
       battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
     } else {
-      battleReport.preBattleLogs.defenderSpellResult = 'noMana';
+      battleReport.preBattle.defender.spellResult = 'noMana';
     }
   }
   if (defender.itemId) {
     if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
       battleItem(defender, defendingArmy, attacker, attackingArmy);
-      battleReport.preBattleLogs.defenderItemResult = 'success';
+      battleReport.preBattle.defender.itemResult = 'success';
     } else {
-      battleReport.preBattleLogs.defenderItemResult = 'noItem';
+      battleReport.preBattle.defender.itemResult = 'noItem';
     }
   }
 
@@ -592,64 +595,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Sort out attacking order
   const battleOrders = calcBattleOrders(attackingArmy, defendingArmy);
 
-  console.log('');
-  console.log('=== Combat ===');
-  console.log(`\tAttacker cast ${attacker.spellId}`);
-  console.log(`\tAttacker use ${attacker.itemId}`);
-  console.log(`\tDefender cast ${defender.spellId}`);
-  console.log(`\tDefender use ${defender.itemId}`);
-
-  console.log('=== Attacking army ===');
-  console.log(
-    LPretty('name'),
-    RPretty('size'),
-    RPretty('Attack'),
-    RPretty('Extra'),
-    RPretty('Counter'),
-    RPretty('Hitpoints'),
-    RPretty('Accuracy'),
-    LPretty('Abilities'),
-  );
-
-  attackingArmy.forEach(stack => {
-    console.log(
-      LPretty(stack.unit.name),
-      RPretty(stack.size),
-      RPretty(stack.unit.primaryAttackPower),
-      RPretty(stack.unit.secondaryAttackPower),
-      RPretty(stack.unit.counterAttackPower),
-      RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
-      JSON.stringify((stack.unit.abilities.map(d => d.name)))
-    );
-  });
-
-  console.log('=== Defending army ===');
-  console.log(
-    LPretty('name'),
-    RPretty('size'),
-    RPretty('Attack'),
-    RPretty('Extra'),
-    RPretty('Counter'),
-    RPretty('Hitpoints'),
-    RPretty('Accuracy'),
-    LPretty('Abilities'),
-  );
-
-  defendingArmy.forEach(stack => {
-    console.log(
-      LPretty(stack.unit.name),
-      RPretty(stack.size),
-      RPretty(stack.unit.primaryAttackPower),
-      RPretty(stack.unit.secondaryAttackPower),
-      RPretty(stack.unit.counterAttackPower),
-      RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
-      JSON.stringify((stack.unit.abilities.map(d => d.name)))
-    );
-  });
-
-  // FIXME: Snapshot the army for reporting before engagement starts ???
   battleReport.attacker.army = _.cloneDeep(attackingArmy);
   battleReport.defender.army = _.cloneDeep(defendingArmy);
 
@@ -702,8 +647,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
-      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
+      battleReport.battleLogs.push({
+        type: 'primary',
+        attacker: {
+          id: attackingMage.id,
+          unitId: attackingStack.unit.id,
+          unitLoss: 0
+        },
+        defender: {
+          id: defendingMage.id,
+          unitId: defendingStack.unit.id,
+          unitLoss: defenderUnitLoss
+        }
+      });
 
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) { 
@@ -712,7 +668,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
       defendingStack.size -= defenderUnitLoss;
       defendingStack.loss += defenderUnitLoss;
-
 
       // Additonal Strike ability
       if (hasAbility(aUnit, 'additionalStrike')) {
@@ -734,8 +689,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
 
         console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-        battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} again`)
-        battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
+        battleReport.battleLogs.push({
+          type: 'additionalStrike',
+          attacker: {
+            id: attackingMage.id,
+            unitId: attackingStack.unit.id,
+            unitLoss: 0
+          },
+          defender: {
+            id: defendingMage.id,
+            unitId: defendingStack.unit.id,
+            unitLoss: defenderUnitLoss
+          }
+        });
 
         // Accumulate or clear partial damage
         if (defenderUnitLoss > 0) { 
@@ -779,12 +745,21 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           totalDamage = attackingStack.size * aUnit.hitPoints;
           attackerUnitLoss = attackingStack.size;
         }
-
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
-        battleReport.battleLogs.push(`${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} struck back ${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name}`)
-        battleReport.battleLogs.push(`${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name} slew ${attackingMage.name}(#${attackingMage.id})'s ${attackerUnitLoss} ${attackingStack.unit.name}`)
-
+        battleReport.battleLogs.push({
+          type: 'counter',
+          attacker: {
+            id: attackingMage.id,
+            unitId: attackingStack.unit.id,
+            unitLoss: attackerUnitLoss
+          },
+          defender: {
+            id: defendingMage.id,
+            unitId: defendingStack.unit.id,
+            unitLoss: 0
+          }
+        });
 
         // Accumulate or clear partial damage
         if (attackerUnitLoss > 0) { 
@@ -827,10 +802,21 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         totalDamage = defendingStack.size * dUnit.hitPoints;
         defenderUnitLoss = defendingStack.size;
       }
-
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} attaced ${defendingMage.name}(#${defendingMage.id})'s ${defendingStack.unit.name}`)
-      battleReport.battleLogs.push(`${attackingMage.name}(#${attackingMage.id})'s ${attackingStack.unit.name} slew ${defendingMage.name}(#${defendingMage.id})'s ${defenderUnitLoss} ${defendingStack.unit.name}`)
+
+      battleReport.battleLogs.push({
+        type: 'secondary',
+        attacker: {
+          id: attackingMage.id,
+          unitId: attackingStack.unit.id,
+          unitLoss: 0
+        },
+        defender: {
+          id: defendingMage.id,
+          unitId: defendingStack.unit.id,
+          unitLoss: defenderUnitLoss
+        }
+      });
 
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) { 

@@ -56,6 +56,7 @@ export interface BattleReport {
   attackType: string,
   attacker: {
     id: number,
+    name: string,
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[],
@@ -67,6 +68,7 @@ export interface BattleReport {
   }
   defender: {
     id: number,
+    name: string,
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[]
@@ -77,17 +79,30 @@ export interface BattleReport {
     lossUnit: number,
   },
 
-  preBattleLogs: {
-    attackerSpellResult: BattleSpellResult,
-    attackerItemResult: BattleItemResult,
-    attackerLogs: any[],
-
-    defenderSpellResult: BattleSpellResult,
-    defenderItemResult: BattleItemResult,
-    defenderLogs: any[],
+  preBattle: {
+    attacker: {
+      spellResult: BattleSpellResult,
+      itemResult: BattleItemResult,
+    },
+    defender: {
+      spellResult: BattleSpellResult,
+      itemResult: BattleItemResult,
+    }
   },
 
-  battleLogs: any[],
+  battleLogs: {
+    type: string,
+    attacker: {
+      id: string,
+      unitId: string,
+      unitLoss: number
+    },
+    defender: {
+      id: string,
+      unitId: string,
+      unitLoss: number
+    }
+  }[],
   postBattleLogs: any[],
   summaryLogs: any[],
 
