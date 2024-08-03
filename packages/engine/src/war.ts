@@ -21,6 +21,7 @@ import { calcAccuracyModifier } from './battle/calc-accuracy-modifier';
 import { calcResistance } from './battle/calc-resistance';
 import { calcDamageMultiplier } from './battle/calc-damage-multiplier';
 import { calcPairings } from './battle/calc-pairings';
+import { resolveUnitAbilities } from './battle/resolve-unit-abilities';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -410,33 +411,6 @@ const battleItem = (
   });
 }
 
-/**
- * Resolve conflicting abilities, e.g. a unit can gain flying and lose flying. Any negative
- * cancels out all positive.
- */
-const resolveUnitAbilities = (stack: BattleStack[]) => {
-  stack.forEach(stack => {
-    const addedAbilities = stack.addedAbilities;
-    const removedAbilities = stack.removedAbilities;
-
-    // 1. jdd first, so negatives can cancel
-    for (let i = 0; i < addedAbilities.length; i++) {
-      const ability = addedAbilities[i];
-      if (!stack.unit.abilities.find(d => d.name === ability.name)) {
-        stack.unit.abilities.push(ability);
-      }
-    }
-    
-    // 2. then remove if there are conflicts
-    for (let i = 0; i < removedAbilities.length; i++) {
-      const ability = removedAbilities[i];
-      if (stack.unit.abilities.find(d => d.name === ability.name)) {
-        stack.unit.abilities = _.remove(stack.unit.abilities, d => d.name === ability.name);
-      }
-    }
-  });
-}
-
 // For debugging different scenarios
 export interface BattleOptions {
   useFortBonus: boolean,
@@ -790,7 +764,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           efficiency = Math.max(0, efficiency);
         }
 
-
         let damage = dUnit.counterAttackPower *
           defendingStack.size * 
           (accuracy / 100) *
@@ -902,7 +875,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         heal = heal * (100 - hValue) / 100;
       });
       heal = 1 - heal;
-
 
       let unitsHealed = Math.floor(heal * stack.loss);
       if (unitsHealed >= stack.loss) {
