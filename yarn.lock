@@ -2676,10 +2676,10 @@ ts-api-utils@^1.3.0:
   resolved "https://registry.yarnpkg.com/ts-api-utils/-/ts-api-utils-1.3.0.tgz#4b490e27129f1e8e686b45cc4ab63714dc60eea1"
   integrity sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==
 
-tsx@^4.16.0:
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.16.0.tgz#913dd96f191b76f07a8744201d8c15d510aa1352"
-  integrity sha512-MPgN+CuY+4iKxGoJNPv+1pyo5YWZAQ5XfsyobUG+zoKG7IkvCPLZDEyoIb8yLS2FcWci1nlxAqmvPlFWD5AFiQ==
+tsx@^4.16.5:
+  version "4.16.5"
+  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.16.5.tgz#49c2a8f4d4d66bd7cf538e23e7368a1919a9a1ca"
+  integrity sha512-ArsiAQHEW2iGaqZ8fTA1nX0a+lN5mNTyuGRRO6OW3H/Yno1y9/t1f9YOI1Cfoqz63VAthn++ZYcbDP7jPflc+A==
   dependencies:
     esbuild "~0.21.5"
     get-tsconfig "^4.7.5"
