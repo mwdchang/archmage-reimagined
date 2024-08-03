@@ -11,3 +11,6 @@ updates:
     versioning-strategy: increase    
     schedule:
       interval: "monthly"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
