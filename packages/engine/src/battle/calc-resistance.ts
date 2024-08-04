@@ -1,4 +1,4 @@
-import { Unit } from "shared/types/unit";
+import type { Unit } from "shared/types/unit";
 import { hasAbility } from "../base/unit";
 
 export const calcResistance = (u: Unit, attackTypes: string[]) => {

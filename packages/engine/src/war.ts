@@ -1,9 +1,8 @@
 import _ from 'lodash';
-import { ArmyUnit, Enchantment, Mage, Combatant } from "shared/types/mage";
-import { Unit } from "shared/types/unit";
+import { Enchantment, Mage, Combatant } from "shared/types/mage";
 import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { isFlying, isRanged, hasAbility } from "./base/unit";
+import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import { 
   currentSpellLevel, 
@@ -22,73 +21,18 @@ import { calcPairings } from './battle/calc-pairings';
 import { resolveUnitAbilities } from './battle/resolve-unit-abilities';
 import { calcHealing } from './battle/calc-stack-healing';
 import { calcFortBonus } from './battle/calc-fort-bonus';
+import { calcBattleSummary } from './battle/calc-battle-summary';
 import { newBattleReport } from './battle/new-battle-report';
+import { prepareBattleStack } from './battle/prepare-battle-stack';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-const NONE = -1;
 
 export interface EffectOrigin {
   id: number,
   magic: string,
   spellLevel: number
 }
-
-enum StackType {
-  NORMAL,
-  REINFORCEMENT,
-  TEMPORARY
-}
-
-// Returns power modifiers
-// - flyer
-// - ranged
-// - everything else
-const getPowerModifier = (u: Unit) => {
-  if (isFlying(u)) return  1.5 * 1.5;
-  if (isRanged(u)) return 1.0;
-  return 1.5;
-};
-
-/**
- * Returns the stacks in power ranking order
- *
- * As determined by primary attack type and unit abilities
- * - flying units have a 2.25 multiplier
- * - ground, none-ranged units have 1.5 multiplier
- * - ranged has 1.0 multipiler
- */
-const prepareBattleStack = (army: ArmyUnit[], role: string) => {
-  const battleStack: BattleStack[] = army.map(stack => {
-    const u = getUnitById(stack.id);
-    return {
-      unit: u,
-      size: stack.size,
-      stackType: StackType.NORMAL,
-      role,
-      isTarget: false,
-      targetIdx: NONE,
-      accuracy: 30,
-      efficiency: 100,
-      sustainedDamage: 0,
-
-      healingPoints: 0,
-      healingBuffer: [],
-
-      addedAbilities: [],
-      removedAbilities: [],
-
-      loss: 0,
-      netPower: u.powerRank * stack.size
-    }
-  });
-
-  // Initially sort by power
-  return battleStack.sort((a, b) => {
-    return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
-  });
-};
 
 const calcDamageVariance = (attackType: String[]) => {
   let randomModifier = randomBM();
@@ -789,49 +733,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   });
 
   // Calculate combat result
-  let attackerStartingNP = 0;
-  let defenderStartingNP = 0;
-  attackingArmy.forEach(stack => attackerStartingNP += stack.netPower);
-  defendingArmy.forEach(stack => defenderStartingNP += stack.netPower);
+  const battleSummary = calcBattleSummary(attackingArmy, defendingArmy);
+  const brA = battleReport.attacker;
+  const brD = battleReport.defender;
+  
+  brA.startingNetPower = battleSummary.attacker.netPower;
+  brA.lossNetPower = battleSummary.attacker.netPowerLoss;
+  brA.lossUnit = battleSummary.attacker.unitsLoss;
+  brA.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
-  battleReport.attacker.startingNetPower = attackerStartingNP;
-  battleReport.defender.startingNetPower = defenderStartingNP;
-
-  console.log('');
-  console.log('=== Attacker summary ===');
-  let attackerPowerLoss = 0;
-  let attackerUnitLoss = 0;
-  attackingArmy.forEach(stack => {
-    const np = stack.unit.powerRank * stack.loss;
-    attackerPowerLoss += np;
-    attackerUnitLoss += stack.loss;
-    console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
-  });
-  console.log('');
-  console.log('Total loss', attackerPowerLoss, (100 * attackerPowerLoss/attackerStartingNP).toFixed(2));
-  console.log('');
-
-  console.log('=== Defender summary ===');
-  let defenderPowerLoss = 0;
-  let defenderUnitLoss = 0;
-  defendingArmy.forEach(stack => {
-    const np = stack.unit.powerRank * stack.loss;
-    defenderPowerLoss += np;
-    defenderUnitLoss += stack.loss;
-    console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
-  });
-  console.log('');
-  console.log('Total loss', defenderPowerLoss, (100 * defenderPowerLoss/defenderStartingNP).toFixed(2));
-  console.log('');
-
-  battleReport.attacker.lossNetPower = attackerPowerLoss;
-  battleReport.attacker.lossUnit = attackerUnitLoss;
-  battleReport.attacker.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
-
-  battleReport.defender.lossNetPower = defenderPowerLoss;
-  battleReport.defender.lossUnit = defenderUnitLoss;
-  battleReport.defender.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
-
+  brD.startingNetPower = battleSummary.defender.netPower;
+  brD.lossNetPower = battleSummary.defender.netPowerLoss;
+  brD.lossUnit = battleSummary.defender.unitsLoss;
+  brD.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
   return battleReport;
 }
 

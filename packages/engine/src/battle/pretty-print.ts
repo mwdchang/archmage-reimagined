@@ -1,6 +1,5 @@
-import { BattleReport } from "shared/types/battle";
+import type { BattleReport } from "shared/types/battle";
 import { LPretty, RPretty } from "../util";
-import { devNull } from "os";
 
 /**
  * For debugging, pretty print BR report for console

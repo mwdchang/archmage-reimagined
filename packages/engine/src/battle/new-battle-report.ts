@@ -1,5 +1,5 @@
-import { BattleReport } from "shared/types/battle";
-import { Combatant } from "shared/types/mage";
+import type { BattleReport } from "shared/types/battle";
+import type { Combatant } from "shared/types/mage";
 import { v4 as uuidv4 } from 'uuid';
 
 export const newBattleReport = (attacker: Combatant, defender: Combatant, attackType: string) => {

@@ -1,4 +1,4 @@
-import { Mage } from "shared/types/mage";
+import type { Mage } from "shared/types/mage";
 import { totalLand } from "../base/mage";
 
 /**

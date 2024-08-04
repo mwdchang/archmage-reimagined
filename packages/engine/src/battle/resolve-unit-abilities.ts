@@ -1,7 +1,6 @@
 import type { BattleStack } from "shared/types/battle";
 import _ from 'lodash';
 
-
 /**
  * Resolve conflicting abilities, e.g. a unit can gain flying and lose flying. Any negative
  * cancels out all positive.
@@ -28,4 +27,3 @@ export const resolveUnitAbilities = (stack: BattleStack[]) => {
     }
   });
 }
-
