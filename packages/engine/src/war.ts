@@ -21,6 +21,7 @@ import { calcResistance } from './battle/calc-resistance';
 import { calcDamageMultiplier } from './battle/calc-damage-multiplier';
 import { calcPairings } from './battle/calc-pairings';
 import { resolveUnitAbilities } from './battle/resolve-unit-abilities';
+import { calcHealing } from './battle/calc-stack-healing';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -818,48 +819,16 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
 
   // Post battle, healing calculation
-
   // Attacker healing
   attackingArmy.forEach(stack => {
     let startingStackLoss = stack.loss;
-    let totalUnitsHealed = 0;
+    let totalUnitsHealed = calcHealing(stack);
 
-    if (stack.size <= 0) return;
-
-    if (stack.healingPoints > 0 && stack.loss > 0) {
-      let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
-      if (unitsHealed >= stack.loss) {
-        unitsHealed = stack.loss;
-      }
-      stack.loss -= unitsHealed;
-      stack.size += unitsHealed;
-      totalUnitsHealed += unitsHealed;
-
-      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    if (totalUnitsHealed >= stack.loss) {
+      totalUnitsHealed = stack.loss;
     }
-    if (hasHealing(stack.unit)) {
-      stack.healingBuffer.push(30);
-    }
-    if (hasRegeneration(stack.unit)) {
-      stack.healingBuffer.push(20);
-    }
-    if (stack.healingBuffer.length > 0 && stack.loss > 0) {
-      let heal = 1.0;
-      stack.healingBuffer.forEach(hValue => {
-        heal = heal * (100 - hValue) / 100;
-      });
-      heal = 1 - heal;
-
-      let unitsHealed = Math.floor(heal * stack.loss);
-      if (unitsHealed >= stack.loss) {
-        unitsHealed = stack.loss;
-      }
-      stack.loss -= unitsHealed;
-      stack.size += unitsHealed;
-      totalUnitsHealed += unitsHealed;
-
-      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-    }
+    stack.loss -= totalUnitsHealed;
+    stack.size += totalUnitsHealed;
 
     battleReport.postBattleLogs.push({
       id: attacker.mage.id,
@@ -872,44 +841,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Defender healing
   defendingArmy.forEach(stack => {
     let startingStackLoss = stack.loss;
-    let totalUnitsHealed = 0;
+    let totalUnitsHealed = calcHealing(stack);
 
-    if (stack.size <= 0) return;
-
-    if (stack.healingPoints > 0 && stack.loss > 0) {
-      let unitsHealed = Math.floor(stack.healingPoints / stack.unit.hitPoints);
-      if (unitsHealed >= stack.loss) {
-        unitsHealed = stack.loss;
-      }
-      stack.loss -= unitsHealed;
-      stack.size += unitsHealed;
-      totalUnitsHealed += unitsHealed;
-
-      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
+    if (totalUnitsHealed >= stack.loss) {
+      totalUnitsHealed = stack.loss;
     }
-    if (hasHealing(stack.unit)) {
-      stack.healingBuffer.push(30);
-    }
-    if (hasRegeneration(stack.unit)) {
-      stack.healingBuffer.push(20);
-    }
-    if (stack.healingBuffer.length > 0 && stack.loss > 0) {
-      let heal = 1.0;
-      stack.healingBuffer.forEach(hValue => {
-        heal = heal * (100 - hValue) / 100;
-      });
-      heal = 1 - heal;
-
-      let unitsHealed = Math.floor(heal * stack.loss);
-      if (unitsHealed >= stack.loss) {
-        unitsHealed = stack.loss;
-      }
-      stack.loss -= unitsHealed;
-      stack.size += unitsHealed;
-      totalUnitsHealed += unitsHealed;
-
-      console.log(`healing ${stack.unit.name} = ${unitsHealed}`);
-    }
+    stack.loss -= totalUnitsHealed;
+    stack.size += totalUnitsHealed;
 
     battleReport.postBattleLogs.push({
       id: defender.mage.id,
@@ -917,7 +855,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       unitsLoss: startingStackLoss,
       unitsHealed: totalUnitsHealed
     });
-
   });
 
   // Calculate combat result
