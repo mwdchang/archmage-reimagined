@@ -104,3 +104,13 @@ export interface Mage {
   heroes: Hero[];
   enchantments: Enchantment[];
 }
+
+export interface Combatant {
+  mage: Mage,
+  spellId: string,
+  itemId: string,
+
+  // Army sent into battle, this is different than mage.army as you don't send all stacks
+  army: ArmyUnit[], 
+}
+

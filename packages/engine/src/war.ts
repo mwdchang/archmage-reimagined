@@ -1,16 +1,15 @@
 import _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { ArmyUnit, Enchantment, Mage } from "shared/types/mage";
+import { ArmyUnit, Enchantment, Mage, Combatant } from "shared/types/mage";
 import { Unit } from "shared/types/unit";
 import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { isFlying, isRanged, hasAbility, hasHealing, hasRegeneration } from "./base/unit";
+import { isFlying, isRanged, hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import { 
   currentSpellLevel, 
   castingCost
 } from './magic';
-import { totalLand, totalUnits } from './base/mage';
+import { totalLand } from './base/mage';
 import { BattleReport, BattleStack } from 'shared/types/battle';
 
 // Various battle helpers
@@ -22,20 +21,13 @@ import { calcDamageMultiplier } from './battle/calc-damage-multiplier';
 import { calcPairings } from './battle/calc-pairings';
 import { resolveUnitAbilities } from './battle/resolve-unit-abilities';
 import { calcHealing } from './battle/calc-stack-healing';
+import { calcFortBonus } from './battle/calc-fort-bonus';
+import { newBattleReport } from './battle/new-battle-report';
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 const NONE = -1;
-
-export interface Combatant {
-  mage: Mage,
-  spellId: string,
-  itemId: string,
-
-  // Army sent into battle, this is different than mage.army as you don't send all stacks
-  army: ArmyUnit[], 
-}
 
 export interface EffectOrigin {
   id: number,
@@ -460,75 +452,14 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Apply fort bonus to defender
   if (battleOptions.useFortBonus === true) {
-    const defenderLand = totalLand(defender.mage);
-    const defenderForts = defender.mage.forts;
-    const fortsMin = 0.0067;
-    const fortsMax = 0.0250;
-    const fortsRatio = Math.min((defenderForts / defenderLand), fortsMax);
-
-    let base = attackType === 'regular' ? 10 : 20;
-    if (attackType === 'regular' && fortsRatio > fortsMin) {
-      const additionalBonus = 27.5 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
-      base += additionalBonus;
-    } 
-
-    if (attackType === 'siege' && fortsRatio > fortsMin) {
-      const additionalBonus = 55 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
-      base += additionalBonus;
-    }
+    const base = calcFortBonus(defender.mage, attackType);
     defendingArmy.forEach(stack => {
       stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
     });
   }
 
-  const battleReport: BattleReport = {
-    id: uuidv4(),
-    timestamp: Date.now(),
-    attackType: attackType,
-    attacker: {
-      id: attacker.mage.id,
-      name: attacker.mage.name,
-      spellId: attacker.spellId,
-      itemId: attacker.itemId,
-      army: [],
-      armyLosses: [],
-      startingNetPower: 0,
-      lossNetPower: 0,
-      lossUnit: 0,
-    },
-    defender: {
-      id: defender.mage.id,
-      name: defender.mage.name,
-      spellId: defender.spellId,
-      itemId: defender.itemId,
-      army: [],
-      armyLosses: [],
-      startingNetPower: 0,
-      lossNetPower: 0,
-      lossUnit: 0,
-    },
-
-    // Tracking spells, heros, ... etc
-    preBattle: {
-      attacker: {
-        spellResult: null,
-        itemResult: null,
-      },
-      defender: {
-        spellResult: null,
-        itemResult: null,
-      }
-    },
-
-    // Tracking engagement
-    battleLogs: [],
-
-    // Units lost/gained
-    postBattleLogs: [],
-
-    // Summary
-    summaryLogs: []
-  };
+  // Initialize battle report
+  const battleReport = newBattleReport(attacker, defender, attackType);
 
   // Spells
   // TODO: check barriers and success
