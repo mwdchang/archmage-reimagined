@@ -12,22 +12,14 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
       name: attacker.mage.name,
       spellId: attacker.spellId,
       itemId: attacker.itemId,
-      army: [],
-      armyLosses: [],
-      startingNetPower: 0,
-      lossNetPower: 0,
-      lossUnit: 0,
+      army: []
     },
     defender: {
       id: defender.mage.id,
       name: defender.mage.name,
       spellId: defender.spellId,
       itemId: defender.itemId,
-      army: [],
-      armyLosses: [],
-      startingNetPower: 0,
-      lossNetPower: 0,
-      lossUnit: 0,
+      army: []
     },
 
     // Tracking spells, heros, ... etc
@@ -49,7 +41,20 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     postBattleLogs: [],
 
     // Summary
-    summaryLogs: []
+    summary: {
+      attacker: {
+        netPower: 0,
+        netPowerLoss: 0,
+        unitsLoss: 0,
+        armyLoss: []
+      },
+      defender: {
+        netPower: 0,
+        netPowerLoss: 0,
+        unitsLoss: 0,
+        armyLoss: []
+      }
+    }
   };
 
   return battleReport;

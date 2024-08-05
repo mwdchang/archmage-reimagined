@@ -1,3 +1,4 @@
+import { ArmyUnit } from "./mage.js";
 import type { Unit, UnitAbility } from "./unit.d.ts";
 
 export enum StackType {
@@ -39,7 +40,7 @@ export interface BattleReportSummary {
   attackType: string
   attackerId: number,
   defenderId: number,
-  summaryLogs: any[]
+  summary: any
 }
 
 /*
@@ -59,12 +60,7 @@ export interface BattleReport {
     name: string,
     spellId: string | null,
     itemId: string | null,
-    army: BattleStack[],
-    armyLosses: { id: string, size: number }[],
-
-    startingNetPower: number,
-    lossNetPower: number,
-    lossUnit: number,
+    army: BattleStack[]
   }
   defender: {
     id: number,
@@ -72,11 +68,6 @@ export interface BattleReport {
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[]
-    armyLosses: { id: string, size: number }[],
-
-    startingNetPower: number,
-    lossNetPower: number,
-    lossUnit: number,
   },
 
   preBattle: {
@@ -111,5 +102,18 @@ export interface BattleReport {
     unitsHealed: number
   }[],
 
-  summaryLogs: any[],
+  summary: {
+    attacker: {
+      netPower: number,
+      netPowerLoss: number,
+      unitsLoss: number,
+      armyLoss: ArmyUnit[]
+    },
+    defender: {
+      netPower: number,
+      netPowerLoss: number,
+      unitsLoss: number,
+      armyLoss: ArmyUnit[]
+    }
+  }
 }

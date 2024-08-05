@@ -97,5 +97,6 @@ export const prettyPrintBR = (br: BattleReport) => {
     console.log(``);
   })
   console.log('=== Power loss ===');
+  console.log(br.summary);
 
 }

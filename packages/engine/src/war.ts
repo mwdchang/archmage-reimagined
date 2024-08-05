@@ -642,7 +642,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (defendingStack.efficiency < 0) defendingStack.efficiency = 0;
     }
 
-
     /////////// Secondary //////////
     if (attackType === 'secondary') {
       if (attackingStack.unit.secondaryAttackInit < 1 || attackingStack.size <= 0) continue;
@@ -734,18 +733,18 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Calculate combat result
   const battleSummary = calcBattleSummary(attackingArmy, defendingArmy);
-  const brA = battleReport.attacker;
-  const brD = battleReport.defender;
+  const brA = battleReport.summary.attacker;
+  const brD = battleReport.summary.defender;
   
-  brA.startingNetPower = battleSummary.attacker.netPower;
-  brA.lossNetPower = battleSummary.attacker.netPowerLoss;
-  brA.lossUnit = battleSummary.attacker.unitsLoss;
-  brA.armyLosses = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
+  brA.netPower = battleSummary.attacker.netPower;
+  brA.netPowerLoss = battleSummary.attacker.netPowerLoss;
+  brA.unitsLoss = battleSummary.attacker.unitsLoss;
+  brA.armyLoss = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
-  brD.startingNetPower = battleSummary.defender.netPower;
-  brD.lossNetPower = battleSummary.defender.netPowerLoss;
-  brD.lossUnit = battleSummary.defender.unitsLoss;
-  brD.armyLosses = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
+  brD.netPower = battleSummary.defender.netPower;
+  brD.netPowerLoss = battleSummary.defender.netPowerLoss;
+  brD.unitsLoss = battleSummary.defender.unitsLoss;
+  brD.armyLoss = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
   return battleReport;
 }
 
@@ -757,11 +756,12 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
  * - update army compositions
  */
 export const resolveBattleAftermath = (attackType: string, attacker: Mage, defender: Mage, battleReport: BattleReport) => {
-  const attackerStartingNP = battleReport.attacker.startingNetPower;
-  const attackerLossNP = battleReport.attacker.lossNetPower;
+  const summary = battleReport.summary;
+  const attackerStartingNP = summary.attacker.netPower;
+  const attackerLossNP = summary.attacker.netPowerLoss;
 
-  const defenderStartingNP = battleReport.defender.startingNetPower;
-  const defenderLossNP = battleReport.defender.lossNetPower;
+  const defenderStartingNP = summary.defender.netPower;
+  const defenderLossNP = summary.defender.netPowerLoss;
 
   const landModifier = 0.1;
   const attackerGain = 0.33;
@@ -877,19 +877,19 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
 
 
     const t = attackType === 'siege' ? 'sieged' : 'attacked'; 
-    battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
-    battleReport.summaryLogs.push(`The attack was successful and ${attacker.name} (#${attacker.id}) gained ${reportLandGain} land.`);
+    // battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
+    // battleReport.summaryLogs.push(`The attack was successful and ${attacker.name} (#${attacker.id}) gained ${reportLandGain} land.`);
   } else {
     console.log('defender defended');
     const t = attackType === 'siege' ? 'sieged' : 'attacked'; 
-    battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
-    battleReport.summaryLogs.push(`The attack failed and achieved nothing`);
+    // battleReport.summaryLogs.push(`${attacker.name} (#${attacker.id}) ${t} ${defender.name} (#${defender.id})'s kingdom`);
+    // battleReport.summaryLogs.push(`The attack failed and achieved nothing`);
   }
 
   console.log('updating armies');
 
   // Handle units
-  const attackerLosses = battleReport.attacker.armyLosses;
+  const attackerLosses = summary.attacker.armyLoss;
   attackerLosses.forEach(stack => {
     const f = attacker.army.find(d => {
       return d.id === stack.id
@@ -900,7 +900,7 @@ export const resolveBattleAftermath = (attackType: string, attacker: Mage, defen
   });
   attacker.army = attacker.army.filter(d => d.size > 0);
 
-  const defenderLosses = battleReport.defender.armyLosses;
+  const defenderLosses = summary.defender.armyLoss;
   defenderLosses.forEach(stack => {
     defender.army.find(d => d.id === stack.id).size = stack.size;
   });

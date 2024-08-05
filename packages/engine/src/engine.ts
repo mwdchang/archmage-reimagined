@@ -15,12 +15,9 @@ import {
   totalNetPower
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
-import { ArmyUnit, Assignment, Enchantment, Mage } from 'shared/types/mage';
-import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { 
-  BuildPayload,
-  DestroyPayload
-} from 'shared/types/api';
+import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
+import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
+import type { BuildPayload, DestroyPayload } from 'shared/types/api';
 import { 
   explore,
   explorationRate,
@@ -46,7 +43,7 @@ import {
   currentSpellLevel,
   enchantmentUpkeep
 } from './magic';
-import { battle, resolveBattleAftermath, Combatant } from './war';
+import { battle, resolveBattleAftermath } from './war';
 import { UnitSummonEffect } from 'shared/types/effects';
 
 import { randomInt } from './random';
@@ -597,7 +594,7 @@ class Engine {
       attackType: 'siege',
       attackerId: battleReport.attacker.id,
       defenderId: battleReport.defender.id,
-      summaryLogs: battleReport.summaryLogs
+      summary: battleReport.summary
     };
 
     this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
