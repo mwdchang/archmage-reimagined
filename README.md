@@ -1,12 +1,7 @@
 ## Archmage Reimagined
 Archmage Reimagined is both a modern take and a re-imagination of the  classic online MMORPG game "Archmage: Reincarnation from Hell".
 
-Archmage was a rich and complex game enjoyed by those who likes deep strategy games. However, it is not easy to play, especialy for new players and those with limited time. This project will try tp address these limitations and introduce new ideas to keep the game fresh.
-
-### News
-We are building out version 0.1, please see the project [roadmap](./docs/roadmap.md)
-
-- October 2023: Finished "version-0", functional core mechanics, some units and spells added for testing.
+Archmage was a rich and complex game enjoyed by those who likes deep strategy games. However, it is not easy to play, especialy for new players and those with limited time. This project will address these limitations and introduce new ideas to keep the game fresh.
 
 ### Development
 You will need to meet the following prerequisites
