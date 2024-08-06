@@ -43,7 +43,7 @@ import {
   currentSpellLevel,
   enchantmentUpkeep
 } from './magic';
-import { battle, resolveBattleAftermath } from './war';
+import { battle, resolveBattle } from './war';
 import { UnitSummonEffect } from 'shared/types/effects';
 
 import { randomInt } from './random';
@@ -586,7 +586,7 @@ class Engine {
     }
 
     const battleReport = battle('siege', attacker, defender);
-    resolveBattleAftermath('siege', mage, defenderMage, battleReport);
+    resolveBattle(mage, defenderMage, battleReport);
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,

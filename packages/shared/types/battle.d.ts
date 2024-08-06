@@ -55,6 +55,8 @@ export interface BattleReport {
   id: string,
   timestamp: number,
   attackType: string,
+  isSuccessful: boolean,
+
   attacker: {
     id: number,
     name: string,
@@ -115,5 +117,10 @@ export interface BattleReport {
       unitsLoss: number,
       armyLoss: ArmyUnit[]
     }
+  },
+
+  landResult: {
+    landLoss: any,
+    landGain: any
   }
 }

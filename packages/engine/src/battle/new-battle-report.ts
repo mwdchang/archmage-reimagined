@@ -7,6 +7,8 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     id: uuidv4(),
     timestamp: Date.now(),
     attackType: attackType,
+    isSuccessful: false,
+
     attacker: {
       id: attacker.mage.id,
       name: attacker.mage.name,
@@ -54,8 +56,12 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
         unitsLoss: 0,
         armyLoss: []
       }
+    },
+
+    landResult: {
+      landLoss: {},
+      landGain: {}
     }
   };
-
   return battleReport;
 }

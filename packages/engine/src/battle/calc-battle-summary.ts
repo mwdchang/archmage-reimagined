@@ -28,6 +28,7 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
     // console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
 
+
   return {
     attacker: {
       netPower: attackerStartingNP,

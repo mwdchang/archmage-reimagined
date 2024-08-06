@@ -9,10 +9,10 @@ const siegePercentage = 0.10;
 const regularPercenage = 0.05; 
 
 const unitsNeededPerAcre = 50;
+const attackerGain = 0.33;
  
 export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: number) => {
-  const result = {
-    totalLand: 0,
+  const landLoss = {
     farms: 0,
     towns: 0,
     workshops: 0,
@@ -24,6 +24,18 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
     wilderness: 0,
   };
 
+  const landGain = {
+    farms: 0,
+    towns: 0,
+    workshops: 0,
+    nodes: 0,
+    barracks: 0,
+    guilds: 0,
+    forts: 0,
+    barriers: 0,
+    wilderness: 0,
+  }
+
   const buildingTypes = [
     'wilderness', 'farms', 'towns', 
     'workshops', 'nodes', 'barracks', 
@@ -33,8 +45,8 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
   const takePercentage = attackType === 'siege' ? siegePercentage : regularPercenage;
   const mageLand = totalLand(mage);
   let landTaken = Math.ceil(Math.min(takePercentage * mageLand, unitsRemaining / unitsNeededPerAcre));
-  result.totalLand = landTaken;
-
+  // result.land = mageLand;
+  // result.landTaken = landTaken;
 
   const tempMage = _.pick(mage, buildingTypes);
 
@@ -45,19 +57,19 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
       const forts = Math.floor(Math.min(1 + 0.1 * mage.forts, maxFortTaken));
       return Math.min(forts, tempMage['forts']);
     } 
-    return Math.floor(val * result.totalLand / mageLand);
+    return Math.floor(val * landTaken / mageLand);
   }
 
   // To a first round calculation
   // Do forts first, then proportionally distribute over remainder building types
-  result.forts = calcLoss('forts', null);
-  landTaken -= result.forts;
+  landLoss.forts = calcLoss('forts', null);
+  landTaken -= landLoss.forts;
 
   buildingTypes.forEach(buildingType => {
     if (buildingType === 'forts') return;
-    result[buildingType] = calcLoss(buildingType, tempMage[buildingType]);
-    tempMage[buildingType] -= result[buildingType];
-    landTaken -= result[buildingType];
+    landLoss[buildingType] = calcLoss(buildingType, tempMage[buildingType]);
+    tempMage[buildingType] -= landLoss[buildingType];
+    landTaken -= landLoss[buildingType];
   });
 
   // Resolve any mathematic remainder
@@ -67,7 +79,7 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
     while (landTaken > 0) {
       for (const v of buildingTypes) {
         if (tempMage[v] > 0) {
-          result[v] ++;
+          landLoss[v] ++;
           tempMage[v] --;
           landTaken --;
           break;
@@ -76,6 +88,21 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
     }
   }
 
+  landGain.forts = Math.max(1, Math.floor(attackerGain * landLoss.forts));
+  buildingTypes.forEach(buildingType => {
+    if (buildingType === 'forts') return;
+    landGain[buildingType] = Math.floor(attackerGain * landLoss[buildingType]);
+  });
+
+  // Dump any remainder into wilderness
+  let tempTotal = 0;
+  buildingTypes.forEach(d => {
+    tempTotal += landGain[d];
+  });
+  const extra = Math.floor(attackerGain * landTaken) - tempTotal;
+  if (extra > 0) { landGain['wilderness'] += extra; }
+
+
   // Done
-  return result;
+  return { landLoss, landGain };
 }
