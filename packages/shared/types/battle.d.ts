@@ -1,3 +1,4 @@
+import { ArmyUnit } from "./mage.js";
 import type { Unit, UnitAbility } from "./unit.d.ts";
 
 export enum StackType {
@@ -39,7 +40,7 @@ export interface BattleReportSummary {
   attackType: string
   attackerId: number,
   defenderId: number,
-  summaryLogs: any[]
+  summary: any
 }
 
 /*
@@ -54,41 +55,72 @@ export interface BattleReport {
   id: string,
   timestamp: number,
   attackType: string,
+  isSuccessful: boolean,
+
   attacker: {
     id: number,
-    spellId: string | null,
-    itemId: string | null,
-    army: BattleStack[],
-    armyLosses: { id: string, size: number }[],
-
-    startingNetPower: number,
-    lossNetPower: number,
-    lossUnit: number,
-  }
-  defender: {
-    id: number,
+    name: string,
     spellId: string | null,
     itemId: string | null,
     army: BattleStack[]
-    armyLosses: { id: string, size: number }[],
-
-    startingNetPower: number,
-    lossNetPower: number,
-    lossUnit: number,
+  }
+  defender: {
+    id: number,
+    name: string,
+    spellId: string | null,
+    itemId: string | null,
+    army: BattleStack[]
   },
 
-  preBattleLogs: {
-    attackerSpellResult: BattleSpellResult,
-    attackerItemResult: BattleItemResult,
-    attackerLogs: any[],
-
-    defenderSpellResult: BattleSpellResult,
-    defenderItemResult: BattleItemResult,
-    defenderLogs: any[],
+  preBattle: {
+    attacker: {
+      spellResult: BattleSpellResult,
+      itemResult: BattleItemResult,
+    },
+    defender: {
+      spellResult: BattleSpellResult,
+      itemResult: BattleItemResult,
+    }
   },
 
-  battleLogs: any[],
-  postBattleLogs: any[],
-  summaryLogs: any[],
+  battleLogs: {
+    type: string,
+    attacker: {
+      id: number,
+      unitId: string,
+      unitsLoss: number
+    },
+    defender: {
+      id: number,
+      unitId: string,
+      unitsLoss: number
+    }
+  }[],
 
+  postBattleLogs: {
+    id: number,
+    unitId: string,
+    unitsLoss: number,
+    unitsHealed: number
+  }[],
+
+  summary: {
+    attacker: {
+      netPower: number,
+      netPowerLoss: number,
+      unitsLoss: number,
+      armyLoss: ArmyUnit[]
+    },
+    defender: {
+      netPower: number,
+      netPowerLoss: number,
+      unitsLoss: number,
+      armyLoss: ArmyUnit[]
+    }
+  },
+
+  landResult: {
+    landLoss: any,
+    landGain: any
+  }
 }

@@ -89,6 +89,14 @@ export const createMage = (name: string, magic: string): Mage => {
   return mage;
 }
 
+// For ease of testing
+export const createMageTest = (name: string, magic: string, override: Partial<Mage>): Mage => {
+  let mage = createMage(name, magic);
+  mage = Object.assign(mage, override);
+
+  return mage;
+}
+
 
 export const totalNetPower = (mage: Mage) => {
   let netpower = 0;
