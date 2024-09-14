@@ -1,4 +1,5 @@
-import { battle, resolveBattleAftermath, Combatant } from '../src/war';
+import type { Combatant } from "shared/types/mage";
+import { battle, resolveBattle } from '../src/war';
 import { loadUnitsAndSpells } from './loader';
 import { createMage } from '../src/base/mage';
 import { prettyPrintBR } from '../src/battle/pretty-print';
@@ -31,7 +32,7 @@ defender.mage.army = defender.army;
 defenderMage.currentSpellLevel = 200;
 
 const report = battle('siege', attacker, defender);
-resolveBattleAftermath('siege', attacker.mage, defender.mage, report);
+resolveBattle(attacker.mage, defender.mage, report);
 
 console.log('');
 console.log('');

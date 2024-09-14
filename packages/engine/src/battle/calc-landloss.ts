@@ -10,21 +10,9 @@ const regularPercenage = 0.05;
 
 const unitsNeededPerAcre = 50;
 const attackerGain = 0.33;
- 
-export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: number) => {
-  const landLoss = {
-    farms: 0,
-    towns: 0,
-    workshops: 0,
-    nodes: 0,
-    barracks: 0,
-    guilds: 0,
-    forts: 0,
-    barriers: 0,
-    wilderness: 0,
-  };
 
-  const landGain = {
+const emptyLandCounts = () => {
+  return {
     farms: 0,
     towns: 0,
     workshops: 0,
@@ -33,8 +21,13 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
     guilds: 0,
     forts: 0,
     barriers: 0,
-    wilderness: 0,
-  }
+    wilderness: 0
+  };
+}
+
+export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: number) => {
+  const landLoss = emptyLandCounts();
+  const landGain = emptyLandCounts();
 
   const buildingTypes = [
     'wilderness', 'farms', 'towns', 

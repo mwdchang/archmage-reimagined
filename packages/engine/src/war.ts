@@ -771,7 +771,9 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   });
   defender.army = defender.army.filter(d => d.size > 0);
 
-  if (battleReport.isSuccessful === false) return;
+  if (battleReport.isSuccessful === false) {
+    return;
+  }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve land losses
