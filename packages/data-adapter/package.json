@@ -8,9 +8,9 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "@electric-sql/pglite": "^0.2.8",
     "@types/bcryptjs": "^2.4.6",
     "typescript": "^5.5.3"
   },
-  "scripts": {
-  }
+  "scripts": {}
 }
