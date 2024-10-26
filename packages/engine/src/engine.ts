@@ -119,6 +119,8 @@ class Engine {
     setTimeout(() => {
       this.updateLoop();
     }, TICK);
+    
+    console.log('engine constructor done');
   }
 
   updateLoop() {
@@ -519,7 +521,9 @@ class Engine {
   }
 
   async updateRankList() {
-    const mages = this.adapter.getAllMages();
+    console.log('engine: updateRankList');
+    /* FIXME
+    const mages = await this.adapter.getAllMages();
     const ranks = mages.map(mage => {
       return {
         id: mage.id,
@@ -532,6 +536,7 @@ class Engine {
     orderedRanks.forEach((d, rankIdx) => {
       this.getMage(d.id).rank = (1 + rankIdx);
     });
+    */
   }
 
   async rankList(_listingType: string) {
@@ -644,12 +649,12 @@ class Engine {
     return { user: res.user, mage };
   }
 
-  getMage(id: number) {
+  async getMage(id: number) {
     return this.adapter.getMage(id);
   }
 
-  getMageSummary(id: number) {
-    const m = this.getMage(id);
+  async getMageSummary(id: number) {
+    const m = await this.getMage(id);
 
     return {
       id: m.id,
@@ -661,7 +666,7 @@ class Engine {
     };
   }
 
-  getMageByUser(username: string) {
+  async getMageByUser(username: string) {
     return this.adapter.getMageByUser(username);
   }
 }

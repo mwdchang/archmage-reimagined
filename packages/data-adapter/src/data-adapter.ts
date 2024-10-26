@@ -10,11 +10,11 @@ export abstract class DataAdapter {
   abstract logout(): Promise<any>
 
   // Mage CRUD
-  abstract createMage(username: string, mage: Mage): void
-  abstract updateMage(mage: Mage): void
-  abstract getMage(id: number): Mage
-  abstract getMageByUser(username: string): Mage 
-  abstract getAllMages(): Mage[];
+  abstract createMage(username: string, mage: Mage): Promise<void>
+  abstract getMageByUser(username: string): Promise<Mage>
+  abstract getAllMages(): Promise<Mage[]>;
+  abstract updateMage(mage: Mage): Promise<void>
+  abstract getMage(id: number): Promise<Mage>
 
   // Battle reports
   abstract getMageBattles(id: number, options: any): any
