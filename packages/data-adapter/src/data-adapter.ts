@@ -4,6 +4,8 @@ import { Mage } from 'shared/types/mage';
 export abstract class DataAdapter {
   constructor() {}
 
+  abstract initialize(): Promise<void>
+
   // Authentication
   abstract register(username: string, password: string): Promise<any> 
   abstract login(username: string, password: string): Promise<any>

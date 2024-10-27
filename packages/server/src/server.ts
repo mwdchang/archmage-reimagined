@@ -47,7 +47,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(verifyAccessToken);
 
-const engine = new Engine(new PGliteDataAdapter());
+const dataAdapter = new PGliteDataAdapter();
+const engine = new Engine(dataAdapter);
 
 router.post('/api/explore', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
@@ -202,3 +203,9 @@ app.listen(PORT, ()=>{
   console.log('================================');
 });
 
+async function run() {
+  await dataAdapter.initialize();
+  await engine.initialize();
+}
+
+run();

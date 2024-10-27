@@ -10,35 +10,43 @@ interface User {
   hash: string;
 }
 
+interface MageTableEntry {
+  username: string,
+  id: number,
+  mage: Mage
+}
+
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;
   
   constructor() {
     super();
     this.db = new PGlite('./archmage-db');
-    this.init();
   }
 
-  async init() {
-    console.log('initialize database...');
+  async initialize() {
     try {
-    await this.db.exec(`
+      console.log('initialize database...');
+      await this.db.exec(`
 DROP TABLE IF EXISTS archmage_user;
+COMMIT;
 CREATE TABLE IF NOT EXISTS archmage_user (
   username VARCHAR(64), 
   hash VARCHAR(200),
   token VARCHAR(200)
 );
+COMMIT;
 
 DROP TABLE IF EXISTS mage;
+COMMIT;
 CREATE TABLE IF NOT EXISTS mage (
   username varchar(64),
   id integer,
   mage json 
 );
-    `);
+COMMIT;
+      `);
     } catch (err) {
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
       console.log(err);
     }
   }
@@ -55,8 +63,8 @@ SELECT * from archmage_user where username = "${username}"
     console.log('pglite updateUser');
     const result = await this.db.exec(`
 UPDATE archmage_user 
-SET token = "${user.token}"
-WHERE username = "${user.username}"
+SET token = '${user.token}'
+WHERE username = '${user.username}'
     `);
   }
 
@@ -66,7 +74,7 @@ WHERE username = "${user.username}"
     const token = getToken(username);
 
     this.db.exec(`
-INSERT INTO archmage_user values(${username}, ${hash}, ${token});
+INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
     `);
 
     return {
@@ -90,12 +98,12 @@ INSERT INTO archmage_user values(${username}, ${hash}, ${token});
   async createMage(username: string, mage: Mage) {
     console.log('pglite: createMage');
     const sql = `
-INSERT INTO mage values("${username}", "${mage.id}", ${JSON.stringify(mage)});
+INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
 
     try {
       const result = await this.db.exec(sql);
-      console.log(result);
+      console.log('create', result);
     } catch (err) {
       console.error(err);
     }
@@ -105,33 +113,37 @@ INSERT INTO mage values("${username}", "${mage.id}", ${JSON.stringify(mage)});
     console.log('pglite: updateMage');
     this.db.exec(`
 UPDATE mage 
-SET mage = ${JSON.stringify(mage)}
+SET mage = '${JSON.stringify(mage)}'
 WHERE id = ${mage.id}
     `);
   }
 
   async getMage(id: number) {
     console.log('pglite: getMage');
-    const result = await this.db.query<Mage>(`
+    const result = await this.db.query<MageTableEntry>(`
 SELECT mage from mage where id = ${id}
     `);
-    return result.rows[0];
+    return result.rows[0].mage;
   }
 
   async getMageByUser(username: string) {
     console.log('pglite: getMageByUser');
-    const result = await this.db.query<Mage>(`
+
+    const result = await this.db.query<MageTableEntry>(`
 SELECT mage from mage where username = '${username}'
     `);
-    return result.rows[0];
+    if (result.rows.length === 0) {
+      return null;
+    }
+    return result.rows[0].mage;
   }
 
   async getAllMages()  {
     console.log('pglite: getAllMages');
-    const result = await this.db.query<Mage>(`
+    const result = await this.db.query<MageTableEntry>(`
 SELECT mage from mage
     `);
-    return result.rows
+    return result.rows.map(d => d.mage);
   }
 
   getMageBattles(id: number, options: any) {

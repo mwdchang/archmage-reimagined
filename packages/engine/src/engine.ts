@@ -85,6 +85,9 @@ class Engine {
   constructor(adapter: DataAdapter) {
     // Load dependencies
     this.adapter = adapter;
+  }
+
+  async initialize() {
     loadUnitData(plainUnits);
     loadUnitData(ascendantUnits);
     loadUnitData(verdantUnits);
@@ -100,16 +103,18 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+    
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
 
-      if (!this.getMageByUser(name)) {
+      const mage = await this.getMageByUser(name);
+      if (!mage) {
         console.log('creating test mage', name);
         const mage = createMage(name, magic);
-        this.adapter.createMage(name, mage);
+        await this.adapter.createMage(name, mage);
       }
     }
 
@@ -119,7 +124,6 @@ class Engine {
     setTimeout(() => {
       this.updateLoop();
     }, TICK);
-    
     console.log('engine constructor done');
   }
 

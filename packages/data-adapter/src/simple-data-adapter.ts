@@ -58,6 +58,7 @@ export class SimpleDataAdapter extends DataAdapter {
     }
   }
 
+  async initialize() {}
 
   async register(username: string, password: string) {
     const saltRounds = 5;
