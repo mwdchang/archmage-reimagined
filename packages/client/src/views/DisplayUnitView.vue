@@ -3,86 +3,88 @@
   <p style="margin: 1rem 10rem; line-height: 120%" v-if="unit">{{ unit.description }} </p>
   <main v-if="unit">
     <table>
-      <tr style="background: #333">
-        <td colspan="2">Unit Statistics</td>
-      </tr>
+      <tbody>
+        <tr style="background: #333">
+          <td colspan="2">Unit Statistics</td>
+        </tr>
 
-      <tr style="border-top: solid 2px">
-        <td>Name</td>
-        <td>{{ unit.name }}</td>
-      </tr>
-      <tr>
-        <td>Magic</td>
-        <td>{{ unit.magic }}</td>
-      </tr>
-      <tr>
-        <td>Race</td>
-        <td>{{ unit.race.join(' ') }}</td>
-      </tr>
-      <tr>
-        <td>Attributes</td>
-        <td>{{ unit.attributes.join(' ') }}</td>
-      </tr>
-      <tr>
-        <td>Power Rank</td>
-        <td class="text-right">{{ unit.powerRank }}</td>
-      </tr>
+        <tr style="border-top: solid 2px">
+          <td>Name</td>
+          <td>{{ unit.name }}</td>
+        </tr>
+        <tr>
+          <td>Magic</td>
+          <td>{{ unit.magic }}</td>
+        </tr>
+        <tr>
+          <td>Race</td>
+          <td>{{ unit.race.join(' ') }}</td>
+        </tr>
+        <tr>
+          <td>Attributes</td>
+          <td>{{ unit.attributes.join(' ') }}</td>
+        </tr>
+        <tr>
+          <td>Power Rank</td>
+          <td class="text-right">{{ unit.powerRank }}</td>
+        </tr>
 
-      <tr style="border-top: solid 2px">
-        <td>Attack Power</td>
-        <td class="text-right">{{ unit.primaryAttackPower }}</td>
-      </tr>
-      <tr>
-        <td>Attack Type</td>
-        <td>{{ unit.primaryAttackType.join(' ') }}</td>
-      </tr>
-      <tr>
-        <td>Attack Initiative</td>
-        <td class="text-right">{{ unit.primaryAttackInit }}</td>
-      </tr>
-      <tr>
-        <td>Counter Power</td>
-        <td class="text-right">{{ unit.counterAttackPower}}</td>
-      </tr>
+        <tr style="border-top: solid 2px">
+          <td>Attack Power</td>
+          <td class="text-right">{{ unit.primaryAttackPower }}</td>
+        </tr>
+        <tr>
+          <td>Attack Type</td>
+          <td>{{ unit.primaryAttackType.join(' ') }}</td>
+        </tr>
+        <tr>
+          <td>Attack Initiative</td>
+          <td class="text-right">{{ unit.primaryAttackInit }}</td>
+        </tr>
+        <tr>
+          <td>Counter Power</td>
+          <td class="text-right">{{ unit.counterAttackPower}}</td>
+        </tr>
 
-      <tr style="border-top: solid 2px">
-        <td>Extra Attack Power</td>
-        <td class="text-right">{{ unit.secondaryAttackPower }}</td>
-      </tr>
-      <tr>
-        <td>Extra Attack Type</td>
-        <td>{{ unit.secondaryAttackType.join(' ') }}</td>
-      </tr>
-      <tr>
-        <td>Extra Attack Initiative</td>
-        <td class="text-right">{{ unit.secondaryAttackInit }}</td>
-      </tr>
+        <tr style="border-top: solid 2px">
+          <td>Extra Attack Power</td>
+          <td class="text-right">{{ unit.secondaryAttackPower }}</td>
+        </tr>
+        <tr>
+          <td>Extra Attack Type</td>
+          <td>{{ unit.secondaryAttackType.join(' ') }}</td>
+        </tr>
+        <tr>
+          <td>Extra Attack Initiative</td>
+          <td class="text-right">{{ unit.secondaryAttackInit }}</td>
+        </tr>
 
-      <tr style="border-top: solid 2px">
-        <td>Hit Points</td>
-        <td class="text-right">{{ unit.hitPoints }}</td>
-      </tr>
-      <tr>
-        <td>Recruiting Cost</td>
-        <td>
-          {{ unit.recruitCost.geld }} geld, {{ unit.recruitCost.mana }} MP, {{ unit.recruitCost.population }} pop
-        </td>
-      </tr>
-      <tr>
-        <td>Upkeep Cost</td>
-        <td>
-          {{ unit.upkeepCost.geld }} geld, {{ unit.upkeepCost.mana }} MP, {{ unit.upkeepCost.population }} pop
-        </td>
-      </tr>
+        <tr style="border-top: solid 2px">
+          <td>Hit Points</td>
+          <td class="text-right">{{ unit.hitPoints }}</td>
+        </tr>
+        <tr>
+          <td>Recruiting Cost</td>
+          <td>
+            {{ unit.recruitCost.geld }} geld, {{ unit.recruitCost.mana }} MP, {{ unit.recruitCost.population }} pop
+          </td>
+        </tr>
+        <tr>
+          <td>Upkeep Cost</td>
+          <td>
+            {{ unit.upkeepCost.geld }} geld, {{ unit.upkeepCost.mana }} MP, {{ unit.upkeepCost.population }} pop
+          </td>
+        </tr>
 
-      <tr style="border-top: solid 2px">
-        <td>Abilities</td>
-        <td> 
-          <div v-for="(ability, idx) of unit.abilities" :key="idx">
-            {{ ability.name }}
-          </div>
-        </td>
-      </tr>
+        <tr style="border-top: solid 2px">
+          <td>Abilities</td>
+          <td> 
+            <div v-for="(ability, idx) of unit.abilities" :key="idx">
+              {{ ability.name }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <div style="width: 2rem">&nbsp;</div>
