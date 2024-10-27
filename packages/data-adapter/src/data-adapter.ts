@@ -19,10 +19,10 @@ export abstract class DataAdapter {
   abstract getMage(id: number): Promise<Mage>
 
   // Battle reports
-  abstract getMageBattles(id: number, options: any): any
-  abstract getBattleReport(id: string): any
-  abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): void
+  abstract getMageBattles(id: number, options: any): Promise<any>
+  abstract getBattleReport(id: string): Promise<any>
+  abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): Promise<void>
 
-  abstract nextTurn(): void
+  abstract nextTurn(): Promise<void>
 }
 

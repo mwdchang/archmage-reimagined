@@ -3,6 +3,7 @@ import { DataAdapter } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
+import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 
 interface User {
   username: string;
@@ -14,6 +15,13 @@ interface MageTableEntry {
   username: string,
   id: number,
   mage: Mage
+}
+
+interface BattleReportTableEntry {
+  defenderId: number;
+  attackerId: number;
+  report: BattleReport;
+  summary: BattleReportSummary;
 }
 
 export class PGliteDataAdapter extends DataAdapter {
@@ -29,7 +37,6 @@ export class PGliteDataAdapter extends DataAdapter {
       console.log('initialize database...');
       await this.db.exec(`
 DROP TABLE IF EXISTS archmage_user;
-COMMIT;
 CREATE TABLE IF NOT EXISTS archmage_user (
   username VARCHAR(64), 
   hash VARCHAR(200),
@@ -38,11 +45,20 @@ CREATE TABLE IF NOT EXISTS archmage_user (
 COMMIT;
 
 DROP TABLE IF EXISTS mage;
-COMMIT;
 CREATE TABLE IF NOT EXISTS mage (
   username varchar(64),
   id integer,
   mage json 
+);
+COMMIT;
+
+DROP TABLE IF EXISTS battle_report;
+CREATE TABLE IF NOT EXISTS battle_report(
+  time bigint,
+  attackerId integer,
+  defenderId integer,
+  report json,
+  summary json
 );
 COMMIT;
       `);
@@ -145,15 +161,20 @@ SELECT mage from mage
     return result.rows.map(d => d.mage);
   }
 
-  getMageBattles(id: number, options: any) {
+  async getMageBattles(id: number, options: any) {
+    const result = await this.db.query<BattleReportTableEntry>(`
+SELECT * from battle_report
+WHERE (attackerId = ${id} OR defenderId = ${id})
+    `);
+    return result.rows.map(d => d.summary);
   }
 
-  getBattleReport(id: string) {
+  async getBattleReport(id: string) {
   }
 
-  saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
+  async saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
   }
 
-  nextTurn() {
+  async nextTurn() {
   }
 }

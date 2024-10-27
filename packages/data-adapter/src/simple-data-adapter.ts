@@ -113,14 +113,14 @@ export class SimpleDataAdapter extends DataAdapter {
     return [...this.mageMap.values()];
   }
 
-  getMageBattles(id: number, options: any) {
+  async getMageBattles(id: number, options: any) {
     if (this.mageBattleMap.has(id)) {
       return this.mageBattleMap.get(id);
     }
     return []
   }
 
-  getBattleReport(id: string) {
+  async getBattleReport(id: string) {
     if (existsSync(`${DATA_DIR}/${REPORT_DIR}/${id}`)) {
       let data = readFileSync(`${DATA_DIR}/${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
       return data;
@@ -128,7 +128,7 @@ export class SimpleDataAdapter extends DataAdapter {
     return null;
   }
 
-  saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
+  async saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
     if (!this.mageBattleMap.has(id)) {
       this.mageBattleMap.set(id, [])
     }
@@ -136,7 +136,7 @@ export class SimpleDataAdapter extends DataAdapter {
     writeFileSync(`${DATA_DIR}/${REPORT_DIR}/${reportId}`, JSON.stringify(report))
   }
 
-  nextTurn() {
+  async nextTurn() {
     this.mageMap.forEach((mage, _username) => {
       if (mage.currentTurn < mage.maxTurn) {
         mage.currentTurn ++;
