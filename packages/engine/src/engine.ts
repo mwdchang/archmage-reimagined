@@ -244,6 +244,7 @@ class Engine {
       landGained += exploredLand;
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return landGained
   }
 
@@ -260,6 +261,7 @@ class Engine {
       mage.currentGeld += gain;
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return geldGained;
   }
 
@@ -278,6 +280,7 @@ class Engine {
       }
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return manaGained;
   }
 
@@ -297,6 +300,7 @@ class Engine {
         this.useTurn(mage);
       }
     }
+    await this.adapter.updateMage(mage);
   }
 
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
@@ -368,6 +372,7 @@ class Engine {
       life: spell.life ? spell.life : 0
     }
     mage.enchantments.push(enchantment);
+    await this.adapter.updateMage(mage);
   }
 
   async summonByItem(mage: Mage, itemId: string, num: number) {
@@ -413,6 +418,7 @@ class Engine {
       });
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return result;
   }
 
@@ -471,6 +477,7 @@ class Engine {
       }
       this.useTurns(mage, castingTurn);
     }
+    await this.adapter.updateMage(mage);
     return result;
   }
 
@@ -505,6 +512,7 @@ class Engine {
     for (let i = 0; i < turnsUsed; i++) {
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
   }
 
   async destroy(mage: Mage, payload: DestroyPayload) {
@@ -514,14 +522,17 @@ class Engine {
       mage.wilderness += num;
     });
     this.useTurn(mage);
+    await this.adapter.updateMage(mage);
   }
 
   async setAssignment(mage: Mage, payload: Assignment) {
     mage.assignment = _.cloneDeep(payload);
+    await this.adapter.updateMage(mage);
   }
 
   async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
     mage.recruitments = _.cloneDeep(payload);
+    await this.adapter.updateMage(mage);
   }
 
   async updateRankList() {
@@ -561,7 +572,7 @@ class Engine {
 
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
-    const defenderMage = this.getMage(targetId);
+    const defenderMage = await this.getMage(targetId);
 
     // Make battle stacks
     const attacker: Combatant =  {
@@ -607,6 +618,9 @@ class Engine {
     };
 
     this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
+
+    await this.adapter.updateMage(mage);
+    await this.adapter.updateMage(defenderMage);
     return battleReport;
   }
 
@@ -634,7 +648,6 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
-
     return { user: res.user, mage };
   }
 

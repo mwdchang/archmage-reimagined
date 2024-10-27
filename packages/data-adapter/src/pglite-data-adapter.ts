@@ -102,8 +102,7 @@ INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
 
     try {
-      const result = await this.db.exec(sql);
-      console.log('create', result);
+      await this.db.exec(sql);
     } catch (err) {
       console.error(err);
     }
