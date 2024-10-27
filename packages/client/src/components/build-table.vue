@@ -1,24 +1,26 @@
 <template>
   <table v-if="mage">
-    <tr>
-      <td>&nbsp;</td>
-      <td>Building</td>
-      <td>Current</td>
-      <td>% Total</td>
-      <td>Cost</td>
-      <td>Max/Turn</td>
-      <td>Build</td>
-    </tr>
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Building</td>
+        <td>Current</td>
+        <td>% Total</td>
+        <td>Cost</td>
+        <td>Max/Turn</td>
+        <td>Build</td>
+      </tr>
 
-    <tr v-for="(bType) of buildingTypes" :key="bType.id">
-      <td>-</td>
-      <td> {{ bType.id }} </td>
-      <td class="text-right"> {{ mage[bType.id] }} </td>
-      <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
-      <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
-      <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
-      <td> <input type="number" v-model="userInput[bType.id]"> </td>
-    </tr>
+      <tr v-for="(bType) of buildingTypes" :key="bType.id">
+        <td>-</td>
+        <td> {{ bType.id }} </td>
+        <td class="text-right"> {{ mage[bType.id] }} </td>
+        <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
+        <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
+        <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
+        <td> <input type="number" v-model="userInput[bType.id]"> </td>
+      </tr>
+    </tbody>
   </table>
   <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
   <button @click="build"> Build </button>

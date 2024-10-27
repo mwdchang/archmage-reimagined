@@ -64,11 +64,15 @@
       </tr>
       <tr>
         <td>Recruiting Cost</td>
-        <td>{{ unit.recruitCost }}</td>
+        <td>
+          {{ unit.recruitCost.geld }} geld, {{ unit.recruitCost.mana }} MP, {{ unit.recruitCost.population }} pop
+        </td>
       </tr>
       <tr>
         <td>Upkeep Cost</td>
-        <td>{{ unit.upkeepCost }}</td>
+        <td>
+          {{ unit.upkeepCost.geld }} geld, {{ unit.upkeepCost.mana }} MP, {{ unit.upkeepCost.population }} pop
+        </td>
       </tr>
 
       <tr style="border-top: solid 2px">
