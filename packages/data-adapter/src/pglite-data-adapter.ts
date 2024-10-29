@@ -54,6 +54,7 @@ COMMIT;
 
 DROP TABLE IF EXISTS battle_report;
 CREATE TABLE IF NOT EXISTS battle_report(
+  id varchar(64),
   time bigint,
   attackerId integer,
   defenderId integer,
@@ -89,7 +90,7 @@ WHERE username = '${user.username}'
     const hash = await bcrypt.hash(password, saltRounds);
     const token = getToken(username);
 
-    this.db.exec(`
+    await this.db.exec(`
 INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
     `);
 
@@ -126,7 +127,7 @@ INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
 
   async updateMage(mage: Mage) {
     console.log('pglite: updateMage');
-    this.db.exec(`
+    await this.db.exec(`
 UPDATE mage 
 SET mage = '${JSON.stringify(mage)}'
 WHERE id = ${mage.id}
@@ -170,9 +171,21 @@ WHERE (attackerId = ${id} OR defenderId = ${id})
   }
 
   async getBattleReport(id: string) {
+    const result = await this.db.query<BattleReportTableEntry>(`
+SELECT * from battle_report
+WHERE id = '${id}'
+    `)
+    if (result.rows.length > 0) {
+      return result.rows[0].report;
+    }
+    return null;
   }
 
-  async saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
+  async saveBattleReport(id: number, reportId: string, report: BattleReport, reportSummary: BattleReportSummary) {
+    await this.db.exec(`
+INSERT INTO battle_report(id, time, attackerId, defenderId, report, summary)
+values('${reportId}', 0, ${report.attacker.id}, ${report.defender.id}, '${JSON.stringify(report)}', '${JSON.stringify(reportSummary)}')
+    `);
   }
 
   async nextTurn() {

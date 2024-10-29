@@ -555,7 +555,7 @@ class Engine {
   }
 
   async rankList(_listingType: string) {
-    const mages = this.adapter.getAllMages();
+    const mages = await this.adapter.getAllMages();
 
     const ranks = mages.map(mage => {
       return {
@@ -627,9 +627,13 @@ class Engine {
   async getBattleReport(mage: Mage, reportId: string) {
     // TODO: Obfuscate based on which side
 
-    const report = this.adapter.getBattleReport(reportId);
+    const report = await this.adapter.getBattleReport(reportId);
     if (report) {
-      return JSON.parse(report) as BattleReport;
+      if (typeof report === 'string') {
+        return JSON.parse(report) as BattleReport;
+      } else {
+        return report;
+      }
     } else {
       return null;
     }

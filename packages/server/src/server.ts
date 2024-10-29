@@ -184,7 +184,7 @@ router.get('/api/mage', async (req: any, res) => {
 
 router.get('/api/mage/:id', async (req: any, res) => {
   const id = +(req.params.id);
-  const mage = engine.getMageSummary(id);
+  const mage = await engine.getMageSummary(id);
   res.status(200).json({ mageSummary: mage });
 });
 
