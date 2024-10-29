@@ -5,26 +5,28 @@
       You are generating {{ rp }} research points per turn. Your magic item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
-      <tr>
-        <td>&nbsp;</td>
-        <td>Spell</td>
-        <td>Cost (points)</td>
-        <td>Turns</td>
-      </tr>
-      <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
-        :class="{active: currentResearch[magic].active}"
-        @click="toggle(magic)">
-        <td> <magic :magic="magic" /></td>
-        <td>
-          {{ currentResearch[magic].id }}
-        </td>
-        <td class="text-right">
-          {{ currentResearch[magic].remainingCost }}
-        </td>
-        <td class="text-right">
-          {{ Math.ceil(currentResearch[magic].remainingCost / rp) }}
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>&nbsp;</td>
+          <td>Spell</td>
+          <td>Cost (points)</td>
+          <td>Turns</td>
+        </tr>
+        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
+          :class="{active: currentResearch[magic].active}"
+          @click="toggle(magic)">
+          <td> <magic :magic="magic" /></td>
+          <td>
+            {{ currentResearch[magic].id }}
+          </td>
+          <td class="text-right">
+            {{ currentResearch[magic].remainingCost }}
+          </td>
+          <td class="text-right">
+            {{ Math.ceil(currentResearch[magic].remainingCost / rp) }}
+          </td>
+        </tr>
+      </tbody>
     </table>
     <div style="display: flex; align-items: center; margin-top: 10px">
       <input type="checkbox" v-model="focusResearch" style="width:18px; height: 18px" />

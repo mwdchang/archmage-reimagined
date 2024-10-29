@@ -5,37 +5,41 @@
     </h3>
     <br>
     <table>
-      <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
-        @click="stack.active = !stack.active">
-        <td> {{ stack.name }} </td>
-        <td class="text-right"> {{ stack.size }} </td>
-        <td class="text-right"> {{ stack.power }} </td>
-        <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
-        <td>
-            <input type="checkbox" v-model="stack.active">
-        </td>
-      </tr>
+      <tbody>
+        <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
+          @click="stack.active = !stack.active">
+          <td> {{ stack.name }} </td>
+          <td class="text-right"> {{ stack.size }} </td>
+          <td class="text-right"> {{ stack.power }} </td>
+          <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
+          <td>
+              <input type="checkbox" v-model="stack.active">
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <br>
 
     <table>
-      <tr>
-        <td>Spell</td>
-        <td>
-          <select v-model="battleSpell">
-            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Item</td>
-        <td>
-          <select v-model="battleItem">
-            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
-          </select>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>Spell</td>
+          <td>
+            <select v-model="battleSpell">
+              <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Item</td>
+          <td>
+            <select v-model="battleItem">
+              <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <br>
