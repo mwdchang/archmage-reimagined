@@ -2,40 +2,41 @@
   <div class="section-header">Assign magic and item for defence</div>
 
   <table>
-    <tr>
-      <td> Spell for defence </td>
-      <td>
-        <select v-model="selectedSpellId" @change="setAssignment()">
-          <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} </option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td> Condition</td>
-      <td>
-        <select v-model="selectedSpellCondition" @change="setAssignment()">
-          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
-        </select>
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <td> Spell for defence </td>
+        <td>
+          <select v-model="selectedSpellId" @change="setAssignment()">
+            <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td> Condition</td>
+        <td>
+          <select v-model="selectedSpellCondition" @change="setAssignment()">
+            <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
+          </select>
+        </td>
+      </tr>
 
-    <tr>
-      <td> Item for defence </td>
-      <td>
-        <select v-model="selectedItemId" @change="setAssignment()">
-          <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }} )</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td> Condition </td>
-      <td>
-        <select v-model="selectedItemCondition" @change="setAssignment()">
-          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
-        </select>
-      </td>
-    </tr>
-
+      <tr>
+        <td> Item for defence </td>
+        <td>
+          <select v-model="selectedItemId" @change="setAssignment()">
+            <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }} )</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td> Condition </td>
+        <td>
+          <select v-model="selectedItemCondition" @change="setAssignment()">
+            <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </template>
 

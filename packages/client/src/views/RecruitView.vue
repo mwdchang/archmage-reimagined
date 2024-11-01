@@ -1,18 +1,20 @@
 <template>
   <div>Recruitment</div>
   <table v-if="mageStore.mage">
-    <tr>
-      <td> Name </td>
-      <td> Cost </td>
-      <td> Upkeep </td>
-      <td> Max/Turn </td>
-    </tr>
-    <tr v-for="(unit) of recruitableUnits">
-      <td> {{ unit.name }} </td>
-      <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
-      <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
-      <td class="text-right"> {{ recruitmentAmount(mageStore.mage, unit.id) }} </td>
-    </tr>
+    <tbody>
+      <tr>
+        <td> Name </td>
+        <td> Cost </td>
+        <td> Upkeep </td>
+        <td> Max/Turn </td>
+      </tr>
+      <tr v-for="(unit) of recruitableUnits">
+        <td> {{ unit.name }} </td>
+        <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
+        <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
+        <td class="text-right"> {{ recruitmentAmount(mageStore.mage, unit.id) }} </td>
+      </tr>
+    </tbody>
   </table>
   <br>
   <div class="row">

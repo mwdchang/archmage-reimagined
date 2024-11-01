@@ -1,18 +1,20 @@
 <template>
   <table v-if="mage">
-    <tr>
-      <td>&nbsp;</td>
-      <td>Building</td>
-      <td>Current</td>
-      <td>Destroy</td>
-    </tr>
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Building</td>
+        <td>Current</td>
+        <td>Destroy</td>
+      </tr>
 
-    <tr v-for="(bType) of buildingTypes" :key="bType.id">
-      <td>-</td>
-      <td>{{ bType.id }}</td>
-      <td class="text-right">{{ mage[bType.id] }} </td>
-      <td> <input type="number" size="6" v-model="userInput[bType.id]"> </td>
-    </tr>
+      <tr v-for="(bType) of buildingTypes" :key="bType.id">
+        <td>-</td>
+        <td>{{ bType.id }}</td>
+        <td class="text-right">{{ mage[bType.id] }} </td>
+        <td> <input type="number" size="6" v-model="userInput[bType.id]"> </td>
+      </tr>
+    </tbody>
   </table>
   <button @click="destroy"> Destroy </button>
 </template>

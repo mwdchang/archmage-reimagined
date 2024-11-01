@@ -85,6 +85,9 @@ class Engine {
   constructor(adapter: DataAdapter) {
     // Load dependencies
     this.adapter = adapter;
+  }
+
+  async initialize() {
     loadUnitData(plainUnits);
     loadUnitData(ascendantUnits);
     loadUnitData(verdantUnits);
@@ -100,16 +103,18 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+    
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
       const name = `TestMage_${i}`;
 
-      if (!this.getMageByUser(name)) {
+      const mage = await this.getMageByUser(name);
+      if (!mage) {
         console.log('creating test mage', name);
         const mage = createMage(name, magic);
-        this.adapter.createMage(name, mage);
+        await this.adapter.createMage(name, mage);
       }
     }
 
@@ -119,6 +124,7 @@ class Engine {
     setTimeout(() => {
       this.updateLoop();
     }, TICK);
+    console.log('engine constructor done');
   }
 
   updateLoop() {
@@ -238,6 +244,7 @@ class Engine {
       landGained += exploredLand;
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return landGained
   }
 
@@ -254,6 +261,7 @@ class Engine {
       mage.currentGeld += gain;
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return geldGained;
   }
 
@@ -272,6 +280,7 @@ class Engine {
       }
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return manaGained;
   }
 
@@ -291,6 +300,7 @@ class Engine {
         this.useTurn(mage);
       }
     }
+    await this.adapter.updateMage(mage);
   }
 
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
@@ -362,6 +372,7 @@ class Engine {
       life: spell.life ? spell.life : 0
     }
     mage.enchantments.push(enchantment);
+    await this.adapter.updateMage(mage);
   }
 
   async summonByItem(mage: Mage, itemId: string, num: number) {
@@ -407,6 +418,7 @@ class Engine {
       });
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
     return result;
   }
 
@@ -465,6 +477,7 @@ class Engine {
       }
       this.useTurns(mage, castingTurn);
     }
+    await this.adapter.updateMage(mage);
     return result;
   }
 
@@ -499,6 +512,7 @@ class Engine {
     for (let i = 0; i < turnsUsed; i++) {
       this.useTurn(mage);
     }
+    await this.adapter.updateMage(mage);
   }
 
   async destroy(mage: Mage, payload: DestroyPayload) {
@@ -508,18 +522,23 @@ class Engine {
       mage.wilderness += num;
     });
     this.useTurn(mage);
+    await this.adapter.updateMage(mage);
   }
 
   async setAssignment(mage: Mage, payload: Assignment) {
     mage.assignment = _.cloneDeep(payload);
+    await this.adapter.updateMage(mage);
   }
 
   async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
     mage.recruitments = _.cloneDeep(payload);
+    await this.adapter.updateMage(mage);
   }
 
   async updateRankList() {
-    const mages = this.adapter.getAllMages();
+    console.log('engine: updateRankList');
+    /* FIXME
+    const mages = await this.adapter.getAllMages();
     const ranks = mages.map(mage => {
       return {
         id: mage.id,
@@ -532,10 +551,11 @@ class Engine {
     orderedRanks.forEach((d, rankIdx) => {
       this.getMage(d.id).rank = (1 + rankIdx);
     });
+    */
   }
 
   async rankList(_listingType: string) {
-    const mages = this.adapter.getAllMages();
+    const mages = await this.adapter.getAllMages();
 
     const ranks = mages.map(mage => {
       return {
@@ -552,7 +572,7 @@ class Engine {
 
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
-    const defenderMage = this.getMage(targetId);
+    const defenderMage = await this.getMage(targetId);
 
     // Make battle stacks
     const attacker: Combatant =  {
@@ -598,15 +618,22 @@ class Engine {
     };
 
     this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
+
+    await this.adapter.updateMage(mage);
+    await this.adapter.updateMage(defenderMage);
     return battleReport;
   }
 
   async getBattleReport(mage: Mage, reportId: string) {
     // TODO: Obfuscate based on which side
 
-    const report = this.adapter.getBattleReport(reportId);
+    const report = await this.adapter.getBattleReport(reportId);
     if (report) {
-      return JSON.parse(report) as BattleReport;
+      if (typeof report === 'string') {
+        return JSON.parse(report) as BattleReport;
+      } else {
+        return report;
+      }
     } else {
       return null;
     }
@@ -625,7 +652,6 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
-
     return { user: res.user, mage };
   }
 
@@ -644,12 +670,12 @@ class Engine {
     return { user: res.user, mage };
   }
 
-  getMage(id: number) {
+  async getMage(id: number) {
     return this.adapter.getMage(id);
   }
 
-  getMageSummary(id: number) {
-    const m = this.getMage(id);
+  async getMageSummary(id: number) {
+    const m = await this.getMage(id);
 
     return {
       id: m.id,
@@ -661,7 +687,7 @@ class Engine {
     };
   }
 
-  getMageByUser(username: string) {
+  async getMageByUser(username: string) {
     return this.adapter.getMageByUser(username);
   }
 }
