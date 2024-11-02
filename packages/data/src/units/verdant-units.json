@@ -653,5 +653,279 @@
       { "name": "regeneration", "extra": null },
       { "name": "bursting", "extra": { "type": ["fire"], "value": 50000 } }
     ]
+  },
+  {
+    "id": "elvenArcher",
+    "name": "Elven Archer",
+    "magic": "verdant",
+    "powerRank": 20,
+    "hitPoints": 100,
+    "race": ["elf"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 120,
+    "primaryAttackType": ["missle", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 70.0,
+      "mana": 0.05,
+      "population": 1.0 
+    },
+    "upkeepCost": {
+      "geld": 1.04,
+      "mana": 0.005,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 5,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 90,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "recruitSpeed", "extra": -10 }
+    ]
+  },
+  {
+    "id": "elvenMagician",
+    "name": "Elven Magician",
+    "magic": "verdant",
+    "powerRank": 41,
+    "hitPoints": 100,
+    "race": ["elf"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 500,
+    "primaryAttackType": ["magic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 300.0,
+      "mana": 0.75,
+      "population": 2.0 
+    },
+    "upkeepCost": {
+      "geld": 8.0,
+      "mana": 0.035,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 10,
+      "nether": 60,
+      "phantasm": 5 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 0,
+      "breath": 0,
+      "magic": 80,
+      "melee": 80,
+      "ranged": 80,
+      "lightning": 50,
+      "cold": 0,
+      "paralyse": 80,
+      "psychic": 90,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "recruitSpeed", "extra": -10 }
+    ]
+  },
+  {
+    "id": "faerieDragon",
+    "name": "Faerie Dragon",
+    "magic": "verdant",
+    "powerRank": 34,
+    "hitPoints": 60,
+    "race": ["dragon"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 300,
+    "primaryAttackType": ["magic", "breath"],
+    "primaryAttackInit": 5,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 120.0,
+      "mana": 0.50,
+      "population": 2.0 
+    },
+    "upkeepCost": {
+      "geld": 5.6,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 400,
+      "nether": 400,
+      "phantasm": 400 
+    },
+    "attackResistances": {
+      "missile": 90,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 90,
+      "melee": 90,
+      "ranged": 90,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "recruitSpeed", "extra": -30 }
+    ]
+  },
+  {
+    "id": "druid",
+    "name": "Druid",
+    "magic": "verdant",
+    "powerRank": 40,
+    "hitPoints": 180,
+    "race": ["elf"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 440,
+    "primaryAttackType": ["magic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 60,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 150.0,
+      "mana": 0.50,
+      "population": 2.0 
+    },
+    "upkeepCost": {
+      "geld": 0.8,
+      "mana": 0.05,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 50,
+      "phantasm": 25 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 25,
+      "poison": 90,
+      "breath": 0,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 25,
+      "cold": 25,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": -15 }
+    ]
+  },
+  {
+    "id": "swanmay",
+    "name": "Swanmay",
+    "magic": "verdant",
+    "powerRank": 35,
+    "hitPoints": 255,
+    "race": ["human", "animal"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 220,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 60,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 170.0,
+      "mana": 0.20,
+      "population": 1.0 
+    },
+    "upkeepCost": {
+      "geld": 1.6,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 10,
+      "nether": 10,
+      "phantasm": 5 
+    },
+    "attackResistances": {
+      "missile": 15,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 15,
+      "melee": 15,
+      "ranged": 15,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "marksmanship", "extra": null },
+      { "name": "recruitSpeed", "extra": -15 }
+    ]
   }
 ]

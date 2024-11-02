@@ -708,5 +708,278 @@
       { "name": "endurance", "extra": null },
       { "name": "weakness", "extra": "cold" }
     ]
+  },
+  {
+    "id": "dwarvenElite",
+    "name": "Dwarven Elite",
+    "magic": "eradication",
+    "powerRank": 27,
+    "hitPoints": 220,
+    "race": ["dwarf"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 300,
+    "primaryAttackType": [ "melee", "poison" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 70,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 160,
+      "mana": 0.15,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 2.40,
+      "mana": 0.02,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 50,
+      "breath": 0,
+      "magic": 30,
+      "melee": 33,
+      "ranged": 30,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 15 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": 10 },
+      { "name": "endurance", "extra": null },
+      { "name": "racialEnemy", "extra": "orc" }
+    ]
+  },
+  {
+    "id": "dwarvenWarrior",
+    "name": "Dwarven Warrior",
+    "magic": "eradication",
+    "powerRank": 20,
+    "hitPoints": 160,
+    "race": ["dwarf"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 200,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 50,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 100,
+      "mana": 0.10,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 1.60,
+      "mana": 0.01,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 25,
+      "breath": 0,
+      "magic": 15,
+      "melee": 25,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 10 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": 30 },
+      { "name": "endurance", "extra": null },
+      { "name": "racialEnemy", "extra": "orc" }
+    ]
+  },
+  {
+    "id": "fireGiant",
+    "name": "Fire Giant",
+    "magic": "eradication",
+    "powerRank": 92,
+    "hitPoints": 700,
+    "race": ["giant"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 1100,
+    "primaryAttackType": [ "fire", "ranged" ],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 200,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 300,
+      "mana": 0.50,
+      "population": 3.0
+    },
+    "upkeepCost": {
+      "geld": 12.0,
+      "mana": 0.05,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 25,
+      "fire": 100,
+      "poison": 0,
+      "breath": 25,
+      "magic": 25,
+      "melee": 25,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": -25 },
+      { "name": "endurance", "extra": null },
+      { "name": "weakness", "extra": "cold" }
+    ]
+  },
+  {
+    "id": "ogre",
+    "name": "Ogre",
+    "magic": "eradication",
+    "powerRank": 34,
+    "hitPoints": 300,
+    "race": ["giant"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 400,
+    "primaryAttackType": [ "melee" ],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 100,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 200,
+      "mana": 0.30,
+      "population": 4.0
+    },
+    "upkeepCost": {
+      "geld": 6.4,
+      "mana": 0.03,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": 10 },
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "troglodyte",
+    "name": "Troglodyte",
+    "magic": "eradication",
+    "powerRank": 22,
+    "hitPoints": 160,
+    "race": ["reptile"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 200,
+    "primaryAttackType": [ "poision" ],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 36,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 80,
+      "mana": 0.10,
+      "population": 2.0
+    },
+    "upkeepCost": {
+      "geld": 0.6,
+      "mana": 0.015,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "recruitSpeed", "extra": 35 },
+      { "name": "scales", "extra": null }
+    ]
   }
 ]
