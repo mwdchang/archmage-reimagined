@@ -873,5 +873,382 @@
       { "name": "flying", "extra": null },
       { "name": "swift", "extra": null }
     ]
+  },
+  {
+    "id": "caveTroll",
+    "name": "Cave Troll",
+    "magic": "nether",
+    "powerRank": 49,
+    "hitPoints": 400,
+    "race": ["troll"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 400,
+    "primaryAttackType": ["poison"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 100,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 160,
+      "mana": 0.35,
+      "population": 3 
+    },
+    "upkeepCost": {
+      "geld": 4.80,
+      "mana": 0.05,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "regeneration", "extra": null },
+      { "name": "weakness", "extra": "fire" }
+    ]
+  },
+  {
+    "id": "darkApprentice",
+    "name": "Dark Apprentice",
+    "magic": "nether",
+    "powerRank": 51,
+    "hitPoints": 100,
+    "race": ["human"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 700,
+    "primaryAttackType": ["magic", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 360,
+      "mana": 0.75,
+      "population": 2
+    },
+    "upkeepCost": {
+      "geld": 8.0,
+      "mana": 0.05,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 80,
+      "fire": 50,
+      "poison": 0,
+      "breath": 0,
+      "magic": 80,
+      "melee": 80,
+      "ranged": 80,
+      "lightning": 50,
+      "cold": 0,
+      "paralyse": 80,
+      "psychic": 80,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "marksmanship", "extra": null },
+      { "name": "recruitSpeed", "extra": -10 },
+      { "name": "swift", "extra": null }
+    ]
+  },
+  {
+    "id": "gargoyle",
+    "name": "Gargoyle",
+    "magic": "nether",
+    "powerRank": 64,
+    "hitPoints": 300,
+    "race": ["golem"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 400,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 300,
+      "mana": 0.6,
+      "population": 2
+    },
+    "upkeepCost": {
+      "geld": 3.2,
+      "mana": 0.075,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 25,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 25,
+      "melee": 25,
+      "ranged": 25,
+      "lightning": 50,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 100,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null }
+    ]
+  },
+  {
+    "id": "imp",
+    "name": "Imp",
+    "magic": "nether",
+    "powerRank": 19,
+    "hitPoints": 80,
+    "race": ["demon"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 150,
+    "primaryAttackType": ["poison"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 60,
+      "mana": 0.2,
+      "population": 1
+    },
+    "upkeepCost": {
+      "geld": 2.4,
+      "mana": 0.02,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 25,
+      "nether": 25,
+      "phantasm": 15 
+    },
+    "attackResistances": {
+      "missile": 30,
+      "fire": 0,
+      "poison": 30,
+      "breath": 0,
+      "magic": 30,
+      "melee": 30,
+      "ranged": 30,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 30,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null }
+    ]
+  },
+  {
+    "id": "orcRaider",
+    "name": "Orc Raider",
+    "magic": "nether",
+    "powerRank": 12,
+    "hitPoints": 110,
+    "race": ["orc"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 20,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 30,
+      "mana": 0.05,
+      "population": 1
+    },
+    "upkeepCost": {
+      "geld": 0.16,
+      "mana": 0.005,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "recruitSpeed", "extra": 50 }
+    ]
+  },
+  {
+    "id": "orcishArcher",
+    "name": "Orcish Archer",
+    "magic": "nether",
+    "powerRank": 12,
+    "hitPoints": 100,
+    "race": ["orc"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 80,
+    "primaryAttackType": ["missile", "ranged"],
+    "primaryAttackInit": 3,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 30,
+      "mana": 0.05,
+      "population": 1
+    },
+    "upkeepCost": {
+      "geld": 0.16,
+      "mana": 0.005,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "recruitSpeed", "extra": 50 }
+    ]
+  },
+  {
+    "id": "wolfRaider",
+    "name": "Wolf Raider",
+    "magic": "nether",
+    "powerRank": 25,
+    "hitPoints": 550,
+    "race": ["orc"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 200,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 150,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 160,
+      "mana": 0.8,
+      "population": 2
+    },
+    "upkeepCost": {
+      "geld": 5,
+      "mana": 0.03,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 0,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "recruitSpeed", "extra": 33 }
+    ]
   }
 ]
