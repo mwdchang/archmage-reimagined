@@ -540,5 +540,281 @@
     "abilities": [
       { "name": "marksmanship", "extra": null }
     ]
+  },
+  {
+    "id": "fallenAngel",
+    "name": "Fallen Angel",
+    "magic": "nether",
+    "powerRank": 193,
+    "hitPoints": 1500,
+    "race": ["angel"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 2400,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 400,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 1,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 50,
+      "verdant": 25,
+      "eradication": 25,
+      "nether": 50,
+      "phantasm": 25 
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 50,
+      "poison": 25,
+      "breath": 25,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 55,
+      "cold": 50,
+      "paralyse": 25,
+      "psychic": 50,
+      "holy": 25 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "fallenArchangel",
+    "name": "Fallen Archangel",
+    "magic": "nether",
+    "powerRank": 750,
+    "hitPoints": 7500,
+    "race": ["angel"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 12000,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 800,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 5.0,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 70,
+      "verdant": 35,
+      "eradication": 35,
+      "nether": 70,
+      "phantasm": 35 
+    },
+    "attackResistances": {
+      "missile": 75,
+      "fire": 75,
+      "poison": 25,
+      "breath": 25,
+      "magic": 75,
+      "melee": 75,
+      "ranged": 75,
+      "lightning": 80,
+      "cold": 75,
+      "paralyse": 25,
+      "psychic": 75,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "fallenDominion",
+    "name": "Fallen Dominion",
+    "magic": "nether",
+    "powerRank": 59020,
+    "hitPoints": 120000,
+    "race": ["angel"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 600000,
+    "primaryAttackType": ["magic"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 60000,
+
+    "secondaryAttackPower": 800000,
+    "secondaryAttackType": ["magic"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 290,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 80,
+      "verdant": 50,
+      "eradication": 50,
+      "nether": 80,
+      "phantasm": 50 
+    },
+    "attackResistances": {
+      "missile": 85,
+      "fire": 85,
+      "poison": 85,
+      "breath": 85,
+      "magic": 85,
+      "melee": 85,
+      "ranged": 85,
+      "lightning": 90,
+      "cold": 85,
+      "paralyse": 85,
+      "psychic": 85,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "beauty", "extra": null },
+      { "name": "fear", "extra": null },
+      { "name": "flying", "extra": null },
+      { "name": "healing", "extra": null }
+    ]
+  },
+  {
+    "id": "devil",
+    "name": "Devil",
+    "magic": "nether",
+    "powerRank": 18586,
+    "hitPoints": 40000,
+    "race": ["demon"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 100000,
+    "primaryAttackType": ["fire"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 15000,
+
+    "secondaryAttackPower": 200000,
+    "secondaryAttackType": ["magic", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 100
+    },
+    "spellResistances": {
+      "ascendant": 50,
+      "verdant": 50,
+      "eradication": 400,
+      "nether": 400,
+      "phantasm": 400 
+    },
+    "attackResistances": {
+      "missile": 100,
+      "fire": 100,
+      "poison": 50,
+      "breath": 0,
+      "magic": 50,
+      "melee": 100,
+      "ranged": 100,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 50,
+      "holy": 0 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
+    "id": "unholyReaver",
+    "name": "Unholy Reaver",
+    "magic": "nether",
+    "powerRank": 50000,
+    "hitPoints": 85000,
+    "race": ["demon"],
+    "attributes": ["summon", "undisbandable"],
+
+    "primaryAttackPower": 210000,
+    "primaryAttackType": ["melee", "paralyse"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 50000,
+
+    "secondaryAttackPower": 470000,
+    "secondaryAttackType": ["psychic", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 62.5,
+      "population": 70
+    },
+    "spellResistances": {
+      "ascendant": 80,
+      "verdant": 0,
+      "eradication": 80,
+      "nether": 80,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 95,
+      "fire": 50,
+      "poison": 70,
+      "breath": 70,
+      "magic": 70,
+      "melee": 95,
+      "ranged": 75,
+      "lightning": 70,
+      "cold": 70,
+      "paralyse": 85,
+      "psychic": 85,
+      "holy": 30 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "fear", "extra": null },
+      { "name": "marksmanship", "extra": null }
+    ]
   }
 ]

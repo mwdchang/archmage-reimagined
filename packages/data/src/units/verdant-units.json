@@ -380,6 +380,60 @@
     ]
   },
   {
+    "id": "griffon",
+    "name": "Griffon",
+    "magic": "verdant",
+    "powerRank": 399,
+    "hitPoints": 3750,
+    "race": ["animal"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 2750,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 500,
+
+    "secondaryAttackPower": 3450,
+    "secondaryAttackType": ["melee"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 48.0,
+      "mana": 0.60,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 20,
+      "nether": 50,
+      "phantasm": 40 
+    },
+    "attackResistances": {
+      "missile": 60,
+      "fire": 30,
+      "poison": 40,
+      "breath": 30,
+      "magic": 20,
+      "melee": 50,
+      "ranged": 45,
+      "lightning": 0,
+      "cold": 30,
+      "paralyse": 0,
+      "psychic": 25,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "flying", "extra": null },
+      { "name": "endurance", "extra": null }
+    ]
+  },
+  {
     "id": "venusFlytrap",
     "name": "Venus Flytrap",
     "magic": "verdant",
