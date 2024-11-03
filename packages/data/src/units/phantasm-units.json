@@ -590,5 +590,114 @@
     "abilities": [
       { "name": "endurance", "extra": null }
     ]
+  },
+  {
+    "id": "leviathan",
+    "name": "Leviathan",
+    "magic": "phantasm",
+    "powerRank": 49500,
+    "hitPoints": 100000,
+    "race": ["giant"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 200000,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 50000,
+
+    "secondaryAttackPower": 300000,
+    "secondaryAttackType": ["ranged", "poision"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 6400,
+      "mana": 60,
+      "population": 0.0 
+    },
+    "spellResistances": {
+      "ascendant": 50,
+      "verdant": 75,
+      "eradication": 75, 
+      "nether": 90,
+      "phantasm": 80 
+    },
+    "attackResistances": {
+      "missile": 95,
+      "fire": 50,
+      "poison": 100,
+      "breath": 80,
+      "magic": 90,
+      "melee": 95,
+      "ranged": 95,
+      "lightning": 70,
+      "cold": 80,
+      "paralyse": 90,
+      "psychic": 70,
+      "holy": 80 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "marksmanship", "extra": null },
+      { "name": "scales", "extra": null }
+    ]
+  },
+  {
+    "id": "phantom",
+    "name": "Phantom",
+    "magic": "phantasm",
+    "powerRank": 20,
+    "hitPoints": 130,
+    "race": ["illusion"],
+    "attributes": ["speical"],
+
+    "primaryAttackPower": 100,
+    "primaryAttackType": ["ranged", "psychic"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 350,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 50,
+      "mana": 1.25,
+      "population": 1 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0.015,
+      "population": 0.0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0, 
+      "nether": 0,
+      "phantasm": 0 
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 75,
+      "breath": 0,
+      "magic": 0,
+      "melee": 100,
+      "ranged": 50,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 100,
+      "holy": 50 
+    },
+    "abilities": [
+      { "name": "fear", "extra": null }
+    ]
   }
 ]
