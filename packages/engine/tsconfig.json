@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule":true,
+    "target": "esnext",
     "paths":{
       "shared/*": ["../../shared/*"],
       "data/*": ["../../data/*"],

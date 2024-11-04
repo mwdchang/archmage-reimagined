@@ -78,8 +78,8 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "randomSingle",
+        "filter": null,
+        "targetStack": "random",
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -116,7 +116,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "affectedStack": "randomSingle",
+        "targetStack": "random",
         "effects": [
           {
             "effectType": "UnitDamageEffect",

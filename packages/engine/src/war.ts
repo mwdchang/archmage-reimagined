@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
 import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
 import { randomBM, randomInt } from './random';
-import { hasAbility } from "./base/unit";
+import { hasAbility, matchesFilter } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import { 
   currentSpellLevel, 
@@ -11,7 +11,7 @@ import {
 import { BattleReport, BattleStack } from 'shared/types/battle';
 
 // Various battle helpers
-import { filtersIncludesStack } from './battle/filters-includes-stack';
+// import { filtersIncludesStack } from './battle/filters-includes-stack';
 import { calcBattleOrders } from './battle/calc-battle-orders';
 import { calcAccuracyModifier } from './battle/calc-accuracy-modifier';
 import { calcResistance } from './battle/calc-resistance';
@@ -228,12 +228,13 @@ const battleSpell = (
 
   const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
   for (const battleEffect of battleEffects) {
-    const affectedStack = battleEffect.affectedStack;
+    const affectedStack = battleEffect.targetStack;
     const effects = battleEffect.effects;
-    const filters = battleEffect.filters;
+    const filter = battleEffect.filter;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
     const filteredArmy = army.filter(stack => {
-      return filtersIncludesStack(filters, stack);
+      // return filtersIncludesStack(filters, stack);
+      return matchesFilter(stack.unit, filter);
     });
 
     let randomSingleIdx = -1;
@@ -305,7 +306,7 @@ const battleItem = (
 
     // TODO: filters
     const filteredArmy = army;
-    const stackType = battleEffect.affectedStack;
+    const stackType = battleEffect.targetStack;
 
     let randomSingleIdx = -1;
     if (stackType === 'randomSingle') {

@@ -61,3 +61,22 @@ export interface Unit {
   spellResistances: SpellResistances,
   attackResistances: AttackResistances
 }
+
+export interface NumberFilterExpr {
+  op: 'gte' | 'lte';
+  value: number;
+}
+export interface UnitFilter {
+  magic?: string[];
+  race?: string[];
+  primaryAttackPower?: NumberFilterExpr;
+  primaryAttackType?: string[];
+  primaryAttackInit?: NumberFilterExpr;
+  secondaryAttackPower?: NumberFilterExpr;
+  secondaryAttackType?: string[];
+  secondaryAttackInit?: NumberFilterExpr;
+  counterAttackPower?: NumberFilterExpr;
+  hitPoints?: NumberFilterExpr;
+  abilities?: string[];
+}
+
