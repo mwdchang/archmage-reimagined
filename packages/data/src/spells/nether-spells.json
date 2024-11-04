@@ -12,7 +12,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["skeleton"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -40,7 +40,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["zombie"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -68,7 +68,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["shadow"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -96,7 +96,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["ghoul"],
         "summonType": "all",
         "summonNetPower": 110000,
@@ -124,7 +124,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["hornedDemon"],
         "summonType": "all",
         "summonNetPower": 170000,
@@ -152,7 +152,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["wraith"],
         "summonType": "all",
         "summonNetPower": 170000,
@@ -184,7 +184,7 @@
     },
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "type": "ResistanceEffect",
         "rule": "spellLevel",
         "resistance": "ascendant",
         "magic": {
@@ -210,15 +210,15 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "abilities": {
                 "rule": "add",
                 "magic": {
@@ -248,7 +248,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["vampire"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -276,7 +276,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["lich"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -304,7 +304,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["bulwarkHorror"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -332,7 +332,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["darkElfMagician"],
         "summonType": "all",
         "summonNetPower": 400000,

@@ -12,7 +12,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["gorilla"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -40,7 +40,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["dryad"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -68,7 +68,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["creepingVines"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -96,16 +96,16 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["elf"]
         },
-        "affectedStack": "all",
+        "targetStack": "all",
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "",
                 "magic": {
@@ -135,7 +135,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["werebear"],
         "summonType": "all",
         "summonNetPower": 150000,
@@ -163,7 +163,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["nymph"],
         "summonType": "all",
         "summonNetPower": 130000,
@@ -191,7 +191,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["mandrake"],
         "summonType": "all",
         "summonNetPower": 150000,
@@ -219,7 +219,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["treant"],
         "summonType": "all",
         "summonNetPower": 400000, 
@@ -247,7 +247,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["venusFlytrap"],
         "summonType": "all",
         "summonNetPower": 400000, 
@@ -275,7 +275,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["highElf"],
         "summonType": "all",
         "summonNetPower": 400000, 
@@ -303,7 +303,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["elvenBladeDancer"],
         "summonType": "all",
         "summonNetPower": 400000, 
@@ -335,7 +335,7 @@
     },
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "type": "ResistanceEffect",
         "rule": "spellLevel",
         "resistance": "nether",
         "magic": {
@@ -347,7 +347,7 @@
         }
       },
       {
-        "effectType": "KingdomResistanceEffect",
+        "type": "KingdomResistanceEffect",
         "rule": "spellLevel",
         "resistance": "phantasm",
         "magic": {
@@ -377,7 +377,7 @@
     },
     "effects": [
       {
-        "effectType": "KingdomProductionEffect",
+        "type": "KingdomProductionEffect",
         "rule": "spellLevel",
         "production": "farms",
         "magic": {
@@ -407,16 +407,16 @@
     },
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["treefolk"]
         },
-        "affectedStack": "all",
+        "targetStack": "all",
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -446,16 +446,16 @@
     },
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["animal"]
         },
-        "affectedStack": "all",
+        "targetStack": "all",
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,counterAttackPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -485,7 +485,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["phoenix"],
         "summonType": "all",
         "summonNetPower": 2000000, 
@@ -513,7 +513,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["earthElemental"],
         "summonType": "all",
         "summonNetPower": 2000000, 

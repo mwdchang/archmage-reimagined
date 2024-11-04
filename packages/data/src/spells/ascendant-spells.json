@@ -12,15 +12,15 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "random",
+        "filter": null,
+        "targetStack": "random",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevel",
                 "magic": {
@@ -50,7 +50,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["pegasus"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -78,7 +78,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["soulSpeaker"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -106,13 +106,13 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitHealEffect",
+            "type": "UnitHealEffect",
             "checkResistance": false,
             "healType": "points",
             "rule": "spellLevel",
@@ -141,15 +141,15 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "random",
+        "filter": null,
+        "targetStack": "random",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "abilities": {
                 "rule": "add",
                 "magic": {
@@ -183,7 +183,7 @@
     },
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "type": "ResistanceEffect",
         "rule": "spellLevel",
         "resistance": "nether",
         "magic": {
@@ -209,13 +209,13 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitHealEffect",
+            "type": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
             "rule": "",
@@ -244,15 +244,15 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "opponent",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -282,7 +282,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["archangel"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -310,7 +310,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["spiritWarrior"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -338,7 +338,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["unicorn"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -366,7 +366,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["empyreanInquisitor"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -394,7 +394,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["nagaQueen"],
         "summonType": "all",
         "summonNetPower": 400000,
@@ -422,15 +422,15 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "resistance.eradication": {
                 "rule": "spellLevel",
                 "magic": {
@@ -460,17 +460,17 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "primaryAttackType,secondaryAttackType": ["melee", "holy"]
         },
-        "affectedStack": "all",
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -484,9 +484,9 @@
             }
           },
           {
-            "effectType": "UnitAttrEffect",
+            "type": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackType": {
                 "rule": "",
                 "magic": {
@@ -516,7 +516,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["titan"],
         "summonType": "all",
         "summonNetPower": 2000000,
@@ -544,7 +544,7 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "UnitSummonEffect",
+        "type": "UnitSummonEffect",
         "unitIds": ["dominion"],
         "summonType": "all",
         "summonNetPower": 2000000,
@@ -572,13 +572,13 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
+        "type": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "all",
+        "filter": null,
+        "targetStack": "all",
         "effects": [
           {
-            "effectType": "UnitHealEffect",
+            "type": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
             "rule": "",
