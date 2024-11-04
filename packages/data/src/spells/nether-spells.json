@@ -212,7 +212,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": null,
+        "filter": null,
         "affectedStack": "all",
         "effects": [
           {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Unit } from 'shared/types/unit';
+import type { Unit, UnitFilter } from 'shared/types/unit';
 import { ArmyUnit } from 'shared/types/mage';
 import { getUnitById } from './references';
 
@@ -49,6 +49,7 @@ export const matchesFilterByUnitId = (id: string, filter: UnitFilter) => {
   return matchesFilter(unit, filter);
 }
 export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
+  if (!filter) return true;
 
   if (filter.magic) {
     if (!filter.magic.includes(unit.magic)) {

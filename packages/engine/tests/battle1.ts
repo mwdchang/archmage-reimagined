@@ -14,7 +14,7 @@ const attacker: Combatant = {
   army: [
     { id: 'archangel', size: 5000 }
   ],
-  spellId: '',
+  spellId: 'swordOfLight',
   itemId: ''
 };
 attacker.mage.army = attacker.army;

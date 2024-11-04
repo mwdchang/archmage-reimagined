@@ -279,7 +279,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filters": null,
+        "filter": null,
         "affectedStack": "all",
         "effects": [
           {

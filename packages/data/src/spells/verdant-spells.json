@@ -98,7 +98,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["elf"]
         },
         "affectedStack": "all",
@@ -409,7 +409,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["treefolk"]
         },
         "affectedStack": "all",
@@ -448,7 +448,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": {
+        "filter": {
           "race": ["animal"]
         },
         "affectedStack": "all",
