@@ -67,8 +67,8 @@ const applyUnitEffect = (
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
-  Object.keys(unitEffect.attributeMap).forEach(attrKey => {
-    const attr = unitEffect.attributeMap[attrKey];
+  Object.keys(unitEffect.attributes).forEach(attrKey => {
+    const attr = unitEffect.attributes[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
 
     // Caster colour does not get this effect
@@ -198,7 +198,6 @@ const applyHealEffect = (
  *
  * The stack attribute determines how the affected army is chosen, there are several options.
  * - random: If the spell has multiple effects, each effect targets a random stack
- * - randomSingle: A random stack is chosen and receives all effects. This is used to model 
  *   spells that have both UnitEffect and DamageEffect and wants to target the same unit.
  * - all: All stacks get all effects
  */
@@ -232,23 +231,22 @@ const battleSpell = (
     const effects = battleEffect.effects;
     const filter = battleEffect.filter;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
+
+    // Match
     const filteredArmy = army.filter(stack => {
       // return filtersIncludesStack(filters, stack);
       return matchesFilter(stack.unit, filter);
     });
 
-    let randomSingleIdx = -1;
-    if (affectedStack === 'randomSingle') {
-      randomSingleIdx = randomInt(filteredArmy.length);
+    let randomIdx = -1;
+    if (affectedStack === 'random') {
+      randomIdx = randomInt(filteredArmy.length);
     }
 
     for (const effect of effects) {
       let affectedArmy: BattleStack[] = [];
-      if (affectedStack === 'randomSingle') {
-        affectedArmy = [filteredArmy[randomSingleIdx]];
-      } else if (affectedStack === 'random') {
-        let idx = randomInt(filteredArmy.length);
-        affectedArmy = [filteredArmy[idx]];
+      if (affectedStack === 'random') {
+        affectedArmy = [filteredArmy[randomIdx]];
       } else {
         affectedArmy = filteredArmy;
       }
@@ -308,18 +306,15 @@ const battleItem = (
     const filteredArmy = army;
     const stackType = battleEffect.targetStack;
 
-    let randomSingleIdx = -1;
-    if (stackType === 'randomSingle') {
-      randomSingleIdx = randomInt(filteredArmy.length);
+    let randomIdx = -1;
+    if (stackType === 'random') {
+      randomIdx = randomInt(filteredArmy.length);
     }
 
     for (let i = 0; i < battleEffect.effects.length; i++) {
       let affectedArmy: BattleStack[] = [];
-      if (stackType === 'randomSingle') {
-        affectedArmy = [filteredArmy[randomSingleIdx]];
-      } else if (stackType === 'random') {
-        let idx = randomInt(filteredArmy.length);
-        affectedArmy = [filteredArmy[idx]];
+      if (stackType === 'random') {
+        affectedArmy = [filteredArmy[randomIdx]];
       } else {
         affectedArmy = filteredArmy;
       }
