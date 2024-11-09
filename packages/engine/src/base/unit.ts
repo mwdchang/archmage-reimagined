@@ -63,6 +63,15 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
     }
   }
 
+  if (filter.allAttackType) {
+    const primary = _.intersection(filter.primaryAttackType, unit.primaryAttackType);
+    const secondary = _.intersection(filter.secondaryAttackType, unit.secondaryAttackType);
+
+    if (primary.length === 0 && secondary.length === 0) {
+      return false;
+    }
+  }
+
   if (filter.primaryAttackPower) {
     if (filter.primaryAttackPower.op === 'gte') {
       if (unit.primaryAttackPower < filter.primaryAttackPower.value) return false;

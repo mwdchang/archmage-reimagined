@@ -78,5 +78,8 @@ export interface UnitFilter {
   counterAttackPower?: NumberFilterExpr;
   hitPoints?: NumberFilterExpr;
   abilities?: string[];
+
+  // extra
+  allAttackType?: string[];
 }
 
