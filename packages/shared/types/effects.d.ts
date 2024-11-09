@@ -1,67 +1,26 @@
-/* Effects improved */
-import type { UnitFilter } from './unit.d.ts';
-
-export type ScalingRule = 
-    'none'
-  | 'abs'               // value
-  | 'spellLevel'        // value * spell level
-;
+/**
+ * Effect hierarchy
+ *
+ * - Effect
+ *   - BattleEffect
+ *     - UnitAttrEffect
+ *     - UnitHealeffect
+ *     - UnitDamageEffect
+ *   - UnitSummonEffect
+**/
 
 export interface Effect {
-  type: string
+  effectType: string
 }
 
+type EffectTarget = 'self' | 'opponent';
+type AffectedStack = 'all' | 'random' | 'randomSingle';
 export interface BattleEffect extends Effect {
-  target: 'self' | 'opponent' | 'all';
-  targetStack: 'all' | 'random' | 'weighted';
-  filter?: UnitFilter;
-  effectsTrigger?: {
-    max: number;
-    min: number;
-    triggerType: 'all' | 'random'
-  },
-  effects: UnitAttrEffect[] | UnitDamageEffect[] | UnitHealEffect[]
+  affectedStack: AffectedStack,
+  target: EffectTarget,
+  filters: any,
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[],
 }
-
-
-export interface UnitAttrEffect extends Effect {
-  checkResistance: boolean;
-  attributes: {
-    [key: string]: {
-      rule: ScalingRule,
-      magic: {
-        [key: string]: {
-          value: any
-        }
-      }
-    }
-  }
-}
-
-export interface UnitDamageEffect extends Effect {
-  checkResistance: boolean;
-  damageType: string[],
-  rule: ScalingRule,
-  minTimes: number,
-  maxTimes: number,
-  magic: {
-    [key: string]: {
-      value: any
-    }
-  }
-}
-
-export interface UnitHealEffect extends Effect {
-  healType: string,
-  rule: ScalingRule,
-  magic: {
-    [key: string]: {
-      value: any
-    }
-  }
-}
-
-
 
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
@@ -111,3 +70,46 @@ export interface CastingEffect extends Effect {
   }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Sub effects
+////////////////////////////////////////////////////////////////////////////////
+
+export interface UnitEffect extends Effect {
+  checkResistance: boolean,
+}
+
+export interface UnitAttrEffect extends UnitEffect {
+  attributeMap: {
+    [key: string]: {
+      rule: string,
+      magic: {
+        [key: string]: {
+          value: any
+        }
+      }
+    }
+  }
+}
+
+export interface UnitDamageEffect extends UnitEffect { 
+  damageType: string[],
+  rule: string,
+  minTimes: number,
+  maxTimes: number,
+  magic: {
+    [key: string]: {
+      value: any
+    }
+  }
+}
+
+export interface UnitHealEffect extends UnitEffect {
+  healType: string,
+  rule: string,
+  magic: {
+    [key: string]: {
+      value: any
+    }
+  }
+}

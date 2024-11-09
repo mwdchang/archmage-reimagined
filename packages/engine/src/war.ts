@@ -67,8 +67,8 @@ const applyUnitEffect = (
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
-  Object.keys(unitEffect.attributes).forEach(attrKey => {
-    const attr = unitEffect.attributes[attrKey];
+  Object.keys(unitEffect.attributeMap).forEach(attrKey => {
+    const attr = unitEffect.attributeMap[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
 
     // Caster colour does not get this effect
@@ -226,7 +226,7 @@ const battleSpell = (
     effectOrigin.spellLevel = enchantment.spellLevel;
   }
 
-  const battleEffects = casterSpell.effects.filter(d => d.type === 'BattleEffect') as BattleEffect[];
+  const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
   for (const battleEffect of battleEffects) {
     const affectedStack = battleEffect.affectedStack;
     const effects = battleEffect.effects;
@@ -264,13 +264,13 @@ const battleSpell = (
       }
       console.log(`Applying effect to ${affectedArmy.map(d => d.unit.name)}`);
 
-      if (effect.type === 'UnitAttrEffect') {
+      if (effect.effectType === 'UnitAttrEffect') {
         const unitAttrEffect = effect as UnitAttrEffect;
         applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-      } else if (effect.type === 'DamageEffect') {
+      } else if (effect.effectType === 'DamageEffect') {
         const damageEffect = effect as UnitDamageEffect;
         applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
-      } else if (effect.type === 'HealEffect') {
+      } else if (effect.effectType === 'HealEffect') {
         const healEffect = effect as UnitHealEffect;
         applyHealEffect(effectOrigin, healEffect, affectedArmy);
       }
@@ -298,7 +298,7 @@ const battleItem = (
   };
 
   casterItem.effects.forEach(effect => {
-    if (effect.type !== 'BattleEffect') return;
+    if (effect.effectType !== 'BattleEffect') return;
 
     const battleEffect = effect as BattleEffect;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
@@ -324,12 +324,12 @@ const battleItem = (
       }
 
       const eff = battleEffect.effects[i];
-      console.log(`Applying effect ${i+1} (${eff.type}) to ${affectedArmy.map(d => d.unit.name)}`);
+      console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
-      if (eff.type === 'UnitAttrEffect') {
+      if (eff.effectType === 'UnitAttrEffect') {
         const unitEffect = eff as UnitAttrEffect;
         applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
-      } else if (eff.type === 'UnitDamageEffect') {
+      } else if (eff.effectType === 'UnitDamageEffect') {
         const damageEffect = eff as UnitDamageEffect;
         applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
       }

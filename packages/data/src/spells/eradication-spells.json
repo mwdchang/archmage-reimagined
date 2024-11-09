@@ -12,12 +12,12 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "type": "UnitDamageEffect",
+            "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "minTimes": 1,
             "maxTimes": 1,
@@ -48,7 +48,7 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "UnitSummonEffect",
+        "effectType": "UnitSummonEffect",
         "unitIds": ["lizardman"],
         "summonType": "all",
         "summonNetPower": 50000,
@@ -76,15 +76,15 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "targetStack": "randomSingle",
+        "filters": null,
+        "affectedStack": "randomSingle",
         "effects": [
           {
-            "type": "UnitAttrEffect",
+            "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributes": {
+            "attributeMap": {
               "primaryAttackType,secondaryAttackType": {
                 "rule": "add",
                 "magic": {
@@ -114,12 +114,12 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "randomSingle",
+        "affectedStack": "randomSingle",
         "effects": [
           {
-            "type": "UnitDamageEffect",
+            "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "minTimes": 1,
             "maxTimes": 1,
@@ -134,9 +134,9 @@
             }
           },
           {
-            "type": "UnitAttrEffect",
+            "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributes": {
+            "attributeMap": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {

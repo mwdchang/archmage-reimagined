@@ -12,12 +12,12 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "type": "UnitDamageEffect",
+            "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "minTimes": 1,
             "maxTimes": 1,
@@ -48,14 +48,14 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "all",
+        "affectedStack": "all",
         "effects": [
           {
-            "type": "UnitAttrEffect",
+            "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributes": {
+            "attributeMap": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -85,7 +85,7 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "UnitSummonEffect",
+        "effectType": "UnitSummonEffect",
         "unitIds": ["sprite"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -113,7 +113,7 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "UnitSummonEffect",
+        "effectType": "UnitSummonEffect",
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 70000,
@@ -141,7 +141,7 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "UnitSummonEffect",
+        "effectType": "UnitSummonEffect",
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 150000,
@@ -173,7 +173,7 @@
     },
     "effects": [
       {
-        "type": "CastingEffect",
+        "effectType": "CastingEffect",
         "rule": "spellLevel",
         "type": "castingSuccess",
         "magic": {
@@ -203,7 +203,7 @@
     },
     "effects": [
       {
-        "type": "ProductionEffect",
+        "effectType": "ProductionEffect",
         "rule": "spellLevel",
         "production": "guilds",
         "magic": {
@@ -215,7 +215,7 @@
         }
       },
       {
-        "type": "CastingEffect",
+        "effectType": "CastingEffect",
         "rule": "spellLevel",
         "type": "castingSuccess",
         "magic": {
@@ -241,12 +241,12 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "random",
+        "affectedStack": "random",
         "effects": [
           {
-            "type": "UnitDamageEffect",
+            "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "minTimes": 1,
             "maxTimes": 1,
@@ -277,15 +277,15 @@
     "upkeep": null,
     "effects": [
       {
-        "type": "BattleEffect",
+        "effectType": "BattleEffect",
         "target": "opponent",
-        "filter": null,
-        "targetStack": "all",
+        "filters": null,
+        "affectedStack": "all",
         "effects": [
           {
-            "type": "UnitAttrEffect",
+            "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributes": {
+            "attributeMap": {
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "",
                 "magic": {
