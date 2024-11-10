@@ -4,7 +4,7 @@
     <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
       {{ new Date(d.timestamp) }} 
       <br>
-      {{ d.summaryLogs.join(' ') }}
+      {{ d.summary }}
     </router-link>
     <br>
     <br>
@@ -14,12 +14,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { API } from '@/api/api';
+import type { BattleReportSummary } from 'shared/types/battle';
 
-const chronicles = ref<any[]>([]);
+const chronicles = ref<BattleReportSummary[]>([]);
 
-// Note d is id
 const openReport = (d) => {
-
 };
 
 onMounted(async () => {

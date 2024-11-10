@@ -1,3 +1,4 @@
+import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Mage } from 'shared/types/mage';
 
 // Models database/datastore CRUD operations
@@ -19,8 +20,8 @@ export abstract class DataAdapter {
   abstract getMage(id: number): Promise<Mage>
 
   // Battle reports
-  abstract getMageBattles(id: number, options: any): Promise<any>
-  abstract getBattleReport(id: string): Promise<any>
+  abstract getMageBattles(id: number, options: any): Promise<BattleReportSummary[]>
+  abstract getBattleReport(id: string): Promise<BattleReport>
   abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): Promise<void>
 
   abstract nextTurn(): Promise<void>

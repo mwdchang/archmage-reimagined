@@ -617,8 +617,7 @@ class Engine {
       summary: battleReport.summary
     };
 
-    this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
-
+    await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     await this.adapter.updateMage(mage);
     await this.adapter.updateMage(defenderMage);
     return battleReport;
@@ -640,7 +639,7 @@ class Engine {
   }
 
   async getMageBattles(mage: Mage) {
-    return this.adapter.getMageBattles(mage.id, {});
+    return await this.adapter.getMageBattles(mage.id, {});
   }
 
   async register(username: string, password: string, magic: string) {

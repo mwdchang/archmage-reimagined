@@ -55,9 +55,12 @@
     <br>
 
     <h3 class="section-header">Spells and items</h3>
-    <div v-for="(log, idx) of report.preBattleLogs" :key="idx">
-      {{ log }}
-    </div>
+      <div>
+        {{ report.attacker.id }} - {{ report.preBattle.attacker }}
+      </div>
+      <div>
+        {{ report.defender.id }} - {{ report.preBattle.defender }}
+      </div>
     <br>
 
     <h3 class="section-header">Assault</h3>
@@ -73,11 +76,18 @@
     <br>
 
     <h3 class="section-header">Summary</h3>
-    <div v-for="(log, idx) of report.summaryLogs" :key="idx">
-      {{ log }}
-    </div>
+      <div>
+        {{ report.summary.attacker }}
+      </div>
+      <div>
+        {{ report.summary.defender }}
+      </div>
     <br>
 
+    <h3 class="section-header">Result</h3>
+      <div>{{ report.isSuccessful }}</div>
+      <div>{{ report.landResult }}</div>
+    <br>
 
     <router-link to="/about">Main</router-link>
   </main>
@@ -87,9 +97,10 @@
 import { onMounted, ref } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
+import type { BattleReport } from 'shared/types/battle';
 
 const props = defineProps<{ id: string }>(); 
-const report = ref<any>(null);
+const report = ref<BattleReport|null>(null);
 
 onMounted(async () => {
   const res = (await API.get(`/report/${props.id}`)).data;
