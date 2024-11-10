@@ -20,7 +20,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevel",
                 "magic": {
@@ -149,7 +149,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "abilities": {
                 "rule": "add",
                 "magic": {
@@ -247,12 +247,12 @@
         "effectType": "BattleEffect",
         "target": "opponent",
         "filter": null,
-        "affectedStack": "all",
+        "affectedStack": "opponent",
         "effects": [
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -430,7 +430,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "resistance.eradication": {
                 "rule": "spellLevel",
                 "magic": {
@@ -470,7 +470,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -486,7 +486,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackType": {
                 "rule": "",
                 "magic": {

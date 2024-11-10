@@ -104,8 +104,8 @@
         "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitAttrEffect",
-            "attributeMap": {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
               "accuracy": {
                 "rule": "",
                 "magic": {
@@ -415,8 +415,8 @@
         "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitAttrEffect",
-            "attributeMap": {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -454,8 +454,8 @@
         "affectedStack": "all",
         "effects": [
           {
-            "name": "UnitAttrEffect",
-            "attributeMap": {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
               "primaryAttackPower,counterAttackPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {

@@ -64,8 +64,8 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   }
 
   if (filter.allAttackType) {
-    const primary = _.intersection(filter.primaryAttackType, unit.primaryAttackType);
-    const secondary = _.intersection(filter.secondaryAttackType, unit.secondaryAttackType);
+    const primary = _.intersection(filter.allAttackType, unit.primaryAttackType);
+    const secondary = _.intersection(filter.allAttackType, unit.secondaryAttackType);
 
     if (primary.length === 0 && secondary.length === 0) {
       return false;

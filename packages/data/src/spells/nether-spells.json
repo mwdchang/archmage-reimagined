@@ -218,7 +218,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "abilities": {
                 "rule": "add",
                 "magic": {

@@ -109,23 +109,22 @@ const applyUnitEffect = (
         }
 
         // Finally apply
-        if (_.isArray(root[field])) {
-          // Resolve this later
-          if (field === 'abilities') {
-            if (rule === 'add') {
-              stack.addedAbilities.push(finalValue);
-            } else {
-              stack.removedAbilities.push(finalValue);
-            }
-          } 
-        } else {
-          if (field === 'accuracy') {
-            stack.accuracy += finalValue;
-          } else if (field === 'efficiency') {
-            stack.efficiency += finalValue;
+        if (field === 'abilities') {
+          if (rule === 'add') {
+            stack.addedAbilities.push(finalValue);
           } else {
-            root[field] += Math.floor(finalValue);
+            stack.removedAbilities.push(finalValue);
           }
+        } else if (field === 'primaryAttackType') {
+          unit.primaryAttackType.push(finalValue);
+        } else if (field === 'secondaryAttackType') {
+          unit.secondaryAttackType.push(finalValue);
+        } else if (field === 'accuracy') {
+          stack.accuracy += finalValue;
+        } else if (field === 'efficiency') {
+          stack.efficiency += finalValue;
+        } else {
+          root[field] += Math.floor(finalValue);
         }
       });
     });
@@ -234,9 +233,11 @@ const battleSpell = (
 
     // Match
     const filteredArmy = army.filter(stack => {
-      // return filtersIncludesStack(filters, stack);
       return matchesFilter(stack.unit, filter);
     });
+
+     // Nothing to do
+    if (filteredArmy.length === 0) continue;
 
     let randomIdx = -1;
     if (affectedStack === 'random') {
@@ -373,6 +374,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Enchantments effects are equivalent to spell effects, but the
   // efficacy is the enchantment spell level, and not that of the caster's
   // current spell level
+  console.log('>> attacker enchants') 
   attacker.mage.enchantments.forEach(enchant => {
     battleSpell(
       attacker,
@@ -381,6 +383,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingArmy,
       enchant);
   });
+  console.log('');
+
+  console.log('>> defender enchants') 
   defender.mage.enchantments.forEach(enchant => {
     battleSpell(
       defender,
@@ -389,6 +394,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       attackingArmy,
       enchant);
   });
+  console.log('');
 
   // Apply fort bonus to defender
   if (battleOptions.useFortBonus === true) {
@@ -404,6 +410,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Spells
   // TODO: check barriers and success
   if (attacker.spellId) {
+    console.log(`>> attacker spell ${attacker.spellId}`);
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
       attacker.mage.currentMana -= cost;
@@ -412,8 +419,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     } else {
       battleReport.preBattle.attacker.spellResult = 'noMana';
     }
+    console.log('');
   }
   if (attacker.itemId) {
+    console.log(`>> attacker item ${attacker.itemId}`);
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
       battleItem(attacker, attackingArmy, defender, defendingArmy);
@@ -421,9 +430,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     } else {
       battleReport.preBattle.attacker.itemResult = 'noItem';
     }
+    console.log('');
   }
 
   if (defender.spellId) {
+    console.log(`>> defender spell ${defender.spellId}`);
     const cost = castingCost(defender.mage, defender.spellId);
     if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
@@ -433,8 +444,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     } else {
       battleReport.preBattle.defender.spellResult = 'noMana';
     }
+    console.log('');
   }
   if (defender.itemId) {
+    console.log(`>> defender item ${defender.itemId}`);
     if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
       battleItem(defender, defendingArmy, attacker, attackingArmy);
@@ -442,6 +455,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     } else {
       battleReport.preBattle.defender.itemResult = 'noItem';
     }
+    console.log('');
   }
 
   // Resolving contradicting ability states

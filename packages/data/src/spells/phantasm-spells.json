@@ -55,7 +55,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -285,7 +285,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "",
                 "magic": {

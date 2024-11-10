@@ -78,13 +78,15 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
+        "filter": {
+          "allAttackType": [ "missile" ]
+        },
         "targetStack": "random",
         "effects": [
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackType,secondaryAttackType": {
                 "rule": "add",
                 "magic": {
@@ -136,7 +138,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {
