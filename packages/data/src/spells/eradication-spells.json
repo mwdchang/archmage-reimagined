@@ -78,13 +78,15 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filters": null,
-        "affectedStack": "randomSingle",
+        "filter": {
+          "allAttackType": [ "missile" ]
+        },
+        "targetStack": "random",
         "effects": [
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackType,secondaryAttackType": {
                 "rule": "add",
                 "magic": {
@@ -116,7 +118,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "affectedStack": "randomSingle",
+        "targetStack": "random",
         "effects": [
           {
             "effectType": "UnitDamageEffect",
@@ -136,7 +138,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {

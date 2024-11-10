@@ -15,7 +15,7 @@
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "percentage",
                 "magic": {
@@ -48,7 +48,7 @@
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "attackResistances.fire": {
                 "rule": "",
                 "magic": {
@@ -106,7 +106,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
-            "attributeMap": {
+            "attributes": {
               "abilities": {
                 "rule": "add",
                 "magic": {
@@ -139,7 +139,7 @@
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "add",
                 "magic": {
@@ -172,7 +172,7 @@
         "effects": [
           {
             "name": "UnitAttrEffect",
-            "attributeMap": {
+            "attributes": {
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "add",
                 "magic": {

@@ -55,7 +55,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "accuracy": {
                 "rule": "spellLevelPercentage",
                 "magic": {
@@ -279,13 +279,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filters": null,
+        "filter": null,
         "affectedStack": "all",
         "effects": [
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "attributeMap": {
+            "attributes": {
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "",
                 "magic": {

@@ -100,7 +100,7 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log(br.summary);
 
   console.log('=== Battle result ===');
-  console.log(br.isSuccessful);
+  console.log(`Success = ${br.isSuccessful}`);
 
   console.log('=== Land loss/gain ===');
   console.log(br.landResult);
