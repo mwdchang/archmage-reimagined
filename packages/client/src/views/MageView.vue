@@ -22,8 +22,16 @@
       <tr>
         <td>Forts</td><td class="text-right">{{ mageSummary.forts }} </td>
       </tr>
+      <tr>
+        <td>Attack</td>
+        <td class="text-right">
+          <router-link :to="{ name: 'battle', query: { targetId: mageSummary.id }}">Siege</router-link>
+        </td>
+      </tr>
     </tbody>
   </table>
+  <div>
+  </div>
 </template>
 
 <script setup lang="ts">

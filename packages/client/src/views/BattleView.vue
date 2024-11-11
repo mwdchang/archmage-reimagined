@@ -7,9 +7,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const mageStore = useMageStore();
@@ -26,5 +26,12 @@ const prepBattle = async () => {
     }
   });
 };
+
+onMounted(() => {
+  const route = useRoute();
+  if (route.query.targetId) {
+    targetId.value = route.query.targetId as string;
+  }
+});
 
 </script>

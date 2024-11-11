@@ -62,6 +62,8 @@ const castingSpells = computed(() => {
 })
 
 const castSpell = async () => {
+  if (!selected.value) return;
+
   const res = (await API.post('spell', { 
     spellId: selected.value, 
     num: turns.value, 
