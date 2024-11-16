@@ -41,14 +41,15 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
   // result.land = mageLand;
   // result.landTaken = landTaken;
 
-  const tempMage = _.pick(mage, buildingTypes);
+
+  const tempMageBuildings = _.pick(mage, buildingTypes);
 
   const calcLoss = (buildingType: string, val: number) => {
     // Handle forts, say 1500 units to take a fort 
     if (buildingType === 'forts') {
       let maxFortTaken = Math.floor(unitsRemaining / 1500);
       const forts = Math.floor(Math.min(1 + 0.1 * mage.forts, maxFortTaken));
-      return Math.min(forts, tempMage['forts']);
+      return Math.min(forts, tempMageBuildings['forts']);
     } 
     return Math.floor(val * landTaken / mageLand);
   }
@@ -58,22 +59,22 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
   landLoss.forts = calcLoss('forts', null);
   landTaken -= landLoss.forts;
 
+  let c = 0;
   buildingTypes.forEach(buildingType => {
     if (buildingType === 'forts') return;
-    landLoss[buildingType] = calcLoss(buildingType, tempMage[buildingType]);
-    tempMage[buildingType] -= landLoss[buildingType];
-    landTaken -= landLoss[buildingType];
+    landLoss[buildingType] = calcLoss(buildingType, tempMageBuildings[buildingType]);
+    tempMageBuildings[buildingType] -= landLoss[buildingType];
+    c += landLoss[buildingType];
   });
+  landTaken -= c;
 
   // Resolve any mathematic remainder
   if (landTaken > 0) {
-    console.log('handle remainder land', landTaken);
-    
     while (landTaken > 0) {
       for (const v of buildingTypes) {
-        if (tempMage[v] > 0) {
+        if (tempMageBuildings[v] > 0) {
           landLoss[v] ++;
-          tempMage[v] --;
+          tempMageBuildings[v] --;
           landTaken --;
           break;
         }

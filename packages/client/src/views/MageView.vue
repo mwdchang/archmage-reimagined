@@ -25,7 +25,11 @@
       <tr>
         <td>Attack</td>
         <td class="text-right">
-          <router-link :to="{ name: 'battle', query: { targetId: mageSummary.id }}">Siege</router-link>
+          <router-link 
+            v-if="mageStore.mage.id !== +mageId"
+            :to="{ name: 'battle', query: { targetId: mageSummary.id }}">
+            Siege
+          </router-link>
         </td>
       </tr>
     </tbody>
@@ -37,7 +41,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import magic from '@/components/magic.vue';
+import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
+
+const mageStore = useMageStore();
 
 const props = defineProps({
   mageId: String

@@ -745,12 +745,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   const battleSummary = calcBattleSummary(attackingArmy, defendingArmy);
   const brA = battleReport.summary.attacker;
   const brD = battleReport.summary.defender;
-  
+
+  // Starting army size
+  brA.startingUnits = battleReport.attacker.army.reduce((v, stack) => {
+    return v + stack.size;
+  }, 0);
   brA.netPower = battleSummary.attacker.netPower;
   brA.netPowerLoss = battleSummary.attacker.netPowerLoss;
   brA.unitsLoss = battleSummary.attacker.unitsLoss;
   brA.armyLoss = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
+  brD.startingUnits = battleReport.defender.army.reduce((v, stack) => {
+    return v + stack.size;
+  }, 0);
   brD.netPower = battleSummary.defender.netPower;
   brD.netPowerLoss = battleSummary.defender.netPowerLoss;
   brD.unitsLoss = battleSummary.defender.unitsLoss;
@@ -758,6 +765,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   if (brA.netPowerLoss < brD.netPowerLoss && brD.netPowerLoss >= 0.1 * brD.netPower) {
     battleReport.isSuccessful = true;
+    battleReport.summary.isSuccessful = true;
+  } else {
+    battleReport.isSuccessful = false;
+    battleReport.summary.isSuccessful = false;
   }
   return battleReport;
 }
@@ -802,4 +813,21 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   });
 
   battleReport.landResult = _.cloneDeep(landResult);
+
+  const buildingTypes = [
+    'wilderness', 'farms', 'towns', 
+    'workshops', 'nodes', 'barracks', 
+    'guilds', 'barriers', 'forts'
+  ];
+  let totalLandGain = 0;
+  buildingTypes.forEach(building => {
+    totalLandGain += battleReport.landResult.landGain[building];
+  });
+  let totalLandLoss = 0;
+  buildingTypes.forEach(building => {
+    totalLandLoss += battleReport.landResult.landLoss[building];
+  });
+  battleReport.summary.landGain = totalLandGain;
+  battleReport.summary.landLoss = totalLandLoss;
+
 }
