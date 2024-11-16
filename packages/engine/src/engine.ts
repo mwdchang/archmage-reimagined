@@ -605,8 +605,12 @@ class Engine {
       defender.itemId = assignment.itemId;
     }
 
+    // FIXME: need to model order, right now
+    // we take one turn to go attack, and one turn to return home ???
+    this.useTurn(mage);
     const battleReport = battle('siege', attacker, defender);
     resolveBattle(mage, defenderMage, battleReport);
+    this.useTurn(mage);
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,

@@ -781,14 +781,14 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   const attackerLosses = summary.attacker.armyLoss;
   attackerLosses.forEach(stack => {
     const f = attacker.army.find(d => { return d.id === stack.id });
-    if (f) f.size = stack.size;
+    if (f) f.size -= stack.size;
   });
   attacker.army = attacker.army.filter(d => d.size > 0);
 
   const defenderLosses = summary.defender.armyLoss;
   defenderLosses.forEach(stack => {
     const f = defender.army.find(d => { return d.id === stack.id });
-    if (f) f.size = stack.size;
+    if (f) f.size -= stack.size;
   });
   defender.army = defender.army.filter(d => d.size > 0);
 

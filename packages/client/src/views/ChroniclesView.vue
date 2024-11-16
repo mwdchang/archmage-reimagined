@@ -4,7 +4,13 @@
     <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
       {{ new Date(d.timestamp) }} 
       <br>
-      {{ d.summary }}
+      <!--
+      {{ d }}
+      <br>
+      -->
+      (#{{ d.attackerId }}) army {{ d.attackType }} (#{{ d.defenderId }}) army on the battlefield, 
+      (#{{ d.attackerId }}) killed {{ d.summary.defender.unitsLoss }} units and lost {{ d.summary.attacker.unitsLoss }} units.
+      The attack was a {{ d.summary.isSuccessful ? 'success' : 'failure' }}
     </router-link>
     <br>
     <br>
