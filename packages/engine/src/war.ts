@@ -806,10 +806,10 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   const landResult = calcLandLoss(defender, battleReport.attackType, unitsRemaining);
 
   Object.keys(landResult.landLoss).forEach(key => {
-    defender[key] -= landResult.landLoss[key]
+    defender[key] -= landResult.landLoss[key];
   });
   Object.keys(landResult.landGain).forEach(key => {
-    attacker[key] -= landResult.landGain[key]
+    attacker[key] += landResult.landGain[key];
   });
 
   battleReport.landResult = _.cloneDeep(landResult);
