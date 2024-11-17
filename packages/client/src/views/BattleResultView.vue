@@ -15,7 +15,7 @@
         </tr>
         <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
           <td>{{ stack.unit.name }}</td>
-          <td><magic :magic="stack.unit.magic" /></td>
+          <td><magic :magic="stack.unit.magic" small /></td>
           <td class="text-right">{{ stack.size }}</td>
           <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
           <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
@@ -42,7 +42,7 @@
         </tr>
         <tr v-for="(stack, idx) of report.defender.army" :key="idx">
           <td>{{ stack.unit.name }}</td>
-          <td><magic :magic="stack.unit.magic" /></td>
+          <td><magic :magic="stack.unit.magic" small /></td>
           <td class="text-right">{{ stack.size }}</td>
           <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
           <td class="text-right">{{ stack.unit.secondaryAttackPower }}</td>
@@ -77,16 +77,33 @@
 
     <h3 class="section-header">Summary</h3>
       <div>
-        {{ report.summary.attacker }}
+        <div>Attacker lost 
+          {{ report.summary.attacker.unitsLoss }} / {{ report.summary.attacker.startingUnits }} units and 
+          {{ report.summary.attacker.netPowerLoss }} power
+        </div>
       </div>
       <div>
-        {{ report.summary.defender }}
+        <div>Defender lost 
+          {{ report.summary.defender.unitsLoss }} / {{ report.summary.defender.startingUnits }} units and 
+          {{ report.summary.defender.netPowerLoss }} power
+        </div>
+
       </div>
+      <!--
+        {{ report.summary.attacker }}
+        {{ report.summary.defender }}
+      -->
     <br>
 
     <h3 class="section-header">Result</h3>
+      <div>
+      Attacker gained {{ report.summary.landGain }} acres and defender lost {{ report.summary.landLoss }} acres
+      </div>
+      <!--
+      <div>{{ report.summary }} </div>
       <div>{{ report.isSuccessful }}</div>
       <div>{{ report.landResult }}</div>
+      -->
     <br>
 
     <router-link to="/about">Main</router-link>

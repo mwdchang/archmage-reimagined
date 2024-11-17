@@ -6,6 +6,14 @@
     <br>
     <table>
       <tbody>
+        <tr>
+          <td colspan="4">
+            &nbsp;
+          </td>
+          <td> 
+            <input type="checkbox" v-model="useAllStacks"> 
+          </td>
+        </tr>
         <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
           @click="stack.active = !stack.active">
           <td> {{ stack.name }} </td>
@@ -43,13 +51,12 @@
     </table>
 
     <br>
-    <button @click="doBattle"> War </button>
-
+    <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> War </button>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
@@ -110,6 +117,9 @@ const battleItems = computed(() => {
   return result;
 });
 
+
+const useAllStacks = ref(false);
+
 const doBattle = async () => {
   if (!mageStore.mage) return;
   if (!props.targetId || props.targetId === '') return;
@@ -152,5 +162,15 @@ onMounted(async () => {
   const rawArmy = getBattleArmy(mageStore.mage);
   armySelection.value = rawArmy.sort((a, b) => b.power - a.power);
 });
+
+watch(
+  () => useAllStacks.value,
+  () => {
+    armySelection.value.forEach(d => {
+      d.active = useAllStacks.value;
+    });
+  },
+  { immediate: true }
+);
 
 </script>

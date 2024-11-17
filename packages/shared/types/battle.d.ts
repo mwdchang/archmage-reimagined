@@ -105,15 +105,21 @@ export interface BattleReport {
   }[],
 
   summary: {
+    isSuccessful: boolean;
+    isDefenderDefeated: boolean;
+    landGain: number;
+    landLoss: number;
     attacker: {
       netPower: number,
       netPowerLoss: number,
+      startingUnits: number,
       unitsLoss: number,
       armyLoss: ArmyUnit[]
     },
     defender: {
       netPower: number,
       netPowerLoss: number,
+      startingUnits: number,
       unitsLoss: number,
       armyLoss: ArmyUnit[]
     }
