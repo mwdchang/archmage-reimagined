@@ -20,7 +20,7 @@
         <td class="text-right"> {{ rank.land }} </td>
         <td class="text-right"> {{ rank.forts }} </td>
         <td class="text-right"> {{ rank.netPower }} </td>
-        <td>NA</td>
+        <td>{{ rank.status }}</td>
         <td> 
           <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
         </td>
@@ -34,8 +34,9 @@ import { ref, onMounted } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
 import Magic from '@/components/magic.vue';
+import type { MageRank } from 'shared/types/common';
 
-const rankList = ref<any[]>([]);
+const rankList = ref<MageRank[]>([]);
 const mageStore = useMageStore();
 
 onMounted(async () => {

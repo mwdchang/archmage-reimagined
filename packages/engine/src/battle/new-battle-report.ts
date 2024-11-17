@@ -45,6 +45,7 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     // Summary
     summary: {
       isSuccessful: false,
+      isDefenderDefeated: false,
       landGain: 0,
       landLoss: 0,
       attacker: {

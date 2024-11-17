@@ -106,6 +106,7 @@ export interface BattleReport {
 
   summary: {
     isSuccessful: boolean;
+    isDefenderDefeated: boolean;
     landGain: number;
     landLoss: number;
     attacker: {

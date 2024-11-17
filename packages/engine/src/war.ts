@@ -811,9 +811,19 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   Object.keys(landResult.landGain).forEach(key => {
     attacker[key] += landResult.landGain[key];
   });
-
   battleReport.landResult = _.cloneDeep(landResult);
 
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Resolve mage status
+  ////////////////////////////////////////////////////////////////////////////////
+  if (defender.forts <= 0) {
+    defender.status = 'defeated';
+    battleReport.summary.isDefenderDefeated = true;
+  }
+
+
+  // land summary for battle report
   const buildingTypes = [
     'wilderness', 'farms', 'towns', 
     'workshops', 'nodes', 'barracks', 

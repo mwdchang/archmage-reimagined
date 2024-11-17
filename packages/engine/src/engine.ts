@@ -18,6 +18,7 @@ import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import type { BuildPayload, DestroyPayload } from 'shared/types/api';
+import type { MageRank } from 'shared/types/common';
 import { 
   explore,
   explorationRate,
@@ -554,7 +555,7 @@ class Engine {
     */
   }
 
-  async rankList(_listingType: string) {
+  async rankList(_listingType: string): Promise<MageRank[]> {
     const mages = await this.adapter.getAllMages();
 
     const ranks = mages.map(mage => {
@@ -564,6 +565,7 @@ class Engine {
         magic: mage.magic,
         forts: mage.forts,
         land: totalLand(mage),
+        status: mage.status,
         netPower: totalNetPower(mage)
       }
     });
