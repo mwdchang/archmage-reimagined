@@ -1,8 +1,12 @@
 <template>
   <main style="display: flex; flex-direction: column; align-items: center">
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
+    <nav-bar v-if="mage" />
+    <RouterView /> 
+    <!--
     <RouterView v-if="route.name === 'home'" />
     <RouterView v-if="mage && route.name !== 'home'" />
+    -->
   </main>
 </template>
 
@@ -11,6 +15,7 @@ import { onMounted } from 'vue';
 import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
+import NavBar from './components/nav.vue';
 import { storeToRefs } from 'pinia'
 import { API } from './api/api';
 import { 

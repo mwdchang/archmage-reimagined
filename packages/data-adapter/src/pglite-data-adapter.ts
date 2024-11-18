@@ -71,7 +71,7 @@ COMMIT;
   async getUser(username: string) {
     console.log('pglite getUser');
     const result = await this.db.query<User>(`
-SELECT * from archmage_user where username = "${username}"
+SELECT * from archmage_user where username = '${username}'
     `);
     return result.rows[0];
   }

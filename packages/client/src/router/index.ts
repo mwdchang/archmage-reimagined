@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
-import InteriorView from '@/views/InteriorView.vue';
+import InteriorView from '@/views/InteriorView.vue'; // TODO: deprecated
+import ExploreView from '@/views/ExploreView.vue';
+import GeldView from '@/views/GeldView.vue';
 import AboutView from '@/views/AboutView.vue';
 import BuildingView from '@/views/BuildingView.vue';
 import DestroyView from '@/views/DestroyView.vue';
@@ -42,6 +44,16 @@ const router = createRouter({
       path: '/interior',
       name: 'interor',
       component: InteriorView
+    },
+    {
+      path: '/explore',
+      name: 'explore',
+      component: ExploreView
+    },
+    {
+      path: '/geld',
+      name: 'geld',
+      component: GeldView
     },
     {
       path: '/build',

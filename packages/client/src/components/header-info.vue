@@ -40,7 +40,7 @@ const mageStore = useMageStore();
 
 <style scoped>
 .header-info {
-  width: 75vw;
+  width: 70vw;
   font-size: 80%;
 }
 
