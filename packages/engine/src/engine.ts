@@ -668,7 +668,7 @@ class Engine {
     }
 
     // 2. return mage
-    const mage = this.adapter.getMageByUser(username);
+    const mage = await this.adapter.getMageByUser(username);
     if (!mage) {
       return { user: res.user, mage: null }
     }

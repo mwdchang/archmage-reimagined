@@ -21,23 +21,43 @@
     <router-link to="/destroy">Destroy</router-link> 
     <router-link to="/recruit">Recruit</router-link> 
     <router-link to="/disband">Disband</router-link> 
+    <div class="divider"></div>
+    <div>
+      <a href="#" @click="logout()">Logout</a>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { API } from '@/api/api';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useMageStore } from '@/stores/mage';
+
+const router = useRouter();
+const mageStore = useMageStore();
+
+const logout = async () => {
+  console.log('log out...')
+  await API.post('/logout');
+
+  mageStore.setMage(null as any)
+  router.push({ name: 'home' });
+};
 
 onMounted(() => {
   // Open the side navigation
-  document.getElementById("menu-toggle").onclick = function() {
-    document.getElementById("mySidenav").style.width = "225px";
+  document.getElementById("menu-toggle")!.onclick = function() {
+    document.getElementById("mySidenav")!.style.width = "225px";
   }
 
   // Close the side navigation
-  document.getElementById("closebtn").onclick = function() {
-    document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("closebtn")!.onclick = function() {
+    document.getElementById("mySidenav")!.style.width = "0";
   }
 });
+
+
 </script>
 
 

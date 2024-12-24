@@ -19,7 +19,8 @@ export const getToken = (username: string) => {
 
 const whitelist = [
   '/api/register',
-  '/api/login'
+  '/api/login',
+  '/api/logout'
 ];
 
 // See http://expressjs.com/en/guide/using-middleware.html

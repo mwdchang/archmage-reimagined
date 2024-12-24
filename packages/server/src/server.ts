@@ -175,6 +175,12 @@ router.post('/api/login', async (req, res) => {
   res.status(200).json(mage);
 });
 
+router.post('/api/logout', async (req, res) => {
+  res.clearCookie('amr-jwt');
+  res.status(200).json({})
+});
+
+
 router.get('/api/mage', async (req: any, res) => {
   console.log('cookies!!! ', req.user.username);
   const mage = await engine.getMageByUser(req.user.username);
