@@ -19,8 +19,10 @@ import BattleResultView from '@/views/BattleResultView.vue';
 import ChroniclesView from '@/views/ChroniclesView.vue';
 import AssignmentView from '@/views/AssignmentView.vue';
 import RecruitView from '@/views/RecruitView.vue';
+import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
+import DisbandView from '@/views/DisbandView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -94,6 +96,11 @@ const router = createRouter({
       path: '/recruit',
       name: 'recruit',
       component: RecruitView
+    },
+    {
+      path: '/disband',
+      name: 'disband',
+      component: DisbandView
     },
     {
       path: '/test',

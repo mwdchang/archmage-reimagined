@@ -295,10 +295,10 @@ const numberFormatter = (v: number) => {
 }
 
 const numItems = computed(() => {
-  const keys = Object.keys(mage.value.items);
+  const keys = Object.keys(mage.value!.items);
   let num = 0;
   keys.forEach(key => {
-    num += mage.value.items[key];
+    num += mage.value!.items[key];
   });
   return num;
 });
@@ -309,19 +309,19 @@ const researchStatus = computed(() => {
 });
 
 const resistanceStatus = computed(() => {
-  return calcKingdomResistance(mageStore.mage);
+  return calcKingdomResistance(mageStore.mage!);
 });
 
 const armyUpkeepStatus = computed(() => {
-  return armyUpkeep(mageStore.mage);
+  return armyUpkeep(mageStore.mage!);
 });
 
 const buildingUpkeepStatus = computed(() => {
-  return buildingUpkeep(mageStore.mage);
+  return buildingUpkeep(mageStore.mage!);
 });
 
 const enchantmentUpkeepStatus = computed(() => {
-  return enchantmentUpkeep(mageStore.mage);
+  return enchantmentUpkeep(mageStore.mage!);
 });
 
 const unitsStatus = computed(() => {
