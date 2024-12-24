@@ -114,6 +114,13 @@ router.post('/api/recruitments', async (req: any, res) => {
   res.status(200).json({ mage });
 });
 
+router.post('/api/disband', async (req: any, res) => {
+  const mage = await engine.getMageByUser(req.user.username);
+  const body = req.body;
+
+  await engine.disbandUnits(mage, body.disbands);
+  res.status(200).json({ mage });
+});
 
 router.post('/api/item', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);

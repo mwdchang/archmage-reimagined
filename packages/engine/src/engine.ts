@@ -536,6 +536,18 @@ class Engine {
     await this.adapter.updateMage(mage);
   }
 
+  async disbandUnits(mage: Mage, payload: { [key: string]: ArmyUnit }) {
+    mage.army.forEach(armyUnit => {
+      const u = payload[armyUnit.id];
+      // FIXME: need to check undisbandable
+      if (u) {
+        armyUnit.size -= u.size;
+      }
+    });
+    mage.army = mage.army.filter(d => d.size > 0);
+    await this.adapter.updateMage(mage);
+  }
+
   async updateRankList() {
     console.log('engine: updateRankList');
     /* FIXME
