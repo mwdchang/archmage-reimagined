@@ -47,16 +47,10 @@ const route = useRoute();
 const { mage } = storeToRefs(mageStore);
 
 
-const hideHeader = ['status', 'test'];
+const hideHeader = ['status', 'test', 'about'];
 
 // Test to see if session already exist
 onMounted(async () => {
-
-  // const plainUnits = (await import('../../data/plain-units.json')).default; 
-  // console.log('!!!', import.meta.env);
-  // const plainUnits = (await import(import.meta.env.VITE_UNITS_FILE)).default; 
-  // console.log('!!', plainUnits);
-
   loadUnitData(plainUnits);
   loadUnitData(ascendantUnits);
   loadUnitData(verdantUnits);

@@ -59,7 +59,6 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
   let rawArmy = getArmy(mageStore.mage);
 
   const armyItems = rawArmy.sort((a, b) => b.power - a.power);
-  // return rawArmy.sort((a, b) => b.power - a.power);
 
   return armyItems.map((armyItem, index) => {
     let moveUp = 0;

@@ -813,6 +813,9 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   });
   battleReport.landResult = _.cloneDeep(landResult);
 
+  if (defender.forts <= 0) {
+    defender.status = 'defeated';
+  }
 
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve mage status

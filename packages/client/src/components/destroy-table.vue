@@ -16,7 +16,11 @@
       </tr>
     </tbody>
   </table>
-  <button @click="destroy"> Destroy </button>
+
+  <span>
+    <label>Destroy confirmation&nbsp;</label><input type="checkbox" v-model="confirmDestroy"> 
+  </span>
+  <button @click="destroy" :disabled="confirmDestroy === false"> Destroy </button>
 </template>
 
 <script setup lang="ts">
@@ -27,6 +31,9 @@ import { buildingTypes } from 'engine/src/interior';
 const emit = defineEmits(['destroy']);
 const mageStore = useMageStore();
 const mage = computed(() => mageStore.mage);
+
+
+const confirmDestroy = ref(false);
 
 const userInput =  ref<{ [key: string]: number }>({});
 buildingTypes.forEach(b => {
