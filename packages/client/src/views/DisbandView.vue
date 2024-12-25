@@ -20,7 +20,7 @@
         <td style="font-size: 125%"> + </td>
         <td style="font-size: 125%"> - </td>
         <td>
-          <input type="text" size=12>
+          <input type="text" size=12 v-model="disbandPayload[u.id]">
         </td>
       </tr>
     </tbody>
@@ -30,17 +30,17 @@
     <label>Disband confirmation&nbsp;</label><input type="checkbox" v-model="confirmDisband"> 
   </span>
 
-  <button @click="">Disband units</button>
+  <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getArmy, ArmyItem } from '@/util/util';
 import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
 
-const confirmDisband = ref(false);
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
@@ -49,6 +49,10 @@ interface DisbandArmyItem extends ArmyItem {
 };
 
 const mageStore = useMageStore();
+
+const confirmDisband = ref(false);
+
+const disbandPayload = ref<{[key: string]: number }>({});
 
 const unitsStatus = computed<DisbandArmyItem[]>(() => {
   if (!mageStore.mage) return []
@@ -89,6 +93,31 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
     };
   });
 });
+
+const disbandUnits = async () => {
+  const payload: any = {};
+  Object.keys(disbandPayload.value).forEach(k => {
+    if (disbandPayload.value[k] > 0) {
+      payload[k] = {
+        id: k,
+        size: +disbandPayload.value[k]
+      };
+    }
+  });
+
+  const res = await API.post('/disband', { disbands: payload });
+  mageStore.setMage(res.data.mage);
+};
+
+watch(
+  () => mageStore.mage,
+  () => {
+    if (!mageStore.mage) return;
+    mageStore.mage!.army.forEach(d => {
+      disbandPayload.value[d.id] = 0;
+    });
+  }
+);
 
 </script>
 
