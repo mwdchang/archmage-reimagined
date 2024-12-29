@@ -1,7 +1,7 @@
 <template>
-  <div id="menu-toggle" class="menu-toggle">☰</div>
+  <div id="menu-toggle" class="menu-toggle">☰ Actions</div>
   <div class="sidenav" id="mySidenav">
-    <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+    <a href="javascript:void(0)" class="closebtn" id="closebtn">&times; Close</a>
     <router-link to="/about">Kingdom</router-link>
     <router-link to="/status">Status</router-link>
     <router-link to="/chronicles">Chronicles</router-link>
@@ -48,7 +48,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "225px";
+    document.getElementById("mySidenav")!.style.width = "180px";
   }
 
   // Close the side navigation
@@ -69,7 +69,7 @@ onMounted(() => {
 }
 
 .menu-toggle {
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
     padding: 5px;
     background-color: #333;
@@ -90,28 +90,28 @@ onMounted(() => {
   background-color: #111;
   overflow-x: hidden;
   transition: 0.3s;
-  padding-top: 30px;
+  padding-top: 35px;
 }
 
 .sidenav a {
   padding: 4px 4px 4px 20px;
   text-decoration: none;
   line-height: 1.2;
-  font-size: 18px;
-  color: #818181;
+  font-size: 16px;
+  color: #b1b1b1;
   display: block;
   transition: 0.3s;
 }
 
 .sidenav a:hover {
-    color: #f1f1f1;
+  color: #f1f1f1;
 }
 
 .sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 15px;
-    font-size: 25px;
-    margin-left: 50px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+  margin-left: 50px;
 }
 </style>

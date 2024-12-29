@@ -3,9 +3,8 @@
     <tbody>
       <tr style="background: #338">
         <td colspan="5">
-          Archmage Reimagined is in early stages of development, for more
-          info, and if you want to help, out please visit:
-          <a style="font-size: 1rem" target="_blank" href="https://github.com/mwdchang/archmage-reimagined"> Here </a>
+          Archmage Reimagined is in early stages of development, if you want to help out please
+          <a target="_blank" href="https://github.com/mwdchang/archmage-reimagined"> visit here. </a>
         </td>
       </tr>
       <tr>
@@ -40,7 +39,7 @@ const mageStore = useMageStore();
 
 <style scoped>
 .header-info {
-  width: 70vw;
+  width: 60vw;
   font-size: 80%;
 }
 

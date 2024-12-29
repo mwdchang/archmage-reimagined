@@ -46,12 +46,11 @@ a,
 }
 
 table { 
-  border: 1px solid #888;
   border-collapse: collapse;
 }
 
 td {
-  border: 1px solid #888;
+  border: 1px solid #555;
   padding: 3px;
 }
 
@@ -62,11 +61,19 @@ button {
   cursor: pointer;
 }
 
+button:disabled,
+button[disabled]{
+  background: #777;
+  color: #BBB;
+  cursor: not-allowed;
+}
+
 select {
   font-size: 1.0rem;
   padding: 1px 4px;
   margin: 1px 1px;
 }
+
 
 table > tr.active {
   background: #53A !important;

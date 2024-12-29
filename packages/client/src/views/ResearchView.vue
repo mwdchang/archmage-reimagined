@@ -1,8 +1,9 @@
 <template>
   <main v-if="mageStore.mage">
-    <h3>Research</h3>
+    <h2>Research</h2>
     <p> 
-      You are generating {{ rp }} research points per turn. Your magic item generation rate is {{ itemRate }}%.
+      You are generating {{ rp }} research points per turn. <br>
+      Your magic item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
       <tbody>
@@ -12,10 +13,15 @@
           <td>Cost (points)</td>
           <td>Turns</td>
         </tr>
-        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" 
-          :class="{active: currentResearch[magic].active}"
-          @click="toggle(magic)">
-          <td> <magic :magic="magic" /></td>
+        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)">
+          <td> 
+            <span style="display: flex; flex-direction: row">
+              <magic :magic="magic" />
+              <span style="font-size: 125%">
+                {{ currentResearch[magic].active ? '&check;' : '' }}
+              </span>
+            </span>
+          </td>
           <td>
             {{ currentResearch[magic].id }}
           </td>
@@ -59,8 +65,9 @@ const itemRate = computed(() => {
   return (100 * itemGenerationRate(mageStore.mage as Mage)).toFixed(2);
 });
 
-const currentResearch = ref(mageStore.mage?.currentResearch);
-const focusResearch = ref(mageStore.mage?.currentResearchFocus ? true : false);
+const currentResearch = ref(mageStore.mage!.currentResearch);
+
+const focusResearch = ref(mageStore.mage!.focusResearch? true : false);
 const turns = ref(0);
 
 const filteredMagicTypes = computed(() => {
@@ -91,13 +98,16 @@ const submitResearch = async () => {
 
   mageStore.setMage(result.data.mage as Mage);
   currentResearch.value = mageStore.mage?.currentResearch;
-  console.log('doh', currentResearch.value);
   focusResearch.value = mageStore.mage?.focusResearch as boolean;
 };
 
 </script>
 
 <style scoped>
+main {
+  max-width: 35rem;
+}
+
 table > tr {
   cursor: pointer;
 }

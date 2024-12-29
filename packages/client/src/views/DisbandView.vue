@@ -17,8 +17,12 @@
         <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
         <td class="text-right" style="padding-left: 10px"> {{ u.size }} </td>
         <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
-        <td style="font-size: 125%"> + </td>
-        <td style="font-size: 125%"> - </td>
+        <td class="text-right" style="font-size: 75%"> 
+          +{{ u.moveUp }}
+        </td>
+        <td class="text-right" style="font-size: 75%"> 
+          -{{ u.moveDown }}
+        </td>
         <td>
           <input type="text" size=12 v-model="disbandPayload[u.id]">
         </td>
