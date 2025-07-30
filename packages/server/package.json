@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@types/express": "^4.17.21",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^2.0.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
