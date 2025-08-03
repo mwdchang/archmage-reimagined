@@ -24,9 +24,40 @@ interface BattleReportTableEntry {
   summary: BattleReportSummary;
 }
 
+
+const DB_INIT = `
+  DROP TABLE IF EXISTS archmage_user;
+  CREATE TABLE IF NOT EXISTS archmage_user (
+    username VARCHAR(64), 
+    hash VARCHAR(200),
+    token VARCHAR(200)
+  );
+  COMMIT;
+
+  DROP TABLE IF EXISTS mage;
+  CREATE TABLE IF NOT EXISTS mage (
+    username varchar(64),
+    id integer,
+    mage json 
+  );
+  COMMIT;
+
+  DROP TABLE IF EXISTS battle_report;
+  CREATE TABLE IF NOT EXISTS battle_report(
+    id varchar(64),
+    time bigint,
+    attackerId integer,
+    defenderId integer,
+    report json,
+    summary json
+  );
+  COMMIT;
+`;
+
+
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;
-  
+
   constructor() {
     super();
     this.db = new PGlite('./archmage-db');
@@ -35,34 +66,7 @@ export class PGliteDataAdapter extends DataAdapter {
   async initialize() {
     try {
       console.log('initialize database...');
-      await this.db.exec(`
-DROP TABLE IF EXISTS archmage_user;
-CREATE TABLE IF NOT EXISTS archmage_user (
-  username VARCHAR(64), 
-  hash VARCHAR(200),
-  token VARCHAR(200)
-);
-COMMIT;
-
-DROP TABLE IF EXISTS mage;
-CREATE TABLE IF NOT EXISTS mage (
-  username varchar(64),
-  id integer,
-  mage json 
-);
-COMMIT;
-
-DROP TABLE IF EXISTS battle_report;
-CREATE TABLE IF NOT EXISTS battle_report(
-  id varchar(64),
-  time bigint,
-  attackerId integer,
-  defenderId integer,
-  report json,
-  summary json
-);
-COMMIT;
-      `);
+      await this.db.exec(DB_INIT);
     } catch (err) {
       console.log(err);
     }
@@ -153,7 +157,7 @@ SELECT mage from mage where username = '${username}'
     return result.rows[0].mage;
   }
 
-  async getAllMages()  {
+  async getAllMages() {
     console.log('pglite: getAllMages');
     const result = await this.db.query<MageTableEntry>(`
 SELECT mage from mage
