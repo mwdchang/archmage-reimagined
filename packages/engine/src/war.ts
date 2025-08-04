@@ -246,15 +246,15 @@ const battleSpell = (
     // Matching spell filters
     const filteredArmy = calcFilteredArmy(army, battleEffect.filters);
 
-     // Nothing to do
+    // Nothing to do
     if (filteredArmy.length === 0) continue;
 
-    let randomIdx = -1;
-    if (targetType === 'random') {
-      randomIdx = randomInt(filteredArmy.length);
-    }
-
     for (let num = 0; num < numTimes; num++) {
+      let randomIdx = -1;
+      if (targetType === 'random') {
+        randomIdx = randomInt(filteredArmy.length);
+      }
+
       for (const effect of effects) {
         let affectedArmy: BattleStack[] = [];
         if (targetType === 'random') {
@@ -314,34 +314,40 @@ const battleItem = (
 
     const battleEffect = effect as BattleEffect;
     const army = battleEffect.target === 'self' ? casterBattleStack : defenderBattleStack;
+    const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
 
     const filteredArmy = calcFilteredArmy(army, battleEffect.filters);
     const targetType = battleEffect.targetType;
 
-    let randomIdx = -1;
-    if (targetType === 'random') {
-      randomIdx = randomInt(filteredArmy.length);
-    }
+    // Nothing to do
+    if (filteredArmy.length === 0) return;
 
-    for (let i = 0; i < battleEffect.effects.length; i++) {
-      let affectedArmy: BattleStack[] = [];
+    for (let num = 0; num < numTimes; num++) {
+      let randomIdx = -1;
       if (targetType === 'random') {
-        affectedArmy = [filteredArmy[randomIdx]];
-      } else {
-        affectedArmy = filteredArmy;
+        randomIdx = randomInt(filteredArmy.length);
       }
 
-      const eff = battleEffect.effects[i];
-      console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+      for (let i = 0; i < battleEffect.effects.length; i++) {
+        let affectedArmy: BattleStack[] = [];
+        if (targetType === 'random') {
+          affectedArmy = [filteredArmy[randomIdx]];
+        } else {
+          affectedArmy = filteredArmy;
+        }
 
-      if (eff.effectType === 'UnitAttrEffect') {
-        const unitEffect = eff as UnitAttrEffect;
-        applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
-      } else if (eff.effectType === 'UnitDamageEffect') {
-        const damageEffect = eff as UnitDamageEffect;
-        applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+        const eff = battleEffect.effects[i];
+        console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+
+        if (eff.effectType === 'UnitAttrEffect') {
+          const unitEffect = eff as UnitAttrEffect;
+          applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
+        } else if (eff.effectType === 'UnitDamageEffect') {
+          const damageEffect = eff as UnitDamageEffect;
+          applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+        }
       }
-    }
+    } // end numTimes
   });
 }
 
