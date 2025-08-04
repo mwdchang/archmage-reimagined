@@ -84,6 +84,88 @@
     ]
   },
   {
+    "id": "blackenSoul",
+    "name": "Blacken Soul",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "This spell will use the powers of evil to paralyze your opponent, while draining a part of their life force. This simple spell is quite effective on weaker units. Area of effect: 1 random enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 1000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["paralyze"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 80 },
+              "verdant": { "value": 80 },
+              "eradication": { "value": 130 },
+              "nether": { "value": 220 },
+              "phantasm": { "value": 130 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "curse",
+    "name": "Curse",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "The Curse will decrease the luck of your enemy. And some luck is what you will need in a battle. It will decrease the accuracy and attack strength of your enemy. Area of effect: 1 enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fear",
+    "name": "Fear",
+    "magic": "nether",
+    "rank": "simple",
+    "description": "This spell will send terror throughout your enemy's troops, scattering their forces. Their attack and counter attack are decreased. Area of effect: 1 random enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 600,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
     "id": "animateGhoul",
     "name": "Animate Ghoul",
     "magic": "nether",
@@ -107,6 +189,36 @@
           "eradication": { "value": 0.6 },
           "nether": { "value": 1.0 },
           "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "shroudOfDarkness",
+    "name": "Shroud Of Darkness",
+    "magic": "nether",
+    "rank": "average",
+    "description": "This spell will cover your whole kingdom under a veil of darkness to protect your troops from Ascendant magic.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 1500,
+    "castingCost": 10000,
+    "castingTurn": 4,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "ResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "ascendant",
+        "magic": {
+          "ascendant": { "value": 0.03 },
+          "verdant": { "value": 0.03 },
+          "eradication": { "value": 0.034 },
+          "nether": { "value": 0.12 },
+          "phantasm": { "value": 0.034 }
         }
       }
     ]
@@ -168,32 +280,25 @@
     ]
   },
   {
-    "id": "shroudOfDarkness",
-    "name": "Shroud Of Darkness",
+    "id": "battleLust",
+    "name": "Battle Lust",
     "magic": "nether",
-    "rank": "average",
-    "description": "This spell will cover your whole kingdom under a veil of darkness to protect your troops from Ascendant magic.",
-    "attributes": ["enchantment", "selfOnly"],
-    "researchCost": 1500,
+    "rank": "complex",
+    "description": "This spell will drive your units berserk, causing them to inflict much more damage than they normally do. But on the other hand, since they are too absorbed with killing the enemies, they will not try to protect themselves, thus greately weakening their defenses.",
+    "attributes": ["battle"],
+    "researchCost": 2000,
     "castingCost": 10000,
-    "castingTurn": 4,
-    "upkeep": {
-      "geld": 0,
-      "mana": 150,
-      "population": 0
-    },
+    "castingTurn": 0,
+    "upkeep": null,
     "effects": [
       {
-        "effectType": "ResistanceEffect",
-        "rule": "spellLevel",
-        "resistance": "ascendant",
-        "magic": {
-          "ascendant": { "value": 0.03 },
-          "verdant": { "value": 0.03 },
-          "eradication": { "value": 0.034 },
-          "nether": { "value": 0.12 },
-          "phantasm": { "value": 0.034 }
-        }
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
       }
     ]
   },
@@ -212,8 +317,9 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "affectedStack": "all",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -236,20 +342,149 @@
     ]
   },
   {
-    "id": "summonVampire",
-    "name": "Summon Vampire",
+    "id": "bloodRitual",
+    "name": "Blood Ritual",
     "magic": "nether",
     "rank": "complex",
-    "description": "This spell will summon vampires to join your rank. All they want is blood. With their incredible magic power they will decimate your enemies, turning them into vampires as well. As long as you feed them virgins, they will serve under your command.",
+    "description": "Kill and sacrifice your people to generate ghouls with their flesh and bones. The ritual lasts for 200 turns. Ghouls all over the world!",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 50000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 0,
+      "population": 666
+    },
+    "effects": [
+      
+    ]
+  },
+  {
+    "id": "deathAndDecay",
+    "name": "Death and Decay",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This powerful nether spell will cover the target mage's country with a heavy fog of death and decay. It brings death to the living and decay to the land. This enchantment takes effect when enemy is taking turns.",
+    "attributes": ["enchantment"],
+    "researchCost": 5000,
+    "castingCost": 10000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 2000,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "foulWater",
+    "name": "Foul Water",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This spell will turn a pool of clear water into poisonous water. By dipping your weapons into the pool, your units' attack become more powerful and poisonus. Area of effect: all your units with melee attack type.",
+    "attributes": ["battle"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kissOfVampire",
+    "name": "Kiss of Vampire",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This powerful necromantic spell inbues the vampiric effect on your troops and allow them to steal the life force of your enemy when they deliver a mortal blow. Area of effect: all your units.",
+    "attributes": ["battle"],
+    "researchCost": 3500,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gazeOfDeath",
+    "name": "Gaze of Death",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This spell will grant your eyes the forces of the negative planes of existance. For those whom you gaze at, death will be a certainty. This complex nether spell is extremally powerful against strong units. Area of effect: 1 random enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 6000,
+    "castingCost": 30000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "nightOfTheLivingDead",
+    "name": "Night of the Living Dead",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "By performing this dark ritual, undead units will rise from the oblivion to join your forces.",
     "attributes": ["summon"],
-    "researchCost": 10000,
-    "castingCost": 77700,
-    "castingTurn": 6,
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "touchOfNecromancy",
+    "name": "Touch of Necromancy",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "The spell will empower the caster with the power to bring the dead back to undead to serve in their afterlife. A part of the slained enemies will rise from the dead and turn into mindless zombies and join your army. The more powerful the archmage, the more zombies can be raised among the fallen ranks. However, this spell will drain part of your mana to sustain the zombies.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 50000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 50,
+      "population":0 
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "summonDarkElfMagician",
+    "name": "Summon Dark Elf Magician",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "",
+    "attributes": ["summon"],
+    "researchCost": 9000,
+    "castingCost": 75000,
+    "castingTurn": 4,
     "upkeep": null,
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["vampire"],
+        "unitIds": ["darkElfMagician"],
         "summonType": "all",
         "summonNetPower": 400000,
         "rule": "spellLevel",
@@ -292,20 +527,20 @@
     ]
   },
   {
-    "id": "summonBulwarkHorror",
-    "name": "Summon Buklwark Horror",
+    "id": "summonVampire",
+    "name": "Summon Vampire",
     "magic": "nether",
     "rank": "complex",
-    "description": "This spell calls forth evil Bulwark Horrors to join your army, these heavily armoured monstrosities are particularly adept at deflecting ranged attacks with their shields.",
+    "description": "This spell will summon vampires to join your rank. All they want is blood. With their incredible magic power they will decimate your enemies, turning them into vampires as well. As long as you feed them virgins, they will serve under your command.",
     "attributes": ["summon"],
     "researchCost": 10000,
-    "castingCost": 80000,
+    "castingCost": 77700,
     "castingTurn": 6,
     "upkeep": null,
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["bulwarkHorror"],
+        "unitIds": ["vampire"],
         "summonType": "all",
         "summonNetPower": 400000,
         "rule": "spellLevel",
@@ -320,20 +555,20 @@
     ]
   },
   {
-    "id": "summonDarkElfMagician",
-    "name": "Summon Dark Elf Magician",
+    "id": "summonDemonKnight",
+    "name": "Summon Demon Knight",
     "magic": "nether",
     "rank": "complex",
-    "description": "",
+    "description": "This spell will summon the demonic counterparts of Ascendant knights to your army. They wear black armors marked with runes that give them immunity to holy attacks, and wield poisonous swords. They can also use cold magic from the distance.",
     "attributes": ["summon"],
-    "researchCost": 9000,
-    "castingCost": 75000,
-    "castingTurn": 4,
+    "researchCost": 10000,
+    "castingCost": 77700,
+    "castingTurn": 6,
     "upkeep": null,
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["darkElfMagician"],
+        "unitIds": ["demonKnight"],
         "summonType": "all",
         "summonNetPower": 400000,
         "rule": "spellLevel",

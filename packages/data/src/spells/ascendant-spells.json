@@ -577,6 +577,20 @@
     ]
   },
   {
+    "id": "gate",
+    "name": "Gate",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "The spell opens a glowing white gateway and conjures a number of white creatures to your aid. The types and amounts of the creatures summoned is unknown to the caster of the spell.",
+    "attributes": ["summon"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
     "id": "summonArchangel",
     "name": "Summon Archangel",
     "magic": "ascendant",
