@@ -14,13 +14,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "affectedStack": "random",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
-            "minTimes": 1,
-            "maxTimes": 1,
             "damageType": ["fire"],
             "rule": "spellLevel",
             "magic": {
@@ -64,6 +64,34 @@
     ]
   },
   {
+    "id": "callDwarvenDeathseeker",
+    "name": "Call Dwarven Deathseeker",
+    "magic": "eradication",
+    "rank": "simple",
+    "description": "This spell calls dwarven outcasts, the Deathseekers to your army. They strike with poison-tipped weapons before igniting the crude explosives strapped to their bodies.",
+    "attributes": ["summon"],
+    "researchCost": 400,
+    "castingCost": 6800,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dwarvenDeathSeeker"],
+        "summonType": "all",
+        "summonNetPower": 50000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
     "id": "flameArrow",
     "name": "Flame Arrow",
     "magic": "eradication",
@@ -78,10 +106,13 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
-          "allAttackType": [ "missile" ]
-        },
-        "targetStack": "random",
+        "targetType": "random",
+        "filters": [
+          {
+           "allAttackType": [ "missile" ]
+          }
+        ],
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -118,13 +149,13 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "random",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
-            "minTimes": 1,
-            "maxTimes": 1,
             "damageType": ["lightning"],
             "rule": "spellLevel",
             "magic": {
@@ -153,6 +184,537 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "id": "lightningStrike",
+    "name": "Lightning Strike",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "This spell shoots a bolt of lightning into the middle of enemy troops, causing heavy lightning damages. The shock effect will cause the enemy unit to attack less effectively. Area of effect: 1 random enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 3000,
+    "castingCost": 40000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "summonWyvern",
+    "name": "Summon Wyvern",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "Using this spell will summon the vicious Wyverns into your army. These minor dragons bite your opponents savagely and poison them with the stinger on their tails.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 28900,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["wyvern"],
+        "summonType": "all",
+        "summonNetPower": 170000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonSalamander",
+    "name": "Summon Salamander",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "This spell will summon salamanders from the elemental plane of fire. These fire-immune, magical creatures use burning fire attacks which can cause tremendous amount of damages to opposing units. However, they die easily to cold attacks.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 28900,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["salamander"],
+        "summonType": "all",
+        "summonNetPower": 160000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonHellhound",
+    "name": "Summon Hellhound",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "This spell will summon war hounds from the pits of infernal Hell. These fierce creatures breathe deadly fire and create much havoc in the battleground.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 24400,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["hellHound"],
+        "summonType": "all",
+        "summonNetPower": 160000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "fireball",
+    "name": "Fireball",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "This spell shoots a huge flaming ball of fire into the middle of enemy troops, causing heavy fire damages. Although not very complex magic, this spell is very powerful eradication weapon. Area of effect: 1 enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 2500,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 800 },
+              "verdant": { "value": 1000 },
+              "eradication": { "value": 1700 },
+              "nether": { "value": 1000},
+              "phantasm": { "value": 800 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "giantStrength",
+    "name": "Giant Strength",
+    "magic": "eradication",
+    "rank": "average",
+    "description": "This spell will endow your troops with the power and strength of giants, increasing their attack power. Area of effect: all your units.",
+    "attributes": ["battle"],
+    "researchCost": 1500,
+    "castingCost": 3000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackType,secondaryAttackType,counter": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.05 },
+                  "verdant": { "value": 0.1 },
+                  "eradication": { "value": 0.2 },
+                  "nether": { "value": 0.1 },
+                  "phantasm": { "value": 0.05 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chainLightning",
+    "name": "Chain Lightning",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "TODO",
+    "attributes": ["battle"],
+    "researchCost": 5000,
+    "castingCost": 100000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filters": null,
+        "targetType": "random",
+        "trigger": {
+          "min": 3,
+          "max": 7
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["lightning"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 1000 },
+              "verdant": { "value": 2000 },
+              "eradication": { "value": 5000 },
+              "nether": { "value": 2000},
+              "phantasm": { "value": 1000 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "battleChant",
+    "name": "Battle Chant",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "The spell drives your armies into a state of frenzy. It squeezes the life force of the units out and enhances their power and strength. Hordes of Goblins are attracted to your Kingdom whilst this spell is in effect. The only drawback of the spell is your units will be exhausted too easily and will not be able to last long in a battle.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 7000,
+    "castingCost": 50000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 350,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "callLightning",
+    "name": "Call Lightning",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will send a magical lightning storm above your enemy. This enchantment will kill enemy citizens with deadly lightning bolts and leave your enemy's country in ruin. This enchantment takes effect when your enemy is making turns.",
+    "attributes": ["enchantment"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 1000,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "disintegrate",
+    "name": "Disintegrate",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will turn a number of enemy units into a pile of dust. This spell is extremely powerful against strong units. Area of effect: 1 enemy group.",
+    "attributes": ["battle"],
+    "researchCost": 7000,
+    "castingCost": 40000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "flameBlade",
+    "name": "Flame Blade",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will cause the blades of your troops with glow red hot with fire, allowing your troops to hit with higher accuracy and inflict fire damages. Area of effect: all units with melee attack.",
+    "attributes": ["battle"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "gravityPull",
+    "name": "Gravity Pull",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "Drawing the power from the earth elements, this spell doubles the gravity force within an area. Any flying creatures caught within the area of effect will fall from the sky, to their doom by the suddenly increased gravity pull. Only the strongest fliers are able to fly to their safety. Area of effect: all enemy units",
+    "attributes": ["battle"],
+    "researchCost": 7000,
+    "castingCost": 30000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "meteorStorm",
+    "name": "Meteor Storm",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will call a series of meteor storms from the heavens to hit your enemies, demolishing their buildings and turning them into pile of rubble. This enchantment will harm the enemy while they're taking turns.",
+    "attributes": ["enchantment"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 8,
+    "upkeep": {
+      "geld": 0,
+      "mana": 2000,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "stun",
+    "name": "Stun",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "By uttering the ultimate word of all and nothingness, you can stun your enemy and make them too dizzy to fight. This will reduce their attack power and resistances. Area of effect: all enemy units.",
+    "attributes": ["battle"],
+    "researchCost": 3500,
+    "castingCost": 14000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "summonChimera",
+    "name": "Summon Chimera",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will summon fearsome chimeras with claws of lions, wings of eagles, and hindlegs of goats. They will breathe deadly fire on your enemies causing heavy damages and shred them to pieces with their sharp claws.",
+    "attributes": ["summon"],
+    "researchCost": 4000,
+    "castingCost": 46800,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["chimera"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonEfreeti",
+    "name": "Summon Efreeti",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell summons the deadly Efreeti into your army. Encompassed in hell fire, these powerful creatures scorch the earth as they travel onto the battlefield, destroying your enemies with an explosive mix of fire and magic.",
+    "attributes": ["summon"],
+    "researchCost": 4000,
+    "castingCost": 46800,
+    "castingTurn": 4,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["efreeti"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonHydra",
+    "name": "Summon Hydra",
+    "magic": "eradication",
+    "rank": "complex",
+    "description": "This spell will summon monstrous nine-headed hydras from the bowels of Earth. Each time one of their head is cut off, another will grow in its place. These creatures are most deadly and difficult to kill.",
+    "attributes": ["summon"],
+    "researchCost": 4000,
+    "castingCost": 41700,
+    "castingTurn": 5,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["hydra"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.6 },
+          "phantasm": { "value": 0.2 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonFireElemental",
+    "name": "Summon Fire Elemental",
+    "magic": "eradication",
+    "rank": "ultimate",
+    "description": "This spell summons the essence of fire itself, Fire Elelemntals, which will incinerate your enemies with their ravaging infernal attacks.",
+    "attributes": ["summon"],
+    "researchCost": 30000,
+    "castingCost": 300000,
+    "castingTurn": 8,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["fireElemental"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.0 },
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.0 },
+          "phantasm": { "value": 0.0 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "summonRedDragon",
+    "name": "Summon Red Dragon",
+    "magic": "eradication",
+    "rank": "ultimate",
+    "description": "This spell will summon red dragons, the most powerful creatures in the realm. They have immunity to most attacks, and their devastating fire breath can burn your enemies into ashes. Only a very powerful archmage may be able to summon and sustain red dragons.",
+    "attributes": ["summon"],
+    "researchCost": 40000,
+    "castingCost": 300000,
+    "castingTurn": 10,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["redDragon"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.0 },
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 0.0 },
+          "phantasm": { "value": 0.0 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "flameShield",
+    "name": "Flame Shield",
+    "magic": "eradication",
+    "rank": "ultimate",
+    "description": "The powerful spell creates a flaming barrier surrounding the target. It grants the target immunity to fire, and any creature who strikes the protected unit will suffer severe burning damage.",
+    "attributes": ["battle"],
+    "researchCost": 30000,
+    "castingCost": 250000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "inferno",
+    "name": "Inferno",
+    "magic": "eradication",
+    "rank": "ultimate",
+    "description": "This is the most devastating attack spell of all. This spell will summon eternal flame from the deepest layers of Hell and ignite everything in sight. It will kill most weaker creatures and can deliver mortal damage even to the most powerful units. Not even most ardent prayers will save those creatures without resistance to fire. Area of effect: all enemy units.",
+    "attributes": ["battle"],
+    "researchCost": 40000,
+    "castingCost": 500000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "volcanoEruption",
+    "name" : "Volcano Eruption",
+    "magic": "eradication",
+    "rank": "ultimate",
+    "decription": "This is the most powerful Eradication spell. It will cause most violent volcanic eruptions in your enemy's country. It will destroy land, maim citizens, eradicate armies and leave your enemy thunderstruck with shock and dismay. Fortunately, the Council only allows 10 such spells to be used against any mage. In addition, this spell is most effective when used against enemy with close net power to the caster. It's effectivness drops as the difference in power increases.",
+    "attributes": ["instant"],
+    "researchCost": 30000,
+    "castingCost": 200000,
+    "castingTurn": 10,
+    "upkeep": null,
+    "effects": [
     ]
   }
 ]
