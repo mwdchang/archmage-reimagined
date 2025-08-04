@@ -4,6 +4,9 @@
     <nav-bar v-if="mage" />
     <RouterView v-if="route.name === 'home'" /> 
     <RouterView v-if="route.name !== 'home' && mageStore.mage" /> 
+
+    <Footer v-if="route.name !== 'home' && route.name !== 'about' " />
+
     <!--
     <RouterView v-if="route.name === 'home'" />
     <RouterView v-if="mage && route.name !== 'home'" />
@@ -16,6 +19,7 @@ import { onMounted } from 'vue';
 import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
+import Footer from './components/footer.vue';
 import NavBar from './components/nav.vue';
 import { storeToRefs } from 'pinia'
 import { API } from './api/api';
