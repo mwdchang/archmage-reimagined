@@ -1,5 +1,28 @@
 [
   {
+    "id": "protectionFromMissile",
+    "name": "Protection from Missile",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "This spell creates an invisible barrier in the air, which blocks off, or deflects, all ranged attacks on your troops by the enemy. Area of effect: 1 random stack.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
     "id": "bless",
     "name": "Bless",
     "magic": "ascendant",
@@ -14,8 +37,9 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "affectedStack": "random",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -29,6 +53,81 @@
                   "eradication": { "value": 0.006 },
                   "nether": { "value": 0.003 },
                   "phantasm": { "value": 0.003 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "healing",
+    "name": "Healing",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "This is the basic spell of priestly healing magics. With this spell, lost hit points of your troops are healed. The spell is cheap but effective in battle and may prove to be indispensable in the case of an emergency.",
+    "attributes": ["battle"],
+    "researchCost": 600,
+    "castingCost": 500,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 0.01 },
+              "verdant": { "value": 0.005 },
+              "eradication": { "value": 0.003 },
+              "nether": { "value": 0.003 },
+              "phantasm": { "value": 0.005 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "armorOfLight",
+    "name": "Armor of Light",
+    "magic": "ascendant",
+    "rank": "simple",
+    "description": "All units under effect of this spell will feel courageous and inspired in the battle again unholy beings. Armor of light also grants them certain immunity to undead units attacks. This is very effective spell when fighting undead beings.",
+    "attributes": ["battle"],
+    "researchCost": 700,
+    "castingCost": 700,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "verdant": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "eradication": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "nether": { "value": { "name": "racialEnemy", "extra": "undead" } },
+                  "phantasm": { "value": { "name": "racialEnemy", "extra": "undead" } }
                 }
               }
             }
@@ -94,75 +193,72 @@
     ]
   },
   {
-    "id": "healing",
-    "name": "Healing",
+    "id": "locateArtifact",
+    "name" : "Locate Artifcat",
     "magic": "ascendant",
-    "rank": "simple",
-    "description": "This is the basic spell of priestly healing magics. With this spell, lost hit points of your troops are healed. The spell is cheap but effective in battle and may prove to be indispensable in the case of an emergency.",
-    "attributes": ["battle"],
-    "researchCost": 600,
-    "castingCost": 500,
-    "castingTurn": 0,
+    "rank": "average",
+    "decription": "This divination spell will allow you to locate the location of a lost artifacts. It will give your small random amount of lesser artifacts.",
+    "attributes": ["instant", "selfOnly"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "summonAstralMagician",
+    "name": "Summon Astral Magicial",
+    "magic": "ascendant",
+    "rank": "average",
+    "description": "Casting this spell sends a signal to these hiding Ascendant mages of the past to join you. Returned to the mortal plane, these mages are much weaker than before, but still their holy magic is a force to be reckoned with.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 27000,
+    "castingTurn": 3,
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": null,
-        "affectedStack": "all",
-        "effects": [
-          {
-            "effectType": "UnitHealEffect",
-            "checkResistance": false,
-            "healType": "points",
-            "rule": "spellLevel",
-            "magic": {
-              "ascendant": { "value": 0.01 },
-              "verdant": { "value": 0.005 },
-              "eradication": { "value": 0.003 },
-              "nether": { "value": 0.003 },
-              "phantasm": { "value": 0.005 }
-            }
-          }
-        ]
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["astralMagician"],
+        "summonType": "all",
+        "summonNetPower": 150000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
       }
     ]
   },
   {
-    "id": "armorOfLight",
-    "name": "Armor of Light",
+    "id": "summonAngel",
+    "name": "Summon Angel",
     "magic": "ascendant",
-    "rank": "simple",
-    "description": "All units under effect of this spell will feel courageous and inspired in the battle again unholy beings. Armor of light also grants them certain immunity to undead units attacks. This is very effective spell when fighting undead beings.",
-    "attributes": ["battle"],
-    "researchCost": 700,
-    "castingCost": 700,
-    "castingTurn": 0,
+    "rank": "average",
+    "description": "This spell allows you to ask for the favour of the God and send in minor angels to aid you in your holy war. The higher your proficiency or spell level becomes, the more angels will fly down to your aid.",
+    "attributes": ["summon"],
+    "researchCost": 2000,
+    "castingCost": 27000,
+    "castingTurn": 3,
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": null,
-        "affectedStack": "random",
-        "effects": [
-          {
-            "effectType": "UnitAttrEffect",
-            "checkResistance": false,
-            "attributes": {
-              "abilities": {
-                "rule": "add",
-                "magic": {
-                  "ascendant": { "value": { "name": "racialEnemy", "extra": "undead" } },
-                  "verdant": { "value": { "name": "racialEnemy", "extra": "undead" } },
-                  "eradication": { "value": { "name": "racialEnemy", "extra": "undead" } },
-                  "nether": { "value": { "name": "racialEnemy", "extra": "undead" } },
-                  "phantasm": { "value": { "name": "racialEnemy", "extra": "undead" } }
-                }
-              }
-            }
-          }
-        ]
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["angel"],
+        "summonType": "all",
+        "summonNetPower": 140000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
       }
     ]
   },
@@ -195,7 +291,7 @@
         }
       }
     ]
-  },
+  }, 
   {
     "id": "platinumHandOfHealing",
     "name": "Platinum Hand Of Healing",
@@ -211,8 +307,9 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "affectedStack": "all",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitHealEffect",
@@ -232,6 +329,58 @@
     ]
   },
   {
+    "id": "holyWord",
+    "name": "Holy Word",
+    "magic": "ascendant",
+    "rank": "average",
+    "description": "By uttering the Holy Word, you can destroy enemy undead creatures and return them to their eternal rest. This spell is quite effective, but only affects the undead. Area of Effect: all enemy undead units.",
+    "attributes": ["battle"],
+    "researchCost": 1500,
+    "castingCost": 10000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": [
+          { "race": "undead" }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["lightning"],
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 550 },
+              "verdant": { "value": 250 },
+              "eradication": { "value": 100 },
+              "nether": { "value": 100 },
+              "phantasm": { "value": 250 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dispellMagic",
+    "name": "Dispel Magic",
+    "magic": "ascendant",
+    "rank": "average",
+    "description": "",
+    "attributes": [""],
+    "researchCost": 3000,
+    "castingCost": 0,
+    "castingTurn": 1,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
     "id": "blindingFlash",
     "name": "Blinding Flash",
     "magic": "ascendant",
@@ -246,8 +395,9 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filter": null,
-        "affectedStack": "opponent",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -267,6 +417,163 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "id": "swordOfLight",
+    "name": "Sword Of Light",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "By being blessed with the blessings of the God, all your troops' melee weapons are bathed with a holy light that gives them higher attack power, which is especially effective against the undead",
+    "attributes": ["battle"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+            "primaryAttackType": ["melee", "holy"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.045 },
+                  "verdant": { "value": 0.021 },
+                  "eradication": { "value": 0.009 },
+                  "nether": { "value": 0.009 },
+                  "phantasm": { "value": 0.021 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackType": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "holy" },
+                  "verdant": { "value": "holy" },
+                  "eradication": { "value": "holy" },
+                  "nether": { "value": "holy" },
+                  "phantasm": { "value": "holy"  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "resistElements",
+    "name": "Resist Elements",
+    "magic": "ascendant",
+    "rank": "comlex",
+    "description": "Through intense concentration, this spell will create an invisible barrier that increases all your units resistance to enemy eradication spells. Once they're enchanted, they receive effective protection against elemental spells.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 8000, 
+    "castingTurn": 12,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "resistance.eradication": {
+                "rule": "spellLevel",
+                "magic": {
+                  "ascendant": { "value": 0.05 },
+                  "verdant": { "value": 0.02 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.02 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "resurrection",
+    "name": "Resurrection",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This powerful magic spell calls upon the favour of the God to bring back the dead of the battlefield back into life. Troops which have perished in that particular battle may be resurrected to join in and fight. Area of effect: all units.",
+    "attributes": ["battle"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "destryArtifact",
+    "name": "Destroy Artifact",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This is a sonic-based spell which causes a vibration within an area. The ultrasound frequency will not cause harm to organic creatures, but is capable of shattering any item. However, it is too weak to do any harm to ancient artifacts.",
+    "attributes": ["instant"],
+    "researchCost": 5000,
+    "castingCost": 30000,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "pacifism",
+    "name": "Pacifism",
+    "magic": "ascendant",
+    "rank": "complex",
+    "description": "This spell instils the armies of your foe with an overwhelming aversion to violence and robs them of the will to fight. Your opponent's troops will prove substantially less effective in combat as they shy from conflict, and struggle with their disdain for bloodshed.",
+    "attributes": ["enchantment"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 6,
+    "upkeep": {
+      "geld": 0,
+      "mana": 1000,
+      "population": 0
+    },
+    "effects": [
     ]
   },
   {
@@ -410,96 +717,30 @@
     ]
   },
   {
-    "id": "resistElements",
-    "name": "Resist Elements",
+    "id": "descentOfHolyBeing",
+    "name": "Descent Of Holy Being",
     "magic": "ascendant",
-    "rank": "comlex",
-    "description": "Through intense concentration, this spell will create an invisible barrier that increases all your units resistance to enemy eradication spells. Once they're enchanted, they receive effective protection against elemental spells.",
-    "attributes": ["enchantment", "selfOnly"],
-    "researchCost": 3000,
-    "castingCost": 8000, 
-    "castingTurn": 12,
+    "rank": "ultimate",
+    "description": "This prayer asks for the favour of the God and His direct divine intervention. Dominion, the most powerful of angels, will descend from the heavens to aid you in battle.",
+    "attributes": ["summon"],
+    "researchCost": 35000,
+    "castingCost": 300000,
+    "castingTurn": 9,
     "upkeep": null,
     "effects": [
       {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": null,
-        "affectedStack": "all",
-        "effects": [
-          {
-            "effectType": "UnitAttrEffect",
-            "checkResistance": false,
-            "attributes": {
-              "resistance.eradication": {
-                "rule": "spellLevel",
-                "magic": {
-                  "ascendant": { "value": 0.05 },
-                  "verdant": { "value": 0.02 },
-                  "eradication": { "value": 0.01 },
-                  "nether": { "value": 0.01 },
-                  "phantasm": { "value": 0.02 }
-                }
-              }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "swordOfLight",
-    "name": "Sword Of Light",
-    "magic": "ascendant",
-    "rank": "complex",
-    "description": "By being blessed with the blessings of the God, all your troops' melee weapons are bathed with a holy light that gives them higher attack power, which is especially effective against the undead",
-    "attributes": ["battle"],
-    "researchCost": 4000,
-    "castingCost": 20000,
-    "castingTurn": 0,
-    "upkeep": null,
-    "effects": [
-      {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": {
-          "primaryAttackType": ["melee", "holy"]
-        },
-        "affectedStack": "all",
-        "effects": [
-          {
-            "effectType": "UnitAttrEffect",
-            "checkResistance": false,
-            "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
-                "magic": {
-                  "ascendant": { "value": 0.045 },
-                  "verdant": { "value": 0.021 },
-                  "eradication": { "value": 0.009 },
-                  "nether": { "value": 0.009 },
-                  "phantasm": { "value": 0.021 }
-                }
-              }
-            }
-          },
-          {
-            "effectType": "UnitAttrEffect",
-            "checkResistance": false,
-            "attributes": {
-              "primaryAttackType": {
-                "rule": "",
-                "magic": {
-                  "ascendant": { "value": "holy" },
-                  "verdant": { "value": "holy" },
-                  "eradication": { "value": "holy" },
-                  "nether": { "value": "holy" },
-                  "phantasm": { "value": "holy"  }
-                }
-              }
-            }
-          }
-        ]
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dominion"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 0.0 },
+          "nether": { "value": 0.0 },
+          "phantasm": { "value": 0.0 }
+        }
       }
     ]
   },
@@ -532,34 +773,6 @@
     ]
   },
   {
-    "id": "descentOfHolyBeing",
-    "name": "Descent Of Holy Being",
-    "magic": "ascendant",
-    "rank": "ultimate",
-    "description": "This prayer asks for the favour of the God and His direct divine intervention. Dominion, the most powerful of angels, will descend from the heavens to aid you in battle.",
-    "attributes": ["summon"],
-    "researchCost": 35000,
-    "castingCost": 300000,
-    "castingTurn": 9,
-    "upkeep": null,
-    "effects": [
-      {
-        "effectType": "UnitSummonEffect",
-        "unitIds": ["dominion"],
-        "summonType": "all",
-        "summonNetPower": 2000000,
-        "rule": "spellLevel",
-        "magic": {
-          "ascendant": { "value": 1.0 },
-          "verdant": { "value": 0.0 },
-          "eradication": { "value": 0.0 },
-          "nether": { "value": 0.0 },
-          "phantasm": { "value": 0.0 }
-        }
-      }
-    ]
-  },
-  {
     "id": "miracle",
     "name": "Miracle",
     "magic": "ascendant",
@@ -574,8 +787,9 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": null,
-        "affectedStack": "all",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitHealEffect",
@@ -588,6 +802,42 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "id": "theHolyLight",
+    "name": "The Holy Light",
+    "magic": "ascendant",
+    "rank": "ultimate",
+    "description": "This enchantment spell is the advanced version of the Sword of Light spell. By sacrificing a percentage of your mana income, you gain the favor of heaven. All your melee weapons will glow in bright white light, and all your troops will fight in godly inspiration which will increase their attack power and accuracy in the battle. This enchantment is one of the most powerful Ascendant magic, and is especially effective when used together with Sword of Light spell.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 25000,
+    "castingCost": 200000, 
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 50,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "loveAndPeace",
+    "name": "Love and Peace",
+    "magic": "ascendant",
+    "rank": "ultimate",
+    "description": "This enchantment spell makes everyone in the country happy and live peacefully together in harmony. This greately increases both the population and geld growth rate, as your people become more productive. However, the people may refuse to fight as they become more and more peaceful, thus decreasing the fighting ability of your armies. The spell will also attract all kinds of Preachers to your country.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 20000,
+    "castingCost": 200000, 
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 250,
+      "population": 0
+    },
+    "effects": [
     ]
   }
 ]
