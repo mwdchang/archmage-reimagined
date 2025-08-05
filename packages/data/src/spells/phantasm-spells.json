@@ -575,6 +575,20 @@
     ]
   },
   {
+    "id": "stealArtifact",
+    "name" : "Steal Artifact",
+    "magic": "phantasm",
+    "rank": "complex",
+    "decription": "Using this spell mage can cause one of target enemy's item to vanish and teleport directly to caster mage. However, this spell is too weak to transfer ancient artifacts.",
+    "attributes": ["instant"],
+    "researchCost": 4000,
+    "castingCost": 20000,
+    "castingTurn": 2,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
     "id": "paralyze",
     "name": "Paralyze",
     "magic": "phantasm",

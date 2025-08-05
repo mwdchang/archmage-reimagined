@@ -499,6 +499,34 @@
     ]
   },
   {
+    "id": "summonBulwarkHorror",
+    "name": "Summon Buklwark Horror",
+    "magic": "nether",
+    "rank": "complex",
+    "description": "This spell calls forth evil Bulwark Horrors to join your army, these heavily armoured monstrosities are particularly adept at deflecting ranged attacks with their shields.",
+    "attributes": ["summon"],
+    "researchCost": 10000,
+    "castingCost": 80000,
+    "castingTurn": 6,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["bulwarkHorror"],
+        "summonType": "all",
+        "summonNetPower": 400000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.3 },
+          "verdant": { "value": 0.3 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
+    ]
+  },
+  {
     "id": "summonLich",
     "name": "Summon Lich",
     "magic": "nether",

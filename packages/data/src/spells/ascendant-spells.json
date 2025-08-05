@@ -482,7 +482,7 @@
     "id": "resistElements",
     "name": "Resist Elements",
     "magic": "ascendant",
-    "rank": "comlex",
+    "rank": "complex",
     "description": "Through intense concentration, this spell will create an invisible barrier that increases all your units resistance to enemy eradication spells. Once they're enchanted, they receive effective protection against elemental spells.",
     "attributes": ["enchantment", "selfOnly"],
     "researchCost": 3000,
