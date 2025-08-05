@@ -581,5 +581,101 @@
         }
       }
     ]
+  },
+  {
+    "id": "blackSabbath",
+    "name": "Black Sabbath",
+    "magic": "nether",
+    "rank": "ultimate",
+    "description": "This is the most powerful Nether magic. Once this dark containment is performed, your population will almost stop growing. However, by sacrificing new infants to Satan, you gain a lot of magic power in return, and those sacrified citizens will turn into skeletons and zombies that will join your forces. Also, your troops will be partially protected from holy attacks by an aura of unholiness.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 30000,
+    "castingCost": 200000,
+    "castingTurn": 3,
+    "upkeep": {
+      "geld": 0,
+      "mana": 0,
+      "population": 666
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "contractOfTheSoul",
+    "name": "Contract of the Soul",
+    "magic": "nether",
+    "rank": "ultimate",
+    "description": "By signing a pact with Satan, you have gained his favour through selling your soul. He will send forth cohorts of Devils under the commandment of devil prince to aid you. Entire cohort will take part in defensive battles, and in counters, ensuring your victory. But be warned! These devils will not leave your army and they need to be fed every day with massive human and geld sacrifice. They will only go back to hell when there's no man left in your country, or when they become bored. After that, you cannot sign another pact before you fulfill current contract.",
+    "attributes": ["enchantment", "selfOnly", "noDispel"],
+    "researchCost": 30000,
+    "castingCost": 1000000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 0,
+      "population": 6666
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "dreamOfSeduction",
+    "name": "Dream of Seduction",
+    "magic": "nether",
+    "rank": "ultimate",
+    "description": "This spell will grant you the servants of the Mistresses of Nine Hells, Succubi, to join your army for one battle.",
+    "attributes": ["battle"],
+    "researchCost": 20000,
+    "castingCost": 40000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+    ]
+  },
+  {
+    "id": "blackDeath",
+    "name": "Black Death",
+    "magic": "nether",
+    "rank": "ultimate",
+    "description": "This ultimate enchantment will inflict black death on the whole Terra. Everyone will suffer from the plague. Citizens and troops will decrease at a rapid pace as the plague begins to haunt the living. Note that this spell will also affect your own country.",
+    "attributes": ["enchantment", "selfOnly", "epidemic"],
+    "researchCost": 50000,
+    "castingCost": 1000000,
+    "castingTurn": 25,
+    "upkeep": {
+      "geld": 0,
+      "mana": 0,
+      "population": 666
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "summonUnholyReaver",
+    "name": "Summon Unholy Reaver",
+    "magic": "nether",
+    "rank": "ultimate",
+    "description": "This summon unleashes the worst manifestation of Hell, Unholy Reavers. They posses wide knowledge of paralyzing magic and posses abnormal psychic abilities. However, their corporal incarnation is not very durable.",
+    "attributes": ["summon"],
+    "researchCost": 35000,
+    "castingCost": 300000,
+    "castingTurn": 9,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["unholyReaver"],
+        "summonType": "all",
+        "summonNetPower": 2000000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.0 },
+          "verdant": { "value": 0.0 },
+          "eradication": { "value": 0.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.0 }
+        }
+      }
+    ]
   }
 ]

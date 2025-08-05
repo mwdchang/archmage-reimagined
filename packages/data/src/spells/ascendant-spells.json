@@ -588,6 +588,20 @@
     "castingTurn": 1,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["archangel", "angel", "knight", "unicorn"],
+        "summonType": "random",
+        "summonNetPower": 180000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 0.6 },
+          "eradication": { "value": 0.2 },
+          "nether": { "value": 0.2 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
     ]
   },
   {

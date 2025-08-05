@@ -123,7 +123,7 @@ export class SimpleDataAdapter extends DataAdapter {
   async getBattleReport(id: string) {
     if (existsSync(`${DATA_DIR}/${REPORT_DIR}/${id}`)) {
       let data = readFileSync(`${DATA_DIR}/${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
-      return data;
+      return JSON.parse(data);
     }
     return null;
   }
