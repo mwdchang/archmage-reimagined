@@ -98,10 +98,13 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "filter": {
+        "targetType": "all",
+        "filters": [
+          {
           "race": ["elf"]
-        },
-        "affectedStack": "all",
+          }
+        ],
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -123,11 +126,57 @@
     ]
   },
   {
-    "id": "summonWerebear",
-    "name": "Summon Werebear",
+    "id": "webOfTheSpierWoman",
+    "name": "Web of the Spider Woman",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "By asking for the favour of the spider lady, you can entangle enemy units in sticky spider webs. Fast units will have to struggle to pass through the web, while slow units will be helplessly caught within the web. It is a very effective spell in slowing down your enemies in defence. Area of effect: 1 random enemy stack.",
+    "attributes": ["battle"],
+    "researchCost": 500,
+    "castingCost": 600,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "oponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "woodenSoul",
+    "name": "Wooden Soul",
+    "magic": "verdant",
+    "rank": "simple",
+    "description": "This spell toughens the skin and hides of your troops, making it akin to the bark of a tree. The appearance of the affected flesh is only subtly altered, etched and stiffened like the bark of a mighty oak or elm, its color turned slightly ashen. Area of Effect: 1 random group",
+    "attributes": ["battle"],
+    "researchCost": 400,
+    "castingCost": 600,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "callMandrake",
+    "name": "Call Mandrake",
     "magic": "verdant",
     "rank": "average",
-    "description": "This spell will summon fierce werebears--part human, part bear, and all power-- to join your army. The enormously powerful creatures are so ferocious warriors that frighten your soldiers as much as they frighten the enemy!",
+    "description": "Though composed entirely of plant matter, mandrakes are highly intelligent, and can understand every nuance of speech from both elven and human language from birth. Originally they were enchanted by renowned elf-bard Sylii the Songstress' sweet voice and harmonious aura. After listening to her many tales of the world's woes, the mandrakes all agreed to assist the cause of the verdant mages and spread word to all of their kindred throughout Terra. Now, for a small expenditure of mana to carry the words of power through the surrounding lands, the mandrakes can be called to fight alongside and verdant mage.",
     "attributes": ["summon"],
     "researchCost": 1800,
     "castingCost": 29500,
@@ -136,7 +185,7 @@
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["werebear"],
+        "unitIds": ["mandrake"],
         "summonType": "all",
         "summonNetPower": 150000,
         "rule": "spellLevel",
@@ -147,6 +196,56 @@
           "nether": { "value": 0.2 },
           "phantasm": { "value": 0.2 }
         }
+      }
+    ]
+  },
+  {
+    "id": "naturesCure",
+    "name": "Natures Cure",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell uses the energy of nature to rejuvenate and heal damage of your troops. Grass and bushes grow tall and flowers bloom around your units, expanding their natural energy to heal all lost hit points. Area of effect: all your units.",
+    "attributes": ["battle"],
+    "researchCost": 1000,
+    "castingCost": 2000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stunningBeauty",
+    "name": "Stunning Beauty",
+    "magic": "verdant",
+    "rank": "average",
+    "description": "This spell will only affect elven units. By showering them with the sparkling beauty of nature, they will shine with a stunning beauty, thus making enemies reluctant to attack them. Area of effect: all your elves.",
+    "attributes": ["battle"],
+    "researchCost": 1500,
+    "castingCost": 3000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+          "race": ["elf"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+        ]
       }
     ]
   },
@@ -179,11 +278,11 @@
     ]
   },
   {
-    "id": "summonMandrake",
-    "name": "Summon Mandrake",
+    "id": "summonWerebear",
+    "name": "Summon Werebear",
     "magic": "verdant",
     "rank": "average",
-    "description": "Though composed entirely of plant matter, mandrakes are highly intelligent, and can understand every nuance of speech from both elven and human language from birth. Originally they were enchanted by renowned elf-bard Sylii the Songstress' sweet voice and harmonious aura. After listening to her many tales of the world's woes, the mandrakes all agreed to assist the cause of the verdant mages and spread word to all of their kindred throughout Terra. Now, for a small expenditure of mana to carry the words of power through the surrounding lands, the mandrakes can be called to fight alongside and verdant mage.",
+    "description": "This spell will summon fierce werebears--part human, part bear, and all power-- to join your army. The enormously powerful creatures are so ferocious warriors that frighten your soldiers as much as they frighten the enemy!",
     "attributes": ["summon"],
     "researchCost": 1800,
     "castingCost": 29500,
@@ -192,7 +291,7 @@
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["mandrake"],
+        "unitIds": ["werebear"],
         "summonType": "all",
         "summonNetPower": 150000,
         "rule": "spellLevel",
@@ -207,11 +306,11 @@
     ]
   },
   {
-    "id": "callTreant",
-    "name": "Call Treant",
+    "id": "callGriffon",
+    "name": "Call Griffon",
     "magic": "verdant",
     "rank": "complex",
-    "description": "This spell will summon a number of treants to join your army. These ancient guardians of the forest are legendary for their fortitude and ferocity in battle and are a favorite among verdant mages.",
+    "description": "",
     "attributes": ["summon"],
     "researchCost": 3000,
     "castingCost": 34600,
@@ -220,37 +319,9 @@
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["treant"],
+        "unitIds": ["griffon"],
         "summonType": "all",
-        "summonNetPower": 400000, 
-        "rule": "spellLevel",
-        "magic": {
-          "ascendant": { "value": 0.6 },
-          "verdant": { "value": 1.0 },
-          "eradication": { "value": 0.6 },
-          "nether": { "value": 0.2 },
-          "phantasm": { "value": 0.2 }
-        }
-      }
-    ]
-  },
-  {
-    "id": "callVenusFlyTraps",
-    "name": "Call Venus Flytraps",
-    "magic": "verdant",
-    "rank": "complex",
-    "description": "This spell calls Venus Flytraps to join your army. These plant creatures are particularly deceptive, somehow making their enemies attacks less effective before lashing out at them with deadly poison. As with all Treefolk, these plants are especially vulnerable to fire.",
-    "attributes": ["summon"],
-    "researchCost": 3200,
-    "castingCost": 45000,
-    "castingTurn": 5,
-    "upkeep": null,
-    "effects": [
-      {
-        "effectType": "UnitSummonEffect",
-        "unitIds": ["venusFlytrap"],
-        "summonType": "all",
-        "summonNetPower": 400000, 
+        "summonNetPower": 420000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -291,20 +362,20 @@
     ]
   },
   {
-    "id": "callElvenBladeDancers",
-    "name": "Call Elven Blade Dancers",
+    "id": "callTreant",
+    "name": "Call Treant",
     "magic": "verdant",
     "rank": "complex",
-    "description": "",
+    "description": "This spell will summon a number of treants to join your army. These ancient guardians of the forest are legendary for their fortitude and ferocity in battle and are a favorite among verdant mages.",
     "attributes": ["summon"],
-    "researchCost": 3100,
-    "castingCost": 45000,
-    "castingTurn": 5,
+    "researchCost": 3000,
+    "castingCost": 34600,
+    "castingTurn": 4,
     "upkeep": null,
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["elvenBladeDancer"],
+        "unitIds": ["treant"],
         "summonType": "all",
         "summonNetPower": 400000, 
         "rule": "spellLevel",
@@ -315,6 +386,163 @@
           "nether": { "value": 0.2 },
           "phantasm": { "value": 0.2 }
         }
+      }
+    ]
+  },
+  {
+    "id": "callHurricane",
+    "name": "Call Hurricane",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "The spell will summon a violent thunder storm. Strong Gale blows and heavy rainfall pours from the sky, which makes it impossible for most fliers to take flight under such bad weather, thus making most fliers a much more easier prey. Area of effect: all units in battle.",
+    "attributes": ["battle"],
+    "researchCost": 6000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "oponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enlargeAnimal",
+    "name": "Enlarge Animal",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell only affects animal units. It will temporary enlarge all your animal units, thus making them much more powerful. This is very effective spell when used on army with many animals.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 15000,
+    "castingTurn": 5,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filter": [
+          {
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
+              "primaryAttackPower,counterAttackPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.04708 },
+                  "verdant": { "value": 0.4708 },
+                  "eradication": { "value": 0.04708 },
+                  "nether": { "value": 0.02354 },
+                  "phantasm": { "value": 0.02354 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plantGrowth",
+    "name": "Plant Growth",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This powerful spell is able to affect only treefolk creatures. It uses the energy of nature to make them grow to a considerable size, and maintain that size for as long as the spell is still in effect.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 3000,
+    "castingCost": 30000,
+    "castingTurn": 3,
+    "upkeep": {
+      "geld": 0,
+      "mana": 250,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+            "race": ["treefolk"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
+              "primaryAttackPower,counterAttackPower,hitPoints": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "verdant": { "value": 0.9524 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "regeneration",
+    "name": "Regeneration",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "By borrowing from the natural energy of growth, you can grant your troops the ability of regeneration. Regenerating soldiers appear to grow back together with tiny vines and mossy bandages. Area of effect: all your units.",
+    "attributes": ["battle"],
+    "researchCost": 3000,
+    "castingCost": 30000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rustArmor",
+    "name": "Rust Armor",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "Calling upon the power of nature, the caster brings forth a shower of acidic rain upon the enemy. The rain will corrode any normal metal items upon contact. Thus, making those heavily armored much less resistant to melee attacks.",
+    "attributes": ["battle"],
+    "researchCost": 5000,
+    "castingCost": 20000,
+    "castingTurn": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+        ]
       }
     ]
   },
@@ -335,7 +563,7 @@
     },
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "effectType": "KingdomResistanceEffect",
         "rule": "spellLevel",
         "resistance": "nether",
         "magic": {
@@ -358,6 +586,24 @@
           "phantasm": { "value": 0.007 }
         }
       }
+    ]
+  },
+  {
+    "id": "summonLocustSwarm",
+    "name": "Summon Locust Swarm",
+    "magic": "verdant",
+    "rank": "complex",
+    "description": "This spell will summon a horde of hungry locusts that you can send to plague another country. They will eat up whatever food they can find, thus leaving the peasants starving to death.",
+    "attributes": ["enchantment"],
+    "researchCost": 5000,
+    "castingCost": 50000,
+    "castingTurn": 4,
+    "upkeep": {
+      "geld": 0,
+      "mana": 1000,
+      "population": 0
+    },
+    "effects": [
     ]
   },
   {
@@ -387,88 +633,6 @@
           "nether": { "value": 0.072 },
           "phantasm": { "value": 0.072 }
         }
-      }
-    ]
-  },
-  {
-    "id": "plantGrowth",
-    "name": "Plant Growth",
-    "magic": "verdant",
-    "rank": "complex",
-    "description": "This powerful spell is able to affect only treefolk creatures. It uses the energy of nature to make them grow to a considerable size, and maintain that size for as long as the spell is still in effect.",
-    "attributes": ["enchantment", "selfOnly"],
-    "researchCost": 3000,
-    "castingCost": 30000,
-    "castingTurn": 3,
-    "upkeep": {
-      "geld": 0,
-      "mana": 250,
-      "population": 0
-    },
-    "effects": [
-      {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": {
-          "race": ["treefolk"]
-        },
-        "affectedStack": "all",
-        "effects": [
-          {
-            "effectType": "UnitAttrEffect",
-            "attributes": {
-              "primaryAttackPower,counterAttackPower,hitPoints": {
-                "rule": "spellLevelPercentage",
-                "magic": {
-                  "verdant": { "value": 0.9524 }
-                }
-              }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "enlargeAnimal",
-    "name": "Enlarge Animal",
-    "magic": "verdant",
-    "rank": "complex",
-    "description": "This spell only affects animal units. It will temporary enlarge all your animal units, thus making them much more powerful. This is very effective spell when used on army with many animals.",
-    "attributes": ["enchantment", "selfOnly"],
-    "researchCost": 3000,
-    "castingCost": 15000,
-    "castingTurn": 5,
-    "upkeep": {
-      "geld": 0,
-      "mana": 150,
-      "population": 0
-    },
-    "effects": [
-      {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "filter": {
-          "race": ["animal"]
-        },
-        "affectedStack": "all",
-        "effects": [
-          {
-            "effectType": "UnitAttrEffect",
-            "attributes": {
-              "primaryAttackPower,counterAttackPower": {
-                "rule": "spellLevelPercentage",
-                "magic": {
-                  "ascendant": { "value": 0.04708 },
-                  "verdant": { "value": 0.4708 },
-                  "eradication": { "value": 0.04708 },
-                  "nether": { "value": 0.02354 },
-                  "phantasm": { "value": 0.02354 }
-                }
-              }
-            }
-          }
-        ]
       }
     ]
   },
@@ -526,6 +690,56 @@
           "phantasm": { "value": 0.2 }
         }
       }
+    ]
+  },
+  {
+    "id": "naturesFavor",
+    "name": "Natures Favor",
+    "magic": "verdant",
+    "rank": "ultimate",
+    "description": "The mage will be granted the favour of nature after this spell is chanted. The population will grow faster, your people will generate more gold, and creatures will come and join your army.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 30000,
+    "castingCost": 100000,
+    "castingTurn": 8,
+    "upkeep": {
+      "geld": 0,
+      "mana": 500,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "naturesLore",
+    "name": "Natures Lore",
+    "magic": "verdant",
+    "rank": "ultimate",
+    "description": "The most treasured secret of the Elder Druids, only the most enlightened mage who are well versed in the arts of the woods are gifted with this ancient lore. It is a reminder to protect the land and its mysterious powers can grant longevity to any kingdom. It will increase amount of land you explore.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 30000,
+    "castingCost": 300000,
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
+    "effects": [
+    ]
+  },
+  {
+    "id": "serenity",
+    "name": "Serenity",
+    "magic": "verdant",
+    "rank": "ultimate",
+    "description": "This spell will restore the balance of everything, thus dispelling most existing enchantment spells, beneficial or harmful, in a specific place.",
+    "attributes": ["instant"],
+    "researchCost": 30000,
+    "castingCost": 300000,
+    "castingTurn": 8,
+    "upkeep": null,
+    "effects": [
     ]
   }
 ]
