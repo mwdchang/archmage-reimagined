@@ -149,8 +149,8 @@ export const magicAlignmentTable = {
 }
 
 export const spellRankTable = {
-  simple: 3,
-  average: 5,
+  simple: 1,
+  average: 3,
   complex: 7,
   ultimate: 20
 }
