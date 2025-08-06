@@ -497,6 +497,67 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+            "allAttackType": ["melee", "fire"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.02 },
+                  "verdant": { "value": 0.04 },
+                  "eradication": { "value": 0.08 },
+                  "nether": { "value": 0.04 },
+                  "phantasm": { "value": 0.02 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackType": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "fire" },
+                  "verdant": { "value": "fire" },
+                  "eradication": { "value": "fire" },
+                  "nether": { "value": "fire" },
+                  "phantasm": { "value": "fire"  }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 3 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {

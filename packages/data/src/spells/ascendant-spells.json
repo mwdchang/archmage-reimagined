@@ -437,7 +437,7 @@
         "targetType": "all",
         "filters": [
           {
-            "primaryAttackType": ["melee", "holy"]
+            "allAttackType": ["melee", "holy"]
           }
         ],
         "trigger": null,
@@ -449,11 +449,11 @@
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "spellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": 0.045 },
-                  "verdant": { "value": 0.021 },
-                  "eradication": { "value": 0.009 },
-                  "nether": { "value": 0.009 },
-                  "phantasm": { "value": 0.021 }
+                  "ascendant": { "value": 0.43 },
+                  "verdant": { "value": 0.20 },
+                  "eradication": { "value": 0.09 },
+                  "nether": { "value": 0.09 },
+                  "phantasm": { "value": 0.20 }
                 }
               }
             }
