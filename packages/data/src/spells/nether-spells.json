@@ -450,6 +450,20 @@
     "castingTurn": 1,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["zombie", "wraith", "lich", "vampire", "shadown"],
+        "summonType": "random",
+        "summonNetPower": 180000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 0.2 },
+          "verdant": { "value": 0.2 },
+          "eradication": { "value": 0.6 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 0.6 }
+        }
+      }
     ]
   },
   {
