@@ -635,7 +635,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackInit,secondaryAttackInit": {
-                "rule": "",
+                "rule": "add",
                 "magic": {
                   "phantasm": { "value": -1 }
                 }

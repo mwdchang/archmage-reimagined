@@ -123,6 +123,21 @@ const applyUnitEffect = (
           stack.accuracy += finalValue;
         } else if (field === 'efficiency') {
           stack.efficiency += finalValue;
+        } else if (field === 'attackResistances') {
+          // applies across to all attack types
+          const ar = unit.attackResistances;
+          ar.breath += finalValue;
+          ar.missile += finalValue;
+          ar.melee += finalValue;
+          ar.paralyse += finalValue;
+          ar.poison += finalValue;
+          ar.psychic += finalValue;
+          ar.magic += finalValue;
+          ar.holy += finalValue;
+          ar.lightning += finalValue;
+          ar.cold += finalValue;
+          ar.fire += finalValue;
+          ar.ranged += finalValue;
         } else {
           root[field] += Math.floor(finalValue);
         }

@@ -144,6 +144,22 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -1 },
+                  "verdant": { "value": -1 },
+                  "eradication": { "value": -1 },
+                  "nether": { "value": -1 },
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
