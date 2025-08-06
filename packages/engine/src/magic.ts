@@ -13,7 +13,7 @@ import {
   getRandomItem,
 } from './base/references';
 import { totalLand } from './base/mage';
-import { randomBM } from './random';
+import { randomBM, randomInt } from './random';
 import { 
   ProductionEffect,
   ResistanceEffect,
@@ -136,7 +136,12 @@ export const doResearch = (mage: Mage, points: number) => {
 
 export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
   const result: { [key: string]: number } = {};
-  const unitIds = effect.unitIds;
+  const summonType = effect.summonType;
+
+  const unitIds = summonType === 'random' ?
+    [effect.unitIds[randomInt(effect.unitIds.length)]] :
+    effect.unitIds;
+
   let power = effect.summonNetPower;
 
   if (effect.rule === 'spellLevel') {
