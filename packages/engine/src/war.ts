@@ -177,6 +177,9 @@ const applyDamageEffect = (
 
     if (rule === 'spellLevelUnit') {
       let unitsLoss = Math.floor(rawDamage);
+      // Give it a bit of randomness
+      unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);
+
       if (unitsLoss >= stack.size) {
         unitsLoss = stack.size;
       }

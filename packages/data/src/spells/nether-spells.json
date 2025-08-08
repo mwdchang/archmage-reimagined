@@ -426,9 +426,45 @@
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
-        "filters": null,
+        "filters": [
+          {
+            "allAttackType": ["melee", "poison"]
+          }
+        ],
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.08 },
+                  "verdant": { "value": 0.08 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.34 },
+                  "phantasm": { "value": 0.20 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackType": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "poison" },
+                  "verdant": { "value": "poison" },
+                  "eradication": { "value": "poison" },
+                  "nether": { "value": "poison" },
+                  "phantasm": { "value": "poison" }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -481,11 +517,11 @@
             "damageType": ["paralyze"],
             "rule": "spellLevelUnit",
             "magic": {
-              "ascendant": { "value": 0.016 },
-              "verdant": { "value": 0.016 },
-              "eradication": { "value": 0.025 },
-              "nether": { "value": 0.065 },
-              "phantasm": { "value": 0.025 }
+              "ascendant": { "value": 0.021 },
+              "verdant": { "value": 0.021 },
+              "eradication": { "value": 0.035 },
+              "nether": { "value": 0.072 },
+              "phantasm": { "value": 0.035 }
             }
           }
         ]

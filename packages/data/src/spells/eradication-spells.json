@@ -483,6 +483,28 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "spellLevelUnit",
+            "magic": {
+              "ascendant": { "value": 0.019 },
+              "verdant": { "value": 0.035 },
+              "eradication": { "value": 0.060 },
+              "nether": { "value": 0.035 },
+              "phantasm": { "value": 0.019 }
+            }
+          }
+        ]
+      }
     ]
   },
   {
