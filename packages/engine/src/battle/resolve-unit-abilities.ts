@@ -22,7 +22,7 @@ export const resolveUnitAbilities = (stack: BattleStack[]) => {
     for (let i = 0; i < removedAbilities.length; i++) {
       const ability = removedAbilities[i];
       if (stack.unit.abilities.find(d => d.name === ability.name)) {
-        stack.unit.abilities = _.remove(stack.unit.abilities, d => d.name === ability.name);
+        stack.unit.abilities = stack.unit.abilities.filter(d => d.name !== ability.name);
       }
     }
   });

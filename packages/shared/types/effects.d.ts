@@ -14,6 +14,11 @@ export interface Effect {
 }
 
 /**
+ * Notes:
+ *
+ * chain-lightining: damage x-times
+
+/**
  * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
  * units attributes, cause direct damages, or alter unit abilities.
  *
@@ -21,15 +26,28 @@ export interface Effect {
  *   UnitDamageEffect
  *   UnitHealEffect
 **/
+
+
+/**
+ * Pseudo code:
+ *
+ * for (let i = 0; i < between(min, max); i++) {
+ *   affectedStacks = match_units(filters);
+ *   if (targetType === "random") {
+ *     affectedStacks = random(affectedStacks);
+ *   }
+ *   applyEffect(...)
+ * }
+ *
+**/
 export interface BattleEffect extends Effect {
-  target: 'self' | 'opponent' | 'all';
-  targetStack: 'all' | 'random' | 'weighted' | 'randomSingle' /* fixme */;
-  filter?: UnitFilter;
-  effectsTrigger?: {
-    max: number;
+  target: 'self' | 'opponent' | 'both';
+  targetType: 'all' | 'random' | 'weightedRandom'
+  filters: UnitFilter[] | null;
+  trigger: {
     min: number;
-    triggerType: 'all' | 'random'
-  },
+    max: number;
+  } | null,
   effects: UnitAttrEffect[] | UnitDamageEffect[] | UnitHealEffect[]
 }
 
@@ -48,12 +66,16 @@ export interface UnitAttrEffect extends Effect {
   }
 }
 
+/**
+ * direct: damage = value
+ * spellLevel: damage = spellLevel * value
+ * spellLevelUnit: unitloss = spellLevel * value
+**/
+export type UnitDamageRule = 'direct' | 'spellLevel' | 'spellLevelUnit';
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: ScalingRule,
-  minTimes: number,
-  maxTimes: number,
+  rule: UnitDamageRule,
   magic: {
     [key: string]: {
       value: any

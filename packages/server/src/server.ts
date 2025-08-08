@@ -140,8 +140,16 @@ router.post('/api/research', async (req: any, res) => {
 router.post('/api/war', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId } = req.body;
+
+  // Do not proceed if there are errors
+  const errors = await engine.preBattleCheck(mage, +targetId);
+  if (errors.length > 0) {
+    res.status(200).json({ errors, reportId: null, mage });
+    return;
+  }
+
   const r = await engine.doBattle(mage, +targetId, stackIds, spellId, itemId);
-  res.status(200).json({ reportId: r.id, mage });
+  res.status(200).json({ errors: [], reportId: r.id, mage });
 });
 
 router.get('/api/report/:id', async (req, res) => {

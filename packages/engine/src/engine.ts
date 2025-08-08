@@ -584,6 +584,19 @@ class Engine {
     return _.orderBy(ranks, d => -d.netPower);
   }
 
+  async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
+    const errors = [];
+    const defenderMage = await this.getMage(targetId);
+
+    if (mage.currentTurn < 2) {
+      errors.push('Need at least 2 turns to make an attack');
+    }
+    if (defenderMage.status === 'defeated') {
+      errors.push('Target mage is already defeated');
+    }
+    // TODO: Check damaged status
+    return errors;
+  }
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
     const defenderMage = await this.getMage(targetId);
