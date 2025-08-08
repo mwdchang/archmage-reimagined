@@ -51,6 +51,14 @@ export interface BattleReportSpellItem {
 export type BattleSpellResult = 'success' | 'lostConcentration' | 'barrier' | 'reflected' | 'noMana' | null;
 export type BattleItemResult = 'success' | 'barrier' | 'noItem' | null; 
 
+
+export interface BattleEffectLog {
+  id: number,
+  unitId: string,
+  effectType: string,
+  value: any
+}
+
 export interface BattleReport {
   id: string,
   timestamp: number,
@@ -80,7 +88,8 @@ export interface BattleReport {
     defender: {
       spellResult: BattleSpellResult,
       itemResult: BattleItemResult,
-    }
+    },
+    logs: BattleEffectLog[]
   },
 
   battleLogs: {

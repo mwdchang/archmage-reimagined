@@ -298,6 +298,38 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.18 },
+                  "verdant": { "value": 0.18 },
+                  "eradication": { "value": 0.41 },
+                  "nether": { "value": 0.76 },
+                  "phantasm": { "value": 0.41 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "hitPoints": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -0.12 },
+                  "verdant": { "value": -0.12 },
+                  "eradication": { "value": -0.20 },
+                  "nether": { "value": -0.36 },
+                  "phantasm": { "value": -0.20 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -436,6 +468,28 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["paralyze"],
+            "rule": "spellLevelUnit",
+            "magic": {
+              "ascendant": { "value": 0.016 },
+              "verdant": { "value": 0.016 },
+              "eradication": { "value": 0.025 },
+              "nether": { "value": 0.065 },
+              "phantasm": { "value": 0.025 }
+            }
+          }
+        ]
+      }
     ]
   },
   {

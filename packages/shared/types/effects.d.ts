@@ -66,10 +66,16 @@ export interface UnitAttrEffect extends Effect {
   }
 }
 
+/**
+ * direct: damage = value
+ * spellLevel: damage = spellLevel * value
+ * spellLevelUnit: unitloss = spellLevel * value
+**/
+export type UnitDamageRule = 'direct' | 'spellLevel' | 'spellLevelUnit';
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: ScalingRule,
+  rule: UnitDamageRule,
   magic: {
     [key: string]: {
       value: any

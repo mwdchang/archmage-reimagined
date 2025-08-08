@@ -8,7 +8,7 @@ import {
   currentSpellLevel, 
   castingCost
 } from './magic';
-import { BattleReport, BattleStack } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -31,7 +31,8 @@ import { calcFilteredArmy } from './battle/calc-filtered-army';
 export interface EffectOrigin {
   id: number,
   magic: string,
-  spellLevel: number
+  spellLevel: number,
+  targetId: number,
 }
 
 const calcDamageVariance = (attackType: String[]) => {
@@ -154,6 +155,7 @@ const applyDamageEffect = (
   damageEffect: UnitDamageEffect, 
   affectedArmy: BattleStack[]
 ) => {
+  const logs: BattleEffectLog[] = [];
   const casterMagic = origin.magic;
   const casterSpellLevel = origin.spellLevel;
 
@@ -167,8 +169,29 @@ const applyDamageEffect = (
     const rule = damageEffect.rule;
     if (rule === 'spellLevel') {
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
-    } else {
+    } else if (rule === 'spellLevelUnit') {
+      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
+    } else if (rule === 'direct') { 
       rawDamage = damageEffect.magic[casterMagic].value;
+    }
+
+    if (rule === 'spellLevelUnit') {
+      let unitsLoss = Math.floor(rawDamage);
+      if (unitsLoss >= stack.size) {
+        unitsLoss = stack.size;
+      }
+      stack.sustainedDamage = 0;
+      stack.size -= unitsLoss;
+      stack.loss += unitsLoss;
+      
+      logs.push({
+        id: origin.targetId,
+        unitId: stack.unit.id,
+        effectType: 'slain',
+        value: unitsLoss
+      });
+      console.log(`dealing unitDamage units=${unitsLoss}`);
+      return;
     }
 
     const resistance = calcResistance(stack.unit, damageType);
@@ -187,8 +210,16 @@ const applyDamageEffect = (
     stack.size -= unitsLoss;
     stack.loss += unitsLoss;
     
+    logs.push({
+      id: origin.targetId,
+      unitId: stack.unit.id,
+      effectType: 'slain',
+      value: unitsLoss
+    })
     console.log(`dealing rawDamage=${damage} actualDamage=${totalDamage} units=${unitsLoss}`);
   });
+
+  return logs
 };
 
 const applyHealEffect = (
@@ -234,6 +265,8 @@ const battleSpell = (
   defenderBattleStack: BattleStack[],
   enchantment: Enchantment = null
 ) => {
+  const logs: BattleEffectLog[] = [];
+
   const casterSpell = enchantment ? 
     getSpellById(enchantment.spellId) :
     getSpellById(caster.spellId);
@@ -241,7 +274,8 @@ const battleSpell = (
   let effectOrigin: EffectOrigin = {
     id: caster.mage.id,
     magic: caster.mage.magic,
-    spellLevel: currentSpellLevel(caster.mage)
+    spellLevel: currentSpellLevel(caster.mage),
+    targetId: defender.mage.id
   };
 
   // Override default if calculating enchantment
@@ -295,7 +329,8 @@ const battleSpell = (
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (effect.effectType === 'UnitDamageEffect') {
           const damageEffect = effect as UnitDamageEffect;
-          applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          logs.push(...damageLogs);
         } else if (effect.effectType === 'UnitHealEffect') {
           const healEffect = effect as UnitHealEffect;
           applyHealEffect(effectOrigin, healEffect, affectedArmy);
@@ -303,6 +338,7 @@ const battleSpell = (
       }
     } // end numTimes
   }
+  return logs;
 }
 
 /**
@@ -316,12 +352,14 @@ const battleItem = (
   defender: Combatant,
   defenderBattleStack: BattleStack[]) => {
 
+  const logs: BattleEffectLog[] = []
   const casterItem = getItemById(caster.itemId);
 
   const effectOrigin: EffectOrigin = {
     id: caster.mage.id,
     magic: caster.mage.magic,
-    spellLevel: currentSpellLevel(caster.mage)
+    spellLevel: currentSpellLevel(caster.mage),
+    targetId: defender.mage.id
   };
 
   casterItem.effects.forEach(effect => {
@@ -364,6 +402,8 @@ const battleItem = (
       }
     } // end numTimes
   });
+
+  return logs;
 }
 
 // For debugging different scenarios
@@ -445,7 +485,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
       attacker.mage.currentMana -= cost;
       battleReport.preBattle.attacker.spellResult = 'success';
-      battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+      const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+      battleReport.preBattle.logs.push(...battleSpellLogs);
     } else {
       battleReport.preBattle.attacker.spellResult = 'noMana';
     }
@@ -455,7 +496,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     console.log(`>> attacker item ${attacker.itemId}`);
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
-      battleItem(attacker, attackingArmy, defender, defendingArmy);
+      const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy);
+      battleReport.preBattle.logs.push(...battleItemLogs);
       battleReport.preBattle.attacker.itemResult = 'success';
     } else {
       battleReport.preBattle.attacker.itemResult = 'noItem';
@@ -470,7 +512,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defender.mage.currentMana -= cost;
 
       battleReport.preBattle.defender.spellResult = 'success';
-      battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+      const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+      battleReport.preBattle.logs.push(...battleSpellLogs);
     } else {
       battleReport.preBattle.defender.spellResult = 'noMana';
     }
@@ -480,7 +523,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     console.log(`>> defender item ${defender.itemId}`);
     if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
-      battleItem(defender, defendingArmy, attacker, attackingArmy);
+      const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy);
+      battleReport.preBattle.logs.push(...battleItemLogs);
       battleReport.preBattle.defender.itemResult = 'success';
     } else {
       battleReport.preBattle.defender.itemResult = 'noItem';

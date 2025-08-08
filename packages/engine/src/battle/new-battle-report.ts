@@ -33,7 +33,8 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
       defender: {
         spellResult: null,
         itemResult: null,
-      }
+      },
+      logs: []
     },
 
     // Tracking engagement

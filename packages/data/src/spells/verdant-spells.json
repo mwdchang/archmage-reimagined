@@ -607,6 +607,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "percentage",
+            "rule": "",
+            "magic": {
+              "ascendant": { "value": 5 },
+              "verdant": { "value": 15 },
+              "eradication": { "value": 5 },
+              "nether": { "value": 2 },
+              "phantasm": { "value": 2 }
+            }
+          }
         ]
       }
     ]
@@ -630,6 +643,22 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances.melee": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -0.14 },
+                  "verdant": { "value": -0.278 },
+                  "eradication": { "value": -0.14 },
+                  "nether": { "value": -0.07 },
+                  "phantasm": { "value": -0.07 }
+                }
+              }
+            }
+          }
         ]
       }
     ]

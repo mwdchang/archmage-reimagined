@@ -74,6 +74,10 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
 
   console.log('');
+  for (const log of br.preBattle.logs) {
+    console.log(log);
+  }
+  console.log('');
   console.log('=== Assault note ===');
 
   br.battleLogs.forEach(entry => {
