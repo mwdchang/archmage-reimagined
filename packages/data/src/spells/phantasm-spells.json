@@ -318,10 +318,47 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetType": "random",
+        "targetType": "weightedRandom",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "siege", "extra": null } },
+                  "verdant": { "value": { "name": "siege", "extra": null } },
+                  "eradication": { "value": { "name": "siege", "extra": null } },
+                  "nether": { "value": { "name": "siege", "extra": null } },
+                  "phantasm": { "value": { "name": "siege", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": { "name": "criticalStrike", "extra": null } }
+                }
+              }
+            }
+          }
         ]
       }
     ]

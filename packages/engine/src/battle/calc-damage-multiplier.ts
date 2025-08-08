@@ -16,6 +16,10 @@ export const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, a
     }
   });
 
+  if (hasAbility(attackingUnit, 'criticalStrike')) {
+    multiplier *= 1.25;
+  }
+
   if (hasAbility(defendingUnit, 'scales')) {
     multiplier *= 0.75;
   }

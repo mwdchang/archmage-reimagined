@@ -42,7 +42,7 @@ export interface Effect {
 **/
 export interface BattleEffect extends Effect {
   target: 'self' | 'opponent' | 'both';
-  targetType: 'all' | 'random'
+  targetType: 'all' | 'random' | 'weightedRandom'
   filters: UnitFilter[] | null;
   trigger: {
     min: number;

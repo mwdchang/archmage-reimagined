@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
 import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
-import { betweenInt, randomBM, randomInt } from './random';
+import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import { 
@@ -305,11 +305,13 @@ const battleSpell = (
       let randomIdx = -1;
       if (targetType === 'random') {
         randomIdx = randomInt(filteredArmy.length);
+      } else if (targetType === 'weightedRandom') {
+        randomIdx = Math.min(randomWeighted() - 1, filteredArmy.length -1);
       }
 
       for (const effect of effects) {
         let affectedArmy: BattleStack[] = [];
-        if (targetType === 'random') {
+        if (targetType === 'random' || targetType === 'weightedRandom') {
           affectedArmy = [filteredArmy[randomIdx]];
         } else {
           affectedArmy = filteredArmy;
@@ -382,11 +384,13 @@ const battleItem = (
       let randomIdx = -1;
       if (targetType === 'random') {
         randomIdx = randomInt(filteredArmy.length);
+      } else if (targetType === 'weightedRandom') {
+        randomIdx = Math.min(randomWeighted() - 1, filteredArmy.length -1);
       }
 
       for (let i = 0; i < battleEffect.effects.length; i++) {
         let affectedArmy: BattleStack[] = [];
-        if (targetType === 'random') {
+        if (targetType === 'random' || targetType === 'weightedRandom') {
           affectedArmy = [filteredArmy[randomIdx]];
         } else {
           affectedArmy = filteredArmy;
