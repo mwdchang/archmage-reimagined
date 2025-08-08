@@ -95,11 +95,15 @@ export interface UnitHealEffect extends Effect {
 }
 
 
+/**
+ * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
+ * fixed = summonNetPower
+**/
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
-  summonType: string, // random, all
+  summonType: 'random' | 'all',
+  rule: 'spellLevel' | 'fixed',
   summonNetPower: number,
-  rule: string,
   magic: {
     [key: string]: {
       value: number

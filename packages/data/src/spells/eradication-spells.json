@@ -451,6 +451,57 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.05 },
+                  "verdant": { "value": 0.10 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.10 },
+                  "phantasm": { "value": 0.05 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "spellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 0.25 },
+                  "verdant": { "value": 0.05 },
+                  "eradication": { "value": 0.10 },
+                  "nether": { "value": 0.05 },
+                  "phantasm": { "value": 0.025  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["goblin"],
+        "summonType": "all",
+        "summonNetPower": 5500,
+        "rule": "spellLevel",
+        "magic": {
+          "eradication": { "value": 1.0 }
+        }
+      }
     ]
   },
   {
@@ -626,6 +677,47 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances": {
+                "rule": "spellLevel",
+                "magic": {
+                  "ascendant": { "value": -0.007 },
+                  "verdant": { "value": -0.015 },
+                  "eradication": { "value": -0.06 },
+                  "nether": { "value": -0.015 },
+                  "phantasm": { "value": -0.007 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "efficiency": {
+                "rule": "spellLevel",
+                "magic": {
+                  "ascendant": { "value": -0.007 },
+                  "verdant": { "value": -0.014 },
+                  "eradication": { "value": -0.055 },
+                  "nether": { "value": -0.014 },
+                  "phantasm": { "value": -0.007 }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {

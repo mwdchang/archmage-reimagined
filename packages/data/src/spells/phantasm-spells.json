@@ -382,6 +382,43 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 6 },
+                  "verdant": { "value": 3 },
+                  "eradication": { "value": 3 },
+                  "nether": { "value": 6 },
+                  "phantasm": { "value": 12 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -526,10 +563,47 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "flying", "extra": null } },
+                  "verdant": { "value": { "name": "flying", "extra": null } },
+                  "eradication": { "value": { "name": "flying", "extra": null } },
+                  "nether": { "value": { "name": "flying", "extra": null } },
+                  "phantasm": { "value": { "name": "flying", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
         "targetType": "random",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": -5 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
