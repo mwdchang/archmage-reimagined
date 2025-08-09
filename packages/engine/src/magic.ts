@@ -16,7 +16,7 @@ import { totalLand } from './base/mage';
 import { randomBM, randomInt } from './random';
 import { 
   ProductionEffect,
-  ResistanceEffect,
+  KingdomResistanceEffect,
   CastingEffect
 } from 'shared/types/effects';
 
@@ -138,6 +138,10 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
   const result: { [key: string]: number } = {};
   const summonType = effect.summonType;
 
+  const magicBase = effect.magic[mage.magic] ?
+    effect.magic[mage.magic].value :
+    0;
+
   const unitIds = summonType === 'random' ?
     [effect.unitIds[randomInt(effect.unitIds.length)]] :
     effect.unitIds;
@@ -150,6 +154,9 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
 
     // Spell level
     power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
+
+    // Magic
+    power *= magicBase;
   }
 
   unitIds.forEach(unitId => {
@@ -318,9 +325,9 @@ export const calcKingdomResistance = (mage: Mage) => {
     const effects = spell.effects;
 
     effects.forEach(effect => {
-      if (effect.effectType !== 'ResistanceEffect') return;
+      if (effect.effectType !== 'KingdomResistanceEffect') return;
 
-      const resistEffect = effect as ResistanceEffect;
+      const resistEffect = effect as KingdomResistanceEffect;
       if (resistEffect.rule === 'spellLevel') {
         resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
       }

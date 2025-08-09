@@ -95,11 +95,15 @@ export interface UnitHealEffect extends Effect {
 }
 
 
+/**
+ * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
+ * fixed = summonNetPower
+**/
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
-  summonType: string, // random, all
+  summonType: 'random' | 'all',
+  rule: 'spellLevel' | 'fixed',
   summonNetPower: number,
-  rule: string,
   magic: {
     [key: string]: {
       value: number
@@ -108,8 +112,8 @@ export interface UnitSummonEffect extends Effect {
 }
 
 
-export interface ResistanceEffect extends Effect {
-  rule: string,
+export interface KingdomResistanceEffect extends Effect {
+  rule: 'spellLevel',
   resistance: string,
   magic: {
     [key: string]: {
@@ -119,8 +123,8 @@ export interface ResistanceEffect extends Effect {
 }
 
 export interface ProductionEffect extends Effect {
-  rule: string,
-  production: string,
+  rule: 'spellLevel',
+  production: 'farms' | 'guilds',
   magic: {
     [key: string]: {
       value: number
