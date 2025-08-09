@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import _ from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
@@ -140,7 +140,7 @@ export const armyUpkeep = (mage: Mage) => {
 
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
-    const upkeep = cloneDeep(u.upkeepCost);
+    const upkeep = _.cloneDeep(u.upkeepCost);
 
     // Enchantment modifiers. The effecacy is calculated by level of the enchantment, not the
     // current level of the mage
@@ -154,12 +154,14 @@ export const armyUpkeep = (mage: Mage) => {
       for (const effect of armyUpkeepEffects) {
         const filters = effect.filters;
 
-        // Check if match
+        // Check if effect matches unit
         let isMatch = filters === null ? true : false;
-        for (const filter of filters) {
-          if (matchesFilter(u, filter) === true) {
-            isMatch = true;
-            break;
+        if (isMatch === false) {
+          for (const filter of filters) {
+            if (matchesFilter(u, filter) === true) {
+              isMatch = true;
+              break;
+            }
           }
         }
 

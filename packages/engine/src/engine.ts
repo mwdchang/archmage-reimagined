@@ -1,4 +1,4 @@
-import _  from 'lodash';
+import _ from 'lodash';
 import { 
   loadUnitData,
   loadSpellData,
@@ -244,7 +244,12 @@ class Engine {
         enchantment.life --;
       }
     }
-    mage.enchantments = mage.enchantments.filter(d => d.life !== 0);
+    mage.enchantments = mage.enchantments.filter(d => {
+      if (d.isPermanent === false) {
+        return d.life > 0;
+      }
+      return true;
+    });
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
@@ -403,10 +408,11 @@ class Engine {
       spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
-      isPermanent: spell.life > 0 ? true : false,
+      isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
     }
     mage.enchantments.push(enchantment);
+    console.log('cast enchantment', enchantment);
     await this.adapter.updateMage(mage);
   }
 

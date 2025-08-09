@@ -880,7 +880,7 @@
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "percentage",
                 "magic": {
-                  "ascendant": { "value": 0.20 }
+                  "ascendant": { "value": -0.20 }
                 }
               }
             }
