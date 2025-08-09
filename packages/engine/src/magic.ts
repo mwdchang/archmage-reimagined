@@ -138,6 +138,10 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
   const result: { [key: string]: number } = {};
   const summonType = effect.summonType;
 
+  const magicBase = effect.magic[mage.magic] ?
+    effect.magic[mage.magic].value :
+    0;
+
   const unitIds = summonType === 'random' ?
     [effect.unitIds[randomInt(effect.unitIds.length)]] :
     effect.unitIds;
@@ -150,6 +154,9 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
 
     // Spell level
     power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
+
+    // Magic
+    power *= magicBase;
   }
 
   unitIds.forEach(unitId => {

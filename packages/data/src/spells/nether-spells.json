@@ -383,13 +383,27 @@
     "researchCost": 3000,
     "castingCost": 50000,
     "castingTurn": 5,
+    "life": 200,
     "upkeep": {
       "geld": 0,
       "mana": 0,
       "population": 666
     },
     "effects": [
-      
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["ghoul"],
+        "summonType": "all",
+        "summonNetPower": 9000,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 },
+          "verdant": { "value": 1.0 }
+        }
+      }
     ]
   },
   {

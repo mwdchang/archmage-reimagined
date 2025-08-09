@@ -124,7 +124,7 @@ export interface KingdomResistanceEffect extends Effect {
 
 export interface ProductionEffect extends Effect {
   rule: 'spellLevel',
-  production: string,
+  production: 'farms' | 'guilds',
   magic: {
     [key: string]: {
       value: number

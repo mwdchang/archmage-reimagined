@@ -223,6 +223,8 @@ class Engine {
       if (summonEffects.length === 0) continue;
 
       for (const summonEffect of summonEffects) {
+
+        // FIXME: use enchantment.casterMagic + enchantments.spellLevel
         const res = summonUnit(mage, summonEffect);
         Object.keys(res).forEach(key => {
           const stack = mage.army.find(d => d.id === key); 
@@ -236,7 +238,13 @@ class Engine {
           }
         });
       }
+
+      // If enchantment has life, update
+      if (enchantment.life && enchantment.life > 0) {
+        enchantment.life --;
+      }
     }
+    mage.enchantments = mage.enchantments.filter(d => d.life !== 0);
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
