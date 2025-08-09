@@ -200,9 +200,9 @@ export const armyUpkeep = (mage: Mage) => {
     if (upkeep.mana < 0) upkeep.mana = 0;
     if (upkeep.population < 0) upkeep.population = 0;
 
-    mana += Math.ceil(u.upkeepCost.mana * stack.size);
-    pop += Math.ceil(u.upkeepCost.population * stack.size);
-    geld += Math.ceil(u.upkeepCost.geld * stack.size);
+    mana += Math.ceil(upkeep.mana * stack.size);
+    pop += Math.ceil(upkeep.population * stack.size);
+    geld += Math.ceil(upkeep.geld * stack.size);
   });
 
   return {
