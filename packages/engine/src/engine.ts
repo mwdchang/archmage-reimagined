@@ -11,6 +11,7 @@ import {
 } from './base/references';
 import { 
   createMage, 
+  createMageTest,
   totalLand,
   totalNetPower
 } from './base/mage';
@@ -82,10 +83,12 @@ const totalArmyPower = (army: ArmyUnit[]) => {
 
 class Engine {
   adapter: DataAdapter;
+  debug: boolean = false;
 
-  constructor(adapter: DataAdapter) {
+  constructor(adapter: DataAdapter, debug: boolean = false) {
     // Load dependencies
     this.adapter = adapter;
+    this.debug = debug;
   }
 
   async initialize() {
@@ -212,7 +215,30 @@ class Engine {
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
     
 
-    // 5. calculate upkeep
+    // 5. enchantment summoning effects
+    const enchantments = mage.enchantments;
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
+      if (summonEffects.length === 0) continue;
+
+      for (const summonEffect of summonEffects) {
+        const res = summonUnit(mage, summonEffect);
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key); 
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
+            });
+          }
+        });
+      }
+    }
+
+    // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
@@ -679,6 +705,19 @@ class Engine {
 
     // 2. return mage
     const mage = createMage(username, magic);
+
+    // 3. Write to data store
+    this.adapter.createMage(username, mage);
+    return { user: res.user, mage };
+  }
+
+  /* For ease of testing */
+  async registerTestMage(username: string, password: string, magic: string, partial: Partial<Mage>) {
+    // 1. register player
+    const res = await this.adapter.register(username, password);
+
+    // 2. return mage
+    const mage = createMageTest(username, magic, partial);
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
