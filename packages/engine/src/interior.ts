@@ -1,14 +1,17 @@
+import { cloneDeep } from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
 import { productionTable, explorationLimit } from "./base/config";
 import { totalLand } from "./base/mage";
+import { getMaxSpellLevels } from './base/references';
 import { 
   getSpellById,
 } from './base/references';
 
 import { currentSpellLevel } from "./magic";
-import { ProductionEffect } from 'shared/types/effects';
+import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
+import { matchesFilter } from './base/unit';
 
 export interface Building {
   id: string,
@@ -137,6 +140,54 @@ export const armyUpkeep = (mage: Mage) => {
 
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
+    const upkeep = cloneDeep(u.upkeepCost);
+
+    // Enchantment modifiers. The effecacy is calculated by level of the enchantment, not the
+    // current level of the mage
+    for (const enchantment of mage.enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const enchantMaxSpellLevel = getMaxSpellLevels()[enchantment.spellMagic];
+
+      const armyUpkeepEffects = spell.effects.filter(d => d.effectType === 'ArmyUpkeepEffect') as ArmyUpkeepEffect[];
+      if (armyUpkeepEffects.length === 0) continue;
+
+      for (const effect of armyUpkeepEffects) {
+        const filters = effect.filters;
+
+        // Check if match
+        let isMatch = filters === null ? true : false;
+        for (const filter of filters) {
+          if (matchesFilter(u, filter) === true) {
+            isMatch = true;
+            break;
+          }
+        }
+
+        // Finally apply the effect
+        if (isMatch === true) {
+          const base = effect.magic[enchantment.spellMagic];
+
+          if (effect.rule === 'spellLevelPercentage') {
+            const percentage = (enchantment.spellLevel / enchantMaxSpellLevel);
+            if (base.value.geld) {
+              upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
+            }
+            if (base.value.mana) {
+              upkeep.mana += percentage * u.upkeepCost.mana * base.value.mana;
+            }
+            if (base.value.population) {
+              upkeep.population += percentage * u.upkeepCost.population * base.value.population;
+            }
+          }
+        }
+      }
+    }
+
+    // Ensure no weirdness
+    if (upkeep.geld < 0) upkeep.geld = 0;
+    if (upkeep.mana < 0) upkeep.mana = 0;
+    if (upkeep.population < 0) upkeep.population = 0;
+
     mana += Math.ceil(u.upkeepCost.mana * stack.size);
     pop += Math.ceil(u.upkeepCost.population * stack.size);
     geld += Math.ceil(u.upkeepCost.geld * stack.size);

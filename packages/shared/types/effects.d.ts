@@ -132,6 +132,20 @@ export interface ProductionEffect extends Effect {
   }
 }
 
+export interface ArmyUpkeepEffect extends Effect {
+  rule: 'spellLevelPercentage',
+  filters: UnitFilter[] | null;
+  magic: {
+    [key: string]: {
+      value: {
+        geld: any,
+        mana: any,
+        population: any
+      }
+    }
+  }
+}
+
 /**
  * type can be one of
  * - summon

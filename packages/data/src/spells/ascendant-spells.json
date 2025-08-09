@@ -866,6 +866,63 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "percentage",
+                "magic": {
+                  "ascendant": { "value": 0.20 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "percentage",
+                "magic": {
+                  "ascendant": { "value": 0.25 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["preacher"],
+        "summonType": "all",
+        "summonNetPower": 3500,
+        "rule": "spellLevel",
+        "magic": {
+          "ascendant": { "value": 1.0 }
+        }
+      },
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": null,
+        "rule": "spellLevelPercentage",
+        "magic": {
+          "ascendant": {
+            "value": {
+              "geld": -0.61,
+              "mana": 0,
+              "population": 0
+            }
+          }
+        }
+      }
     ]
   }
 ]
