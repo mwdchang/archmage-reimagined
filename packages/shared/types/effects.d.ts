@@ -112,8 +112,8 @@ export interface UnitSummonEffect extends Effect {
 }
 
 
-export interface ResistanceEffect extends Effect {
-  rule: string,
+export interface KingdomResistanceEffect extends Effect {
+  rule: 'spellLevel',
   resistance: string,
   magic: {
     [key: string]: {
@@ -123,7 +123,7 @@ export interface ResistanceEffect extends Effect {
 }
 
 export interface ProductionEffect extends Effect {
-  rule: string,
+  rule: 'spellLevel',
   production: string,
   magic: {
     [key: string]: {

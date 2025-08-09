@@ -210,7 +210,7 @@
     },
     "effects": [
       {
-        "effectType": "ResistanceEffect",
+        "effectType": "KingdomResistanceEffect",
         "rule": "spellLevel",
         "resistance": "ascendant",
         "magic": {

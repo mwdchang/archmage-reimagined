@@ -16,7 +16,7 @@ import { totalLand } from './base/mage';
 import { randomBM, randomInt } from './random';
 import { 
   ProductionEffect,
-  ResistanceEffect,
+  KingdomResistanceEffect,
   CastingEffect
 } from 'shared/types/effects';
 
@@ -318,9 +318,9 @@ export const calcKingdomResistance = (mage: Mage) => {
     const effects = spell.effects;
 
     effects.forEach(effect => {
-      if (effect.effectType !== 'ResistanceEffect') return;
+      if (effect.effectType !== 'KingdomResistanceEffect') return;
 
-      const resistEffect = effect as ResistanceEffect;
+      const resistEffect = effect as KingdomResistanceEffect;
       if (resistEffect.rule === 'spellLevel') {
         resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
       }
