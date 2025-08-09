@@ -585,6 +585,24 @@
             }
           }
         ]
+      },
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": [
+          {
+            "race": ["treefolk"]
+          }
+        ],
+        "rule": "percentage",
+        "magic": {
+          "verdant": {
+            "value": {
+              "geld": 0,
+              "mana": 20,
+              "population": 0
+            }
+          }
+        }
       }
     ]
   },

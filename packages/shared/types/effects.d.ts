@@ -133,7 +133,7 @@ export interface ProductionEffect extends Effect {
 }
 
 export interface ArmyUpkeepEffect extends Effect {
-  rule: 'spellLevelPercentage',
+  rule: 'spellLevelPercentage' | 'percentage',
   filters: UnitFilter[] | null;
   magic: {
     [key: string]: {

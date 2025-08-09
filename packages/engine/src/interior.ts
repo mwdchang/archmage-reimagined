@@ -178,6 +178,16 @@ export const armyUpkeep = (mage: Mage) => {
             if (base.value.population) {
               upkeep.population += percentage * u.upkeepCost.population * base.value.population;
             }
+          } else if (effect.rule === 'percentage') {
+            if (base.value.geld) {
+              upkeep.geld += u.upkeepCost.geld * base.value.geld/100;
+            }
+            if (base.value.mana) {
+              upkeep.mana += u.upkeepCost.mana * base.value.mana/100;
+            }
+            if (base.value.population) {
+              upkeep.population += u.upkeepCost.population * base.value.population/100;
+            }
           }
         }
       }
