@@ -4,8 +4,8 @@ import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from '
 import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
-import { 
-  currentSpellLevel, 
+import {
+  currentSpellLevel,
   castingCost
 } from './magic';
 import { BattleReport, BattleStack, BattleEffectLog } from 'shared/types/battle';
@@ -49,19 +49,19 @@ const calcDamageVariance = (attackType: String[]) => {
  * The general grammar is: "Apply X to unit that match condition Y with rule Z"
  * Where
  *  - X is an attribute like primaryAttackPower, or attackReistances.cold
- *  - Y is filtering rule, like matching all units with melee attacks 
+ *  - Y is filtering rule, like matching all units with melee attacks
  *  - Z determines how the final value is calculate; scale with spell-level, percentage .. etc
  *
  *  Finally there a magic multiplier. Generally speaking if you cast other schools's spell it will
  *  become a weaker version of the same spell casted by a mage whose magic is innate to that school.
  *
- *  e.g. Ascendant mages get better bonuses casting Blinding-Flash than a Nether mage casting the 
+ *  e.g. Ascendant mages get better bonuses casting Blinding-Flash than a Nether mage casting the
  *  same spell.
  */
 const applyUnitEffect = (
-  // caster: Combatant, 
+  // caster: Combatant,
   origin: EffectOrigin,
-  unitEffect: UnitAttrEffect, 
+  unitEffect: UnitAttrEffect,
   affectedArmy: BattleStack[]
 ) => {
   const casterMagic = origin.magic;
@@ -91,7 +91,7 @@ const applyUnitEffect = (
         let field = rawField;
 
         if (rawField.includes('.')) {
-          const [t1, t2] = rawField.split('.'); 
+          const [t1, t2] = rawField.split('.');
           root = unit[t1];
           originalRoot = originalUnit[t1];
           field = t2;
@@ -162,7 +162,7 @@ const applyUnitEffect = (
  */
 const applyDamageEffect = (
   origin: EffectOrigin,
-  damageEffect: UnitDamageEffect, 
+  damageEffect: UnitDamageEffect,
   affectedArmy: BattleStack[]
 ) => {
   const logs: BattleEffectLog[] = [];
@@ -181,7 +181,7 @@ const applyDamageEffect = (
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
     } else if (rule === 'spellLevelUnit') {
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
-    } else if (rule === 'direct') { 
+    } else if (rule === 'direct') {
       rawDamage = damageEffect.magic[casterMagic].value;
     }
 
@@ -196,7 +196,7 @@ const applyDamageEffect = (
       stack.sustainedDamage = 0;
       stack.size -= unitsLoss;
       stack.loss += unitsLoss;
-      
+
       logs.push({
         id: origin.targetId,
         unitId: stack.unit.id,
@@ -222,7 +222,7 @@ const applyDamageEffect = (
     stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
     stack.size -= unitsLoss;
     stack.loss += unitsLoss;
-    
+
     logs.push({
       id: origin.targetId,
       unitId: stack.unit.id,
@@ -237,7 +237,7 @@ const applyDamageEffect = (
 
 const applyHealEffect = (
   origin: EffectOrigin,
-  healEffect: UnitHealEffect, 
+  healEffect: UnitHealEffect,
   affectedArmy: BattleStack[]
 ) => {
   const casterMagic = origin.magic;
@@ -249,7 +249,7 @@ const applyHealEffect = (
   if (rule === 'spellLevel') {
     healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
   } else {
-    healBase = healEffect.magic[casterMagic].value; 
+    healBase = healEffect.magic[casterMagic].value;
   }
 
   affectedArmy.forEach(stack => {
@@ -280,7 +280,7 @@ const battleSpell = (
 ) => {
   const logs: BattleEffectLog[] = [];
 
-  const casterSpell = enchantment ? 
+  const casterSpell = enchantment ?
     getSpellById(enchantment.spellId) :
     getSpellById(caster.spellId);
 
@@ -358,7 +358,7 @@ const battleSpell = (
 
 /**
  * Use a battle item. The process is similar to battleSpell, however items cannot be resisted or
- * reflected by opposing forces at the mage level. Item effects also cannot be resisted at the 
+ * reflected by opposing forces at the mage level. Item effects also cannot be resisted at the
  * unit level.
  */
 const battleItem = (
@@ -456,14 +456,14 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
 
   ////////////////////////////////////////////////////////////////////////////////
-  // TODO: 
+  // TODO:
   // - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   // Enchantments effects are equivalent to spell effects, but the
   // efficacy is the enchantment spell level, and not that of the caster's
   // current spell level
-  console.log('>> apply attacker enchantments') 
+  console.log('>> apply attacker enchantments')
   attacker.mage.enchantments.forEach(enchant => {
     battleSpell(
       attacker,
@@ -473,7 +473,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       enchant);
   });
 
-  console.log('>> apply defender enchantments') 
+  console.log('>> apply defender enchantments')
   defender.mage.enchantments.forEach(enchant => {
     battleSpell(
       defender,
@@ -584,6 +584,92 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     /////////// Primary //////////
     if (attackType === 'primary') {
       if (attackingStack.unit.primaryAttackInit < 1 || attackingStack.size <= 0) continue;
+      if (defendingStack.size <= 0) continue;
+
+      // Resolve burst
+      if (hasAbility(dUnit, 'bursting')) {
+        const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
+
+        for (const burstingAbility of burstingAbilities) {
+          console.log('handle burst', burstingAbility);
+
+          let burstingType = dUnit.primaryAttackType;
+          let burstingPower = dUnit.powerRank;
+
+          if (burstingAbility.extra) {
+            const extra = burstingAbility.extra;
+            if (extra.type) burstingType = extra.type;
+            if (extra.value) burstingPower = extra.value;
+          }
+
+          // Calculate attacker burst loss
+          let attackerResistance = calcResistance(aUnit, burstingType);
+          let attackerDamageMultiplier = calcDamageMultiplier(dUnit, aUnit, burstingType);
+          let attackerDamageVariance = calcDamageVariance(burstingType);
+          let attackerDamage = burstingPower *
+            defendingStack.size *
+            (defendingStack.efficiency / 100) *
+            ((100 - attackerResistance) / 100) *
+            attackerDamageVariance;
+          attackerDamage = Math.floor(attackerDamage * attackerDamageMultiplier);
+          let attackerSustainedDamage = attackingStack.sustainedDamage;
+          let attackerTotalDamage = attackerDamage + attackerSustainedDamage;
+
+          let attackerUnitLoss = Math.floor(attackerTotalDamage / aUnit.hitPoints);
+          if (attackerUnitLoss >= attackingStack.size) {
+            attackerUnitLoss = attackingStack.size;
+            attackerTotalDamage = attackingStack.size * aUnit.hitPoints;
+          }
+
+          if (attackerUnitLoss > 0) {
+            attackingStack.sustainedDamage = 0;
+          }
+          attackingStack.sustainedDamage += (attackerTotalDamage % aUnit.hitPoints);
+          attackingStack.size -= attackerUnitLoss;
+          attackingStack.loss += attackerUnitLoss;
+
+
+          // Calculate defender burst loss
+          let defenderResistance = calcResistance(dUnit, burstingType);
+          let defenderDamageMultiplier = calcDamageMultiplier(dUnit, dUnit, burstingType);
+          let defenderDamageVariance = calcDamageVariance(burstingType);
+          let defenderDamage = burstingPower *
+            defendingStack.size *
+            (defendingStack.efficiency / 100) *
+            ((100 - defenderResistance) / 100) *
+            defenderDamageVariance;
+          defenderDamage = Math.floor(defenderDamage * defenderDamageMultiplier);
+          let defenderSustainedDamage = defendingStack.sustainedDamage;
+          let defenderTotalDamage = defenderDamage + defenderSustainedDamage;
+
+          let defenderUnitLoss = Math.floor(defenderTotalDamage / dUnit.hitPoints);
+          if (defenderUnitLoss >= defendingStack.size) {
+            defenderUnitLoss = defendingStack.size;
+          }
+
+          if (defenderUnitLoss > 0) {
+            defendingStack.sustainedDamage = 0;
+          }
+          defendingStack.sustainedDamage += (defenderTotalDamage % dUnit.hitPoints);
+          defendingStack.size -= defenderUnitLoss;
+          defendingStack.loss += defenderUnitLoss;
+
+          battleReport.battleLogs.push({
+            type: `burst`,
+            attacker: {
+              id: attackingMage.id,
+              unitId: attackingStack.unit.id,
+              unitsLoss:attackerUnitLoss
+            },
+            defender: {
+              id: defendingMage.id,
+              unitId: defendingStack.unit.id,
+              unitsLoss: defenderUnitLoss
+            }
+          });
+        }
+      }
+
 
       let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
       let resistance = calcResistance(dUnit, aUnit.primaryAttackType);
@@ -596,7 +682,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       let damage = aUnit.primaryAttackPower *
-        attackingStack.size * 
+        attackingStack.size *
         (accuracy / 100) *
         (efficiency / 100) *
         ((100 - resistance) / 100) *
@@ -627,7 +713,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       });
 
       // Accumulate or clear partial damage
-      if (defenderUnitLoss > 0) { 
+      if (defenderUnitLoss > 0) {
         defendingStack.sustainedDamage = 0;
       }
       defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
@@ -638,7 +724,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (hasAbility(aUnit, 'additionalStrike')) {
         let damageVariance = calcDamageVariance(aUnit.primaryAttackType);
         let damage = aUnit.primaryAttackPower *
-          attackingStack.size * 
+          attackingStack.size *
           (accuracy / 100) *
           (efficiency / 100) *
           ((100 - resistance) / 100) *
@@ -669,7 +755,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         });
 
         // Accumulate or clear partial damage
-        if (defenderUnitLoss > 0) { 
+        if (defenderUnitLoss > 0) {
           defendingStack.sustainedDamage = 0;
         }
         defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
@@ -683,7 +769,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         // Unit paralysed
       } else if (aUnit.primaryAttackType.includes('ranged')) {
         // Cannot counter ranged
-      } else if (defendingStack.size > 0) {
+      } else if (defendingStack.size > 0 && attackingStack.size > 0) {
         // Execute counter
         let accuracy = defendingStack.accuracy + calcAccuracyModifier(dUnit, aUnit);
         let resistance = calcResistance(aUnit, dUnit.primaryAttackType);
@@ -696,7 +782,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
 
         let damage = dUnit.counterAttackPower *
-          defendingStack.size * 
+          defendingStack.size *
           (accuracy / 100) *
           (efficiency / 100) *
           ((100 - resistance) / 100) *
@@ -727,7 +813,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         });
 
         // Accumulate or clear partial damage
-        if (attackerUnitLoss > 0) { 
+        if (attackerUnitLoss > 0) {
           attackingStack.sustainedDamage = 0;
         }
         attackingStack.sustainedDamage += (totalDamage % aUnit.hitPoints);
@@ -753,7 +839,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       let damageMultiplier = calcDamageMultiplier(aUnit, dUnit, aUnit.secondaryAttackType);
 
       let damage = aUnit.secondaryAttackPower *
-        attackingStack.size * 
+        attackingStack.size *
         (accuracy / 100) *
         ((100 - resistance) / 100) *
         damageVariance;
@@ -783,7 +869,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       });
 
       // Accumulate or clear partial damage
-      if (defenderUnitLoss > 0) { 
+      if (defenderUnitLoss > 0) {
         defendingStack.sustainedDamage = 0;
       }
       defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
@@ -919,8 +1005,8 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
 
   // land summary for battle report
   const buildingTypes = [
-    'wilderness', 'farms', 'towns', 
-    'workshops', 'nodes', 'barracks', 
+    'wilderness', 'farms', 'towns',
+    'workshops', 'nodes', 'barracks',
     'guilds', 'barriers', 'forts'
   ];
   let totalLandGain = 0;
