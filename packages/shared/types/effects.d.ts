@@ -140,7 +140,7 @@ export interface ProductionEffect extends Effect {
 }
 
 export interface ArmyUpkeepEffect extends Effect {
-  rule: 'addSpellLevelPercentageBase' | 'addPercentage',
+  rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
   filters: UnitFilter[] | null;
   magic: {
     [key: string]: {

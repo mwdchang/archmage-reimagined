@@ -593,12 +593,12 @@
             "race": ["treefolk"]
           }
         ],
-        "rule": "addPercentage",
+        "rule": "addPercentageBase",
         "magic": {
           "verdant": {
             "value": {
               "geld": 0,
-              "mana": 20,
+              "mana": 0.20,
               "population": 0
             }
           }
