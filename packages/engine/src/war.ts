@@ -110,6 +110,8 @@ const applyUnitEffect = (
           finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue * originalRoot[field];
         } else if (rule === 'remove') {
           finalValue = baseValue;
+        } else if (rule === 'set') {
+          finalValue = baseValue;
         } else {
           throw new Error(`Unable to proces rule ${rule}`);
         }
@@ -410,8 +412,8 @@ const battleItem = (
         console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
         if (eff.effectType === 'UnitAttrEffect') {
-          const unitEffect = eff as UnitAttrEffect;
-          applyUnitEffect(effectOrigin, unitEffect, affectedArmy);
+          const unitAttrEffect = eff as UnitAttrEffect;
+          applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (eff.effectType === 'UnitDamageEffect') {
           const damageEffect = eff as UnitDamageEffect;
           applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
@@ -494,18 +496,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Initialize battle report
   const battleReport = newBattleReport(attacker, defender, attackType);
 
-  // Spells
+
   // TODO: check barriers and success
+  const preBattle = battleReport.preBattle;
   if (attacker.spellId) {
     console.log(`>> attacker spell ${attacker.spellId}`);
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
       attacker.mage.currentMana -= cost;
-      battleReport.preBattle.attacker.spellResult = 'success';
+      preBattle.attacker.spellResult = 'success';
       const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
-      battleReport.preBattle.logs.push(...battleSpellLogs);
+      preBattle.logs.push(...battleSpellLogs);
     } else {
-      battleReport.preBattle.attacker.spellResult = 'noMana';
+      preBattle.attacker.spellResult = 'noMana';
     }
     console.log('');
   }
@@ -514,10 +517,10 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
       const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy);
-      battleReport.preBattle.logs.push(...battleItemLogs);
-      battleReport.preBattle.attacker.itemResult = 'success';
+      preBattle.logs.push(...battleItemLogs);
+      preBattle.attacker.itemResult = 'success';
     } else {
-      battleReport.preBattle.attacker.itemResult = 'noItem';
+      preBattle.attacker.itemResult = 'noItem';
     }
     console.log('');
   }
@@ -528,11 +531,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
 
-      battleReport.preBattle.defender.spellResult = 'success';
+      preBattle.defender.spellResult = 'success';
       const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
-      battleReport.preBattle.logs.push(...battleSpellLogs);
+      preBattle.logs.push(...battleSpellLogs);
     } else {
-      battleReport.preBattle.defender.spellResult = 'noMana';
+      preBattle.defender.spellResult = 'noMana';
     }
     console.log('');
   }
@@ -541,13 +544,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
       defender.mage.items[defender.itemId] --;
       const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy);
-      battleReport.preBattle.logs.push(...battleItemLogs);
-      battleReport.preBattle.defender.itemResult = 'success';
+      preBattle.logs.push(...battleItemLogs);
+      preBattle.defender.itemResult = 'success';
     } else {
-      battleReport.preBattle.defender.itemResult = 'noItem';
+      preBattle.defender.itemResult = 'noItem';
     }
     console.log('');
   }
+
+
 
   // Resolving contradicting ability states
   resolveUnitAbilities(attackingArmy);

@@ -740,6 +740,66 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "ascendant",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "verdant",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "eradication",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "nether",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "phantasm",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      }
     ]
   },
   {
