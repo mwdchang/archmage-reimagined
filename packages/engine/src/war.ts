@@ -147,6 +147,9 @@ const applyUnitEffect = (
           ar.fire += finalValue;
           ar.ranged += finalValue;
         } else {
+          if (field === 'secondaryAttackInit' || field === 'secondaryAttackPower') {
+            if (unit.secondaryAttackType.length === 0) return;
+          }
           root[field] += Math.floor(finalValue);
         }
       });
