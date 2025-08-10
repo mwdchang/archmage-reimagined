@@ -98,23 +98,30 @@ const applyUnitEffect = (
         }
 
         // Figure out the value to add
-        if (rule === 'spellLevel') {
-          finalValue = baseValue * casterSpellLevel;
-        } else if (rule === 'spellLevelPercentage') {
-          const ratio = casterSpellLevel / casterMaxSpellLevel;
-          finalValue = baseValue * ratio * originalRoot[field];
-        } else if (rule === 'percentage') {
-          finalValue = baseValue * originalRoot[field];
-        } else {
+        if (rule === 'add') {
           finalValue = baseValue;
+        } else if (rule === 'addPercentageBase') {
+          finalValue = baseValue * originalRoot[field];
+        } else if (rule === 'addSpellLevel') {
+          finalValue = baseValue * casterSpellLevel;
+        } else if (rule === 'addSpellLevelPercentage') {
+          finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue;
+        } else if (rule === 'addSpellLevelPercentageBase') {
+          finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue * originalRoot[field];
+        } else if (rule === 'remove') {
+          finalValue = baseValue;
+        } else {
+          throw new Error(`Unable to proces rule ${rule}`);
         }
 
         // Finally apply
         if (field === 'abilities') {
           if (rule === 'add') {
             stack.addedAbilities.push(finalValue);
-          } else {
+          } else if (rule === 'remove') {
             stack.removedAbilities.push(finalValue);
+          } else {
+            throw new Error(`Unable to resolve ${rule}`);
           }
         } else if (field === 'primaryAttackType') {
           unit.primaryAttackType.push(finalValue);

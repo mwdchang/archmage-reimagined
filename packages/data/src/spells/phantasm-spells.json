@@ -59,13 +59,13 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": 0.0497705 },
-                  "verdant": { "value": 0.02488525 },
-                  "eradication": { "value": 0.02488525 },
-                  "nether": { "value": 0.0497705 },
-                  "phantasm": { "value": 0.099541 }
+                  "ascendant": { "value": -5 },
+                  "verdant": { "value": -2 },
+                  "eradication": { "value": -2 },
+                  "nether": { "value": -5 },
+                  "phantasm": { "value": -10 }
                 }
               }
             }
@@ -177,6 +177,47 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -19 }, 
+                  "verdant": { "value": -9 },
+                  "eradication": { "value": -9 },
+                  "nether": { "value": -9 },
+                  "phantasm": { "value": -38 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "efficiency": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -10 }, 
+                  "verdant": { "value": -10 },
+                  "eradication": { "value": -10 },
+                  "nether": { "value": -10 },
+                  "phantasm": { "value": -10 }
+                }
+              }
+            }
+          }
         ]
       }
     ]

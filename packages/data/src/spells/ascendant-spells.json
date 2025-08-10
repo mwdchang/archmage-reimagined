@@ -46,7 +46,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "spellLevel",
+                "rule": "addSpellLevel",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.006 },
@@ -404,13 +404,13 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": -0.06315 },
-                  "verdant": { "value": -0.0337488 }, 
-                  "eradication": { "value": -0.0172366 },
-                  "nether": { "value": -0.0172366 },
-                  "phantasm": { "value": -0.0337488 }
+                  "ascendant": { "value": -6.315 },
+                  "verdant": { "value": -3.37488 }, 
+                  "eradication": { "value": -1.72366 },
+                  "nether": { "value": -1.72366 },
+                  "phantasm": { "value": -3.37488 }
                 }
               }
             }
@@ -447,7 +447,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.43 },
                   "verdant": { "value": 0.20 },
@@ -506,7 +506,7 @@
             "checkResistance": false,
             "attributes": {
               "resistance.eradication": {
-                "rule": "spellLevel",
+                "rule": "addSpellLevel",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.02 },
@@ -878,7 +878,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "percentage",
+                "rule": "addPercentage",
                 "magic": {
                   "ascendant": { "value": -0.20 }
                 }
@@ -890,7 +890,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "percentage",
+                "rule": "addPercentage",
                 "magic": {
                   "ascendant": { "value": 0.25 }
                 }
@@ -912,11 +912,11 @@
       {
         "effectType": "ArmyUpkeepEffect",
         "filters": null,
-        "rule": "spellLevelPercentage",
+        "rule": "addSpellLevelPercentageBase",
         "magic": {
           "ascendant": {
             "value": {
-              "geld": -0.61,
+              "geld": -61,
               "mana": 0,
               "population": 0
             }

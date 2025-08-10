@@ -52,11 +52,19 @@ export interface BattleEffect extends Effect {
 }
 
 
+/**
+ * add:                          value
+ * addPercentageBase:            value * base
+ *
+ * addSpellLevel:                value * spellLevel
+ * addSpellLevelPercentage:      value * spellLevel / maxSpellLevel  
+ * addSpellLevelPercentageBase:  value * spellLevel / maxSpellLevel * base
+**/
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
     [key: string]: {
-      rule: ScalingRule,
+      rule: 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
         [key: string]: {
           value: any
@@ -71,11 +79,10 @@ export interface UnitAttrEffect extends Effect {
  * spellLevel: damage = spellLevel * value
  * spellLevelUnit: unitloss = spellLevel * value
 **/
-export type UnitDamageRule = 'direct' | 'spellLevel' | 'spellLevelUnit';
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: UnitDamageRule,
+  rule: 'direct' | 'spellLevel' | 'spellLevelUnit',
   magic: {
     [key: string]: {
       value: any
@@ -133,7 +140,7 @@ export interface ProductionEffect extends Effect {
 }
 
 export interface ArmyUpkeepEffect extends Effect {
-  rule: 'spellLevelPercentage' | 'percentage',
+  rule: 'addSpellLevelPercentageBase' | 'addPercentage',
   filters: UnitFilter[] | null;
   magic: {
     [key: string]: {

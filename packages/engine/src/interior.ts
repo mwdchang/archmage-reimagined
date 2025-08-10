@@ -169,7 +169,7 @@ export const armyUpkeep = (mage: Mage) => {
         if (isMatch === true) {
           const base = effect.magic[enchantment.spellMagic];
 
-          if (effect.rule === 'spellLevelPercentage') {
+          if (effect.rule === 'addSpellLevelPercentageBase') {
             const percentage = (enchantment.spellLevel / enchantMaxSpellLevel);
             if (base.value.geld) {
               upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
@@ -180,7 +180,7 @@ export const armyUpkeep = (mage: Mage) => {
             if (base.value.population) {
               upkeep.population += percentage * u.upkeepCost.population * base.value.population;
             }
-          } else if (effect.rule === 'percentage') {
+          } else if (effect.rule === 'addPercentage') {
             if (base.value.geld) {
               upkeep.geld += u.upkeepCost.geld * base.value.geld/100;
             }

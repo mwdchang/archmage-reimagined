@@ -110,7 +110,7 @@
             "effectType": "UnitAttrEffect",
             "attributes": {
               "accuracy": {
-                "rule": "",
+                "rule": "add",
                 "magic": {
                   "ascendant": { "value": 10 },
                   "verdant": { "value": 10 },
@@ -531,7 +531,7 @@
             "effectType": "UnitAttrEffect",
             "attributes": {
               "primaryAttackPower,counterAttackPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.04708 },
                   "verdant": { "value": 0.4708 },
@@ -577,7 +577,7 @@
             "effectType": "UnitAttrEffect",
             "attributes": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "verdant": { "value": 0.9524 }
                 }
@@ -593,7 +593,7 @@
             "race": ["treefolk"]
           }
         ],
-        "rule": "percentage",
+        "rule": "addPercentage",
         "magic": {
           "verdant": {
             "value": {
@@ -666,13 +666,13 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances.melee": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": -0.14 },
-                  "verdant": { "value": -0.278 },
-                  "eradication": { "value": -0.14 },
-                  "nether": { "value": -0.07 },
-                  "phantasm": { "value": -0.07 }
+                  "ascendant": { "value": -14 },
+                  "verdant": { "value": -27.8 },
+                  "eradication": { "value": -14 },
+                  "nether": { "value": -7 },
+                  "phantasm": { "value": -7 }
                 }
               }
             }

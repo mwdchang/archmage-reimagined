@@ -199,13 +199,13 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
-                  "ascendant": { "value": -0.00005 },
-                  "verdant": { "value": -0.00007 },
-                  "eradication": { "value": -0.0001 },
-                  "nether": { "value": -0.00007 },
-                  "phantasm": { "value": -0.00005 }
+                  "ascendant": { "value": -0.01 },
+                  "verdant": { "value": -0.02 },
+                  "eradication": { "value": -0.048 },
+                  "nether": { "value": -0.020 },
+                  "phantasm": { "value": -0.01 }
                 }
               }
             }
@@ -381,12 +381,12 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackType,secondaryAttackType,counter": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
-                  "verdant": { "value": 0.1 },
-                  "eradication": { "value": 0.2 },
-                  "nether": { "value": 0.1 },
+                  "verdant": { "value": 0.10 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.10 },
                   "phantasm": { "value": 0.05 }
                 }
               }
@@ -463,11 +463,11 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.10 },
-                  "eradication": { "value": 0.20 },
+                  "eradication": { "value": 0.22 },
                   "nether": { "value": 0.10 },
                   "phantasm": { "value": 0.05 }
                 }
@@ -479,13 +479,13 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
-                  "ascendant": { "value": 0.25 },
-                  "verdant": { "value": 0.05 },
-                  "eradication": { "value": 0.10 },
-                  "nether": { "value": 0.05 },
-                  "phantasm": { "value": 0.025  }
+                  "ascendant": { "value": -0.025 },
+                  "verdant": { "value": -0.05 },
+                  "eradication": { "value": -0.10 },
+                  "nether": { "value": -0.05 },
+                  "phantasm": { "value": -0.025  }
                 }
               }
             }
@@ -586,7 +586,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.04 },
@@ -689,13 +689,13 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances": {
-                "rule": "spellLevel",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": -0.007 },
-                  "verdant": { "value": -0.015 },
-                  "eradication": { "value": -0.06 },
-                  "nether": { "value": -0.015 },
-                  "phantasm": { "value": -0.007 }
+                  "ascendant": { "value": -4.5 },
+                  "verdant": { "value": -9 },
+                  "eradication": { "value": -30 },
+                  "nether": { "value": -9 },
+                  "phantasm": { "value": -4.5 }
                 }
               }
             }
@@ -705,13 +705,13 @@
             "checkResistance": true,
             "attributes": {
               "efficiency": {
-                "rule": "spellLevel",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": -0.007 },
-                  "verdant": { "value": -0.014 },
-                  "eradication": { "value": -0.055 },
-                  "nether": { "value": -0.014 },
-                  "phantasm": { "value": -0.007 }
+                  "ascendant": { "value": -5 },
+                  "verdant": { "value": -11 },
+                  "eradication": { "value": -20 },
+                  "nether": { "value": -11 },
+                  "phantasm": { "value": -5 }
                 }
               }
             }
