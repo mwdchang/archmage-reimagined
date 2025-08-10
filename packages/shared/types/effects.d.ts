@@ -64,7 +64,7 @@ export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
     [key: string]: {
-      rule: 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
+      rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
         [key: string]: {
           value: any
@@ -77,12 +77,13 @@ export interface UnitAttrEffect extends Effect {
 /**
  * direct: damage = value
  * spellLevel: damage = spellLevel * value
- * spellLevelUnit: unitloss = spellLevel * value
+ * spellLevelUnitLoss: unitloss = spellLevel * value
+ * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: 'direct' | 'spellLevel' | 'spellLevelUnit',
+  rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
     [key: string]: {
       value: any

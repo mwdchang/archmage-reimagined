@@ -529,7 +529,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["paralyze"],
-            "rule": "spellLevelUnit",
+            "rule": "spellLevelUnitLoss",
             "magic": {
               "ascendant": { "value": 0.021 },
               "verdant": { "value": 0.021 },

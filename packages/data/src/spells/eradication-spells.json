@@ -233,6 +233,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["lightning"],
+            "rule": "spellLevelUnitDamage",
+            "magic": {
+              "ascendant": { "value": 0.04  },
+              "verdant": { "value": 0.11  },
+              "eradication": { "value": 0.19  },
+              "nether": { "value": 0.11  },
+              "phantasm": { "value": 0.04  }
+            }
+          }
         ]
       }
     ]
@@ -545,7 +558,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnit",
+            "rule": "spellLevelUnitLoss",
             "magic": {
               "ascendant": { "value": 0.019 },
               "verdant": { "value": 0.035 },
@@ -935,6 +948,20 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "eradication": {
+                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": 3000 } }
+                  }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -958,6 +985,15 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "spellLevelUnitDamage",
+            "magic": {
+              "eradication": { "value": 0.33 }
+            }
+          }
         ]
       }
     ]

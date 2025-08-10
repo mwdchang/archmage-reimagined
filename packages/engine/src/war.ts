@@ -181,13 +181,15 @@ const applyDamageEffect = (
     const rule = damageEffect.rule;
     if (rule === 'spellLevel') {
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
-    } else if (rule === 'spellLevelUnit') {
+    } else if (rule === 'spellLevelUnitLoss') {
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
+    } else if (rule === 'spellLevelUnitDamage') {
+      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel * stack.size;
     } else if (rule === 'direct') {
       rawDamage = damageEffect.magic[casterMagic].value;
     }
 
-    if (rule === 'spellLevelUnit') {
+    if (rule === 'spellLevelUnitLoss') {
       let unitsLoss = Math.floor(rawDamage);
       // Give it a bit of randomness
       unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);
