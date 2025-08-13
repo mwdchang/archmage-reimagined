@@ -48,7 +48,7 @@ export interface BattleEffect extends Effect {
     min: number;
     max: number;
   } | null,
-  effects: UnitAttrEffect[] | UnitDamageEffect[] | UnitHealEffect[]
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
 }
 
 
@@ -105,7 +105,7 @@ export interface UnitHealEffect extends Effect {
 
 /**
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
- * fixed = summonNetPower
+ * fixed = summonNetPower 
 **/
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
@@ -131,8 +131,8 @@ export interface KingdomResistanceEffect extends Effect {
 }
 
 export interface ProductionEffect extends Effect {
-  rule: 'spellLevel',
-  production: 'farms' | 'guilds',
+  rule: 'spellLevel' | 'addPercentageBase' 
+  production: 'farms' | 'guilds' | 'nodes',
   magic: {
     [key: string]: {
       value: number

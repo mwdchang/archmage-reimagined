@@ -414,6 +414,13 @@ class Engine {
     mage.enchantments.push(enchantment);
     console.log('cast enchantment', enchantment);
     await this.adapter.updateMage(mage);
+
+    result.push({
+      type: 'log',
+      message: `You cast ${spell.name} on yourself`
+    });
+
+    return result;
   }
 
   async summonByItem(mage: Mage, itemId: string, num: number) {

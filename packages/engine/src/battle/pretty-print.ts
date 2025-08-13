@@ -35,7 +35,7 @@ export const prettyPrintBR = (br: BattleReport) => {
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
+      RPretty(stack.accuracy.toFixed(2)),
       JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   })
@@ -60,7 +60,7 @@ export const prettyPrintBR = (br: BattleReport) => {
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
+      RPretty(stack.accuracy.toFixed(2)),
       JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   })

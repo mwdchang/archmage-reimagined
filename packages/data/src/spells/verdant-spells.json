@@ -758,7 +758,7 @@
     },
     "effects": [
       {
-        "effectType": "KingdomProductionEffect",
+        "effectType": "ProductionEffect",
         "rule": "spellLevel",
         "production": "farms",
         "magic": {

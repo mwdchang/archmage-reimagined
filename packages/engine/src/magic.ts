@@ -157,12 +157,17 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
 
     // Magic
     power *= magicBase;
+  } else if (effect.rule === 'fixed') {
+    power = effect.summonNetPower;
   }
 
   unitIds.forEach(unitId => {
     const unit = getUnitById(unitId);
     const unitPower = unit.powerRank;
-    const unitsSummoned = Math.floor(power / unitPower);
+    const unitsSummoned = effect.rule === 'fixed' ? 
+      power :
+      Math.floor(power / unitPower);
+
     console.log(`Summoned ${unitsSummoned} ${unit.name}`);
     if (!result[unit.id]) result[unit.id] = 0;
     result[unit.id] += unitsSummoned;
@@ -241,6 +246,28 @@ export const manaIncome = (mage: Mage) => {
 
   const x = Math.floor(nodes * 100 / land);
   const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
+
+  let valueBuffer = 0;
+  for (const enchantment of mage.enchantments) {
+    const spell = getSpellById(enchantment.spellId);
+    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue; 
+
+    for (const effect of productionEffects) {
+      if (effect.production !== 'nodes') continue;
+
+      const base = effect.magic[enchantment.spellMagic];
+      if (!base) continue;
+    
+      const rule = effect.rule;
+      if (rule === 'spellLevel') {
+        valueBuffer += base.value * enchantment.spellLevel;
+      } else if (rule === 'addPercentageBase') {
+        valueBuffer += manaYield * base.value;
+      }
+    }
+  }
+
   return Math.floor(manaYield);
 }
 

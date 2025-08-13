@@ -138,6 +138,22 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -1.5 },
+                  "verdant": { "value": -1.5 },
+                  "eradication": { "value": -2.5 },
+                  "nether": { "value": -5 },
+                  "phantasm": { "value": -2.5 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -161,6 +177,22 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.13 },
+                  "verdant": { "value": -0.13 },
+                  "eradication": { "value": -0.25 },
+                  "nether": { "value": -0.55 },
+                  "phantasm": { "value": -0.25 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -744,6 +776,45 @@
       "population": 666
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances.holy": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "nether": { "value": 32 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["zombie", "skeleton"],
+        "summonType": "all",
+        "summonNetPower": 666,
+        "rule": "fixed",
+        "magic": {
+          "nether": { "value": 1.0 }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "nodes",
+        "magic": {
+          "ascendant": { "value": 7 }
+        }
+      }
     ]
   },
   {

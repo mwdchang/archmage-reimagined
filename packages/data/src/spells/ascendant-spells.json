@@ -1,28 +1,5 @@
 [
   {
-    "id": "protectionFromMissile",
-    "name": "Protection from Missile",
-    "magic": "ascendant",
-    "rank": "simple",
-    "description": "This spell creates an invisible barrier in the air, which blocks off, or deflects, all ranged attacks on your troops by the enemy. Area of effect: 1 random stack.",
-    "attributes": ["battle"],
-    "researchCost": 500,
-    "castingCost": 700,
-    "castingTurn": 0,
-    "upkeep": null,
-    "effects": [
-      {
-        "effectType": "BattleEffect",
-        "target": "self",
-        "targetType": "random",
-        "filters": null,
-        "trigger": null,
-        "effects": [
-        ]
-      }
-    ]
-  },
-  {
     "id": "bless",
     "name": "Bless",
     "magic": "ascendant",
@@ -371,7 +348,7 @@
     "name": "Dispel Magic",
     "magic": "ascendant",
     "rank": "average",
-    "description": "",
+    "description": "place holder",
     "attributes": [""],
     "researchCost": 3000,
     "castingCost": 0,
@@ -848,6 +825,51 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+            "magic": "ascendant"
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.13 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": 6.3 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addPercentageBase",
+        "production": "nodes",
+        "magic": {
+          "ascendant": { "value": -0.15 }
+        }
+      }
     ]
   },
   {
