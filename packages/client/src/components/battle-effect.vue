@@ -1,8 +1,14 @@
 <template>
+  <h4> Battle effect </h4>
   <p v-if="effect.filters">
     {{ effect.filters }}
   </p>
-  <template v-for="battleEffect in (effect as BattleEffect).effects">
+  <p>
+    Targeting {{ effect.target }} on {{ effect.targetType }} units 
+    <span v-if="effect.filters"> with {{ effect.filters }} </span>
+  </p>
+  <div>&nbsp;</div>
+  <template v-for="battleEffect in effect.effects">
     <AttrEffect v-if="battleEffect.effectType === 'UnitAttrEffect'" :effect="battleEffect as any" />
   </template>
 </template>

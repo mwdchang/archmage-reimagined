@@ -1,15 +1,41 @@
 <template>
   <h2 v-if="spell">{{spell.name}}</h2>
   <main v-if="spell">
-    <p style="margin: 1rem 10rem; line-height: 120%">{{ spell.description }} </p>
-    <p> Rank: {{ spell.rank }} </p>
-    <p> Casting cost: {{ spell.castingCost }} </p>
-    <p> Casting turn: {{ spell.castingTurn }} </p>
-    <p> Attributes: {{ spell.attributes.join(', ') }} </p>
-    <p> Research cost: {{ spell.researchCost }} </p>
-    <p v-if="spell.upkeep">
-      Upkeep: {{ spell.upkeep.geld }} geld, {{ spell.upkeep.mana }} mana, {{ spell.upkeep.population }} population.
-    </p>
+    <p style="margin: 1rem 1rem">{{ spell.description }} </p>
+    <table>
+      <tbody>
+        <tr>
+          <td> Rank </td>
+          <td> {{ spell.rank }}</td>
+        </tr>
+        <tr>
+          <td> Casting cost </td>
+          <td> {{ spell.castingCost }} </td>
+        </tr>
+        <tr>
+          <td> Casting turn </td>
+          <td> {{ spell.castingTurn }} </td>
+        </tr>
+        <tr>
+          <td> Research cost </td>
+          <td> {{ spell.researchCost }} </td>
+        </tr>
+        <tr>
+          <td> Atrributes </td>
+          <td> {{ spell.attributes.join(",&nbsp;") }} </td>
+        </tr>
+        <tr v-if="spell.upkeep">
+          <td> Upkeep </td>
+          <td>
+            <div> {{ spell.upkeep.geld }} geld </div>
+            <div> {{ spell.upkeep.mana }} mana</div>
+            <div> {{ spell.upkeep.population }} population</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="width:100%; border-bottom: 1px solid #888">&nbsp;</div>
     <p v-for="(effect, idx) in spell.effects" :key="idx">
       <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
       <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />
@@ -37,6 +63,15 @@ onMounted(() => {
 main {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin: 1rem 22%;
+  line-height: 120%;
+  gap: 5px;
 }
+
+table {
+  width: 70%;
+}
+
+
+
 </style>
