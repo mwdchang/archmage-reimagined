@@ -1,22 +1,9 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
 
-export type ScalingRule = 
-    'none'
-  | 'add'                    // FIXME
-  | 'percentage'             // FIXME
-  | 'spellLevel'             // value * spellLevel
-  | 'spellLevelPercentage'   // value * (spellLevel / baseSpellLevel)
-;
-
 export interface Effect {
   effectType: string
 }
-
-/**
- * Notes:
- *
- * chain-lightining: damage x-times
 
 /**
  * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
@@ -93,8 +80,8 @@ export interface UnitDamageEffect extends Effect {
 
 export interface UnitHealEffect extends Effect {
   checkResistance: boolean; // not used
-  healType: string,
-  rule: ScalingRule,
+  healType: 'points' | 'percentage',
+  rule: 'none' | 'spellLevel',
   magic: {
     [key: string]: {
       value: any

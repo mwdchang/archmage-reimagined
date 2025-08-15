@@ -52,7 +52,7 @@ const route = useRoute();
 const { mage } = storeToRefs(mageStore);
 
 
-const hideHeader = ['status', 'test', 'about'];
+const hideHeader = ['status', 'test', 'about', 'viewUnit', 'viewSpell' ];
 
 // Test to see if session already exist
 onMounted(async () => {

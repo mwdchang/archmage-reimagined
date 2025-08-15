@@ -252,7 +252,7 @@ const applyHealEffect = (
   let healBase = 0;
   if (rule === 'spellLevel') {
     healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
-  } else {
+  } else if (rule === 'none') {
     healBase = healEffect.magic[casterMagic].value;
   }
 

@@ -629,7 +629,7 @@
             "effectType": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
-            "rule": "",
+            "rule": "none",
             "magic": {
               "ascendant": { "value": 5 },
               "verdant": { "value": 15 },

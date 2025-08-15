@@ -43,8 +43,6 @@ const attributes = computed(() => {
   });
 });
 
-
-
 </script>
 
 <style scoped>
