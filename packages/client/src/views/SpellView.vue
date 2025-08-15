@@ -3,7 +3,9 @@
   <br>
   <table>
     <tr v-for="spell of spells" :key="spell.id">
-      <td>{{ spell.name }}</td>
+      <td>
+        <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
+      </td>
       <td><magic :magic="spell.magic" /></td>
       <td class="text-right">{{ spell.castingTurn }}</td>
       <td class="text-right">{{ spell.castingCost }}</td>

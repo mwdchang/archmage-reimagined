@@ -426,14 +426,14 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["ghoul"],
         "summonType": "all",
-        "summonNetPower": 9000,
-        "rule": "spellLevel",
+        "summonNetPower": 0,
+        "rule": "fixed",
         "magic": {
-          "ascendant": { "value": 1.0 },
-          "eradication": { "value": 1.0 },
-          "nether": { "value": 1.0 },
-          "phantasm": { "value": 1.0 },
-          "verdant": { "value": 1.0 }
+          "ascendant": { "value": 666 },
+          "eradication": { "value": 666 },
+          "nether": { "value": 666 },
+          "phantasm": { "value": 666 },
+          "verdant": { "value": 666 }
         }
       }
     ]
