@@ -59,13 +59,13 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentage",
                 "magic": {
-                  "ascendant": { "value": 0.0497705 },
-                  "verdant": { "value": 0.02488525 },
-                  "eradication": { "value": 0.02488525 },
-                  "nether": { "value": 0.0497705 },
-                  "phantasm": { "value": 0.099541 }
+                  "ascendant": { "value": -5 },
+                  "verdant": { "value": -2 },
+                  "eradication": { "value": -2 },
+                  "nether": { "value": -5 },
+                  "phantasm": { "value": -10 }
                 }
               }
             }
@@ -163,7 +163,7 @@
     "name": "Sleep",
     "magic": "phantasm",
     "rank": "simple",
-    "description": "",
+    "description": "This spell will put enemy units to sleep, severely hindering their ability to fight in the battle",
     "attributes": ["battle"],
     "researchCost": 500,
     "castingCost": 700,
@@ -177,6 +177,47 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -19 }, 
+                  "verdant": { "value": -9 },
+                  "eradication": { "value": -9 },
+                  "nether": { "value": -9 },
+                  "phantasm": { "value": -38 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "efficiency": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -10 }, 
+                  "verdant": { "value": -10 },
+                  "eradication": { "value": -10 },
+                  "nether": { "value": -10 },
+                  "phantasm": { "value": -10 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -382,6 +423,43 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 6 },
+                  "verdant": { "value": 3 },
+                  "eradication": { "value": 3 },
+                  "nether": { "value": 6 },
+                  "phantasm": { "value": 12 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -405,6 +483,22 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 0 },
+                  "verdant": { "value":0 },
+                  "eradication": { "value": 0 },
+                  "nether": { "value": 0 },
+                  "phantasm": { "value": 5 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -470,7 +564,7 @@
     "name": "Summon Snow Beast",
     "magic": "phantasm",
     "rank": "average",
-    "description": "",
+    "description": "This spell summons a ferocious snow beast from the icy tundras. These massive creatures are known for their incredible strength and resilience, making them formidable allies in battle.",
     "attributes": ["summon"],
     "researchCost": 2100,
     "castingCost": 35000,
@@ -526,10 +620,47 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "flying", "extra": null } },
+                  "verdant": { "value": { "name": "flying", "extra": null } },
+                  "eradication": { "value": { "name": "flying", "extra": null } },
+                  "nether": { "value": { "name": "flying", "extra": null } },
+                  "phantasm": { "value": { "name": "flying", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
         "targetType": "random",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": -5 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -609,6 +740,66 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "ascendant",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "verdant",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "eradication",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "nether",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      },
+      {
+        "effectType": "KingdomResistanceEffect",
+        "rule": "spellLevel",
+        "resistance": "phantasm",
+        "magic": {
+          "ascendant": { "value": 0.04 },
+          "verdant": { "value": 0.035 },
+          "eradication": { "value": 0.035 },
+          "nether": { "value": 0.04 },
+          "phantasm": { "value": 0.0765 }
+        }
+      }
     ]
   },
   {

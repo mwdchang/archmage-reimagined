@@ -1,22 +1,9 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
 
-export type ScalingRule = 
-    'none'
-  | 'add'                    // FIXME
-  | 'percentage'             // FIXME
-  | 'spellLevel'             // value * spellLevel
-  | 'spellLevelPercentage'   // value * (spellLevel / baseSpellLevel)
-;
-
 export interface Effect {
   effectType: string
 }
-
-/**
- * Notes:
- *
- * chain-lightining: damage x-times
 
 /**
  * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
@@ -48,15 +35,23 @@ export interface BattleEffect extends Effect {
     min: number;
     max: number;
   } | null,
-  effects: UnitAttrEffect[] | UnitDamageEffect[] | UnitHealEffect[]
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
 }
 
 
+/**
+ * add:                          value
+ * addPercentageBase:            value * base
+ *
+ * addSpellLevel:                value * spellLevel
+ * addSpellLevelPercentage:      value * spellLevel / maxSpellLevel  
+ * addSpellLevelPercentageBase:  value * spellLevel / maxSpellLevel * base
+**/
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
     [key: string]: {
-      rule: ScalingRule,
+      rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
         [key: string]: {
           value: any
@@ -69,13 +64,13 @@ export interface UnitAttrEffect extends Effect {
 /**
  * direct: damage = value
  * spellLevel: damage = spellLevel * value
- * spellLevelUnit: unitloss = spellLevel * value
+ * spellLevelUnitLoss: unitloss = spellLevel * value
+ * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
-export type UnitDamageRule = 'direct' | 'spellLevel' | 'spellLevelUnit';
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: UnitDamageRule,
+  rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
     [key: string]: {
       value: any
@@ -85,8 +80,8 @@ export interface UnitDamageEffect extends Effect {
 
 export interface UnitHealEffect extends Effect {
   checkResistance: boolean; // not used
-  healType: string,
-  rule: ScalingRule,
+  healType: 'points' | 'percentage',
+  rule: 'none' | 'spellLevel',
   magic: {
     [key: string]: {
       value: any
@@ -95,11 +90,15 @@ export interface UnitHealEffect extends Effect {
 }
 
 
+/**
+ * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
+ * fixed = summonNetPower 
+**/
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
-  summonType: string, // random, all
+  summonType: 'random' | 'all',
+  rule: 'spellLevel' | 'fixed',
   summonNetPower: number,
-  rule: string,
   magic: {
     [key: string]: {
       value: number
@@ -108,8 +107,8 @@ export interface UnitSummonEffect extends Effect {
 }
 
 
-export interface ResistanceEffect extends Effect {
-  rule: string,
+export interface KingdomResistanceEffect extends Effect {
+  rule: 'spellLevel',
   resistance: string,
   magic: {
     [key: string]: {
@@ -119,11 +118,25 @@ export interface ResistanceEffect extends Effect {
 }
 
 export interface ProductionEffect extends Effect {
-  rule: string,
-  production: string,
+  rule: 'spellLevel' | 'addPercentageBase' 
+  production: 'farms' | 'guilds' | 'nodes',
   magic: {
     [key: string]: {
       value: number
+    }
+  }
+}
+
+export interface ArmyUpkeepEffect extends Effect {
+  rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
+  filters: UnitFilter[] | null;
+  magic: {
+    [key: string]: {
+      value: {
+        geld: any,
+        mana: any,
+        population: any
+      }
     }
   }
 }

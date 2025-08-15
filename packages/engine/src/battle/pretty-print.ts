@@ -35,7 +35,7 @@ export const prettyPrintBR = (br: BattleReport) => {
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
+      RPretty(stack.accuracy.toFixed(2)),
       JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   })
@@ -60,7 +60,7 @@ export const prettyPrintBR = (br: BattleReport) => {
       RPretty(stack.unit.secondaryAttackPower),
       RPretty(stack.unit.counterAttackPower),
       RPretty(stack.unit.hitPoints),
-      RPretty(stack.accuracy),
+      RPretty(stack.accuracy.toFixed(2)),
       JSON.stringify((stack.unit.abilities.map(d => d.name)))
     );
   })
@@ -90,6 +90,9 @@ export const prettyPrintBR = (br: BattleReport) => {
     } else if (entry.type === 'counter') {
       console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} struck back ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId}`);
       console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
+    } else if (entry.type.startsWith('burst')) {
+      console.log(`burst from ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
+      console.log(`burst from ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
     }
     console.log('');
   })

@@ -199,13 +199,13 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
-                  "ascendant": { "value": -0.00005 },
-                  "verdant": { "value": -0.00007 },
-                  "eradication": { "value": -0.0001 },
-                  "nether": { "value": -0.00007 },
-                  "phantasm": { "value": -0.00005 }
+                  "ascendant": { "value": -0.01 },
+                  "verdant": { "value": -0.02 },
+                  "eradication": { "value": -0.048 },
+                  "nether": { "value": -0.020 },
+                  "phantasm": { "value": -0.01 }
                 }
               }
             }
@@ -233,6 +233,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["lightning"],
+            "rule": "spellLevelUnitDamage",
+            "magic": {
+              "ascendant": { "value": 0.04  },
+              "verdant": { "value": 0.11  },
+              "eradication": { "value": 0.19  },
+              "nether": { "value": 0.11  },
+              "phantasm": { "value": 0.04  }
+            }
+          }
         ]
       }
     ]
@@ -381,12 +394,12 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackType,secondaryAttackType,counter": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
-                  "verdant": { "value": 0.1 },
-                  "eradication": { "value": 0.2 },
-                  "nether": { "value": 0.1 },
+                  "verdant": { "value": 0.10 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.10 },
                   "phantasm": { "value": 0.05 }
                 }
               }
@@ -401,7 +414,7 @@
     "name": "Chain Lightning",
     "magic": "eradication",
     "rank": "complex",
-    "description": "TODO",
+    "description": "This is an advanced level spell of the lightning blast spell. It will shoot a powerful bolt of lightning at one enemy group causing heavy lightning damage, leaving it in state of shock which will hinder it's ability to fight. After that, it will split into secondary lightning bolts which will sweep through the battlefield, harming everything in their way. This spell is very effective against massive amounts of weak units, although it has to be used with care. Area of effect: all enemy units.",
     "attributes": ["battle"],
     "researchCost": 5000,
     "castingCost": 100000,
@@ -451,6 +464,57 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.05 },
+                  "verdant": { "value": 0.10 },
+                  "eradication": { "value": 0.22 },
+                  "nether": { "value": 0.10 },
+                  "phantasm": { "value": 0.05 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.025 },
+                  "verdant": { "value": -0.05 },
+                  "eradication": { "value": -0.10 },
+                  "nether": { "value": -0.05 },
+                  "phantasm": { "value": -0.025  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["goblin"],
+        "summonType": "all",
+        "summonNetPower": 5500,
+        "rule": "spellLevel",
+        "magic": {
+          "eradication": { "value": 1.0 }
+        }
+      }
     ]
   },
   {
@@ -494,7 +558,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnit",
+            "rule": "spellLevelUnitLoss",
             "magic": {
               "ascendant": { "value": 0.019 },
               "verdant": { "value": 0.035 },
@@ -535,7 +599,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "spellLevelPercentage",
+                "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.04 },
@@ -626,6 +690,47 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "attackResistances": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -4.5 },
+                  "verdant": { "value": -9 },
+                  "eradication": { "value": -30 },
+                  "nether": { "value": -9 },
+                  "phantasm": { "value": -4.5 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "efficiency": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "ascendant": { "value": -5 },
+                  "verdant": { "value": -11 },
+                  "eradication": { "value": -20 },
+                  "nether": { "value": -11 },
+                  "phantasm": { "value": -5 }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {
@@ -717,7 +822,7 @@
     "name": "Call Dwavern Shaman",
     "magic": "eradication",
     "rank": "complex",
-    "description": "",
+    "description": "TODO",
     "attributes": ["summon"],
     "researchCost": 4000,
     "castingCost": 40000,
@@ -745,7 +850,7 @@
     "name": "Call Storm Giant",
     "magic": "eradication",
     "rank": "complex",
-    "description": "",
+    "description": "TODO",
     "attributes": ["summon"],
     "researchCost": 5000,
     "castingCost": 50000,
@@ -843,6 +948,20 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "eradication": {
+                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": 3000 } }
+                  }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -866,6 +985,15 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "spellLevelUnitDamage",
+            "magic": {
+              "eradication": { "value": 0.33 }
+            }
+          }
         ]
       }
     ]

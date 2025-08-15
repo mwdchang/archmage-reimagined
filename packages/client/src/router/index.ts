@@ -22,7 +22,6 @@ import RecruitView from '@/views/RecruitView.vue';
 import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
-import DisbandView from '@/views/DisbandView.vue';
 
 const router = createRouter({
   //@ts-ignore

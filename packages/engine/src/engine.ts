@@ -1,4 +1,4 @@
-import _  from 'lodash';
+import _ from 'lodash';
 import { 
   loadUnitData,
   loadSpellData,
@@ -11,6 +11,7 @@ import {
 } from './base/references';
 import { 
   createMage, 
+  createMageTest,
   totalLand,
   totalNetPower
 } from './base/mage';
@@ -82,10 +83,12 @@ const totalArmyPower = (army: ArmyUnit[]) => {
 
 class Engine {
   adapter: DataAdapter;
+  debug: boolean = false;
 
-  constructor(adapter: DataAdapter) {
+  constructor(adapter: DataAdapter, debug: boolean = false) {
     // Load dependencies
     this.adapter = adapter;
+    this.debug = debug;
   }
 
   async initialize() {
@@ -212,7 +215,43 @@ class Engine {
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
     
 
-    // 5. calculate upkeep
+    // 5. enchantment summoning effects
+    const enchantments = mage.enchantments;
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
+      if (summonEffects.length === 0) continue;
+
+      for (const summonEffect of summonEffects) {
+
+        // FIXME: use enchantment.casterMagic + enchantments.spellLevel
+        const res = summonUnit(mage, summonEffect);
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key); 
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
+            });
+          }
+        });
+      }
+
+      // If enchantment has life, update
+      if (enchantment.life && enchantment.life > 0) {
+        enchantment.life --;
+      }
+    }
+    mage.enchantments = mage.enchantments.filter(d => {
+      if (d.isPermanent === false) {
+        return d.life > 0;
+      }
+      return true;
+    });
+
+    // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
@@ -369,11 +408,19 @@ class Engine {
       spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
-      isPermanent: spell.life > 0 ? true : false,
+      isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
     }
     mage.enchantments.push(enchantment);
+    console.log('cast enchantment', enchantment);
     await this.adapter.updateMage(mage);
+
+    result.push({
+      type: 'log',
+      message: `You cast ${spell.name} on yourself`
+    });
+
+    return result;
   }
 
   async summonByItem(mage: Mage, itemId: string, num: number) {
@@ -679,6 +726,19 @@ class Engine {
 
     // 2. return mage
     const mage = createMage(username, magic);
+
+    // 3. Write to data store
+    this.adapter.createMage(username, mage);
+    return { user: res.user, mage };
+  }
+
+  /* For ease of testing */
+  async registerTestMage(username: string, password: string, magic: string, partial: Partial<Mage>) {
+    // 1. register player
+    const res = await this.adapter.register(username, password);
+
+    // 2. return mage
+    const mage = createMageTest(username, magic, partial);
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);

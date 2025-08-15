@@ -654,7 +654,7 @@
     "powerRank": 20,
     "hitPoints": 130,
     "race": ["illusion"],
-    "attributes": ["speical"],
+    "attributes": ["special"],
 
     "primaryAttackPower": 100,
     "primaryAttackType": ["ranged", "psychic"],
