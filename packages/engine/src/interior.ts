@@ -29,6 +29,9 @@ export const buildingTypes: Building[] = [
   { id: 'forts', geldCost: 3000, manaCost: 0 },
   { id: 'barriers', geldCost: 50, manaCost: 0 }
 ];
+export const getBuildingTypes = () => {
+  return buildingTypes.map(d => d.id);
+};
 
 export const buildingRate = (mage: Mage, buildType: string) => {
   if (buildType === 'farms') return (mage.workshops + 1) / 5;

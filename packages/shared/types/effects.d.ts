@@ -106,13 +106,44 @@ export interface UnitSummonEffect extends Effect {
   }
 }
 
-
 export interface KingdomResistanceEffect extends Effect {
   rule: 'spellLevel',
   resistance: string,
   magic: {
     [key: string]: {
       value: number
+    }
+  }
+}
+
+export interface KingdomBuildingsDamageEffect extends Effect {
+  rule: 'landPercentage',
+  magic: {
+    [key: string]: {
+      value: {
+        farms?: { min: number, max: number },
+        towns?: { min: number, max: number },
+        workshops?: { min: number, max: number }
+        nodes?: { min: number, max: number }
+        barracks?: { min: number, max: number }
+        guilds?: { min: number, max: number }
+        forts?: { min: number, max: number }
+        barriers?: { min: number, max: number }
+      }
+    }
+  }
+}
+
+export interface KingdomResourcesDamageEffect extends Effect {
+  rule: 'spellLevel',
+  magic: {
+    [key: string]: {
+      value: {
+        geld?: { min: number, max: number },
+        mana?: { min: number, max: number },
+        population?: { min: number, max: number },
+        items?: { min: number, max: number },
+      }
     }
   }
 }

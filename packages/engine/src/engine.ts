@@ -8,6 +8,7 @@ import {
   initializeResearchTree, 
   magicTypes,
   getUnitById,
+  getMaxSpellLevels,
 } from './base/references';
 import { 
   createMage, 
@@ -30,7 +31,9 @@ import {
   armyUpkeep,
   buildingUpkeep,
   realMaxPopulation,
-  recruitmentAmount
+  recruitmentAmount,
+  buildingTypes,
+  getBuildingTypes
 } from './interior';
 import { 
   doResearch,
@@ -43,12 +46,13 @@ import {
   castingCost,
   successCastingRate,
   currentSpellLevel,
-  enchantmentUpkeep
+  enchantmentUpkeep,
+  maxSpellLevel
 } from './magic';
 import { battle, resolveBattle } from './war';
-import { UnitSummonEffect } from 'shared/types/effects';
+import { UnitSummonEffect, KingdomBuildingsDamageEffect } from 'shared/types/effects';
 
-import { randomInt } from './random';
+import { randomInt, between } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -153,6 +157,67 @@ class Engine {
     }
   }
 
+  useTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]) {
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
+      if (summonEffects.length === 0) continue;
+
+      for (const summonEffect of summonEffects) {
+        // FIXME: use enchantment.casterMagic + enchantments.spellLevel
+        const res = summonUnit(mage, summonEffect);
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key); 
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
+            });
+          }
+        });
+      }
+    }
+  }
+
+  useTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
+    const buildingTypes = getBuildingTypes();
+
+
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const damageEffects = spell.effects.filter(d => d.effectType === 'KingdomBuildingDamageEffect') as KingdomBuildingsDamageEffect[];
+      if (damageEffects.length === 0) continue;
+
+      const spellLevel = enchantment.spellLevel;
+      const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
+      const spellPowerScale = spellLevel / maxSpellLevel;
+
+      for (const damageEffect of damageEffects) {
+        if (damageEffect.rule === 'landPercentage') {
+          const mageLand = totalLand(mage);
+          const manifest = damageEffect.magic[enchantment.casterMagic].value;
+
+          for (const buildingType in buildingTypes) {
+            if (!manifest[buildingType]) continue;
+
+            const minPercent = manifest[buildingType].min;
+            const maxPercent = manifest[buildingType].max;
+            const damagePercent = between(minPercent, maxPercent);
+            let destroyed = Math.floor(mageLand * damagePercent * spellPowerScale);
+
+            // FIXME:logging
+            if (mage[buildingType] < destroyed) {
+              destroyed = mage[buildingType];
+            }
+            mage[buildingType] -= destroyed;
+          }
+        }
+      }
+    }
+  }
+
   // Use one turn for a mage
   useTurn(mage: Mage) {
     // 1. use turn
@@ -215,36 +280,21 @@ class Engine {
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
     
 
-    // 5. enchantment summoning effects
+    // 5. enchantment 
+    // - summoning effects
+    // - damage effects
     const enchantments = mage.enchantments;
-    for (const enchantment of enchantments) {
-      const spell = getSpellById(enchantment.spellId);
-      const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
-      if (summonEffects.length === 0) continue;
+    this.useTurnEnchantmentSummon(mage, enchantments);
+    this.useTurnEnchantmentDamage(mage, enchantments);
 
-      for (const summonEffect of summonEffects) {
 
-        // FIXME: use enchantment.casterMagic + enchantments.spellLevel
-        const res = summonUnit(mage, summonEffect);
-        Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key); 
-          if (stack) {
-            stack.size += res[key];
-          } else {
-            mage.army.push({
-              id: key,
-              size: res[key]
-            });
-          }
-        });
-      }
-
-      // If enchantment has life, update
-      if (enchantment.life && enchantment.life > 0) {
-        enchantment.life --;
-      }
-    }
+    // Enchantment life and upkeep
     mage.enchantments = mage.enchantments.filter(d => {
+      // If enchantment has life, update
+      if (d.life && d.life > 0) {
+        d.life --;
+      }
+
       if (d.isPermanent === false) {
         return d.life > 0;
       }
