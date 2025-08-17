@@ -19,7 +19,7 @@ export const applyKingdomResourcesEffect = (
     const base = between(min, max);
 
     // Give it a little bit of randomness
-    let value = Math.floor((0.5 + 0.5 * randomBM()) * spellPowerScale * base);
+    let value = Math.floor((1.0 + 0.4 * randomBM()) * spellPowerScale * base);
     if (effect.rule === 'spellLevelLoss') {
       value = -value;
     }
@@ -46,10 +46,11 @@ export const applyKingdomResourcesEffect = (
       if (value > 0) {
         // item gain
         for (let i = 0; i < value; i++) {
-          doItemGeneration(mage, true);
+          const item = doItemGeneration(mage, true);
+          console.log(`Found ${item.id}`);
         }
       } else {
-        // item loss
+        // FIXME: item loss
       }
     }
   }

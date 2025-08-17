@@ -52,7 +52,7 @@ import {
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { battle, resolveBattle } from './war';
-import { UnitSummonEffect, KingdomBuildingsEffect, KingdomResourcesEffect } from 'shared/types/effects';
+import { UnitSummonEffect, KingdomBuildingsEffect, KingdomResourcesEffect, EffectOrigin } from 'shared/types/effects';
 
 import { randomInt, between, randomBM } from './random';
 
@@ -423,7 +423,7 @@ class Engine {
         } else if (spell.attributes.includes('enchantment')) {
           this.enchant(mage, spellId);
         } else if (spell.attributes.includes('instant')) {
-          this.instant(mage, spellId);
+          this.instantSelf(mage, spellId);
         }
       }
       this.useTurns(mage, spell.castingTurn);
@@ -434,9 +434,23 @@ class Engine {
   /**
    * instant harmful or beneficial effects
   **/
-  async instant(mage: Mage, spellId: string) {
-  }
+  async instantSelf(mage: Mage, spellId: string) {
+    const spell = getSpellById(spellId);
+    const origin: EffectOrigin = {
+      id: mage.id,
+      spellLevel: mage.currentSpellLevel,
+      magic: mage.magic,
+      targetId: mage.id
+    };
 
+    for (const effect of spell.effects) {
+      if (effect.effectType === 'KingdomResourcesEffect') {
+        applyKingdomResourcesEffect(mage, effect as any, origin);
+      } else if (effect.effectType === 'KingdomBuildingsEffect') {
+        applyKingdomBuildingsEffect(mage, effect as any, origin);
+      }
+    }
+  }
 
   async enchant(mage: Mage, spellId: string) {
     const spell = getSpellById(spellId);
