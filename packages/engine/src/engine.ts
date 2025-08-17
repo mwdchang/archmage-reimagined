@@ -32,7 +32,6 @@ import {
   buildingUpkeep,
   realMaxPopulation,
   recruitmentAmount,
-  buildingTypes,
   getBuildingTypes
 } from './interior';
 import { 
@@ -50,9 +49,9 @@ import {
   maxSpellLevel
 } from './magic';
 import { battle, resolveBattle } from './war';
-import { UnitSummonEffect, KingdomBuildingsDamageEffect } from 'shared/types/effects';
+import { UnitSummonEffect, KingdomBuildingsEffect, KingdomResourcesEffect } from 'shared/types/effects';
 
-import { randomInt, between } from './random';
+import { randomInt, between, randomBM } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -182,36 +181,105 @@ class Engine {
   }
 
   useTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
-    const buildingTypes = getBuildingTypes();
+    const mageLand = totalLand(mage);
 
-
+    // handle buildings
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
-      const damageEffects = spell.effects.filter(d => d.effectType === 'KingdomBuildingDamageEffect') as KingdomBuildingsDamageEffect[];
-      if (damageEffects.length === 0) continue;
+      const effects = spell.effects
+        .filter(d => d.effectType === 'KingdomBuildingsEffect') as KingdomBuildingsEffect[];
+
+      if (effects.length === 0) continue;
 
       const spellLevel = enchantment.spellLevel;
       const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
       const spellPowerScale = spellLevel / maxSpellLevel;
 
-      for (const damageEffect of damageEffects) {
-        if (damageEffect.rule === 'landPercentage') {
-          const mageLand = totalLand(mage);
-          const manifest = damageEffect.magic[enchantment.casterMagic].value;
+      for (const effect of effects) {
+        if (effect.rule === 'landPercentage') {
+          const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
+          const percent = between(min, max) / 100 * spellPowerScale;
 
-          for (const buildingType in buildingTypes) {
-            if (!manifest[buildingType]) continue;
+          const buildingTypes = effect.target === 'all' ?
+            getBuildingTypes() :
+            effect.target.split(','); 
 
-            const minPercent = manifest[buildingType].min;
-            const maxPercent = manifest[buildingType].max;
-            const damagePercent = between(minPercent, maxPercent);
-            let destroyed = Math.floor(mageLand * damagePercent * spellPowerScale);
+          // Create buffers
+          const buffer: { [key: string]: number } = {};
+          let totalBuildings = 0;
+          for (const buildingType of buildingTypes) {
+            totalBuildings += mage[buildingType];
+            buffer[buildingType] = 0;
+          }
+
+          // Distribute damage
+          let counter = Math.abs(Math.ceil(totalLand(mage) * percent));
+          while (counter > 0) {
+            const r = Math.random() * totalBuildings;
+            let acc = 0;
+            for (const buildingType of buildingTypes) {
+              acc += mage[buildingType];
+              if (r < acc) {
+                buffer[buildingType] ++;
+                break;
+              }
+            }
+            counter --;
+          }
+
+          // Resolve
+          for (const buildingType of buildingTypes) {
+            if (mage[buildingType] - buffer[buildingType] <= 0) {
+              buffer[buildingType] = mage[buildingType]
+            }
+            mage[buildingType] -= buffer[buildingType];
+            mage['wilderness'] += buffer[buildingType];
 
             // FIXME:logging
-            if (mage[buildingType] < destroyed) {
-              destroyed = mage[buildingType];
+            console.log(`mage(#${mage.id}) ${buffer[buildingType]} ${buildingType} destroyed by ${enchantment.spellId}`);
+          }
+        }
+      }
+    }
+
+    // handle resources
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const effects = spell.effects
+        .filter(d => d.effectType === 'KingdomResourcesEffect') as KingdomResourcesEffect[];
+
+      if (effects.length === 0) continue;
+
+      const spellLevel = enchantment.spellLevel;
+      const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
+      const spellPowerScale = spellLevel / maxSpellLevel;
+
+      for (const effect of effects) {
+        if (effect.rule === 'spellLevel') {
+          const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
+          const base = between(min, max);
+
+          let value = Math.floor((0.5 + 0.5 * randomBM()) * spellPowerScale * base);
+          if (effect.target === 'population') {
+            if (mage.currentPopulation - value <= 0) {
+              value = mage.currentPopulation;
             }
-            mage[buildingType] -= destroyed;
+            mage.currentPopulation -= value;
+            console.log(`mage(#${mage.id}) lost ${value} population by ${enchantment.spellId}`);
+          } else if (effect.target === 'geld') {
+            if (mage.currentGeld - value <= 0) {
+              value = mage.currentGeld;
+            }
+            mage.currentPopulation -= value;
+            console.log(`mage(#${mage.id}) lost ${value} geld by ${enchantment.spellId}`);
+          } else if (effect.target === 'mana') {
+            if (mage.currentMana - value <= 0) {
+              value = mage.currentMana;
+            }
+            mage.currentMana -= value;
+            console.log(`mage(#${mage.id}) lost ${value} mana by ${enchantment.spellId}`);
+          } else if (effect.target === 'item') {
+            // TODO
           }
         }
       }
@@ -220,6 +288,7 @@ class Engine {
 
   // Use one turn for a mage
   useTurn(mage: Mage) {
+    console.log('[Turn]');
     // 1. use turn
     mage.currentTurn --;
 
@@ -293,6 +362,9 @@ class Engine {
       // If enchantment has life, update
       if (d.life && d.life > 0) {
         d.life --;
+      }
+      if (d.life === 0) {
+        console.log(`${d.casterId} ${d.spellId} expired`)
       }
 
       if (d.isPermanent === false) {

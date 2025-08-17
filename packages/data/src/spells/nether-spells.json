@@ -454,6 +454,30 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "KingdomBuildingsEffect",
+        "rule": "landPercentage",
+        "target": "all",
+        "magic": {
+          "ascendant": { "value": { "min": 0.1, "max": 0.2 } },
+          "verdant": { "value": { "min": 0.1, "max": 0.2 } },
+          "eradication": { "value": { "min": 0.2, "max": 0.8 } },
+          "nether": { "value": { "min": 0.3, "max": 2.0 } },
+          "phantasm": { "value": { "min": 0.2, "max": 0.8 } }
+        }
+      },
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "spellLevel",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": 400, "max": 5000 } },
+          "verdant": { "value": { "min": 400, "max": 5000 } },
+          "eradication": { "value": { "min": 2200, "max": 10000 } },
+          "nether": { "value": { "min": 3000, "max": 20000 } },
+          "phantasm": { "value": { "min": 2200, "max": 10000 } }
+        }
+      }
     ]
   },
   {
@@ -588,7 +612,7 @@
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["zombie", "wraith", "lich", "vampire", "shadown"],
+        "unitIds": ["zombie", "wraith", "lich", "vampire", "shadow"],
         "summonType": "random",
         "summonNetPower": 180000,
         "rule": "spellLevel",

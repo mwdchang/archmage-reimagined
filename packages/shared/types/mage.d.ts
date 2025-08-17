@@ -41,7 +41,7 @@ export interface Enchantment {
   targetId: number;
 
   spellId: string;
-  spellMagic: string;
+  spellMagic: string; // not used???
   spellLevel: number;
 
   isPermanent: boolean;
