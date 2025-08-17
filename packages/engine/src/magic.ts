@@ -53,9 +53,9 @@ export const itemGenerationRate = (mage: Mage) => {
   return rate;
 }
 
-export const doItemGeneration = (mage: Mage) => {
+export const doItemGeneration = (mage: Mage, force: boolean = false) => {
   const rate = itemGenerationRate(mage);
-  if (Math.random() <= rate) {
+  if (Math.random() <= rate || force === true) {
     const item = getRandomItem();
     console.log('Found an item!!!', item.name);
 

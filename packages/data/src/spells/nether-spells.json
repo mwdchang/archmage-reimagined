@@ -456,7 +456,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "landPercentage",
+        "rule": "landPercentageLoss",
         "target": "all",
         "magic": {
           "ascendant": { "value": { "min": 0.1, "max": 0.2 } },
@@ -468,7 +468,7 @@
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevel",
+        "rule": "spellLevelLoss",
         "target": "population",
         "magic": {
           "ascendant": { "value": { "min": 400, "max": 5000 } },

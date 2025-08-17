@@ -9,6 +9,7 @@ import {
   magicTypes,
   getUnitById,
   getMaxSpellLevels,
+  getRandomItem,
 } from './base/references';
 import { 
   createMage, 
@@ -196,7 +197,7 @@ class Engine {
       const spellPowerScale = spellLevel / maxSpellLevel;
 
       for (const effect of effects) {
-        if (effect.rule === 'landPercentage') {
+        if (effect.rule === 'landPercentageLoss') {
           const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
           const percent = between(min, max) / 100 * spellPowerScale;
 
@@ -255,31 +256,40 @@ class Engine {
       const spellPowerScale = spellLevel / maxSpellLevel;
 
       for (const effect of effects) {
-        if (effect.rule === 'spellLevel') {
+        if (effect.rule === 'spellLevelLoss' || effect.rule === 'spellLevelGain') {
           const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
           const base = between(min, max);
 
+          // Give it a little bit of randomness
           let value = Math.floor((0.5 + 0.5 * randomBM()) * spellPowerScale * base);
+          if (effect.rule === 'spellLevelLoss') {
+            value = -value;
+          }
+
           if (effect.target === 'population') {
-            if (mage.currentPopulation - value <= 0) {
-              value = mage.currentPopulation;
+            if (mage.currentPopulation + value <= 0) {
+              value = -mage.currentPopulation;
             }
-            mage.currentPopulation -= value;
+            mage.currentPopulation += value;
             console.log(`mage(#${mage.id}) lost ${value} population by ${enchantment.spellId}`);
           } else if (effect.target === 'geld') {
-            if (mage.currentGeld - value <= 0) {
-              value = mage.currentGeld;
+            if (mage.currentGeld + value <= 0) {
+              value = -mage.currentGeld;
             }
-            mage.currentPopulation -= value;
+            mage.currentPopulation += value;
             console.log(`mage(#${mage.id}) lost ${value} geld by ${enchantment.spellId}`);
           } else if (effect.target === 'mana') {
-            if (mage.currentMana - value <= 0) {
-              value = mage.currentMana;
+            if (mage.currentMana + value <= 0) {
+              value = -mage.currentMana;
             }
-            mage.currentMana -= value;
+            mage.currentMana += value;
             console.log(`mage(#${mage.id}) lost ${value} mana by ${enchantment.spellId}`);
           } else if (effect.target === 'item') {
-            // TODO
+            if (value > 0) {
+              for (let i = 0; i < value; i++) {
+                doItemGeneration(mage, true);
+              }
+            }
           }
         }
       }
@@ -474,14 +484,23 @@ class Engine {
 
   async castSpell(mage: Mage, spellId: string, num: number, target: number) {
     const spell = getSpellById(spellId);
-    if (spell.attributes.includes('summon')) {
-      return this.summon(mage, spellId, num);
-    } else if (spell.attributes.includes('enchantment')) {
-      return this.enchant(mage, spellId, target);
-    }
+    const attributes = spell.attributes;
+    const logs: GameMsg[] = [];
 
-    // TODO: offensive spells
+    for (let i = 0; i < num; i++) {
+      if (attributes.includes('selfOnly')) {
+        if (attributes.includes('summon')) {
+          this.summon(mage, spellId);
+        } else if (spell.attributes.includes('enchantment')) {
+          this.enchant(mage, spellId, target);
+        } else if (spell.attributes.includes('instant')) {
+        }
+      }
+      this.useTurns(mage, spell.castingTurn);
+    }
+    return logs;
   }
+
 
   async enchant(mage: Mage, spellId: string, target: number) {
     const spell = getSpellById(spellId);
@@ -506,7 +525,6 @@ class Engine {
         type: 'error',
         message: `You lost your concentration`
       });
-      this.useTurns(mage, castingTurn);
       return result;
     }
 
@@ -516,7 +534,6 @@ class Engine {
         type: 'error',
         message: `The spell is alrady in effect, your attempt fizzled`
       });
-      this.useTurns(mage, castingTurn);
       return result;
     }
 
@@ -592,60 +609,57 @@ class Engine {
     return result;
   }
 
-  async summon(mage: Mage, spellId: string, num: number) {
+  async summon(mage: Mage, spellId: string) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
     const cost = castingCost(mage, spellId);
     const result: GameMsg[] = [];
 
-    for (let i = 0; i < num; i++) {
-      if (mage.currentMana < cost) {
-        result.push({
-          type: 'error',
-          message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
-        });
-        continue;
-      }
-      if (mage.currentTurn < castingTurn) {
-        result.push({
-          type: 'error',
-          message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
-        });
-        continue;
-      }
+    if (mage.currentMana < cost) {
+      result.push({
+        type: 'error',
+        message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
+      });
+      return result;
+    }
+    if (mage.currentTurn < castingTurn) {
+      result.push({
+        type: 'error',
+        message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
+      });
+      return result;
+    }
 
-      // result.push(res);
-      mage.currentMana -= cost;
+    // result.push(res);
+    mage.currentMana -= cost;
 
-      const rate = successCastingRate(mage, spellId);
-      if (Math.random() * 100 > rate) {
-        result.push({
-          type: 'error',
-          message: `You lost your concentration`
-        });
-      } else {
-        const effects: UnitSummonEffect[] = spell.effects as UnitSummonEffect[];
-        effects.forEach(effect => {
-          const res = summonUnit(mage, effect);
-          // Add to existing army
-          Object.keys(res).forEach(key => {
-            const stack = mage.army.find(d => d.id === key); 
-            if (stack) {
-              stack.size += res[key];
-            } else {
-              mage.army.push({
-                id: key,
-                size: res[key]
-              });
-            }
-            result.push({
-              type: 'log',
-              message: `Summoned ${res[key]} ${key} into your army`
+    const rate = successCastingRate(mage, spellId);
+    if (Math.random() * 100 > rate) {
+      result.push({
+        type: 'error',
+        message: `You lost your concentration`
+      });
+    } else {
+      const effects: UnitSummonEffect[] = spell.effects as UnitSummonEffect[];
+      effects.forEach(effect => {
+        const res = summonUnit(mage, effect);
+        // Add to existing army
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key); 
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
             });
+          }
+          result.push({
+            type: 'log',
+            message: `Summoned ${res[key]} ${key} into your army`
           });
         });
-      }
-      this.useTurns(mage, castingTurn);
+      });
     }
     await this.adapter.updateMage(mage);
     return result;

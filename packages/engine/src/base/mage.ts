@@ -34,6 +34,7 @@ export const createMage = (name: string, magic: string): Mage => {
     netPower: 0,
     currentTurn: 2000,
     maxTurn: 2000,
+    turnsUsed: 0,
 
     currentPopulation: 1000,
     currentMana: 1000,

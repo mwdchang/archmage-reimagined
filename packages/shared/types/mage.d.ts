@@ -79,6 +79,7 @@ export interface Mage {
 
   currentTurn: number;
   maxTurn: number;
+  turnsUsed: number,
 
   // economy
   currentPopulation: number;

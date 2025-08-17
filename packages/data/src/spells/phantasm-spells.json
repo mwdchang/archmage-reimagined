@@ -684,6 +684,43 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "abilities,": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": "charm", "extra": null }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "abilities,": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "beauty", "extra": null },
+                  "verdant": { "value": "beauty", "extra": null },
+                  "eradication": { "value": "beauty", "extra": null },
+                  "nether": { "value": "beauty", "extra": null },
+                  "phantasm": { "value": "beauty", "extra": null }
+                }
+              }
+            }
+          }
         ]
       }
     ]

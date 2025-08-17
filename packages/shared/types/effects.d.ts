@@ -117,7 +117,7 @@ export interface KingdomResistanceEffect extends Effect {
 }
 
 export interface KingdomBuildingsEffect extends Effect {
-  rule: 'landPercentage',
+  rule: 'landPercentageLoss',
   target: string,
   magic: {
     [key: string]: {
@@ -127,7 +127,7 @@ export interface KingdomBuildingsEffect extends Effect {
 }
 
 export interface KingdomResourcesEffect extends Effect {
-  rule: 'spellLevel',
+  rule: 'spellLevelLoss' | 'spellLevelGain',
   target: string,
   magic: {
     [key: string]: {
