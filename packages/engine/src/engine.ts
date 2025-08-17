@@ -49,6 +49,8 @@ import {
   enchantmentUpkeep,
   maxSpellLevel
 } from './magic';
+import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
+import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { battle, resolveBattle } from './war';
 import { UnitSummonEffect, KingdomBuildingsEffect, KingdomResourcesEffect } from 'shared/types/effects';
 
@@ -192,54 +194,13 @@ class Engine {
 
       if (effects.length === 0) continue;
 
-      const spellLevel = enchantment.spellLevel;
-      const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
-      const spellPowerScale = spellLevel / maxSpellLevel;
-
       for (const effect of effects) {
-        if (effect.rule === 'landPercentageLoss') {
-          const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
-          const percent = between(min, max) / 100 * spellPowerScale;
-
-          const buildingTypes = effect.target === 'all' ?
-            getBuildingTypes() :
-            effect.target.split(','); 
-
-          // Create buffers
-          const buffer: { [key: string]: number } = {};
-          let totalBuildings = 0;
-          for (const buildingType of buildingTypes) {
-            totalBuildings += mage[buildingType];
-            buffer[buildingType] = 0;
-          }
-
-          // Distribute damage
-          let counter = Math.abs(Math.ceil(totalLand(mage) * percent));
-          while (counter > 0) {
-            const r = Math.random() * totalBuildings;
-            let acc = 0;
-            for (const buildingType of buildingTypes) {
-              acc += mage[buildingType];
-              if (r < acc) {
-                buffer[buildingType] ++;
-                break;
-              }
-            }
-            counter --;
-          }
-
-          // Resolve
-          for (const buildingType of buildingTypes) {
-            if (mage[buildingType] - buffer[buildingType] <= 0) {
-              buffer[buildingType] = mage[buildingType]
-            }
-            mage[buildingType] -= buffer[buildingType];
-            mage['wilderness'] += buffer[buildingType];
-
-            // FIXME:logging
-            console.log(`mage(#${mage.id}) ${buffer[buildingType]} ${buildingType} destroyed by ${enchantment.spellId}`);
-          }
-        }
+        applyKingdomBuildingsEffect(mage, effect, {
+          id: enchantment.casterId,
+          magic: enchantment.casterMagic,
+          spellLevel: enchantment.spellLevel,
+          targetId: enchantment.targetId
+        });
       }
     }
 
@@ -251,47 +212,13 @@ class Engine {
 
       if (effects.length === 0) continue;
 
-      const spellLevel = enchantment.spellLevel;
-      const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
-      const spellPowerScale = spellLevel / maxSpellLevel;
-
       for (const effect of effects) {
-        if (effect.rule === 'spellLevelLoss' || effect.rule === 'spellLevelGain') {
-          const { min, max } = effect.magic[enchantment.casterMagic].value as { min: number, max: number };
-          const base = between(min, max);
-
-          // Give it a little bit of randomness
-          let value = Math.floor((0.5 + 0.5 * randomBM()) * spellPowerScale * base);
-          if (effect.rule === 'spellLevelLoss') {
-            value = -value;
-          }
-
-          if (effect.target === 'population') {
-            if (mage.currentPopulation + value <= 0) {
-              value = -mage.currentPopulation;
-            }
-            mage.currentPopulation += value;
-            console.log(`mage(#${mage.id}) lost ${value} population by ${enchantment.spellId}`);
-          } else if (effect.target === 'geld') {
-            if (mage.currentGeld + value <= 0) {
-              value = -mage.currentGeld;
-            }
-            mage.currentPopulation += value;
-            console.log(`mage(#${mage.id}) lost ${value} geld by ${enchantment.spellId}`);
-          } else if (effect.target === 'mana') {
-            if (mage.currentMana + value <= 0) {
-              value = -mage.currentMana;
-            }
-            mage.currentMana += value;
-            console.log(`mage(#${mage.id}) lost ${value} mana by ${enchantment.spellId}`);
-          } else if (effect.target === 'item') {
-            if (value > 0) {
-              for (let i = 0; i < value; i++) {
-                doItemGeneration(mage, true);
-              }
-            }
-          }
-        }
+        applyKingdomResourcesEffect(mage, effect, {
+          id: enchantment.casterId,
+          magic: enchantment.casterMagic,
+          spellLevel: enchantment.spellLevel,
+          targetId: enchantment.targetId
+        });
       }
     }
   }
@@ -482,6 +409,8 @@ class Engine {
     }
   }
 
+  // - factor out spell success/fail
+  // - logs
   async castSpell(mage: Mage, spellId: string, num: number, target: number) {
     const spell = getSpellById(spellId);
     const attributes = spell.attributes;
@@ -492,8 +421,9 @@ class Engine {
         if (attributes.includes('summon')) {
           this.summon(mage, spellId);
         } else if (spell.attributes.includes('enchantment')) {
-          this.enchant(mage, spellId, target);
+          this.enchant(mage, spellId);
         } else if (spell.attributes.includes('instant')) {
+          this.instant(mage, spellId);
         }
       }
       this.useTurns(mage, spell.castingTurn);
@@ -501,8 +431,14 @@ class Engine {
     return logs;
   }
 
+  /**
+   * instant harmful or beneficial effects
+  **/
+  async instant(mage: Mage, spellId: string) {
+  }
 
-  async enchant(mage: Mage, spellId: string, target: number) {
+
+  async enchant(mage: Mage, spellId: string) {
     const spell = getSpellById(spellId);
     const castingTurn = spell.castingTurn;
     let cost = castingCost(mage, spellId);

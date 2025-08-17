@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
-import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect } from 'shared/types/effects';
+import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect, EffectOrigin } from 'shared/types/effects';
 import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
@@ -26,14 +26,6 @@ import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-export interface EffectOrigin {
-  id: number,
-  magic: string,
-  spellLevel: number,
-  targetId: number,
-}
 
 const calcDamageVariance = (attackType: String[]) => {
   let randomModifier = randomBM();

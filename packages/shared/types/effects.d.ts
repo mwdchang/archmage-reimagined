@@ -5,6 +5,14 @@ export interface Effect {
   effectType: string
 }
 
+export interface EffectOrigin {
+  id: number,
+  magic: string,
+  spellLevel: number,
+  targetId: number,
+  spellId?: string,
+}
+
 /**
  * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
  * units attributes, cause direct damages, or alter unit abilities.
