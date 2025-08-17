@@ -258,7 +258,7 @@ export const manaIncome = (mage: Mage) => {
     for (const effect of productionEffects) {
       if (effect.production !== 'nodes') continue;
 
-      const base = effect.magic[enchantment.spellMagic];
+      const base = effect.magic[enchantment.casterMagic];
       if (!base) continue;
     
       const rule = effect.rule;

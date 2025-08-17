@@ -603,6 +603,30 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": null,
+        "rule": "addSpellLevelPercentageBase",
+        "magic": {
+          "ascendant": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
+          "verdant": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
+          "eradication": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
+          "nether": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
+          "phantasm": { "value": { "geld": 0, "mana": -0.10, "population": 0 } }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addPercentageBase",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": -0.25 },
+          "verdant": { "value": -0.50 },
+          "eradication": { "value": -0.50 },
+          "nether": { "value": -0.25 },
+          "phantasm": { "value": -0.15 }
+        }
+      }
     ]
   },
   {

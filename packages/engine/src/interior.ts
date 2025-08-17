@@ -133,7 +133,25 @@ export const populationIncome = (mage: Mage) => {
 }
 
 export const geldIncome = (mage: Mage) => {
-  return mage.currentPopulation + 1000;
+  const baseIncome = mage.currentPopulation + 1000;
+  let delta = 0
+
+  for (const enchantment of mage.enchantments) {
+    const spell = getSpellById(enchantment.spellId);
+    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+    
+    for (const effect of productionEffects) {
+      if (effect.production !== 'geld' || !effect.magic[enchantment.casterMagic]) continue;
+      
+      if (effect.rule === 'spellLevel') { 
+        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
+      } else if (effect.rule === 'addPercentageBase') {
+        delta += effect.magic[enchantment.casterMagic].value * baseIncome;
+      }
+    }
+  }
+  return baseIncome + delta;
 }
 
 export const armyUpkeep = (mage: Mage) => {
@@ -149,7 +167,7 @@ export const armyUpkeep = (mage: Mage) => {
     // current level of the mage
     for (const enchantment of mage.enchantments) {
       const spell = getSpellById(enchantment.spellId);
-      const enchantMaxSpellLevel = getMaxSpellLevels()[enchantment.spellMagic];
+      const enchantMaxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
 
       const armyUpkeepEffects = spell.effects.filter(d => d.effectType === 'ArmyUpkeepEffect') as ArmyUpkeepEffect[];
       if (armyUpkeepEffects.length === 0) continue;
@@ -170,7 +188,7 @@ export const armyUpkeep = (mage: Mage) => {
 
         // Finally apply the effect
         if (isMatch === true) {
-          const base = effect.magic[enchantment.spellMagic];
+          const base = effect.magic[enchantment.casterMagic];
 
           if (effect.rule === 'addSpellLevelPercentageBase') {
             const percentage = (enchantment.spellLevel / enchantMaxSpellLevel);
@@ -235,5 +253,3 @@ export const buildingUpkeep = (mage: Mage) => {
   result.mana += 30 * mage.barriers;
   return result;
 }
-
-
