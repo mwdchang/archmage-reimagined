@@ -843,6 +843,32 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dryad", "nymph", "treant"],
+        "summonType": "all",
+        "summonNetPower": 5000,
+        "rule": "spellLevel",
+        "magic": {
+          "verdant": { "value": 1.0 }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "verdant": { "value": 0.2 }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addPercentageBase",
+        "production": "population",
+        "magic": {
+          "verdant": { "value": 0.15 }
+        }
+      }
     ]
   },
   {

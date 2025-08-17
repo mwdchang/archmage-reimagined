@@ -146,7 +146,7 @@ export interface KingdomResourcesEffect extends Effect {
 
 export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' 
-  production: 'farms' | 'guilds' | 'nodes' | 'geld',
+  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
   magic: {
     [key: string]: {
       value: number

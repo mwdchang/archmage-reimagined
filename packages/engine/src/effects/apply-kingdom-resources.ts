@@ -5,7 +5,7 @@ import { between, randomBM } from "../random";
 import { doItemGeneration } from "../magic";
 
 export const applyKingdomResourcesEffect = (
-  mage: Mage, 
+  mage: Mage,
   effect: KingdomResourcesEffect,
   origin: EffectOrigin
 ) => {

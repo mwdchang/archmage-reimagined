@@ -6,9 +6,9 @@ import { getBuildingTypes } from "../interior";
 import { totalLand } from "../base/mage";
 
 export const applyKingdomBuildingsEffect = (
-  mage: Mage, 
-  effect: KingdomBuildingsEffect, 
-  origin: EffectOrigin 
+  mage: Mage,
+  effect: KingdomBuildingsEffect,
+  origin: EffectOrigin
 ) => {
   const spellLevel = origin.spellLevel;
   const magic = origin.magic;
@@ -22,7 +22,7 @@ export const applyKingdomBuildingsEffect = (
 
     const buildingTypes = effect.target === 'all' ?
       getBuildingTypes() :
-      effect.target.split(','); 
+      effect.target.split(',');
 
     // Create buffers
     const buffer: { [key: string]: number } = {};

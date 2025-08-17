@@ -5,7 +5,7 @@ import { getUnitById } from "./base/references";
 import { productionTable, explorationLimit } from "./base/config";
 import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
-import { 
+import {
   getSpellById,
 } from './base/references';
 
@@ -51,7 +51,7 @@ export const explorationRate = (mage: Mage) => {
   if (current >= explorationLimit) return 0;
 
   // return 1 + (1/ current) * 2500;
-  return Math.sqrt(explorationLimit - current) / 3; 
+  return Math.sqrt(explorationLimit - current) / 3;
 }
 
 export const explore = (rate: number) => {
@@ -105,7 +105,7 @@ export const maxFood = (mage: Mage) => {
       if (productionEffect.production !== 'farms') return;
 
       if (productionEffect.rule === 'spellLevel') {
-        food += mage.farms * currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+        food += mage.farms * currentSpellLevel(mage) * productionEffect.magic[enchantment.casterMagic].value;
       }
     });
   })
@@ -129,7 +129,26 @@ export const recruitmentAmount = (mage: Mage, unitId: string) => {
 // }
 
 export const populationIncome = (mage: Mage) => {
-  return Math.floor(mage.currentPopulation * 0.015 + 50);
+  const baseIncome = Math.floor(mage.currentPopulation * 0.015 + 50);
+  let delta = 0;
+
+  for (const enchantment of mage.enchantments) {
+    const spell = getSpellById(enchantment.spellId);
+    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+
+    for (const effect of productionEffects) {
+      if (effect.production !== 'population' || !effect.magic[enchantment.casterMagic]) continue;
+
+      if (effect.rule === 'spellLevel') {
+        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
+      } else if (effect.rule === 'addPercentageBase') {
+        delta += effect.magic[enchantment.casterMagic].value * baseIncome;
+      }
+    }
+  }
+
+  return baseIncome + delta;
 }
 
 export const geldIncome = (mage: Mage) => {
@@ -140,11 +159,11 @@ export const geldIncome = (mage: Mage) => {
     const spell = getSpellById(enchantment.spellId);
     const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
     if (productionEffects.length === 0) continue;
-    
+
     for (const effect of productionEffects) {
       if (effect.production !== 'geld' || !effect.magic[enchantment.casterMagic]) continue;
-      
-      if (effect.rule === 'spellLevel') { 
+
+      if (effect.rule === 'spellLevel') {
         delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
       } else if (effect.rule === 'addPercentageBase') {
         delta += effect.magic[enchantment.casterMagic].value * baseIncome;
@@ -227,7 +246,7 @@ export const armyUpkeep = (mage: Mage) => {
   });
 
   return {
-    mana: mana, 
+    mana: mana,
     geld: geld,
     population: pop
   };

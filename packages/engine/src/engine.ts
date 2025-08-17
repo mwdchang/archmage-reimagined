@@ -1,18 +1,18 @@
 import _ from 'lodash';
-import { 
+import {
   loadUnitData,
   loadSpellData,
   loadItemData,
   getSpellById,
   getItemById,
-  initializeResearchTree, 
+  initializeResearchTree,
   magicTypes,
   getUnitById,
   getMaxSpellLevels,
   getRandomItem,
 } from './base/references';
-import { 
-  createMage, 
+import {
+  createMage,
   createMageTest,
   totalLand,
   totalNetPower
@@ -22,7 +22,7 @@ import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import type { BuildPayload, DestroyPayload } from 'shared/types/api';
 import type { MageRank } from 'shared/types/common';
-import { 
+import {
   explore,
   explorationRate,
   buildingTypes,
@@ -35,7 +35,7 @@ import {
   recruitmentAmount,
   getBuildingTypes
 } from './interior';
-import { 
+import {
   doResearch,
   summonUnit,
   researchPoints,
@@ -52,7 +52,12 @@ import {
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { battle, resolveBattle } from './war';
-import { UnitSummonEffect, KingdomBuildingsEffect, KingdomResourcesEffect, EffectOrigin } from 'shared/types/effects';
+import {
+  UnitSummonEffect,
+  KingdomBuildingsEffect,
+  KingdomResourcesEffect,
+  EffectOrigin
+} from 'shared/types/effects';
 
 import { randomInt, between, randomBM } from './random';
 
@@ -113,7 +118,7 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
-    
+
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
@@ -145,7 +150,7 @@ class Engine {
      * - black market and other things
      */
     console.log(`=== Server turn ===`);
-    this.adapter.nextTurn(); 
+    this.adapter.nextTurn();
     this.updateRankList();
 
     setTimeout(() => {
@@ -166,10 +171,14 @@ class Engine {
       if (summonEffects.length === 0) continue;
 
       for (const summonEffect of summonEffects) {
-        // FIXME: use enchantment.casterMagic + enchantments.spellLevel
-        const res = summonUnit(mage, summonEffect);
+        const res = summonUnit(summonEffect, {
+          id: enchantment.casterId,
+          magic: enchantment.casterMagic,
+          spellLevel: enchantment.spellLevel,
+          targetId: mage.id
+        });
         Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key); 
+          const stack = mage.army.find(d => d.id === key);
           if (stack) {
             stack.size += res[key];
           } else {
@@ -284,9 +293,9 @@ class Engine {
     }
     // Clean up
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
-    
 
-    // 5. enchantment 
+
+    // 5. enchantment
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
@@ -534,11 +543,16 @@ class Engine {
 
       const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
       effects.forEach(effect => {
-        const res = summonUnit(mage, effect);
+        const res = summonUnit(effect, {
+          id: mage.id,
+          magic: mage.magic,
+          spellLevel: mage.currentSpellLevel,
+          targetId: mage.id
+        });
 
         // Add to existing army
         Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key); 
+          const stack = mage.army.find(d => d.id === key);
           if (stack) {
             stack.size += res[key];
           } else {
@@ -592,10 +606,15 @@ class Engine {
     } else {
       const effects: UnitSummonEffect[] = spell.effects as UnitSummonEffect[];
       effects.forEach(effect => {
-        const res = summonUnit(mage, effect);
+        const res = summonUnit(effect, {
+          id: mage.id,
+          magic: mage.magic,
+          spellLevel: mage.currentSpellLevel,
+          targetId: mage.id
+        });
         // Add to existing army
         Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key); 
+          const stack = mage.army.find(d => d.id === key);
           if (stack) {
             stack.size += res[key];
           } else {
