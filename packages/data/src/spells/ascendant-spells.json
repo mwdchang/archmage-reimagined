@@ -63,10 +63,10 @@
             "healType": "points",
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 0.01 },
+              "ascendant": { "value": 0.011 },
               "verdant": { "value": 0.005 },
-              "eradication": { "value": 0.003 },
-              "nether": { "value": 0.003 },
+              "eradication": { "value": 0.002 },
+              "nether": { "value": 0.002 },
               "phantasm": { "value": 0.005 }
             }
           }

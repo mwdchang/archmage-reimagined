@@ -555,9 +555,54 @@
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
+        "filters": [
+          {
+            "abilities": ["stealLife"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value":  2 },
+                  "nether": { "value": 4 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "stealLife", "extra": 3 } },
+                  "verdant": { "value": { "name": "stealLife", "extra": 3 } },
+                  "eradication": { "value": { "name": "stealLife", "extra": 5 } },
+                  "nether": { "value": { "name": "stealLife", "extra": 10 } },
+                  "phantasm": { "value": { "name": "stealLife", "extra": 5 } }
+                }
+              }
+            }
+          }
         ]
       }
     ]
