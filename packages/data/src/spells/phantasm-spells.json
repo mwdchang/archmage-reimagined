@@ -80,7 +80,7 @@
     "magic": "phantasm",
     "rank": "simple",
     "description": "This spell will summon playful sprites from nearly springs and fountains. These pretty elfin creatures can be very irritating as they are elusive like a butterfly but sting like a bee.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 500,
     "castingCost": 6600,
     "castingTurn": 1,
@@ -108,7 +108,7 @@
     "magic": "phantasm",
     "rank": "simple",
     "description": "By chanting this incantation, you summon swarms of Psychic Wisps into your army. Striking from a distance with mind warping psychic attacks, these energy beings swiftly decimate your enemies.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 500,
     "castingCost": 6600,
     "castingTurn": 1,
@@ -136,7 +136,7 @@
     "magic": "phantasm",
     "rank": "simple",
     "description": "This spell will summon beautiful sylphs from crystal blue lakes in nearby mountains. The enemy soldiers will stand smitten and mesmerized as their limbs get torn apart by these heartless creatures.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 1500,
     "castingCost": 8100,
     "castingTurn": 2,
@@ -509,7 +509,7 @@
     "magic": "phantasm",
     "rank": "average",
     "description": "This spell will summon seductive sirenes from the rocks overlooking shallow oceans. These insidious creatures will sing bewitching songs to enemy troops to lure them to their destruction.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2100,
     "castingCost": 24500,
     "castingTurn": 3,
@@ -537,7 +537,7 @@
     "magic": "phantasm",
     "rank": "average",
     "description": "When you cast this spell, a horde of Medusas slithers into your army. These beautiful yet fearsome half-women, half-snake will petrify your opponents with a mere glance.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2000,
     "castingCost": 27000,
     "castingTurn": 3,
@@ -565,7 +565,7 @@
     "magic": "phantasm",
     "rank": "average",
     "description": "This spell summons a ferocious snow beast from the icy tundras. These massive creatures are known for their incredible strength and resilience, making them formidable allies in battle.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2100,
     "castingCost": 35000,
     "castingTurn": 3,
@@ -603,6 +603,30 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": null,
+        "rule": "addSpellLevelPercentageBase",
+        "magic": {
+          "ascendant": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
+          "verdant": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
+          "eradication": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
+          "nether": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
+          "phantasm": { "value": { "geld": 0, "mana": -0.10, "population": 0 } }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addPercentageBase",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": -0.25 },
+          "verdant": { "value": -0.50 },
+          "eradication": { "value": -0.50 },
+          "nether": { "value": -0.25 },
+          "phantasm": { "value": -0.15 }
+        }
+      }
     ]
   },
   {
@@ -684,6 +708,43 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "abilities,": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": "charm", "extra": null }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "abilities,": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "beauty", "extra": null },
+                  "verdant": { "value": "beauty", "extra": null },
+                  "eradication": { "value": "beauty", "extra": null },
+                  "nether": { "value": "beauty", "extra": null },
+                  "phantasm": { "value": "beauty", "extra": null }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -704,6 +765,18 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": -0.35 },
+          "verdant": { "value": -0.15 },
+          "eradication": { "value": -0.15 },
+          "nether": { "value": -0.35 },
+          "phantasm": { "value": -0.88 }
+        }
+      }
     ]
   },
   {
@@ -831,10 +904,97 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": -6 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
         "targetType": "random",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.5 },
+                  "verdant": { "value": -0.20 },
+                  "eradication": { "value": -0.20 },
+                  "nether": { "value": -0.5 },
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.5 },
+                  "verdant": { "value": -0.20 },
+                  "eradication": { "value": -0.20 },
+                  "nether": { "value": -0.5 },
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "counterAttackPower": {
+                "rule": "remove",
+                "magic": {
+                  "ascendant": { "value": { "name": "bursting", "extra": null } },
+                  "verdant": { "value": { "name": "bursting", "extra": null } },
+                  "eradication": { "value": { "name": "bursting", "extra": null } },
+                  "nether": { "value": { "name": "bursting", "extra": null } },
+                  "phantasm": { "value": { "name": "bursting", "extra": null } }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -880,7 +1040,7 @@
     "magic": "phantasm",
     "rank": "complex",
     "description": "Chanting this summon spell, Djinni will join your army. Flying high above the battlefield, these beings use their strong magical powers to attack your opponents, tossing lightnings at unfortunate enemies.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2500,
     "castingCost": 30000,
     "castingTurn": 4,
@@ -908,7 +1068,7 @@
     "magic": "phantasm",
     "rank": "complex",
     "description": "This spell will summon terrible mind rippers from the upper astral plane. These dreadful and terrifying monsters posses superior psychic abilities and relish feasting on the brains of their still-alive enemies.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 8000,
     "castingCost": 65700,
     "castingTurn": 6,
@@ -936,7 +1096,7 @@
     "magic": "phantasm",
     "rank": "ultimate",
     "description": "Delving deep into your store of energy, Summon Elemental calls upon the powers of the gods to send you their mightiest creatures, those created from the very fabric of Terra itself. The result of this spell is usually random, but can be controlled by experienced phantasm mages.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 30000,
     "castingCost": 280000,
     "castingTurn": 9,
@@ -964,7 +1124,7 @@
     "magic": "phantasm",
     "rank": "ultimate",
     "description": "This spell allows you to control gigantic Leviathans, who answer your summons and come to join your army from the depths of the largest oceans of Terra.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 35000,
     "castingCost": 300000,
     "castingTurn": 10,

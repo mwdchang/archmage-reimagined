@@ -5,7 +5,7 @@
     "magic": "nether",
     "rank": "simple",
     "description": "This spell will animate the bones of the dead into walking skeletons that obey your commands. They are weak, but they come in great numbers, and they are immune to most mind-affecting effects. By stealing from Death in the graveyard, you create life in the battlefield.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 500,
     "castingCost": 2500,
     "castingTurn": 1,
@@ -33,7 +33,7 @@
     "magic": "nether",
     "rank": "simple",
     "description": "This spell will animate freshly dead corpses into zombies to fight for you. Although they are clumsy, they are tougher than skeletons.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 1000,
     "castingCost": 5100,
     "castingTurn": 1,
@@ -61,7 +61,7 @@
     "magic": "nether",
     "rank": "simple",
     "description": "This spell summons Shadows, creatures of the night, to your army. They posses some magical abilities, and incorporeal body which makes them immune to melee and missile attacks. Those slain by shadows will become shadows as well.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 500,
     "castingCost": 2500,
     "castingTurn": 1,
@@ -203,7 +203,7 @@
     "magic": "nether",
     "rank": "average",
     "description": "This spell will animate fresh corpses into flesh eating ghouls. The touch of these ghouls can paralyze your enemy, and they are deadly in battle.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2000,
     "castingCost": 15600,
     "castingTurn": 2,
@@ -261,7 +261,7 @@
     "magic": "nether",
     "rank": "average",
     "description": "By casting this summon, most violent Demons will join your ranks. Those horned abominations bring panic to the battlefield, slaughtering enemies without mercy. As their more powerful cousins Devils, they will ravage the battle collecting souls.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2500,
     "castingCost": 35500,
     "castingTurn": 2,
@@ -289,7 +289,7 @@
     "magic": "nether",
     "rank": "average",
     "description": "This spell will summon the ancient undead spirits to join your forces. Their touch means death.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2500,
     "castingCost": 35500,
     "castingTurn": 2,
@@ -454,6 +454,30 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "KingdomBuildingsEffect",
+        "rule": "landPercentageLoss",
+        "target": "all",
+        "magic": {
+          "ascendant": { "value": { "min": 0.1, "max": 0.2 } },
+          "verdant": { "value": { "min": 0.1, "max": 0.2 } },
+          "eradication": { "value": { "min": 0.2, "max": 0.8 } },
+          "nether": { "value": { "min": 0.3, "max": 2.0 } },
+          "phantasm": { "value": { "min": 0.2, "max": 0.8 } }
+        }
+      },
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "spellLevelLoss",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": 400, "max": 5000 } },
+          "verdant": { "value": { "min": 400, "max": 5000 } },
+          "eradication": { "value": { "min": 2200, "max": 10000 } },
+          "nether": { "value": { "min": 3000, "max": 20000 } },
+          "phantasm": { "value": { "min": 2200, "max": 10000 } }
+        }
+      }
     ]
   },
   {
@@ -531,9 +555,54 @@
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
+        "filters": [
+          {
+            "abilities": ["stealLife"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value":  2 },
+                  "nether": { "value": 4 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "stealLife", "extra": 3 } },
+                  "verdant": { "value": { "name": "stealLife", "extra": 3 } },
+                  "eradication": { "value": { "name": "stealLife", "extra": 5 } },
+                  "nether": { "value": { "name": "stealLife", "extra": 10 } },
+                  "phantasm": { "value": { "name": "stealLife", "extra": 5 } }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -580,7 +649,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "By performing this dark ritual, undead units will rise from the oblivion to join your forces.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 1,
@@ -588,7 +657,7 @@
     "effects": [
       {
         "effectType": "UnitSummonEffect",
-        "unitIds": ["zombie", "wraith", "lich", "vampire", "shadown"],
+        "unitIds": ["zombie", "wraith", "lich", "vampire", "shadow"],
         "summonType": "random",
         "summonNetPower": 180000,
         "rule": "spellLevel",
@@ -626,7 +695,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 9000,
     "castingCost": 75000,
     "castingTurn": 4,
@@ -654,7 +723,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "This spell calls forth evil Bulwark Horrors to join your army, these heavily armoured monstrosities are particularly adept at deflecting ranged attacks with their shields.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 10000,
     "castingCost": 80000,
     "castingTurn": 6,
@@ -682,7 +751,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "This spell will summon the ancient and powerful liches to join your undead ranks. Their touch is cold and deadly, and their magic strikes fear into hearts of your opponents.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 10000,
     "castingCost": 79900,
     "castingTurn": 6,
@@ -710,7 +779,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "This spell will summon vampires to join your rank. All they want is blood. With their incredible magic power they will decimate your enemies, turning them into vampires as well. As long as you feed them virgins, they will serve under your command.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 10000,
     "castingCost": 77700,
     "castingTurn": 6,
@@ -738,7 +807,7 @@
     "magic": "nether",
     "rank": "complex",
     "description": "This spell will summon the demonic counterparts of Ascendant knights to your army. They wear black armors marked with runes that give them immunity to holy attacks, and wield poisonous swords. They can also use cold magic from the distance.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 10000,
     "castingCost": 77700,
     "castingTurn": 6,
@@ -812,7 +881,7 @@
         "rule": "spellLevel",
         "production": "nodes",
         "magic": {
-          "ascendant": { "value": 7 }
+          "nether": { "value": 7 }
         }
       }
     ]
@@ -873,7 +942,7 @@
     "magic": "nether",
     "rank": "ultimate",
     "description": "This summon unleashes the worst manifestation of Hell, Unholy Reavers. They posses wide knowledge of paralyzing magic and posses abnormal psychic abilities. However, their corporal incarnation is not very durable.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 35000,
     "castingCost": 300000,
     "castingTurn": 9,

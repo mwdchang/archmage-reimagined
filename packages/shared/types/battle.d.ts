@@ -24,6 +24,7 @@ export interface BattleStack {
   loss: number,
 
   healingPoints: number,
+  healingUnits: number,
   healingBuffer: number[],
 
   // Temporary buffer to sort out conflicting effects from items/spells

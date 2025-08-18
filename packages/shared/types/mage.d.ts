@@ -41,7 +41,7 @@ export interface Enchantment {
   targetId: number;
 
   spellId: string;
-  spellMagic: string;
+  spellMagic: string; // not used???
   spellLevel: number;
 
   isPermanent: boolean;
@@ -79,6 +79,7 @@ export interface Mage {
 
   currentTurn: number;
   maxTurn: number;
+  turnsUsed: number,
 
   // economy
   currentPopulation: number;

@@ -5,7 +5,7 @@
     "magic": "verdant",
     "rank": "simple",
     "description": "This spell will summon fierce, powerful gorillas from the jungle to join your army. The gorillas are fiercely loyal and understand the commands of your officers. The number of gorillas summoned depends on your proficiency in magick.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 500,
     "castingCost": 5600,
     "castingTurn": 1,
@@ -33,7 +33,7 @@
     "magic": "verdant",
     "rank": "simple",
     "description": "This spell calls upon the spirit of the trees, the dryads, from the forest to join your troops in battle. The dryads are especially good warriors of the forests and will server their magic to protect forest-lands.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 900,
     "castingCost": 3000,
     "castingTurn": 1,
@@ -61,7 +61,7 @@
     "magic": "verdant",
     "rank": "simple",
     "description": "A Verdant mage can commune not only with the animal kingdom, but the very forest as well. With a mere thought, scores of thorny vines creep stealthily and silently from the forest and through the battlefield to ensnare and strangle man and beast alike.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 900,
     "castingCost": 3000,
     "castingTurn": 1,
@@ -193,7 +193,7 @@
     "magic": "verdant",
     "rank": "average",
     "description": "Though composed entirely of plant matter, mandrakes are highly intelligent, and can understand every nuance of speech from both elven and human language from birth. Originally they were enchanted by renowned elf-bard Sylii the Songstress' sweet voice and harmonious aura. After listening to her many tales of the world's woes, the mandrakes all agreed to assist the cause of the verdant mages and spread word to all of their kindred throughout Terra. Now, for a small expenditure of mana to carry the words of power through the surrounding lands, the mandrakes can be called to fight alongside and verdant mage.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 1800,
     "castingCost": 29500,
     "castingTurn": 2,
@@ -234,6 +234,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 0.004 },
+              "verdant": { "value": 0.008 },
+              "eradication": { "value": 0.004 },
+              "nether": { "value": 0.001 },
+              "phantasm": { "value": 0.001 }
+            }
+          }
         ]
       }
     ]
@@ -271,7 +284,7 @@
     "magic": "verdant",
     "rank": "average",
     "description": "This spell will call a number of water spirits, nymphs, from their lakes to come to your side in battle. The highly magical nymphs are terrific warriors and cast their own magical influence over enemies. Although they appear as incredibly beautiful women, they posses magic of great power and often use it with great cruelty against their enemies.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 1400,
     "castingCost": 7900,
     "castingTurn": 2,
@@ -299,7 +312,7 @@
     "magic": "verdant",
     "rank": "average",
     "description": "This spell will summon fierce werebears--part human, part bear, and all power-- to join your army. The enormously powerful creatures are so ferocious warriors that frighten your soldiers as much as they frighten the enemy!",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 1800,
     "castingCost": 29500,
     "castingTurn": 2,
@@ -327,7 +340,7 @@
     "magic": "verdant",
     "rank": "complex",
     "description": "",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 3000,
     "castingCost": 34600,
     "castingTurn": 4,
@@ -355,7 +368,7 @@
     "magic": "verdant",
     "rank": "complex",
     "description": "This spell calls Venus Flytraps to join your army. These plant creatures are particularly deceptive, somehow making their enemies attacks less effective before lashing out at them with deadly poison. As with all Treefolk, these plants are especially vulnerable to fire.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 3200,
     "castingCost": 45000,
     "castingTurn": 5,
@@ -383,7 +396,7 @@
     "magic": "verdant",
     "rank": "complex",
     "description": "",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 3100,
     "castingCost": 45000,
     "castingTurn": 5,
@@ -411,7 +424,7 @@
     "magic": "verdant",
     "rank": "complex",
     "description": "",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2900,
     "castingCost": 40000,
     "castingTurn": 4,
@@ -439,7 +452,7 @@
     "magic": "verdant",
     "rank": "complex",
     "description": "This spell will summon a number of treants to join your army. These ancient guardians of the forest are legendary for their fortitude and ferocity in battle and are a favorite among verdant mages.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 3000,
     "castingCost": 34600,
     "castingTurn": 4,
@@ -739,6 +752,18 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "ascendant": { "value": -0.34 },
+          "verdant": { "value": -0.67 },
+          "eradication": { "value": -0.34 },
+          "nether": { "value": -0.12 },
+          "phantasm": { "value": -0.12 }
+        }
+      }
     ]
   },
   {
@@ -777,7 +802,7 @@
     "magic": "verdant",
     "rank": "ultimate",
     "description": "This spell will summon the fire bird phoenix from its remote hiding place to join your army.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 30000,
     "castingCost": 300000,
     "castingTurn": 8,
@@ -805,7 +830,7 @@
     "magic": "verdant",
     "rank": "ultimate",
     "description": "This spell summons Earth Elementals to your army. Born of the mother earth, these beings embody natures fury. The ground trembles with anticipation at the archmages call for the mountains to again rise up to the clash of a new war. The beauty of stone and the passion of soil have been embraced in the creation of these battle ready warriors, that only the strongest verdant trained mage can attain.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 30000,
     "castingCost": 300000,
     "castingTurn": 8,
@@ -843,6 +868,32 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["dryad", "nymph", "treant"],
+        "summonType": "all",
+        "summonNetPower": 5000,
+        "rule": "spellLevel",
+        "magic": {
+          "verdant": { "value": 1.0 }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "verdant": { "value": 0.2 }
+        }
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addPercentageBase",
+        "production": "population",
+        "magic": {
+          "verdant": { "value": 0.15 }
+        }
+      }
     ]
   },
   {

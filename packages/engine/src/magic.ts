@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { UnitSummonEffect } from 'shared/types/effects';
-import { 
+import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
+import {
   magicAlignmentTable, spellRankTable, productionTable, itemProductionTable
 } from './base/config';
 import { Mage } from 'shared/types/mage';
-import { 
+import {
   magicTypes,
   getUnitById,
   getSpellById,
@@ -14,7 +14,7 @@ import {
 } from './base/references';
 import { totalLand } from './base/mage';
 import { randomBM, randomInt } from './random';
-import { 
+import {
   ProductionEffect,
   KingdomResistanceEffect,
   CastingEffect
@@ -53,21 +53,23 @@ export const itemGenerationRate = (mage: Mage) => {
   return rate;
 }
 
-export const doItemGeneration = (mage: Mage) => {
+export const doItemGeneration = (mage: Mage, force: boolean = false) => {
   const rate = itemGenerationRate(mage);
-  if (Math.random() <= rate) {
+  if (Math.random() <= rate || force === true) {
     const item = getRandomItem();
-    console.log('Found an item!!!', item.name);
+    // console.log('Found an item!!!', item.name);
 
     if (!mage.items[item.id]) {
       mage.items[item.id] = 1;
     } else {
       mage.items[item.id] ++;
     }
+    return item;
   }
+  return null;
 }
 
-// Do research, 
+// Do research
 export const doResearch = (mage: Mage, points: number) => {
   const researchTree = getResearchTree();
   const currentResearch = mage.currentResearch;
@@ -134,12 +136,12 @@ export const doResearch = (mage: Mage, points: number) => {
 }
 
 
-export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
+export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
   const result: { [key: string]: number } = {};
   const summonType = effect.summonType;
 
-  const magicBase = effect.magic[mage.magic] ?
-    effect.magic[mage.magic].value :
+  const magicBase = effect.magic[origin.magic] ?
+    effect.magic[origin.magic].value :
     0;
 
   const unitIds = summonType === 'random' ?
@@ -153,7 +155,7 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
     power *= (0.5 + 0.75 * randomBM());
 
     // Spell level
-    power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
+    power *= origin.spellLevel / getMaxSpellLevels()[origin.magic];
 
     // Magic
     power *= magicBase;
@@ -164,7 +166,7 @@ export const summonUnit = (mage: Mage, effect: UnitSummonEffect) => {
   unitIds.forEach(unitId => {
     const unit = getUnitById(unitId);
     const unitPower = unit.powerRank;
-    const unitsSummoned = effect.rule === 'fixed' ? 
+    const unitsSummoned = effect.rule === 'fixed' ?
       power :
       Math.floor(power / unitPower);
 
@@ -251,19 +253,21 @@ export const manaIncome = (mage: Mage) => {
   for (const enchantment of mage.enchantments) {
     const spell = getSpellById(enchantment.spellId);
     const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue; 
+    if (productionEffects.length === 0) continue;
 
     for (const effect of productionEffects) {
       if (effect.production !== 'nodes') continue;
 
-      const base = effect.magic[enchantment.spellMagic];
+      const base = effect.magic[enchantment.casterMagic];
       if (!base) continue;
-    
+
       const rule = effect.rule;
       if (rule === 'spellLevel') {
         valueBuffer += base.value * enchantment.spellLevel;
       } else if (rule === 'addPercentageBase') {
         valueBuffer += manaYield * base.value;
+      } else {
+        throw new Error(`Unknown rule ${effect.rule}`);
       }
     }
   }

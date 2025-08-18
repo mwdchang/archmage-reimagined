@@ -63,10 +63,10 @@
             "healType": "points",
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 0.01 },
+              "ascendant": { "value": 0.011 },
               "verdant": { "value": 0.005 },
-              "eradication": { "value": 0.003 },
-              "nether": { "value": 0.003 },
+              "eradication": { "value": 0.002 },
+              "nether": { "value": 0.002 },
               "phantasm": { "value": 0.005 }
             }
           }
@@ -119,7 +119,7 @@
     "magic": "ascendant",
     "rank": "simple",
     "description": "This spell will call the legendary winged horse, Pegasus, to join your forces in battle. The number of horses which are summoned vary by the proficiency or level of your spell.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 600,
     "castingCost": 6300,
     "castingTurn": 1,
@@ -147,7 +147,7 @@
     "magic": "ascendant",
     "rank": "simple",
     "description": "By praying to the Heavens, these beautiful ascended beings join your army. Altough soul speakers do not look especially powerful, they posses limited clairvoyance abilities, allowing them forsee outcome of battle. That makes their psychic attacks very effective.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 600,
     "castingCost": 6300,
     "castingTurn": 1,
@@ -181,6 +181,18 @@
     "castingTurn": 2,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "spellLevelGain",
+        "target": "item",
+        "magic": {
+          "ascendant": { "value": { "min": 1, "max": 3 } },
+          "verdant": { "value": { "min": 1, "max": 1} },
+          "eradication": { "value": { "min": 1, "max": 1 } },
+          "nether": { "value": { "min": 1, "max": 1 } },
+          "phantasm": { "value": { "min": 1, "max": 1 } }
+        }
+      }
     ]
   },
   {
@@ -189,7 +201,7 @@
     "magic": "ascendant",
     "rank": "average",
     "description": "Casting this spell sends a signal to these hiding Ascendant mages of the past to join you. Returned to the mortal plane, these mages are much weaker than before, but still their holy magic is a force to be reckoned with.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2000,
     "castingCost": 27000,
     "castingTurn": 3,
@@ -217,7 +229,7 @@
     "magic": "ascendant",
     "rank": "average",
     "description": "This spell allows you to ask for the favour of the God and send in minor angels to aid you in your holy war. The higher your proficiency or spell level becomes, the more angels will fly down to your aid.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2000,
     "castingCost": 27000,
     "castingTurn": 3,
@@ -517,6 +529,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "units",
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 0.33 },
+              "verdant": { "value": 0.09 },
+              "eradication": { "value": 0.04 },
+              "nether": { "value": 0.04 },
+              "phantasm": { "value": 0.09 }
+            }
+          }
         ]
       }
     ]
@@ -559,7 +584,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "The spell opens a glowing white gateway and conjures a number of white creatures to your aid. The types and amounts of the creatures summoned is unknown to the caster of the spell.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 1,
@@ -587,7 +612,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "This is an advanced version of the Summon Angel spell, and will summon powerful Archangels for your holy war.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 4000,
     "castingCost": 52000,
     "castingTurn": 5,
@@ -615,7 +640,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "By chanting this spell, you bring back the spirits of Terra's greatest warriors to aid you in battle. These ghost fighters are one of the most powerful Ascendant troops, with holy attack deadly to any undead creature, and incorporeal bodies that makes them very resistant to most attacks.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2500,
     "castingCost": 30000,
     "castingTurn": 4,
@@ -643,7 +668,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "This spell summons the mystical and legendary unicorns to join your battle. Unicorns increase your attack by attacking and spearing the enemy troops with their horns.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 2500,
     "castingCost": 30000,
     "castingTurn": 4,
@@ -671,7 +696,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "This spell calls the astral Empyrean Inquisitors to join your army. These ethereal beings seek to hunt out and destroy all evil forces in the world. They attack with remarkable speed and have great resistances to most conventional forms of attack, they are however weak to the more nefarious methods of evil doers such as poisons, paralysis and attacks of the mind.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 5000,
     "castingCost": 60000,
     "castingTurn": 4,
@@ -699,7 +724,7 @@
     "magic": "ascendant",
     "rank": "complex",
     "description": "This spell summons the snake-like Naga Queens to your army. These powerful creatures are very resistant to many forms of damage and can attack their enemies with lightning.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 4000,
     "castingCost": 40000,
     "castingTurn": 5,
@@ -727,7 +752,7 @@
     "magic": "ascendant",
     "rank": "ultimate",
     "description": "This prayer asks for the favour of the God and His direct divine intervention. Dominion, the most powerful of angels, will descend from the heavens to aid you in battle.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 35000,
     "castingCost": 300000,
     "castingTurn": 9,
@@ -755,7 +780,7 @@
     "magic": "ascendant",
     "rank": "ultimate",
     "description": "Using this spell will bring forth the ancient giants of Terra. Wielding javelins of lightning and giant blessed hammers, they will decimate all your opponents.",
-    "attributes": ["summon"],
+    "attributes": ["summon", "selfOnly"],
     "researchCost": 35000,
     "castingCost": 300000,
     "castingTurn": 9,

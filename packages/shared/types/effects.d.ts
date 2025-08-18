@@ -5,6 +5,14 @@ export interface Effect {
   effectType: string
 }
 
+export interface EffectOrigin {
+  id: number,
+  magic: string,
+  spellLevel: number,
+  targetId: number,
+  spellId?: string,
+}
+
 /**
  * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
  * units attributes, cause direct damages, or alter unit abilities.
@@ -80,7 +88,7 @@ export interface UnitDamageEffect extends Effect {
 
 export interface UnitHealEffect extends Effect {
   checkResistance: boolean; // not used
-  healType: 'points' | 'percentage',
+  healType: 'points' | 'percentage' | 'units',
   rule: 'none' | 'spellLevel',
   magic: {
     [key: string]: {
@@ -106,7 +114,6 @@ export interface UnitSummonEffect extends Effect {
   }
 }
 
-
 export interface KingdomResistanceEffect extends Effect {
   rule: 'spellLevel',
   resistance: string,
@@ -117,9 +124,29 @@ export interface KingdomResistanceEffect extends Effect {
   }
 }
 
+export interface KingdomBuildingsEffect extends Effect {
+  rule: 'landPercentageLoss',
+  target: string,
+  magic: {
+    [key: string]: {
+      value: { min: number, max: number }
+    }
+  }
+}
+
+export interface KingdomResourcesEffect extends Effect {
+  rule: 'spellLevelLoss' | 'spellLevelGain',
+  target: string,
+  magic: {
+    [key: string]: {
+      value: { min: number, max: number }
+    }
+  }
+}
+
 export interface ProductionEffect extends Effect {
-  rule: 'spellLevel' | 'addPercentageBase' 
-  production: 'farms' | 'guilds' | 'nodes',
+  rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
+  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
   magic: {
     [key: string]: {
       value: number
