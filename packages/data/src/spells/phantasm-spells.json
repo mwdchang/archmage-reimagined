@@ -904,10 +904,97 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": -6 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
         "targetType": "random",
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "primaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.5 },
+                  "verdant": { "value": -0.20 },
+                  "eradication": { "value": -0.20 },
+                  "nether": { "value": -0.5 },
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.5 },
+                  "verdant": { "value": -0.20 },
+                  "eradication": { "value": -0.20 },
+                  "nether": { "value": -0.5 },
+                  "phantasm": { "value": -1 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "counterAttackPower": {
+                "rule": "remove",
+                "magic": {
+                  "ascendant": { "value": { "name": "bursting", "extra": null } },
+                  "verdant": { "value": { "name": "bursting", "extra": null } },
+                  "eradication": { "value": { "name": "bursting", "extra": null } },
+                  "nether": { "value": { "name": "bursting", "extra": null } },
+                  "phantasm": { "value": { "name": "bursting", "extra": null } }
+                }
+              }
+            }
+          }
         ]
       }
     ]
