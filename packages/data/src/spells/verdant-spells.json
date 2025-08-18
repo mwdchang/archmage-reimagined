@@ -752,6 +752,18 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "spellLevel",
+        "production": "farms",
+        "magic": {
+          "ascendant": { "value": -0.34 },
+          "verdant": { "value": -0.67 },
+          "eradication": { "value": -0.34 },
+          "nether": { "value": -0.12 },
+          "phantasm": { "value": -0.12 }
+        }
+      }
     ]
   },
   {

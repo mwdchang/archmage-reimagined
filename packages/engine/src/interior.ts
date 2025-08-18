@@ -105,7 +105,9 @@ export const maxFood = (mage: Mage) => {
       if (productionEffect.production !== 'farms') return;
 
       if (productionEffect.rule === 'spellLevel') {
-        food += mage.farms * currentSpellLevel(mage) * productionEffect.magic[enchantment.casterMagic].value;
+        food += mage.farms * enchantment.spellLevel * productionEffect.magic[enchantment.casterMagic].value;
+      } else {
+        throw new Error(`unspported rule ${productionEffect.rule}`);
       }
     });
   })
