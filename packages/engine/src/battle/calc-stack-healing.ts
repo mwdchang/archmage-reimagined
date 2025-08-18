@@ -46,7 +46,7 @@ export const calcHealing = (stack: BattleStack) => {
     if (stack.healingUnits / stack.loss > MAX_UNIT_THRSHOLD) {
       totalUnitsHealed += Math.floor(MAX_UNIT_THRSHOLD * stack.loss);
     } else {
-      totalUnitsHealed += Math.floor(totalUnitsHealed);
+      totalUnitsHealed += Math.floor(stack.healingUnits);
     }
   }
 
