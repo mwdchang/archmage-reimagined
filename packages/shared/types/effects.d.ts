@@ -88,7 +88,7 @@ export interface UnitDamageEffect extends Effect {
 
 export interface UnitHealEffect extends Effect {
   checkResistance: boolean; // not used
-  healType: 'points' | 'percentage',
+  healType: 'points' | 'percentage' | 'units',
   rule: 'none' | 'spellLevel',
   magic: {
     [key: string]: {
@@ -145,7 +145,7 @@ export interface KingdomResourcesEffect extends Effect {
 }
 
 export interface ProductionEffect extends Effect {
-  rule: 'spellLevel' | 'addPercentageBase' 
+  rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
   production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
   magic: {
     [key: string]: {

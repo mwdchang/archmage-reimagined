@@ -45,6 +45,7 @@ export const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       efficiency: 100,
       sustainedDamage: 0,
 
+      healingUnits: 0,
       healingPoints: 0,
       healingBuffer: [],
 

@@ -167,6 +167,11 @@ export const geldIncome = (mage: Mage) => {
         delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
       } else if (effect.rule === 'addPercentageBase') {
         delta += effect.magic[enchantment.casterMagic].value * baseIncome;
+      } else if (effect.rule === 'addSpellLevelPercentageBase') {
+        const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
+        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel / maxSpellLevel * baseIncome;
+      } else {
+        throw new Error(`Unknown rule ${effect.rule}`);
       }
     }
   }

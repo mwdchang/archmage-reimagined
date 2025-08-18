@@ -266,6 +266,8 @@ export const manaIncome = (mage: Mage) => {
         valueBuffer += base.value * enchantment.spellLevel;
       } else if (rule === 'addPercentageBase') {
         valueBuffer += manaYield * base.value;
+      } else {
+        throw new Error(`Unknown rule ${effect.rule}`);
       }
     }
   }

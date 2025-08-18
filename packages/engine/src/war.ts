@@ -253,6 +253,8 @@ const applyHealEffect = (
       stack.healingPoints += stack.size * healBase;
     } else if (healType === 'percentage') {
       stack.healingBuffer.push(healBase);
+    } else if (healType === 'units') {
+      stack.healingUnits += healBase;
     }
   });
 };

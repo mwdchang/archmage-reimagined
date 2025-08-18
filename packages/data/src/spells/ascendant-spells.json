@@ -529,6 +529,19 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "units",
+            "rule": "spellLevel",
+            "magic": {
+              "ascendant": { "value": 0.33 },
+              "verdant": { "value": 0.09 },
+              "eradication": { "value": 0.04 },
+              "nether": { "value": 0.04 },
+              "phantasm": { "value": 0.09 }
+            }
+          }
         ]
       }
     ]

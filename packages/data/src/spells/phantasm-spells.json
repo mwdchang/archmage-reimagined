@@ -765,6 +765,18 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": -0.35 },
+          "verdant": { "value": -0.15 },
+          "eradication": { "value": -0.15 },
+          "nether": { "value": -0.35 },
+          "phantasm": { "value": -0.88 }
+        }
+      }
     ]
   },
   {
