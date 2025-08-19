@@ -447,15 +447,64 @@ const battleOptions: BattleOptions = {
  * - Calculate healing factors
 **/
 export const battle = (attackType: string, attacker: Combatant, defender: Combatant) => {
-  console.log(`war ${attackType}`, attackType, attacker.army.length, defender.army.length);
+  // Initialize battle report
+  const battleReport = newBattleReport(attacker, defender, attackType);
+  const preBattle = battleReport.preBattle;
+
+  let hasAttackerSpell = false;
+  let hasAttackerItem = false;
+  let hasDefenderSpell = false;
+  let hasDefenderItem = false;
+
+  // TODO: check barriers and success
+  if (attacker.spellId) {
+    const cost = castingCost(attacker.mage, attacker.spellId);
+    if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
+      attacker.mage.currentMana -= cost;
+      preBattle.attacker.spellResult = 'success';
+      hasAttackerSpell = true;
+    } else {
+      preBattle.attacker.spellResult = 'noMana';
+    }
+  }
+  if (attacker.itemId) {
+    if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
+      attacker.mage.items[attacker.itemId] --;
+      preBattle.attacker.itemResult = 'success';
+      hasAttackerItem = true
+    } else {
+      preBattle.attacker.itemResult = 'noItem';
+    }
+  }
+
+  if (defender.spellId) {
+    const cost = castingCost(defender.mage, defender.spellId);
+    if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
+      defender.mage.currentMana -= cost;
+      preBattle.defender.spellResult = 'success';
+      hasDefenderSpell = true;
+    } else {
+      preBattle.defender.spellResult = 'noMana';
+    }
+  }
+  if (defender.itemId) {
+    if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
+      defender.mage.items[defender.itemId] --;
+      preBattle.defender.itemResult = 'success';
+      hasDefenderItem = true;
+    } else {
+      preBattle.defender.itemResult = 'noItem';
+    }
+  }
+
+  // Prebattle effects
 
   // Create mutable data for the battle
   const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
 
   ////////////////////////////////////////////////////////////////////////////////
-  // TODO:
-  // - Hero effects
+  // TODO:: Hero effects
   ////////////////////////////////////////////////////////////////////////////////
 
   // Enchantments effects are equivalent to spell effects, but the
@@ -489,65 +538,23 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     });
   }
 
-  // Initialize battle report
-  const battleReport = newBattleReport(attacker, defender, attackType);
-
-
-  // TODO: check barriers and success
-  const preBattle = battleReport.preBattle;
-  if (attacker.spellId) {
-    console.log(`>> attacker spell ${attacker.spellId}`);
-    const cost = castingCost(attacker.mage, attacker.spellId);
-    if (cost > attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
-      attacker.mage.currentMana -= cost;
-      preBattle.attacker.spellResult = 'success';
-      const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
-      preBattle.logs.push(...battleSpellLogs);
-    } else {
-      preBattle.attacker.spellResult = 'noMana';
-    }
-    console.log('');
+  // Run through spells and items
+  if (hasAttackerSpell) {
+    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+    preBattle.logs.push(...battleSpellLogs);
   }
-  if (attacker.itemId) {
-    console.log(`>> attacker item ${attacker.itemId}`);
-    if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
-      attacker.mage.items[attacker.itemId] --;
-      const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy);
-      preBattle.logs.push(...battleItemLogs);
-      preBattle.attacker.itemResult = 'success';
-    } else {
-      preBattle.attacker.itemResult = 'noItem';
-    }
-    console.log('');
+  if (hasAttackerItem) {
+    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy);
+    preBattle.logs.push(...battleItemLogs);
   }
-
-  if (defender.spellId) {
-    console.log(`>> defender spell ${defender.spellId}`);
-    const cost = castingCost(defender.mage, defender.spellId);
-    if (cost > defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-      defender.mage.currentMana -= cost;
-
-      preBattle.defender.spellResult = 'success';
-      const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
-      preBattle.logs.push(...battleSpellLogs);
-    } else {
-      preBattle.defender.spellResult = 'noMana';
-    }
-    console.log('');
+  if (hasDefenderSpell) {
+    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+    preBattle.logs.push(...battleSpellLogs);
   }
-  if (defender.itemId) {
-    console.log(`>> defender item ${defender.itemId}`);
-    if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-      defender.mage.items[defender.itemId] --;
-      const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy);
-      preBattle.logs.push(...battleItemLogs);
-      preBattle.defender.itemResult = 'success';
-    } else {
-      preBattle.defender.itemResult = 'noItem';
-    }
-    console.log('');
+  if (hasDefenderItem) {
+    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy);
+    preBattle.logs.push(...battleItemLogs);
   }
-
 
 
   // Resolving contradicting ability states
