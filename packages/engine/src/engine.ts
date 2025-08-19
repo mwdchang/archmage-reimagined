@@ -467,14 +467,22 @@ class Engine {
       mage.currentMana -= cost;
       this.useTurns(mage, spell.castingTurn);
 
-      if (attributes.includes('selfOnly') && castingSuccessful) {
+      if (castingSuccessful === false) {
+        continue;
+      }
+
+      if (attributes.includes('selfOnly')) {
         if (attributes.includes('summon')) {
           this.summon(mage, spellId);
         } else if (spell.attributes.includes('enchantment')) {
           this.enchant(mage, spellId);
         } else if (spell.attributes.includes('instant')) {
           this.instantSelf(mage, spellId);
+        } else {
+          throw new Error(`cannot process attributes ${attributes}`);
         }
+      } else {
+        // FIXME
       }
     }
     return logs;

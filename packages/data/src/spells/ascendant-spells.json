@@ -576,6 +576,31 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.15 },
+                  "verdant": { "value": -0.07 },
+                  "eradication": { "value": -0.04 },
+                  "nether": { "value": -0.05 },
+                  "phantasm": { "value": -0.07 }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {

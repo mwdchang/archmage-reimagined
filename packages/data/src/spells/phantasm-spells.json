@@ -1176,6 +1176,14 @@
     "castingTurn": 5,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "spellLevelLoss",
+        "target": "geld",
+        "magic": {
+          "phantasm": { "value": { "min": 5000000, "max": 85000000 } }
+        }
+      }
     ]
   },
   {
