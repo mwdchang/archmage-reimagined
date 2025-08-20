@@ -53,6 +53,20 @@ export const itemGenerationRate = (mage: Mage) => {
   return rate;
 }
 
+export const doItemDestruction = (mage: Mage) => {
+  const itemKeys = Object.keys(mage.items);
+  if (itemKeys.length === 0) return null;
+
+  const idx = Math.floor(Math.random() * (itemKeys.length));
+  const dkey = itemKeys[idx];
+
+  mage.items[dkey] --;
+  if (mage.items[dkey] <= 0) {
+    delete mage.items[dkey];
+  }
+  return dkey;
+}
+
 export const doItemGeneration = (mage: Mage, force: boolean = false) => {
   const rate = itemGenerationRate(mage);
   if (Math.random() <= rate || force === true) {

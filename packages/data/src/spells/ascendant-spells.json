@@ -547,7 +547,7 @@
     ]
   },
   {
-    "id": "destryArtifact",
+    "id": "destroyArtifact",
     "name": "Destroy Artifact",
     "magic": "ascendant",
     "rank": "complex",
@@ -558,6 +558,18 @@
     "castingTurn": 3,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "spellLevelLoss",
+        "target": "item",
+        "magic": {
+          "ascendant": { "value": { "min": 1, "max": 10 } },
+          "verdant": { "value": { "min": 1, "max": 4} },
+          "eradication": { "value": { "min": 1, "max": 2 } },
+          "nether": { "value": { "min": 1, "max": 2 } },
+          "phantasm": { "value": { "min": 1, "max": 4 } }
+        }
+      }
     ]
   },
   {

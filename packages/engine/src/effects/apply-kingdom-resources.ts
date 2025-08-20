@@ -2,7 +2,7 @@ import { EffectOrigin, KingdomResourcesEffect } from "shared/types/effects";
 import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between, randomBM } from "../random";
-import { doItemGeneration } from "../magic";
+import { doItemDestruction, doItemGeneration } from "../magic";
 
 export const applyKingdomResourcesEffect = (
   mage: Mage,
@@ -45,12 +45,15 @@ export const applyKingdomResourcesEffect = (
     } else if (effect.target === 'item') {
       if (value > 0) {
         // item gain
-        for (let i = 0; i < value; i++) {
+        for (let i = 0; i < Math.abs(value); i++) {
           const item = doItemGeneration(mage, true);
           console.log(`Found ${item.id}`);
         }
       } else {
-        // FIXME: item loss
+        for (let i = 0; i < Math.abs(value); i++) {
+          const itemKey = doItemDestruction(mage);
+          console.log(`Destroyed ${itemKey}`);
+        }
       }
     }
   }
