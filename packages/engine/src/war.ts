@@ -108,6 +108,12 @@ const applyUnitEffect = (
           throw new Error(`Unable to proces rule ${rule}`);
         }
 
+        // Set overrides default
+        if (rule === 'set') {
+          root[field] = finalValue;
+          return;
+        }
+
         // Finally apply
         if (field === 'abilities') {
           if (rule === 'add') {
@@ -274,7 +280,8 @@ const battleSpell = (
   casterBattleStack: BattleStack[],
   defender: Combatant,
   defenderBattleStack: BattleStack[],
-  enchantment: Enchantment = null
+  enchantment: Enchantment | null,
+  effectType: 'BattleEffect' | 'PrebattleEffect'
 ) => {
   const logs: BattleEffectLog[] = [];
 
@@ -296,7 +303,8 @@ const battleSpell = (
     effectOrigin.spellLevel = enchantment.spellLevel;
   }
 
-  const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
+  // const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
+  const battleEffects = casterSpell.effects.filter(d => d.effectType === effectType) as BattleEffect[];
   for (const battleEffect of battleEffects) {
     const targetType = battleEffect.targetType;
     const effects = battleEffect.effects;
@@ -497,15 +505,25 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     }
   }
 
-  // Prebattle effects
 
   // Create mutable data for the battle
   const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
 
+  // Prebattle effects
+  if (hasAttackerSpell) {
+    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
+  }
+  if (hasDefenderSpell) {
+    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+  }
+
+  
   ////////////////////////////////////////////////////////////////////////////////
-  // TODO:: Hero effects
+  // TODO:: 
+  //  - Hero effects
   ////////////////////////////////////////////////////////////////////////////////
+  
 
   // Enchantments effects are equivalent to spell effects, but the
   // efficacy is the enchantment spell level, and not that of the caster's
@@ -517,7 +535,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       attackingArmy,
       defender,
       defendingArmy,
-      enchant);
+      enchant,
+      'BattleEffect');
   });
 
   console.log('>> apply defender enchantments')
@@ -527,7 +546,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingArmy,
       attacker,
       attackingArmy,
-      enchant);
+      enchant,
+      'BattleEffect');
   });
 
   // Apply fort bonus to defender
@@ -540,7 +560,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Run through spells and items
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null);
+    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'BattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
@@ -548,7 +568,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null);
+    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'BattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {
@@ -601,8 +621,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         for (const burstingAbility of burstingAbilities) {
           console.log('handle burst', burstingAbility);
 
+          // default
           let burstingType = dUnit.primaryAttackType;
-          let burstingPower = dUnit.powerRank;
+          let burstingPower = dUnit.powerRank * 1.25;
 
           if (burstingAbility.extra) {
             const extra = burstingAbility.extra;

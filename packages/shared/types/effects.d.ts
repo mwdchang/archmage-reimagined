@@ -23,18 +23,25 @@ export interface EffectOrigin {
 **/
 
 
+export interface TemporaryUnitEffect extends Effect {
+  unitId: string,
+  rule: 'spellLevel', 
+  magic: {
+    [key: string]: {
+      value: number
+    }
+  }
+}
+
+
 /**
- * Pseudo code:
- *
- * for (let i = 0; i < between(min, max); i++) {
- *   affectedStacks = match_units(filters);
- *   if (targetType === "random") {
- *     affectedStacks = random(affectedStacks);
- *   }
- *   applyEffect(...)
- * }
- *
+ * Prebattle effects takes place before the armies line up. This is used to
+ * - Priortize unit attribute changes, eg: set to fix number
+ * - Create temporary stacks
 **/
+export interface PrebattleEffect extends BattleEffect{
+}
+
 export interface BattleEffect extends Effect {
   target: 'self' | 'opponent' | 'both';
   targetType: 'all' | 'random' | 'weightedRandom'
@@ -45,6 +52,7 @@ export interface BattleEffect extends Effect {
   } | null,
   effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
 }
+
 
 
 /**

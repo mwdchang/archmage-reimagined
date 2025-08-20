@@ -978,6 +978,29 @@
     "upkeep": null,
     "effects": [
       {
+        "effectType": "PrebattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.fire": {
+                "rule": "set",
+                "magic": {
+                  "eradication": {
+                    "value": 100
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
@@ -992,7 +1015,7 @@
                 "rule": "add",
                 "magic": {
                   "eradication": {
-                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": 3000 } }
+                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": null } }
                   }
                 }
               }
