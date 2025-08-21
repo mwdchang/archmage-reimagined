@@ -14,15 +14,13 @@ export const applyKingdomResourcesEffect = (
   const maxSpellLevel = getMaxSpellLevels()[magic];
   const spellPowerScale = spellLevel / maxSpellLevel;
 
-  if (effect.rule === 'spellLevelLoss' || effect.rule === 'spellLevelGain') {
-    const { min, max } = effect.magic[magic].value as { min: number, max: number };
-    const base = between(min, max);
+  
+  const { min, max } = effect.magic[magic].value as { min: number, max: number };
+  const base = between(min, max);
 
+  if (effect.rule === 'addSpellLevelPercentage') {
     // Give it a little bit of randomness
     let value = Math.floor((1.0 + 0.4 * randomBM()) * spellPowerScale * base);
-    if (effect.rule === 'spellLevelLoss') {
-      value = -value;
-    }
 
     if (effect.target === 'population') {
       if (mage.currentPopulation + value <= 0) {
@@ -50,12 +48,15 @@ export const applyKingdomResourcesEffect = (
           console.log(`Found ${item.id}`);
         }
       } else {
+        // item loss
         for (let i = 0; i < Math.abs(value); i++) {
           const itemKey = doItemDestruction(mage);
           console.log(`Destroyed ${itemKey}`);
         }
       }
     }
+  } else  if (effect.rule === 'addSpellLevelPercentageBase') {
+    let value = base * spellPowerScale;
   }
 };
 

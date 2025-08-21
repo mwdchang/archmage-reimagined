@@ -535,26 +535,26 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "population",
         "magic": {
-          "ascendant": { "value": { "min": 1200, "max": 3000 } },
-          "verdant": { "value": { "min": 2000, "max": 7000 } },
-          "eradication": { "value": { "min": 4000, "max": 15000 } },
-          "nether": { "value": { "min": 2000, "max": 7000 } },
-          "phantasm": { "value": { "min": 1200, "max": 3000 } }
+          "ascendant": { "value": { "min": -1200, "max": -3000 } },
+          "verdant": { "value": { "min": -2000, "max": -7000 } },
+          "eradication": { "value": { "min": -4000, "max": -15000 } },
+          "nether": { "value": { "min": -2000, "max": -7000 } },
+          "phantasm": { "value": { "min": -1200, "max": -3000 } }
         }
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "mana",
         "magic": {
-          "ascendant": { "value": { "min": 1200, "max": 2000 } },
-          "verdant": { "value": { "min": 2000, "max": 4000 } },
-          "eradication": { "value": { "min": 4000, "max": 10000 } },
-          "nether": { "value": { "min": 2000, "max": 4000 } },
-          "phantasm": { "value": { "min": 1200, "max": 2000 } }
+          "ascendant": { "value": { "min": -1200, "max": -2000 } },
+          "verdant": { "value": { "min": -2000, "max": -4000 } },
+          "eradication": { "value": { "min": -4000, "max": -10000 } },
+          "nether": { "value": { "min": -2000, "max": -4000 } },
+          "phantasm": { "value": { "min": -1200, "max": -2000 } }
         }
       }
     ]

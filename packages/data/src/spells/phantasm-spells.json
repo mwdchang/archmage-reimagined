@@ -1178,10 +1178,10 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "geld",
         "magic": {
-          "phantasm": { "value": { "min": 5000000, "max": 85000000 } }
+          "phantasm": { "value": { "min": -5000000, "max": -85000000 } }
         }
       }
     ]

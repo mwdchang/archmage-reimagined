@@ -468,14 +468,14 @@
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "population",
         "magic": {
-          "ascendant": { "value": { "min": 400, "max": 5000 } },
-          "verdant": { "value": { "min": 400, "max": 5000 } },
-          "eradication": { "value": { "min": 2200, "max": 10000 } },
-          "nether": { "value": { "min": 3000, "max": 20000 } },
-          "phantasm": { "value": { "min": 2200, "max": 10000 } }
+          "ascendant": { "value": { "min": -400, "max": -5000 } },
+          "verdant": { "value": { "min": -400, "max": -5000 } },
+          "eradication": { "value": { "min": -2200, "max": -10000 } },
+          "nether": { "value": { "min": -3000, "max": -20000 } },
+          "phantasm": { "value": { "min": -2200, "max": -10000 } }
         }
       }
     ]

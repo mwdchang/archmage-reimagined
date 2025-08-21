@@ -143,7 +143,7 @@ export interface KingdomBuildingsEffect extends Effect {
 }
 
 export interface KingdomResourcesEffect extends Effect {
-  rule: 'spellLevelLoss' | 'spellLevelGain',
+  rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: string,
   magic: {
     [key: string]: {
