@@ -527,6 +527,7 @@
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 10,
+    "life": 50,
     "upkeep": {
       "geld": 0,
       "mana": 1000,
@@ -694,6 +695,7 @@
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 8,
+    "life": 50,
     "upkeep": {
       "geld": 0,
       "mana": 2000,

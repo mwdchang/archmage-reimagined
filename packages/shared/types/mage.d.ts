@@ -44,6 +44,7 @@ export interface Enchantment {
   spellMagic: string; // not used???
   spellLevel: number;
 
+  isEpidemic: boolean;
   isPermanent: boolean;
   life: number;
 }

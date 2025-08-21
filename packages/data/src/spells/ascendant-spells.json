@@ -582,6 +582,7 @@
     "researchCost": 4000,
     "castingCost": 20000,
     "castingTurn": 6,
+    "life": 50,
     "upkeep": {
       "geld": 0,
       "mana": 1000,

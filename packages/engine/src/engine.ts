@@ -76,6 +76,7 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 
+const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
 
 interface GameMsg {
@@ -532,6 +533,7 @@ class Engine {
       spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
+      isEpidemic: spell.attributes.includes('epidemic'),
       isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
     }
@@ -798,6 +800,33 @@ class Engine {
       defenderId: battleReport.defender.id,
       summary: battleReport.summary
     };
+
+
+    /** Handle epidemic enchantments **/
+ 
+    // attacker to defender
+    mage.enchantments.forEach(enchantment => {
+      if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
+        const existingEnchantment = defenderMage.enchantments.find(d => {
+          return d.spellId === enchantment.spellId;
+        });
+        if (!existingEnchantment) {
+          defenderMage.enchantments.push(_.cloneDeep(enchantment));
+        }
+      }
+    });
+
+    // defender to attacker
+    defenderMage.enchantments.forEach(enchantment => {
+      if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
+        const existingEnchantment = mage.enchantments.find(d => {
+          return d.spellId === enchantment.spellId;
+        });
+        if (!existingEnchantment) {
+          mage.enchantments.push(_.cloneDeep(enchantment));
+        }
+      }
+    });
 
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     await this.adapter.updateMage(mage);
