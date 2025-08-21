@@ -902,11 +902,12 @@
       "population": 6666
     },
     "effects": [
+      
     ]
   },
   {
-    "id": "dreamOfSeduction",
-    "name": "Dream of Seduction",
+    "id": "dreamsOfSeduction",
+    "name": "Dreams of Seduction",
     "magic": "nether",
     "rank": "ultimate",
     "description": "This spell will grant you the servants of the Mistresses of Nine Hells, Succubi, to join your army for one battle.",
@@ -916,6 +917,24 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "PrebattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "TemporaryUnitEffect",
+            "unitId": "succubus",
+            "rule": "spellLevelPercentageBase", 
+            "target": "population",
+            "magic": {
+              "nether": { "value": 0.05 }
+            }
+          }
+        ]
+      }
     ]
   },
   {

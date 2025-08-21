@@ -14,6 +14,8 @@ export interface BattleStack {
   stackType: StackType,
   role: string,
 
+  isTemporary: boolean,
+
   isTarget: boolean,
   targetIdx: number,
 

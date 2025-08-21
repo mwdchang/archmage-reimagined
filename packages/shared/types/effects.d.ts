@@ -24,8 +24,10 @@ export interface EffectOrigin {
 
 
 export interface TemporaryUnitEffect extends Effect {
+  checkResistance: false;
   unitId: string,
-  rule: 'spellLevel', 
+  rule: 'spellLevelPercentageBase', 
+  target: 'population',
   magic: {
     [key: string]: {
       value: number
@@ -50,7 +52,7 @@ export interface BattleEffect extends Effect {
     min: number;
     max: number;
   } | null,
-  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect | TemporaryUnitEffect)[]
 }
 
 

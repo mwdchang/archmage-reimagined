@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
-import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect, EffectOrigin } from 'shared/types/effects';
+import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect, EffectOrigin, TemporaryUnitEffect } from 'shared/types/effects';
 import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
@@ -21,7 +21,7 @@ import { calcHealing } from './battle/calc-stack-healing';
 import { calcFortBonus } from './battle/calc-fort-bonus';
 import { calcBattleSummary } from './battle/calc-battle-summary';
 import { newBattleReport } from './battle/new-battle-report';
-import { prepareBattleStack } from './battle/prepare-battle-stack';
+import { getPowerModifier, prepareBattleStack } from './battle/prepare-battle-stack';
 import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
 
@@ -265,6 +265,32 @@ const applyHealEffect = (
   });
 };
 
+const applyTemporaryUnitEffect = (
+  origin: EffectOrigin,
+  tempEffect: TemporaryUnitEffect,
+  mage: Mage
+) => {
+  console.log('---------------- test test test', tempEffect);
+  const spellLevel = origin.spellLevel;
+  const magic = origin.magic;
+  const maxSpellLevel = getMaxSpellLevels()[magic];
+  const spellPowerScale = spellLevel / maxSpellLevel;
+
+  let value = 0;
+  const base = tempEffect.magic[magic].value; 
+
+  if (tempEffect.target === 'population') {
+    value = Math.floor(mage.currentPopulation * base * spellPowerScale);
+    mage.currentPopulation -= value;
+  } else {
+    value = base * spellPowerScale;
+  }
+
+  const newStacks = prepareBattleStack([{ id: tempEffect.unitId, size: value }], '');
+  newStacks[0].isTemporary = true;
+  return newStacks[0];
+}
+
 
 /**
  * Entry point for casting battle spells. This ensures the correct caster and affected army
@@ -355,6 +381,14 @@ const battleSpell = (
         } else if (effect.effectType === 'UnitHealEffect') {
           const healEffect = effect as UnitHealEffect;
           applyHealEffect(effectOrigin, healEffect, affectedArmy);
+        } else if (effect.effectType === 'TemporaryUnitEffect') {
+          const tempUnitEffect = effect as TemporaryUnitEffect;
+          const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
+          newStack.role = casterBattleStack[0].role;
+          casterBattleStack.push(newStack);
+          casterBattleStack.sort((a, b) => {
+            return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
+          })
         }
       }
     } // end numTimes
@@ -906,6 +940,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingStack.loss += defenderUnitLoss;
     }
   } // end battleOrders
+
+
+  // FIXME: Resolve temporary units
 
 
   // Post battle, healing calculation
