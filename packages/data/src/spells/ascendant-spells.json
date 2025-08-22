@@ -174,7 +174,7 @@
     "name" : "Locate Artifcat",
     "magic": "ascendant",
     "rank": "average",
-    "decription": "This divination spell will allow you to locate the location of a lost artifacts. It will give your small random amount of lesser artifacts.",
+    "description": "This divination spell will allow you to locate the location of a lost artifacts. It will give your small random amount of lesser artifacts.",
     "attributes": ["instant", "selfOnly"],
     "researchCost": 4000,
     "castingCost": 20000,
