@@ -26,8 +26,8 @@ export interface EffectOrigin {
 export interface TemporaryUnitEffect extends Effect {
   checkResistance: false;
   unitId: string,
-  rule: 'spellLevelPercentageBase', 
-  target: 'population',
+  rule: 'spellLevelPercentageBase' | 'fixed', 
+  target: 'population' | null,
   magic: {
     [key: string]: {
       value: number

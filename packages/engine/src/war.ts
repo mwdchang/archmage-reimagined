@@ -279,12 +279,15 @@ const applyTemporaryUnitEffect = (
   let value = 0;
   const base = tempEffect.magic[magic].value; 
 
-  if (tempEffect.target === 'population') {
+  if (tempEffect.rule === 'spellLevelPercentageBase') {
     value = Math.floor(mage.currentPopulation * base * spellPowerScale);
-    mage.currentPopulation -= value;
-  } else {
-    value = base * spellPowerScale;
+  } else if (tempEffect.rule === 'fixed') {
+    value = Math.floor(base);
   }
+
+  if (tempEffect.target === 'population') {
+    mage.currentPopulation -= value;
+  } 
 
   const newStacks = prepareBattleStack([{ id: tempEffect.unitId, size: value }], '');
   newStacks[0].isTemporary = true;
@@ -405,7 +408,9 @@ const battleItem = (
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
-  defenderBattleStack: BattleStack[]) => {
+  defenderBattleStack: BattleStack[],
+  effectType: 'BattleEffect' | 'PrebattleEffect'
+) => {
 
   const logs: BattleEffectLog[] = []
   const casterItem = getItemById(caster.itemId);
@@ -418,7 +423,7 @@ const battleItem = (
   };
 
   casterItem.effects.forEach(effect => {
-    if (effect.effectType !== 'BattleEffect') return;
+    if (effect.effectType !== effectType) return;
 
     const battleEffect = effect as BattleEffect;
     const army = battleEffect.target === 'self' ? casterBattleStack : defenderBattleStack;
@@ -455,6 +460,14 @@ const battleItem = (
         } else if (eff.effectType === 'UnitDamageEffect') {
           const damageEffect = eff as UnitDamageEffect;
           applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+        } else if (eff.effectType === 'TemporaryUnitEffect') {
+          const tempUnitEffect = eff as TemporaryUnitEffect;
+          const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
+          newStack.role = casterBattleStack[0].role;
+          casterBattleStack.push(newStack);
+          casterBattleStack.sort((a, b) => {
+            return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
+          })
         }
       }
     } // end numTimes
@@ -544,12 +557,20 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
 
-  // Prebattle effects
+  // Prebattle spell effects
   if (hasAttackerSpell) {
     const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
   }
   if (hasDefenderSpell) {
     const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+  }
+
+  // Prebattle item effects
+  if (hasAttackerItem) {
+    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'PrebattleEffect');
+  }
+  if (hasDefenderItem) {
+    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'PrebattleEffect');
   }
 
   
@@ -598,7 +619,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy);
+    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'BattleEffect');
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
@@ -606,7 +627,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy);
+    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'BattleEffect');
     preBattle.logs.push(...battleItemLogs);
   }
 

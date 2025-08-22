@@ -192,5 +192,37 @@
         ]
       }
     ]
+  },
+  {
+    "id": "capsuleMonster",
+    "name": "Capsule Monster",
+    "description": "It looks like an ovoid shape egg but it is made up of some kind of tree sap like material. There is a number inscribed on one side and the word \"capsule\" on the other side. When the capsule is thrown or dropped, a horde of monsters will emerge from within. They will obey your order but after some times, they will dispatch into nothingness. It is rumoured that these capsules are made by the alchemists of the Old World. Nowadays, no one knows how to make these capsules because the capsule itself does not radiate any magic at all. But these capsules can still be found among the ruins of those lost civilizations.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "PrebattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "TemporaryUnitEffect",
+            "unitId": "capsuleMonster",
+            "rule": "fixed", 
+            "target": null,
+            "magic": {
+              "ascendant": { "value": 2000 },
+              "verdant": { "value": 2000 },
+              "eradication": { "value": 2000 },
+              "nether": { "value": 2000 },
+              "phantasm": { "value": 2000 }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
