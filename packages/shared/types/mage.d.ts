@@ -36,6 +36,8 @@ export interface ResearchItem {
 }
 
 export interface Enchantment {
+  id: string; // instance id
+
   casterId: number;
   casterMagic: string;
   targetId: number;

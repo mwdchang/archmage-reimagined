@@ -1,6 +1,13 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
 
+type AllowedMagic = 
+  'ascendant' |
+  'verdant' |
+  'eradication' |
+  'nether' | 
+  'phantasm';
+
 export interface Effect {
   effectType: string
 }
@@ -29,7 +36,7 @@ export interface TemporaryUnitEffect extends Effect {
   rule: 'spellLevelPercentageBase' | 'fixed', 
   target: 'population' | null,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -68,7 +75,7 @@ export interface BattleEffect extends Effect {
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
         [key: string]: {
@@ -90,7 +97,7 @@ export interface UnitDamageEffect extends Effect {
   damageType: string[],
   rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic ]: {
       value: any
     }
   }
@@ -101,7 +108,7 @@ export interface UnitHealEffect extends Effect {
   healType: 'points' | 'percentage' | 'units',
   rule: 'none' | 'spellLevel',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: any
     }
   }
@@ -118,7 +125,7 @@ export interface UnitSummonEffect extends Effect {
   rule: 'spellLevel' | 'fixed',
   summonNetPower: number,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -128,7 +135,7 @@ export interface KingdomResistanceEffect extends Effect {
   rule: 'spellLevel',
   resistance: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -138,7 +145,7 @@ export interface KingdomBuildingsEffect extends Effect {
   rule: 'landPercentageLoss',
   target: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: { min: number, max: number }
     }
   }
@@ -148,7 +155,7 @@ export interface KingdomResourcesEffect extends Effect {
   rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: { min: number, max: number }
     }
   }
@@ -158,7 +165,7 @@ export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
   production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -168,7 +175,7 @@ export interface ArmyUpkeepEffect extends Effect {
   rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
   filters: UnitFilter[] | null;
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: {
         geld: any,
         mana: any,
@@ -187,8 +194,15 @@ export interface CastingEffect extends Effect {
   rule: string,
   type: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
+  }
+}
+
+export interface WishEffect extends Effect {
+  positive:{
+  },
+  negative: {
   }
 }

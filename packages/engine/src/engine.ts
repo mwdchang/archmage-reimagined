@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
   loadUnitData,
   loadSpellData,
@@ -47,7 +48,8 @@ import {
   successCastingRate,
   currentSpellLevel,
   enchantmentUpkeep,
-  maxSpellLevel
+  maxSpellLevel,
+  dispelEnchantment
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -418,6 +420,25 @@ class Engine {
     if (item.attributes.includes('summon')) {
       return this.summonByItem(mage, itemId, num);
     }
+    this.useTurn(mage);
+    await this.adapter.updateMage(mage);
+  }
+
+  async dispel(mage:Mage, enchantId: string, mana: number) {
+    const enchantment = mage.enchantments.find(d => d.id === enchantId);
+    if (enchantment) {
+      this.useTurn(mage);
+
+      const probability = dispelEnchantment(mage, enchantment, mana);
+      if (Math.random() <= probability) {
+        mage.enchantments = mage.enchantments.filter(d => d.id !== enchantId);
+        mage.currentMana -= mana;
+        if (mage.currentMana < 0) {
+          mage.currentMana = 0;
+        }
+      }
+    }
+    await this.adapter.updateMage(mage);
   }
 
   // - factor out spell success/fail
@@ -525,6 +546,7 @@ class Engine {
 
     // Success
     const enchantment: Enchantment = {
+      id: uuidv4(),
       casterId: mage.id,
       casterMagic: mage.magic,
       targetId: mage.id,

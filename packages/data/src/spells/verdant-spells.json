@@ -912,6 +912,76 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+          "race": ["elf"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "primaryAttackPower,secondaryAttackPower": {
+              "accuracy": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "verdant": { "value": 0.13 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
+              "accuracy": {
+                "rule": "addSpellLevelPercentage",
+                "magic": {
+                  "verdant": { "value": 7 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
+          "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "primaryAttackPower": {
+              "accuracy": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "verdant": { "value": 0.23 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
+              "hitPoints": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "verdant": { "value": 0.20 }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {
