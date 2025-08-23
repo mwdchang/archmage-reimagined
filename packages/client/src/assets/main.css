@@ -82,3 +82,18 @@ table > tr.active {
 .section-header {
   color: #F80
 }
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}

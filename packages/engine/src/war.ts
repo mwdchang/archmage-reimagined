@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
-import { UnitAttrEffect, UnitDamageEffect, UnitHealEffect, BattleEffect, EffectOrigin, TemporaryUnitEffect } from 'shared/types/effects';
+import { 
+  UnitAttrEffect,
+  UnitDamageEffect,
+  UnitHealEffect,
+  BattleEffect,
+  EffectOrigin,
+  TemporaryUnitEffect
+} from 'shared/types/effects';
 import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
@@ -175,7 +182,6 @@ const applyDamageEffect = (
   if (!damageEffect.magic[casterMagic]) return;
 
   affectedArmy.forEach(stack => {
-    // TODO: minTimes and maxTimes
     const rule = damageEffect.rule;
     if (rule === 'spellLevel') {
       rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
@@ -270,7 +276,6 @@ const applyTemporaryUnitEffect = (
   tempEffect: TemporaryUnitEffect,
   mage: Mage
 ) => {
-  console.log('---------------- test test test', tempEffect);
   const spellLevel = origin.spellLevel;
   const magic = origin.magic;
   const maxSpellLevel = getMaxSpellLevels()[magic];

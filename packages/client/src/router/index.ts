@@ -23,6 +23,7 @@ import RecruitView from '@/views/RecruitView.vue';
 import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
+import DefeatedView from '@/views/DefeatedView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/defeated',
+      name: 'defeated',
+      component: DefeatedView
     },
     {
       path: '/about',

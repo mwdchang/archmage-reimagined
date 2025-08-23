@@ -2,7 +2,7 @@
   <main v-if="mageStore.mage">
     <h2>Research</h2>
     <p> 
-      You are generating {{ rp }} research points per turn. <br>
+      You are generating {{ rp }} research points per turn. 
       Your magic item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
@@ -10,7 +10,7 @@
         <tr>
           <td>&nbsp;</td>
           <td>Spell</td>
-          <td>Cost (points)</td>
+          <td>Research cost (points)</td>
           <td>Turns</td>
         </tr>
         <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)">
@@ -44,6 +44,9 @@
     <div style="display: flex; align-items: center; margin-top: 10px">
       <button @click="submitResearch"> Research </button>
     </div>
+    <div style="display: flex; align-items: center; margin-top: 10px">
+      {{ researchResultStr }}
+    </div>
   </main>
 </template>
 
@@ -70,6 +73,22 @@ const currentResearch = ref(mageStore.mage!.currentResearch);
 const focusResearch = ref(mageStore.mage!.focusResearch? true : false);
 const turns = ref(0);
 
+interface ResearchResult {
+  [key: string]: string[]
+}
+
+const researchResult = ref<ResearchResult|null>(null);
+const researchResultStr = computed(() => {
+  const newSpells: string[] = [];
+  if (researchResult.value === null) return '';
+  Object.keys(researchResult.value).forEach(key => {
+    researchResult.value![key].forEach(spellId => {
+      newSpells.push(spellId);
+    });
+  });
+  return `You added ${newSpells.join(', ')} to your spellbook`;
+});
+
 const filteredMagicTypes = computed(() => {
   return magicTypes.filter(m => {
     return mageStore.mage?.currentResearch[m];
@@ -90,14 +109,15 @@ const submitResearch = async () => {
       magic = m;
     }
   });
-  const result = await API.post('research', {
+  const response = await API.post('research', {
     magic,
     focus: focusResearch.value,
     turns: turns.value
   });
+  researchResult.value = response.data.result; 
 
-  mageStore.setMage(result.data.mage as Mage);
-  currentResearch.value = mageStore.mage?.currentResearch;
+  mageStore.setMage(response.data.mage as Mage);
+  currentResearch.value = mageStore.mage?.currentResearch!;
   focusResearch.value = mageStore.mage?.focusResearch as boolean;
 };
 
@@ -105,7 +125,7 @@ const submitResearch = async () => {
 
 <style scoped>
 main {
-  max-width: 35rem;
+  max-width: 40rem;
 }
 
 table > tr {

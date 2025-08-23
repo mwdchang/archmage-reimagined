@@ -8,9 +8,7 @@ import {
   getItemById,
   initializeResearchTree,
   magicTypes,
-  getUnitById,
-  getMaxSpellLevels,
-  getRandomItem,
+  getUnitById
 } from './base/references';
 import {
   createMage,
@@ -33,8 +31,7 @@ import {
   armyUpkeep,
   buildingUpkeep,
   realMaxPopulation,
-  recruitmentAmount,
-  getBuildingTypes
+  recruitUpkeep
 } from './interior';
 import {
   doResearch,
@@ -48,7 +45,6 @@ import {
   successCastingRate,
   currentSpellLevel,
   enchantmentUpkeep,
-  maxSpellLevel,
   dispelEnchantment
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
@@ -61,7 +57,7 @@ import {
   EffectOrigin
 } from 'shared/types/effects';
 
-import { randomInt, between, randomBM } from './random';
+import { randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -261,7 +257,6 @@ class Engine {
 
 
     // 4. recruiting barrack units
-    const speed = 1.0;
     const doRecruit = (id: string, size: number) => {
       if (mage.army.find(d => d.id === id)) {
         mage.army.find(d => d.id === id).size += size;
@@ -270,34 +265,15 @@ class Engine {
       }
     };
 
-    let recruitGeldCapacity = 100 * mage.barracks * speed;
+    const recruitCost = recruitUpkeep(mage);
+    const recruits = recruitCost.recruits;
 
-    for (let i = 0; i < mage.recruitments.length; i++) {
-      const au = mage.recruitments[i];
-      const unitMax = recruitmentAmount(mage, au.id);
-
-      // consumes all capacity
-      if (unitMax <= au.size) {
-        doRecruit(au.id, unitMax);
-        au.size -= unitMax;
-        console.log(`\trecruited ${unitMax} ${au.id}`);
-        break;
-      }
-
-      // partially consumes, need to rollover to next recruitment
-      if (unitMax > au.size) {
-        const recruitGeld = au.size * getUnitById(au.id).recruitCost.geld;
-        if (recruitGeldCapacity < recruitGeld) break;
-
-        recruitGeldCapacity -= recruitGeld;
-        doRecruit(au.id, au.size);
-        au.size = 0;
-        console.log(`\trecruited ${au.size} ${au.id}`);
-      }
+    for (let i = 0; i < recruits.length; i++) {
+      doRecruit(recruits[i].id, recruits[i].size);
+      mage.recruitments[i].size -= recruits[i].size;
+      console.log(`recruited ${recruits[i].size} of ${recruits[i].id}`);
     }
-    // Clean up
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
-
 
     // 5. enchantment
     // - summoning effects
@@ -338,6 +314,10 @@ class Engine {
     mage.currentGeld -= spellCost.geld;
     mage.currentMana -= spellCost.mana;
     mage.currentPopulation -= spellCost.population;
+
+    mage.currentGeld -= recruitCost.geld;
+    mage.currentMana -= recruitCost.mana;
+    mage.currentPopulation -= recruitCost.population
 
     if (mage.currentGeld < 0) mage.currentGeld = 0;
     if (mage.currentMana < 0) mage.currentMana = 0;
@@ -396,6 +376,7 @@ class Engine {
     return manaGained;
   }
 
+
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
     magicTypes.forEach(m => {
       if (mage.currentResearch[m]) {
@@ -406,14 +387,30 @@ class Engine {
     mage.currentResearch[magic].active = true;
     mage.focusResearch = focus;
 
+    const before = _.cloneDeep(mage.spellbook);
     if (turns && turns > 0) {
       for (let i = 0; i < turns; i++) {
         doResearch(mage, researchPoints(mage));
         this.useTurn(mage);
       }
     }
+    const after = _.cloneDeep(mage.spellbook);
+
+    // Calculate new spells gained, if any
+    const learnedSpells: { [key: string]: string[]} = {};
+    const keys = Object.keys(after);
+    for (const key of keys) {
+      if (before[key]) {
+        learnedSpells[key] = _.difference(after[key], before[key]);
+      } else {
+        learnedSpells[key] = after[key];
+      }
+    }
+
     await this.adapter.updateMage(mage);
+    return learnedSpells;
   }
+
 
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const item = getItemById(itemId);

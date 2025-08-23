@@ -54,37 +54,67 @@
     <table v-if="mage">
       <tbody>
         <tr>
-          <td> Barrier </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="''" />
+              Barrier 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.barrier) }} 
           </td>
         </tr>
         <tr>
-          <td> Ascendant </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="'ascendant'" />
+              Ascendant 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.ascendant) }} 
           </td>
         </tr>
         <tr>
-          <td> Verdant </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="'verdant'" />
+              Verdant 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.verdant) }} 
           </td>
         </tr>
         <tr>
-          <td> Eradication </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="'eradication'" />
+              Eradication 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.eradication) }} 
           </td>
         </tr>
         <tr>
-          <td> Nether </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="'nether'" />
+              Nether 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.nether) }} 
           </td>
         </tr>
         <tr>
-          <td> Phantasm </td> 
+          <td> 
+            <div class="row">
+              <magic :magic="'phantasm'" />
+              Phantasm 
+            </div>
+          </td> 
           <td class="text-right"> 
             {{ numberFormatter(resistanceStatus.phantasm) }} 
           </td>
@@ -156,6 +186,18 @@
             <td class="text-right"> {{ enchantmentUpkeepStatus.geld }} </td>
             <td class="text-right"> {{ enchantmentUpkeepStatus.mana }} </td>
             <td class="text-right"> {{ enchantmentUpkeepStatus.population }} </td>
+          </tr>
+          <tr>
+            <td> Recruit cost </td>
+            <td class="text-right"> {{ recruitUpkeepStatus.geld }}</td>
+            <td class="text-right"> {{ recruitUpkeepStatus.mana }} </td>
+            <td class="text-right"> {{ recruitUpkeepStatus.population }}</td>
+          </tr>
+          <tr>
+            <td> Net income </td>
+            <td class="text-right"> </td>
+            <td class="text-right"> </td>
+            <td class="text-right"> </td>
           </tr>
         </tbody>
       </table>
@@ -266,7 +308,8 @@ import {
   populationIncome,
   armyUpkeep,
   buildingUpkeep,
-  realMaxPopulation
+  realMaxPopulation,
+  recruitUpkeep
 } from 'engine/src/interior';
 
 import { 
@@ -285,6 +328,7 @@ enchantmentUpkeep,
 import {
   getArmy, conditionString
 } from '@/util/util';
+import Magic from '@/components/magic.vue';
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);
@@ -316,6 +360,10 @@ const armyUpkeepStatus = computed(() => {
   return armyUpkeep(mageStore.mage!);
 });
 
+const recruitUpkeepStatus = computed(() => {
+  return recruitUpkeep(mageStore.mage);
+});
+
 const buildingUpkeepStatus = computed(() => {
   return buildingUpkeep(mageStore.mage!);
 });
@@ -329,6 +377,9 @@ const unitsStatus = computed(() => {
   let rawArmy = getArmy(mageStore.mage);
 
   return rawArmy.sort((a, b) => b.power - a.power);
+});
+
+const netGeldIncome = computed(() => {
 });
 
 </script>
