@@ -5,11 +5,11 @@
     <br>
     <main style="display: flex; flex-direction: row">
       <section>
-        <img style="width: 250px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
-        <img style="width: 250px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
-        <img style="width: 250px" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
-        <img style="width: 250px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
-        <img style="width: 250px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+        <img style="width: 200px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
+        <img style="width: 200px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
+        <img style="width: 200px" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
+        <img style="width: 200px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
+        <img style="width: 200px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
       </section>
       <section style="margin-left: 25px">
         <div class="row">

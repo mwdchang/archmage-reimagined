@@ -165,9 +165,9 @@
           </tr>
           <tr>
             <td> Income </td>
-            <td class="text-right"> {{ geldIncome(mage) }} </td>
-            <td class="text-right"> {{ manaIncome(mage) }} </td>
-            <td class="text-right"> {{ populationIncome(mage) }} </td>
+            <td class="text-right"> {{ productionStatus.geld }} </td>
+            <td class="text-right"> {{ productionStatus.mana }} </td>
+            <td class="text-right"> {{ productionStatus.population }} </td>
           </tr>
           <tr>
             <td> Unit upkeep </td>
@@ -195,9 +195,9 @@
           </tr>
           <tr>
             <td> Net income </td>
-            <td class="text-right"> </td>
-            <td class="text-right"> </td>
-            <td class="text-right"> </td>
+            <td class="text-right"> {{ netStatus.geld }} </td>
+            <td class="text-right"> {{ netStatus.mana }} </td>
+            <td class="text-right"> {{ netStatus.population }} </td>
           </tr>
         </tbody>
       </table>
@@ -356,6 +356,13 @@ const resistanceStatus = computed(() => {
   return calcKingdomResistance(mageStore.mage!);
 });
 
+const productionStatus = computed(() => {
+  const geld = geldIncome(mageStore.mage!);
+  const mana = manaIncome(mageStore.mage!);
+  const population = populationIncome(mageStore.mage!);
+  return { geld, mana, population };
+});
+
 const armyUpkeepStatus = computed(() => {
   return armyUpkeep(mageStore.mage!);
 });
@@ -372,6 +379,28 @@ const enchantmentUpkeepStatus = computed(() => {
   return enchantmentUpkeep(mageStore.mage!);
 });
 
+const netStatus= computed(() => {
+  const geld = productionStatus.value.geld
+    - armyUpkeepStatus.value.geld 
+    - buildingUpkeepStatus.value.geld
+    - enchantmentUpkeepStatus.value.geld
+    - recruitUpkeepStatus.value.geld;
+
+  const mana = productionStatus.value.mana
+    - armyUpkeepStatus.value.mana
+    - buildingUpkeepStatus.value.mana
+    - enchantmentUpkeepStatus.value.mana
+    - recruitUpkeepStatus.value.mana;
+
+  const population = productionStatus.value.population
+    - armyUpkeepStatus.value.population
+    - buildingUpkeepStatus.value.population
+    - enchantmentUpkeepStatus.value.population
+    - recruitUpkeepStatus.value.population;
+
+  return { geld, mana, population };
+});
+
 const unitsStatus = computed(() => {
   if (!mageStore.mage) return []
   let rawArmy = getArmy(mageStore.mage);
@@ -379,8 +408,6 @@ const unitsStatus = computed(() => {
   return rawArmy.sort((a, b) => b.power - a.power);
 });
 
-const netGeldIncome = computed(() => {
-});
 
 </script>
 
@@ -390,7 +417,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #333;
+  background: #282828;
   padding: 0.5rem;
 }
 

@@ -49,7 +49,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "180px";
+    document.getElementById("mySidenav")!.style.width = "200px";
   }
 
   // Close the side navigation
@@ -64,21 +64,21 @@ onMounted(() => {
 
 <style scoped>
 .divider {
-  border-bottom: 1px solid #888;
+  border-bottom: 2px solid #333;
   margin-top: 2px;
   margin-bottom: 2px;
 }
 
 .menu-toggle {
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px;
-    background-color: #333;
-    color: white;
-    /* position: absolute; */
-    position: fixed;
-    top: 10px;
-    left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+  /* background-color: #333; */
+  color: white;
+  /* position: absolute; */
+  position: fixed;
+  top: 10px;
+  left: 10px;
 }
 
 .sidenav {
@@ -91,13 +91,13 @@ onMounted(() => {
   background-color: #111;
   overflow-x: hidden;
   transition: 0.3s;
-  padding-top: 35px;
+  padding-top: 40px;
 }
 
 .sidenav a {
   padding: 4px 4px 4px 20px;
   text-decoration: none;
-  line-height: 1.2;
+  line-height: 1.0;
   font-size: 16px;
   color: #b1b1b1;
   display: block;
@@ -111,8 +111,6 @@ onMounted(() => {
 .sidenav .closebtn {
   position: absolute;
   top: 10px;
-  right: 15px;
   font-size: 18px;
-  margin-left: 50px;
 }
 </style>
