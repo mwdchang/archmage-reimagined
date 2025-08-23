@@ -36,6 +36,8 @@ export interface ResearchItem {
 }
 
 export interface Enchantment {
+  id: string; // instance id
+
   casterId: number;
   casterMagic: string;
   targetId: number;
@@ -44,6 +46,7 @@ export interface Enchantment {
   spellMagic: string; // not used???
   spellLevel: number;
 
+  isEpidemic: boolean;
   isPermanent: boolean;
   life: number;
 }

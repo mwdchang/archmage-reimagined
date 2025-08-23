@@ -824,7 +824,7 @@
     "powerRank": 29,
     "hitPoints": 50,
     "race": ["demon"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "temporary"],
 
     "primaryAttackPower": 200,
     "primaryAttackType": ["psychic"],

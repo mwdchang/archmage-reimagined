@@ -1,6 +1,13 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
 
+type AllowedMagic = 
+  'ascendant' |
+  'verdant' |
+  'eradication' |
+  'nether' | 
+  'phantasm';
+
 export interface Effect {
   effectType: string
 }
@@ -23,18 +30,27 @@ export interface EffectOrigin {
 **/
 
 
+export interface TemporaryUnitEffect extends Effect {
+  checkResistance: false;
+  unitId: string,
+  rule: 'spellLevelPercentageBase' | 'fixed', 
+  target: 'population' | null,
+  magic: {
+    [key in AllowedMagic]: {
+      value: number
+    }
+  }
+}
+
+
 /**
- * Pseudo code:
- *
- * for (let i = 0; i < between(min, max); i++) {
- *   affectedStacks = match_units(filters);
- *   if (targetType === "random") {
- *     affectedStacks = random(affectedStacks);
- *   }
- *   applyEffect(...)
- * }
- *
+ * Prebattle effects takes place before the armies line up. This is used to
+ * - Priortize unit attribute changes, eg: set to fix number
+ * - Create temporary stacks
 **/
+export interface PrebattleEffect extends BattleEffect{
+}
+
 export interface BattleEffect extends Effect {
   target: 'self' | 'opponent' | 'both';
   targetType: 'all' | 'random' | 'weightedRandom'
@@ -43,8 +59,9 @@ export interface BattleEffect extends Effect {
     min: number;
     max: number;
   } | null,
-  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect)[]
+  effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect | TemporaryUnitEffect)[]
 }
+
 
 
 /**
@@ -58,7 +75,7 @@ export interface BattleEffect extends Effect {
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
         [key: string]: {
@@ -80,7 +97,7 @@ export interface UnitDamageEffect extends Effect {
   damageType: string[],
   rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic ]: {
       value: any
     }
   }
@@ -91,7 +108,7 @@ export interface UnitHealEffect extends Effect {
   healType: 'points' | 'percentage' | 'units',
   rule: 'none' | 'spellLevel',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: any
     }
   }
@@ -108,7 +125,7 @@ export interface UnitSummonEffect extends Effect {
   rule: 'spellLevel' | 'fixed',
   summonNetPower: number,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -118,7 +135,7 @@ export interface KingdomResistanceEffect extends Effect {
   rule: 'spellLevel',
   resistance: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -128,17 +145,17 @@ export interface KingdomBuildingsEffect extends Effect {
   rule: 'landPercentageLoss',
   target: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: { min: number, max: number }
     }
   }
 }
 
 export interface KingdomResourcesEffect extends Effect {
-  rule: 'spellLevelLoss' | 'spellLevelGain',
+  rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: { min: number, max: number }
     }
   }
@@ -148,7 +165,7 @@ export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
   production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
   }
@@ -158,7 +175,7 @@ export interface ArmyUpkeepEffect extends Effect {
   rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
   filters: UnitFilter[] | null;
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: {
         geld: any,
         mana: any,
@@ -177,8 +194,15 @@ export interface CastingEffect extends Effect {
   rule: string,
   type: string,
   magic: {
-    [key: string]: {
+    [key in AllowedMagic]: {
       value: number
     }
+  }
+}
+
+export interface WishEffect extends Effect {
+  positive:{
+  },
+  negative: {
   }
 }

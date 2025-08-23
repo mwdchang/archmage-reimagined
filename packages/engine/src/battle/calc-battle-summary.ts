@@ -12,6 +12,7 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
   let attackerPowerLoss = 0;
   let attackerUnitLoss = 0;
   attackingArmy.forEach(stack => {
+    if (stack.isTemporary) return;
     const np = stack.unit.powerRank * stack.loss;
     attackerPowerLoss += np;
     attackerUnitLoss += stack.loss;
@@ -21,6 +22,7 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
   let defenderPowerLoss = 0;
   let defenderUnitLoss = 0;
   defendingArmy.forEach(stack => {
+    if (stack.isTemporary) return;
     const np = stack.unit.powerRank * stack.loss;
     defenderPowerLoss += np;
     defenderUnitLoss += stack.loss;

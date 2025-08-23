@@ -16,7 +16,7 @@ enum StackType {
 // - flyer
 // - ranged
 // - everything else
-const getPowerModifier = (u: Unit) => {
+export const getPowerModifier = (u: Unit) => {
   if (isFlying(u)) return  1.5 * 1.5;
   if (isRanged(u)) return 1.0;
   return 1.5;
@@ -53,7 +53,9 @@ export const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       removedAbilities: [],
 
       loss: 0,
-      netPower: u.powerRank * stack.size
+      netPower: u.powerRank * stack.size,
+
+      isTemporary: false
     }
   });
 

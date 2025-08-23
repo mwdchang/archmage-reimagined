@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
   loadUnitData,
   loadSpellData,
@@ -7,9 +8,7 @@ import {
   getItemById,
   initializeResearchTree,
   magicTypes,
-  getUnitById,
-  getMaxSpellLevels,
-  getRandomItem,
+  getUnitById
 } from './base/references';
 import {
   createMage,
@@ -32,8 +31,7 @@ import {
   armyUpkeep,
   buildingUpkeep,
   realMaxPopulation,
-  recruitmentAmount,
-  getBuildingTypes
+  recruitUpkeep
 } from './interior';
 import {
   doResearch,
@@ -47,7 +45,7 @@ import {
   successCastingRate,
   currentSpellLevel,
   enchantmentUpkeep,
-  maxSpellLevel
+  dispelEnchantment
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -59,7 +57,7 @@ import {
   EffectOrigin
 } from 'shared/types/effects';
 
-import { randomInt, between, randomBM } from './random';
+import { randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -76,6 +74,7 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 
+const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
 
 interface GameMsg {
@@ -258,7 +257,6 @@ class Engine {
 
 
     // 4. recruiting barrack units
-    const speed = 1.0;
     const doRecruit = (id: string, size: number) => {
       if (mage.army.find(d => d.id === id)) {
         mage.army.find(d => d.id === id).size += size;
@@ -267,34 +265,15 @@ class Engine {
       }
     };
 
-    let recruitGeldCapacity = 100 * mage.barracks * speed;
+    const recruitCost = recruitUpkeep(mage);
+    const recruits = recruitCost.recruits;
 
-    for (let i = 0; i < mage.recruitments.length; i++) {
-      const au = mage.recruitments[i];
-      const unitMax = recruitmentAmount(mage, au.id);
-
-      // consumes all capacity
-      if (unitMax <= au.size) {
-        doRecruit(au.id, unitMax);
-        au.size -= unitMax;
-        console.log(`\trecruited ${unitMax} ${au.id}`);
-        break;
-      }
-
-      // partially consumes, need to rollover to next recruitment
-      if (unitMax > au.size) {
-        const recruitGeld = au.size * getUnitById(au.id).recruitCost.geld;
-        if (recruitGeldCapacity < recruitGeld) break;
-
-        recruitGeldCapacity -= recruitGeld;
-        doRecruit(au.id, au.size);
-        au.size = 0;
-        console.log(`\trecruited ${au.size} ${au.id}`);
-      }
+    for (let i = 0; i < recruits.length; i++) {
+      doRecruit(recruits[i].id, recruits[i].size);
+      mage.recruitments[i].size -= recruits[i].size;
+      console.log(`recruited ${recruits[i].size} of ${recruits[i].id}`);
     }
-    // Clean up
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
-
 
     // 5. enchantment
     // - summoning effects
@@ -335,6 +314,10 @@ class Engine {
     mage.currentGeld -= spellCost.geld;
     mage.currentMana -= spellCost.mana;
     mage.currentPopulation -= spellCost.population;
+
+    mage.currentGeld -= recruitCost.geld;
+    mage.currentMana -= recruitCost.mana;
+    mage.currentPopulation -= recruitCost.population
 
     if (mage.currentGeld < 0) mage.currentGeld = 0;
     if (mage.currentMana < 0) mage.currentMana = 0;
@@ -393,6 +376,7 @@ class Engine {
     return manaGained;
   }
 
+
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
     magicTypes.forEach(m => {
       if (mage.currentResearch[m]) {
@@ -403,20 +387,59 @@ class Engine {
     mage.currentResearch[magic].active = true;
     mage.focusResearch = focus;
 
+    const before = _.cloneDeep(mage.spellbook);
     if (turns && turns > 0) {
       for (let i = 0; i < turns; i++) {
         doResearch(mage, researchPoints(mage));
         this.useTurn(mage);
       }
     }
+    const after = _.cloneDeep(mage.spellbook);
+
+    // Calculate new spells gained, if any
+    const learnedSpells: { [key: string]: string[]} = {};
+    const keys = Object.keys(after);
+    for (const key of keys) {
+      if (before[key]) {
+        learnedSpells[key] = _.difference(after[key], before[key]);
+      } else {
+        learnedSpells[key] = after[key];
+      }
+    }
+
     await this.adapter.updateMage(mage);
+    return learnedSpells;
   }
+
 
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const item = getItemById(itemId);
     if (item.attributes.includes('summon')) {
       return this.summonByItem(mage, itemId, num);
     }
+    this.useTurn(mage);
+    await this.adapter.updateMage(mage);
+  }
+
+  async dispel(mage:Mage, enchantId: string, mana: number) {
+    const enchantment = mage.enchantments.find(d => d.id === enchantId);
+    let success = false;
+    if (enchantment) {
+      this.useTurn(mage);
+
+      mage.currentMana -= mana;
+      if (mage.currentMana < 0) {
+        mage.currentMana = 0;
+      }
+
+      const probability = dispelEnchantment(mage, enchantment, mana);
+      if (Math.random() <= probability) {
+        mage.enchantments = mage.enchantments.filter(d => d.id !== enchantId);
+        success = true;
+      }
+    }
+    await this.adapter.updateMage(mage);
+    return success;
   }
 
   // - factor out spell success/fail
@@ -467,14 +490,22 @@ class Engine {
       mage.currentMana -= cost;
       this.useTurns(mage, spell.castingTurn);
 
-      if (attributes.includes('selfOnly') && castingSuccessful) {
+      if (castingSuccessful === false) {
+        continue;
+      }
+
+      if (attributes.includes('selfOnly')) {
         if (attributes.includes('summon')) {
           this.summon(mage, spellId);
         } else if (spell.attributes.includes('enchantment')) {
           this.enchant(mage, spellId);
         } else if (spell.attributes.includes('instant')) {
           this.instantSelf(mage, spellId);
+        } else {
+          throw new Error(`cannot process attributes ${attributes}`);
         }
+      } else {
+        // FIXME
       }
     }
     return logs;
@@ -516,6 +547,7 @@ class Engine {
 
     // Success
     const enchantment: Enchantment = {
+      id: uuidv4(),
       casterId: mage.id,
       casterMagic: mage.magic,
       targetId: mage.id,
@@ -524,6 +556,7 @@ class Engine {
       spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
+      isEpidemic: spell.attributes.includes('epidemic'),
       isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
     }
@@ -790,6 +823,33 @@ class Engine {
       defenderId: battleReport.defender.id,
       summary: battleReport.summary
     };
+
+
+    /** Handle epidemic enchantments **/
+ 
+    // attacker to defender
+    mage.enchantments.forEach(enchantment => {
+      if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
+        const existingEnchantment = defenderMage.enchantments.find(d => {
+          return d.spellId === enchantment.spellId;
+        });
+        if (!existingEnchantment) {
+          defenderMage.enchantments.push(_.cloneDeep(enchantment));
+        }
+      }
+    });
+
+    // defender to attacker
+    defenderMage.enchantments.forEach(enchantment => {
+      if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
+        const existingEnchantment = mage.enchantments.find(d => {
+          return d.spellId === enchantment.spellId;
+        });
+        if (!existingEnchantment) {
+          mage.enchantments.push(_.cloneDeep(enchantment));
+        }
+      }
+    });
 
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     await this.adapter.updateMage(mage);

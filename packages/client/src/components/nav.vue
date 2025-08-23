@@ -11,6 +11,7 @@
 
     <router-link to="/battle">Battle</router-link>
     <router-link to="/spell">Cast Spells</router-link>
+    <router-link to="/dispel">Dispel Enchantments</router-link>
     <router-link to="/item">Use Items</router-link>
     <div class="divider"></div>
 

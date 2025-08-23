@@ -9,6 +9,7 @@ import DestroyView from '@/views/DestroyView.vue';
 import StatusReportView from '@/views/StatusReportView.vue';
 import RankListView from '@/views/RankListView.vue';
 import SpellView from '@/views/SpellView.vue';
+import DispelView from '@/views/DispelView.vue';
 import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
 import BattleView from '@/views/BattleView.vue';
@@ -22,6 +23,7 @@ import RecruitView from '@/views/RecruitView.vue';
 import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
+import DefeatedView from '@/views/DefeatedView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -31,6 +33,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/defeated',
+      name: 'defeated',
+      component: DefeatedView
     },
     {
       path: '/about',
@@ -80,6 +87,11 @@ const router = createRouter({
       path: '/spell',
       name: 'spell',
       component: SpellView
+    },
+    {
+      path: '/dispel',
+      name: 'dispel',
+      component: DispelView
     },
     {
       path: '/item',

@@ -93,8 +93,15 @@ router.get('/api/ranklist', async (_req: any, res) => {
 router.post('/api/spell', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { spellId, num, target } = req.body;
-  const r = await engine.castSpell(mage, spellId, num, target);
-  res.status(200).json({ r, mage });
+  const result = await engine.castSpell(mage, spellId, num, target);
+  res.status(200).json({ result, mage });
+});
+
+router.post('/api/dispel', async (req: any, res) => {
+  const mage = await engine.getMageByUser(req.user.username);
+  const { enchantId, mana } = req.body;
+  const result = await engine.dispel(mage, enchantId, mana);
+  res.status(200).json({ result, mage });
 });
 
 router.post('/api/defence-assignment', async (req: any, res) => {
@@ -104,7 +111,6 @@ router.post('/api/defence-assignment', async (req: any, res) => {
   await engine.setAssignment(mage, assignment);
   res.status(200).json({ mage });
 });
-
 
 router.post('/api/recruitments', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
@@ -133,8 +139,8 @@ router.post('/api/item', async (req: any, res) => {
 router.post('/api/research', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { magic, focus, turns } = req.body;
-  const r = await engine.research(mage, magic, focus, turns);
-  res.status(200).json({ r, mage });
+  const result = await engine.research(mage, magic, focus, turns);
+  res.status(200).json({ result, mage });
 });
 
 router.post('/api/war', async (req: any, res) => {

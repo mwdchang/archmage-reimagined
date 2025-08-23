@@ -267,5 +267,58 @@
     },
     "abilities": [
     ]
+  },
+  {
+    "id": "capsuleMonster",
+    "name": "Capsule Monster",
+    "magic": "plain",
+    "powerRank": 21,
+    "hitPoints": 1,
+    "race": ["human"],
+    "attributes": ["special", "temporary"],
+
+    "primaryAttackPower": 500,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "flying", "extra": null }
+    ]
   }
 ]

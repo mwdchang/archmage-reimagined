@@ -1,9 +1,6 @@
 <template>
   <h4> Battle effect </h4>
-  <p v-if="effect.filters">
-    {{ effect.filters }}
-  </p>
-  <p>
+  <p> 
     Targeting {{ effect.target }} on {{ effect.targetType }} units 
     <span v-if="effect.filters"> with {{ effect.filters }} </span>
   </p>

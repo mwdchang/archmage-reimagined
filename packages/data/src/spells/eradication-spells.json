@@ -527,6 +527,7 @@
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 10,
+    "life": 50,
     "upkeep": {
       "geld": 0,
       "mana": 1000,
@@ -535,26 +536,26 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "population",
         "magic": {
-          "ascendant": { "value": { "min": 1200, "max": 3000 } },
-          "verdant": { "value": { "min": 2000, "max": 7000 } },
-          "eradication": { "value": { "min": 4000, "max": 15000 } },
-          "nether": { "value": { "min": 2000, "max": 7000 } },
-          "phantasm": { "value": { "min": 1200, "max": 3000 } }
+          "ascendant": { "value": { "min": -1200, "max": -3000 } },
+          "verdant": { "value": { "min": -2000, "max": -7000 } },
+          "eradication": { "value": { "min": -4000, "max": -15000 } },
+          "nether": { "value": { "min": -2000, "max": -7000 } },
+          "phantasm": { "value": { "min": -1200, "max": -3000 } }
         }
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "spellLevelLoss",
+        "rule": "addSpellLevelPercentage",
         "target": "mana",
         "magic": {
-          "ascendant": { "value": { "min": 1200, "max": 2000 } },
-          "verdant": { "value": { "min": 2000, "max": 4000 } },
-          "eradication": { "value": { "min": 4000, "max": 10000 } },
-          "nether": { "value": { "min": 2000, "max": 4000 } },
-          "phantasm": { "value": { "min": 1200, "max": 2000 } }
+          "ascendant": { "value": { "min": -1200, "max": -2000 } },
+          "verdant": { "value": { "min": -2000, "max": -4000 } },
+          "eradication": { "value": { "min": -4000, "max": -10000 } },
+          "nether": { "value": { "min": -2000, "max": -4000 } },
+          "phantasm": { "value": { "min": -1200, "max": -2000 } }
         }
       }
     ]
@@ -694,6 +695,7 @@
     "researchCost": 5000,
     "castingCost": 20000,
     "castingTurn": 8,
+    "life": 50,
     "upkeep": {
       "geld": 0,
       "mana": 2000,
@@ -978,6 +980,29 @@
     "upkeep": null,
     "effects": [
       {
+        "effectType": "PrebattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.fire": {
+                "rule": "set",
+                "magic": {
+                  "eradication": {
+                    "value": 100
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
@@ -992,7 +1017,7 @@
                 "rule": "add",
                 "magic": {
                   "eradication": {
-                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": 3000 } }
+                    "value": { "name": "bursting", "extra": { "type": ["fire"], "value": null } }
                   }
                 }
               }
@@ -1039,7 +1064,7 @@
     "name" : "Volcano Eruption",
     "magic": "eradication",
     "rank": "ultimate",
-    "decription": "This is the most powerful Eradication spell. It will cause most violent volcanic eruptions in your enemy's country. It will destroy land, maim citizens, eradicate armies and leave your enemy thunderstruck with shock and dismay. Fortunately, the Council only allows 10 such spells to be used against any mage. In addition, this spell is most effective when used against enemy with close net power to the caster. It's effectivness drops as the difference in power increases.",
+    "description": "This is the most powerful Eradication spell. It will cause most violent volcanic eruptions in your enemy's country. It will destroy land, maim citizens, eradicate armies and leave your enemy thunderstruck with shock and dismay. Fortunately, the Council only allows 10 such spells to be used against any mage. In addition, this spell is most effective when used against enemy with close net power to the caster. It's effectivness drops as the difference in power increases.",
     "attributes": ["instant"],
     "researchCost": 30000,
     "castingCost": 200000,

@@ -3,7 +3,7 @@ import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import {
   magicAlignmentTable, spellRankTable, productionTable, itemProductionTable
 } from './base/config';
-import { Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/types/mage';
 import {
   magicTypes,
   getUnitById,
@@ -51,6 +51,20 @@ export const itemGenerationRate = (mage: Mage) => {
   const land = totalLand(mage);
   const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.guilds / land);
   return rate;
+}
+
+export const doItemDestruction = (mage: Mage) => {
+  const itemKeys = Object.keys(mage.items);
+  if (itemKeys.length === 0) return null;
+
+  const idx = Math.floor(Math.random() * (itemKeys.length));
+  const dkey = itemKeys[idx];
+
+  mage.items[dkey] --;
+  if (mage.items[dkey] <= 0) {
+    delete mage.items[dkey];
+  }
+  return dkey;
 }
 
 export const doItemGeneration = (mage: Mage, force: boolean = false) => {
@@ -339,6 +353,17 @@ export const castingCost = (mage: Mage, spellId: string) => {
   castingCost *= costModifier;
 
   return castingCost;
+}
+
+const MIN_DISPEL_PROB = 0.01;
+const MAX_DISPEL_PROB = 0.97
+export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: number) => {
+  const spell = getSpellById(enchantment.spellId);
+  const castingCost = spell.castingCost;
+  const rawProb = (mana * (1 + mage.currentSpellLevel / enchantment.spellLevel)) / (2 * castingCost);
+  const adjustedProb = Math.max(MIN_DISPEL_PROB, Math.min(MAX_DISPEL_PROB, rawProb));
+
+  return adjustedProb;
 }
 
 export const calcKingdomResistance = (mage: Mage) => {

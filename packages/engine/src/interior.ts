@@ -114,10 +114,15 @@ export const maxFood = (mage: Mage) => {
   return food;
 }
 
+// Determine the maximum recruitable by the geld cost
+export const recruitGeldCapacity = (mage: Mage) => {
+  const speed = 1.0;
+  return 100 * mage.barracks * speed;
+}
+
 export const recruitmentAmount = (mage: Mage, unitId: string) => {
   const unit = getUnitById(unitId);
-  const speed = 1.0;
-  const amt = ((100 / unit.recruitCost.geld) * mage.barracks * speed);
+  const amt = recruitGeldCapacity(mage) / unit.recruitCost.geld;
   return Math.floor(amt);
 }
 
@@ -178,6 +183,34 @@ export const geldIncome = (mage: Mage) => {
     }
   }
   return baseIncome + delta;
+}
+
+
+export const recruitUpkeep = (mage: Mage) => {
+  let mana = 0;
+  let geld = 0;
+  let population = 0;
+  let geldCapacity = recruitGeldCapacity(mage);
+
+  const recruits: { id: string, size: number }[] = [];
+  for (let i = 0; i < mage.recruitments.length; i++) {
+    const recruit = mage.recruitments[i];
+    const unit = getUnitById(recruit.id);
+    const unitCapacity = Math.floor(geldCapacity / unit.recruitCost.geld);
+    const numUnits = Math.min(unitCapacity, recruit.size);
+
+    if (numUnits <= 0) break;
+
+    geld += numUnits * unit.recruitCost.geld;
+    mana += numUnits * unit.recruitCost.mana;
+    population += numUnits * unit.recruitCost.population;
+    geldCapacity -= numUnits * unit.recruitCost.geld;
+    recruits.push({ id: unit.id, size: numUnits });
+
+    if (numUnits < recruit.size) break;
+  }
+
+  return { geld, mana, population, recruits };
 }
 
 export const armyUpkeep = (mage: Mage) => {
