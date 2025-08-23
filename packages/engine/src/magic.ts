@@ -355,7 +355,7 @@ export const castingCost = (mage: Mage, spellId: string) => {
   return castingCost;
 }
 
-const MIN_DISPEL_PROB = 0.1;
+const MIN_DISPEL_PROB = 0.01;
 const MAX_DISPEL_PROB = 0.97
 export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: number) => {
   const spell = getSpellById(enchantment.spellId);

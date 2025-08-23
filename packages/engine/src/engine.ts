@@ -426,19 +426,23 @@ class Engine {
 
   async dispel(mage:Mage, enchantId: string, mana: number) {
     const enchantment = mage.enchantments.find(d => d.id === enchantId);
+    let success = false;
     if (enchantment) {
       this.useTurn(mage);
+
+      mage.currentMana -= mana;
+      if (mage.currentMana < 0) {
+        mage.currentMana = 0;
+      }
 
       const probability = dispelEnchantment(mage, enchantment, mana);
       if (Math.random() <= probability) {
         mage.enchantments = mage.enchantments.filter(d => d.id !== enchantId);
-        mage.currentMana -= mana;
-        if (mage.currentMana < 0) {
-          mage.currentMana = 0;
-        }
+        success = true;
       }
     }
     await this.adapter.updateMage(mage);
+    return success;
   }
 
   // - factor out spell success/fail
