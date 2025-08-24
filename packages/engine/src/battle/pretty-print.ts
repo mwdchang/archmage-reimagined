@@ -81,18 +81,30 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log('=== Assault note ===');
 
   br.battleLogs.forEach(entry => {
+    const aId = entry.attacker.id;
+    const dId = entry.defender.id;
+
     if (entry.type === 'primary' || entry.type === 'secondary') {
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} attacks ${mageMap[entry.defender.id]}'s ${entry.defender.unitId}`);
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} attacks ${mageMap[dId]}'s ${entry.defender.unitId}`);
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} slew ${mageMap[dId]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+      if (entry.attacker.unitsLoss < 0) {
+        console.log(`${mageMap[aId]}'s created ${Math.abs(entry.attacker.unitsLoss)} ${entry.attacker.unitId}`);
+      }
     } else if (entry.type === 'additionalStrike') {
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} attacks ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} again`);
-      console.log(`${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} attacks ${mageMap[dId]}'s ${entry.defender.unitId} again`);
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} slew ${mageMap[dId]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+      if (entry.attacker.unitsLoss < 0) {
+        console.log(`${mageMap[aId]}'s created ${Math.abs(entry.attacker.unitsLoss)} ${entry.attacker.unitId}`);
+      }
     } else if (entry.type === 'counter') {
-      console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} struck back ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitId}`);
-      console.log(`${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
+      console.log(`${mageMap[dId]}'s ${entry.defender.unitId} struck back ${mageMap[aId]}'s ${entry.attacker.unitId}`);
+      console.log(`${mageMap[dId]}'s ${entry.defender.unitId} slew ${mageMap[aId]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
+      if (entry.defender.unitsLoss < 0) {
+        console.log(`${mageMap[dId]}'s created ${Math.abs(entry.defender.unitsLoss)} ${entry.defender.unitId}`);
+      }
     } else if (entry.type.startsWith('burst')) {
-      console.log(`burst from ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.attacker.id]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
-      console.log(`burst from ${mageMap[entry.defender.id]}'s ${entry.defender.unitId} slew ${mageMap[entry.defender.id]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+      console.log(`burst from ${mageMap[dId]}'s ${entry.defender.unitId} slew ${mageMap[aId]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
+      console.log(`burst from ${mageMap[dId]}'s ${entry.defender.unitId} slew ${mageMap[dId]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
     }
     console.log('');
   })

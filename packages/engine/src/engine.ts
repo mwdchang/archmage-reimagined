@@ -73,6 +73,7 @@ import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
+import { prepareBattleStack } from './battle/prepare-battle-stack';
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -284,17 +285,19 @@ class Engine {
 
 
     // Enchantment life and upkeep
-    mage.enchantments = mage.enchantments.filter(d => {
+    // FIXME: mana = 0
+    // FIXME: Need to charge enemy mage mana for enchantments upkeep
+    mage.enchantments = mage.enchantments.filter(enchant => {
       // If enchantment has life, update
-      if (d.life && d.life > 0) {
-        d.life --;
+      if (enchant.life && enchant.life > 0) {
+        enchant.life --;
       }
-      if (d.life === 0) {
-        console.log(`${d.casterId} ${d.spellId} expired`)
+      if (enchant.life === 0) {
+        console.log(`${enchant.casterId} ${enchant.spellId} expired`)
       }
 
-      if (d.isPermanent === false) {
-        return d.life > 0;
+      if (enchant.isPermanent === false) {
+        return enchant.life > 0;
       }
       return true;
     });
@@ -776,20 +779,29 @@ class Engine {
 
   async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
     const defenderMage = await this.getMage(targetId);
+    const MAX_STACKS = 10;
 
-    // Make battle stacks
+    // For attacker, the army is formed by selected ids
+    const aBattleStackIds = stackIds.slice(MAX_STACKS);
+    const attackerArmy = mage.army.filter(s => aBattleStackIds.includes(s.id));
     const attacker: Combatant =  {
       mage: mage,
       spellId: spellId,
       itemId: itemId,
-      army: mage.army.filter(s => stackIds.includes(s.id))
+      army: attackerArmy
     };
 
+    // FIXME: assignment triggers
+    // For defender, the army is formed by up to 10 stacks sorted by modified power rank
+    const dBattleStackIds = prepareBattleStack(defenderMage.army, 'defender')
+      .map(d => { return d.unit.id; })
+      .slice(MAX_STACKS);
+    const defenderArmy = defenderMage.army.filter(s => dBattleStackIds.includes(s.id));
     const defender: Combatant = {
       mage: defenderMage,
       spellId: '',
       itemId: '',
-      army: defenderMage.army
+      army: defenderArmy
     };
 
     // Check if defense assignment is triggered

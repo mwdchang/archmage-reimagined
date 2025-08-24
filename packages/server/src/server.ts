@@ -158,14 +158,14 @@ router.post('/api/war', async (req: any, res) => {
   res.status(200).json({ errors: [], reportId: r.id, mage });
 });
 
-router.get('/api/report/:id', async (req, res) => {
+router.get('/api/report/:id', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const reportId = req.params.id;
   const report = await engine.getBattleReport(mage, reportId);
   res.status(200).json({ report });
 });
 
-router.get('/api/mage-battles', async (req, res) => {
+router.get('/api/mage-battles', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const battles = await engine.getMageBattles(mage);
   res.status(200).json({ battles });

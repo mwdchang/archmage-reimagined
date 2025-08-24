@@ -62,6 +62,20 @@ export interface BattleEffectLog {
   value: any
 }
 
+export interface BattleLog {
+  type: string,
+  attacker: {
+    id: number,
+    unitId: string,
+    unitsLoss: number
+  },
+  defender: {
+    id: number,
+    unitId: string,
+    unitsLoss: number
+  }
+}
+
 export interface BattleReport {
   id: string,
   timestamp: number,
@@ -95,19 +109,7 @@ export interface BattleReport {
     logs: BattleEffectLog[]
   },
 
-  battleLogs: {
-    type: string,
-    attacker: {
-      id: number,
-      unitId: string,
-      unitsLoss: number
-    },
-    defender: {
-      id: number,
-      unitId: string,
-      unitsLoss: number
-    }
-  }[],
+  battleLogs: BattleLog[],
 
   postBattleLogs: {
     id: number,
