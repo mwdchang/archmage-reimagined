@@ -285,17 +285,19 @@ class Engine {
 
 
     // Enchantment life and upkeep
-    mage.enchantments = mage.enchantments.filter(d => {
+    // FIXME: mana = 0
+    // FIXME: Need to charge enemy mage mana for enchantments upkeep
+    mage.enchantments = mage.enchantments.filter(enchant => {
       // If enchantment has life, update
-      if (d.life && d.life > 0) {
-        d.life --;
+      if (enchant.life && enchant.life > 0) {
+        enchant.life --;
       }
-      if (d.life === 0) {
-        console.log(`${d.casterId} ${d.spellId} expired`)
+      if (enchant.life === 0) {
+        console.log(`${enchant.casterId} ${enchant.spellId} expired`)
       }
 
-      if (d.isPermanent === false) {
-        return d.life > 0;
+      if (enchant.isPermanent === false) {
+        return enchant.life > 0;
       }
       return true;
     });
