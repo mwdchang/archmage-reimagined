@@ -368,7 +368,7 @@ const armyUpkeepStatus = computed(() => {
 });
 
 const recruitUpkeepStatus = computed(() => {
-  return recruitUpkeep(mageStore.mage);
+  return recruitUpkeep(mageStore.mage!);
 });
 
 const buildingUpkeepStatus = computed(() => {
@@ -379,7 +379,7 @@ const enchantmentUpkeepStatus = computed(() => {
   return enchantmentUpkeep(mageStore.mage!);
 });
 
-const netStatus= computed(() => {
+const netStatus = computed(() => {
   const geld = productionStatus.value.geld
     - armyUpkeepStatus.value.geld 
     - buildingUpkeepStatus.value.geld

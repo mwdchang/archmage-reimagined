@@ -9,7 +9,6 @@ import {
   getSpellById,
 } from './base/references';
 
-import { currentSpellLevel } from "./magic";
 import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
 import { matchesFilter } from './base/unit';
 
@@ -312,3 +311,4 @@ export const buildingUpkeep = (mage: Mage) => {
   result.mana += 30 * mage.barriers;
   return result;
 }
+

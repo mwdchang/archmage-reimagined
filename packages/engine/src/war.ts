@@ -15,7 +15,7 @@ import {
   currentSpellLevel,
   castingCost
 } from './magic';
-import { BattleReport, BattleStack, BattleEffectLog } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, BattleLog } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -757,7 +757,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
             }
           });
         }
-      }
+      } // end burst
 
 
       let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
@@ -787,7 +787,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-      battleReport.battleLogs.push({
+      const battleLog: BattleLog = {
         type: 'primary',
         attacker: {
           id: attackingMage.id,
@@ -799,7 +799,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           unitId: defendingStack.unit.id,
           unitsLoss: defenderUnitLoss
         }
-      });
+      };
 
       // Accumulate or clear partial damage
       if (defenderUnitLoss > 0) {
@@ -808,6 +808,18 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
       defendingStack.size -= defenderUnitLoss;
       defendingStack.loss += defenderUnitLoss;
+
+      // Steallife
+      if (hasAbility(aUnit, 'stealLife')) {
+        const stealPower = aUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
+        const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+        const newUnits = Math.floor(stealLifePoints / getUnitById(aUnit.id).hitPoints);
+        console.log(`${newUnits} ${aUnit.id} are created`);
+        attackingStack.size += newUnits;
+        attackingStack.loss -= newUnits;
+        battleLog.attacker.unitsLoss -= newUnits;
+      }
+      battleReport.battleLogs.push(battleLog);
 
       // Additonal Strike ability
       if (hasAbility(aUnit, 'additionalStrike')) {
@@ -829,7 +841,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
 
         console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-        battleReport.battleLogs.push({
+        const battleLog: BattleLog = {
           type: 'additionalStrike',
           attacker: {
             id: attackingMage.id,
@@ -841,7 +853,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
             unitId: defendingStack.unit.id,
             unitsLoss: defenderUnitLoss
           }
-        });
+        };
 
         // Accumulate or clear partial damage
         if (defenderUnitLoss > 0) {
@@ -850,6 +862,18 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         defendingStack.sustainedDamage += (totalDamage % dUnit.hitPoints);
         defendingStack.size -= defenderUnitLoss;
         defendingStack.loss += defenderUnitLoss;
+
+        // Steallife
+        if (hasAbility(aUnit, 'stealLife')) {
+          const stealPower = aUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
+          const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+          const newUnits = Math.floor(stealLifePoints / getUnitById(aUnit.id).hitPoints);
+          console.log(`${newUnits} ${aUnit.id} are created`);
+          attackingStack.size += newUnits;
+          attackingStack.loss -= newUnits;
+          battleLog.attacker.unitsLoss -= newUnits;
+        }
+        battleReport.battleLogs.push(battleLog);
       } // end Additional Strike
 
 
@@ -887,7 +911,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
-        battleReport.battleLogs.push({
+        const battleLog: BattleLog = {
           type: 'counter',
           attacker: {
             id: attackingMage.id,
@@ -899,7 +923,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
             unitId: defendingStack.unit.id,
             unitsLoss: 0
           }
-        });
+        };
 
         // Accumulate or clear partial damage
         if (attackerUnitLoss > 0) {
@@ -908,6 +932,19 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attackingStack.sustainedDamage += (totalDamage % aUnit.hitPoints);
         attackingStack.size -= attackerUnitLoss;
         attackingStack.loss += attackerUnitLoss;
+
+        // Steallife
+        if (hasAbility(dUnit, 'stealLife')) {
+          const stealPower = dUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
+          const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+          const newUnits = Math.floor(stealLifePoints / getUnitById(dUnit.id).hitPoints);
+          console.log(`${newUnits} ${dUnit.id} are created`);
+          defendingStack.size += newUnits;
+          defendingStack.loss -= newUnits;
+          battleLog.defender.unitsLoss -= newUnits;
+        }
+
+        battleReport.battleLogs.push(battleLog);
       }
 
       // Fatigue
@@ -974,6 +1011,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Post battle, healing calculation
   // Attacker healing
   attackingArmy.forEach(stack => {
+    if (stack.loss < 0) {
+      battleReport.postBattleLogs.push({
+        id: attacker.mage.id,
+        unitId: stack.unit.id,
+        unitsLoss: 0,
+        unitsHealed: 0 
+      });
+      return;
+    }
     let startingStackLoss = stack.loss;
     let totalUnitsHealed = calcHealing(stack);
 
@@ -993,6 +1039,15 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Defender healing
   defendingArmy.forEach(stack => {
+    if (stack.loss < 0) {
+      battleReport.postBattleLogs.push({
+        id: defender.mage.id,
+        unitId: stack.unit.id,
+        unitsLoss: 0,
+        unitsHealed: 0
+      });
+      return;
+    }
     let startingStackLoss = stack.loss;
     let totalUnitsHealed = calcHealing(stack);
 
@@ -1050,6 +1105,10 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   const attackerLosses = summary.attacker.armyLoss;
   attackerLosses.forEach(stack => {
     const f = attacker.army.find(d => { return d.id === stack.id });
+
+    // FIXME: check if allow new units with negative mana income
+    if (stack.size < 0) {
+    }
     if (f) f.size -= stack.size;
   });
   attacker.army = attacker.army.filter(d => d.size > 0);
@@ -1057,6 +1116,10 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   const defenderLosses = summary.defender.armyLoss;
   defenderLosses.forEach(stack => {
     const f = defender.army.find(d => { return d.id === stack.id });
+
+    // FIXME: check if allow new units with negative mana income
+    if (stack.size < 0) {
+    }
     if (f) f.size -= stack.size;
   });
   defender.army = defender.army.filter(d => d.size > 0);
