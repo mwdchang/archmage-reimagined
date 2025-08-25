@@ -1,6 +1,13 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Mage } from 'shared/types/mage';
 
+
+export interface BattleSearchOptions {
+  mageId?: number,
+  startTime?: number,
+  endTime?: number
+}
+
 // Models database/datastore CRUD operations
 export abstract class DataAdapter {
   constructor() {}
@@ -20,7 +27,7 @@ export abstract class DataAdapter {
   abstract getMage(id: number): Promise<Mage>
 
   // Battle reports
-  abstract getMageBattles(id: number, options: any): Promise<BattleReportSummary[]>
+  abstract getBattles(options: BattleSearchOptions): Promise<BattleReportSummary[]>
   abstract getBattleReport(id: string): Promise<BattleReport>
   abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): Promise<void>
 

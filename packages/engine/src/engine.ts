@@ -782,7 +782,7 @@ class Engine {
     const MAX_STACKS = 10;
 
     // For attacker, the army is formed by selected ids
-    const aBattleStackIds = stackIds.slice(MAX_STACKS);
+    const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
     const attackerArmy = mage.army.filter(s => aBattleStackIds.includes(s.id));
     const attacker: Combatant =  {
       mage: mage,
@@ -795,7 +795,7 @@ class Engine {
     // For defender, the army is formed by up to 10 stacks sorted by modified power rank
     const dBattleStackIds = prepareBattleStack(defenderMage.army, 'defender')
       .map(d => { return d.unit.id; })
-      .slice(MAX_STACKS);
+      .slice(0, MAX_STACKS);
     const defenderArmy = defenderMage.army.filter(s => dBattleStackIds.includes(s.id));
     const defender: Combatant = {
       mage: defenderMage,
@@ -885,7 +885,7 @@ class Engine {
   }
 
   async getMageBattles(mage: Mage) {
-    return await this.adapter.getMageBattles(mage.id, {});
+    return await this.adapter.getBattles({ mageId: mage.id });
   }
 
   async register(username: string, password: string, magic: string) {

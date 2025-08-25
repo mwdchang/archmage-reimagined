@@ -1,28 +1,43 @@
 import bcrypt from 'bcryptjs';
-import { DataAdapter } from './data-adapter';
+import { BattleSearchOptions, DataAdapter } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 
-interface User {
+interface UserTable {
   username: string;
   token: string;
   hash: string;
 }
 
-interface MageTableEntry {
+interface MageTable {
   username: string,
   id: number,
   mage: Mage
 }
 
-interface BattleReportTableEntry {
+interface BattleSummaryTable {
+  id: string,
+  time: number,
   defenderId: number;
   attackerId: number;
-  report: BattleReport;
-  summary: BattleReportSummary;
+  data: BattleReportSummary;
 }
+
+interface BattleReportTable {
+  id: string,
+  data: BattleReport
+}
+
+/*
+interface TurnChronicle {
+  mageId: number,
+  time: number, 
+  turn: number, 
+  data: any[]
+}
+*/
 
 
 const DB_INIT = `
@@ -45,11 +60,26 @@ const DB_INIT = `
   DROP TABLE IF EXISTS battle_report;
   CREATE TABLE IF NOT EXISTS battle_report(
     id varchar(64),
+    data json
+  );
+  COMMIT;
+
+  DROP TABLE IF EXISTS battle_summary;
+  CREATE TABLE IF NOT EXISTS battle_summary(
+    id varchar(64),
     time bigint,
     attackerId integer,
     defenderId integer,
-    report json,
-    summary json
+    data json
+  );
+  COMMIT;
+
+  DROP TABLE IF EXISTS turn_chronicle;
+  CREATE TABLE IF NOT EXISTS turn_chronicle(
+    mageId integer,
+    time bigint,
+    turn integer,
+    data json
   );
   COMMIT;
 `;
@@ -74,13 +104,13 @@ export class PGliteDataAdapter extends DataAdapter {
 
   async getUser(username: string) {
     console.log('pglite getUser');
-    const result = await this.db.query<User>(`
+    const result = await this.db.query<UserTable>(`
 SELECT * from archmage_user where username = '${username}'
     `);
     return result.rows[0];
   }
 
-  async updateUser(user: User) {
+  async updateUser(user: UserTable) {
     console.log('pglite updateUser');
     const result = await this.db.exec(`
 UPDATE archmage_user 
@@ -140,7 +170,7 @@ WHERE id = ${mage.id}
 
   async getMage(id: number) {
     console.log('pglite: getMage');
-    const result = await this.db.query<MageTableEntry>(`
+    const result = await this.db.query<MageTable>(`
 SELECT mage from mage where id = ${id}
     `);
     return result.rows[0].mage;
@@ -148,7 +178,7 @@ SELECT mage from mage where id = ${id}
 
   async getMageByUser(username: string) {
     console.log('pglite: getMageByUser');
-    const result = await this.db.query<MageTableEntry>(`
+    const result = await this.db.query<MageTable>(`
 SELECT mage from mage where username = '${username}'
     `);
     if (result.rows.length === 0) {
@@ -159,35 +189,44 @@ SELECT mage from mage where username = '${username}'
 
   async getAllMages() {
     console.log('pglite: getAllMages');
-    const result = await this.db.query<MageTableEntry>(`
+    const result = await this.db.query<MageTable>(`
 SELECT mage from mage
     `);
     return result.rows.map(d => d.mage);
   }
 
-  async getMageBattles(id: number, options: any) {
-    const result = await this.db.query<BattleReportTableEntry>(`
-SELECT * from battle_report
-WHERE (attackerId = ${id} OR defenderId = ${id})
+  async getBattles(options: BattleSearchOptions) {
+    const result = await this.db.query<BattleSummaryTable>(`
+SELECT * from battle_summary
+WHERE (attackerId = ${options.mageId} OR defenderId = ${options.mageId})
     `);
-    return result.rows.map(d => d.summary);
+    return result.rows.map(d => d.data);
   }
 
   async getBattleReport(id: string) {
-    const result = await this.db.query<BattleReportTableEntry>(`
+    const result = await this.db.query<BattleReportTable>(`
 SELECT * from battle_report
 WHERE id = '${id}'
     `)
     if (result.rows.length > 0) {
-      return result.rows[0].report;
+      return result.rows[0].data;
     }
     return null;
   }
 
-  async saveBattleReport(id: number, reportId: string, report: BattleReport, reportSummary: BattleReportSummary) {
+  async saveBattleReport(
+    id: number, 
+    reportId: string, 
+    report: BattleReport, 
+    reportSummary: BattleReportSummary
+  ) {
     await this.db.exec(`
-INSERT INTO battle_report(id, time, attackerId, defenderId, report, summary)
-values('${reportId}', 0, ${report.attacker.id}, ${report.defender.id}, '${JSON.stringify(report)}', '${JSON.stringify(reportSummary)}')
+INSERT INTO battle_summary(id, time, attackerId, defenderId, data)
+values ('${reportId}', 0, ${report.attacker.id}, ${report.defender.id},'${JSON.stringify(reportSummary)}')
+    `);
+
+    await this.db.exec(`
+INSERT INTO battle_report(id, data) values ('${reportId}', '${JSON.stringify(report)}')
     `);
   }
 
