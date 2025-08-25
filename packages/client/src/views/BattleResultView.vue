@@ -86,7 +86,7 @@
     <br>
 
     <h3 class="section-header">Assault</h3>
-    <div v-for="(log, idx) of report.battleLogs" :key="idx">
+    <div v-for="(log, idx) of report.battleLogs" :key="idx" class="br-row">
       <!--{{ log }}-->
       <div v-if="log.type === 'primary' || log.type === 'secondary'">
         <p>
@@ -141,8 +141,14 @@
     <br>
 
     <h3 class="section-header">Assault Result</h3>
-    <div v-for="(log, idx) of report.postBattleLogs" :key="idx">
-      {{ log }}
+    <div v-for="(log, idx) of report.postBattleLogs" :key="idx" class="br-row">
+      <!--{{ log }}-->
+      <p>
+        {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ log.unitId }} were slain in battle
+      </p>
+      <p>
+        {{ nameById(log.id) }}'s {{ log.unitsHealed }} {{ log.unitId }} resurrected
+      </p>
     </div>
     <br>
 
@@ -226,5 +232,9 @@ td:nth-child(odd) {
 }
 td:nth-child(even) {
   background: #282828;
+}
+
+.br-row {
+  margin-bottom: 8px;
 }
 </style>
