@@ -110,7 +110,6 @@ export class PGliteDataAdapter extends DataAdapter {
   }
 
   async getUser(username: string) {
-    // console.log('pglite getUser');
     const result = await this.db.query<UserTable>(`
 SELECT * from archmage_user where username = '${username}'
     `);
@@ -118,7 +117,6 @@ SELECT * from archmage_user where username = '${username}'
   }
 
   async updateUser(user: UserTable) {
-    // console.log('pglite updateUser');
     const result = await this.db.exec(`
 UPDATE archmage_user 
 SET token = '${user.token}'
@@ -154,7 +152,6 @@ INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
   async logout() { }
 
   async createMage(username: string, mage: Mage) {
-    console.log('pglite: createMage');
     const sql = `
 INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
@@ -167,7 +164,6 @@ INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
   }
 
   async updateMage(mage: Mage) {
-    console.log('pglite: updateMage');
     await this.db.exec(`
 UPDATE mage 
 SET mage = '${JSON.stringify(mage)}'
@@ -176,7 +172,6 @@ WHERE id = ${mage.id}
   }
 
   async getMage(id: number) {
-    console.log('pglite: getMage');
     const result = await this.db.query<MageTable>(`
 SELECT mage from mage where id = ${id}
     `);

@@ -16,7 +16,6 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
     const np = stack.unit.powerRank * stack.loss;
     attackerPowerLoss += np;
     attackerUnitLoss += stack.loss;
-    // console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
 
   let defenderPowerLoss = 0;
@@ -26,7 +25,6 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
     const np = stack.unit.powerRank * stack.loss;
     defenderPowerLoss += np;
     defenderUnitLoss += stack.loss;
-    // console.log('\t', stack.unit.name, stack.loss, `(net power = ${np})`);
   });
 
 

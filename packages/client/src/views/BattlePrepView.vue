@@ -139,8 +139,6 @@ const doBattle = async () => {
 
   if (res.data.reportId) {
     mageStore.setMage(res.data.mage);
-    // console.log('battle report 1', res.data.reportId);
-    // console.log('battle report 2', res.data.mage);
     router.push({
       name: 'battleResult',
       params: {

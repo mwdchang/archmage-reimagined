@@ -71,7 +71,6 @@ export const doItemGeneration = (mage: Mage, force: boolean = false) => {
   const rate = itemGenerationRate(mage);
   if (Math.random() <= rate || force === true) {
     const item = getRandomItem();
-    // console.log('Found an item!!!', item.name);
 
     if (!mage.items[item.id]) {
       mage.items[item.id] = 1;
