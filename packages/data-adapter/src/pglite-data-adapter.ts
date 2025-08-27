@@ -92,6 +92,7 @@ const DB_INIT = `
 `;
 
 
+
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;
 
@@ -198,10 +199,35 @@ SELECT mage from mage
   }
 
   async getBattles(options: SearchOptions) {
-    const result = await this.db.query<BattleSummaryTable>(`
-SELECT * from battle_summary
-WHERE (attackerId = ${options.mageId} OR defenderId = ${options.mageId})
-    `);
+    let sqlQuery = 'SELECT * from battle_summary ';
+    const whereClauses: string[] = [];
+
+    if (options.mageId) {
+      whereClauses.push(`(attackerId = ${options.mageId} OR defenderId = ${options.mageId})`);
+    }
+    if (options.mageName) {
+      whereClauses.push(`(attackerName like '%${options.mageName}%' OR defenderName like '%${options.mageName})%'`);
+    }
+    if (options.startTime !== undefined) {
+      whereClauses.push(`time >= ${options.startTime}`);
+    }
+    if (options.endTime !== undefined) {
+      whereClauses.push(`time <= ${options.startTime}`);
+    }
+    if (whereClauses.length > 0) {
+      sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
+    }
+    
+    // paging and order
+    sqlQuery += ' ORDER BY time desc ';
+    if (options.limit > 0) {
+      sqlQuery += ` LIMIT ${options.limit} `;
+    }
+    if (options.from > 0) {
+      sqlQuery += ` OFFSET ${options.from} `;
+    }
+    console.log("SQL", sqlQuery);
+    const result = await this.db.query<BattleSummaryTable>(sqlQuery);
     return result.rows.map(d => d.data);
   }
 
@@ -256,10 +282,36 @@ INSERT INTO battle_report(id, data) values ('${reportId}', '${JSON.stringify(rep
   }
 
   async getChronicles(options: SearchOptions): Promise<any[]> {
-    const result = await this.db.query<ChronicleTurn>(`
-      SELECT * from turn_chronicle 
-      WHERE id = ${options.mageId}
-    `);
+    let sqlQuery = 'SELECT * from turn_chronicle';
+    const whereClauses: string[] = [];
+
+    if (options.mageId) {
+      whereClauses.push(`id = ${options.mageId}`);
+    }
+    if (options.mageName) {
+      whereClauses.push(`name like '%${options.mageId}%'`);
+    }
+    if (options.startTime !== undefined) {
+      whereClauses.push(`time >= ${options.startTime}`);
+    }
+    if (options.endTime !== undefined) {
+      whereClauses.push(`time <= ${options.startTime}`);
+    }
+    if (whereClauses.length > 0) {
+      sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    // paging and order
+    sqlQuery += ' ORDER BY time desc ';
+    if (options.limit > 0) {
+      sqlQuery += ` LIMIT ${options.limit} `;
+    }
+    if (options.from > 0) {
+      sqlQuery += ` OFFSET ${options.from} `;
+    }
+
+    console.log("SQL", sqlQuery);
+    const result = await this.db.query<ChronicleTurn>(sqlQuery);
     return result.rows;
   }
 

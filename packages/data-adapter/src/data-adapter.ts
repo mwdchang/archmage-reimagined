@@ -7,10 +7,11 @@ export interface SearchOptions {
   mageId?: number,
   mageName?: string,
   startTime?: number,
-  endTime?: number
+  endTime?: number,
   
-  // how many
-  limit?: number
+  // pagination
+  limit?: number,
+  from?: number,
 }
 
 

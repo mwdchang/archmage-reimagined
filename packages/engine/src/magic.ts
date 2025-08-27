@@ -12,7 +12,7 @@ import {
   getResearchTree,
   getRandomItem,
 } from './base/references';
-import { totalLand } from './base/mage';
+import { totalLand, currentSpellLevel } from './base/mage';
 import { randomBM, randomInt } from './random';
 import {
   ProductionEffect,
@@ -26,26 +26,6 @@ export const maxSpellLevel = (mage: Mage) => {
   return maxSpellLevels[mage.magic];
 }
 
-export const currentSpellLevel = (mage: Mage) => {
-  // For testing
-  if (mage.currentSpellLevel) return mage.currentSpellLevel;
-
-  let result = 0;
-  const addSpellPower = (id: string) => {
-    const spell = getSpellById(id);
-    const rankPower = spellRankTable[spell.rank];
-    result += rankPower;
-  }
-
-  mage.spellbook.ascendant.forEach(addSpellPower);
-  mage.spellbook.verdant.forEach(addSpellPower);
-  mage.spellbook.eradication.forEach(addSpellPower);
-  mage.spellbook.nether.forEach(addSpellPower);
-  mage.spellbook.phantasm.forEach(addSpellPower);
-
-  // TODO: others
-  return result;
-}
 
 export const itemGenerationRate = (mage: Mage) => {
   const land = totalLand(mage);
@@ -175,6 +155,7 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
   } else if (effect.rule === 'fixed') {
     power = effect.summonNetPower;
   }
+
 
   unitIds.forEach(unitId => {
     const unit = getUnitById(unitId);
@@ -359,7 +340,7 @@ const MAX_DISPEL_PROB = 0.97
 export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: number) => {
   const spell = getSpellById(enchantment.spellId);
   const castingCost = spell.castingCost;
-  const rawProb = (mana * (1 + mage.currentSpellLevel / enchantment.spellLevel)) / (2 * castingCost);
+  const rawProb = (mana * (1 + currentSpellLevel(mage) / enchantment.spellLevel)) / (2 * castingCost);
   const adjustedProb = Math.max(MIN_DISPEL_PROB, Math.min(MAX_DISPEL_PROB, rawProb));
 
   return adjustedProb;

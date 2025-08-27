@@ -49,7 +49,7 @@
     <router-link to="/chronicles">Chronicles</router-link>
     <div class="chronicles">
       <div v-for="(turn) in logs" :key="turn.turn">
-        <h4>Turn {{turn.turn}}</h4>
+        <div> [ Turn {{turn.turn}} ]</div>
         <div v-for="(log) in turn.data">
           {{ log }}
         </div>
@@ -65,8 +65,8 @@ import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
-import { totalNetPower } from 'engine/src/base/mage';
-import { currentSpellLevel, maxSpellLevel } from 'engine/src/magic';
+import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
+import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
 import { ChronicleTurn } from 'shared/types/common';
 
@@ -104,11 +104,14 @@ section {
 }
 
 .chronicles {
+  display: flex;
+  flex-direction: column;
   font-size: 14px;
-  line-height: 105%;
+  line-height: 120%;
   padding: 10px;
   margin: 10px;
   background: #322;
+  gap: 8px;
 }
 
 .row {

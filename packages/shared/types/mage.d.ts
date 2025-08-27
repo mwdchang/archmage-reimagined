@@ -59,7 +59,7 @@ export interface Mage {
 
   // magic
   magic: string;
-  currentSpellLevel: number; // For testing only
+  testingSpellLevel: number; // For testing only
 
   spellbook: {
     ascendant: string[],

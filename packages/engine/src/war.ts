@@ -12,9 +12,11 @@ import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
-  currentSpellLevel,
   castingCost
 } from './magic';
+import { 
+  currentSpellLevel,
+} from './base/mage';
 import { BattleReport, BattleStack, BattleEffectLog, BattleLog } from 'shared/types/battle';
 
 // Various battle helpers

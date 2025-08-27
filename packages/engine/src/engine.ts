@@ -14,7 +14,8 @@ import {
   createMage,
   createMageTest,
   totalLand,
-  totalNetPower
+  totalNetPower,
+  currentSpellLevel
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
@@ -43,7 +44,6 @@ import {
   maxMana,
   castingCost,
   successCastingRate,
-  currentSpellLevel,
   enchantmentUpkeep,
   dispelEnchantment
 } from './magic';
@@ -243,6 +243,10 @@ class Engine {
     mage.turnsUsed ++;
 
     // 2. calculate income
+    const beforeGeld = mage.currentGeld;
+    const beforeMana = mage.currentMana;
+    const beforePopuplation = mage.currentPopulation;
+
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
@@ -307,9 +311,6 @@ class Engine {
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
-    const beforeGeld = mage.currentGeld;
-    const beforeMana = mage.currentMana;
-    const beforePopuplation = mage.currentPopulation;
 
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
@@ -337,8 +338,8 @@ class Engine {
     const deltaGeld = mage.currentGeld - beforeGeld;
     const deltaMana = mage.currentMana - beforeMana;
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
-    const logs: string[] = [];
 
+    const logs: string[] = [];
     const researchItem = Object.values(mage.currentResearch).find(d => d.active === true);
     if (researchItem) {
       logs.push(`You are researching ${researchItem.id}`);
@@ -554,7 +555,7 @@ class Engine {
     const spell = getSpellById(spellId);
     const origin: EffectOrigin = {
       id: mage.id,
-      spellLevel: mage.currentSpellLevel,
+      spellLevel: currentSpellLevel(mage),
       magic: mage.magic,
       targetId: mage.id
     };
@@ -610,6 +611,7 @@ class Engine {
 
   async summonByItem(mage: Mage, itemId: string, num: number) {
     const item = getItemById(itemId);
+    const spellLevel = currentSpellLevel(mage);
 
     const result: GameMsg[] = [];
     for (let i = 0; i < num; i++) {
@@ -633,7 +635,7 @@ class Engine {
         const res = summonUnit(effect, {
           id: mage.id,
           magic: mage.magic,
-          spellLevel: mage.currentSpellLevel,
+          spellLevel: spellLevel,
           targetId: mage.id
         });
 
@@ -669,7 +671,7 @@ class Engine {
       const res = summonUnit(effect, {
         id: mage.id,
         magic: mage.magic,
-        spellLevel: mage.currentSpellLevel,
+        spellLevel: currentSpellLevel(mage),
         targetId: mage.id
       });
       // Add to existing army
@@ -917,11 +919,17 @@ class Engine {
   }
 
   async getMageBattles(mage: Mage) {
-    return await this.adapter.getBattles({ mageId: mage.id });
+    return await this.adapter.getBattles({ 
+      mageId: mage.id,
+      limit: 100
+    });
   }
 
   async getChronicles(mage: Mage) {
-    return await this.adapter.getChronicles({ mageId: mage.id });
+    return await this.adapter.getChronicles({ 
+      mageId: mage.id,
+      limit: 30
+    });
   }
 
   async register(username: string, password: string, magic: string) {
