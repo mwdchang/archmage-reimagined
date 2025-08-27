@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { BattleSearchOptions, DataAdapter } from './data-adapter';
+import { DataAdapter, SearchOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
+import { ChronicleTurn } from 'shared/types/common';
 
 interface UserTable {
   username: string;
@@ -21,7 +22,9 @@ interface BattleSummaryTable {
   id: string,
   time: number,
   defenderId: number;
+  defenderName: string;
   attackerId: number;
+  attackerName: string;
   data: BattleReportSummary;
 }
 
@@ -30,14 +33,15 @@ interface BattleReportTable {
   data: BattleReport
 }
 
-/*
-interface TurnChronicle {
+
+interface ChronicleTable {
   mageId: number,
+  mageName: string,
   time: number, 
   turn: number, 
   data: any[]
 }
-*/
+
 
 
 const DB_INIT = `
@@ -69,14 +73,17 @@ const DB_INIT = `
     id varchar(64),
     time bigint,
     attackerId integer,
+    attackerName varchar(64),
     defenderId integer,
+    defenderName varchar(64),
     data json
   );
   COMMIT;
 
   DROP TABLE IF EXISTS turn_chronicle;
   CREATE TABLE IF NOT EXISTS turn_chronicle(
-    mageId integer,
+    id integer,
+    name varchar(64),
     time bigint,
     turn integer,
     data json
@@ -103,7 +110,7 @@ export class PGliteDataAdapter extends DataAdapter {
   }
 
   async getUser(username: string) {
-    console.log('pglite getUser');
+    // console.log('pglite getUser');
     const result = await this.db.query<UserTable>(`
 SELECT * from archmage_user where username = '${username}'
     `);
@@ -111,7 +118,7 @@ SELECT * from archmage_user where username = '${username}'
   }
 
   async updateUser(user: UserTable) {
-    console.log('pglite updateUser');
+    // console.log('pglite updateUser');
     const result = await this.db.exec(`
 UPDATE archmage_user 
 SET token = '${user.token}'
@@ -195,7 +202,7 @@ SELECT mage from mage
     return result.rows.map(d => d.mage);
   }
 
-  async getBattles(options: BattleSearchOptions) {
+  async getBattles(options: SearchOptions) {
     const result = await this.db.query<BattleSummaryTable>(`
 SELECT * from battle_summary
 WHERE (attackerId = ${options.mageId} OR defenderId = ${options.mageId})
@@ -220,9 +227,11 @@ WHERE id = '${id}'
     report: BattleReport, 
     reportSummary: BattleReportSummary
   ) {
+    const attacker = report.attacker;
+    const defender = report.defender;
     await this.db.exec(`
-INSERT INTO battle_summary(id, time, attackerId, defenderId, data)
-values ('${reportId}', 0, ${report.attacker.id}, ${report.defender.id},'${JSON.stringify(reportSummary)}')
+INSERT INTO battle_summary(id, time, attackerId, attackerName, defenderId, defenderName, data)
+values ('${reportId}', 0, ${attacker.id}, ${attacker.name}, ${defender.id}, ${defender.name}, '${JSON.stringify(reportSummary)}')
     `);
 
     await this.db.exec(`
@@ -230,6 +239,36 @@ INSERT INTO battle_report(id, data) values ('${reportId}', '${JSON.stringify(rep
     `);
   }
 
+  async saveChronicles(data: ChronicleTurn[]): Promise<void> {
+    // Build parameter placeholders for each row
+    const valuePlaceholders = data.map((_, i) => 
+      `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3}, $${i * 3 + 4}, $${i * 3 + 5})`
+    ).join(", ");
+
+    const values: any[] = data.flatMap(entry => [
+      entry.id,
+      entry.name,
+      entry.time,
+      entry.turn,
+      JSON.stringify(entry.data)
+    ]);
+
+    const insertSQL = `
+      INSERT INTO turn_chronicle(id, name, time, turn, data)
+      VALUES ${valuePlaceholders}
+    `;
+    await this.db.query(insertSQL, values);
+  }
+
+  async getChronicles(options: SearchOptions): Promise<any[]> {
+    const result = await this.db.query<ChronicleTurn>(`
+      SELECT * from turn_chronicle 
+      WHERE id = ${options.mageId}
+    `);
+    return result.rows;
+  }
+
   async nextTurn() {
+    // nothing
   }
 }

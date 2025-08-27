@@ -1,12 +1,18 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Mage } from 'shared/types/mage';
+import { ChronicleTurn } from 'shared/types/common';
 
 
-export interface BattleSearchOptions {
+export interface SearchOptions {
   mageId?: number,
+  mageName?: string,
   startTime?: number,
   endTime?: number
+  
+  // how many
+  limit?: number
 }
+
 
 // Models database/datastore CRUD operations
 export abstract class DataAdapter {
@@ -27,9 +33,13 @@ export abstract class DataAdapter {
   abstract getMage(id: number): Promise<Mage>
 
   // Battle reports
-  abstract getBattles(options: BattleSearchOptions): Promise<BattleReportSummary[]>
+  abstract getBattles(options: SearchOptions): Promise<BattleReportSummary[]>
   abstract getBattleReport(id: string): Promise<BattleReport>
   abstract saveBattleReport(id: number, reportId: string, report: any, reportSummary: any): Promise<void>
+
+  // Chronicles
+  abstract saveChronicles(data: ChronicleTurn[]): Promise<void>
+  abstract getChronicles(options: SearchOptions): Promise<any[]>
 
   abstract nextTurn(): Promise<void>
 }

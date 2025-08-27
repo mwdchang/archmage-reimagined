@@ -129,6 +129,9 @@ class Engine {
       if (!mage) {
         console.log('creating test mage', name);
         const mage = createMage(name, magic);
+        mage.assignment.itemId = 'potionOfValor';
+        mage.assignment.itemCondition = 75;
+
         await this.adapter.createMage(name, mage);
       }
     }
@@ -304,6 +307,10 @@ class Engine {
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
+    const beforeGeld = mage.currentGeld;
+    const beforeMana = mage.currentMana;
+    const beforePopuplation = mage.currentPopulation;
+
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
     mage.currentPopulation -= armyCost.population;
@@ -325,6 +332,32 @@ class Engine {
     if (mage.currentGeld < 0) mage.currentGeld = 0;
     if (mage.currentMana < 0) mage.currentMana = 0;
     if (mage.currentPopulation < 0) mage.currentPopulation = 0;
+
+
+    const deltaGeld = mage.currentGeld - beforeGeld;
+    const deltaMana = mage.currentMana - beforeMana;
+    const deltaPopulation = mage.currentPopulation - beforePopuplation;
+    const logs: string[] = [];
+
+    const researchItem = Object.values(mage.currentResearch).find(d => d.active === true);
+    if (researchItem) {
+      logs.push(`You are researching ${researchItem.id}`);
+    }
+    if (mage.enchantments.length > 0) {
+      logs.push(`You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`);
+    }
+    logs.push(`You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`);
+
+    // Save turn chronicle to DB 
+    this.adapter.saveChronicles([
+      {
+        id: mage.id,
+        name: mage.name,
+        turn: mage.turnsUsed,
+        time: Date.now(),
+        data: logs
+      }
+    ]);
   }
 
   async exploreLand(mage: Mage, num: number) {
@@ -791,7 +824,6 @@ class Engine {
       army: attackerArmy
     };
 
-    // FIXME: assignment triggers
     // For defender, the army is formed by up to 10 stacks sorted by modified power rank
     const dBattleStackIds = prepareBattleStack(defenderMage.army, 'defender')
       .map(d => { return d.unit.id; })
@@ -886,6 +918,10 @@ class Engine {
 
   async getMageBattles(mage: Mage) {
     return await this.adapter.getBattles({ mageId: mage.id });
+  }
+
+  async getChronicles(mage: Mage) {
+    return await this.adapter.getChronicles({ mageId: mage.id });
   }
 
   async register(username: string, password: string, magic: string) {

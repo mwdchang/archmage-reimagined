@@ -7,3 +7,13 @@ export interface MageRank {
   status: string;
   netPower: number;
 }
+
+
+export interface ChronicleTurn {
+  id: number;
+  name: string,
+  turn: number;
+  time: number;
+  // FIXME: string for now, maybe structured
+  data: any[]; 
+}
