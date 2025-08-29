@@ -18,16 +18,6 @@ interface MageTable {
   mage: Mage
 }
 
-interface BattleSummaryTable {
-  id: string,
-  time: number,
-  defenderId: number;
-  defenderName: string;
-  attackerId: number;
-  attackerName: string;
-  data: BattleReportSummary;
-}
-
 interface BattleReportTable {
   id: string,
   data: BattleReport
@@ -72,11 +62,23 @@ const DB_INIT = `
   CREATE TABLE IF NOT EXISTS battle_summary(
     id varchar(64),
     time bigint,
+    attackType varchar(32),
     attackerId integer,
     attackerName varchar(64),
+    attackerNPLoss bigint,
+    attackerNPLossPercentage float,
+    attackerStartingUnits integer,
+    attackerUnitsLoss integer,
     defenderId integer,
     defenderName varchar(64),
-    data json
+    defenderNPLoss bigint,
+    defenderNPLossPercentage float,
+    defenderStartingUnits integer,
+    defenderUnitsLoss integer,
+    isSuccessful boolean,
+    isDefenderDefeated boolean,
+    landGain integer,
+    landLoss integer
   );
   COMMIT;
 
@@ -92,6 +94,8 @@ const DB_INIT = `
 `;
 
 
+
+const Q = (v: string) => `'${v}'`;
 
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;
@@ -227,14 +231,14 @@ SELECT mage from mage
       sqlQuery += ` OFFSET ${options.from} `;
     }
     console.log("SQL", sqlQuery);
-    const result = await this.db.query<BattleSummaryTable>(sqlQuery);
-    return result.rows.map(d => d.data);
+    const result = await this.db.query<BattleReportSummary>(sqlQuery);
+    return result.rows;
   }
 
   async getBattleReport(id: string) {
     const result = await this.db.query<BattleReportTable>(`
-SELECT * from battle_report
-WHERE id = '${id}'
+      SELECT * from battle_report
+      WHERE id = '${id}'
     `)
     if (result.rows.length > 0) {
       return result.rows[0].data;
@@ -248,15 +252,54 @@ WHERE id = '${id}'
     report: BattleReport, 
     reportSummary: BattleReportSummary
   ) {
-    const attacker = report.attacker;
-    const defender = report.defender;
     await this.db.exec(`
-INSERT INTO battle_summary(id, time, attackerId, attackerName, defenderId, defenderName, data)
-values ('${reportId}', 0, ${attacker.id}, ${attacker.name}, ${defender.id}, ${defender.name}, '${JSON.stringify(reportSummary)}')
+      INSERT INTO battle_summary(
+        id,
+        time,
+        attackType,
+        attackerId,
+        attackerName,
+        attackerNPLoss,
+        attackerNPLossPercentage,
+        attackerStartingUnits,
+        attackerUnitsLoss,
+        defenderId, 
+        defenderName,
+        defenderNPLoss,
+        defenderNPLossPercentage,
+        defenderStartingUnits,
+        defenderUnitsLoss,
+        isSuccessful,
+        isDefenderDefeated,
+        landGain,
+        landLoss
+      )
+      VALUES (
+        ${Q(reportId)}, 
+        ${reportSummary.timestamp}, 
+        ${Q(reportSummary.attackType)},
+        ${reportSummary.attackerId}, 
+        ${Q(reportSummary.attackerName)}, 
+        ${reportSummary.attackerNPLoss}, 
+        ${reportSummary.attackerNPLossPercentage}, 
+        ${reportSummary.attackerStartingUnits}, 
+        ${reportSummary.attackerUnitsLoss}, 
+        ${reportSummary.defenderId}, 
+        ${Q(reportSummary.defenderName)}, 
+        ${reportSummary.defenderNPLoss}, 
+        ${reportSummary.defenderNPLossPercentage}, 
+        ${reportSummary.defenderStartingUnits}, 
+        ${reportSummary.defenderUnitsLoss}, 
+        ${reportSummary.isSuccessful}, 
+        ${reportSummary.isDefenderDefeated}, 
+        ${reportSummary.landGain}, 
+        ${reportSummary.landLoss}
+      )
     `);
 
     await this.db.exec(`
-INSERT INTO battle_report(id, data) values ('${reportId}', '${JSON.stringify(report)}')
+      INSERT INTO battle_report(id, data) 
+      VALUES (${Q(reportId)}, ${Q(JSON.stringify(report))})
     `);
   }
 

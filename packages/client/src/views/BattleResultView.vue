@@ -155,14 +155,14 @@
     <h3 class="section-header">Summary</h3>
       <div>
         <div>Attacker lost
-          {{ report.summary.attacker.unitsLoss }} / {{ report.summary.attacker.startingUnits }} units and
-          {{ report.summary.attacker.netPowerLoss }} power
+          {{ report.result.attacker.unitsLoss }} / {{ report.result.attacker.startingUnits }} units and
+          {{ report.result.attacker.armyNetPowerLoss }} power
         </div>
       </div>
       <div>
         <div>Defender lost
-          {{ report.summary.defender.unitsLoss }} / {{ report.summary.defender.startingUnits }} units and
-          {{ report.summary.defender.netPowerLoss }} power
+          {{ report.result.defender.unitsLoss }} / {{ report.result.defender.startingUnits }} units and
+          {{ report.result.defender.armyNetPowerLoss }} power
         </div>
 
       </div>
@@ -173,15 +173,9 @@
     <br>
 
     <h3 class="section-header">Result</h3>
-      <div>
-      Attacker gained {{ report.summary.landGain }} acres and defender lost {{ report.summary.landLoss }} acres
-      </div>
-      <!--
-      <div>{{ report.summary }} </div>
-      <div>{{ report.isSuccessful }}</div>
-      <div>{{ report.landResult }}</div>
-      -->
-    <br>
+    <div>
+    Attacker gained {{ report.result.landGain }} acres and defender lost {{ report.result.landLoss }} acres
+    </div>
 
   </main>
 </template>

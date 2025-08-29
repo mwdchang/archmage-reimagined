@@ -863,12 +863,38 @@ class Engine {
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
+ 
       timestamp: battleReport.timestamp,
       attackType: 'siege',
+
       attackerId: battleReport.attacker.id,
+      attackerName: battleReport.attacker.name,
+      attackerStartingUnits: battleReport.result.attacker.startingUnits,
+      attackerUnitsLoss: battleReport.result.attacker.unitsLoss,
+      attackerNPLoss: 0,
+      attackerNPLossPercentage: 0,
+
       defenderId: battleReport.defender.id,
-      summary: battleReport.summary
+      defenderName: battleReport.defender.name,
+      defenderStartingUnits: battleReport.result.defender.startingUnits,
+      defenderUnitsLoss: battleReport.result.defender.unitsLoss,
+      defenderNPLoss: 0,
+      defenderNPLossPercentage: 0,
+
+      isSuccessful: battleReport.result.isSuccessful,
+      isDefenderDefeated: battleReport.result.isDefenderDefeated,
+
+      landGain: battleReport.result.landGain,
+      landLoss: battleReport.result.landLoss
     };
+
+    const result = battleReport.result;
+    reportSummary.attackerNPLoss = Math.max(0, (result.attacker.startNetPower - result.attacker.endNetPower));
+    reportSummary.defenderNPLoss = Math.max(0, (result.defender.startNetPower - result.defender.endNetPower));
+    reportSummary.attackerNPLossPercentage = reportSummary.attackerNPLoss / result.attacker.startNetPower;
+    reportSummary.defenderNPLossPercentage = reportSummary.defenderNPLoss / result.defender.startNetPower;
+
+    // Noramlize
 
 
     /** Handle epidemic enchantments **/

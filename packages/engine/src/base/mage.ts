@@ -123,13 +123,14 @@ export const totalNetPower = (mage: Mage) => {
   netpower += 1000 * currentSpellLevel(mage),
 
   Object.keys(mage.items).forEach(key => {
+    if (!mage.items[key]) return;
     netpower += 1000 * mage.items[key];
   });
 
   // Army
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
-    netpower += u.powerRank + stack.size;
+    netpower += u.powerRank * stack.size;
   });
 
   // TODO: allies and heroes??
