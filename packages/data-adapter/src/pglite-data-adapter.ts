@@ -196,20 +196,33 @@ WHERE id = ${mage.id}
 
   async getMage(id: number) {
     const result = await this.db.query<MageTable>(`
-SELECT mage from mage where id = ${id}
+      SELECT mage from mage where id = ${id}
     `);
-    return result.rows[0].mage;
+    const mage: Mage = result.rows[0].mage;
+
+    const mageRank = await this.db.query<MageRank>(`
+      select rank from rank_view where id = ${mage.id} limit 1
+    `);
+    mage.rank = mageRank.rows[0].rank; 
+
+    return mage;
   }
 
   async getMageByUser(username: string) {
     console.log('pglite: getMageByUser');
     const result = await this.db.query<MageTable>(`
-SELECT mage from mage where username = '${username}'
+      SELECT mage from mage where username = '${username}'
     `);
     if (result.rows.length === 0) {
       return null;
     }
-    return result.rows[0].mage;
+    const mage: Mage = result.rows[0].mage;
+    const mageRank = await this.db.query<MageRank>(`
+      select rank from rank_view where id = ${mage.id} limit 1
+    `);
+    mage.rank = mageRank.rows[0].rank; 
+
+    return mage;
   }
 
   async getAllMages() {

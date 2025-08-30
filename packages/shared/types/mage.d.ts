@@ -37,6 +37,7 @@ export interface ResearchItem {
 
 export interface Enchantment {
   id: string; // instance id
+  rank?: number; // populated as needed
 
   casterId: number;
   casterMagic: string;
