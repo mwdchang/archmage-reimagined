@@ -44,21 +44,25 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     postBattleLogs: [],
 
     // Summary
-    summary: {
+    result: {
       isSuccessful: false,
       isDefenderDefeated: false,
       landGain: 0,
       landLoss: 0,
       attacker: {
-        netPower: 0,
-        netPowerLoss: 0,
+        startNetPower: 0,
+        endNetPower: 0,
+        armyNetPower: 0,
+        armyNetPowerLoss: 0,
         startingUnits: 0,
         unitsLoss: 0,
         armyLoss: []
       },
       defender: {
-        netPower: 0,
-        netPowerLoss: 0,
+        startNetPower: 0,
+        endNetPower: 0,
+        armyNetPower: 0,
+        armyNetPowerLoss: 0,
         startingUnits: 0,
         unitsLoss: 0,
         armyLoss: []

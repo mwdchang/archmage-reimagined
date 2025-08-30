@@ -37,6 +37,7 @@ export interface ResearchItem {
 
 export interface Enchantment {
   id: string; // instance id
+  rank?: number; // populated as needed
 
   casterId: number;
   casterMagic: string;
@@ -59,7 +60,7 @@ export interface Mage {
 
   // magic
   magic: string;
-  currentSpellLevel: number; // For testing only
+  testingSpellLevel: number; // For testing only
 
   spellbook: {
     ascendant: string[],

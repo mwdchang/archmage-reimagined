@@ -1,7 +1,7 @@
 import type { Mage } from 'shared/types/mage';
 import { createStackByNumber } from './unit';
 import { researchTree, getSpellById, getUnitById } from './references';
-import { mageStartTable, magicAlignmentTable } from './config';
+import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
 
 let _id = 0;
 
@@ -12,7 +12,7 @@ export const createMage = (name: string, magic: string): Mage => {
     status: '',
 
     magic: magic,
-    currentSpellLevel: 0,
+    testingSpellLevel: 0,
 
     spellbook: {
       ascendant: [],
@@ -120,16 +120,17 @@ export const totalNetPower = (mage: Mage) => {
   netpower += Math.floor(0.05 * mage.currentMana);
   netpower += Math.floor(0.0005 * mage.currentGeld);
   netpower += Math.floor(0.02 * mage.currentPopulation);
-  netpower += 1000 * mage.currentSpellLevel;
+  netpower += 1000 * currentSpellLevel(mage),
 
   Object.keys(mage.items).forEach(key => {
+    if (!mage.items[key]) return;
     netpower += 1000 * mage.items[key];
   });
 
   // Army
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
-    netpower += u.powerRank + stack.size;
+    netpower += u.powerRank * stack.size;
   });
 
   // TODO: allies and heroes??
@@ -157,4 +158,24 @@ export const totalUnits = (mage: Mage) => {
   return num;
 }
 
+export const currentSpellLevel = (mage: Mage) => {
+  // For testing
+  if (mage.testingSpellLevel > 0) return mage.testingSpellLevel;
+
+  let result = 0;
+  const addSpellPower = (id: string) => {
+    const spell = getSpellById(id);
+    const rankPower = spellRankTable[spell.rank];
+    result += rankPower;
+  }
+
+  mage.spellbook.ascendant.forEach(addSpellPower);
+  mage.spellbook.verdant.forEach(addSpellPower);
+  mage.spellbook.eradication.forEach(addSpellPower);
+  mage.spellbook.nether.forEach(addSpellPower);
+  mage.spellbook.phantasm.forEach(addSpellPower);
+
+  // TODO: others
+  return result;
+}
 

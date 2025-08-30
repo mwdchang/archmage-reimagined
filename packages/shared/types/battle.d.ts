@@ -41,19 +41,31 @@ export interface BattleReportSummary {
   id: string,
   timestamp: number,
   attackType: string
+
   attackerId: number,
+  attackerName: string,
+  attackerNPLoss: number,
+  attackerNPLossPercentage: number,
+  attackerStartingUnits: number,
+  attackerUnitsLoss: number,
+
   defenderId: number,
-  summary: any
+  defenderName: string,
+  defenderNPLoss: number,
+  defenderNPLossPercentage: number,
+  defenderStartingUnits: number,
+  defenderUnitsLoss: number,
+
+  isSuccessful: boolean;
+  isDefenderDefeated: boolean;
+  landGain: number;
+  landLoss: number;
 }
 
-/*
-export interface BattleReportSpellItem {
-}
-*/
+
 
 export type BattleSpellResult = 'success' | 'lostConcentration' | 'barrier' | 'reflected' | 'noMana' | null;
 export type BattleItemResult = 'success' | 'barrier' | 'noItem' | null; 
-
 
 export interface BattleEffectLog {
   id: number,
@@ -118,21 +130,25 @@ export interface BattleReport {
     unitsHealed: number
   }[],
 
-  summary: {
+  result: {
     isSuccessful: boolean;
     isDefenderDefeated: boolean;
     landGain: number;
     landLoss: number;
     attacker: {
-      netPower: number,
-      netPowerLoss: number,
+      startNetPower: number,
+      endNetPower: number,
+      armyNetPower: number,
+      armyNetPowerLoss: number,
       startingUnits: number,
       unitsLoss: number,
       armyLoss: ArmyUnit[]
     },
     defender: {
-      netPower: number,
-      netPowerLoss: number,
+      startNetPower: number,
+      endNetPower: number,
+      armyNetPower: number,
+      armyNetPowerLoss: number,
       startingUnits: number,
       unitsLoss: number,
       armyLoss: ArmyUnit[]

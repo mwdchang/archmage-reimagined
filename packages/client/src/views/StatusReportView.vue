@@ -315,11 +315,11 @@ import {
 import { 
   totalLand,
   totalUnits,
+  currentSpellLevel, 
   totalNetPower
 } from 'engine/src/base/mage';
 import { 
   maxSpellLevel,
-  currentSpellLevel, 
   manaIncome,
   maxMana,
   calcKingdomResistance,

@@ -23,7 +23,6 @@ const maxSpellLevels = {
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
     unitMap.set(units[i].id, units[i]);
-    // console.log(`Unit[${units[i].magic}] ${units[i].name} loaded`);
   }
 }
 

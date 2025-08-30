@@ -12,9 +12,12 @@ import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
-  currentSpellLevel,
   castingCost
 } from './magic';
+import { 
+  currentSpellLevel,
+  totalNetPower,
+} from './base/mage';
 import { BattleReport, BattleStack, BattleEffectLog, BattleLog } from 'shared/types/battle';
 
 // Various battle helpers
@@ -122,7 +125,9 @@ const applyUnitEffect = (
         }
 
         // Finally apply
-        if (field === 'abilities') {
+        // There are two abilities fields, this to allow an effect to 
+        // both remove and add abilities
+        if (field === 'abilities' || field === 'abilities2') {
           if (rule === 'add') {
             stack.addedAbilities.push(finalValue);
           } else if (rule === 'remove') {
@@ -641,6 +646,60 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   resolveUnitAbilities(attackingArmy);
   resolveUnitAbilities(defendingArmy);
 
+  // Resolve temporary abilities
+  attackingArmy.forEach(stack => {
+    if (hasAbility(stack.unit, 'flying') && hasAbility(stack.unit, 'dropping')) {
+      const droppingEffect = stack.unit.abilities.find(d => d.name === 'dropping');
+      stack.unit.abilities = stack.unit.abilities.filter(d => d.name !== 'flying');
+
+      const damagePerUnit = droppingEffect.extra || 5;
+      const resist = calcResistance(stack.unit, ['melee']);
+      const damage = damagePerUnit * stack.size * ((100 - resist) / 100); 
+
+      let sustainedDamage = stack.sustainedDamage;
+      let totalDamage = damage + sustainedDamage;
+
+      let unitLoss = Math.floor(totalDamage / stack.unit.hitPoints);
+      if (unitLoss >= stack.size) {
+        unitLoss = stack.size;
+      }
+
+      if (unitLoss > 0) {
+        console.log('!!!', stack.unit.id, unitLoss)
+        stack.sustainedDamage = 0;
+      }
+      stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
+      stack.size -= unitLoss;
+      stack.loss += unitLoss;
+    }
+  });
+  defendingArmy.forEach(stack => {
+    if (hasAbility(stack.unit, 'flying') && hasAbility(stack.unit, 'dropping')) {
+      const droppingEffect = stack.unit.abilities.find(d => d.name === 'dropping');
+      stack.unit.abilities = stack.unit.abilities.filter(d => d.name !== 'flying');
+
+      const damagePerUnit = droppingEffect.extra || 5;
+      const resist = calcResistance(stack.unit, ['melee']);
+      const damage = damagePerUnit * stack.size * ((100 - resist) / 100); 
+
+      let sustainedDamage = stack.sustainedDamage;
+      let totalDamage = damage + sustainedDamage;
+
+      let unitLoss = Math.floor(totalDamage / stack.unit.hitPoints);
+      if (unitLoss >= stack.size) {
+        unitLoss = stack.size;
+      }
+
+      if (unitLoss > 0) {
+        console.log('!!!', stack.unit.id, unitLoss)
+        stack.sustainedDamage = 0;
+      }
+      stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
+      stack.size -= unitLoss;
+      stack.loss += unitLoss;
+    }
+  });
+
   // Find pairing
   calcPairings(attackingArmy, defendingArmy);
   calcPairings(defendingArmy, attackingArmy);
@@ -1067,42 +1126,45 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Calculate combat result
   const battleSummary = calcBattleSummary(attackingArmy, defendingArmy);
-  const brA = battleReport.summary.attacker;
-  const brD = battleReport.summary.defender;
+  const brA = battleReport.result.attacker;
+  const brD = battleReport.result.defender;
 
   // Starting army size
   brA.startingUnits = battleReport.attacker.army.reduce((v, stack) => {
     return v + stack.size;
   }, 0);
-  brA.netPower = battleSummary.attacker.netPower;
-  brA.netPowerLoss = battleSummary.attacker.netPowerLoss;
+  brA.armyNetPower = battleSummary.attacker.netPower;
+  brA.armyNetPowerLoss = battleSummary.attacker.netPowerLoss;
   brA.unitsLoss = battleSummary.attacker.unitsLoss;
   brA.armyLoss = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
   brD.startingUnits = battleReport.defender.army.reduce((v, stack) => {
     return v + stack.size;
   }, 0);
-  brD.netPower = battleSummary.defender.netPower;
-  brD.netPowerLoss = battleSummary.defender.netPowerLoss;
+  brD.armyNetPower = battleSummary.defender.netPower;
+  brD.armyNetPowerLoss = battleSummary.defender.netPowerLoss;
   brD.unitsLoss = battleSummary.defender.unitsLoss;
   brD.armyLoss = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
-  if (brA.netPowerLoss < brD.netPowerLoss && brD.netPowerLoss >= 0.1 * brD.netPower) {
+  if (brA.armyNetPowerLoss < brD.armyNetPowerLoss && brD.armyNetPowerLoss >= 0.1 * brD.armyNetPower) {
     battleReport.isSuccessful = true;
-    battleReport.summary.isSuccessful = true;
+    battleReport.result.isSuccessful = true;
   } else {
     battleReport.isSuccessful = false;
-    battleReport.summary.isSuccessful = false;
+    battleReport.result.isSuccessful = false;
   }
   return battleReport;
 }
 
 export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: BattleReport) => {
+  battleReport.result.attacker.startNetPower = totalNetPower(attacker);
+  battleReport.result.defender.startNetPower = totalNetPower(defender);
+
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve army losses
   ////////////////////////////////////////////////////////////////////////////////
-  const summary = battleReport.summary;
-  const attackerLosses = summary.attacker.armyLoss;
+  const result = battleReport.result;
+  const attackerLosses = result.attacker.armyLoss;
   attackerLosses.forEach(stack => {
     const f = attacker.army.find(d => { return d.id === stack.id });
 
@@ -1113,7 +1175,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   });
   attacker.army = attacker.army.filter(d => d.size > 0);
 
-  const defenderLosses = summary.defender.armyLoss;
+  const defenderLosses = result.defender.armyLoss;
   defenderLosses.forEach(stack => {
     const f = defender.army.find(d => { return d.id === stack.id });
 
@@ -1125,6 +1187,8 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   defender.army = defender.army.filter(d => d.size > 0);
 
   if (battleReport.isSuccessful === false) {
+    battleReport.result.attacker.endNetPower = totalNetPower(attacker);
+    battleReport.result.defender.endNetPower = totalNetPower(defender);
     return;
   }
 
@@ -1149,12 +1213,15 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
     defender.status = 'defeated';
   }
 
+  battleReport.result.attacker.endNetPower = totalNetPower(attacker);
+  battleReport.result.defender.endNetPower = totalNetPower(defender);
+
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve mage status
   ////////////////////////////////////////////////////////////////////////////////
   if (defender.forts <= 0) {
     defender.status = 'defeated';
-    battleReport.summary.isDefenderDefeated = true;
+    battleReport.result.isDefenderDefeated = true;
   }
 
 
@@ -1172,7 +1239,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   buildingTypes.forEach(building => {
     totalLandLoss += battleReport.landResult.landLoss[building];
   });
-  battleReport.summary.landGain = totalLandGain;
-  battleReport.summary.landLoss = totalLandLoss;
+  battleReport.result.landGain = totalLandGain;
+  battleReport.result.landLoss = totalLandLoss;
 
 }

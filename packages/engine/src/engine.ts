@@ -14,7 +14,8 @@ import {
   createMage,
   createMageTest,
   totalLand,
-  totalNetPower
+  totalNetPower,
+  currentSpellLevel
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
@@ -43,7 +44,6 @@ import {
   maxMana,
   castingCost,
   successCastingRate,
-  currentSpellLevel,
   enchantmentUpkeep,
   dispelEnchantment
 } from './magic';
@@ -129,11 +129,21 @@ class Engine {
       if (!mage) {
         console.log('creating test mage', name);
         const mage = createMage(name, magic);
+        mage.assignment.itemId = 'potionOfValor';
+        mage.assignment.itemCondition = 75;
+
         await this.adapter.createMage(name, mage);
+        await this.adapter.createRank({
+          id: mage.id,
+          name: mage.name,
+          magic: mage.magic,
+          forts: mage.forts,
+          land: totalLand(mage),
+          status: '',
+          netPower: totalNetPower(mage)
+        });
       }
     }
-
-    this.updateRankList();
 
     // Start loop
     setTimeout(() => {
@@ -141,6 +151,7 @@ class Engine {
     }, TICK);
     console.log('engine constructor done');
   }
+
 
   updateLoop() {
     /**
@@ -151,7 +162,6 @@ class Engine {
      */
     console.log(`=== Server turn ===`);
     this.adapter.nextTurn();
-    this.updateRankList();
 
     setTimeout(() => {
       this.updateLoop()
@@ -240,6 +250,10 @@ class Engine {
     mage.turnsUsed ++;
 
     // 2. calculate income
+    const beforeGeld = mage.currentGeld;
+    const beforeMana = mage.currentMana;
+    const beforePopuplation = mage.currentPopulation;
+
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
@@ -304,6 +318,7 @@ class Engine {
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
+
     mage.currentGeld -= armyCost.geld;
     mage.currentMana -= armyCost.mana;
     mage.currentPopulation -= armyCost.population;
@@ -325,6 +340,41 @@ class Engine {
     if (mage.currentGeld < 0) mage.currentGeld = 0;
     if (mage.currentMana < 0) mage.currentMana = 0;
     if (mage.currentPopulation < 0) mage.currentPopulation = 0;
+
+
+    const deltaGeld = mage.currentGeld - beforeGeld;
+    const deltaMana = mage.currentMana - beforeMana;
+    const deltaPopulation = mage.currentPopulation - beforePopuplation;
+
+    const logs: string[] = [];
+    const researchItem = Object.values(mage.currentResearch).find(d => d.active === true);
+    if (researchItem) {
+      logs.push(`You are researching ${researchItem.id}`);
+    }
+    if (mage.enchantments.length > 0) {
+      logs.push(`You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`);
+    }
+    logs.push(`You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`);
+
+    // Save turn chronicle to DB 
+    this.adapter.saveChronicles([
+      {
+        id: mage.id,
+        name: mage.name,
+        turn: mage.turnsUsed,
+        time: Date.now(),
+        data: logs
+      }
+    ]);
+    this.adapter.updateRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
   }
 
   async exploreLand(mage: Mage, num: number) {
@@ -521,7 +571,7 @@ class Engine {
     const spell = getSpellById(spellId);
     const origin: EffectOrigin = {
       id: mage.id,
-      spellLevel: mage.currentSpellLevel,
+      spellLevel: currentSpellLevel(mage),
       magic: mage.magic,
       targetId: mage.id
     };
@@ -577,6 +627,7 @@ class Engine {
 
   async summonByItem(mage: Mage, itemId: string, num: number) {
     const item = getItemById(itemId);
+    const spellLevel = currentSpellLevel(mage);
 
     const result: GameMsg[] = [];
     for (let i = 0; i < num; i++) {
@@ -600,7 +651,7 @@ class Engine {
         const res = summonUnit(effect, {
           id: mage.id,
           magic: mage.magic,
-          spellLevel: mage.currentSpellLevel,
+          spellLevel: spellLevel,
           targetId: mage.id
         });
 
@@ -636,7 +687,7 @@ class Engine {
       const res = summonUnit(effect, {
         id: mage.id,
         magic: mage.magic,
-        spellLevel: mage.currentSpellLevel,
+        spellLevel: currentSpellLevel(mage),
         targetId: mage.id
       });
       // Add to existing army
@@ -727,26 +778,10 @@ class Engine {
     await this.adapter.updateMage(mage);
   }
 
-  async updateRankList() {
-    console.log('engine: updateRankList');
-    /* FIXME
-    const mages = await this.adapter.getAllMages();
-    const ranks = mages.map(mage => {
-      return {
-        id: mage.id,
-        name: mage.name,
-        netPower: totalNetPower(mage)
-      };
-    });
-
-    const orderedRanks = _.orderBy(ranks, d => -d.netPower);
-    orderedRanks.forEach((d, rankIdx) => {
-      this.getMage(d.id).rank = (1 + rankIdx);
-    });
-    */
-  }
 
   async rankList(_listingType: string): Promise<MageRank[]> {
+    return this.adapter.getRankList();
+    /*
     const mages = await this.adapter.getAllMages();
 
     const ranks = mages.map(mage => {
@@ -761,6 +796,7 @@ class Engine {
       }
     });
     return _.orderBy(ranks, d => -d.netPower);
+    */
   }
 
   async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
@@ -782,7 +818,7 @@ class Engine {
     const MAX_STACKS = 10;
 
     // For attacker, the army is formed by selected ids
-    const aBattleStackIds = stackIds.slice(MAX_STACKS);
+    const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
     const attackerArmy = mage.army.filter(s => aBattleStackIds.includes(s.id));
     const attacker: Combatant =  {
       mage: mage,
@@ -791,11 +827,10 @@ class Engine {
       army: attackerArmy
     };
 
-    // FIXME: assignment triggers
     // For defender, the army is formed by up to 10 stacks sorted by modified power rank
     const dBattleStackIds = prepareBattleStack(defenderMage.army, 'defender')
       .map(d => { return d.unit.id; })
-      .slice(MAX_STACKS);
+      .slice(0, MAX_STACKS);
     const defenderArmy = defenderMage.army.filter(s => dBattleStackIds.includes(s.id));
     const defender: Combatant = {
       mage: defenderMage,
@@ -829,12 +864,38 @@ class Engine {
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
+ 
       timestamp: battleReport.timestamp,
       attackType: 'siege',
+
       attackerId: battleReport.attacker.id,
+      attackerName: battleReport.attacker.name,
+      attackerStartingUnits: battleReport.result.attacker.startingUnits,
+      attackerUnitsLoss: battleReport.result.attacker.unitsLoss,
+      attackerNPLoss: 0,
+      attackerNPLossPercentage: 0,
+
       defenderId: battleReport.defender.id,
-      summary: battleReport.summary
+      defenderName: battleReport.defender.name,
+      defenderStartingUnits: battleReport.result.defender.startingUnits,
+      defenderUnitsLoss: battleReport.result.defender.unitsLoss,
+      defenderNPLoss: 0,
+      defenderNPLossPercentage: 0,
+
+      isSuccessful: battleReport.result.isSuccessful,
+      isDefenderDefeated: battleReport.result.isDefenderDefeated,
+
+      landGain: battleReport.result.landGain,
+      landLoss: battleReport.result.landLoss
     };
+
+    const result = battleReport.result;
+    reportSummary.attackerNPLoss = Math.max(0, (result.attacker.startNetPower - result.attacker.endNetPower));
+    reportSummary.defenderNPLoss = Math.max(0, (result.defender.startNetPower - result.defender.endNetPower));
+    reportSummary.attackerNPLossPercentage = reportSummary.attackerNPLoss / result.attacker.startNetPower;
+    reportSummary.defenderNPLossPercentage = reportSummary.defenderNPLoss / result.defender.startNetPower;
+
+    // Noramlize
 
 
     /** Handle epidemic enchantments **/
@@ -866,6 +927,16 @@ class Engine {
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     await this.adapter.updateMage(mage);
     await this.adapter.updateMage(defenderMage);
+    this.adapter.updateRank({
+      id: defenderMage.id,
+      name: defenderMage.name,
+      magic: defenderMage.magic,
+      forts: defenderMage.forts,
+      land: totalLand(defenderMage),
+      status: '',
+      netPower: totalNetPower(defenderMage)
+    });
+
     return battleReport;
   }
 
@@ -885,7 +956,17 @@ class Engine {
   }
 
   async getMageBattles(mage: Mage) {
-    return await this.adapter.getMageBattles(mage.id, {});
+    return await this.adapter.getBattles({ 
+      mageId: mage.id,
+      limit: 100
+    });
+  }
+
+  async getChronicles(mage: Mage) {
+    return await this.adapter.getChronicles({ 
+      mageId: mage.id,
+      limit: 30
+    });
   }
 
   async register(username: string, password: string, magic: string) {
@@ -897,6 +978,15 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+    this.adapter.createRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
     return { user: res.user, mage };
   }
 
@@ -910,6 +1000,15 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+    this.adapter.createRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
     return { user: res.user, mage };
   }
 

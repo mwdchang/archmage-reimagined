@@ -1,27 +1,26 @@
 import bcrypt from 'bcryptjs';
-import { DataAdapter } from './data-adapter';
+import { DataAdapter, SearchOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
+import { ChronicleTurn, MageRank } from 'shared/types/common';
 
-interface User {
+interface UserTable {
   username: string;
   token: string;
   hash: string;
 }
 
-interface MageTableEntry {
+interface MageTable {
   username: string,
   id: number,
   mage: Mage
 }
 
-interface BattleReportTableEntry {
-  defenderId: number;
-  attackerId: number;
-  report: BattleReport;
-  summary: BattleReportSummary;
+interface BattleReportTable {
+  id: string,
+  data: BattleReport
 }
 
 
@@ -45,15 +44,76 @@ const DB_INIT = `
   DROP TABLE IF EXISTS battle_report;
   CREATE TABLE IF NOT EXISTS battle_report(
     id varchar(64),
-    time bigint,
-    attackerId integer,
-    defenderId integer,
-    report json,
-    summary json
+    data json
   );
   COMMIT;
+
+  DROP TABLE IF EXISTS battle_summary;
+  CREATE TABLE IF NOT EXISTS battle_summary(
+    id varchar(64),
+    time bigint,
+    attackType varchar(32),
+    attackerId integer,
+    attackerName varchar(64),
+    attackerNPLoss bigint,
+    attackerNPLossPercentage float,
+    attackerStartingUnits integer,
+    attackerUnitsLoss integer,
+    defenderId integer,
+    defenderName varchar(64),
+    defenderNPLoss bigint,
+    defenderNPLossPercentage float,
+    defenderStartingUnits integer,
+    defenderUnitsLoss integer,
+    isSuccessful boolean,
+    isDefenderDefeated boolean,
+    landGain integer,
+    landLoss integer
+  );
+  COMMIT;
+
+  DROP TABLE IF EXISTS turn_chronicle;
+  CREATE TABLE IF NOT EXISTS turn_chronicle(
+    id integer,
+    name varchar(64),
+    time bigint,
+    turn integer,
+    data json
+  );
+  COMMIT;
+
+  
+  DROP VIEW IF EXISTS rank_view;
+  DROP TABLE IF EXISTS rank;
+
+  CREATE TABLE IF NOT EXISTS rank(
+    id integer,
+    name varchar(64),
+    magic varchar(32),
+    forts integer,
+    land integer,
+    status varchar(32),
+    netPower bigint
+  );
+  COMMIT;
+
+  CREATE VIEW rank_view AS
+  SELECT
+      id,
+      name,
+      magic,
+      forts,
+      land,
+      status,
+      netPower as "netPower",
+      RANK() OVER (ORDER BY netPower DESC) AS rank
+  FROM
+      rank;
 `;
 
+
+
+const Q = (v: string) => `'${v}'`;
 
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;
@@ -73,15 +133,13 @@ export class PGliteDataAdapter extends DataAdapter {
   }
 
   async getUser(username: string) {
-    console.log('pglite getUser');
-    const result = await this.db.query<User>(`
+    const result = await this.db.query<UserTable>(`
 SELECT * from archmage_user where username = '${username}'
     `);
     return result.rows[0];
   }
 
-  async updateUser(user: User) {
-    console.log('pglite updateUser');
+  async updateUser(user: UserTable) {
     const result = await this.db.exec(`
 UPDATE archmage_user 
 SET token = '${user.token}'
@@ -117,9 +175,8 @@ INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
   async logout() { }
 
   async createMage(username: string, mage: Mage) {
-    console.log('pglite: createMage');
     const sql = `
-INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
+      INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
 
     try {
@@ -130,7 +187,6 @@ INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
   }
 
   async updateMage(mage: Mage) {
-    console.log('pglite: updateMage');
     await this.db.exec(`
 UPDATE mage 
 SET mage = '${JSON.stringify(mage)}'
@@ -139,58 +195,230 @@ WHERE id = ${mage.id}
   }
 
   async getMage(id: number) {
-    console.log('pglite: getMage');
-    const result = await this.db.query<MageTableEntry>(`
-SELECT mage from mage where id = ${id}
+    const result = await this.db.query<MageTable>(`
+      SELECT mage from mage where id = ${id}
     `);
-    return result.rows[0].mage;
+    const mage: Mage = result.rows[0].mage;
+
+    const mageRank = await this.db.query<MageRank>(`
+      select rank from rank_view where id = ${mage.id} limit 1
+    `);
+    mage.rank = mageRank.rows[0].rank; 
+
+    return mage;
   }
 
   async getMageByUser(username: string) {
     console.log('pglite: getMageByUser');
-    const result = await this.db.query<MageTableEntry>(`
-SELECT mage from mage where username = '${username}'
+    const result = await this.db.query<MageTable>(`
+      SELECT mage from mage where username = '${username}'
     `);
     if (result.rows.length === 0) {
       return null;
     }
-    return result.rows[0].mage;
+    const mage: Mage = result.rows[0].mage;
+    const mageRank = await this.db.query<MageRank>(`
+      select rank from rank_view where id = ${mage.id} limit 1
+    `);
+    mage.rank = mageRank.rows[0].rank; 
+
+    return mage;
   }
 
   async getAllMages() {
     console.log('pglite: getAllMages');
-    const result = await this.db.query<MageTableEntry>(`
+    const result = await this.db.query<MageTable>(`
 SELECT mage from mage
     `);
     return result.rows.map(d => d.mage);
   }
 
-  async getMageBattles(id: number, options: any) {
-    const result = await this.db.query<BattleReportTableEntry>(`
-SELECT * from battle_report
-WHERE (attackerId = ${id} OR defenderId = ${id})
+  async getRankList(): Promise<MageRank[]> {
+    const result = await this.db.query<MageRank>('SELECT * from rank_view order by rank asc');
+    return result.rows;
+  }
+
+  async createRank(mr : MageRank) {
+    await this.db.exec(`
+      INSERT INTO rank values(
+        ${mr.id},
+        ${Q(mr.name)},
+        ${Q(mr.magic)},
+        ${mr.forts},
+        ${mr.land},
+        ${Q(mr.status)},
+        ${mr.netPower}
+      );
+    `)
+  }
+
+  async updateRank(mr : MageRank) {
+    const result = await this.db.exec(`
+      UPDATE rank 
+      SET forts = ${mr.forts}
+      ,   land=${mr.land}
+      ,   netPower=${mr.netPower}
+      WHERE id = ${mr.id}
     `);
-    return result.rows.map(d => d.summary);
+  }
+
+  async getBattles(options: SearchOptions) {
+    let sqlQuery = 'SELECT * from battle_summary ';
+    const whereClauses: string[] = [];
+
+    if (options.mageId) {
+      whereClauses.push(`(attackerId = ${options.mageId} OR defenderId = ${options.mageId})`);
+    }
+    if (options.mageName) {
+      whereClauses.push(`(attackerName like '%${options.mageName}%' OR defenderName like '%${options.mageName})%'`);
+    }
+    if (options.startTime !== undefined) {
+      whereClauses.push(`time >= ${options.startTime}`);
+    }
+    if (options.endTime !== undefined) {
+      whereClauses.push(`time <= ${options.startTime}`);
+    }
+    if (whereClauses.length > 0) {
+      sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
+    }
+    
+    // paging and order
+    sqlQuery += ' ORDER BY time desc ';
+    if (options.limit > 0) {
+      sqlQuery += ` LIMIT ${options.limit} `;
+    }
+    if (options.from > 0) {
+      sqlQuery += ` OFFSET ${options.from} `;
+    }
+    console.log("SQL", sqlQuery);
+    const result = await this.db.query<BattleReportSummary>(sqlQuery);
+    return result.rows;
   }
 
   async getBattleReport(id: string) {
-    const result = await this.db.query<BattleReportTableEntry>(`
-SELECT * from battle_report
-WHERE id = '${id}'
+    const result = await this.db.query<BattleReportTable>(`
+      SELECT * from battle_report
+      WHERE id = '${id}'
     `)
     if (result.rows.length > 0) {
-      return result.rows[0].report;
+      return result.rows[0].data;
     }
     return null;
   }
 
-  async saveBattleReport(id: number, reportId: string, report: BattleReport, reportSummary: BattleReportSummary) {
+  async saveBattleReport(
+    id: number, 
+    reportId: string, 
+    report: BattleReport, 
+    reportSummary: BattleReportSummary
+  ) {
     await this.db.exec(`
-INSERT INTO battle_report(id, time, attackerId, defenderId, report, summary)
-values('${reportId}', 0, ${report.attacker.id}, ${report.defender.id}, '${JSON.stringify(report)}', '${JSON.stringify(reportSummary)}')
+      INSERT INTO battle_summary(
+        id,
+        time,
+        attackType,
+        attackerId,
+        attackerName,
+        attackerNPLoss,
+        attackerNPLossPercentage,
+        attackerStartingUnits,
+        attackerUnitsLoss,
+        defenderId, 
+        defenderName,
+        defenderNPLoss,
+        defenderNPLossPercentage,
+        defenderStartingUnits,
+        defenderUnitsLoss,
+        isSuccessful,
+        isDefenderDefeated,
+        landGain,
+        landLoss
+      )
+      VALUES (
+        ${Q(reportId)}, 
+        ${reportSummary.timestamp}, 
+        ${Q(reportSummary.attackType)},
+        ${reportSummary.attackerId}, 
+        ${Q(reportSummary.attackerName)}, 
+        ${reportSummary.attackerNPLoss}, 
+        ${reportSummary.attackerNPLossPercentage}, 
+        ${reportSummary.attackerStartingUnits}, 
+        ${reportSummary.attackerUnitsLoss}, 
+        ${reportSummary.defenderId}, 
+        ${Q(reportSummary.defenderName)}, 
+        ${reportSummary.defenderNPLoss}, 
+        ${reportSummary.defenderNPLossPercentage}, 
+        ${reportSummary.defenderStartingUnits}, 
+        ${reportSummary.defenderUnitsLoss}, 
+        ${reportSummary.isSuccessful}, 
+        ${reportSummary.isDefenderDefeated}, 
+        ${reportSummary.landGain}, 
+        ${reportSummary.landLoss}
+      )
+    `);
+
+    await this.db.exec(`
+      INSERT INTO battle_report(id, data) 
+      VALUES (${Q(reportId)}, ${Q(JSON.stringify(report))})
     `);
   }
 
+  async saveChronicles(data: ChronicleTurn[]): Promise<void> {
+    // Build parameter placeholders for each row
+    const valuePlaceholders = data.map((_, i) => 
+      `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3}, $${i * 3 + 4}, $${i * 3 + 5})`
+    ).join(", ");
+
+    const values: any[] = data.flatMap(entry => [
+      entry.id,
+      entry.name,
+      entry.time,
+      entry.turn,
+      JSON.stringify(entry.data)
+    ]);
+
+    const insertSQL = `
+      INSERT INTO turn_chronicle(id, name, time, turn, data)
+      VALUES ${valuePlaceholders}
+    `;
+    await this.db.query(insertSQL, values);
+  }
+
+  async getChronicles(options: SearchOptions): Promise<any[]> {
+    let sqlQuery = 'SELECT * from turn_chronicle';
+    const whereClauses: string[] = [];
+
+    if (options.mageId) {
+      whereClauses.push(`id = ${options.mageId}`);
+    }
+    if (options.mageName) {
+      whereClauses.push(`name like '%${options.mageId}%'`);
+    }
+    if (options.startTime !== undefined) {
+      whereClauses.push(`time >= ${options.startTime}`);
+    }
+    if (options.endTime !== undefined) {
+      whereClauses.push(`time <= ${options.startTime}`);
+    }
+    if (whereClauses.length > 0) {
+      sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    // paging and order
+    sqlQuery += ' ORDER BY time desc ';
+    if (options.limit > 0) {
+      sqlQuery += ` LIMIT ${options.limit} `;
+    }
+    if (options.from > 0) {
+      sqlQuery += ` OFFSET ${options.from} `;
+    }
+
+    console.log("SQL", sqlQuery);
+    const result = await this.db.query<ChronicleTurn>(sqlQuery);
+    return result.rows;
+  }
+
   async nextTurn() {
+    // nothing
   }
 }

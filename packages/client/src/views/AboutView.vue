@@ -43,25 +43,35 @@
         </div>
       </section>
     </main>
-
     <router-link to="/status">Status Report</router-link>
     <router-link to="/battle">Battle</router-link>
     <router-link to="/rankList">Ranks</router-link>
     <router-link to="/chronicles">Chronicles</router-link>
+    <div class="chronicles">
+      <div v-for="(turn) in logs" :key="turn.turn">
+        <div> [ Turn {{turn.turn}} ]</div>
+        <div v-for="(log) in turn.data">
+          {{ log }}
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
-import { totalNetPower } from 'engine/src/base/mage';
-import { currentSpellLevel, maxSpellLevel } from 'engine/src/magic';
+import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
+import { maxSpellLevel } from 'engine/src/magic';
+import { API } from '@/api/api';
+import { ChronicleTurn } from 'shared/types/common';
 
 const mageStore = useMageStore();
+const logs = ref<ChronicleTurn[]>([]);
 
 const numItems = computed(() => {
   const keys = Object.keys(mageStore.mage!.items);
@@ -75,11 +85,33 @@ const numItems = computed(() => {
 const spellLevel = computed(() => {
   return currentSpellLevel(mageStore.mage!);
 });
+
+
+
+onMounted(async () => {
+  const res = await API.get<{ chronicles: ChronicleTurn[]}>('/chronicles');
+  logs.value = res.data.chronicles;
+  console.log(logs.value);
+});
+
+
+
 </script>
 
 <style scoped>
 section {
   padding: 5px;
+}
+
+.chronicles {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 120%;
+  padding: 10px;
+  margin: 10px;
+  background: #322;
+  gap: 8px;
 }
 
 .row {
