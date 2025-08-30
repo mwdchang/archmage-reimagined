@@ -133,10 +133,17 @@ class Engine {
         mage.assignment.itemCondition = 75;
 
         await this.adapter.createMage(name, mage);
+        await this.adapter.createRank({
+          id: mage.id,
+          name: mage.name,
+          magic: mage.magic,
+          forts: mage.forts,
+          land: totalLand(mage),
+          status: '',
+          netPower: totalNetPower(mage)
+        });
       }
     }
-
-    this.updateRankList();
 
     // Start loop
     setTimeout(() => {
@@ -144,6 +151,7 @@ class Engine {
     }, TICK);
     console.log('engine constructor done');
   }
+
 
   updateLoop() {
     /**
@@ -154,7 +162,6 @@ class Engine {
      */
     console.log(`=== Server turn ===`);
     this.adapter.nextTurn();
-    this.updateRankList();
 
     setTimeout(() => {
       this.updateLoop()
@@ -359,6 +366,15 @@ class Engine {
         data: logs
       }
     ]);
+    this.adapter.updateRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
   }
 
   async exploreLand(mage: Mage, num: number) {
@@ -762,26 +778,10 @@ class Engine {
     await this.adapter.updateMage(mage);
   }
 
-  async updateRankList() {
-    console.log('engine: updateRankList');
-    /* FIXME
-    const mages = await this.adapter.getAllMages();
-    const ranks = mages.map(mage => {
-      return {
-        id: mage.id,
-        name: mage.name,
-        netPower: totalNetPower(mage)
-      };
-    });
-
-    const orderedRanks = _.orderBy(ranks, d => -d.netPower);
-    orderedRanks.forEach((d, rankIdx) => {
-      this.getMage(d.id).rank = (1 + rankIdx);
-    });
-    */
-  }
 
   async rankList(_listingType: string): Promise<MageRank[]> {
+    return this.adapter.getRankList();
+    /*
     const mages = await this.adapter.getAllMages();
 
     const ranks = mages.map(mage => {
@@ -796,6 +796,7 @@ class Engine {
       }
     });
     return _.orderBy(ranks, d => -d.netPower);
+    */
   }
 
   async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
@@ -926,6 +927,16 @@ class Engine {
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
     await this.adapter.updateMage(mage);
     await this.adapter.updateMage(defenderMage);
+    this.adapter.updateRank({
+      id: defenderMage.id,
+      name: defenderMage.name,
+      magic: defenderMage.magic,
+      forts: defenderMage.forts,
+      land: totalLand(defenderMage),
+      status: '',
+      netPower: totalNetPower(defenderMage)
+    });
+
     return battleReport;
   }
 
@@ -967,6 +978,15 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+    this.adapter.createRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
     return { user: res.user, mage };
   }
 
@@ -980,6 +1000,15 @@ class Engine {
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);
+    this.adapter.createRank({
+      id: mage.id,
+      name: mage.name,
+      magic: mage.magic,
+      forts: mage.forts,
+      land: totalLand(mage),
+      status: '',
+      netPower: totalNetPower(mage)
+    });
     return { user: res.user, mage };
   }
 

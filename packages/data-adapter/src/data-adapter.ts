@@ -1,6 +1,6 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Mage } from 'shared/types/mage';
-import { ChronicleTurn } from 'shared/types/common';
+import { ChronicleTurn, MageRank } from 'shared/types/common';
 
 
 export interface SearchOptions {
@@ -32,6 +32,11 @@ export abstract class DataAdapter {
   abstract getAllMages(): Promise<Mage[]>;
   abstract updateMage(mage: Mage): Promise<void>
   abstract getMage(id: number): Promise<Mage>
+
+
+  abstract createRank(mr :Omit<MageRank, 'rank'>): Promise<void>
+  abstract getRankList(): Promise<MageRank[]>
+  abstract updateRank(mr :Omit<MageRank, 'rank'>): Promise<void>
 
   // Battle reports
   abstract getBattles(options: SearchOptions): Promise<BattleReportSummary[]>

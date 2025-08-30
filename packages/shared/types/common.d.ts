@@ -6,6 +6,7 @@ export interface MageRank {
   land: number;
   status: string;
   netPower: number;
+  rank: number;
 }
 
 

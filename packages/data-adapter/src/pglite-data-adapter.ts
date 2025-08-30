@@ -4,7 +4,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn } from 'shared/types/common';
+import { ChronicleTurn, MageRank } from 'shared/types/common';
 
 interface UserTable {
   username: string;
@@ -22,16 +22,6 @@ interface BattleReportTable {
   id: string,
   data: BattleReport
 }
-
-
-interface ChronicleTable {
-  mageId: number,
-  mageName: string,
-  time: number, 
-  turn: number, 
-  data: any[]
-}
-
 
 
 const DB_INIT = `
@@ -91,6 +81,34 @@ const DB_INIT = `
     data json
   );
   COMMIT;
+
+  
+  DROP VIEW IF EXISTS rank_view;
+  DROP TABLE IF EXISTS rank;
+
+  CREATE TABLE IF NOT EXISTS rank(
+    id integer,
+    name varchar(64),
+    magic varchar(32),
+    forts integer,
+    land integer,
+    status varchar(32),
+    netPower bigint
+  );
+  COMMIT;
+
+  CREATE VIEW rank_view AS
+  SELECT
+      id,
+      name,
+      magic,
+      forts,
+      land,
+      status,
+      netPower as "netPower",
+      RANK() OVER (ORDER BY netPower DESC) AS rank
+  FROM
+      rank;
 `;
 
 
@@ -158,7 +176,7 @@ INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
 
   async createMage(username: string, mage: Mage) {
     const sql = `
-INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
+      INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
 
     try {
@@ -200,6 +218,35 @@ SELECT mage from mage where username = '${username}'
 SELECT mage from mage
     `);
     return result.rows.map(d => d.mage);
+  }
+
+  async getRankList(): Promise<MageRank[]> {
+    const result = await this.db.query<MageRank>('SELECT * from rank_view order by rank asc');
+    return result.rows;
+  }
+
+  async createRank(mr : MageRank) {
+    await this.db.exec(`
+      INSERT INTO rank values(
+        ${mr.id},
+        ${Q(mr.name)},
+        ${Q(mr.magic)},
+        ${mr.forts},
+        ${mr.land},
+        ${Q(mr.status)},
+        ${mr.netPower}
+      );
+    `)
+  }
+
+  async updateRank(mr : MageRank) {
+    const result = await this.db.exec(`
+      UPDATE rank 
+      SET forts = ${mr.forts}
+      ,   land=${mr.land}
+      ,   netPower=${mr.netPower}
+      WHERE id = ${mr.id}
+    `);
   }
 
   async getBattles(options: SearchOptions) {
