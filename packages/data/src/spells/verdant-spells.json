@@ -495,7 +495,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
-            "checkResistance": false,
+            "checkResistance": true,
             "attributes": {
               "abilities": {
                 "rule": "remove",

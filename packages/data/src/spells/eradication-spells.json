@@ -683,6 +683,31 @@
     "castingTurn": 0,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "oponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "dropping", "extra": 21 } },
+                  "verdant": { "value": { "name": "dropping", "extra": 50 } },
+                  "eradication": { "value": { "name": "dropping", "extra": 95 } },
+                  "nether": { "value": { "name": "dropping", "extra": 50 } },
+                  "phantasm": { "value": { "name": "dropping", "extra": 21 } }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {

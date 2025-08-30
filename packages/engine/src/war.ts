@@ -125,7 +125,9 @@ const applyUnitEffect = (
         }
 
         // Finally apply
-        if (field === 'abilities') {
+        // There are two abilities fields, this to allow an effect to 
+        // both remove and add abilities
+        if (field === 'abilities' || field === 'abilities2') {
           if (rule === 'add') {
             stack.addedAbilities.push(finalValue);
           } else if (rule === 'remove') {
@@ -643,6 +645,60 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Resolving contradicting ability states
   resolveUnitAbilities(attackingArmy);
   resolveUnitAbilities(defendingArmy);
+
+  // Resolve temporary abilities
+  attackingArmy.forEach(stack => {
+    if (hasAbility(stack.unit, 'flying') && hasAbility(stack.unit, 'dropping')) {
+      const droppingEffect = stack.unit.abilities.find(d => d.name === 'dropping');
+      stack.unit.abilities = stack.unit.abilities.filter(d => d.name !== 'flying');
+
+      const damagePerUnit = droppingEffect.extra || 5;
+      const resist = calcResistance(stack.unit, ['melee']);
+      const damage = damagePerUnit * stack.size * ((100 - resist) / 100); 
+
+      let sustainedDamage = stack.sustainedDamage;
+      let totalDamage = damage + sustainedDamage;
+
+      let unitLoss = Math.floor(totalDamage / stack.unit.hitPoints);
+      if (unitLoss >= stack.size) {
+        unitLoss = stack.size;
+      }
+
+      if (unitLoss > 0) {
+        console.log('!!!', stack.unit.id, unitLoss)
+        stack.sustainedDamage = 0;
+      }
+      stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
+      stack.size -= unitLoss;
+      stack.loss += unitLoss;
+    }
+  });
+  defendingArmy.forEach(stack => {
+    if (hasAbility(stack.unit, 'flying') && hasAbility(stack.unit, 'dropping')) {
+      const droppingEffect = stack.unit.abilities.find(d => d.name === 'dropping');
+      stack.unit.abilities = stack.unit.abilities.filter(d => d.name !== 'flying');
+
+      const damagePerUnit = droppingEffect.extra || 5;
+      const resist = calcResistance(stack.unit, ['melee']);
+      const damage = damagePerUnit * stack.size * ((100 - resist) / 100); 
+
+      let sustainedDamage = stack.sustainedDamage;
+      let totalDamage = damage + sustainedDamage;
+
+      let unitLoss = Math.floor(totalDamage / stack.unit.hitPoints);
+      if (unitLoss >= stack.size) {
+        unitLoss = stack.size;
+      }
+
+      if (unitLoss > 0) {
+        console.log('!!!', stack.unit.id, unitLoss)
+        stack.sustainedDamage = 0;
+      }
+      stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
+      stack.size -= unitLoss;
+      stack.loss += unitLoss;
+    }
+  });
 
   // Find pairing
   calcPairings(attackingArmy, defendingArmy);
