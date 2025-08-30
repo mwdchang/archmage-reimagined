@@ -48,9 +48,7 @@ export interface TemporaryUnitEffect extends Effect {
  * - Priortize unit attribute changes, eg: set to fix number
  * - Create temporary stacks
 **/
-export interface PrebattleEffect extends BattleEffect{
-}
-
+export interface PrebattleEffect extends BattleEffect{}
 export interface BattleEffect extends Effect {
   target: 'self' | 'opponent' | 'both';
   targetType: 'all' | 'random' | 'weightedRandom'
@@ -153,7 +151,18 @@ export interface KingdomBuildingsEffect extends Effect {
 
 export interface KingdomResourcesEffect extends Effect {
   rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
-  target: string,
+  target: 'population' | 'mana' | 'geld' | 'item',
+  magic: {
+    [key in AllowedMagic]: {
+      value: { min: number, max: number }
+    }
+  }
+}
+
+export interface KingdomArmyEffect extends Effect {
+  rule: 'addSpellLevelPercentageBase',
+  filters: UnitFilter[] | null,
+  checkResistance: boolean;
   magic: {
     [key in AllowedMagic]: {
       value: { min: number, max: number }

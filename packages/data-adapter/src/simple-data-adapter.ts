@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { DataAdapter } from './data-adapter';
+import { DataAdapter, SearchOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
+import { BattleReport, BattleReportSummary } from 'shared/types/battle';
+import { ChronicleTurn, MageRank } from 'shared/types/common';
 
 interface User {
   username: string
@@ -14,8 +16,144 @@ const DATA_DIR = 'game-data';
 const REPORT_DIR = 'reports';
 
 /**
- * This is a simple in-memory/file-based data adapter - not performant if there are hundreds of mages
+ * This is a simple in-memory/file-based data adapter - mainly for testing
 **/
+
+export class SimpleDataAdapter extends DataAdapter {
+  userTable: Map<string, User> = new Map();
+
+  mageTable: Mage[] = [];
+
+  battleReportTable: BattleReport[] = [];
+  battleSummaryTable: BattleReportSummary[] = [];
+  turnTable: ChronicleTurn[] = [];
+  rankTable: MageRank[] = []
+
+  constructor() { super(); }
+
+  async initialize() {}
+
+  async register(username: string, password: string) {
+    const saltRounds = 5;
+    const hash = await bcrypt.hash(password, saltRounds);
+
+    const token = getToken(username);
+    this.userTable.set(username, {
+      username, hash , token
+    });
+
+    return { 
+      user: this.userTable.get(username)
+    };
+  }
+
+  async login(username: string, password: string) {
+    const user = this.userTable.get(username);
+    if (!user) return null;
+
+    const isValid = await bcrypt.compare(password, user.hash);
+    if (!isValid) return null;
+    const token = getToken(username);
+    this.userTable.get(username).token = token;
+
+    return {
+      user: this.userTable.get(username)
+    };
+  }
+
+  async logout() {}
+  async nextTurn() {}
+
+  async createMage(username: string, mage: Mage) {
+    this.mageTable.push(mage);
+  }
+
+  async updateMage(mage: Mage) {
+    const index = this.mageTable.findIndex(d => d.id === mage.id);
+    this.mageTable[index] = mage;
+  }
+
+  async getMage(id: number) {
+    const index = this.mageTable.findIndex(d => d.id === id);
+    return this.mageTable[index];
+  }
+
+  async getMageByUser(username: string) {
+    const mage = this.mageTable.find(d => d.name === username);
+    return mage;
+  }
+
+  async getAllMages() {
+    return this.mageTable;
+  }
+
+  async createRank(mr :Omit<MageRank, 'rank'>) {
+    // @ts-ignore
+    this.rankTable.push(mr);
+  }
+
+  async getRankList() {
+    return this.rankTable.sort((a, b) => b.netPower - a.netPower);
+  }
+
+  async updateRank(mr :Omit<MageRank, 'rank'>) {
+    const index = this.rankTable.findIndex(d => d.id === mr.id);
+    // @ts-ignore
+    this.rankTable[index] = mr;
+  }
+
+  async saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
+    this.battleReportTable.push(report);
+    this.battleSummaryTable.push(reportSummary);
+  }
+
+  async getBattles(options: SearchOptions) {
+    return this.battleSummaryTable.filter(s => {
+      if (options.endTime && options.endTime > s.timestamp) {
+        return false;
+      }
+      if (options.startTime && options.startTime < s.timestamp) {
+        return false;
+      }
+      if (options.mageId && options.mageId !== s.attackerId && options.mageId !== s.defenderId) {
+        return false;
+      }
+      if (options.mageName && options.mageName !== s.attackerName && options.mageName !== s.defenderName) {
+        return false;
+      }
+    }).sort((a, b) => b.timestamp - a.timestamp);
+  }
+
+  async getBattleReport(id: string) {
+    const br = this.battleReportTable.find(d => d.id === id);
+    return br;
+  }
+
+  async saveChronicles(data: ChronicleTurn[]) {
+    for (const x of data) {
+      this.turnTable.push(x);
+    }
+  }
+
+  async getChronicles(options: SearchOptions) {
+    return this.turnTable.filter(t => {
+      if (options.endTime && options.endTime > t.time) {
+        return false;
+      }
+      if (options.startTime && options.startTime < t.time) {
+        return false;
+      }
+      if (options.mageId && options.mageId !== t.id) {
+        return false;
+      }
+      if (options.mageName && options.mageName !== t.name) {
+        return false;
+      }
+    }).sort((a, b) => b.turn - a.turn);
+  }
+}
+
+/*
 export class SimpleDataAdapter extends DataAdapter {
   userAuthMap: Map<string, User> = new Map();
 
@@ -88,31 +226,6 @@ export class SimpleDataAdapter extends DataAdapter {
     };
   }
 
-  async logout() { }
-
-  async createMage(username: string, mage: Mage) {
-    this.userMageMap.set(username, mage.id);
-    this.mageMap.set(mage.id, mage);
-    this.saveState();
-  }
-
-  async updateMage(mage: Mage) {
-    this.mageMap.set(mage.id, mage);
-  }
-
-  async getMage(id: number) {
-    return this.mageMap.get(id);
-  }
-
-  async getMageByUser(username: string) {
-    const id = this.userMageMap.get(username);
-    return this.mageMap.get(id);
-  }
-
-  async getAllMages() {
-    return [...this.mageMap.values()];
-  }
-
   async getMageBattles(id: number, options: any) {
     if (this.mageBattleMap.has(id)) {
       return this.mageBattleMap.get(id);
@@ -154,3 +267,4 @@ export class SimpleDataAdapter extends DataAdapter {
     writeFileSync(`${DATA_DIR}/mageBattle.sav`, JSON.stringify(Array.from(this.mageBattleMap.entries())));
   }
 }
+*/

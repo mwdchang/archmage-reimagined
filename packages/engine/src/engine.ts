@@ -54,7 +54,8 @@ import {
   UnitSummonEffect,
   KingdomBuildingsEffect,
   KingdomResourcesEffect,
-  EffectOrigin
+  EffectOrigin,
+  KingdomArmyEffect
 } from 'shared/types/effects';
 
 import { randomInt } from './random';
@@ -74,6 +75,7 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 import { prepareBattleStack } from './battle/prepare-battle-stack';
+import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -228,11 +230,27 @@ class Engine {
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
         .filter(d => d.effectType === 'KingdomResourcesEffect') as KingdomResourcesEffect[];
-
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
         applyKingdomResourcesEffect(mage, effect, {
+          id: enchantment.casterId,
+          magic: enchantment.casterMagic,
+          spellLevel: enchantment.spellLevel,
+          targetId: enchantment.targetId
+        });
+      }
+    }
+
+    // handle army effect
+    for (const enchantment of enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const effects = spell.effects
+        .filter(d => d.effectType === 'KingdomArmyEffect') as KingdomArmyEffect[];
+      if (effects.length === 0) continue;
+
+      for (const effect of effects) {
+        applyKingdomArmyEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,

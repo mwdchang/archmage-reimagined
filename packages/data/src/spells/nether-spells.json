@@ -962,6 +962,15 @@
         "magic": {
           "nether": { "value": { "min": -0.04, "max": -0.12 } }
         }
+      },
+      {
+        "effectType": "KingdomArmyEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "filters": null,
+        "checkResistance": false,
+        "magic": {
+          "nether": { "value": { "min": -0.02, "max": -0.05 } }
+        }
       }
     ]
   },
