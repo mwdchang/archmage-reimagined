@@ -981,6 +981,14 @@
             }
           }
         ]
+      },
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "production": "land",
+        "magic": {
+          "verdant": { "value": 0.50 }
+        }
       }
     ]
   },

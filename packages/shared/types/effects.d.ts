@@ -172,7 +172,7 @@ export interface KingdomArmyEffect extends Effect {
 
 export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
-  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
+  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land',
   magic: {
     [key in AllowedMagic]: {
       value: number
