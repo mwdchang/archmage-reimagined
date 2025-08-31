@@ -209,9 +209,16 @@ export interface CastingEffect extends Effect {
   }
 }
 
+
 export interface WishEffect extends Effect {
-  positive:{
-  },
-  negative: {
-  }
+  trigger: {
+    min: number;
+    max: number;
+  } | null,
+  rolls: {
+    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | null,
+    min: number,
+    max: number,
+    weight: number
+  } []
 }

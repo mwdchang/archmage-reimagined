@@ -361,7 +361,7 @@ const battleSpell = (
       if (targetType === 'random') {
         randomIdx = randomInt(filteredArmy.length);
       } else if (targetType === 'weightedRandom') {
-        randomIdx = Math.min(randomWeighted() - 1, filteredArmy.length -1);
+        randomIdx = Math.min(randomWeighted(), filteredArmy.length -1);
       }
 
       for (const effect of effects) {
@@ -450,7 +450,7 @@ const battleItem = (
       if (targetType === 'random') {
         randomIdx = randomInt(filteredArmy.length);
       } else if (targetType === 'weightedRandom') {
-        randomIdx = Math.min(randomWeighted() - 1, filteredArmy.length -1);
+        randomIdx = Math.min(randomWeighted(), filteredArmy.length -1);
       }
 
       for (let i = 0; i < battleEffect.effects.length; i++) {

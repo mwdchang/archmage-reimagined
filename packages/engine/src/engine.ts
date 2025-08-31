@@ -76,6 +76,7 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 import lesserItems from 'data/src/items/lesser.json';
 import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
+import { applyWishEffect } from './effects/apply-wish-effect';
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -599,6 +600,8 @@ class Engine {
         applyKingdomResourcesEffect(mage, effect as any, origin);
       } else if (effect.effectType === 'KingdomBuildingsEffect') {
         applyKingdomBuildingsEffect(mage, effect as any, origin);
+      } else if (effect.effectType === 'WishEffect') {
+        applyWishEffect(mage, effect as any, origin);
       }
     }
   }

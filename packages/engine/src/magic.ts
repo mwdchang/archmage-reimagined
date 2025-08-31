@@ -306,7 +306,7 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
       modifier += (value * spellLevel);
     });
   });
-  console.log('\tenchant modifier:', modifier);
+  // console.log('\tenchant modifier:', modifier);
 
   // Adjacent and opposiite casting
   if (mage.magic !== spellMagic) {
@@ -317,8 +317,8 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
     }
   }
 
-  console.log('spell lvl', current);
-  console.log('success casting rate:', successRate);
+  // console.log('spell lvl', current);
+  // console.log('success casting rate:', successRate);
   return successRate;
 }
 
