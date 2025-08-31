@@ -1,5 +1,7 @@
 <template>
-  <h2 v-if="unit">{{unit.name}}</h2>
+  <h2 v-if="unit" class="row">
+    <magic :magic="unit.magic" />{{unit.name}}
+  </h2>
   <p style="margin: 1rem 10rem; line-height: 120%" v-if="unit">{{ unit.description }} </p>
   <main v-if="unit">
     <table>
@@ -8,7 +10,7 @@
           <td colspan="2">Unit Statistics</td>
         </tr>
 
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Name</td>
           <td>{{ unit.name }}</td>
         </tr>
@@ -29,7 +31,7 @@
           <td class="text-right">{{ unit.powerRank }}</td>
         </tr>
 
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Attack Power</td>
           <td class="text-right">{{ unit.primaryAttackPower }}</td>
         </tr>
@@ -46,7 +48,7 @@
           <td class="text-right">{{ unit.counterAttackPower}}</td>
         </tr>
 
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Extra Attack Power</td>
           <td class="text-right">{{ unit.secondaryAttackPower }}</td>
         </tr>
@@ -59,7 +61,7 @@
           <td class="text-right">{{ unit.secondaryAttackInit }}</td>
         </tr>
 
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Hit Points</td>
           <td class="text-right">{{ unit.hitPoints }}</td>
         </tr>
@@ -76,11 +78,11 @@
           </td>
         </tr>
 
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Abilities</td>
           <td> 
             <div v-for="(ability, idx) of unit.abilities" :key="idx">
-              {{ ability.name }}
+              {{ readableStr(ability.name) }}
             </div>
           </td>
         </tr>
@@ -94,7 +96,7 @@
         <tr style="background: #333">
           <td colspan="2">Spell Resistances</td>
         </tr>
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Ascendant</td>
           <td class="text-right">{{ unit.spellResistances.ascendant }}</td>
         </tr>
@@ -118,7 +120,7 @@
         <tr style="background: #333">
           <td colspan="2">Attack Resistances</td>
         </tr>
-        <tr style="border-top: solid 2px">
+        <tr style="border-top: solid 2px #555">
           <td>Missile</td>
           <td class="text-right">{{ unit.attackResistances.missile }}</td>
         </tr>
@@ -175,6 +177,8 @@
 import { ref, onMounted } from 'vue';
 import { getUnitById } from 'engine/src/base/references';
 import { Unit } from 'shared/types/unit';
+import { readableStr } from '@/util/util';
+import Magic from '@/components/magic.vue';
 
 const props = defineProps<{ id: string }>(); 
 

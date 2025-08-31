@@ -5,20 +5,20 @@ import { magicAlignmentTable, spellRankTable } from './config';
 import { randomInt } from '../random';
 
 export const unitMap = new Map<string, Unit>();
-export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
+export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'] as const;
+type MagicType = typeof magicTypes[number];
+
 export const spellMap = new Map<string, Spell>();
 export const researchTree = new Map<string, Map<string, string[]>>;
 export const itemMap = new Map<string, Item>();
 
 const spellList: Spell[] = [];
 const itemList: Item[] = [];
-const maxSpellLevels = {
-  ascendant: 0,
-  verdant: 0,
-  eradication: 0,
-  nether: 0,
-  phantasm: 0
-};
+
+const maxSpellLevels: Record<MagicType, number> = Object.fromEntries(
+  magicTypes.map(type => [type, 0])
+) as Record<MagicType, number>;
+
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {

@@ -135,3 +135,12 @@ export const conditionString = (v: number) => {
   return `Greater than ${v}%`;
 }
 
+
+export const readableStr = (str: string) => {
+  if (!str) return '';
+
+  // Insert space before capital letters and capitalize the first word
+  return str
+    .replace(/([A-Z])/g, ' $1')   // insert space before capital letters
+    .replace(/^./, char => char.toUpperCase()); // capitalize first letter
+}
