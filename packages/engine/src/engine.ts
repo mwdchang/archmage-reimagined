@@ -171,13 +171,13 @@ class Engine {
     }, TICK);
   }
 
-  useTurns(mage: Mage, turns: number) {
+  async useTurns(mage: Mage, turns: number) {
     for (let i = 0; i < turns; i++) {
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
   }
 
-  useTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]) {
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
@@ -205,7 +205,7 @@ class Engine {
     }
   }
 
-  useTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
     const mageLand = totalLand(mage);
 
     // handle buildings
@@ -261,8 +261,12 @@ class Engine {
     }
   }
 
-  // Use one turn for a mage
-  useTurn(mage: Mage) {
+  /**
+   * Use one turn for a mage
+   *
+   * Note the only async/await part is for updating enchantments from other mages
+  **/
+  async useTurn(mage: Mage) {
     console.log('[Turn]');
     // 1. use turn
     mage.currentTurn --;
@@ -313,18 +317,45 @@ class Engine {
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
-    this.useTurnEnchantmentSummon(mage, enchantments);
-    this.useTurnEnchantmentDamage(mage, enchantments);
+    this.processTurnEnchantmentSummon(mage, enchantments);
+    this.processTurnEnchantmentDamage(mage, enchantments);
 
 
     // Enchantment life and upkeep
-    // FIXME: mana = 0
-    // FIXME: Need to charge enemy mage mana for enchantments upkeep
-    mage.enchantments = mage.enchantments.filter(enchant => {
+    // FIXME: when mana = 0
+    for (const enchant of mage.enchantments) {
+      if (enchant.casterId !== mage.id && enchant.casterId !== 0) {
+        const spell = getSpellById(enchant.spellId);
+        const upkeep = spell.upkeep;
+        if (!upkeep) continue;
+
+        const casterMage = await this.getMage(enchant.casterId);
+        casterMage.currentGeld -= upkeep.geld;
+        casterMage.currentMana -= upkeep.mana;
+        casterMage.currentPopulation -= upkeep.population;
+        if (casterMage.currentGeld <= 0 && upkeep.geld) {
+          casterMage.currentGeld = 0;
+          enchant.life = 0;
+        }
+        if (casterMage.currentMana <= 0 && upkeep.mana) {
+          casterMage.currentMana = 0;
+          enchant.life = 0;
+        }
+        if (casterMage.currentPopulation <= 0 && upkeep.population) {
+          casterMage.currentPopulation = 0;
+          enchant.life = 0;
+        }
+        await this.adapter.updateMage(casterMage);
+      }
+
       // If enchantment has life, update
       if (enchant.life && enchant.life > 0) {
         enchant.life --;
       }
+    }
+
+    // Refresh functioning enchantments
+    mage.enchantments = mage.enchantments.filter(enchant => {
       if (enchant.life === 0) {
         console.log(`${enchant.casterId} ${enchant.spellId} expired`)
       }
@@ -406,7 +437,7 @@ class Engine {
       const exploredLand = explore(rate);
       mage.wilderness += exploredLand;
       landGained += exploredLand;
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
     await this.adapter.updateMage(mage);
     return landGained
@@ -423,7 +454,7 @@ class Engine {
       const gain = geldIncome(mage);
       geldGained += gain;
       mage.currentGeld += gain;
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
     await this.adapter.updateMage(mage);
     return geldGained;
@@ -442,7 +473,7 @@ class Engine {
       if (mage.currentMana > maxMana(mage)) {
         mage.currentMana = maxMana(mage);
       }
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
     await this.adapter.updateMage(mage);
     return manaGained;
@@ -463,7 +494,7 @@ class Engine {
     if (turns && turns > 0) {
       for (let i = 0; i < turns; i++) {
         doResearch(mage, researchPoints(mage));
-        this.useTurn(mage);
+        await this.useTurn(mage);
       }
     }
     const after = _.cloneDeep(mage.spellbook);
@@ -489,7 +520,7 @@ class Engine {
     if (item.attributes.includes('summon')) {
       return this.summonByItem(mage, itemId, num);
     }
-    this.useTurn(mage);
+    await this.useTurn(mage);
     await this.adapter.updateMage(mage);
   }
 
@@ -497,7 +528,7 @@ class Engine {
     const enchantment = mage.enchantments.find(d => d.id === enchantId);
     let success = false;
     if (enchantment) {
-      this.useTurn(mage);
+      await this.useTurn(mage);
 
       mage.currentMana -= mana;
       if (mage.currentMana < 0) {
@@ -560,7 +591,7 @@ class Engine {
       }
 
       mage.currentMana -= cost;
-      this.useTurns(mage, spell.castingTurn);
+      await this.useTurns(mage, spell.castingTurn);
 
       if (castingSuccessful === false) {
         continue;
@@ -693,7 +724,7 @@ class Engine {
           });
         });
       });
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
     await this.adapter.updateMage(mage);
     return result;
@@ -762,7 +793,7 @@ class Engine {
 
     // 2. Calculate cost and spend turns
     for (let i = 0; i < turnsUsed; i++) {
-      this.useTurn(mage);
+      await this.useTurn(mage);
     }
     await this.adapter.updateMage(mage);
   }
@@ -773,7 +804,7 @@ class Engine {
       mage[b.id] -= num;
       mage.wilderness += num;
     });
-    this.useTurn(mage);
+    await this.useTurn(mage);
     await this.adapter.updateMage(mage);
   }
 
@@ -878,10 +909,10 @@ class Engine {
 
     // FIXME: need to model order, right now
     // we take one turn to go attack, and one turn to return home ???
-    this.useTurn(mage);
+    await this.useTurn(mage);
     const battleReport = battle('siege', attacker, defender);
     resolveBattle(mage, defenderMage, battleReport);
-    this.useTurn(mage);
+    await this.useTurn(mage);
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
