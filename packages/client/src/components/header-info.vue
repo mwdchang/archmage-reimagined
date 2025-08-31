@@ -1,14 +1,6 @@
 <template>
   <table v-if="mageStore.mage" class="header-info">
     <tbody>
-      <!--
-      <tr style="background: #338">
-        <td colspan="3">
-          Archmage Reimagined is in early stages of development, if you want to help out please
-          <a target="_blank" href="https://github.com/mwdchang/archmage-reimagined"> visit here. </a>
-        </td>
-      </tr>
-      -->
       <tr>
         <td> Turns {{ mageStore.mage.currentTurn }} / {{ mageStore.mage.maxTurn }} </td>
         <td> Land {{ totalLand(mageStore.mage) }} </td>
@@ -17,14 +9,9 @@
       <tr>
         <td> Geld {{ mageStore.mage.currentGeld }} </td>
         <td> Pop. {{ mageStore.mage.currentPopulation }} / {{ interior.maxPopulation(mageStore.mage) }}</td>
-        <td> &nbsp; </td>
-      </tr>
-      <tr>
-        <td colspan="5"> 
-          <span style="display: flex; align-items: center;">Enchants &nbsp;
+        <td> 
           <span v-for="(enchant, idx) of mageStore.mage.enchantments" :key="idx" alt="abcdefg">
             <magic :magic="enchant.spellMagic" small />
-          </span>
           </span>
         </td>
       </tr>

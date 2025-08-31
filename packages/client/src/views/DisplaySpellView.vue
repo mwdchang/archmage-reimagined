@@ -50,7 +50,6 @@ import { Spell } from 'shared/types/magic';
 import SummonEffect from '@/components/summon-effect.vue';
 import BattleEffect from '@/components/battle-effect.vue';
 
-
 const props = defineProps<{ id: string }>(); 
 const spell = ref<Spell|null>(null);
 
@@ -71,7 +70,4 @@ main {
 table {
   width: 70%;
 }
-
-
-
 </style>

@@ -6,7 +6,7 @@
       <td>
         <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
       </td>
-      <td><magic :magic="spell.magic" /></td>
+      <td><magic :magic="spell.magic" small /></td>
       <td class="text-right">{{ spell.castingTurn }}</td>
       <td class="text-right">{{ spell.castingCost }}</td>
     </tr>
@@ -20,11 +20,15 @@
     You have no spells available.
   </p>
 
-  <div>Target</div>
-  <input type="text" v-model="target" />
+  <div class="row" style="width: 280px">
+    <div style="width: 100px">Target</div>
+    <input type="text" v-model="target" size="12" />
+  </div>
 
-  <div># of times</div> 
-  <input type="text" v-model="turns" />
+  <div class="row" style="width: 280px">
+    <div style="width: 100px"># of times</div> 
+    <input type="text" v-model="turns" size="4" />
+  </div>
 
   <button @click="castSpell">Cast spell</button>
 
@@ -86,5 +90,10 @@ const castSpell = async () => {
 <style scoped>
 tr:nth-child(odd) {
   background: #333;
+}
+
+td {
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 </style>

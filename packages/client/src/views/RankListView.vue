@@ -2,14 +2,14 @@
   <table v-if="mageStore.mage">
     <tbody>
       <tr>
-        <td>Ranking</td>
+        <td>Rank</td>
         <td>Name</td>
         <td>&nbsp;</td>
         <td>Land</td>
         <td>Fort</td>
         <td>Power</td>
         <td>Status</td>
-        <td>-</td>
+        <td>&nbsp;</td>
       </tr>
       <tr v-for="(rank, idx) of rankList" 
         :class="{active: rank.id === mageStore.mage.id}"
@@ -48,5 +48,9 @@ onMounted(async () => {
 <style scoped>
 table > tr > td {
   min-width: 2rem;
+}
+
+.active {
+  background: #335
 }
 </style>
