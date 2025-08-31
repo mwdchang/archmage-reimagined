@@ -2,7 +2,11 @@
   <main v-if="mageStore.mage">
     <h2>Research</h2>
     <p> 
-      You are generating {{ rp }} research points per turn. 
+      Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
+      (Max = {{ maxSpellLevel(mageStore.mage) }})
+    </p>
+    <p> 
+      You are generating {{ rp }} research points per turn. <br>
       Your magic item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
@@ -27,7 +31,7 @@
             <!-- {{ currentResearch[magic].id }} -->
           </td>
           <td class="text-right">
-            {{ currentResearch[magic]!.remainingCost }}
+            {{ readbleNumber(currentResearch[magic]!.remainingCost) }}
           </td>
           <td class="text-right">
             {{ Math.ceil(currentResearch[magic]!.remainingCost / rp) }}
@@ -57,8 +61,11 @@ import magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getSpellById, magicTypes } from 'engine/src/base/references';
-import { itemGenerationRate, researchPoints } from 'engine/src/magic';
+import { itemGenerationRate, maxSpellLevel, researchPoints } from 'engine/src/magic';
 import { Mage } from '../../../shared/types/mage';
+import { readbleNumber, readableStr } from '@/util/util';
+import { currentSpellLevel } from 'engine/src/base/mage';
+
 const mageStore = useMageStore();
 
 const rp = computed(() => {
@@ -88,7 +95,7 @@ const researchResultStr = computed(() => {
   if (researchResult.value === null) return '';
   Object.keys(researchResult.value).forEach(key => {
     researchResult.value![key].forEach(spellId => {
-      newSpells.push(spellId);
+      newSpells.push(readableStr(spellId));
     });
   });
   return `You added ${newSpells.join(', ')} to your spellbook`;

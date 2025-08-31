@@ -4,7 +4,7 @@
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 
-        Your income is about {{ geldIncome(mageStore.mage) }} geld
+        Your income is about {{ readbleNumber(geldIncome(mageStore.mage)) }} geld.
       </p>
       <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
       <button @click="geld"> Geld </button>
@@ -20,6 +20,7 @@ import { ref, onMounted } from 'vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { geldIncome } from 'engine/src/interior';
+import { readbleNumber } from '@/util/util';
 
 const turnsToGeld = ref(0);
 const mageStore = useMageStore();

@@ -49,7 +49,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "200px";
+    document.getElementById("mySidenav")!.style.width = "160px";
   }
 
   // Close the side navigation
@@ -76,7 +76,7 @@ onMounted(() => {
   /* background-color: #333; */
   color: white;
   /* position: absolute; */
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 10px;
 }
@@ -84,7 +84,7 @@ onMounted(() => {
 .sidenav {
   height: 100%;
   width: 0;
-  position: fixed;
+  position: absolute;
   z-index: 2;
   top: 0;
   left: 0;

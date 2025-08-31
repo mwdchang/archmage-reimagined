@@ -8,7 +8,7 @@
     </p>
 
     <br>
-    <main style="display: flex; flex-direction: row">
+    <main class="row" style="gap: 50px">
       <section>
         <img style="width: 160px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
         <img style="width: 160px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
@@ -16,33 +16,33 @@
         <img style="width: 160px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
         <img style="width: 160px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
       </section>
-      <section style="margin-left: 25px">
-        <div class="row">
+      <section> 
+        <div class="about-row">
           <div>Land</div>
           <div>{{ readbleNumber(totalLand(mageStore.mage)) }} </div>
         </div>
-        <div class="row">
+        <div class="about-row">
           <div>Forts</div>
           <div>{{ mageStore.mage.forts }} </div>
         </div>
-        <div class="row">
+        <div class="about-row">
           <div>Geld</div>
           <div>{{ readbleNumber(mageStore.mage.currentGeld) }} </div>
         </div>
-        <div class="row">
+        <div class="about-row">
           <div>Population</div>
           <div>{{ readbleNumber(mageStore.mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mageStore.mage)) }}</div>
         </div>
 
-        <div class="row">
+        <div class="about-row">
           <div>Magic</div>
           <div>{{ readbleNumber(mageStore.mage.currentMana) }} / {{ readbleNumber(manaStorage(mageStore.mage)) }}</div>
         </div>
-        <div class="row">
+        <div class="about-row">
           <div>Spell Level</div>
           <div>{{ spellLevel }} / {{ maxSpellLevel(mageStore.mage) }} </div>
         </div>
-        <div class="row">
+        <div class="about-row">
           <div>Items</div>
           <div>{{ numItems }}</div>
         </div>
@@ -122,7 +122,7 @@ section {
   gap: 8px;
 }
 
-.row {
+.about-row {
   display: flex;
   flex-direction: row;
   width: 18vw;

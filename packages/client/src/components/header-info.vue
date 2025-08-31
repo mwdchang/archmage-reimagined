@@ -2,15 +2,40 @@
   <table v-if="mageStore.mage" class="header-info">
     <tbody>
       <tr>
-        <td> Turns {{ mageStore.mage.currentTurn }} / {{ mageStore.mage.maxTurn }} </td>
-        <td> Land {{ totalLand(mageStore.mage) }} </td>
-        <td> Mana {{ mageStore.mage.currentMana }} / {{ manaStorage(mageStore.mage) }} </td>
+        <td> 
+          <div class="row" style="justify-content:space-between; padding: 0 5px">
+            <div>Turns</div>
+            <div>{{ readbleNumber(mage.currentTurn) }} / {{ readbleNumber(mage.maxTurn) }} </div>
+          </div>
+        </td>
+        <td> 
+          <div class="row" style="justify-content:space-between; padding: 0 5px">
+            <div>Land</div> 
+            <div>{{ readbleNumber(totalLand(mage)) }}</div>
+          </div>
+        </td>
+        <td> 
+          <div class="row" style="justify-content:space-between; padding: 0 5px">
+            <div>Mana</div>
+            <div>{{ readbleNumber(mage.currentMana) }} / {{ readbleNumber(manaStorage(mage)) }}</div>
+          </div>
+        </td>
       </tr>
       <tr>
-        <td> Geld {{ mageStore.mage.currentGeld }} </td>
-        <td> Pop. {{ mageStore.mage.currentPopulation }} / {{ interior.maxPopulation(mageStore.mage) }}</td>
         <td> 
-          <span v-for="(enchant, idx) of mageStore.mage.enchantments" :key="idx" alt="abcdefg">
+          <div class="row" style="justify-content:space-between; padding: 0 5px">
+            <div>Geld</div>
+            <div>{{ readbleNumber(mage.currentGeld) }} </div>
+          </div>
+        </td>
+        <td> 
+          <div class="row" style="justify-content:space-between; padding: 0 5px">
+            <div>Pop.</div>
+            <div>{{ readbleNumber(mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mage)) }}</div>
+          </div>
+        </td>
+        <td> 
+          <span v-for="(enchant, idx) of mage.enchantments" :key="idx" alt="abcdefg">
             <magic :magic="enchant.spellMagic" small />
           </span>
         </td>
@@ -21,17 +46,24 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
 import magic from './magic.vue';
+import { readbleNumber } from '@/util/util';
+import { Mage } from 'shared/types/mage';
+
 const mageStore = useMageStore();
+const mage = computed<Mage>(() => {
+  return mageStore.mage!;
+});
 </script>
 
 <style scoped>
 .header-info {
-  width: 60vw;
+  width: 55vw;
   font-size: 80%;
 }
 

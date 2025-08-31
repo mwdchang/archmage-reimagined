@@ -17,9 +17,9 @@
         <td> {{ idx + 1 }} </td>
         <td> (#{{ rank.id }}) {{ rank.name }} </td>
         <td> <magic :magic="rank.magic" /> </td>
-        <td class="text-right"> {{ rank.land }} </td>
+        <td class="text-right"> {{ readbleNumber(rank.land) }} </td>
         <td class="text-right"> {{ rank.forts }} </td>
-        <td class="text-right"> {{ rank.netPower }} </td>
+        <td class="text-right"> {{ readbleNumber(rank.netPower) }} </td>
         <td>{{ rank.status }}</td>
         <td> 
           <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
@@ -35,6 +35,7 @@ import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
 import Magic from '@/components/magic.vue';
 import type { MageRank } from 'shared/types/common';
+import { readbleNumber } from '@/util/util';
 
 const rankList = ref<MageRank[]>([]);
 const mageStore = useMageStore();
