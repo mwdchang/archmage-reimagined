@@ -13,23 +13,24 @@
           <td>Research cost (points)</td>
           <td>Turns</td>
         </tr>
-        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)">
+        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" style="cursor: pointer">
           <td> 
-            <span style="display: flex; flex-direction: row">
+            <span class="row">
               <magic :magic="magic" />
               <span style="font-size: 125%">
-                {{ currentResearch[magic].active ? '&check;' : '' }}
+                {{ currentResearch[magic]!.active ? '&check;' : '' }}
               </span>
             </span>
           </td>
           <td>
-            {{ currentResearch[magic].id }}
+            <router-link :to="{ name: 'viewSpell', params: { id: currentResearch[magic]!.id }}"> {{ spellName(currentResearch[magic].id) }} </router-link>
+            <!-- {{ currentResearch[magic].id }} -->
           </td>
           <td class="text-right">
-            {{ currentResearch[magic].remainingCost }}
+            {{ currentResearch[magic]!.remainingCost }}
           </td>
           <td class="text-right">
-            {{ Math.ceil(currentResearch[magic].remainingCost / rp) }}
+            {{ Math.ceil(currentResearch[magic]!.remainingCost / rp) }}
           </td>
         </tr>
       </tbody>
@@ -55,7 +56,7 @@ import { computed, ref } from 'vue';
 import magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { magicTypes } from 'engine/src/base/references';
+import { getSpellById, magicTypes } from 'engine/src/base/references';
 import { itemGenerationRate, researchPoints } from 'engine/src/magic';
 import { Mage } from '../../../shared/types/mage';
 const mageStore = useMageStore();
@@ -72,6 +73,10 @@ const currentResearch = ref(mageStore.mage!.currentResearch);
 
 const focusResearch = ref(mageStore.mage!.focusResearch? true : false);
 const turns = ref(0);
+
+const spellName = (id: string) => {
+  return getSpellById(id).name;
+};
 
 interface ResearchResult {
   [key: string]: string[]
@@ -97,7 +102,7 @@ const filteredMagicTypes = computed(() => {
 
 const toggle = (magic: string) => {
   filteredMagicTypes.value.forEach(d => {
-    currentResearch.value[d].active = false;
+    currentResearch.value[d]!.active = false;
   });
   currentResearch.value[magic].active = true;
 }
@@ -105,7 +110,7 @@ const toggle = (magic: string) => {
 const submitResearch = async () => {
   let magic: any = null;
   filteredMagicTypes.value.forEach(m => {
-    if (currentResearch.value[m].active === true) {
+    if (currentResearch.value[m]!.active === true) {
       magic = m;
     }
   });

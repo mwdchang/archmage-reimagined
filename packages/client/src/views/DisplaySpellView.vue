@@ -1,5 +1,7 @@
 <template>
-  <h2 v-if="spell">{{spell.name}}</h2>
+  <h2 v-if="spell" class="row">
+    <magic :magic="spell.magic" />{{spell.name}}
+  </h2>
   <main v-if="spell">
     <p style="margin: 1rem 1rem">{{ spell.description }} </p>
     <table>
@@ -47,8 +49,9 @@
 import { ref, onMounted } from 'vue';
 import { getSpellById } from 'engine/src/base/references';
 import { Spell } from 'shared/types/magic';
-import SummonEffect from '@/components/summon-effect.vue';
-import BattleEffect from '@/components/battle-effect.vue';
+import SummonEffect from '@/components/display/summon-effect.vue';
+import BattleEffect from '@/components/display/battle-effect.vue';
+import Magic from '@/components/magic.vue';
 
 const props = defineProps<{ id: string }>(); 
 const spell = ref<Spell|null>(null);
