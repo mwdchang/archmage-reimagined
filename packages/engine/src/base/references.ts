@@ -47,7 +47,6 @@ export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
-    // console.log(`Spell[${spells[i].magic}] ${spells[i].name} loaded`);
   }
 }
 
@@ -61,7 +60,6 @@ export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
     itemMap.set(items[i].id, items[i]);
     itemList.push(items[i]);
-    // console.log(`Item[${items[i].name}] loaded`);
   }
 }
 
@@ -114,7 +112,6 @@ export const initializeResearchTree = () => {
     })
   });
   console.log('Debug max spell levels', maxSpellLevels);
-  // console.log(researchTree);
 }
 
 export const getResearchTree = () => {

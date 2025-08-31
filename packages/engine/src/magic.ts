@@ -171,40 +171,6 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
   return result;
 }
 
-/*
-export const summonUnit = (mage: Mage, spellId: string) => {
-  const spell = getSpellById(spellId);
-  const spellMagic = spell.magic;
-  const magic = mage.magic;
-
-  const manaCost = spell.castingCost * magicAlignmentTable[magic].costModifier[spellMagic];
-  const effects: UnitSummonEffect[] = spell.effects as UnitSummonEffect[];
-
-  const result: { [key: string]: number } = {};
-
-  effects.forEach(effect => {
-    const unitIds = effect.unitIds;
-    let power = effect.summonNetPower;
-
-    // Randomness
-    power *= (0.5 + 0.75 * randomBM());
-
-    // Spell level
-    power *= (currentSpellLevel(mage) / maxSpellLevel(mage));
-
-    unitIds.forEach(unitId => {
-      const unit = getUnitById(unitId);
-      const unitPower = unit.powerRank;
-      const unitsSummoned = Math.floor(power / unitPower);
-      console.log(`Summoned ${unitsSummoned} ${unit.name}, cost = ${manaCost}`);
-      if (!result[unit.id]) result[unit.id] = 0;
-      result[unit.id] += unitsSummoned;
-    });
-  });
-  return result;
-}
-*/
-
 export const maxMana = (mage: Mage) => {
   return mage.nodes * 1000;
 }
