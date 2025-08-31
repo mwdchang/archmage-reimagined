@@ -144,3 +144,15 @@ export const readableStr = (str: string) => {
     .replace(/([A-Z])/g, ' $1')   // insert space before capital letters
     .replace(/^./, char => char.toUpperCase()); // capitalize first letter
 }
+
+const userLocale =
+  navigator.languages && navigator.languages.length > 0
+    ? navigator.languages[0]
+    : navigator.language || 'en-US';
+
+export const readbleNumber = (
+  v: number,
+  options?: Intl.NumberFormatOptions
+) => {
+  return new Intl.NumberFormat(userLocale, options).format(v);
+}
