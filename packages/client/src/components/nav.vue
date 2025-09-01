@@ -11,7 +11,7 @@
 
     <router-link to="/battle">Battle</router-link>
     <router-link to="/spell">Cast Spells</router-link>
-    <router-link to="/dispel">Dispel Enchantments</router-link>
+    <router-link to="/dispel">Dispel Magic</router-link>
     <router-link to="/item">Use Items</router-link>
     <div class="divider"></div>
 
@@ -49,7 +49,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "200px";
+    document.getElementById("mySidenav")!.style.width = "160px";
   }
 
   // Close the side navigation
@@ -76,7 +76,7 @@ onMounted(() => {
   /* background-color: #333; */
   color: white;
   /* position: absolute; */
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 10px;
 }
@@ -84,11 +84,11 @@ onMounted(() => {
 .sidenav {
   height: 100%;
   width: 0;
-  position: fixed;
+  position: absolute;
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: #111;
+  background-color: #1c1c1c;
   overflow-x: hidden;
   transition: 0.3s;
   padding-top: 40px;

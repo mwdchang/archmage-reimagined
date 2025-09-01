@@ -10,8 +10,8 @@
 
       <tr v-for="(bType) of buildingTypes" :key="bType.id">
         <td>-</td>
-        <td>{{ bType.id }}</td>
-        <td class="text-right">{{ mage[bType.id] }} </td>
+        <td>{{ readableStr(bType.id) }}</td>
+        <td class="text-right">{{ readbleNumber(mage[bType.id]) }} </td>
         <td> <input type="number" size="6" v-model="userInput[bType.id]"> </td>
       </tr>
     </tbody>
@@ -27,6 +27,7 @@
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { buildingTypes } from 'engine/src/interior';
+import { readbleNumber, readableStr } from '@/util/util';
 
 const emit = defineEmits(['destroy']);
 const mageStore = useMageStore();

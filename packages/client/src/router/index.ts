@@ -23,6 +23,7 @@ import RecruitView from '@/views/RecruitView.vue';
 import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
+import DisplayItemView from '@/views/DisplayItemView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
 
 const router = createRouter({
@@ -159,12 +160,17 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/spell-unit/:id',
+      path: '/view-spell/:id',
       name: 'viewSpell',
       component: DisplaySpellView,
       props: true
+    },
+    {
+      path: '/view-item/:id',
+      name: 'viewItem',
+      component: DisplayItemView,
+      props: true
     }
-
   ]
 })
 

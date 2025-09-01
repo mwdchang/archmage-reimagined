@@ -48,9 +48,7 @@ export interface TemporaryUnitEffect extends Effect {
  * - Priortize unit attribute changes, eg: set to fix number
  * - Create temporary stacks
 **/
-export interface PrebattleEffect extends BattleEffect{
-}
-
+export interface PrebattleEffect extends BattleEffect{}
 export interface BattleEffect extends Effect {
   target: 'self' | 'opponent' | 'both';
   targetType: 'all' | 'random' | 'weightedRandom'
@@ -153,7 +151,18 @@ export interface KingdomBuildingsEffect extends Effect {
 
 export interface KingdomResourcesEffect extends Effect {
   rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
-  target: string,
+  target: 'population' | 'mana' | 'geld' | 'item',
+  magic: {
+    [key in AllowedMagic]: {
+      value: { min: number, max: number }
+    }
+  }
+}
+
+export interface KingdomArmyEffect extends Effect {
+  rule: 'addSpellLevelPercentageBase',
+  filters: UnitFilter[] | null,
+  checkResistance: boolean;
   magic: {
     [key in AllowedMagic]: {
       value: { min: number, max: number }
@@ -163,7 +172,7 @@ export interface KingdomResourcesEffect extends Effect {
 
 export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
-  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population',
+  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land',
   magic: {
     [key in AllowedMagic]: {
       value: number
@@ -200,9 +209,16 @@ export interface CastingEffect extends Effect {
   }
 }
 
+
 export interface WishEffect extends Effect {
-  positive:{
-  },
-  negative: {
-  }
+  trigger: {
+    min: number;
+    max: number;
+  } | null,
+  rolls: {
+    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | null,
+    min: number,
+    max: number,
+    weight: number
+  } []
 }

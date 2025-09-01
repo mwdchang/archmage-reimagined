@@ -15,8 +15,8 @@
 <script lang="ts" setup>
 import { BattleEffect } from 'shared/types/effects';
 import AttrEffect from '@/components/attr-effect.vue';
-import HealEffect from '@/components/heal-effect.vue';
-import DamageEffect from '@/components/damage-effect.vue';
+import HealEffect from '@/components/display/heal-effect.vue';
+import DamageEffect from '@/components/display/damage-effect.vue';
 
 defineProps<{
   effect: BattleEffect

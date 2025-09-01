@@ -26,18 +26,25 @@ export const between = (min: number, max: number) => {
   return Math.random() * (max - min) + min;
 }
 
-export const randomWeighted = () => {
-  const table = [
-    { value: 1, weight: 50 },
-    { value: 2, weight: 25 },
-    { value: 3, weight: 12.5 },
-    { value: 4, weight: 6.25 },
-    { value: 5, weight: 3.12 },
-    { value: 6, weight: 1.56 },
-    { value: 7, weight: 0.78 },
-    { value: 8, weight: 0.39 },
-    { value: 9, weight: 0.19 },
-    { value: 10, weight: 0.01 }
+
+
+export interface WeightEntry {
+  value: number;
+  weight: number;
+}
+export const randomWeighted = (weightEntries: WeightEntry[] | null) => {
+
+  const table = weightEntries ? weightEntries : [
+    { value: 0, weight: 50 },
+    { value: 1, weight: 25 },
+    { value: 2, weight: 12.5 },
+    { value: 3, weight: 6.25 },
+    { value: 4, weight: 3.12 },
+    { value: 5, weight: 1.56 },
+    { value: 6, weight: 0.78 },
+    { value: 7, weight: 0.39 },
+    { value: 8, weight: 0.19 },
+    { value: 9, weight: 0.01 }
   ];
 
   // Generate a random number between 0 and 100

@@ -5,20 +5,20 @@ import { magicAlignmentTable, spellRankTable } from './config';
 import { randomInt } from '../random';
 
 export const unitMap = new Map<string, Unit>();
-export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
+export const magicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'] as const;
+type MagicType = typeof magicTypes[number];
+
 export const spellMap = new Map<string, Spell>();
 export const researchTree = new Map<string, Map<string, string[]>>;
 export const itemMap = new Map<string, Item>();
 
 const spellList: Spell[] = [];
 const itemList: Item[] = [];
-const maxSpellLevels = {
-  ascendant: 0,
-  verdant: 0,
-  eradication: 0,
-  nether: 0,
-  phantasm: 0
-};
+
+const maxSpellLevels: Record<MagicType, number> = Object.fromEntries(
+  magicTypes.map(type => [type, 0])
+) as Record<MagicType, number>;
+
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
@@ -47,7 +47,6 @@ export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
-    // console.log(`Spell[${spells[i].magic}] ${spells[i].name} loaded`);
   }
 }
 
@@ -61,7 +60,6 @@ export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
     itemMap.set(items[i].id, items[i]);
     itemList.push(items[i]);
-    // console.log(`Item[${items[i].name}] loaded`);
   }
 }
 
@@ -114,7 +112,6 @@ export const initializeResearchTree = () => {
     })
   });
   console.log('Debug max spell levels', maxSpellLevels);
-  // console.log(researchTree);
 }
 
 export const getResearchTree = () => {

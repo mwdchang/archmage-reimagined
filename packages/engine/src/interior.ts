@@ -47,10 +47,29 @@ export const buildingRate = (mage: Mage, buildType: string) => {
 // Returns an approximate exploration rate
 export const explorationRate = (mage: Mage) => {
   const current = totalLand(mage);
-  if (current >= explorationLimit) return 0;
+  let rate = 0;
+  if (current < explorationLimit) {
+    rate = Math.sqrt(explorationLimit - current) / 3;
+  }
 
-  // return 1 + (1/ current) * 2500;
-  return Math.sqrt(explorationLimit - current) / 3;
+  let extra = 0;
+  for (const enchantment of mage.enchantments) {
+    const spell = getSpellById(enchantment.spellId);
+    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+
+    for (const effect of productionEffects) {
+      if (effect.production === 'land') {
+        if (effect.rule === 'addSpellLevelPercentageBase') {
+          extra += rate * effect.magic[enchantment.casterMagic].value;
+        }
+        // Always add 1
+        extra += 1;
+      }
+    }
+  }
+
+  return (rate + extra);
 }
 
 export const explore = (rate: number) => {

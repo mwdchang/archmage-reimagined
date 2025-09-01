@@ -5,7 +5,9 @@
   <section>
     <table>
       <tr v-for="(item, _idx) of itemList" :key="item.id">
-        <td>{{ item.name }}</td>
+        <td>
+          <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
+        </td>
         <td>{{ item.attributes.join(', ') }}</td>
         <td>{{ item.amount }}</td>
       </tr>
@@ -13,18 +15,22 @@
 
     <br>
 
-    <select v-model="selected" v-if="itemList.length > 0">
+    <select v-model="selected" v-if="usableItems.length > 0">
       <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
     </select>
-    <p v-if="itemList.length === 0">
-      You have no items.
+    <p v-if="usableItems.length === 0">
+      You have no usable items.
     </p>
 
-    <div>Target</div>
-    <input type="text" v-model="target" />
+    <div class="row" style="width: 280px">
+      <div style="width: 100px">Target</div>
+      <input type="text" v-model="target" size="12" />
+    </div>
 
-    <div># of times</div> 
-    <input type="text" v-model="turns" />
+    <div class="row" style="width: 280px">
+      <div style="width: 100px"># of times</div> 
+      <input type="text" v-model="turns" size="4" />
+    </div>
     <br>
 
     <button @click="useItem">Use Item</button>

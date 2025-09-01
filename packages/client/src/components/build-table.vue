@@ -13,8 +13,8 @@
 
       <tr v-for="(bType) of buildingTypes" :key="bType.id">
         <td>-</td>
-        <td> {{ bType.id }} </td>
-        <td class="text-right"> {{ mage[bType.id] }} </td>
+        <td> {{ readableStr(bType.id) }} </td>
+        <td class="text-right"> {{ readbleNumber(mage[bType.id]) }} </td>
         <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
         <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
         <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
@@ -32,6 +32,7 @@ import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { buildingTypes, buildingRate } from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
+import { readbleNumber, readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 const emit = defineEmits(['build']);
