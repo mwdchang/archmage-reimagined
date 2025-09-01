@@ -1,5 +1,63 @@
 [
   {
+    "id": "ashOfInvisibility",
+    "name": "Ash of Invisibility",
+    "description": "The ashes are kept inside a silk pouch. When the pouch is shaken, the ashes dust an area of the possessor's choice. All things dusted by the ashes reflect and bend light, thus rendering a unit invisible.", 
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackInit,secondaryAttackInit": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 5 },
+                  "verdant": { "value": 5 },
+                  "eradication": { "value": 5 },
+                  "nether": { "value": 5 },
+                  "phantasm": { "value": 5 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bookOfGolemSummoning",
+    "name": "Book of Golem Summoning",
+    "description": "This heavy book is inscribed with magical runes and writings, which record the secret of creating Stone Golems. The book's magic will be gone once the creation process of the Stone Golem is finished.",
+    "attributes": ["oneUse", "summon"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["stoneGolem"],
+        "summonType": "all",
+        "summonNetPower": 40000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+  {
     "id": "potionOfValor",
     "name": "Potion of Valor",
     "description": "This small bottle contains a pink liquid. When a mage drinks it all at once, he/she will begin to act brave, as a hero does, therefore inspiring his/her followers and enhancing their performance for a period of time.",
@@ -25,6 +83,78 @@
                   "eradication": { "value": 0.20 },
                   "nether": { "value": 0.20 },
                   "phantasm": { "value": 0.20 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "candleOfSleeping",
+    "name": "Candle of Sleeping",
+    "description": "This red candle, when burned, gives out a sweet-smelling smoke which makes enemies within its range drowsy and eventually fall asleep. Area of Effect: all enemy units",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -10 },
+                  "verdant": { "value": -10 },
+                  "eradication": { "value": -10 },
+                  "nether": { "value": -10 },
+                  "phantasm": { "value": -10 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pixiDust",
+    "name": "Pixi Dust",
+    "description": "Pixies are known for guile and charm, sprinkling magical dust upon the unwilling in order to lower their defenses and take what they wish.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "weightedRandom",
+        "filters": null,
+        "trigger": {
+          "min": 5,
+          "max": 5 
+        },
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": -3 },
+                  "verdant": { "value": -3 },
+                  "eradication": { "value": -3 },
+                  "nether": { "value": -3 },
+                  "phantasm": { "value": -3 }
                 }
               }
             }
@@ -68,6 +198,74 @@
     ]
   },
   {
+    "id": "broochOfProtection",
+    "name": "Brooch Of Protection",
+    "description": "This large ornamental pin is embalmed with magic. It can create a force field that blocks attacks. The magic of the brooch disappears when the force field is broken by an enemy attack.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.melee": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 40 },
+                  "verdant": { "value": 40 },
+                  "eradication": { "value": 40 },
+                  "nether": { "value": 40 },
+                  "phantasm": { "value": 40 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "scrollOfProtectionFromFire",
+    "name": "Scroll Of Protection From Fire",
+    "description": "This scroll is inscribed with magical runes, writings, and symbols. When a mage recites the scroll, the scroll provides limited protection for a random unit from fire damage for an amount of time. Area of Effects: all units",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.fire": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 40 },
+                  "verdant": { "value": 40 },
+                  "eradication": { "value": 40 },
+                  "nether": { "value": 40 },
+                  "phantasm": { "value": 40 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hornOfValhalla",
     "name": "Horn of Valhalla",
     "description": "The possessor of the Horn of Valhalla has the power to summon knight troops to his/her side in battle. When the horn is blown, it draws the attention of knight troops nearby, who join in on the glory of battle.",
@@ -79,7 +277,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["knight"],
         "summonType": "all",
-        "summonNetPower": 150000,
+        "summonNetPower": 100000,
         "rule": "absolute",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -91,6 +289,79 @@
       }
     ]
   },
+  {
+    "id": "coffin",
+    "name": "Coffin",
+    "description": "The possessor of the coffin gains undeads which move at his/her command when the coffin is opened. Dark powers which permeate the world create dark forces of evil, whose undead may prove to be a great asset, or a possible hindrance.",
+    "attributes": ["oneUse", "summon"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["lich", "vampire", "wraith", "ghoul", "zombie"],
+        "summonType": "random",
+        "summonNetPower": 100000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "peaches",
+    "name": "Peaches",
+    "description": "These are enchanted peaches for summoning gorillas to your troops. When these peaches are placed on the shrine, gorillas within a mile radius of the shrine will be able to smell them and come to your aid.",
+    "attributes": ["oneUse", "summon"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["gorilla"],
+        "summonType": "all",
+        "summonNetPower": 100000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "totalNewbieHandbook",
+    "name": "Total Newbie Handlbook",
+    "description": "This small handbook contains a FAQ and other notes on how to get started as an apprentice mage. The only thing that you found interesting is some cantrip spells attached at the end of the handbook.",
+    "attributes": ["oneUse", "summon"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["frog", "squirrel", "sheep"],
+        "summonType": "random",
+        "summonNetPower": 10000,
+        "rule": "absolute",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "verdant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+
   {
     "id": "carpetOfFlying",
     "name": "Carpet of Flying",
@@ -219,6 +490,77 @@
               "eradication": { "value": 2000 },
               "nether": { "value": 2000 },
               "phantasm": { "value": 2000 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "javelinOfLightningBolt",
+    "name": "Javelin Of Lightning Bolt",
+    "description": "This Javelin may look like a normal javelin, but when it is thrown, it turns into a bolt of lightning that strikes those in its path.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": {
+          "min": 2,
+          "max": 6
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["lightning"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": { "min": 500, "max": 250000 }}, 
+              "verdant": { "value": { "min": 500, "max": 250000 }},
+              "eradication": { "value":  { "min": 500, "max": 250000 }},
+              "nether": { "value":  { "min": 500, "max": 250000 }},
+              "phantasm": { "value": { "min": 500, "max": 250000 }}
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "flaskOfHolyWater",
+    "name": "Flask Of Holy Water",
+    "description": "These small flasks are fillled with holy water that has blessed by the high priest in the serving ceremony. They carry great attack power against undead creatures. The water burns like acid on the creatures when the flasks are thrown.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": [
+          {
+            "race": ["undead"]
+          }
+        ],
+        "triger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["holy"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": 150000 },
+              "verdant": { "value": 1500000 },
+              "eradication": { "value": 150000 },
+              "nether": { "value": 150000 },
+              "phantasm": { "value": 150000 }
             }
           }
         ]
