@@ -1,7 +1,8 @@
 ## Archmage Reimagined
 Archmage Reimagined is both a modern take and a re-imagination of the  classic online MMORPG game "Archmage: Reincarnation from Hell".
 
-Archmage was a rich and complex game enjoyed by those who likes deep strategy games. However, it is not easy to play, especialy for new players and those with limited time. This project will address these limitations and introduce new ideas to keep the game fresh.
+Archmage was a rich and complex game enjoyed by those who likes deep strategy games. It began in the early 2000s and had kept a cult-following until this day. The player incarnate a mage from amongst five factions, each with its own unique strengths and weakensses, and comp]ete to become to greatest mage on Terra.
+
 
 ### Development
 You will need to meet the following prerequisites
@@ -14,16 +15,16 @@ Code is written in [Typescript](https://www.typescriptlang.org/), with the UI wr
 This setup has been tested on \*nix-based machines, it should work on Windows with a few tweaks to setup.sh file.
 - In the project folder, run `yarn`
 - Run `setup.sh` to link mono repo resources
-- Running the server `yarn run server`, server should be listening on http://localhost:3000
+- Running the server `yarn run dev`, server should be listening on http://localhost:3000
 - Running the client `yarn run dev`, client should be running on http://localhost:9000
 
 
 #### Organizational structure
 - packages/shared: Shared utilities, types
-- packages/data: Unit and spell files
-- packages/data-adapter: I/O
+- packages/data: Units, spells, and items files
+- packages/data-adapter: Data stroage adapters
 - packages/engine: Game engine
-- packages/server: Game server
+- packages/server: Game server, REST server in Express
 - packages/client: Game client
 
 
