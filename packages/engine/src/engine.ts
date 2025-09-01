@@ -1096,6 +1096,23 @@ class Engine {
     };
   }
 
+  async getMages(ids: number[]) {
+    const results:{ [key: number]: any } = {};
+    // FIXME: replace with rank_view lookup
+    for (const id of ids) {
+      const m = await this.getMage(id);
+      results[m.id] = {
+        id: m.id,
+        name: m.name,
+        magic: m.magic,
+        land: totalLand(m),
+        netPower: totalNetPower(m),
+        forts: m.forts
+      };
+    }
+    return results;
+  }
+
   async getMageByUser(username: string) {
     return this.adapter.getMageByUser(username);
   }

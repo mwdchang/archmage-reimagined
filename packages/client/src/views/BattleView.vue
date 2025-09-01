@@ -16,7 +16,12 @@
         <td class="text-right"> Time </td>
       </tr>
       <tr v-for="(summary, idx) of offensiveBattles" :key="summary.id">
-        <td> {{ summary.defenderName }} (#{{ summary.defenderId }}) </td>
+        <td> 
+          <div class="row">
+            <magic :magic="mages[summary.defenderId]?.magic" small /> 
+            {{ summary.defenderName }} (#{{ summary.defenderId }}) 
+          </div>
+        </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
         <td> {{ readableDate(summary.timestamp) }} </td>
@@ -35,7 +40,12 @@
         <td class="text-right"> Time </td>
       </tr>
       <tr v-for="(summary, idx) of defensiveBattles" :key="summary.id">
-        <td> {{ summary.attackerName }} (#{{ summary.attackerId }}) </td>
+        <td> 
+          <div class="row">
+            <magic :magic="mages[summary.attackerId]?.magic" small /> 
+            {{ summary.attackerName }} (#{{ summary.attackerId }}) 
+          </div>
+        </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
         <td> {{ readableDate(summary.timestamp) }} </td>
@@ -45,17 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { API } from '@/api/api';
 import { ref, computed, onMounted } from 'vue';
+import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter, useRoute } from 'vue-router';
 import { BattleReportSummary } from 'shared/types/battle';
 import { readbleNumber, readableDate } from '@/util/util';
+import Magic from '@/components/magic.vue';
 
 const router = useRouter();
 const mageStore = useMageStore();
 const targetId = ref('');
 const involvedBattles = ref<BattleReportSummary[]>([]);
+const mages = ref<{[key: number]: any}>({});
 
 const offensiveBattles = computed(() => {
   return involvedBattles.value.filter(d => d.attackerId === mageStore.mage!.id);
@@ -86,8 +98,14 @@ onMounted(async () => {
 
   const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles')).data;
   involvedBattles.value = result.battles;
-  console.log('!!');
-  console.log(involvedBattles);
+
+  const ids = [
+    ...result.battles.map(d => d.attackerId),
+    ...result.battles.map(d => d.defenderId)
+  ];
+
+  const metadata = (await API.post('/mages', { ids })).data;
+  mages.value = metadata.mages
 });
 
 </script>
