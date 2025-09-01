@@ -120,6 +120,8 @@ section {
   margin: 10px;
   background: #112;
   gap: 8px;
+
+  border-right: 1px solid #555;
 }
 
 .about-row {

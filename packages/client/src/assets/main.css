@@ -29,20 +29,18 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    justify-content: center;
-    /* place-items: center; */
-  }
+body {
+  margin: 0 auto;
+  max-width: 1024px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
 
-  /*
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+@media (min-width: 1024px) {
+  html {
+    background-color: #123; /* color outside the body */
   }
-  */
 }
 
 table { 
@@ -69,7 +67,6 @@ button[disabled]{
 }
 
 select {
-  font-size: 1.0rem;
   padding: 1px 4px;
   margin: 1px 1px;
 }
@@ -83,7 +80,6 @@ table > tr.active {
   color: #F80
 }
 
-
 .row {
   display: flex;
   flex-direction: row;
@@ -96,4 +92,12 @@ table > tr.active {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+}
+
+
+/******************************************
+* Variables
+*******************************************/
+:root {
+  header-background-colour: #222222
 }

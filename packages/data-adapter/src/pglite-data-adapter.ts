@@ -209,7 +209,7 @@ WHERE id = ${mage.id}
   }
 
   async getMageByUser(username: string) {
-    console.log('pglite: getMageByUser');
+    // console.log('pglite: getMageByUser');
     const result = await this.db.query<MageTable>(`
       SELECT mage from mage where username = '${username}'
     `);

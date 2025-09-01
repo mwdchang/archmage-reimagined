@@ -600,5 +600,53 @@
         ]
       }
     ]
+  },
+  {
+    "id": "staffOfIllusion",
+    "name": "Staff Of Illusion",
+    "description": "This foot long, ivory staff is topped by a large crystal ball. It can be used to create audio and visual illusions. Half of those who are zapped by the staff realize that it is merely an illusion and are not affected. However, the other half suffer magic and psychic damages, which are as real and devastating as physical damages. After releasing its magical powers, the crystal ball will shatter, losing its effectiveness and thus becoming obsolete.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "triger": {
+          "min": 3,
+          "max": 3
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["magic"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": 120000 },
+              "verdant": { "value": 1200000 },
+              "eradication": { "value": 120000 },
+              "nether": { "value": 120000 },
+              "phantasm": { "value": 120000 }
+            }
+          },
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["psychic"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": 120000 },
+              "verdant": { "value": 1200000 },
+              "eradication": { "value": 120000 },
+              "nether": { "value": 120000 },
+              "phantasm": { "value": 120000 }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

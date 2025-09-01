@@ -126,7 +126,7 @@ class Engine {
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
-      const name = `TestMage_${i}`;
+      const name = `Robot${i}`;
 
       const mage = await this.getMageByUser(name);
       if (!mage) {
