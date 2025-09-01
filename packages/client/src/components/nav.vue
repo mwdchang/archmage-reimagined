@@ -88,7 +88,7 @@ onMounted(() => {
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: #111;
+  background-color: #1c1c1c;
   overflow-x: hidden;
   transition: 0.3s;
   padding-top: 40px;
