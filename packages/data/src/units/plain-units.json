@@ -18,15 +18,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 20,
       "mana": 0,
-      "population": 1 
+      "population": 1
     },
     "upkeepCost": {
       "geld": 0.32,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
 
     "spellResistances": {
@@ -74,15 +74,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 40,
       "mana": 0,
-      "population": 1 
+      "population": 1
     },
     "upkeepCost": {
       "geld": 0.64,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
 
     "spellResistances": {
@@ -128,15 +128,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 38,
       "mana": 0,
-      "population": 1 
+      "population": 1
     },
     "upkeepCost": {
       "geld": 0.80,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
 
     "spellResistances": {
@@ -183,15 +183,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 36,
       "mana": 0,
-      "population": 1 
+      "population": 1
     },
     "upkeepCost": {
       "geld": 0.72,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
 
     "spellResistances": {
@@ -238,15 +238,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 70,
       "mana": 0,
-      "population": 1 
+      "population": 1
     },
     "upkeepCost": {
       "geld": 1.44,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
 
     "spellResistances": {
@@ -292,15 +292,15 @@
     "secondaryAttackType": [],
     "secondaryAttackInit": 0,
 
-    "recruitCost": { 
+    "recruitCost": {
       "geld": 0,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
     "upkeepCost": {
       "geld": 0,
       "mana": 0,
-      "population": 0 
+      "population": 0
     },
     "spellResistances": {
       "ascendant": 0,
@@ -325,6 +325,276 @@
     },
     "abilities": [
       { "name": "flying", "extra": null }
+    ]
+  },
+  {
+    "id": "frog",
+    "name": "Frog",
+    "magic": "plain",
+    "description": "Frogs are amphibious animals that swim rapidly, and take long leaps on land. Many of the species utter loud notes in the springtime.",
+    "powerRank": 1,
+    "hitPoints": 10,
+    "race": ["animal"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 10,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  },
+  {
+    "id": "squirrel",
+    "name": "Squirrel",
+    "magic": "plain",
+    "description": "Squirrels generally have a bushy tail, large erect ears, and strong hind legs. They are commonly arboreal in their habits, but many species live in burrows.",
+    "powerRank": 1,
+    "hitPoints": 10,
+    "race": ["animal"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 10,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+      { "name": "flying", "extra": null }
+    ]
+  },
+  {
+    "id": "sheep",
+    "name": "Sheep",
+    "magic": "plain",
+    "description": "A domestic animal, sheep vary much in size, in the length and texture of their wool, the form and size of their horns, the length of their tail, etc. Sheep have many distinct breeds and are well known for their fine wool.",
+    "powerRank": 1,
+    "hitPoints": 10,
+    "race": ["animal"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 10,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 0,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 0,
+      "nether": 0,
+      "phantasm": 0
+    },
+    "attackResistances": {
+      "missile": 0,
+      "fire": 0,
+      "poison": 0,
+      "breath": 0,
+      "magic": 0,
+      "melee": 0,
+      "ranged": 0,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 0,
+      "psychic": 100,
+      "holy": 0
+    },
+    "abilities": [
+    ]
+  },
+  {
+    "id": "fanatic",
+    "name": "Fanatic",
+    "magic": "plain",
+    "description": "These are devoted worshippers of their god. They will fight to defend their religion with zeal and ferocity. They are frenzied in battles and their fighting abilities are well known. They will not tolerate any blasphemy and will hack any violaters into pieces without mercy. They are more feared than respected among the majority. Alternative name: 'zealots'.",
+    "powerRank": 12,
+    "hitPoints": 500,
+    "race": ["human"],
+    "attributes": ["special"],
+
+    "primaryAttackPower": 500,
+    "primaryAttackType": ["holy"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 500,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 0,
+      "eradication": 50,
+      "nether": 50,
+      "phantasm": 25
+    },
+    "attackResistances": {
+      "missile": 50,
+      "fire": 50,
+      "poison": 50,
+      "breath": 50,
+      "magic": 50,
+      "melee": 50,
+      "ranged": 50,
+      "lightning": 50,
+      "cold": 50,
+      "paralyse": 50,
+      "psychic": 50,
+      "holy": 50
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null }
+    ]
+  },
+  {
+    "id": "stoneGolem",
+    "name": "Stone Golem",
+    "magic": "plain",
+    "description": "Stone Golem stands twelve feet tall and is made of dark granite. He resembles a huge human, and weighs around five thousand pounds. He is mindless and fearless, and will only obey the command of his master. He cannot be hurt by normal or fire attacks. In combat, he will use either his fists, or a weapon if one is available. He has the strength of the strongest giants and can damage buildings easily. Sometimes, he will be used as a siege weapon in order to batter down the gates or the city walls.",
+    "powerRank": 1984,
+    "hitPoints": 15000,
+    "race": ["golem"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 20000,
+    "primaryAttackType": ["melee"],
+    "primaryAttackInit": 1,
+    "counterAttackPower": 20000,
+
+    "secondaryAttackPower": 0,
+    "secondaryAttackType": [],
+    "secondaryAttackInit": 0,
+
+    "recruitCost": {
+      "geld": 0,
+      "mana": 0,
+      "population": 0
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 5,
+      "population": 0
+    },
+    "spellResistances": {
+      "ascendant": 75,
+      "verdant": 75,
+      "eradication": 75,
+      "nether": 75,
+      "phantasm": 75
+    },
+    "attackResistances": {
+      "missile": 99,
+      "fire": 50,
+      "poison": 100,
+      "breath": 0,
+      "magic": 50,
+      "melee": 99,
+      "ranged": 99,
+      "lightning": 0,
+      "cold": 0,
+      "paralyse": 100,
+      "psychic": 100,
+      "holy": 100
+    },
+    "abilities": [
+      { "name": "clumsiness", "extra": null },
+      { "name": "siege", "extra": null },
+      { "name": "endurance", "extra": null }
     ]
   }
 ]
