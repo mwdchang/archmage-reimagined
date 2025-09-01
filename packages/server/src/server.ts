@@ -222,6 +222,11 @@ router.get('/api/mage/:id', async (req: any, res) => {
   res.status(200).json({ mageSummary: mage });
 });
 
+router.post('/api/mages', async (req: any, res) => {
+  const { ids } = req.body;
+  const mages = await engine.getMages(ids);
+  res.status(200).json({ mages });
+});
 
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {
 //   console.log('cookies!!! ', req.user);

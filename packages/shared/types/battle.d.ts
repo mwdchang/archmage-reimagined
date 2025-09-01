@@ -44,15 +44,15 @@ export interface BattleReportSummary {
 
   attackerId: number,
   attackerName: string,
-  attackerNPLoss: number,
-  attackerNPLossPercentage: number,
+  attackerPowerLoss: number,
+  attackerPowerLossPercentage: number,
   attackerStartingUnits: number,
   attackerUnitsLoss: number,
 
   defenderId: number,
   defenderName: string,
-  defenderNPLoss: number,
-  defenderNPLossPercentage: number,
+  defenderPowerLoss: number,
+  defenderPowerLossPercentage: number,
   defenderStartingUnits: number,
   defenderUnitsLoss: number,
 

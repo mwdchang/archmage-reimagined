@@ -7,18 +7,21 @@
     <table>
       <tbody>
         <tr>
-          <td colspan="4">
-            &nbsp;
-          </td>
+          <td>Unit</td> 
+          <td>Size</td>
+          <td>Power</td>
+          <td>Power %</td>
           <td> 
             <input type="checkbox" v-model="useAllStacks"> 
           </td>
         </tr>
         <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
           @click="stack.active = !stack.active">
-          <td> {{ stack.name }} </td>
-          <td class="text-right"> {{ stack.size }} </td>
-          <td class="text-right"> {{ stack.power }} </td>
+          <td> 
+            <router-link :to="{ name: 'viewUnit', params: { id: stack.id }}"> {{ stack.name }} </router-link>
+          </td>
+          <td class="text-right"> {{ readbleNumber(stack.size) }} </td>
+          <td class="text-right"> {{ readbleNumber(stack.power) }} </td>
           <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
           <td>
               <input type="checkbox" v-model="stack.active">
@@ -61,7 +64,7 @@ import { useRouter } from 'vue-router';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { 
-  getSpells, getItems, getBattleArmy,
+  getSpells, getItems, getBattleArmy, readbleNumber,
   BattleArmyItem
 } from '@/util/util';
 

@@ -4,20 +4,23 @@
     <a href="javascript:void(0)" class="closebtn" id="closebtn">&times; Close</a>
     <router-link to="/about">Kingdom</router-link>
     <router-link to="/status">Status</router-link>
+    <div class="divider"></div>
+    <!--
     <router-link to="/chronicles">Chronicles</router-link>
     <router-link to="/rankList">Ranking</router-link>
-    <router-link to="/assignment">Assignment</router-link>
-    <div class="divider"></div>
+    -->
 
     <router-link to="/battle">Battle</router-link>
     <router-link to="/spell">Cast Spells</router-link>
     <router-link to="/dispel">Dispel Magic</router-link>
-    <router-link to="/item">Use Items</router-link>
+    <router-link to="/item">Use Item</router-link>
     <div class="divider"></div>
 
+    <router-link to="/assignment">Assignment</router-link>
     <router-link to="/research">Research</router-link>
     <router-link to="/explore">Explore</router-link>
     <router-link to="/geld">Geld</router-link>
+    <router-link to="/charge">Mana Charge</router-link>
     <router-link to="/build">Building</router-link> 
     <router-link to="/destroy">Destroy</router-link> 
     <router-link to="/recruit">Recruit</router-link> 

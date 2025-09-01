@@ -135,6 +135,11 @@ export const conditionString = (v: number) => {
   return `Greater than ${v}%`;
 }
 
+const userLocale =
+  navigator.languages && navigator.languages.length > 0
+    ? navigator.languages[0]
+    : navigator.language || 'en-US';
+
 
 export const readableStr = (str: string) => {
   if (!str) return '';
@@ -145,10 +150,6 @@ export const readableStr = (str: string) => {
     .replace(/^./, char => char.toUpperCase()); // capitalize first letter
 }
 
-const userLocale =
-  navigator.languages && navigator.languages.length > 0
-    ? navigator.languages[0]
-    : navigator.language || 'en-US';
 
 export const readbleNumber = (
   v: number,
@@ -156,3 +157,17 @@ export const readbleNumber = (
 ) => {
   return new Intl.NumberFormat(userLocale, options).format(v);
 }
+
+export const readableDate = (date: Date | string | number) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat(userLocale, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'UTC'
+  }).format(d) + ' UTC';
+};

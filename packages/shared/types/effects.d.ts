@@ -90,13 +90,14 @@ export interface UnitAttrEffect extends Effect {
  * spellLevelUnitLoss: unitloss = spellLevel * value
  * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
+type DamageValue = number | { min: number, max: number };
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
   rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
     [key in AllowedMagic ]: {
-      value: any
+      value: DamageValue
     }
   }
 }

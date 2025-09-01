@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue';
 import InteriorView from '@/views/InteriorView.vue'; // TODO: deprecated
 import ExploreView from '@/views/ExploreView.vue';
 import GeldView from '@/views/GeldView.vue';
+import ChargeView from '@/views/ChargeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import BuildingView from '@/views/BuildingView.vue';
 import DestroyView from '@/views/DestroyView.vue';
@@ -63,6 +64,11 @@ const router = createRouter({
       path: '/geld',
       name: 'geld',
       component: GeldView
+    },
+    {
+      path: '/charge',
+      name: 'charge',
+      component: ChargeView
     },
     {
       path: '/build',

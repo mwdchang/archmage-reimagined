@@ -126,7 +126,7 @@ class Engine {
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
       const magic = magicTypes[randomInt(5)];
-      const name = `TestMage_${i}`;
+      const name = `Robot${i}`;
 
       const mage = await this.getMageByUser(name);
       if (!mage) {
@@ -924,15 +924,15 @@ class Engine {
       attackerName: battleReport.attacker.name,
       attackerStartingUnits: battleReport.result.attacker.startingUnits,
       attackerUnitsLoss: battleReport.result.attacker.unitsLoss,
-      attackerNPLoss: 0,
-      attackerNPLossPercentage: 0,
+      attackerPowerLoss: 0,
+      attackerPowerLossPercentage: 0,
 
       defenderId: battleReport.defender.id,
       defenderName: battleReport.defender.name,
       defenderStartingUnits: battleReport.result.defender.startingUnits,
       defenderUnitsLoss: battleReport.result.defender.unitsLoss,
-      defenderNPLoss: 0,
-      defenderNPLossPercentage: 0,
+      defenderPowerLoss: 0,
+      defenderPowerLossPercentage: 0,
 
       isSuccessful: battleReport.result.isSuccessful,
       isDefenderDefeated: battleReport.result.isDefenderDefeated,
@@ -942,10 +942,10 @@ class Engine {
     };
 
     const result = battleReport.result;
-    reportSummary.attackerNPLoss = Math.max(0, (result.attacker.startNetPower - result.attacker.endNetPower));
-    reportSummary.defenderNPLoss = Math.max(0, (result.defender.startNetPower - result.defender.endNetPower));
-    reportSummary.attackerNPLossPercentage = reportSummary.attackerNPLoss / result.attacker.startNetPower;
-    reportSummary.defenderNPLossPercentage = reportSummary.defenderNPLoss / result.defender.startNetPower;
+    reportSummary.attackerPowerLoss = Math.max(0, (result.attacker.startNetPower - result.attacker.endNetPower));
+    reportSummary.defenderPowerLoss = Math.max(0, (result.defender.startNetPower - result.defender.endNetPower));
+    reportSummary.attackerPowerLossPercentage = reportSummary.attackerPowerLoss / result.attacker.startNetPower;
+    reportSummary.defenderPowerLossPercentage = reportSummary.defenderPowerLoss / result.defender.startNetPower;
 
     // Noramlize
 
@@ -1094,6 +1094,23 @@ class Engine {
       netPower: totalNetPower(m),
       forts: m.forts
     };
+  }
+
+  async getMages(ids: number[]) {
+    const results:{ [key: number]: any } = {};
+    // FIXME: replace with rank_view lookup
+    for (const id of ids) {
+      const m = await this.getMage(id);
+      results[m.id] = {
+        id: m.id,
+        name: m.name,
+        magic: m.magic,
+        land: totalLand(m),
+        netPower: totalNetPower(m),
+        forts: m.forts
+      };
+    }
+    return results;
   }
 
   async getMageByUser(username: string) {

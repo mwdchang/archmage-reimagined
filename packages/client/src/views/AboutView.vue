@@ -54,7 +54,7 @@
     <router-link to="/chronicles">Chronicles</router-link>
 
 
-    <div class="chronicles">
+    <div class="chronicles" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
         <div>(Turn {{turn.turn}})</div>
         <div v-for="(log) in turn.data">
@@ -99,7 +99,7 @@ const spellLevel = computed(() => {
 onMounted(async () => {
   const res = await API.get<{ chronicles: ChronicleTurn[]}>('/chronicles');
   logs.value = res.data.chronicles;
-  console.log(logs.value);
+  // console.log(logs.value);
 });
 
 
@@ -120,6 +120,8 @@ section {
   margin: 10px;
   background: #112;
   gap: 8px;
+
+  border-right: 1px solid #555;
 }
 
 .about-row {

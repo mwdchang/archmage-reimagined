@@ -8,7 +8,7 @@ import {
   EffectOrigin,
   TemporaryUnitEffect
 } from 'shared/types/effects';
-import { betweenInt, randomBM, randomInt, randomWeighted } from './random';
+import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
@@ -183,19 +183,28 @@ const applyDamageEffect = (
 
   const damageType = damageEffect.damageType;
   let rawDamage = 0;
+  let base = 0;
 
   if (!damageEffect.magic[casterMagic]) return;
+
+  if (typeof damageEffect.magic[casterMagic].value === 'object') {
+    const min = damageEffect.magic[casterMagic].value.min;
+    const max = damageEffect.magic[casterMagic].value.max;
+    base = between(min, max);
+  } else {
+    base = damageEffect.magic[casterMagic].value;
+  }
 
   affectedArmy.forEach(stack => {
     const rule = damageEffect.rule;
     if (rule === 'spellLevel') {
-      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
+      rawDamage = base * casterSpellLevel;
     } else if (rule === 'spellLevelUnitLoss') {
-      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel;
+      rawDamage = base * casterSpellLevel;
     } else if (rule === 'spellLevelUnitDamage') {
-      rawDamage = damageEffect.magic[casterMagic].value * casterSpellLevel * stack.size;
+      rawDamage = base * casterSpellLevel * stack.size;
     } else if (rule === 'direct') {
-      rawDamage = damageEffect.magic[casterMagic].value;
+      rawDamage = base;
     }
 
     if (rule === 'spellLevelUnitLoss') {
@@ -242,7 +251,7 @@ const applyDamageEffect = (
       effectType: 'slain',
       value: unitsLoss
     })
-    console.log(`dealing rawDamage=${damage} actualDamage=${totalDamage} units=${unitsLoss}`);
+    console.log(`dealing rawDamage=${damage.toFixed(0)} actualDamage=${totalDamage.toFixed(0)} units=${unitsLoss}`);
   });
 
   return logs
