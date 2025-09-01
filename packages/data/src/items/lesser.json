@@ -207,7 +207,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "opponent",
+        "target": "self",
         "targetType": "all",
         "filters": null,
         "effects": [
@@ -232,6 +232,40 @@
     ]
   },
   {
+    "id": "missileShield",
+    "name": "Missile Shield",
+    "description": "This six foot tall shield of great magnitude is the result of a failed experiment. However, it has been magnified through to experiment to attract all iron substances within a given area. All arrows will be attracted to it like a moth to fire. The shield will lose its magic powers after it has been struck by a large number of arrows.", 
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.ranged": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 50 },
+                  "verdant": { "value": 50 },
+                  "eradication": { "value": 50 },
+                  "nether": { "value": 50 },
+                  "phantasm": { "value": 50 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "scrollOfProtectionFromFire",
     "name": "Scroll Of Protection From Fire",
     "description": "This scroll is inscribed with magical runes, writings, and symbols. When a mage recites the scroll, the scroll provides limited protection for a random unit from fire damage for an amount of time. Area of Effects: all units",
@@ -241,7 +275,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "opponent",
+        "target": "self",
         "targetType": "all",
         "filters": null,
         "effects": [
