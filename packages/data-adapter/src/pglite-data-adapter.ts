@@ -51,24 +51,24 @@ const DB_INIT = `
   DROP TABLE IF EXISTS battle_summary;
   CREATE TABLE IF NOT EXISTS battle_summary(
     id varchar(64),
-    time bigint,
-    attackType varchar(32),
-    attackerId integer,
-    attackerName varchar(64),
-    attackerNPLoss bigint,
-    attackerNPLossPercentage float,
-    attackerStartingUnits integer,
-    attackerUnitsLoss integer,
-    defenderId integer,
-    defenderName varchar(64),
-    defenderNPLoss bigint,
-    defenderNPLossPercentage float,
-    defenderStartingUnits integer,
-    defenderUnitsLoss integer,
-    isSuccessful boolean,
-    isDefenderDefeated boolean,
-    landGain integer,
-    landLoss integer
+    timestamp bigint,
+    attack_type varchar(32),
+    attacker_id integer,
+    attacker_name varchar(64),
+    attacker_power_loss bigint,
+    attacker_power_loss_percentage float,
+    attacker_starting_units integer,
+    attacker_units_loss integer,
+    defender_id integer,
+    defender_name varchar(64),
+    defender_power_loss bigint,
+    defender_power_loss_percentage float,
+    defender_starting_units integer,
+    defender_units_loss integer,
+    is_successful boolean,
+    is_defender_defeated boolean,
+    land_gain integer,
+    land_loss integer
   );
   COMMIT;
 
@@ -76,7 +76,7 @@ const DB_INIT = `
   CREATE TABLE IF NOT EXISTS turn_chronicle(
     id integer,
     name varchar(64),
-    time bigint,
+    timestamp bigint,
     turn integer,
     data json
   );
@@ -93,7 +93,7 @@ const DB_INIT = `
     forts integer,
     land integer,
     status varchar(32),
-    netPower bigint
+    net_power bigint
   );
   COMMIT;
 
@@ -105,13 +105,23 @@ const DB_INIT = `
       forts,
       land,
       status,
-      netPower as "netPower",
-      RANK() OVER (ORDER BY netPower DESC) AS rank
+      net_power,
+      RANK() OVER (ORDER BY net_power DESC) AS rank
   FROM
       rank;
 `;
 
 
+
+const toCamelCase = <T>(row: Record<string, any>): T => {
+  const result: any = {};
+
+  for (const key in row) {
+    const camelKey = key.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+    result[camelKey] = row[key];
+  }
+  return result as T;
+}
 
 const Q = (v: string) => `'${v}'`;
 
@@ -234,8 +244,8 @@ SELECT mage from mage
   }
 
   async getRankList(): Promise<MageRank[]> {
-    const result = await this.db.query<MageRank>('SELECT * from rank_view order by rank asc');
-    return result.rows;
+    const result = await this.db.query<any>('SELECT * from rank_view order by rank asc');
+    return result.rows.map(toCamelCase<MageRank>);
   }
 
   async createRank(mr : MageRank) {
@@ -253,11 +263,11 @@ SELECT mage from mage
   }
 
   async updateRank(mr : MageRank) {
-    const result = await this.db.exec(`
+    await this.db.exec(`
       UPDATE rank 
       SET forts = ${mr.forts}
       ,   land=${mr.land}
-      ,   netPower=${mr.netPower}
+      ,   net_power=${mr.netPower}
       WHERE id = ${mr.id}
     `);
   }
@@ -267,32 +277,33 @@ SELECT mage from mage
     const whereClauses: string[] = [];
 
     if (options.mageId) {
-      whereClauses.push(`(attackerId = ${options.mageId} OR defenderId = ${options.mageId})`);
+      whereClauses.push(`(attacker_id = ${options.mageId} OR defender_id = ${options.mageId})`);
     }
     if (options.mageName) {
-      whereClauses.push(`(attackerName like '%${options.mageName}%' OR defenderName like '%${options.mageName})%'`);
+      whereClauses.push(`(attacker_name like '%${options.mageName}%' OR defender_name like '%${options.mageName})%'`);
     }
     if (options.startTime !== undefined) {
-      whereClauses.push(`time >= ${options.startTime}`);
+      whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`time <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.startTime}`);
     }
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
     }
     
     // paging and order
-    sqlQuery += ' ORDER BY time desc ';
+    sqlQuery += ' ORDER BY timestamp desc ';
     if (options.limit > 0) {
       sqlQuery += ` LIMIT ${options.limit} `;
     }
     if (options.from > 0) {
       sqlQuery += ` OFFSET ${options.from} `;
     }
-    console.log("SQL", sqlQuery);
-    const result = await this.db.query<BattleReportSummary>(sqlQuery);
-    return result.rows;
+    // console.log("SQL", sqlQuery);
+    const result = await this.db.query<any>(sqlQuery);
+
+    return result.rows.map(toCamelCase<BattleReportSummary>);
   }
 
   async getBattleReport(id: string) {
@@ -315,24 +326,24 @@ SELECT mage from mage
     await this.db.exec(`
       INSERT INTO battle_summary(
         id,
-        time,
-        attackType,
-        attackerId,
-        attackerName,
-        attackerNPLoss,
-        attackerNPLossPercentage,
-        attackerStartingUnits,
-        attackerUnitsLoss,
-        defenderId, 
-        defenderName,
-        defenderNPLoss,
-        defenderNPLossPercentage,
-        defenderStartingUnits,
-        defenderUnitsLoss,
-        isSuccessful,
-        isDefenderDefeated,
-        landGain,
-        landLoss
+        timestamp,
+        attack_type,
+        attacker_id,
+        attacker_name,
+        attacker_power_loss,
+        attacker_power_loss_percentage,
+        attacker_starting_units,
+        attacker_units_loss,
+        defender_id, 
+        defender_name,
+        defender_power_loss,
+        defender_power_loss_percentage,
+        defender_starting_units,
+        defender_units_loss,
+        is_successful,
+        is_defender_defeated,
+        land_gain,
+        land_loss
       )
       VALUES (
         ${Q(reportId)}, 
@@ -340,14 +351,14 @@ SELECT mage from mage
         ${Q(reportSummary.attackType)},
         ${reportSummary.attackerId}, 
         ${Q(reportSummary.attackerName)}, 
-        ${reportSummary.attackerNPLoss}, 
-        ${reportSummary.attackerNPLossPercentage}, 
+        ${reportSummary.attackerPowerLoss}, 
+        ${reportSummary.attackerPowerLossPercentage}, 
         ${reportSummary.attackerStartingUnits}, 
         ${reportSummary.attackerUnitsLoss}, 
         ${reportSummary.defenderId}, 
         ${Q(reportSummary.defenderName)}, 
-        ${reportSummary.defenderNPLoss}, 
-        ${reportSummary.defenderNPLossPercentage}, 
+        ${reportSummary.defenderPowerLoss}, 
+        ${reportSummary.defenderPowerLossPercentage}, 
         ${reportSummary.defenderStartingUnits}, 
         ${reportSummary.defenderUnitsLoss}, 
         ${reportSummary.isSuccessful}, 
@@ -372,13 +383,13 @@ SELECT mage from mage
     const values: any[] = data.flatMap(entry => [
       entry.id,
       entry.name,
-      entry.time,
+      entry.timestamp,
       entry.turn,
       JSON.stringify(entry.data)
     ]);
 
     const insertSQL = `
-      INSERT INTO turn_chronicle(id, name, time, turn, data)
+      INSERT INTO turn_chronicle(id, name, timestamp, turn, data)
       VALUES ${valuePlaceholders}
     `;
     await this.db.query(insertSQL, values);
@@ -395,17 +406,17 @@ SELECT mage from mage
       whereClauses.push(`name like '%${options.mageId}%'`);
     }
     if (options.startTime !== undefined) {
-      whereClauses.push(`time >= ${options.startTime}`);
+      whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`time <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.startTime}`);
     }
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
     }
 
     // paging and order
-    sqlQuery += ' ORDER BY time desc ';
+    sqlQuery += ' ORDER BY timestamp desc ';
     if (options.limit > 0) {
       sqlQuery += ` LIMIT ${options.limit} `;
     }
