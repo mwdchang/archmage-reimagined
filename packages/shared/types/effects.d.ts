@@ -30,6 +30,11 @@ export interface EffectOrigin {
 **/
 
 
+/**
+ * This effect describes how to create temporary units for a battle. These units participate
+ * as any other units, however they do not count in the success/failure calculations and are
+ * dismissed after the battle.
+**/
 export interface TemporaryUnitEffect extends Effect {
   checkResistance: false;
   unitId: string,
@@ -210,7 +215,6 @@ export interface CastingEffect extends Effect {
   }
 }
 
-
 export interface WishEffect extends Effect {
   trigger: {
     min: number;
@@ -222,4 +226,17 @@ export interface WishEffect extends Effect {
     max: number,
     weight: number
   } []
+}
+
+/**
+ * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
+**/
+export interface StealEffect extends Effect {
+  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage',
+  target: 'mana' | 'geld' | 'item',
+  magic: {
+    [key in AllowedMagic]: {
+      value: { min: number, max: number, stealPercent: number | null }
+    }
+  }
 }
