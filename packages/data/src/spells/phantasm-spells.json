@@ -889,6 +889,18 @@
     "castingTurn": 2,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "StealEffect",
+        "rule": "addSpellLevelPercentage",
+        "target": "item",
+        "magic": {
+          "ascendant": { "value": { "min": 1, "max": 1, "stealPercent": null } },
+          "verdant": { "value": { "min": 1, "max": 1, "stealPercent": null } },
+          "eradication": { "value": { "min": 1, "max": 1, "stealPercent": null } },
+          "nether": { "value": { "min": 1, "max": 1, "stealPercent": null } },
+          "phantasm": { "value": { "min": 1, "max": 1, "stealPercent": null } }
+        }
+      }
     ]
   },
   {
@@ -1179,11 +1191,11 @@
     "upkeep": null,
     "effects": [
       {
-        "effectType": "KingdomResourcesEffect",
+        "effectType": "StealEffect",
         "rule": "addSpellLevelPercentage",
         "target": "geld",
         "magic": {
-          "phantasm": { "value": { "min": -5000000, "max": -85000000 } }
+          "phantasm": { "value": { "min": 1000000, "max": 45000000, "stealPercent": 0.3 } }
         }
       }
     ]

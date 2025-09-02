@@ -608,6 +608,7 @@ class Engine {
         } else {
           throw new Error(`cannot process attributes ${attributes}`);
         }
+        await this.adapter.updateMage(mage);
       } else {
         if (target === null) {
           throw new Error(`No target found for casting ${spellId}`);
@@ -619,6 +620,8 @@ class Engine {
         } else if (attributes.includes('instant')) {
           this.instant(mage, spellId, targetMage);
         }
+        await this.adapter.updateMage(mage);
+        await this.adapter.updateMage(targetMage);
       }
     }
     return logs;
