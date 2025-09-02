@@ -15,7 +15,7 @@
           <td>&nbsp;</td>
           <td>Spell</td>
           <td>Research cost (points)</td>
-          <td>Turns</td>
+          <td>Turns remaining</td>
         </tr>
         <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" style="cursor: pointer">
           <td> 
@@ -49,7 +49,7 @@
     <div style="display: flex; align-items: center; margin-top: 10px">
       <button @click="submitResearch"> Research </button>
     </div>
-    <div style="display: flex; align-items: center; margin-top: 10px">
+    <div style="display: flex; align-items: center; margin-top: 10px; max-width: 25rem;">
       {{ researchResultStr }}
     </div>
   </main>
@@ -138,13 +138,18 @@ const submitResearch = async () => {
 <style scoped>
 main {
   max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 table > tr {
+  max-width: 40rem;
   cursor: pointer;
 }
 
 tr:nth-child(odd) {
-  background: #333;
+  background: #222222;
 }
 </style>

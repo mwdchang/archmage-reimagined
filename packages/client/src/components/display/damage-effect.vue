@@ -3,13 +3,13 @@
     Deal {{ effect.damageType.join(", ") }} damage
   </div>
   <div style="line-height: 120%" v-if="effect.rule === 'spellLevel'">
-    Deal {{ effect.damageType.join(", ") }} damage by spell level
+    Deal {{ effect.damageType.join(", ") }} damage by spell level * magic value
   </div>
   <div style="line-height: 120%" v-if="effect.rule === 'spellLevelUnitLoss'">
-    Destroys targeted units
+    Destroys units by spell level * magic value
   </div>
   <div style="line-height: 120%" v-if="effect.rule === 'spellLevelUnitDamage'">
-    Deal {{ effect.damageType.join(", ") }} damage by spell level * value * stack size
+    Deal {{ effect.damageType.join(", ") }} damage by spell level * magic value * stack size
   </div>
 
   <div 

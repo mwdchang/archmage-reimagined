@@ -4,7 +4,7 @@
     <tbody>
       <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
         <td> <magic :magic="enchant.spellMagic" /></td>
-        <td> {{enchant.spellId}}</td>
+        <td>{{readableStr(enchant.spellId)}}</td>
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
         <td>#{{enchant.casterId}}</td>
@@ -19,7 +19,7 @@
     <tbody>
       <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 
         <td> <magic :magic="enchant.spellMagic" /></td>
-        <td> {{enchant.spellId}}</td>
+        <td>{{readableStr(enchant.spellId)}}</td>
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
         <td>#{{enchant.casterId}}</td>
@@ -41,6 +41,7 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import Magic from '@/components/magic.vue';
 import { dispelEnchantment } from 'engine/src/magic';
+import { readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);

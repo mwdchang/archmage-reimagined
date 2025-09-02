@@ -4,12 +4,17 @@
 
   <section>
     <table>
+      <tr>
+        <td>Name</td>
+        <td>Attributes</td>
+        <td>Number</td>
+      </tr>
       <tr v-for="(item, _idx) of itemList" :key="item.id">
         <td>
           <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
         </td>
         <td>{{ item.attributes.join(', ') }}</td>
-        <td>{{ item.amount }}</td>
+        <td class="text-right">{{ item.amount }}</td>
       </tr>
     </table>
 
