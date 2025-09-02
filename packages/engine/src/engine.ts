@@ -357,7 +357,7 @@ class Engine {
 
     // Refresh functioning enchantments
     mage.enchantments = mage.enchantments.filter(enchant => {
-      if (enchant.life === 0) {
+      if (enchant.life === 0 && enchant.isPermanent === false) {
         console.log(`${enchant.casterId} ${enchant.spellId} expired`)
       }
 

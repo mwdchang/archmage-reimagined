@@ -533,7 +533,7 @@
         "effectType": "BattleEffect",
         "target": "self",
         "targetType": "all",
-        "filter": [
+        "filters": [
           {
             "race": ["animal"]
           }

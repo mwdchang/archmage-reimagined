@@ -20,13 +20,35 @@ export interface EffectOrigin {
   spellId?: string,
 }
 
+
 /**
- * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
- * units attributes, cause direct damages, or alter unit abilities.
+ * Effect catalogue.
+ * Effects form the foundation of all actions in Archmage. They generally fall
+ * into these categories.
  *
- *   UnitAttrEffect
- *   UnitDamageEffect
- *   UnitHealEffect
+ *
+ * Effect used in battles
+ * - PrebattleEffect, BattleEffect
+ *   - UnitDamageEffect: Damages pre-engagement
+ *   - UnitHealEffect: Unit healing effects
+ *   - UnitAttrEffect: Unit attribute changes
+ *   - TemporaryUnitEffect: Create temporary units for battle
+ *
+ *
+ * These effect change kingdom attributes
+ * - KingdomResistanceEffect
+ * - KingdomBuildingsEffect
+ * - KingdomArmyEffect
+ * - KingdomResourcesEffect
+ * - StealEffect
+ * - WishEffect
+ * - UnitSummonEffect
+ *
+ * These are passive effects
+ * - ArmyUpkeepEffect
+ * - ProductionEffect
+ * - CastingEffect
+ *
 **/
 
 
