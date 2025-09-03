@@ -2,13 +2,19 @@
   <div class="section-header">Spells in your Spellbook</div>
   <br>
   <table>
+    <tr>
+      <td>Name</td>
+      <td>&nbsp;</td>
+      <td>Turns</td>
+      <td>Mana Cost</td>
+    </tr>
     <tr v-for="spell of spells" :key="spell.id">
       <td>
         <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
       </td>
       <td><magic :magic="spell.magic" small /></td>
       <td class="text-right">{{ spell.castingTurn }}</td>
-      <td class="text-right">{{ spell.castingCost }}</td>
+      <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
     </tr>
   </table>
 
@@ -45,6 +51,7 @@ import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
+import { readbleNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 
@@ -89,7 +96,7 @@ const castSpell = async () => {
 
 <style scoped>
 tr:nth-child(odd) {
-  background: #333;
+  background: #222222;
 }
 
 td {

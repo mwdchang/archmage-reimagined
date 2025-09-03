@@ -14,6 +14,10 @@ export interface SearchOptions {
   from?: number,
 }
 
+export interface TurnOptions {
+  maxTurn: number
+}
+
 
 // Models database/datastore CRUD operations
 export abstract class DataAdapter {
@@ -47,6 +51,7 @@ export abstract class DataAdapter {
   abstract saveChronicles(data: ChronicleTurn[]): Promise<void>
   abstract getChronicles(options: SearchOptions): Promise<any[]>
 
-  abstract nextTurn(): Promise<void>
+
+  abstract nextTurn(options: TurnOptions): Promise<void>
 }
 

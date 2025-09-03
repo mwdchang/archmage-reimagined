@@ -125,7 +125,7 @@ export const maxFood = (mage: Mage) => {
       if (productionEffect.rule === 'spellLevel') {
         food += mage.farms * enchantment.spellLevel * productionEffect.magic[enchantment.casterMagic].value;
       } else {
-        throw new Error(`unspported rule ${productionEffect.rule}`);
+        throw new Error(`unspported production rule ${productionEffect.rule} for ${spell.id}`);
       }
     });
   })
@@ -135,7 +135,37 @@ export const maxFood = (mage: Mage) => {
 // Determine the maximum recruitable by the geld cost
 export const recruitGeldCapacity = (mage: Mage) => {
   const speed = 1.0;
-  return 100 * mage.barracks * speed;
+  const base = 100;
+  let buffer = 0.0;
+
+  for (const enchant of mage.enchantments) {
+    const spell = getSpellById(enchant.spellId);
+    const spellLevel = enchant.spellLevel;
+    const magic = enchant.casterMagic;
+    const maxSpellLevel = getMaxSpellLevels()[magic];
+    const spellPowerScale = spellLevel / maxSpellLevel;
+
+    const effects = spell.effects;
+
+    effects.forEach(effect => {
+      if (effect.effectType !== 'ProductionEffect') return;
+
+      const productionEffect = effect as ProductionEffect;
+      if (productionEffect.production !== 'barrack') return;
+
+      if (productionEffect.rule === 'spellLevel') {
+        buffer += enchant.spellLevel * productionEffect.magic[magic].value;
+      } else if (productionEffect.rule === 'addPercentageBase') {
+        buffer += base * productionEffect.magic[magic].value;
+      } else if (productionEffect.rule === 'addSpellLevelPercentageBase') {
+        buffer += base * productionEffect.magic[magic].value * spellPowerScale;
+      } else {
+        throw new Error(`unspported production rule ${productionEffect.rule} for ${spell.id}`);
+      }
+    });
+  }
+
+  return (base + buffer) * mage.barracks * speed;
 }
 
 export const recruitmentAmount = (mage: Mage, unitId: string) => {

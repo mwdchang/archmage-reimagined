@@ -77,6 +77,7 @@ import lesserItems from 'data/src/items/lesser.json';
 import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
+import { applyStealEffect } from './effects/apply-steal-effect';
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -155,6 +156,12 @@ class Engine {
     console.log('engine constructor done');
   }
 
+  /**
+   * Next server turn cycle
+  **/
+  async serverTurn() {
+    await this.adapter.nextTurn({ maxTurn: 2000 });
+  }
 
   updateLoop() {
     /**
@@ -164,7 +171,7 @@ class Engine {
      * - black market and other things
      */
     console.log(`=== Server turn ===`);
-    this.adapter.nextTurn();
+    this.serverTurn()
 
     setTimeout(() => {
       this.updateLoop()
@@ -356,7 +363,7 @@ class Engine {
 
     // Refresh functioning enchantments
     mage.enchantments = mage.enchantments.filter(enchant => {
-      if (enchant.life === 0) {
+      if (enchant.life === 0 && enchant.isPermanent === false) {
         console.log(`${enchant.casterId} ${enchant.spellId} expired`)
       }
 
@@ -601,14 +608,26 @@ class Engine {
         if (attributes.includes('summon')) {
           this.summon(mage, spellId);
         } else if (spell.attributes.includes('enchantment')) {
-          this.enchant(mage, spellId);
+          this.enchant(mage, spellId, null);
         } else if (spell.attributes.includes('instant')) {
-          this.instantSelf(mage, spellId);
+          this.instant(mage, spellId, null);
         } else {
           throw new Error(`cannot process attributes ${attributes}`);
         }
+        await this.adapter.updateMage(mage);
       } else {
-        // FIXME
+        if (target === null) {
+          throw new Error(`No target found for casting ${spellId}`);
+        }
+
+        const targetMage = await this.getMage(target);
+        if (attributes.includes('enchantment')) {
+          this.enchant(mage, spellId, targetMage);
+        } else if (attributes.includes('instant')) {
+          this.instant(mage, spellId, targetMage);
+        }
+        await this.adapter.updateMage(mage);
+        await this.adapter.updateMage(targetMage);
       }
     }
     return logs;
@@ -617,7 +636,7 @@ class Engine {
   /**
    * instant harmful or beneficial effects
   **/
-  async instantSelf(mage: Mage, spellId: string) {
+  async instant(mage: Mage, spellId: string, targetMage: Mage | null) {
     const spell = getSpellById(spellId);
     const origin: EffectOrigin = {
       id: mage.id,
@@ -626,18 +645,30 @@ class Engine {
       targetId: mage.id
     };
 
-    for (const effect of spell.effects) {
-      if (effect.effectType === 'KingdomResourcesEffect') {
-        applyKingdomResourcesEffect(mage, effect as any, origin);
-      } else if (effect.effectType === 'KingdomBuildingsEffect') {
-        applyKingdomBuildingsEffect(mage, effect as any, origin);
-      } else if (effect.effectType === 'WishEffect') {
-        applyWishEffect(mage, effect as any, origin);
+    if (targetMage === null) {
+      for (const effect of spell.effects) {
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          applyKingdomResourcesEffect(mage, effect as any, origin);
+        } else if (effect.effectType === 'KingdomBuildingsEffect') {
+          applyKingdomBuildingsEffect(mage, effect as any, origin);
+        } else if (effect.effectType === 'WishEffect') {
+          applyWishEffect(mage, effect as any, origin);
+        }
+      }
+    } else {
+      for (const effect of spell.effects) {
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          applyKingdomResourcesEffect(targetMage, effect as any, origin);
+        } else if (effect.effectType === 'KingdomBuildingsEffect') {
+          applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+        } else if (effect.effectType === 'StealEffect') {
+          applyStealEffect(mage, effect as any, origin, targetMage);
+        }
       }
     }
   }
 
-  async enchant(mage: Mage, spellId: string) {
+  async enchant(mage: Mage, spellId: string, targetMage: Mage | null) {
     const spell = getSpellById(spellId);
     const result: GameMsg[] = [];
 
@@ -665,16 +696,26 @@ class Engine {
       isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
     }
-    mage.enchantments.push(enchantment);
-    console.log('cast enchantment', enchantment);
-    await this.adapter.updateMage(mage);
 
-    result.push({
-      type: 'log',
-      message: `You cast ${spell.name} on yourself`
-    });
-
-    return result;
+    if (targetMage === null) {
+      mage.enchantments.push(enchantment);
+      console.log('cast enchantment', enchantment);
+      await this.adapter.updateMage(mage);
+      result.push({
+        type: 'log',
+        message: `You cast ${spell.name} on yourself`
+      });
+      return result;
+    } else {
+      targetMage.enchantments.push(enchantment);
+      console.log('cast enchantment', enchantment);
+      await this.adapter.updateMage(targetMage);
+      result.push({
+        type: 'log',
+        message: `You cast ${spell.name} on ${targetMage.id}`
+      });
+      return result;
+    }
   }
 
   async summonByItem(mage: Mage, itemId: string, num: number) {

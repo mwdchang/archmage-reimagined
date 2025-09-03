@@ -356,17 +356,33 @@
     ]
   },
   {
-    "id": "dispellMagic",
-    "name": "Dispel Magic",
+    "id": "invocationOfZeal",
+    "name": "Invocation Of Zeal",
     "magic": "ascendant",
     "rank": "average",
-    "description": "place holder",
-    "attributes": [""],
+    "description": "This enchantment fills your people with burning devotion and unwavering purpose. Morale surges, loyalty deepens, and even the meek may rise to fight for the cause.",
+    "attributes": ["enchantment", "selfOnly"],
     "researchCost": 3000,
-    "castingCost": 0,
-    "castingTurn": 1,
-    "upkeep": null,
+    "castingCost": 13500,
+    "castingTurn": 4,
+    "upkeep": {
+      "geld": 0,
+      "mana": 150,
+      "population": 0
+    },
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "production": "barrack",
+        "magic": {
+          "ascendant": { "value": 0.08 },
+          "verdant": { "value": 0.03 },
+          "eradication": { "value": 0.02 },
+          "nether": { "value": 0.02 },
+          "phantasm": { "value": 0.03 }
+        }
+      }
     ]
   },
   {

@@ -20,16 +20,43 @@ export interface EffectOrigin {
   spellId?: string,
 }
 
+
 /**
- * BattleEffect are effects that are triggered before the battle takes place, it can augment/debuff
- * units attributes, cause direct damages, or alter unit abilities.
+ * Effect catalogue.
+ * Effects form the foundation of all actions in Archmage. They generally fall
+ * into these categories.
  *
- *   UnitAttrEffect
- *   UnitDamageEffect
- *   UnitHealEffect
+ *
+ * Effect used in battles
+ * - PrebattleEffect, BattleEffect
+ *   - UnitDamageEffect: Damages pre-engagement
+ *   - UnitHealEffect: Unit healing effects
+ *   - UnitAttrEffect: Unit attribute changes
+ *   - TemporaryUnitEffect: Create temporary units for battle
+ *
+ *
+ * These effect change kingdom attributes
+ * - KingdomResistanceEffect
+ * - KingdomBuildingsEffect
+ * - KingdomArmyEffect
+ * - KingdomResourcesEffect
+ * - StealEffect
+ * - WishEffect
+ * - UnitSummonEffect
+ *
+ * These are passive effects
+ * - ArmyUpkeepEffect
+ * - ProductionEffect
+ * - CastingEffect
+ *
 **/
 
 
+/**
+ * This effect describes how to create temporary units for a battle. These units participate
+ * as any other units, however they do not count in the success/failure calculations and are
+ * dismissed after the battle.
+**/
 export interface TemporaryUnitEffect extends Effect {
   checkResistance: false;
   unitId: string,
@@ -173,7 +200,7 @@ export interface KingdomArmyEffect extends Effect {
 
 export interface ProductionEffect extends Effect {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
-  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land',
+  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land' | 'barrack',
   magic: {
     [key in AllowedMagic]: {
       value: number
@@ -210,7 +237,6 @@ export interface CastingEffect extends Effect {
   }
 }
 
-
 export interface WishEffect extends Effect {
   trigger: {
     min: number;
@@ -222,4 +248,17 @@ export interface WishEffect extends Effect {
     max: number,
     weight: number
   } []
+}
+
+/**
+ * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
+**/
+export interface StealEffect extends Effect {
+  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage',
+  target: 'mana' | 'geld' | 'item',
+  magic: {
+    [key in AllowedMagic]: {
+      value: { min: number, max: number, stealPercent: number | null }
+    }
+  }
 }

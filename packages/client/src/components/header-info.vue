@@ -35,9 +35,9 @@
           </div>
         </td>
         <td> 
-          <span v-for="(enchant, idx) of mage.enchantments" :key="idx" alt="abcdefg">
-            <magic :magic="enchant.spellMagic" small />
-          </span>
+          <div class="row" style="gap: 2px">
+            <magic v-for="(enchant, idx) of mage.enchantments" :Key="idx" :magic="enchant.spellMagic" small />
+          </div>
         </td>
       </tr>
     </tbody>

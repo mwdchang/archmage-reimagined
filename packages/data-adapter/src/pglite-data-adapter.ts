@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { DataAdapter, SearchOptions } from './data-adapter';
+import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
@@ -429,7 +429,27 @@ SELECT mage from mage
     return result.rows;
   }
 
-  async nextTurn() {
-    // nothing
+
+  async nextTurn(options: TurnOptions) {
+    await this.db.query(`
+      UPDATE mage
+      SET mage = jsonb_set(
+          mage::jsonb,
+          '{currentTurn}',
+          ((mage->>'currentTurn')::int + 1)::text::jsonb
+      )
+      WHERE (mage->>'currentTurn')::int <= ${options.maxTurn};
+    `);
+    /*
+    await this.db.query(`
+      UPDATE mage
+      SET mage = json_set(
+          mage,
+          '$.currentTurn',
+          json((json_extract(mage, '$.currentTurn') + 1))
+      )
+      WHERE json_extract(mage, '$.currentTurn') <= 400
+    `);
+    */
   }
 }
