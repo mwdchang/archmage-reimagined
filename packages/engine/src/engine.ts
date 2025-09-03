@@ -156,6 +156,12 @@ class Engine {
     console.log('engine constructor done');
   }
 
+  /**
+   * Next server turn cycle
+  **/
+  async serverTurn() {
+    await this.adapter.nextTurn({ maxTurn: 2000 });
+  }
 
   updateLoop() {
     /**
@@ -165,7 +171,7 @@ class Engine {
      * - black market and other things
      */
     console.log(`=== Server turn ===`);
-    this.adapter.nextTurn();
+    this.serverTurn()
 
     setTimeout(() => {
       this.updateLoop()

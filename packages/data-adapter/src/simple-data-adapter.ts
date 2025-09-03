@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { DataAdapter, SearchOptions } from './data-adapter';
+import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
@@ -16,9 +16,9 @@ const DATA_DIR = 'game-data';
 const REPORT_DIR = 'reports';
 
 /**
- * This is a simple in-memory/file-based data adapter - mainly for testing
+ * This is a simple in-memory/file-based data adapter - mainly for testing and
+ * one-off scripting needs
 **/
-
 export class SimpleDataAdapter extends DataAdapter {
   userTable: Map<string, User> = new Map();
 
@@ -62,7 +62,14 @@ export class SimpleDataAdapter extends DataAdapter {
   }
 
   async logout() {}
-  async nextTurn() {}
+
+  async nextTurn(options: TurnOptions) {
+    for (const mage of this.mageTable) {
+      if (mage.currentTurn < options.maxTurn) {
+        mage.currentTurn ++;
+      }
+    }
+  }
 
   async createMage(username: string, mage: Mage) {
     this.mageTable.push(mage);
