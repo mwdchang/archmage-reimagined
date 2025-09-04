@@ -25,7 +25,16 @@ interface BattleReportTable {
 
 
 const DB_INIT = `
+  DROP VIEW IF EXISTS rank_view;
+  DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
+  DROP TABLE IF EXISTS mage;
+  DROP TABLE IF EXISTS battle_report;
+  DROP TABLE IF EXISTS battle_summary;
+  DROP TABLE IF EXISTS turn_chronicle;
+  COMMIT;
+
+
   CREATE TABLE IF NOT EXISTS archmage_user (
     username VARCHAR(64), 
     hash VARCHAR(200),
@@ -33,7 +42,7 @@ const DB_INIT = `
   );
   COMMIT;
 
-  DROP TABLE IF EXISTS mage;
+
   CREATE TABLE IF NOT EXISTS mage (
     username varchar(64),
     id integer,
@@ -41,14 +50,13 @@ const DB_INIT = `
   );
   COMMIT;
 
-  DROP TABLE IF EXISTS battle_report;
   CREATE TABLE IF NOT EXISTS battle_report(
     id varchar(64),
     data json
   );
   COMMIT;
 
-  DROP TABLE IF EXISTS battle_summary;
+ 
   CREATE TABLE IF NOT EXISTS battle_summary(
     id varchar(64),
     timestamp bigint,
@@ -72,7 +80,7 @@ const DB_INIT = `
   );
   COMMIT;
 
-  DROP TABLE IF EXISTS turn_chronicle;
+
   CREATE TABLE IF NOT EXISTS turn_chronicle(
     id integer,
     name varchar(64),
@@ -83,9 +91,6 @@ const DB_INIT = `
   COMMIT;
 
   
-  DROP VIEW IF EXISTS rank_view;
-  DROP TABLE IF EXISTS rank;
-
   CREATE TABLE IF NOT EXISTS rank(
     id integer,
     name varchar(64),
@@ -97,18 +102,58 @@ const DB_INIT = `
   );
   COMMIT;
 
+
   CREATE VIEW rank_view AS
+  WITH 
+  recent_battles AS (
+    SELECT
+      defender_id,
+      SUM(defender_power_loss_percentage) AS total_loss_pct
+    FROM
+      battle_summary
+    WHERE
+      timestamp >= (EXTRACT(EPOCH FROM now()) * 1000)::bigint - 86400000
+    GROUP BY
+      defender_id
+  ),
+  rank_with_status AS (
+    SELECT
+      r.id,
+      r.name,
+      r.magic,
+      r.forts,
+      r.land,
+      r.net_power,
+      COALESCE(
+        CASE
+          WHEN rb.total_loss_pct > 0.3 THEN 'damaged'
+          ELSE 'normal'
+        END,
+        'normal'
+      ) AS status
+    FROM
+      rank r
+      LEFT JOIN recent_battles rb ON r.id = rb.defender_id
+  )
   SELECT
-      id,
-      name,
-      magic,
-      forts,
-      land,
-      status,
-      net_power,
-      RANK() OVER (ORDER BY net_power DESC) AS rank
+    *,
+    RANK() OVER (ORDER BY net_power DESC) AS rank
   FROM
-      rank;
+    rank_with_status;
+
+
+  -- CREATE VIEW rank_view AS
+  -- SELECT
+  --     id,
+  --     name,
+  --     magic,
+  --     forts,
+  --     land,
+  --     status,
+  --     net_power,
+  --     RANK() OVER (ORDER BY net_power DESC) AS rank
+  -- FROM
+  --     rank;
 `;
 
 
@@ -123,7 +168,7 @@ const toCamelCase = <T>(row: Record<string, any>): T => {
   return result as T;
 }
 
-const Q = (v: string) => `'${v}'`;
+const Q = (v: string) => `'${v.replace(/'/g, "''")}'`;
 
 export class PGliteDataAdapter extends DataAdapter {
   db: PGlite;

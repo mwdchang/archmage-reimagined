@@ -2,20 +2,22 @@
   <div class="section-header">Spells in your Spellbook</div>
   <br>
   <table>
-    <tr>
-      <td>Name</td>
-      <td>&nbsp;</td>
-      <td>Turns</td>
-      <td>Mana Cost</td>
-    </tr>
-    <tr v-for="spell of spells" :key="spell.id">
-      <td>
-        <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
-      </td>
-      <td><magic :magic="spell.magic" small /></td>
-      <td class="text-right">{{ spell.castingTurn }}</td>
-      <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
-    </tr>
+    <tbody>
+      <tr>
+        <td>Name</td>
+        <td>&nbsp;</td>
+        <td>Turns</td>
+        <td>Mana Cost</td>
+      </tr>
+      <tr v-for="spell of spells" :key="spell.id">
+        <td>
+          <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
+        </td>
+        <td><magic :magic="spell.magic" small /></td>
+        <td class="text-right">{{ spell.castingTurn }}</td>
+        <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
+      </tr>
+    </tbody>
   </table>
 
   <br>
