@@ -6,8 +6,10 @@
         You get an average of {{ exploreRate }} acres of land per turn. 
         The amount of land explored per turn decreases as your land increases.
       </p>
-      <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
-      <button @click="exploreLand"> Explore </button>
+      <div class="form">
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
+        <button @click="exploreLand"> Explore </button>
+      </div>
       <div>
         {{ exploreMsg }}
       </div>

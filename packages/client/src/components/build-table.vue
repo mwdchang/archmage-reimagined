@@ -23,7 +23,9 @@
     </tbody>
   </table>
   <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
-  <button @click="build"> Build </button>
+  <div class="form">
+    <button @click="build"> Build </button>
+  </div>
 </template>
 
 <script setup lang="ts">

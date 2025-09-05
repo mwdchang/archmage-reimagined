@@ -1,10 +1,12 @@
 <template>
   <h2>War</h2>
-  <p> All attack type cost 2 turns </p>
-  <input type="text" placeholder="mage id" v-model="targetId" /> 
-  <br>
-  <button @click="prepBattle"> War </button>
-  <br>
+
+  <section class="form">
+    <p> All attack type cost 2 turns </p>
+    <input type="text" placeholder="mage id" v-model="targetId" /> 
+
+    <button @click="prepBattle"> War </button>
+  </section>
 
   <div>Counters you given out</div>
   <table>

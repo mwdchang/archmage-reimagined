@@ -5,8 +5,10 @@
       <p>
         You raw mana income is {{ readbleNumber(manaIncome(mageStore.mage)) }}.
       </p>
-      <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
-      <button @click="charge"> Charge </button>
+      <div class="form">
+        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
+        <button @click="charge"> Charge </button>
+      </div>
       <div>
         {{ manaMsg }}
       </div>

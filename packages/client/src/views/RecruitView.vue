@@ -18,18 +18,22 @@
       </tr>
     </tbody>
   </table>
+
   <br>
-  <div class="row">
-    <label>Recruit&nbsp;</label> 
-    <select v-model="rselect">
-      <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
-    </select>
-    &nbsp;
-    <input type="text" v-model="rsize" size="8">
-    &nbsp;
+  <section class="form" style="width: 25rem">
+    <label>Recruit units</label> 
+
+    <div class="row">
+      <select v-model="rselect">
+        <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
+      </select>
+      <input type="text" v-model="rsize" size="8">
+    </div>
+
     <button @click="addOrder">Add</button>
-  </div>
+  </section>
   <br>
+
   <table>
     <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
       <td>{{ r.id }}</td>

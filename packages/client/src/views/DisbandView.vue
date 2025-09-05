@@ -29,12 +29,17 @@
       </tr>
     </tbody>
   </table>
+  <br/>
 
-  <span>
-    <label>Disband confirmation&nbsp;</label><input type="checkbox" v-model="confirmDisband"> 
-  </span>
+  <section class="form">
+    <div class="row" style="align-items: baseline">
+      <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
+      <label>Disband confirmation&nbsp;</label>
+    </div>
 
-  <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
+    <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
+  </section>
+
 </template>
 
 <script lang="ts" setup>

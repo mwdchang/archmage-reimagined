@@ -28,10 +28,11 @@
   </table>
   <br/>
 
-  <input type="number" v-model="dispelMana" />
-  <div>Success rate for {{ dispelProb }}%</div>
-  <button @click="dispelEnchant">Dispel</button>
-
+  <section class="form">
+    <input type="number" v-model="dispelMana" />
+    <label>Success rate for {{ dispelProb }}%</label>
+    <button @click="dispelEnchant">Dispel</button>
+  </section>
 </template>
 
 <script lang="ts" setup>

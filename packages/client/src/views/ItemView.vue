@@ -1,50 +1,50 @@
 <template>
   <div class="section-header">Your item inventory</div>
-  <br>
+  <p>
+    You have {{ itemList.length }} spells in your spell book.
+  </p>
 
-  <section>
-    <table>
-      <tbody>
-        <tr>
-          <td>Name</td>
-          <td>Attributes</td>
-          <td>Number</td>
-        </tr>
-        <tr v-for="(item, _idx) of itemList" :key="item.id">
-          <td>
-            <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
-          </td>
-          <td>{{ item.attributes.join(', ') }}</td>
-          <td class="text-right">{{ item.amount }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <br>
-
-    <select v-model="selected" v-if="usableItems.length > 0">
-      <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
-    </select>
-    <p v-if="usableItems.length === 0">
-      You have no usable items.
-    </p>
-
-    <div class="row" style="width: 280px">
-      <div style="width: 100px">Target</div>
-      <input type="text" v-model="target" size="12" />
+  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+    <div style="max-height: 400px; overflow-y: scroll; padding: 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Attributes</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, _idx) of itemList" :key="item.id">
+            <td>
+              <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
+            </td>
+            <td>{{ item.attributes.join(', ') }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div> 
+      <section class="form">
+        <label>Use item</label>
+        <select v-model="selected" v-if="usableItems.length > 0">
+          <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+        </select>
 
-    <div class="row" style="width: 280px">
-      <div style="width: 100px"># of times</div> 
-      <input type="text" v-model="turns" size="4" />
-    </div>
-    <br>
+        <label>Target</label>
+        <input type="text" v-model="target" />
 
-    <button @click="useItem">Use Item</button>
+        <label># of times</label>
+        <input type="text" v-model="turns" />
 
-    <div v-if="itemResult.length">
-      <div v-for="(d, idx) of itemResult" :key="idx">
-        {{ d.message }}
+        <button @click="useItem">Use Item</button>
+      </section>
+
+      <div v-if="itemResult.length">
+        <div v-for="(d, idx) of itemResult" :key="idx">
+          {{ d.message }}
+        </div>
       </div>
     </div>
 
@@ -97,3 +97,15 @@ const useItem = async () => {
 };
 
 </script>
+
+<style scoped>
+tr:nth-child(odd) {
+  background: #222222;
+}
+
+td {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+</style>
