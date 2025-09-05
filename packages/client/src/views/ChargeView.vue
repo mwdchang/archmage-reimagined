@@ -1,12 +1,14 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2> Mana Charge</h2>
+    <div class="section-header">Mana Charge</div>
     <section> 
       <p>
         You raw mana income is {{ readbleNumber(manaIncome(mageStore.mage)) }}.
       </p>
-      <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
-      <button @click="charge"> Charge </button>
+      <div class="form">
+        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
+        <button @click="charge"> Charge </button>
+      </div>
       <div>
         {{ manaMsg }}
       </div>

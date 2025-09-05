@@ -1,13 +1,15 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2> Gelding </h2>
+    <div class="section-header">Gelding</div>
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 
         Your income is about {{ readbleNumber(geldIncome(mageStore.mage)) }} geld.
       </p>
-      <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
-      <button @click="geld"> Geld </button>
+      <div class="form">
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
+        <button @click="geld"> Geld </button>
+      </div>
       <div>
         {{ geldMsg }}
       </div>

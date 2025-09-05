@@ -52,7 +52,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "160px";
+    document.getElementById("mySidenav")!.style.width = "150px";
   }
 
   // Close the side navigation
@@ -73,7 +73,7 @@ onMounted(() => {
 }
 
 .menu-toggle {
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   padding: 5px;
   /* background-color: #333; */
@@ -101,7 +101,7 @@ onMounted(() => {
   padding: 4px 4px 4px 20px;
   text-decoration: none;
   line-height: 1.0;
-  font-size: 16px;
+  font-size: 15px;
   color: #b1b1b1;
   display: block;
   transition: 0.3s;
@@ -114,6 +114,6 @@ onMounted(() => {
 .sidenav .closebtn {
   position: absolute;
   top: 10px;
-  font-size: 18px;
+  font-size: 15px;
 }
 </style>

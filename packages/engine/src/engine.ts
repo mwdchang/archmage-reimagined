@@ -404,7 +404,11 @@ class Engine {
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
 
     const logs: string[] = [];
-    const researchItem = Object.values(mage.currentResearch).find(d => d.active === true);
+
+    const researchItem = Object.values(mage.currentResearch).find(d => {
+      if (!d) return false;
+      return d.active === true;
+    });
     if (researchItem) {
       logs.push(`You are researching ${researchItem.id}`);
     }
@@ -419,7 +423,7 @@ class Engine {
         id: mage.id,
         name: mage.name,
         turn: mage.turnsUsed,
-        time: Date.now(),
+        timestamp: Date.now(),
         data: logs
       }
     ]);
@@ -1017,9 +1021,15 @@ class Engine {
       }
     });
 
+    console.log('>> saving battle report');
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
+
+    console.log('>> saving atacking mage');
     await this.adapter.updateMage(mage);
+
+    console.log('>> saving defending mage');
     await this.adapter.updateMage(defenderMage);
+
     this.adapter.updateRank({
       id: defenderMage.id,
       name: defenderMage.name,

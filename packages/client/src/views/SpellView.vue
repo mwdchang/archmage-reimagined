@@ -1,48 +1,54 @@
 <template>
   <div class="section-header">Spells in your Spellbook</div>
-  <br>
-  <table>
-    <tr>
-      <td>Name</td>
-      <td>&nbsp;</td>
-      <td>Turns</td>
-      <td>Mana Cost</td>
-    </tr>
-    <tr v-for="spell of spells" :key="spell.id">
-      <td>
-        <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
-      </td>
-      <td><magic :magic="spell.magic" small /></td>
-      <td class="text-right">{{ spell.castingTurn }}</td>
-      <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
-    </tr>
-  </table>
-
-  <br>
-  <select v-model="selected" v-if="spells.length > 0">
-    <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
-  </select>
-  <p v-if="spells.length === 0">
-    You have no spells available.
+  <p>
+    You have {{ spells.length }} spells in your spell book.
   </p>
-
-  <div class="row" style="width: 280px">
-    <div style="width: 100px">Target</div>
-    <input type="text" v-model="target" size="12" />
-  </div>
-
-  <div class="row" style="width: 280px">
-    <div style="width: 100px"># of times</div> 
-    <input type="text" v-model="turns" size="4" />
-  </div>
-
-  <button @click="castSpell">Cast spell</button>
-
-  <div v-if="spellResult.length">
-    <div v-for="(d, idx) of spellResult" :key="idx">
-      {{ d.message }}
+  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+    <div style="max-height: 400px; overflow-y: scroll; padding: 0">
+      <table>
+        <thead style="position: sticky; top: 0; z-index: 10">
+          <tr>
+            <th>Name</th>
+            <th>&nbsp;</th>
+            <th>Turns</th>
+            <th>Mana Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="spell of spells" :key="spell.id">
+            <td>
+              <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
+            </td>
+            <td><magic :magic="spell.magic" small /></td>
+            <td class="text-right">{{ spell.castingTurn }}</td>
+            <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+    <div> 
+      <section class="form">
+        <label>Select spell</label>
+        <select v-model="selected" v-if="spells.length > 0" style="max-width:175px" tabindex=1>
+          <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+        </select>
+
+        <label>Target</label>
+        <input type="text" v-model="target" tabindex=2 />
+
+        <label># of times</label> 
+        <input type="text" v-model="turns" tabindex=3 />
+
+        <button @click="castSpell">Cast spell</button>
+      </section>
+
+      <div v-if="spellResult.length">
+        <div v-for="(d, idx) of spellResult" :key="idx">
+          {{ d.message }}
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -103,4 +109,5 @@ td {
   padding-top: 1px;
   padding-bottom: 1px;
 }
+
 </style>

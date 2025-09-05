@@ -979,7 +979,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
-                "rule": "addPercentage",
+                "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": -0.20 }
                 }
@@ -991,7 +991,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentage",
+                "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.25 }
                 }

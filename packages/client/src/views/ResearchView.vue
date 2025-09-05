@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2>Research</h2>
+    <div class="section-header">Research</div>
     <p> 
       Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
       (Max = {{ maxSpellLevel(mageStore.mage) }})
@@ -39,16 +39,17 @@
         </tr>
       </tbody>
     </table>
-    <div style="display: flex; align-items: center; margin-top: 10px">
-      <input type="checkbox" v-model="focusResearch" style="width:18px; height: 18px" />
-      &nbsp;Research all spells of this magic
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 10px">
-      Spend&nbsp;<input type="number" v-model="turns" style="width: 4rem" />&nbsp;turns to reearch faster.
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 10px">
+
+    <section class="form" style="margin-top: 1rem">
+      <label>Spend turns to research faster</label>
+      <input type="number" v-model="turns" style="width: 6rem" />
+      <div class="row" style="align-items: baseline">
+        <input type="checkbox" v-model="focusResearch" style="width:15px; height: 15px" />
+        <label>&nbsp;Research all spells of this magic</label>
+      </div>
+
       <button @click="submitResearch"> Research </button>
-    </div>
+    </section>
     <div style="display: flex; align-items: center; margin-top: 10px; max-width: 25rem;">
       {{ researchResultStr }}
     </div>

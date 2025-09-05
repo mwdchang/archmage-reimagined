@@ -17,10 +17,13 @@
     </tbody>
   </table>
 
-  <span>
-    <label>Destroy confirmation&nbsp;</label><input type="checkbox" v-model="confirmDestroy"> 
-  </span>
-  <button @click="destroy" :disabled="confirmDestroy === false"> Destroy </button>
+  <div class="form" style="margin-top: 1rem">
+    <div class="row" style="align-items: baseline">
+      <input type="checkbox" v-model="confirmDestroy" style="width: 15px; height: 15px"> 
+      <label>Destroy confirmation</label>
+    </div>
+    <button @click="destroy" :disabled="confirmDestroy === false"> Destroy </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -48,12 +51,6 @@ const destroy = () => {
 </script>
 
 <style scoped>
-input {
-  width: 5rem;
-  text-align: right;
-  background: #eee;
-}
- 
 tr:nth-child(odd) {
   background: #333;
 }
