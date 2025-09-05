@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2>Research</h2>
+    <div class="section-header">Research</div>
     <p> 
       Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
       (Max = {{ maxSpellLevel(mageStore.mage) }})

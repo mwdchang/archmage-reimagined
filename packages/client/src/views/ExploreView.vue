@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2> Explore </h2>
+    <div class="section-header">Explore</div>
     <section> 
       <p>
         You get an average of {{ exploreRate }} acres of land per turn. 

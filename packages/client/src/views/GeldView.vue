@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage">
-    <h2> Gelding </h2>
+    <div class="section-header">Gelding</div>
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 

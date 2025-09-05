@@ -1,5 +1,5 @@
 <template>
-  <h3>Destroy buildings</h3>
+  <div class="section-header">Destroy Buildings</div>
   <destroy-table @destroy="destroy($event)" />
 </template>
 

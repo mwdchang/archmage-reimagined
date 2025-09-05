@@ -1,4 +1,5 @@
 <template>
+  <div class="section-header">Dispel Magic</div>
   <div> Your enchantments </div>
   <table>
     <tbody>

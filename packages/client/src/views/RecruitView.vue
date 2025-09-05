@@ -1,5 +1,5 @@
 <template>
-  <div>Recruitment</div>
+  <div class="section-header">Recruitment</div>
   <table v-if="mageStore.mage">
     <tbody>
       <tr>

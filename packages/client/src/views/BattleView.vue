@@ -1,5 +1,5 @@
 <template>
-  <h2>War</h2>
+  <div class="section-header">War</div>
 
   <section class="form">
     <p> All attack type cost 2 turns </p>

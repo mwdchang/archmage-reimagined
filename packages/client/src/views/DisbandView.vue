@@ -1,4 +1,5 @@
 <template>
+  <div class="section-header">Disband Units</div>
   <table v-if="mageStore.mage">
     <tbody>
       <tr>
