@@ -14,7 +14,11 @@
           <td>Accuracy</td>
         </tr>
         <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
-          <td>{{ stack.unit.name }}</td>
+          <td>
+            <router-link :to="{ name: 'viewUnit', params: { id: stack.unit.id }}"> 
+              {{ stack.unit.name }}
+            </router-link>
+          </td>
           <td><magic :magic="stack.unit.magic" small /></td>
           <td class="text-right">{{ stack.size }}</td>
           <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
@@ -41,7 +45,11 @@
           <td>Accuracy</td>
         </tr>
         <tr v-for="(stack, idx) of report.defender.army" :key="idx">
-          <td>{{ stack.unit.name }}</td>
+          <td>
+            <router-link :to="{ name: 'viewUnit', params: { id: stack.unit.id }}"> 
+              {{ stack.unit.name }}
+            </router-link>
+          </td>
           <td><magic :magic="stack.unit.magic" small /></td>
           <td class="text-right">{{ stack.size }}</td>
           <td class="text-right">{{ stack.unit.primaryAttackPower }}</td>
@@ -57,13 +65,19 @@
     <h3 class="section-header">Spells and items</h3>
       <div>
         <div v-if="report.attacker.spellId">
-          {{ attackerStr }} casts {{ report.attacker.spellId }}
+          {{ attackerStr }} casts 
+          <router-link :to="{ name: 'viewSpell', params: { id: report.attacker.spellId }}">
+            {{ readableStr(report.attacker.spellId) }}
+          </router-link>
           <span v-if="report.preBattle.attacker.spellResult !== 'success'">
           &nsp; spell failed.
           </span>
         </div>
         <div v-if="report.attacker.itemId">
-          {{ attackerStr }} uses {{ report.attacker.itemId }}
+          {{ attackerStr }} uses 
+          <router-link :to="{ name: 'viewItem', params: { id: report.attacker.itemId }}">
+            {{ readableStr(report.attacker.itemId) }}
+          </router-link>
           <span v-if="report.preBattle.attacker.itemResult !== 'success'">
           &nsp; item failed.
           </span>
@@ -71,13 +85,19 @@
       </div>
       <div>
         <div v-if="report.defender.spellId">
-          {{ defenderStr }} casts {{ report.defender.spellId }}
+          {{ defenderStr }} casts 
+          <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
+            {{ readableStr(report.defender.spellId) }}
+          </router-link>
           <span v-if="report.preBattle.defender.spellResult !== 'success'">
           &nsp; spell failed.
           </span>
         </div>
         <div v-if="report.defender.itemId">
-          {{ defenderStr }} uses {{ report.defender.itemId }}
+          {{ defenderStr }} uses
+          <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
+           {{ readableStr(report.defender.itemId) }}
+          </router-link>
           <span v-if="report.preBattle.defender.itemResult !== 'success'">
           &nsp; item failed.
           </span>
@@ -114,7 +134,7 @@
           {{ nameById(log.attacker.id) }} created {{ Math.abs(log.attacker.unitsLoss) }} {{ log.attacker.unitId }}
         </p>
       </div>
-      <div v-if="log.type === 'counter'">
+      <div v-if="log.type === 'counter'"> 
         <p>
           {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} struck back at
           {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }}
@@ -137,12 +157,12 @@
           {{ nameById(log.defender.id) }} {{ log.defender.unitsLoss }} {{ log.defender.unitId }}
         </p>
       </div>
+      <div v-if="checkGap(report.battleLogs[idx], report.battleLogs[idx+1])" style="margin-bottom: 0.5rem" />
     </div>
     <br>
 
     <h3 class="section-header">Assault Result</h3>
     <div v-for="(log, idx) of report.postBattleLogs" :key="idx" class="br-row">
-      <!--{{ log }}-->
       <p>
         {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ log.unitId }} were slain in battle
       </p>
@@ -184,7 +204,8 @@
 import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
-import type { BattleReport } from 'shared/types/battle';
+import { readableStr } from '@/util/util';
+import type { BattleLog, BattleReport } from 'shared/types/battle';
 
 const props = defineProps<{ id: string }>();
 const report = ref<BattleReport|null>(null);
@@ -207,6 +228,15 @@ const nameById = (id: number) => {
   return defenderStr;
 };
 
+// Make the battle report easier to read
+const checkGap = (curr: BattleLog | null, next: BattleLog | null) => {
+  if (curr && next) {
+    if (next.type === 'counter') return false;
+    return true;
+  }
+  return false;
+}
+
 onMounted(async () => {
   const res = (await API.get<{ report: BattleReport}>(`/report/${props.id}`)).data;
   report.value = res.report;
@@ -228,7 +258,8 @@ td:nth-child(even) {
   background: #282828;
 }
 
+p { line-height: 125% }
+
 .br-row {
-  margin-bottom: 8px;
 }
 </style>

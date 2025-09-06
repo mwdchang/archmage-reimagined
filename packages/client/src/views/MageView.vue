@@ -8,19 +8,31 @@
       <tr>
         <td>Magic</td>
         <td>
-          <div style="display: flex">
-          <magic :magic="mageSummary.magic" />{{ mageSummary.magic }} 
+          <div class="row">
+            <magic :magic="mageSummary.magic" />
+            <div>{{ mageSummary.magic }} </div>
           </div>
         </td>
       </tr>
       <tr>
-        <td>Power</td><td class="text-right">{{ readbleNumber(mageSummary.netPower) }} </td>
+        <td>Rank</td>
+        <td class="text-right">{{ mageSummary.rank }}</td>
       </tr>
       <tr>
-        <td>Land</td><td class="text-right">{{ readbleNumber(mageSummary.land) }} </td>
+        <td>Status</td>
+        <td class="text-right">{{ mageSummary.status }}</td>
       </tr>
       <tr>
-        <td>Forts</td><td class="text-right">{{ mageSummary.forts }} </td>
+        <td>Power</td>
+        <td class="text-right">{{ readbleNumber(mageSummary.netPower) }} </td>
+      </tr>
+      <tr>
+        <td>Land</td>
+        <td class="text-right">{{ readbleNumber(mageSummary.land) }} </td>
+      </tr>
+      <tr>
+        <td>Forts</td>
+        <td class="text-right">{{ mageSummary.forts }} </td>
       </tr>
       <tr>
         <td>Attack</td>

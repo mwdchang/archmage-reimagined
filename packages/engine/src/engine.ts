@@ -1136,11 +1136,12 @@ class Engine {
 
   async getMageSummary(id: number) {
     const m = await this.getMage(id);
-
     return {
       id: m.id,
       name: m.name,
       magic: m.magic,
+      rank: m.rank,
+      status: m.status,
       land: totalLand(m),
       netPower: totalNetPower(m),
       forts: m.forts

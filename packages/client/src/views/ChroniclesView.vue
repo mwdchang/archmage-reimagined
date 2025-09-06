@@ -1,25 +1,52 @@
 <template>
   <main>
-    <h3> Previous engagements </h3>
+    <div class="section-header">Previous Engagements</div>
     <div v-for="(d, idx) of chronicles" :key="idx" style="margin-bottom: 10px"> 
-      <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
-        <p>
-          {{ formatEpochToUTC(d.timestamp) }} 
-        </p>
-        <p>
-          (#{{ d.attackerId }}) army {{ d.attackType }} (#{{ d.defenderId }}) army on the battlefield, 
-          (#{{ d.attackerId }}) killed {{ d.summary.defender.unitsLoss }} units and lost {{ d.summary.attacker.unitsLoss }} units.
-          The attack was a {{ d.summary.isSuccessful ? 'success' : 'failure' }}
-        </p>
-      </router-link>
+      <div>{{ formatEpochToUTC(d.timestamp) }}</div>
+      <div class="row" style="max-width: 25rem; align-items: flex-start; gap: 10px">
+        <img 
+          v-if="mage.id === d.attackerId && d.isSuccessful === true"
+          src="@/assets/images/attack-win.png" 
+          class="icon win"
+        />
+        <img 
+          v-if="mage.id === d.attackerId && d.isSuccessful === false"
+          src="@/assets/images/attack-loss.png" 
+          class="icon loss"
+        />
+        <img 
+          v-if="mage.id === d.defenderId && d.isSuccessful === false"
+          src="@/assets/images/defend-win.png" 
+          class="icon win"
+        />
+        <img 
+          v-if="mage.id === d.defenderId && d.isSuccessful === true"
+          src="@/assets/images/defend-loss.png" 
+          class="icon loss"
+        />
+        <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
+          <p>
+            {{d.attackerName }} (#{{ d.attackerId }}) army {{ d.attackType }} {{ d.defenderName }} (#{{ d.defenderId }}) army on the battlefield, 
+            {{d.attackerName }} (#{{ d.attackerId }}) slew {{ d.defenderUnitsLoss }} units and lost {{ d.attackerUnitsLoss }} units.
+            The attack was a {{ d.isSuccessful ? 'success' : 'failure' }}
+          </p>
+        </router-link>
+      </div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { API } from '@/api/api';
 import type { BattleReportSummary } from 'shared/types/battle';
+import { useMageStore } from '@/stores/mage';
+
+const mageStore = useMageStore();
+
+const mage = computed(() => {
+  return mageStore.mage!;
+});
 
 const chronicles = ref<BattleReportSummary[]>([]);
 
@@ -34,3 +61,24 @@ onMounted(async () => {
   chronicles.value = res.battles;
 });
 </script>
+
+<style scoped>
+main {
+  max-width: 40rem;
+  max-height: 30rem;
+  overflow-y: scroll;
+}
+p { line-height: 125% }
+
+.icon {
+  width: 58px;
+  border-radius: 12px;
+}
+
+.icon.win {
+  background: #228833;
+}
+.icon.loss {
+  background: #882233;
+}
+</style>

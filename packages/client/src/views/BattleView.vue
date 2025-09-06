@@ -21,7 +21,9 @@
         <td> 
           <div class="row">
             <magic :magic="mages[summary.defenderId]?.magic" small /> 
-            {{ summary.defenderName }} (#{{ summary.defenderId }}) 
+            <router-link :to="{ name: 'mage', params: { mageId: summary.defenderId }}">
+              {{ summary.defenderName }} (#{{ summary.defenderId }}) 
+            </router-link>
           </div>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
@@ -45,7 +47,9 @@
         <td> 
           <div class="row">
             <magic :magic="mages[summary.attackerId]?.magic" small /> 
-            {{ summary.attackerName }} (#{{ summary.attackerId }}) 
+            <router-link :to="{ name: 'mage', params: { mageId: summary.attackerId }}">
+              {{ summary.attackerName }} (#{{ summary.attackerId }}) 
+            </router-link>
           </div>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
