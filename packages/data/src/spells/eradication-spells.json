@@ -393,7 +393,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackType,secondaryAttackType,counter": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
@@ -500,6 +500,23 @@
                   "nether": { "value": -0.05 },
                   "phantasm": { "value": -0.025  }
                 }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "PostbattleEffect",
+        "target": "opponent",
+        "condition": "win",
+        "effects": [
+          {
+            "effectType": "StealEffect",
+            "rule": "addSpellLevelPercentageBase",
+            "target": "geld",
+            "magic": {
+              "eradication": { 
+                "value": { "min": 0.02, "max": 0.08, "stealPercent": 1.0 }
               }
             }
           }

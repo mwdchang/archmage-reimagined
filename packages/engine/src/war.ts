@@ -6,7 +6,8 @@ import {
   UnitHealEffect,
   BattleEffect,
   EffectOrigin,
-  TemporaryUnitEffect
+  TemporaryUnitEffect,
+  PostbattleEffect
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
@@ -34,6 +35,8 @@ import { newBattleReport } from './battle/new-battle-report';
 import { getPowerModifier, prepareBattleStack } from './battle/prepare-battle-stack';
 import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
+import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
+import { applyStealEffect } from './effects/apply-steal-effect';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +46,16 @@ const calcDamageVariance = (attackType: String[]) => {
     randomModifier = 0.5;
   }
   return randomModifier;
+}
+
+const enchant2origin = (enchant: Enchantment) => {
+  const origin: EffectOrigin = {
+    id: enchant.casterId,
+    magic: enchant.casterMagic,
+    spellLevel: enchant.spellLevel,
+    targetId: enchant.targetId
+  };
+  return origin;
 }
 
 /**
@@ -391,7 +404,7 @@ const battleSpell = (
             return false;
           });
         }
-        console.log(`Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
+        console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
 
         if (effect.effectType === 'UnitAttrEffect') {
           const unitAttrEffect = effect as UnitAttrEffect;
@@ -471,7 +484,7 @@ const battleItem = (
         }
 
         const eff = battleEffect.effects[i];
-        console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+        console.log(`Item: Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
         if (eff.effectType === 'UnitAttrEffect') {
           const unitAttrEffect = eff as UnitAttrEffect;
@@ -523,6 +536,9 @@ const battleOptions: BattleOptions = {
 export const battle = (attackType: string, attacker: Combatant, defender: Combatant) => {
   // Initialize battle report
   const battleReport = newBattleReport(attacker, defender, attackType);
+  battleReport.result.attacker.startNetPower = totalNetPower(attacker.mage);
+  battleReport.result.defender.startNetPower = totalNetPower(defender.mage);
+
   const preBattle = battleReport.preBattle;
 
   let hasAttackerSpell = false;
@@ -1162,13 +1178,63 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     battleReport.isSuccessful = false;
     battleReport.result.isSuccessful = false;
   }
+
+
+  console.log('');
+  console.log('>> Applying postbattle report ');
+
+  // Calculate any post battle effects from enchantments or spells/items
+  for (const enchant of attacker.mage.enchantments) {
+    const spell = getSpellById(enchant.spellId);
+    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    if (postbattleEffects.length === 0) continue;
+
+    const origin = enchant2origin(enchant);
+
+    for (const postbattleEffect of postbattleEffects) {
+      // Win condition trigger check for a successful attack
+      if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
+
+      for (const effect of postbattleEffect.effects) {
+        console.log('>>>>> applying', effect.effectType);
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          postbattleEffect.target === 'self' ?
+            applyKingdomResourcesEffect(attacker.mage, effect as any, origin) :
+            applyKingdomResourcesEffect(defender.mage, effect as any, origin);
+        } else if (effect.effectType === 'StealEffect') {
+          applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
+        }
+      }
+    }
+  }
+
+  for (const enchant of defender.mage.enchantments) {
+    const spell = getSpellById(enchant.spellId);
+    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    if (postbattleEffects.length === 0) continue;
+
+    const origin = enchant2origin(enchant);
+
+    for (const postbattleEffect of postbattleEffects) {
+      // Win condition trigger check for a successful defend
+      if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === true) continue;
+
+      for (const effect of postbattleEffect.effects) {
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          postbattleEffect.target === 'self' ?
+            applyKingdomResourcesEffect(defender.mage, effect as any, origin) :
+            applyKingdomResourcesEffect(attacker.mage, effect as any, origin); 
+        } else if (effect.effectType === 'StealEffect') {
+          applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
+        }
+      }
+    }
+  }
+
   return battleReport;
 }
 
 export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: BattleReport) => {
-  battleReport.result.attacker.startNetPower = totalNetPower(attacker);
-  battleReport.result.defender.startNetPower = totalNetPower(defender);
-
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve army losses
   ////////////////////////////////////////////////////////////////////////////////

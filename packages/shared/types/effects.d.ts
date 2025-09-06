@@ -87,6 +87,12 @@ export interface BattleEffect extends Effect {
   effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect | TemporaryUnitEffect)[]
 }
 
+export interface PostbattleEffect extends Effect {
+  target: 'self' | 'opponent',
+  condition: 'win' | 'all';
+  effects: (KingdomResourcesEffect | StealEffect)[]
+}
+
 
 
 /**

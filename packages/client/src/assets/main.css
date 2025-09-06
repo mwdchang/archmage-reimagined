@@ -4,7 +4,7 @@
   max-width: 1280px;
   padding: 1rem;
   font-weight: normal;
-  line-height: 1.5rem;
+  line-height: 1.4rem;
 }
 
 a,
@@ -84,7 +84,8 @@ table > tr.active {
 
 .row {
   display: flex;
-  flex-direction: row; align-items: center;
+  flex-direction: row;
+  align-items: center;
   gap: 5px;
 }
 
@@ -94,9 +95,6 @@ table > tr.active {
   justify-content: center;
   gap: 5px;
 }
-
-
-
 
 
 /******************************************

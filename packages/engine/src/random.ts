@@ -32,7 +32,7 @@ export interface WeightEntry {
   value: number;
   weight: number;
 }
-export const randomWeighted = (weightEntries: WeightEntry[] | null) => {
+export const randomWeighted = (weightEntries?: WeightEntry[]) => {
 
   const table = weightEntries ? weightEntries : [
     { value: 0, weight: 50 },

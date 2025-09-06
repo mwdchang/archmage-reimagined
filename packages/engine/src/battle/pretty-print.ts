@@ -5,6 +5,8 @@ import { LPretty, RPretty } from "../util";
  * For debugging, pretty print BR report for console
 **/
 export const prettyPrintBR = (br: BattleReport) => {
+  console.log('');
+  console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
   console.log('== Battle Report ==');
 
   const attackerStr = `${br.attacker.name} (#${br.attacker.id})`;
@@ -116,7 +118,7 @@ export const prettyPrintBR = (br: BattleReport) => {
     console.log(``);
   })
   console.log('=== Power loss ===');
-  console.log(br.summary);
+  console.log(br.result);
 
   console.log('=== Battle result ===');
   console.log(`Success = ${br.isSuccessful}`);
