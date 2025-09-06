@@ -25,7 +25,7 @@ interface BattleReportTable {
 
 
 const DB_INIT = `
-  DROP VIEW IF EXISTS rank_view;
+  DROP MATERIALIZED VIEW IF EXISTS rank_view;
   DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
@@ -103,7 +103,7 @@ const DB_INIT = `
   COMMIT;
 
 
-  CREATE VIEW rank_view AS
+  CREATE MATERIALIZED VIEW rank_view AS
   WITH 
   recent_battles AS (
     SELECT
@@ -137,7 +137,7 @@ const DB_INIT = `
   )
   SELECT
     *,
-    RANK() OVER (ORDER BY net_power DESC) AS rank
+    ROW_NUMBER() OVER (ORDER BY net_power DESC) AS rank
   FROM
     rank_with_status;
 
@@ -176,6 +176,11 @@ export class PGliteDataAdapter extends DataAdapter {
   constructor() {
     super();
     this.db = new PGlite('./archmage-db');
+  }
+
+  // We need to refresh view occasionally
+  async refreshRankView() {
+    this.db.exec('REFRESH MATERIALIZED VIEW rank_view');
   }
 
   async initialize() {
@@ -239,6 +244,7 @@ INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
     } catch (err) {
       console.error(err);
     }
+    this.refreshRankView();
   }
 
   async updateMage(mage: Mage) {
@@ -256,10 +262,10 @@ WHERE id = ${mage.id}
     const mage: Mage = result.rows[0].mage;
 
     const mageRank = await this.db.query<MageRank>(`
-      select rank from rank_view where id = ${mage.id} limit 1
+      select * from rank_view where id = ${mage.id}
     `);
     mage.rank = mageRank.rows[0].rank; 
-
+    mage.status = mageRank.rows[0].status;
     return mage;
   }
 
@@ -273,17 +279,17 @@ WHERE id = ${mage.id}
     }
     const mage: Mage = result.rows[0].mage;
     const mageRank = await this.db.query<MageRank>(`
-      select rank from rank_view where id = ${mage.id} limit 1
+      select * from rank_view where id = ${mage.id}
     `);
     mage.rank = mageRank.rows[0].rank; 
+    mage.status = mageRank.rows[0].status;
 
     return mage;
   }
 
   async getAllMages() {
-    console.log('pglite: getAllMages');
     const result = await this.db.query<MageTable>(`
-SELECT mage from mage
+      SELECT mage from mage
     `);
     return result.rows.map(d => d.mage);
   }
@@ -417,6 +423,8 @@ SELECT mage from mage
       INSERT INTO battle_report(id, data) 
       VALUES (${Q(reportId)}, ${Q(JSON.stringify(report))})
     `);
+
+    this.refreshRankView();
   }
 
   async saveChronicles(data: ChronicleTurn[]): Promise<void> {
@@ -438,6 +446,7 @@ SELECT mage from mage
       VALUES ${valuePlaceholders}
     `;
     await this.db.query(insertSQL, values);
+    this.refreshRankView();
   }
 
   async getChronicles(options: SearchOptions): Promise<any[]> {
@@ -469,7 +478,6 @@ SELECT mage from mage
       sqlQuery += ` OFFSET ${options.from} `;
     }
 
-    console.log("SQL", sqlQuery);
     const result = await this.db.query<ChronicleTurn>(sqlQuery);
     return result.rows;
   }
@@ -485,6 +493,8 @@ SELECT mage from mage
       )
       WHERE (mage->>'currentTurn')::int <= ${options.maxTurn};
     `);
+    this.refreshRankView();
+
     /*
     await this.db.query(`
       UPDATE mage
