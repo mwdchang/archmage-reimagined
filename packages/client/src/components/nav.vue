@@ -52,7 +52,7 @@ const logout = async () => {
 onMounted(() => {
   // Open the side navigation
   document.getElementById("menu-toggle")!.onclick = function() {
-    document.getElementById("mySidenav")!.style.width = "150px";
+    document.getElementById("mySidenav")!.style.width = "140px";
   }
 
   // Close the side navigation
