@@ -19,7 +19,7 @@ import {
   currentSpellLevel,
   totalNetPower,
 } from './base/mage';
-import { BattleReport, BattleStack, BattleEffectLog, BattleLog } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -595,17 +595,21 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Prebattle spell effects
   if (hasAttackerSpell) {
     const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
+    preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
     const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+    preBattle.logs.push(...battleSpellLogs);
   }
 
   // Prebattle item effects
   if (hasAttackerItem) {
     const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'PrebattleEffect');
+    preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderItem) {
     const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'PrebattleEffect');
+    preBattle.logs.push(...battleItemLogs);
   }
 
   
@@ -827,7 +831,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           defendingStack.size -= defenderUnitLoss;
           defendingStack.loss += defenderUnitLoss;
 
-          battleReport.battleLogs.push({
+          battleReport.engagement.logs.push({
             type: `burst`,
             attacker: {
               id: attackingMage.id,
@@ -871,7 +875,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-      const battleLog: BattleLog = {
+      const battleLog: EngagementLog = {
         type: 'primary',
         attacker: {
           id: attackingMage.id,
@@ -903,7 +907,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attackingStack.loss -= newUnits;
         battleLog.attacker.unitsLoss -= newUnits;
       }
-      battleReport.battleLogs.push(battleLog);
+      battleReport.engagement.logs.push(battleLog);
 
       // Additonal Strike ability
       if (hasAbility(aUnit, 'additionalStrike')) {
@@ -925,7 +929,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
 
         console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-        const battleLog: BattleLog = {
+        const battleLog: EngagementLog = {
           type: 'additionalStrike',
           attacker: {
             id: attackingMage.id,
@@ -957,7 +961,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           attackingStack.loss -= newUnits;
           battleLog.attacker.unitsLoss -= newUnits;
         }
-        battleReport.battleLogs.push(battleLog);
+        battleReport.engagement.logs.push(battleLog);
       } // end Additional Strike
 
 
@@ -995,7 +999,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
-        const battleLog: BattleLog = {
+        const battleLog: EngagementLog = {
           type: 'counter',
           attacker: {
             id: attackingMage.id,
@@ -1028,7 +1032,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           battleLog.defender.unitsLoss -= newUnits;
         }
 
-        battleReport.battleLogs.push(battleLog);
+        battleReport.engagement.logs.push(battleLog);
       }
 
       // Fatigue
@@ -1064,7 +1068,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
 
-      battleReport.battleLogs.push({
+      battleReport.engagement.logs.push({
         type: 'secondary',
         attacker: {
           id: attackingMage.id,
@@ -1096,7 +1100,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Attacker healing
   attackingArmy.forEach(stack => {
     if (stack.loss < 0) {
-      battleReport.postBattleLogs.push({
+      battleReport.postBattle.unitSummary.push({
         id: attacker.mage.id,
         unitId: stack.unit.id,
         unitsLoss: 0,
@@ -1113,7 +1117,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     stack.loss -= totalUnitsHealed;
     stack.size += totalUnitsHealed;
 
-    battleReport.postBattleLogs.push({
+    battleReport.postBattle.unitSummary.push({
       id: attacker.mage.id,
       unitId: stack.unit.id,
       unitsLoss: startingStackLoss,
@@ -1124,7 +1128,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Defender healing
   defendingArmy.forEach(stack => {
     if (stack.loss < 0) {
-      battleReport.postBattleLogs.push({
+      battleReport.postBattle.unitSummary.push({
         id: defender.mage.id,
         unitId: stack.unit.id,
         unitsLoss: 0,
@@ -1141,7 +1145,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     stack.loss -= totalUnitsHealed;
     stack.size += totalUnitsHealed;
 
-    battleReport.postBattleLogs.push({
+    battleReport.postBattle.unitSummary.push({
       id: defender.mage.id,
       unitId: stack.unit.id,
       unitsLoss: startingStackLoss,

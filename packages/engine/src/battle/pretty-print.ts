@@ -77,12 +77,12 @@ export const prettyPrintBR = (br: BattleReport) => {
 
   console.log('');
   for (const log of br.preBattle.logs) {
-    console.log(log);
+    console.log(`#${log.id}'s ${log.value} ${log.unitId} are slain`);
   }
   console.log('');
   console.log('=== Assault note ===');
 
-  br.battleLogs.forEach(entry => {
+  br.engagement.logs.forEach(entry => {
     const aId = entry.attacker.id;
     const dId = entry.defender.id;
 
@@ -112,7 +112,7 @@ export const prettyPrintBR = (br: BattleReport) => {
   })
 
   console.log('=== Assault result ===');
-  br.postBattleLogs.forEach(entry => {
+  br.postBattle.unitSummary.forEach(entry => {
     console.log(`${mageMap[entry.id]}'s ${entry.unitsLoss} ${entry.unitId} where slain during battle`);
     console.log(`${mageMap[entry.id]}'s ${entry.unitsHealed} ${entry.unitId} are resurrected from death`);
     console.log(``);

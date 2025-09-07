@@ -106,7 +106,7 @@
     <br>
 
     <h3 class="section-header">Assault</h3>
-    <div v-for="(log, idx) of report.battleLogs" :key="idx" class="br-row">
+    <div v-for="(log, idx) of report.engagement.logs" :key="idx" class="br-row">
       <!--{{ log }}-->
       <div v-if="log.type === 'primary' || log.type === 'secondary'">
         <p>
@@ -157,12 +157,12 @@
           {{ nameById(log.defender.id) }} {{ log.defender.unitsLoss }} {{ log.defender.unitId }}
         </p>
       </div>
-      <div v-if="checkGap(report.battleLogs[idx], report.battleLogs[idx+1])" style="margin-bottom: 0.5rem" />
+      <div v-if="checkGap(report.engagement.logs[idx], report.engagement.logs[idx+1])" style="margin-bottom: 0.5rem" />
     </div>
     <br>
 
     <h3 class="section-header">Assault Result</h3>
-    <div v-for="(log, idx) of report.postBattleLogs" :key="idx" class="br-row">
+    <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx" class="br-row">
       <p>
         {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ log.unitId }} were slain in battle
       </p>
@@ -205,7 +205,7 @@ import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { readableStr } from '@/util/util';
-import type { BattleLog, BattleReport } from 'shared/types/battle';
+import type { EngagementLog, BattleReport } from 'shared/types/battle';
 
 const props = defineProps<{ id: string }>();
 const report = ref<BattleReport|null>(null);
@@ -229,7 +229,7 @@ const nameById = (id: number) => {
 };
 
 // Make the battle report easier to read
-const checkGap = (curr: BattleLog | null, next: BattleLog | null) => {
+const checkGap = (curr: EngagementLog | null, next: EngagementLog | null) => {
   if (curr && next) {
     if (next.type === 'counter') return false;
     return true;

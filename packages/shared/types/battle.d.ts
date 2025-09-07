@@ -74,7 +74,7 @@ export interface BattleEffectLog {
   value: any
 }
 
-export interface BattleLog {
+export interface EngagementLog {
   type: string,
   attacker: {
     id: number,
@@ -121,14 +121,29 @@ export interface BattleReport {
     logs: BattleEffectLog[]
   },
 
-  battleLogs: BattleLog[],
+  engagement: {
+    logs: EngagementLog[]
+  },
 
+  postBattle: {
+    unitSummary: {
+      id: number,
+      unitId: string,
+      unitsLoss: number,
+      unitsHealed: number
+    }[],
+
+    logs: string[]
+  },
+
+  /*
   postBattleLogs: {
     id: number,
     unitId: string,
     unitsLoss: number,
     unitsHealed: number
   }[],
+  */
 
   result: {
     isSuccessful: boolean;
