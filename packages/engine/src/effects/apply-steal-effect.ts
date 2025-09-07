@@ -56,6 +56,17 @@ export const applyStealEffect = (
     } else if (effect.target === 'item') {
       lossValue = base
     }
+  } else if (effect.rule === 'addPercentage') {
+    if (effect.target === 'geld') {
+      lossValue = Math.floor(base * targetMage.currentGeld);
+      lossValue = Math.min(targetMage.currentGeld, lossValue);
+    } else if (effect.target === 'mana') {
+      lossValue = Math.floor(base * targetMage.currentMana);
+      lossValue = Math.min(targetMage.currentMana, lossValue);
+    } else if (effect.target === 'item') {
+      lossValue = base
+    }
+    console.log('!!!!!!!!!!!!!!!1', base, targetMage.currentGeld);
   } else {
     throw new Error(`Unable to process ${effect.rule} for ${origin.spellId}`);
   }

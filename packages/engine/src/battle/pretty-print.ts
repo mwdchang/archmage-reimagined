@@ -117,6 +117,13 @@ export const prettyPrintBR = (br: BattleReport) => {
     console.log(`${mageMap[entry.id]}'s ${entry.unitsHealed} ${entry.unitId} are resurrected from death`);
     console.log(``);
   })
+  console.log('');
+
+  console.log('=== Post battle logs ===');
+  br.postBattle.logs.forEach(entry => {
+    console.log(entry);
+  });
+
   console.log('=== Power loss ===');
   console.log(br.result);
 

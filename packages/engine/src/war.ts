@@ -7,7 +7,10 @@ import {
   BattleEffect,
   EffectOrigin,
   TemporaryUnitEffect,
-  PostbattleEffect
+  PostbattleEffect,
+  StealEffect,
+  AllowedMagic,
+  Effect
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
@@ -37,6 +40,7 @@ import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
+import Stream from 'node:stream';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -521,7 +525,34 @@ const battleOptions: BattleOptions = {
   useUnlimitedResources: true
 };
 
-// TODO: Redo report structure
+
+export const successPillage = (attacker: Combatant, defender: Combatant) => {
+  const battleReport = newBattleReport(attacker, defender, 'pillage');
+  const army = attacker.army[0];
+
+  const mage = attacker.mage;
+  const origin: EffectOrigin = {
+    id: mage.id,
+    magic: mage.magic,
+    spellLevel: currentSpellLevel(mage),
+    targetId: defender.mage.id
+  };
+
+  const stealEffect: StealEffect = {
+    effectType: 'StealEffect',
+    rule: 'addPercentage',
+    target: 'geld',
+    magic: {
+      [mage.magic]: { value: { min: 0.02, max: 0.06, stealPercent: 1.0 } }
+    }
+  };
+
+  const r = applyStealEffect(mage, stealEffect, origin, defender.mage);
+  battleReport.postBattle.logs.push(r);
+
+  return battleReport;
+}
+
 
 /**
  * Handles siege and regular battles. The battle phase goes as follows
@@ -533,9 +564,9 @@ const battleOptions: BattleOptions = {
  * - Calculte battle order
  * - Calculate healing factors
 **/
-export const battle = (attackType: string, attacker: Combatant, defender: Combatant) => {
+export const battle = (battleType: string, attacker: Combatant, defender: Combatant) => {
   // Initialize battle report
-  const battleReport = newBattleReport(attacker, defender, attackType);
+  const battleReport = newBattleReport(attacker, defender, battleType);
   battleReport.result.attacker.startNetPower = totalNetPower(attacker.mage);
   battleReport.result.defender.startNetPower = totalNetPower(defender.mage);
 
@@ -646,7 +677,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Apply fort bonus to defender
   if (battleOptions.useFortBonus === true) {
-    const base = calcFortBonus(defender.mage, attackType);
+    const base = calcFortBonus(defender.mage, battleType);
     defendingArmy.forEach(stack => {
       stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
     });
@@ -749,6 +780,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const targetIdx = attackingStack.targetIdx;
     const defendingStack = side === 'attacker' ? defendingArmy[targetIdx] : attackingArmy[targetIdx];
 
+
+    // In a pillage attacker cannot engage
+    if (side === 'attacker' && battleType === 'pillage') {
+      console.log('\t', i, `${side}: ${attackingStack.unit.name}(${attackingStack.accuracy}) attacks:${attackType} ${defendingStack.unit.name} ... skipping`);
+      continue;
+    }
+
     console.log('\t', i, `${side}: ${attackingStack.unit.name}(${attackingStack.accuracy}) attacks:${attackType} ${defendingStack.unit.name}`);
 
     const aUnit = attackingStack.unit;
@@ -763,7 +801,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (defendingStack.size <= 0) continue;
 
       // Resolve burst
-      if (hasAbility(dUnit, 'bursting')) {
+      const isPillage = side === 'defender' && battleType === 'pillage';
+      if (hasAbility(dUnit, 'bursting') && isPillage === true) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {
@@ -971,6 +1010,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       } else if (aUnit.primaryAttackType.includes('ranged')) {
         // Cannot counter ranged
       } else if (defendingStack.size > 0 && attackingStack.size > 0) {
+
+        if (battleType === 'pillage' && side === 'defender') continue;
+
         // Execute counter
         let accuracy = defendingStack.accuracy + calcAccuracyModifier(dUnit, aUnit);
         let resistance = calcResistance(aUnit, dUnit.primaryAttackType);
@@ -1175,6 +1217,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   brD.unitsLoss = battleSummary.defender.unitsLoss;
   brD.armyLoss = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
+  // Pillage has no further effects to run, stop and return here
+  if (battleReport.attackType === 'pillage') {
+    battleReport.isSuccessful = false;
+    battleReport.result.isSuccessful = false;
+    return battleReport;
+  }
+
   if (brA.armyNetPowerLoss < brD.armyNetPowerLoss && brD.armyNetPowerLoss >= 0.1 * brD.armyNetPower) {
     battleReport.isSuccessful = true;
     battleReport.result.isSuccessful = true;
@@ -1182,7 +1231,6 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     battleReport.isSuccessful = false;
     battleReport.result.isSuccessful = false;
   }
-
 
   console.log('');
   console.log('>> Applying postbattle report ');
@@ -1271,6 +1319,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
     battleReport.result.defender.endNetPower = totalNetPower(defender);
     return;
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve land losses

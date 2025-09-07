@@ -12,10 +12,10 @@ import {
 } from './base/references';
 import {
   createMage,
-  createMageTest,
   totalLand,
   totalNetPower,
-  currentSpellLevel
+  currentSpellLevel,
+  totalUnits
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
@@ -49,7 +49,7 @@ import {
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
-import { battle, resolveBattle } from './war';
+import { battle, pillage, resolveBattle, successPillage } from './war';
 import {
   UnitSummonEffect,
   KingdomBuildingsEffect,
@@ -78,6 +78,8 @@ import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
+import { calcPillageProbability } from './battle/calc-pillage-probability';
+
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
@@ -596,7 +598,6 @@ class Engine {
         castingSuccessful = false;
       }
 
-
       if (target) {
         // FIXME: target barriers if applicable
       }
@@ -866,9 +867,11 @@ class Engine {
   async disbandUnits(mage: Mage, payload: { [key: string]: ArmyUnit }) {
     mage.army.forEach(armyUnit => {
       const u = payload[armyUnit.id];
-      // FIXME: need to check undisbandable
-      if (u) {
+      const unit = getUnitById(u.id);
+
+      if (u && unit.attributes.includes('undisbandable') === false) {
         armyUnit.size -= u.size;
+        armyUnit.size = Math.max(0, armyUnit.size);
       }
     });
     mage.army = mage.army.filter(d => d.size > 0);
@@ -878,22 +881,6 @@ class Engine {
 
   async rankList(_listingType: string): Promise<MageRank[]> {
     return this.adapter.getRankList();
-    /*
-    const mages = await this.adapter.getAllMages();
-
-    const ranks = mages.map(mage => {
-      return {
-        id: mage.id,
-        name: mage.name,
-        magic: mage.magic,
-        forts: mage.forts,
-        land: totalLand(mage),
-        status: mage.status,
-        netPower: totalNetPower(mage)
-      }
-    });
-    return _.orderBy(ranks, d => -d.netPower);
-    */
   }
 
   async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
@@ -906,11 +893,42 @@ class Engine {
     if (defenderMage.status === 'defeated') {
       errors.push('Target mage is already defeated');
     }
-    // TODO: Check damaged status
+    if (defenderMage.status === 'damaged') {
+      errors.push('Target mage is in damaged status');
+    }
     return errors;
   }
 
-  async doBattle(mage: Mage, targetId: number, stackIds: string[], spellId: string, itemId: string) {
+
+  /*
+  async doPillage(mage: Mage, targetId: number, stackId: string) {
+    // 1. Calculte if success or not
+    // 2. Engage if caught
+    // 3. Calculate pillage damage
+    const targetMage = await this.getMage(targetId);
+    
+    const pillageArmy = mage.army.find(d => d.id === stackId);
+    if (!pillageArmy) {
+      // error
+      return;
+    }
+
+    const unit = getUnitById(pillageArmy.id)
+    const pillageArmySize = pillageArmy.size;
+    const defenderArmySize = totalUnits(targetMage);
+
+    console.log('!!!'); 
+  }
+  */
+
+  async doBattle(
+    mage: Mage, 
+    targetId: number, 
+    battleType: 'siege' | 'regular' | 'pillage', 
+    stackIds: string[], 
+    spellId: string, 
+    itemId: string
+  ) {
     const defenderMage = await this.getMage(targetId);
     const MAX_STACKS = 10;
 
@@ -925,6 +943,7 @@ class Engine {
     };
 
     // For defender, the army is formed by up to 10 stacks sorted by modified power rank
+    //  FIXME: For pillage order by stack size instead of stack power
     const dBattleStackIds = prepareBattleStack(defenderMage.army, 'defender')
       .map(d => { return d.unit.id; })
       .slice(0, MAX_STACKS);
@@ -936,26 +955,47 @@ class Engine {
       army: defenderArmy
     };
 
-    // Check if defense assignment is triggered
-    const attackerArmyNP = totalArmyPower(attacker.army);
-    const defenderArmyNP = totalArmyPower(defender.army);
-    const ratio = 100 * (attackerArmyNP / defenderArmyNP);
 
-    console.log('Attacker to defender army ratio', ratio.toFixed(4));
+    // Check if pillage is successful
+    if (battleType === 'pillage') {
+    } else {
+      // Check if defense assignment is triggered
+      const attackerArmyNP = totalArmyPower(attacker.army);
+      const defenderArmyNP = totalArmyPower(defender.army);
+      const ratio = 100 * (attackerArmyNP / defenderArmyNP);
 
-    const assignment = defender.mage.assignment;
+      console.log('Attacker to defender army ratio', ratio.toFixed(4));
 
-    if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
-      defender.spellId = assignment.spellId;
+      const assignment = defender.mage.assignment;
+      if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
+        defender.spellId = assignment.spellId;
+      }
+      if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
+        defender.itemId = assignment.itemId;
+      }
     }
-    if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
-      defender.itemId = assignment.itemId;
+
+    let isPillageSuccess = false;
+    if (battleType === 'pillage') {
+      const defenderLand = totalLand(defenderMage)
+      const defenderArmySize = totalUnits(defenderMage);
+      const attackerAmrySize = attackerArmy[0].size;
+      const rate = calcPillageProbability(
+        attackerAmrySize,
+        defenderArmySize,
+        defenderLand
+      )
+      isPillageSuccess = Math.random() <= rate;
     }
+
 
     // FIXME: need to model order, right now
     // we take one turn to go attack, and one turn to return home ???
     await this.useTurn(mage);
-    const battleReport = battle('siege', attacker, defender);
+    const battleReport = isPillageSuccess === false? 
+      battle(battleType, attacker, defender):
+      successPillage(attacker, defender);
+
     resolveBattle(mage, defenderMage, battleReport);
     await this.useTurn(mage);
 
@@ -992,12 +1032,7 @@ class Engine {
     reportSummary.attackerPowerLossPercentage = reportSummary.attackerPowerLoss / result.attacker.startNetPower;
     reportSummary.defenderPowerLossPercentage = reportSummary.defenderPowerLoss / result.defender.startNetPower;
 
-    // Noramlize
-
-
-    /** Handle epidemic enchantments **/
- 
-    // attacker to defender
+    // epidemic: attacker to defender
     mage.enchantments.forEach(enchantment => {
       if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
         const existingEnchantment = defenderMage.enchantments.find(d => {
@@ -1009,7 +1044,7 @@ class Engine {
       }
     });
 
-    // defender to attacker
+    // epidemic: defender to attacker
     defenderMage.enchantments.forEach(enchantment => {
       if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
         const existingEnchantment = mage.enchantments.find(d => {

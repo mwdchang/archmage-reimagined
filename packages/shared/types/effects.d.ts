@@ -260,10 +260,10 @@ export interface WishEffect extends Effect {
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/
 export interface StealEffect extends Effect {
-  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage',
+  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage' | 'addPercentage',
   target: 'mana' | 'geld' | 'item',
   magic: {
-    [key in AllowedMagic]: {
+    [key in AllowedMagic]?: {
       value: { min: number, max: number, stealPercent: number | null }
     }
   }
