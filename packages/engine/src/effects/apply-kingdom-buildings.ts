@@ -5,6 +5,14 @@ import { between } from "../random";
 import { getBuildingTypes } from "../interior";
 import { totalLand } from "../base/mage";
 
+
+export interface KingdomBuildingsEffectResult {
+  effectType: 'KingdomBuildingsEffect',
+  id: number,
+  name: string,
+  buildings: { [key: string]: number }
+}
+
 export const applyKingdomBuildingsEffect = (
   mage: Mage,
   effect: KingdomBuildingsEffect,
@@ -15,6 +23,13 @@ export const applyKingdomBuildingsEffect = (
   const maxSpellLevel = getMaxSpellLevels()[magic];
   const spellPowerScale = spellLevel / maxSpellLevel;
   const mageLand = totalLand(mage);
+
+  const result: KingdomBuildingsEffectResult = {
+    effectType: 'KingdomBuildingsEffect',
+    id: mage.id,
+    name: mage.name,
+    buildings: {}
+  };
 
   if (effect.rule === 'landPercentageLoss') {
     const { min, max } = effect.magic[magic].value as { min: number, max: number };
@@ -55,8 +70,12 @@ export const applyKingdomBuildingsEffect = (
       mage[buildingType] -= buffer[buildingType];
       mage['wilderness'] += buffer[buildingType];
 
-      // FIXME:logging
+      result.buildings[buildingType] = buffer[buildingType];
       console.log(`mage(#${mage.id}) ${buffer[buildingType]} ${buildingType} destroyed`);
     }
+  } else {
+    throw new Error(`${effect.rule} not found for KingdomBuildingsEffect`);
   }
+
+  return result;
 };
