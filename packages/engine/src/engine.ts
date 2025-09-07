@@ -1072,34 +1072,12 @@ class Engine {
     });
   }
 
-  async register(username: string, password: string, magic: string) {
+  async register(username: string, password: string, magic: string, override?: Partial<Mage>) {
     // 1. register player
     const res = await this.adapter.register(username, password);
 
     // 2. return mage
-    const mage = createMage(username, magic);
-
-    // 3. Write to data store
-    this.adapter.createMage(username, mage);
-    this.adapter.createRank({
-      id: mage.id,
-      name: mage.name,
-      magic: mage.magic,
-      forts: mage.forts,
-      land: totalLand(mage),
-      status: '',
-      netPower: totalNetPower(mage)
-    });
-    return { user: res.user, mage };
-  }
-
-  /* For ease of testing */
-  async registerTestMage(username: string, password: string, magic: string, partial: Partial<Mage>) {
-    // 1. register player
-    const res = await this.adapter.register(username, password);
-
-    // 2. return mage
-    const mage = createMageTest(username, magic, partial);
+    const mage = createMage(username, magic, override);
 
     // 3. Write to data store
     this.adapter.createMage(username, mage);

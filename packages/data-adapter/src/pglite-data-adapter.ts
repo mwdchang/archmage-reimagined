@@ -491,7 +491,7 @@ WHERE id = ${mage.id}
           '{currentTurn}',
           ((mage->>'currentTurn')::int + 1)::text::jsonb
       )
-      WHERE (mage->>'currentTurn')::int <= ${options.maxTurn};
+      WHERE (mage->>'currentTurn')::int < ${options.maxTurn};
     `);
     this.refreshRankView();
 
