@@ -4,6 +4,19 @@ import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
 import { doItemDestruction } from "../magic";
 
+
+export interface StealEffectResult {
+  effectType: 'StealEffect',
+  id: number,
+  name: string,
+  targetId: number,
+  targetName: string,
+
+  target: string,
+  lossValue: number,
+  stealValue: number
+}
+
 export const applyStealEffect = (
   mage: Mage,
   effect: StealEffect,
@@ -75,4 +88,17 @@ export const applyStealEffect = (
       console.log(`You stole ${itemId} from ${targetMage.id}`);
     }
   }
+
+  const r: StealEffectResult = {
+    effectType: 'StealEffect',
+    id: mage.id,
+    name: mage.name,
+    targetId: targetMage.id,
+    targetName: targetMage.name,
+
+    target: effect.target,
+    lossValue: lossValue,
+    stealValue: stealValue
+  };
+  return r
 }

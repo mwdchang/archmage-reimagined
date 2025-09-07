@@ -1200,13 +1200,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
 
       for (const effect of postbattleEffect.effects) {
-        console.log('>>>>> applying', effect.effectType);
         if (effect.effectType === 'KingdomResourcesEffect') {
           postbattleEffect.target === 'self' ?
             applyKingdomResourcesEffect(attacker.mage, effect as any, origin) :
             applyKingdomResourcesEffect(defender.mage, effect as any, origin);
         } else if (effect.effectType === 'StealEffect') {
-          applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
+          const r = applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
+          battleReport.postBattle.logs.push(r);
         }
       }
     }
@@ -1229,7 +1229,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
             applyKingdomResourcesEffect(defender.mage, effect as any, origin) :
             applyKingdomResourcesEffect(attacker.mage, effect as any, origin); 
         } else if (effect.effectType === 'StealEffect') {
-          applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
+          const r = applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
+          battleReport.postBattle.logs.push(r);
         }
       }
     }

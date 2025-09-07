@@ -1,8 +1,18 @@
 import { EffectOrigin, WishEffect } from "shared/types/effects";
 import { Mage } from "shared/types/mage";
-import { between, betweenInt, randomWeighted, WeightEntry } from "../random";
-import { doItemGeneration } from "../magic";
+import { betweenInt, randomWeighted, WeightEntry } from "../random";
 import { getRandomItem } from "../base/references";
+
+
+export interface WishEffectResult {
+  effectType: 'WishEffect',
+  id: number,
+  name: string,
+  results: {
+    target?: string,
+    value?: number,
+  }[]
+}
 
 export const applyWishEffect = (
   mage: Mage,
@@ -30,6 +40,13 @@ export const applyWishEffect = (
   }
   weightTable.sort((a, b) => b.weight - a.weight);
 
+  const wishResult: WishEffectResult = {
+    effectType: 'WishEffect',
+    id: mage.id,
+    name: mage.name,
+    results: []
+  }
+
   // apply
   for (let i = 0; i < num; i++) {
     const index = randomWeighted(weightTable);
@@ -42,24 +59,44 @@ export const applyWishEffect = (
         value = -mage.currentGeld;
       }
       mage.currentGeld += value;
+
+      wishResult.results.push({
+        target: 'geld', 
+        value: value
+      });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} geld`);
     } else if (target === 'mana') {
       if (mage.currentMana + value < 0) {
         value = -mage.currentMana;
       }
       mage.currentMana += value;
+
+      wishResult.results.push({
+        target: 'mana', 
+        value: value
+      });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} mana`);
     } else if (target === 'population') {
       if (mage.currentPopulation + value < 0) {
         value = -mage.currentPopulation;
       }
       mage.currentPopulation += value;
+
+      wishResult.results.push({
+        target: 'population', 
+        value: value
+      });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} population`);
     } else if (target === 'turn') {
       if (mage.currentTurn + value < 0) {
         value = -mage.currentTurn;
       }
       mage.currentTurn += value;
+      
+      wishResult.results.push({
+        target: 'turn', 
+        value: value
+      });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} turns`);
     } else if (target === 'item') {
       const item = getRandomItem();
@@ -70,12 +107,22 @@ export const applyWishEffect = (
           mage.items[item.id] ++;
         }
       }
+
+      wishResult.results.push({
+        target: item.id,
+        value: value
+      });
       console.log(`You gained ${Math.abs(value)} ${item.id}`);
     } else if (target === null) {
+      wishResult.results.push({
+        target: null,
+        value: null
+      });
       console.log('nothing happened');
     } else {
       throw new Error(`Wish target ${target} not supported`);
     }
   }
+  return wishResult;
 }
 
