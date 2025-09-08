@@ -16,6 +16,7 @@ import { between, betweenInt, randomBM, randomInt, randomWeighted } from './rand
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
+    calcKingdomResistance,
   castingCost
 } from './magic';
 import { 
@@ -517,12 +518,14 @@ export interface BattleOptions {
   useFortBonus: boolean,
   useEnchantments: boolean,
   useUnlimitedResources: boolean,
+  useBarriers: boolean
 }
 
 const battleOptions: BattleOptions = {
   useFortBonus: true,
   useEnchantments: true,
-  useUnlimitedResources: true
+  useUnlimitedResources: false,
+  useBarriers: true
 };
 
 
@@ -576,14 +579,29 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   let hasAttackerItem = false;
   let hasDefenderSpell = false;
   let hasDefenderItem = false;
+  const kingdomResistances = calcKingdomResistance(defender.mage);
 
-  // TODO: check barriers and success
+  /**
+   * Check if spell and item pass barriers
+   * - spell goes throw two stages: barrier resist and magic resist.
+   * - item goes through only barrier resist
+  **/
   if (attacker.spellId) {
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
+      const spell = getSpellById(attacker.spellId);
       attacker.mage.currentMana -= cost;
-      preBattle.attacker.spellResult = 'success';
-      hasAttackerSpell = true;
+
+      if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+        preBattle.attacker.spellResult = 'barriers';
+      } else {
+        if (Math.random() <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+          preBattle.attacker.spellResult = 'barriers';
+        } else {
+          preBattle.attacker.spellResult = 'success';
+          hasAttackerSpell = true;
+        }
+      }
     } else {
       preBattle.attacker.spellResult = 'noMana';
     }
@@ -591,8 +609,13 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   if (attacker.itemId) {
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
-      preBattle.attacker.itemResult = 'success';
-      hasAttackerItem = true
+
+      if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+        preBattle.attacker.itemResult = 'barriers';
+      } else {
+        preBattle.attacker.itemResult = 'success';
+        hasAttackerItem = true
+      }
     } else {
       preBattle.attacker.itemResult = 'noItem';
     }

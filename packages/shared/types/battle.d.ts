@@ -64,8 +64,8 @@ export interface BattleReportSummary {
 
 
 
-export type BattleSpellResult = 'success' | 'lostConcentration' | 'barrier' | 'reflected' | 'noMana' | null;
-export type BattleItemResult = 'success' | 'barrier' | 'noItem' | null; 
+export type BattleSpellResult = 'success' | 'lostConcentration' | 'barriers' | 'reflected' | 'noMana' | null;
+export type BattleItemResult = 'success' | 'barriers' | 'noItem' | null; 
 
 export interface BattleEffectLog {
   id: number,
@@ -133,7 +133,7 @@ export interface BattleReport {
       unitsHealed: number
     }[],
 
-    logs: string[]
+    logs: any[]
   },
 
   /*

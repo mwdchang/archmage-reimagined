@@ -66,7 +66,6 @@ export const applyStealEffect = (
     } else if (effect.target === 'item') {
       lossValue = base
     }
-    console.log('!!!!!!!!!!!!!!!1', base, targetMage.currentGeld);
   } else {
     throw new Error(`Unable to process ${effect.rule} for ${origin.spellId}`);
   }

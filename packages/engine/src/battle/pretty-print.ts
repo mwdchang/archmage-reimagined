@@ -70,9 +70,21 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log('');
   console.log('=== Engage ===');
   console.log(`${attackerStr} casts ${br.attacker.spellId}`);
+  if (br.preBattle.attacker.spellResult == 'noMana') {
+    console.log('Not enough mana to cast spell');
+  }
+  if (br.preBattle.attacker.spellResult == 'barriers') {
+    console.log('The spell hit the barriers and fizzled');
+  }
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
+  if (br.preBattle.attacker.itemResult == 'barriers') {
+    console.log('The item hit the barriers and fizzled');
+  }
 
   console.log(`${defenderStr} casts ${br.defender.spellId}`);
+  if (br.preBattle.defender.spellResult == 'noMana') {
+    console.log('Not enough mana to cast spell');
+  }
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
 
   console.log('');
