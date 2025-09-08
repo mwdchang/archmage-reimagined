@@ -69,18 +69,21 @@
           <router-link :to="{ name: 'viewSpell', params: { id: report.attacker.spellId }}">
             {{ readableStr(report.attacker.spellId) }}
           </router-link>
-          <span v-if="report.preBattle.attacker.spellResult !== 'success'">
-          &nsp; spell failed.
-          </span>
+          <div v-if="preBattle.attacker.spellResult === 'barriers'">
+            The spell hit barriers and fizzled.
+          </div>
+          <div v-if="preBattle.attacker.spellResult === 'noMana'">
+            Not enough mana to cast the spell
+          </div>
         </div>
         <div v-if="report.attacker.itemId">
           {{ attackerStr }} uses 
           <router-link :to="{ name: 'viewItem', params: { id: report.attacker.itemId }}">
             {{ readableStr(report.attacker.itemId) }}
           </router-link>
-          <span v-if="report.preBattle.attacker.itemResult !== 'success'">
-          &nsp; item failed.
-          </span>
+          <div v-if="preBattle.attacker.itemResult === 'barriers'">
+            The item hit barriers and fizzled.
+          </div>
         </div>
       </div>
       <div>
@@ -89,7 +92,7 @@
           <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
             {{ readableStr(report.defender.spellId) }}
           </router-link>
-          <span v-if="report.preBattle.defender.spellResult !== 'success'">
+          <span v-if="preBattle.defender.spellResult !== 'success'">
           &nsp; spell failed.
           </span>
         </div>
@@ -98,7 +101,7 @@
           <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
            {{ readableStr(report.defender.itemId) }}
           </router-link>
-          <span v-if="report.preBattle.defender.itemResult !== 'success'">
+          <span v-if="preBattle.defender.itemResult !== 'success'">
           &nsp; item failed.
           </span>
         </div>
@@ -209,6 +212,10 @@ import type { EngagementLog, BattleReport } from 'shared/types/battle';
 
 const props = defineProps<{ id: string }>();
 const report = ref<BattleReport|null>(null);
+
+const preBattle = computed(() => {
+  return report.value?.preBattle!;
+});
 
 const attackerStr = computed(() => {
   if (!report.value) return '';

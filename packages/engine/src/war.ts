@@ -17,7 +17,8 @@ import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
     calcKingdomResistance,
-  castingCost
+  castingCost,
+  successCastingRate
 } from './magic';
 import { 
   currentSpellLevel,
@@ -592,7 +593,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       const spell = getSpellById(attacker.spellId);
       attacker.mage.currentMana -= cost;
 
-      if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      const castingRate = successCastingRate(attacker.mage, attacker.spellId);
+      if (Math.random() * 100 > castingRate) {
+        preBattle.attacker.spellResult = 'lostConcentration';
+      } else if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.spellResult = 'barriers';
       } else {
         if (Math.random() <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
@@ -625,6 +629,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     const cost = castingCost(defender.mage, defender.spellId);
     if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
+
+      const castingRate = successCastingRate(defender.mage, defender.spellId);
+      if (Math.random() * 100 > castingRate) {
+        preBattle.defender.spellResult = 'lostConcentration';
+      }
       preBattle.defender.spellResult = 'success';
       hasDefenderSpell = true;
     } else {

@@ -61,7 +61,7 @@
             </div>
           </td> 
           <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.barrier) }} 
+            {{ numberFormatter(resistanceStatus.barriers) }} 
           </td>
         </tr>
         <tr>

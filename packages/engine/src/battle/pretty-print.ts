@@ -76,6 +76,11 @@ export const prettyPrintBR = (br: BattleReport) => {
   if (br.preBattle.attacker.spellResult == 'barriers') {
     console.log('The spell hit the barriers and fizzled');
   }
+  if (br.preBattle.attacker.spellResult == 'lostConcentration') {
+    console.log('Lost concentration');
+  }
+
+
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
   if (br.preBattle.attacker.itemResult == 'barriers') {
     console.log('The item hit the barriers and fizzled');
@@ -84,6 +89,9 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log(`${defenderStr} casts ${br.defender.spellId}`);
   if (br.preBattle.defender.spellResult == 'noMana') {
     console.log('Not enough mana to cast spell');
+  }
+  if (br.preBattle.defender.spellResult === 'lostConcentration') {
+    console.log('Lost concentration');
   }
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
 
