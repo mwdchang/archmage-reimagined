@@ -2,8 +2,15 @@ import { EffectOrigin, KingdomArmyEffect } from "shared/types/effects";
 import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels, getUnitById } from "../base/references";
 import { between, randomBM } from "../random";
-import { doItemDestruction, doItemGeneration } from "../magic";
 import { matchesFilter } from "../base/unit";
+
+
+export interface KingdomArmyEffectResult {
+  effectType: 'KingdomArmyEffect',
+  id: number,
+  name: string,
+  army: { [key: string]: number }
+};
 
 export const applyKingdomArmyEffect = (
   mage: Mage,
@@ -43,6 +50,13 @@ export const applyKingdomArmyEffect = (
     });
   }
 
+  const result: KingdomArmyEffectResult = {
+    effectType: 'KingdomArmyEffect',
+    id: mage.id,
+    name: mage.name,
+    army: {}
+  };
+
   // Apply
   const rule = effect.rule;
   for (const armyUnit of filteredArmy) {
@@ -52,7 +66,8 @@ export const applyKingdomArmyEffect = (
         value = - armyUnit.size;
       }
       armyUnit.size += value;
-      
+      result.army[armyUnit.id] = value;
+
       if (value < 0) {
         console.log(`lost ${value} ${armyUnit.id}`);
       } else {
@@ -62,5 +77,5 @@ export const applyKingdomArmyEffect = (
       throw new Error(`unsupported KingdomArmyEffect rule ${rule}`);
     }
   }
-
+  return result;
 };

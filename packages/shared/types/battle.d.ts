@@ -64,8 +64,8 @@ export interface BattleReportSummary {
 
 
 
-export type BattleSpellResult = 'success' | 'lostConcentration' | 'barrier' | 'reflected' | 'noMana' | null;
-export type BattleItemResult = 'success' | 'barrier' | 'noItem' | null; 
+export type BattleSpellResult = 'success' | 'lostConcentration' | 'barriers' | 'reflected' | 'noMana' | null;
+export type BattleItemResult = 'success' | 'barriers' | 'noItem' | null; 
 
 export interface BattleEffectLog {
   id: number,
@@ -74,7 +74,7 @@ export interface BattleEffectLog {
   value: any
 }
 
-export interface BattleLog {
+export interface EngagementLog {
   type: string,
   attacker: {
     id: number,
@@ -121,14 +121,29 @@ export interface BattleReport {
     logs: BattleEffectLog[]
   },
 
-  battleLogs: BattleLog[],
+  engagement: {
+    logs: EngagementLog[]
+  },
 
+  postBattle: {
+    unitSummary: {
+      id: number,
+      unitId: string,
+      unitsLoss: number,
+      unitsHealed: number
+    }[],
+
+    logs: any[]
+  },
+
+  /*
   postBattleLogs: {
     id: number,
     unitId: string,
     unitsLoss: number,
     unitsHealed: number
   }[],
+  */
 
   result: {
     isSuccessful: boolean;

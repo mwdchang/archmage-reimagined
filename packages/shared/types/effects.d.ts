@@ -87,6 +87,12 @@ export interface BattleEffect extends Effect {
   effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect | TemporaryUnitEffect)[]
 }
 
+export interface PostbattleEffect extends Effect {
+  target: 'self' | 'opponent',
+  condition: 'win' | 'all';
+  effects: (KingdomResourcesEffect | StealEffect)[]
+}
+
 
 
 /**
@@ -254,10 +260,10 @@ export interface WishEffect extends Effect {
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/
 export interface StealEffect extends Effect {
-  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage',
+  rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage' | 'addPercentage',
   target: 'mana' | 'geld' | 'item',
   magic: {
-    [key in AllowedMagic]: {
+    [key in AllowedMagic]?: {
       value: { min: number, max: number, stealPercent: number | null }
     }
   }

@@ -5,6 +5,8 @@ import { LPretty, RPretty } from "../util";
  * For debugging, pretty print BR report for console
 **/
 export const prettyPrintBR = (br: BattleReport) => {
+  console.log('');
+  console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
   console.log('== Battle Report ==');
 
   const attackerStr = `${br.attacker.name} (#${br.attacker.id})`;
@@ -68,19 +70,39 @@ export const prettyPrintBR = (br: BattleReport) => {
   console.log('');
   console.log('=== Engage ===');
   console.log(`${attackerStr} casts ${br.attacker.spellId}`);
+  if (br.preBattle.attacker.spellResult == 'noMana') {
+    console.log('Not enough mana to cast spell');
+  }
+  if (br.preBattle.attacker.spellResult == 'barriers') {
+    console.log('The spell hit the barriers and fizzled');
+  }
+  if (br.preBattle.attacker.spellResult == 'lostConcentration') {
+    console.log('Lost concentration');
+  }
+
+
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
+  if (br.preBattle.attacker.itemResult == 'barriers') {
+    console.log('The item hit the barriers and fizzled');
+  }
 
   console.log(`${defenderStr} casts ${br.defender.spellId}`);
+  if (br.preBattle.defender.spellResult == 'noMana') {
+    console.log('Not enough mana to cast spell');
+  }
+  if (br.preBattle.defender.spellResult === 'lostConcentration') {
+    console.log('Lost concentration');
+  }
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
 
   console.log('');
   for (const log of br.preBattle.logs) {
-    console.log(log);
+    console.log(`#${log.id}'s ${log.value} ${log.unitId} are slain`);
   }
   console.log('');
   console.log('=== Assault note ===');
 
-  br.battleLogs.forEach(entry => {
+  br.engagement.logs.forEach(entry => {
     const aId = entry.attacker.id;
     const dId = entry.defender.id;
 
@@ -110,13 +132,20 @@ export const prettyPrintBR = (br: BattleReport) => {
   })
 
   console.log('=== Assault result ===');
-  br.postBattleLogs.forEach(entry => {
+  br.postBattle.unitSummary.forEach(entry => {
     console.log(`${mageMap[entry.id]}'s ${entry.unitsLoss} ${entry.unitId} where slain during battle`);
     console.log(`${mageMap[entry.id]}'s ${entry.unitsHealed} ${entry.unitId} are resurrected from death`);
     console.log(``);
   })
+  console.log('');
+
+  console.log('=== Post battle logs ===');
+  br.postBattle.logs.forEach(entry => {
+    console.log(entry);
+  });
+
   console.log('=== Power loss ===');
-  console.log(br.summary);
+  console.log(br.result);
 
   console.log('=== Battle result ===');
   console.log(`Success = ${br.isSuccessful}`);

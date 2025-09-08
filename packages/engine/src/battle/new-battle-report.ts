@@ -38,10 +38,15 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     },
 
     // Tracking engagement
-    battleLogs: [],
+    engagement: {
+      logs: [],
+    },
 
     // Units lost/gained
-    postBattleLogs: [],
+    postBattle: {
+      unitSummary: [],
+      logs: [],
+    },
 
     // Summary
     result: {

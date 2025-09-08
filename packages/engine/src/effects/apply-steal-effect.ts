@@ -4,6 +4,19 @@ import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
 import { doItemDestruction } from "../magic";
 
+
+export interface StealEffectResult {
+  effectType: 'StealEffect',
+  id: number,
+  name: string,
+  targetId: number,
+  targetName: string,
+
+  target: string,
+  lossValue: number,
+  stealValue: number
+}
+
 export const applyStealEffect = (
   mage: Mage,
   effect: StealEffect,
@@ -43,6 +56,16 @@ export const applyStealEffect = (
     } else if (effect.target === 'item') {
       lossValue = base
     }
+  } else if (effect.rule === 'addPercentage') {
+    if (effect.target === 'geld') {
+      lossValue = Math.floor(base * targetMage.currentGeld);
+      lossValue = Math.min(targetMage.currentGeld, lossValue);
+    } else if (effect.target === 'mana') {
+      lossValue = Math.floor(base * targetMage.currentMana);
+      lossValue = Math.min(targetMage.currentMana, lossValue);
+    } else if (effect.target === 'item') {
+      lossValue = base
+    }
   } else {
     throw new Error(`Unable to process ${effect.rule} for ${origin.spellId}`);
   }
@@ -75,4 +98,17 @@ export const applyStealEffect = (
       console.log(`You stole ${itemId} from ${targetMage.id}`);
     }
   }
+
+  const r: StealEffectResult = {
+    effectType: 'StealEffect',
+    id: mage.id,
+    name: mage.name,
+    targetId: targetMage.id,
+    targetName: targetMage.name,
+
+    target: effect.target,
+    lossValue: lossValue,
+    stealValue: stealValue
+  };
+  return r
 }

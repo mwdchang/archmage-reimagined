@@ -5,7 +5,7 @@ import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
 
 let _id = 0;
 
-export const createMage = (name: string, magic: string): Mage => {
+export const createMage = (name: string, magic: string, override?:Partial<Mage>): Mage => {
   const mage: Mage = {
     id: ++_id,
     name: name,
@@ -31,7 +31,7 @@ export const createMage = (name: string, magic: string): Mage => {
     },
     focusResearch: false,
 
-    netPower: 0,
+    netPower: 0, // Deprecated
     currentTurn: 2000,
     maxTurn: 2000,
     turnsUsed: 0,
@@ -87,16 +87,17 @@ export const createMage = (name: string, magic: string): Mage => {
     }
   });
 
+  Object.assign(mage, override);
   return mage;
 }
 
 // For ease of testing
-export const createMageTest = (name: string, magic: string, override: Partial<Mage>): Mage => {
-  let mage = createMage(name, magic);
-  mage = Object.assign(mage, override);
-
-  return mage;
-}
+// export const createMageTest = (name: string, magic: string, override: Partial<Mage>): Mage => {
+//   let mage = createMage(name, magic);
+//   mage = Object.assign(mage, override);
+// 
+//   return mage;
+// }
 
 
 export const totalNetPower = (mage: Mage) => {

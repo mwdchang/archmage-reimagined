@@ -6,19 +6,25 @@ import {
   UnitHealEffect,
   BattleEffect,
   EffectOrigin,
-  TemporaryUnitEffect
+  TemporaryUnitEffect,
+  PostbattleEffect,
+  StealEffect,
+  AllowedMagic,
+  Effect
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
-  castingCost
+    calcKingdomResistance,
+  castingCost,
+  successCastingRate
 } from './magic';
 import { 
   currentSpellLevel,
   totalNetPower,
 } from './base/mage';
-import { BattleReport, BattleStack, BattleEffectLog, BattleLog } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -34,6 +40,9 @@ import { newBattleReport } from './battle/new-battle-report';
 import { getPowerModifier, prepareBattleStack } from './battle/prepare-battle-stack';
 import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
+import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
+import { applyStealEffect } from './effects/apply-steal-effect';
+import Stream from 'node:stream';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +52,16 @@ const calcDamageVariance = (attackType: String[]) => {
     randomModifier = 0.5;
   }
   return randomModifier;
+}
+
+const enchant2origin = (enchant: Enchantment) => {
+  const origin: EffectOrigin = {
+    id: enchant.casterId,
+    magic: enchant.casterMagic,
+    spellLevel: enchant.spellLevel,
+    targetId: enchant.targetId
+  };
+  return origin;
 }
 
 /**
@@ -391,7 +410,7 @@ const battleSpell = (
             return false;
           });
         }
-        console.log(`Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
+        console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
 
         if (effect.effectType === 'UnitAttrEffect') {
           const unitAttrEffect = effect as UnitAttrEffect;
@@ -471,7 +490,7 @@ const battleItem = (
         }
 
         const eff = battleEffect.effects[i];
-        console.log(`Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+        console.log(`Item: Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
         if (eff.effectType === 'UnitAttrEffect') {
           const unitAttrEffect = eff as UnitAttrEffect;
@@ -500,15 +519,44 @@ export interface BattleOptions {
   useFortBonus: boolean,
   useEnchantments: boolean,
   useUnlimitedResources: boolean,
+  useBarriers: boolean
 }
 
 const battleOptions: BattleOptions = {
   useFortBonus: true,
   useEnchantments: true,
-  useUnlimitedResources: true
+  useUnlimitedResources: false,
+  useBarriers: true
 };
 
-// TODO: Redo report structure
+
+export const successPillage = (attacker: Combatant, defender: Combatant) => {
+  const battleReport = newBattleReport(attacker, defender, 'pillage');
+  const army = attacker.army[0];
+
+  const mage = attacker.mage;
+  const origin: EffectOrigin = {
+    id: mage.id,
+    magic: mage.magic,
+    spellLevel: currentSpellLevel(mage),
+    targetId: defender.mage.id
+  };
+
+  const stealEffect: StealEffect = {
+    effectType: 'StealEffect',
+    rule: 'addPercentage',
+    target: 'geld',
+    magic: {
+      [mage.magic]: { value: { min: 0.02, max: 0.06, stealPercent: 1.0 } }
+    }
+  };
+
+  const r = applyStealEffect(mage, stealEffect, origin, defender.mage);
+  battleReport.postBattle.logs.push(r);
+
+  return battleReport;
+}
+
 
 /**
  * Handles siege and regular battles. The battle phase goes as follows
@@ -520,23 +568,44 @@ const battleOptions: BattleOptions = {
  * - Calculte battle order
  * - Calculate healing factors
 **/
-export const battle = (attackType: string, attacker: Combatant, defender: Combatant) => {
+export const battle = (battleType: string, attacker: Combatant, defender: Combatant) => {
   // Initialize battle report
-  const battleReport = newBattleReport(attacker, defender, attackType);
+  const battleReport = newBattleReport(attacker, defender, battleType);
+  battleReport.result.attacker.startNetPower = totalNetPower(attacker.mage);
+  battleReport.result.defender.startNetPower = totalNetPower(defender.mage);
+
   const preBattle = battleReport.preBattle;
 
   let hasAttackerSpell = false;
   let hasAttackerItem = false;
   let hasDefenderSpell = false;
   let hasDefenderItem = false;
+  const kingdomResistances = calcKingdomResistance(defender.mage);
 
-  // TODO: check barriers and success
+  /**
+   * Check if spell and item pass barriers
+   * - spell goes throw two stages: barrier resist and magic resist.
+   * - item goes through only barrier resist
+  **/
   if (attacker.spellId) {
     const cost = castingCost(attacker.mage, attacker.spellId);
     if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
+      const spell = getSpellById(attacker.spellId);
       attacker.mage.currentMana -= cost;
-      preBattle.attacker.spellResult = 'success';
-      hasAttackerSpell = true;
+
+      const castingRate = successCastingRate(attacker.mage, attacker.spellId);
+      if (Math.random() * 100 > castingRate) {
+        preBattle.attacker.spellResult = 'lostConcentration';
+      } else if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+        preBattle.attacker.spellResult = 'barriers';
+      } else {
+        if (Math.random() <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+          preBattle.attacker.spellResult = 'barriers';
+        } else {
+          preBattle.attacker.spellResult = 'success';
+          hasAttackerSpell = true;
+        }
+      }
     } else {
       preBattle.attacker.spellResult = 'noMana';
     }
@@ -544,8 +613,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   if (attacker.itemId) {
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
-      preBattle.attacker.itemResult = 'success';
-      hasAttackerItem = true
+
+      if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+        preBattle.attacker.itemResult = 'barriers';
+      } else {
+        preBattle.attacker.itemResult = 'success';
+        hasAttackerItem = true
+      }
     } else {
       preBattle.attacker.itemResult = 'noItem';
     }
@@ -555,6 +629,11 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const cost = castingCost(defender.mage, defender.spellId);
     if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
       defender.mage.currentMana -= cost;
+
+      const castingRate = successCastingRate(defender.mage, defender.spellId);
+      if (Math.random() * 100 > castingRate) {
+        preBattle.defender.spellResult = 'lostConcentration';
+      }
       preBattle.defender.spellResult = 'success';
       hasDefenderSpell = true;
     } else {
@@ -579,17 +658,21 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Prebattle spell effects
   if (hasAttackerSpell) {
     const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
+    preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
     const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+    preBattle.logs.push(...battleSpellLogs);
   }
 
   // Prebattle item effects
   if (hasAttackerItem) {
     const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'PrebattleEffect');
+    preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderItem) {
     const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'PrebattleEffect');
+    preBattle.logs.push(...battleItemLogs);
   }
 
   
@@ -626,7 +709,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
 
   // Apply fort bonus to defender
   if (battleOptions.useFortBonus === true) {
-    const base = calcFortBonus(defender.mage, attackType);
+    const base = calcFortBonus(defender.mage, battleType);
     defendingArmy.forEach(stack => {
       stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
     });
@@ -729,6 +812,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     const targetIdx = attackingStack.targetIdx;
     const defendingStack = side === 'attacker' ? defendingArmy[targetIdx] : attackingArmy[targetIdx];
 
+
+    // In a pillage attacker cannot engage
+    if (side === 'attacker' && battleType === 'pillage') {
+      console.log('\t', i, `${side}: ${attackingStack.unit.name}(${attackingStack.accuracy}) attacks:${attackType} ${defendingStack.unit.name} ... skipping`);
+      continue;
+    }
+
     console.log('\t', i, `${side}: ${attackingStack.unit.name}(${attackingStack.accuracy}) attacks:${attackType} ${defendingStack.unit.name}`);
 
     const aUnit = attackingStack.unit;
@@ -743,7 +833,8 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       if (defendingStack.size <= 0) continue;
 
       // Resolve burst
-      if (hasAbility(dUnit, 'bursting')) {
+      const isPillage = side === 'defender' && battleType === 'pillage';
+      if (hasAbility(dUnit, 'bursting') && isPillage === true) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {
@@ -811,7 +902,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           defendingStack.size -= defenderUnitLoss;
           defendingStack.loss += defenderUnitLoss;
 
-          battleReport.battleLogs.push({
+          battleReport.engagement.logs.push({
             type: `burst`,
             attacker: {
               id: attackingMage.id,
@@ -855,7 +946,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
 
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-      const battleLog: BattleLog = {
+      const battleLog: EngagementLog = {
         type: 'primary',
         attacker: {
           id: attackingMage.id,
@@ -887,7 +978,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         attackingStack.loss -= newUnits;
         battleLog.attacker.unitsLoss -= newUnits;
       }
-      battleReport.battleLogs.push(battleLog);
+      battleReport.engagement.logs.push(battleLog);
 
       // Additonal Strike ability
       if (hasAbility(aUnit, 'additionalStrike')) {
@@ -909,7 +1000,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
 
         console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
-        const battleLog: BattleLog = {
+        const battleLog: EngagementLog = {
           type: 'additionalStrike',
           attacker: {
             id: attackingMage.id,
@@ -941,7 +1032,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           attackingStack.loss -= newUnits;
           battleLog.attacker.unitsLoss -= newUnits;
         }
-        battleReport.battleLogs.push(battleLog);
+        battleReport.engagement.logs.push(battleLog);
       } // end Additional Strike
 
 
@@ -951,6 +1042,9 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       } else if (aUnit.primaryAttackType.includes('ranged')) {
         // Cannot counter ranged
       } else if (defendingStack.size > 0 && attackingStack.size > 0) {
+
+        if (battleType === 'pillage' && side === 'defender') continue;
+
         // Execute counter
         let accuracy = defendingStack.accuracy + calcAccuracyModifier(dUnit, aUnit);
         let resistance = calcResistance(aUnit, dUnit.primaryAttackType);
@@ -979,7 +1073,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
         }
         console.log(`\t\t counter damage=${damage}+${sustainedDamage}, loss=${attackerUnitLoss}`);
 
-        const battleLog: BattleLog = {
+        const battleLog: EngagementLog = {
           type: 'counter',
           attacker: {
             id: attackingMage.id,
@@ -1012,7 +1106,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
           battleLog.defender.unitsLoss -= newUnits;
         }
 
-        battleReport.battleLogs.push(battleLog);
+        battleReport.engagement.logs.push(battleLog);
       }
 
       // Fatigue
@@ -1048,7 +1142,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
       }
       console.log(`\t\t damage=${damage}+${sustainedDamage}, loss=${defenderUnitLoss}`);
 
-      battleReport.battleLogs.push({
+      battleReport.engagement.logs.push({
         type: 'secondary',
         attacker: {
           id: attackingMage.id,
@@ -1080,7 +1174,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Attacker healing
   attackingArmy.forEach(stack => {
     if (stack.loss < 0) {
-      battleReport.postBattleLogs.push({
+      battleReport.postBattle.unitSummary.push({
         id: attacker.mage.id,
         unitId: stack.unit.id,
         unitsLoss: 0,
@@ -1097,7 +1191,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     stack.loss -= totalUnitsHealed;
     stack.size += totalUnitsHealed;
 
-    battleReport.postBattleLogs.push({
+    battleReport.postBattle.unitSummary.push({
       id: attacker.mage.id,
       unitId: stack.unit.id,
       unitsLoss: startingStackLoss,
@@ -1108,7 +1202,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   // Defender healing
   defendingArmy.forEach(stack => {
     if (stack.loss < 0) {
-      battleReport.postBattleLogs.push({
+      battleReport.postBattle.unitSummary.push({
         id: defender.mage.id,
         unitId: stack.unit.id,
         unitsLoss: 0,
@@ -1125,7 +1219,7 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     stack.loss -= totalUnitsHealed;
     stack.size += totalUnitsHealed;
 
-    battleReport.postBattleLogs.push({
+    battleReport.postBattle.unitSummary.push({
       id: defender.mage.id,
       unitId: stack.unit.id,
       unitsLoss: startingStackLoss,
@@ -1155,6 +1249,13 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
   brD.unitsLoss = battleSummary.defender.unitsLoss;
   brD.armyLoss = defendingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
+  // Pillage has no further effects to run, stop and return here
+  if (battleReport.attackType === 'pillage') {
+    battleReport.isSuccessful = false;
+    battleReport.result.isSuccessful = false;
+    return battleReport;
+  }
+
   if (brA.armyNetPowerLoss < brD.armyNetPowerLoss && brD.armyNetPowerLoss >= 0.1 * brD.armyNetPower) {
     battleReport.isSuccessful = true;
     battleReport.result.isSuccessful = true;
@@ -1162,13 +1263,63 @@ export const battle = (attackType: string, attacker: Combatant, defender: Combat
     battleReport.isSuccessful = false;
     battleReport.result.isSuccessful = false;
   }
+
+  console.log('');
+  console.log('>> Applying postbattle report ');
+
+  // Calculate any post battle effects from enchantments or spells/items
+  for (const enchant of attacker.mage.enchantments) {
+    const spell = getSpellById(enchant.spellId);
+    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    if (postbattleEffects.length === 0) continue;
+
+    const origin = enchant2origin(enchant);
+
+    for (const postbattleEffect of postbattleEffects) {
+      // Win condition trigger check for a successful attack
+      if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
+
+      for (const effect of postbattleEffect.effects) {
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          postbattleEffect.target === 'self' ?
+            applyKingdomResourcesEffect(attacker.mage, effect as any, origin) :
+            applyKingdomResourcesEffect(defender.mage, effect as any, origin);
+        } else if (effect.effectType === 'StealEffect') {
+          const r = applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
+          battleReport.postBattle.logs.push(r);
+        }
+      }
+    }
+  }
+
+  for (const enchant of defender.mage.enchantments) {
+    const spell = getSpellById(enchant.spellId);
+    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    if (postbattleEffects.length === 0) continue;
+
+    const origin = enchant2origin(enchant);
+
+    for (const postbattleEffect of postbattleEffects) {
+      // Win condition trigger check for a successful defend
+      if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === true) continue;
+
+      for (const effect of postbattleEffect.effects) {
+        if (effect.effectType === 'KingdomResourcesEffect') {
+          postbattleEffect.target === 'self' ?
+            applyKingdomResourcesEffect(defender.mage, effect as any, origin) :
+            applyKingdomResourcesEffect(attacker.mage, effect as any, origin); 
+        } else if (effect.effectType === 'StealEffect') {
+          const r = applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
+          battleReport.postBattle.logs.push(r);
+        }
+      }
+    }
+  }
+
   return battleReport;
 }
 
 export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: BattleReport) => {
-  battleReport.result.attacker.startNetPower = totalNetPower(attacker);
-  battleReport.result.defender.startNetPower = totalNetPower(defender);
-
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve army losses
   ////////////////////////////////////////////////////////////////////////////////
@@ -1200,6 +1351,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
     battleReport.result.defender.endNetPower = totalNetPower(defender);
     return;
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Resolve land losses

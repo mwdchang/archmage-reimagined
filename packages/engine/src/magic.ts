@@ -314,7 +314,7 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
 
 export const calcKingdomResistance = (mage: Mage) => {
   const resistance: { [key: string]: number } = {
-    barrier: 0,
+    barriers: 0,
     ascendant: 0,
     verdant: 0,
     eradication: 0,
@@ -340,8 +340,8 @@ export const calcKingdomResistance = (mage: Mage) => {
   // Max barrier is 2.5% of the land, max normal barrier is 75
   if (mage.barriers > 0) {
     const land = 0.025 * totalLand(mage);
-    const barrier = Math.floor((mage.barriers / land) * 75);
-    resistance.barrier = barrier;
+    const barriers = Math.floor((mage.barriers / land) * 75);
+    resistance.barriers = barriers;
   }
   return resistance;
 }

@@ -32,29 +32,23 @@
 
     <br>
 
-    <table>
-      <tbody>
-        <tr>
-          <td>Spell</td>
-          <td>
-            <select v-model="battleSpell">
-              <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Item</td>
-          <td>
-            <select v-model="battleItem">
-              <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <section class="form">
+      <div class="row" style="align-items: baseline">
+        <label style="width:6rem">Spell</label>
+        <select v-model="battleSpell">
+          <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+        </select>
+      </div>
+      <div class="row" style="align-items: baseline">
+        <label style="width:6rem">Item</label>
+        <select v-model="battleItem">
+          <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+        </select>
+      </div>
 
-    <br>
-    <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> War </button>
+      <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> Attack! </button>
+    </section>
+
   </main>
 </template>
 

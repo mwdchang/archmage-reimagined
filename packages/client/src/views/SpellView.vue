@@ -5,7 +5,7 @@
   </p>
   <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table>
+      <table v-if="spells.length > 0">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
             <th>Name</th>
@@ -25,6 +25,10 @@
           </tr>
         </tbody>
       </table>
+      <div v-else style="max-width: 250px">
+        You do not have any spells in your spellbook. 
+        Use <router-link :to="{ name: 'research' }">research</router-link> to learn new spells.
+      </div>
     </div>
     <div> 
       <section class="form">

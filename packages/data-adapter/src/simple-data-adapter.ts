@@ -144,10 +144,10 @@ export class SimpleDataAdapter extends DataAdapter {
 
   async getChronicles(options: SearchOptions) {
     return this.turnTable.filter(t => {
-      if (options.endTime && options.endTime > t.time) {
+      if (options.endTime && options.endTime > t.timestamp) {
         return false;
       }
-      if (options.startTime && options.startTime < t.time) {
+      if (options.startTime && options.startTime < t.timestamp) {
         return false;
       }
       if (options.mageId && options.mageId !== t.id) {

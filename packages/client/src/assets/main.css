@@ -4,7 +4,7 @@
   max-width: 1280px;
   padding: 1rem;
   font-weight: normal;
-  line-height: 1.5rem;
+  line-height: 1.4rem;
 }
 
 a,
@@ -97,9 +97,6 @@ table > tr.active {
 }
 
 
-
-
-
 /******************************************
 * Entry forms
 *******************************************/
@@ -121,12 +118,12 @@ table > tr.active {
 .form select {
   width: 100%;
   padding: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.0rem;
   border: 1px solid #444;
   border-radius: 4px;
   background-color: #2a2a2a;
   color: #f1f1f1;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
 }
@@ -143,7 +140,7 @@ table > tr.active {
   color: #fff;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -155,6 +152,11 @@ table > tr.active {
 .form button:active {
   background-color: #2c639a;
 }
+.form button:disabled {
+  background-color: #777788;
+  cursor: not-allowed;
+}
+
 
 
 

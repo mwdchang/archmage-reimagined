@@ -6,7 +6,7 @@
 
   <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table>
+      <table v-if="itemList.length > 0">
         <thead>
           <tr>
             <th>Name</th>
@@ -24,6 +24,9 @@
           </tr>
         </tbody>
       </table>
+      <div v-else style="width: 250px">
+        You do not have any items in your inventory.
+      </div>
     </div>
     <div> 
       <section class="form">

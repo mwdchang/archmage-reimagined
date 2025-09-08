@@ -4,6 +4,15 @@ import { getMaxSpellLevels } from "../base/references";
 import { between, randomBM } from "../random";
 import { doItemDestruction, doItemGeneration } from "../magic";
 
+export interface KingdomResourcesEffectResult {
+  effectType: 'KingdomResourcesEffect',
+  id: number,
+  name: string,
+
+  target: string,
+  value: number
+}
+
 export const applyKingdomResourcesEffect = (
   mage: Mage,
   effect: KingdomResourcesEffect,
@@ -34,23 +43,41 @@ export const applyKingdomResourcesEffect = (
   }
   value = Math.floor(value); 
 
+  const result: KingdomResourcesEffectResult = {
+    effectType: 'KingdomResourcesEffect',
+    id: mage.id,
+    name: mage.name,
+
+    target: '',
+    value: 0
+  };
+
   if (effect.target === 'population') {
     if (mage.currentPopulation + value <= 0) {
       value = -mage.currentPopulation;
     }
     mage.currentPopulation += value;
+
+    result.target = 'population';
+    result.value = value;
     console.log(`mage(#${mage.id}) lost ${value} population`);
   } else if (effect.target === 'geld') {
     if (mage.currentGeld + value <= 0) {
       value = -mage.currentGeld;
     }
     mage.currentPopulation += value;
+
+    result.target = 'geld';
+    result.value = value;
     console.log(`mage(#${mage.id}) lost ${value} geld`);
   } else if (effect.target === 'mana') {
     if (mage.currentMana + value <= 0) {
       value = -mage.currentMana;
     }
     mage.currentMana += value;
+
+    result.target = 'mana';
+    result.value = value;
     console.log(`mage(#${mage.id}) lost ${value} mana`);
   } else if (effect.target === 'item') {
     if (value > 0) {
@@ -66,5 +93,9 @@ export const applyKingdomResourcesEffect = (
         console.log(`Destroyed ${itemKey}`);
       }
     }
+    result.target = 'item';
+    result.value = value;
   }
+
+  return result;
 };

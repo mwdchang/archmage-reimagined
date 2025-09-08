@@ -154,7 +154,7 @@ router.post('/api/war', async (req: any, res) => {
     return;
   }
 
-  const r = await engine.doBattle(mage, +targetId, stackIds, spellId, itemId);
+  const r = await engine.doBattle(mage, +targetId, 'siege', stackIds, spellId, itemId);
   res.status(200).json({ errors: [], reportId: r.id, mage });
 });
 

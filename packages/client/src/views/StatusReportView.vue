@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h2>Status Report</h2>
+    <h3>Status Report</h3>
     <div class="section-header">General Info</div>
     <table v-if="mage">
       <tbody>
@@ -61,7 +61,7 @@
             </div>
           </td> 
           <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.barrier) }} 
+            {{ numberFormatter(resistanceStatus.barriers) }} 
           </td>
         </tr>
         <tr>
