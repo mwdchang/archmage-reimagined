@@ -13,6 +13,7 @@
     <tbody>
       <tr>
         <td> Name </td>
+        <td> Action </td>
         <td class="text-right"> Damage dealt </td>
         <td class="text-right"> Damage % </td>
         <td class="text-right"> Time </td>
@@ -25,6 +26,11 @@
               {{ summary.defenderName }} (#{{ summary.defenderId }}) 
             </router-link>
           </div>
+        </td>
+        <td>
+          <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+            {{ readableStr(summary.attackType) }}
+          </router-link>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
@@ -39,6 +45,7 @@
     <tbody>
       <tr>
         <td> Name </td>
+        <td> Action </td>
         <td class="text-right"> Damage dealt </td>
         <td class="text-right"> Damage % </td>
         <td class="text-right"> Time </td>
@@ -51,6 +58,11 @@
               {{ summary.attackerName }} (#{{ summary.attackerId }}) 
             </router-link>
           </div>
+        </td>
+        <td>
+          <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+            {{ readableStr(summary.attackType) }}
+          </router-link>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
@@ -66,7 +78,7 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter, useRoute } from 'vue-router';
 import { BattleReportSummary } from 'shared/types/battle';
-import { readbleNumber, readableDate } from '@/util/util';
+import { readbleNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 
 const router = useRouter();

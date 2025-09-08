@@ -1,6 +1,6 @@
 <template>
   <div class="section-header">Dispel Magic</div>
-  <div> Your enchantments </div>
+  <div> Your enchantments in effect </div>
   <table>
     <tbody>
       <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
@@ -15,7 +15,7 @@
   </table>
 
   <br/>
-  <div> Other enchantments </div>
+  <div> Other enchantments in effect </div>
   <table>
     <tbody>
       <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 

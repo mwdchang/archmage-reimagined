@@ -16,7 +16,6 @@
       </select>
     </div>
 
-
     <div class="row" style="align-items: baseline">
       <label style="width: 12rem"> Item for defence </label>
       <select v-model="selectedItemId" @change="setAssignment()">

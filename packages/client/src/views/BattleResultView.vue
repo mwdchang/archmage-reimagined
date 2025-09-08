@@ -92,18 +92,18 @@
           <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
             {{ readableStr(report.defender.spellId) }}
           </router-link>
-          <span v-if="preBattle.defender.spellResult !== 'success'">
-          &nsp; spell failed.
-          </span>
+          <div v-if="preBattle.defender.spellResult !== 'success'">
+            Spell failed.
+          </div>
         </div>
         <div v-if="report.defender.itemId">
           {{ defenderStr }} uses
           <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
            {{ readableStr(report.defender.itemId) }}
           </router-link>
-          <span v-if="preBattle.defender.itemResult !== 'success'">
-          &nsp; item failed.
-          </span>
+          <div v-if="preBattle.defender.itemResult !== 'success'">
+            Item failed.
+          </div>
         </div>
       </div>
     <br>
@@ -187,7 +187,14 @@
           {{ report.result.defender.unitsLoss }} / {{ report.result.defender.startingUnits }} units and
           {{ report.result.defender.armyNetPowerLoss }} power
         </div>
-
+      </div>
+      <div>
+        <div v-if="report.result.isSuccessful">
+          {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} was successful 
+        </div>
+        <div v-else>
+          {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} failed
+        </div>
       </div>
       <!--
         {{ report.summary.attacker }}

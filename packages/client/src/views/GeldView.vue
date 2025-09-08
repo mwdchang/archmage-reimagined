@@ -4,7 +4,7 @@
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 
-        Your income is about {{ readbleNumber(geldIncome(mageStore.mage)) }} geld.
+        Your income is about {{ readbleNumber(geldIncome(mageStore.mage)) }} geld per turn.
       </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
