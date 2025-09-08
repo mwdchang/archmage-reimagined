@@ -45,7 +45,8 @@ import {
   castingCost,
   successCastingRate,
   enchantmentUpkeep,
-  dispelEnchantment
+  dispelEnchantment,
+  calcKingdomResistance
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -598,8 +599,22 @@ class Engine {
         castingSuccessful = false;
       }
 
+      // Check if spell past barriers
       if (target) {
         // FIXME: target barriers if applicable
+        const targetMage = await this.getMage(target);
+        const kingdomResistances = calcKingdomResistance(targetMage);
+        if (
+          Math.random() <= kingdomResistances['barriers'] ||
+          Math.random() <= kingdomResistances[spell.magic]
+        ) {
+          logs.push({
+            type: 'error',
+            message: `You spell hit the barriers and fizzled.`
+          });
+          console.log('============ fizzled on barriers');
+          castingSuccessful = false;
+        } 
       }
 
       mage.currentMana -= cost;
