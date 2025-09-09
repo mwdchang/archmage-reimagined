@@ -25,7 +25,11 @@
           -{{ u.moveDown }}
         </td>
         <td>
-          <input type="text" size=12 v-model="disbandPayload[u.id]">
+          <input
+            :disabled="u.attributes.includes('undisbandable') === true" 
+            type="text" 
+            size=12 
+            v-model="disbandPayload[u.id]">
         </td>
       </tr>
     </tbody>
@@ -92,7 +96,7 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
       moveDown = num;
     }
 
-    console.log(armyItem.id, moveUp, moveDown);
+    // console.log(armyItem.id, moveUp, moveDown);
     
     return {
       ...armyItem,
