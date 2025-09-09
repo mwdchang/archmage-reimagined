@@ -26,6 +26,7 @@ import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
 import DisplayItemView from '@/views/DisplayItemView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
+import EncyclopediaView from '@/views/EncyclopediaView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -159,6 +160,12 @@ const router = createRouter({
       component: ChroniclesView
     },
     // Misc
+    {
+      path: '/encyclopedia',
+      name: 'encyclopedia',
+      component: EncyclopediaView,
+      props: false 
+    },
     {
       path: '/view-unit/:id',
       name: 'viewUnit',

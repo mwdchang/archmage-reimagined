@@ -910,7 +910,7 @@
         "targetType": "all",
         "filters": [
           {
-            "magic": "ascendant"
+            "magic": ["ascendant"]
           }
         ],
         "trigger": null,
