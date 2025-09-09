@@ -50,7 +50,7 @@ import {
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
-import { battle, pillage, resolveBattle, successPillage } from './war';
+import { battle, resolveBattle, successPillage } from './war';
 import {
   UnitSummonEffect,
   KingdomBuildingsEffect,
@@ -1018,7 +1018,7 @@ class Engine {
       id: battleReport.id,
  
       timestamp: battleReport.timestamp,
-      attackType: 'siege',
+      attackType: battleReport.attackType,
 
       attackerId: battleReport.attacker.id,
       attackerName: battleReport.attacker.name,

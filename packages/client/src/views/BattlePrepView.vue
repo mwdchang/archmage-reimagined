@@ -12,7 +12,7 @@
           <td>Power</td>
           <td>Power %</td>
           <td> 
-            <input type="checkbox" v-model="useAllStacks"> 
+            <input type="checkbox" v-model="useAllStacks" v-if="battleType !== 'pillage'"> 
           </td>
         </tr>
         <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
@@ -24,7 +24,8 @@
           <td class="text-right"> {{ readbleNumber(stack.power) }} </td>
           <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
           <td>
-              <input type="checkbox" v-model="stack.active">
+              <input type="checkbox" v-model="stack.active" v-if="battleType !== 'pillage'">
+              <input type="radio" :value="stack.id" v-model="pillageStackId" v-if="battleType === 'pillage'">
           </td>
         </tr>
       </tbody>
@@ -46,11 +47,19 @@
         </select>
       </div>
 
-      <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> 
+      <button 
+        v-if="battleType !== 'pillage'"
+        @click="doBattle" 
+        :disabled="armySelection.filter(d => d.active).length === 0">
+        {{ readableStr(battleType) }}
+      </button>
+      <button 
+        v-if="battleType === 'pillage'"
+        @click="doBattle" 
+        :disabled="pillageStackId === null">
         {{ readableStr(battleType) }}
       </button>
     </section>
-
   </main>
 </template>
 
@@ -76,6 +85,7 @@ const targetSummary = ref<any>(null);
 const armySelection = ref<BattleArmyItem[]>([]);
 const battleSpell = ref('');
 const battleItem = ref('');
+const pillageStackId = ref<string|null>(null);
 
 const battleTypeStr = computed(() => {
   if (props.battleType === 'siege') return 'sieging';
@@ -132,8 +142,10 @@ const doBattle = async () => {
   if (!mageStore.mage) return;
   if (!props.targetId || props.targetId === '') return;
 
-  // const stackIds = mageStore.mage.army.map(d => d.id);
-  const stackIds = armySelection.value.filter(d => d.active === true).map(d => d.id);
+  const stackIds = props.battleType === 'pillage' ? 
+    [pillageStackId.value] :
+    armySelection.value.filter(d => d.active === true).map(d => d.id);
+
   if (stackIds.length === 0) {
     return;
   }

@@ -532,8 +532,16 @@ const battleOptions: BattleOptions = {
 
 export const successPillage = (attacker: Combatant, defender: Combatant) => {
   const battleReport = newBattleReport(attacker, defender, 'pillage');
-  const army = attacker.army[0];
+  battleReport.result.attacker.startNetPower = totalNetPower(attacker.mage);
+  battleReport.result.defender.startNetPower = totalNetPower(defender.mage);
 
+  const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
+  const defendingArmy =  prepareBattleStack(defender.army, 'defender');
+  battleReport.attacker.army = _.cloneDeep(attackingArmy);
+  battleReport.defender.army = _.cloneDeep(defendingArmy);
+
+
+  const army = attacker.army[0];
   const mage = attacker.mage;
   const origin: EffectOrigin = {
     id: mage.id,
@@ -554,6 +562,8 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
   const r = applyStealEffect(mage, stealEffect, origin, defender.mage);
   battleReport.postBattle.logs.push(r);
 
+  battleReport.isSuccessful = true;
+  battleReport.result.isSuccessful = true;
   return battleReport;
 }
 
@@ -1346,7 +1356,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   });
   defender.army = defender.army.filter(d => d.size > 0);
 
-  if (battleReport.isSuccessful === false) {
+  if (battleReport.isSuccessful === false || battleReport.attackType === 'pillage') {
     battleReport.result.attacker.endNetPower = totalNetPower(attacker);
     battleReport.result.defender.endNetPower = totalNetPower(defender);
     return;
