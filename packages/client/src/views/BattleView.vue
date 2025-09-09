@@ -3,6 +3,11 @@
 
   <section class="form">
     <p> All attack type cost 2 turns </p>
+    <select v-model="battleType">
+      <option value="regular">Regular</option>
+      <option value="siege">Siege</option>
+      <option value="pillage">Pillage</option>
+    </select>
     <input type="text" placeholder="mage id" v-model="targetId" /> 
 
     <button @click="prepBattle"> War </button>
@@ -87,6 +92,8 @@ const targetId = ref('');
 const involvedBattles = ref<BattleReportSummary[]>([]);
 const mages = ref<{[key: number]: any}>({});
 
+const battleType = ref('regular');
+
 const offensiveBattles = computed(() => {
   return involvedBattles.value.filter(d => d.attackerId === mageStore.mage!.id);
 });
@@ -103,7 +110,8 @@ const prepBattle = async () => {
   router.push({
     name: 'battlePrep',
     params: {
-      targetId: targetId.value
+      targetId: targetId.value,
+      battleType: battleType.value
     }
   });
 };

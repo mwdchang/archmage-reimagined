@@ -1,7 +1,7 @@
 <template>
   <main v-if="targetSummary">
     <h3>
-      You are attacking {{ targetSummary.name }} (#{{targetSummary.id}}) 
+      You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
     </h3>
     <br>
     <table>
@@ -33,20 +33,22 @@
     <br>
 
     <section class="form">
-      <div class="row" style="align-items: baseline">
+      <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
         <label style="width:6rem">Spell</label>
         <select v-model="battleSpell">
           <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
         </select>
       </div>
-      <div class="row" style="align-items: baseline">
+      <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
         <label style="width:6rem">Item</label>
         <select v-model="battleItem">
           <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
         </select>
       </div>
 
-      <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> Attack! </button>
+      <button @click="doBattle" :disabled="armySelection.filter(d => d.active).length === 0"> 
+        {{ readableStr(battleType) }}
+      </button>
     </section>
 
   </main>
@@ -59,18 +61,27 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { 
   getSpells, getItems, getBattleArmy, readbleNumber,
-  BattleArmyItem
+  BattleArmyItem, readableStr
 } from '@/util/util';
 
 const mageStore = useMageStore();
 const router = useRouter();
 
-const props = defineProps<{ targetId: string }>(); 
+const props = defineProps<{ 
+  targetId: string,
+  battleType: 'siege' | 'regular' | 'pillage' 
+}>(); 
 
 const targetSummary = ref<any>(null);
 const armySelection = ref<BattleArmyItem[]>([]);
 const battleSpell = ref('');
 const battleItem = ref('');
+
+const battleTypeStr = computed(() => {
+  if (props.battleType === 'siege') return 'sieging';
+  if (props.battleType === 'regular') return 'attacking';
+  if (props.battleType === 'pillage') return 'pillaging';
+});
 
 const battleSpells = computed(() => {
   const mage = mageStore.mage; 
@@ -129,6 +140,7 @@ const doBattle = async () => {
 
   const res = await API.post('/war', { 
     targetId: props.targetId,
+    battleType: props.battleType,
     spellId: battleSpell.value,
     itemId: battleItem.value,
     stackIds

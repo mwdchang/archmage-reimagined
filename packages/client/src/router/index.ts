@@ -137,7 +137,7 @@ const router = createRouter({
       component: BattleView
     },
     {
-      path: '/battle-prep/:targetId',
+      path: '/battle-prep/:targetId/:battleType',
       name: 'battlePrep',
       component: BattlePrepView,
       props: true
