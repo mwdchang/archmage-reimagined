@@ -73,6 +73,7 @@ export interface ArmyItem {
   name: String,
   size: number,
   upkeep: { [key: string]: number },
+  attributes: string[],
   power: number,
   powerPercentage: number
 }
@@ -99,6 +100,7 @@ export const getArmy = (mage: Mage) => {
       name: unit.name,
       size: stack.size,
       upkeep,
+      attributes: unit.attributes,
       power: multiplier * unit.powerRank * stack.size,
       powerPercentage: 0
     });

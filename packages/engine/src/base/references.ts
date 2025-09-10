@@ -56,6 +56,10 @@ export const getSpellById = (id: string): Spell => {
   return _.cloneDeep(spell);
 }
 
+export const getAllSpells = (): Spell[] => {
+  return _.cloneDeep(spellList);
+};
+
 export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
     itemMap.set(items[i].id, items[i]);

@@ -26,6 +26,8 @@ import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
 import DisplayItemView from '@/views/DisplayItemView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
+import EncyclopediaView from '@/views/EncyclopediaView.vue';
+import GuideView from '@/views/GuideView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -137,7 +139,7 @@ const router = createRouter({
       component: BattleView
     },
     {
-      path: '/battle-prep/:targetId',
+      path: '/battle-prep/:targetId/:battleType',
       name: 'battlePrep',
       component: BattlePrepView,
       props: true
@@ -159,6 +161,17 @@ const router = createRouter({
       component: ChroniclesView
     },
     // Misc
+    {
+      path: '/guide',
+      name: 'guide',
+      component: GuideView
+    },
+    {
+      path: '/encyclopedia',
+      name: 'encyclopedia',
+      component: EncyclopediaView,
+      props: false 
+    },
     {
       path: '/view-unit/:id',
       name: 'viewUnit',

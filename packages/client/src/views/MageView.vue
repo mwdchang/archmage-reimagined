@@ -1,6 +1,6 @@
 <template>
   <div>Lookup a Mage </div>
-  <table>
+  <table v-if="mageSummary.id">
     <tbody>
       <tr>
         <td>Country</td><td>{{ mageSummary.name }} (#{{ mageSummary.id }}) </td>
@@ -37,11 +37,20 @@
       <tr>
         <td>Attack</td>
         <td class="text-right">
-          <router-link 
-            v-if="mageStore.mage!.id !== mageId"
-            :to="{ name: 'battle', query: { targetId: mageSummary.id }}">
-            Siege
-          </router-link>
+          <div class="row" v-if="mageStore.mage!.id !== mageId" style="gap: 8px">
+            <router-link 
+              :to="{ name: 'battlePrep', params: { targetId: mageSummary.id, battleType: 'siege' }}">
+              Siege
+            </router-link>
+            <router-link 
+              :to="{ name: 'battlePrep', params: { targetId: mageSummary.id, battleType: 'regular' }}">
+              Regular
+            </router-link>
+            <router-link 
+              :to="{ name: 'battlePrep', params: { targetId: mageSummary.id, battleType: 'pillage' }}">
+              Pillage
+            </router-link>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -59,7 +68,9 @@ import { readbleNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 
-const props = defineProps<{ mageId: number}>(); 
+const props = defineProps<{ 
+  mageId: number | string
+}>(); 
 
 const mageSummary = ref<any>({});
 

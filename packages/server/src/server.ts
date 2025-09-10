@@ -145,7 +145,7 @@ router.post('/api/research', async (req: any, res) => {
 
 router.post('/api/war', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
-  const { spellId, itemId, stackIds, targetId } = req.body;
+  const { spellId, itemId, stackIds, targetId, battleType } = req.body;
 
   // Do not proceed if there are errors
   const errors = await engine.preBattleCheck(mage, +targetId);
@@ -154,7 +154,7 @@ router.post('/api/war', async (req: any, res) => {
     return;
   }
 
-  const r = await engine.doBattle(mage, +targetId, 'siege', stackIds, spellId, itemId);
+  const r = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
   res.status(200).json({ errors: [], reportId: r.id, mage });
 });
 
