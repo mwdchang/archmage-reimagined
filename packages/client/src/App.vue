@@ -2,10 +2,11 @@
   <main style="display: flex; flex-direction: column; align-items: center">
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage" />
-    <RouterView v-if="route.name === 'home'" /> 
-    <RouterView v-if="route.name !== 'home' && mageStore.mage" /> 
 
-    <Footer v-if="route.name !== 'home' && route.name !== 'about' " />
+    <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
+    <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
+
+    <Footer v-if="mageStore.mage && route.name !== 'home' && route.name !== 'about' " />
 
     <!--
     <RouterView v-if="route.name === 'home'" />
@@ -51,8 +52,11 @@ const router = useRouter();
 const route = useRoute();
 const { mage } = storeToRefs(mageStore);
 
-
-const hideHeader = ['status', 'test', 'about', 'viewUnit', 'viewSpell' ];
+const publicRoutes = [
+  'home', 'guide', 'encyclopedia',
+  'viewUnit', 'viewSpell'
+];
+const hideHeader = ['status', 'test', 'about', 'viewUnit', 'viewSpell', 'encyclopedia' ];
 
 // Test to see if session already exist
 onMounted(async () => {
@@ -72,7 +76,13 @@ onMounted(async () => {
 
   loadItemData(lesserItems);
 
+  /*
   try {
+    console.log('!!!!!', route.name);
+    if (route.name === 'guide') {
+      return;
+    }
+
     const r = await API.get('mage');
     mageStore.setLoginStatus(1);
     mageStore.setMage(r.data.mage);
@@ -81,11 +91,13 @@ onMounted(async () => {
       router.push({ name: 'about' });
     }
   } catch (e: any) {
+    console.log('doh!!!');
     if (e.response.status === 403 || e.response.status === 401) {
       mageStore.setLoginStatus(0);
       router.push({ name: 'home' });
     }
   }
+  */
 });
 
 </script>

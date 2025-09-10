@@ -27,6 +27,7 @@ import DisplaySpellView from '@/views/DisplaySpellView.vue';
 import DisplayItemView from '@/views/DisplayItemView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
 import EncyclopediaView from '@/views/EncyclopediaView.vue';
+import GuideView from '@/views/GuideView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -160,6 +161,11 @@ const router = createRouter({
       component: ChroniclesView
     },
     // Misc
+    {
+      path: '/guide',
+      name: 'guide',
+      component: GuideView
+    },
     {
       path: '/encyclopedia',
       name: 'encyclopedia',
