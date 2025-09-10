@@ -76,13 +76,7 @@ onMounted(async () => {
 
   loadItemData(lesserItems);
 
-  /*
   try {
-    console.log('!!!!!', route.name);
-    if (route.name === 'guide') {
-      return;
-    }
-
     const r = await API.get('mage');
     mageStore.setLoginStatus(1);
     mageStore.setMage(r.data.mage);
@@ -91,13 +85,14 @@ onMounted(async () => {
       router.push({ name: 'about' });
     }
   } catch (e: any) {
-    console.log('doh!!!');
     if (e.response.status === 403 || e.response.status === 401) {
       mageStore.setLoginStatus(0);
+      if (publicRoutes.includes(route.name as string)) {
+        return
+      }
       router.push({ name: 'home' });
     }
   }
-  */
 });
 
 </script>
