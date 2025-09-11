@@ -143,7 +143,7 @@ export const magicAlignmentTable = {
       verdant: 4.0,
       eradication: 4.0,
       nether: 2.0,
-      phantasm: 2.0
+      phantasm: 1.0
     }
   }
 }
@@ -163,9 +163,14 @@ export const itemProductionTable = {
 ////////////////////////////////////////////////////////////////////////////////
 // War
 ////////////////////////////////////////////////////////////////////////////////
-export const defenderBonusTable = {
+export const warTable = {
+  pillage: {
+    range: { min: 0.80, max: 1.25 }
+  },
   regular: {
+    range: { min: 0.80, max: 1.25 }
   },
   siege: {
+    range: { min: 0.80, max: 1.25 }
   }
 }

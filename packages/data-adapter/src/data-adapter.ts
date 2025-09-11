@@ -5,6 +5,9 @@ import { ChronicleTurn, MageRank } from 'shared/types/common';
 
 export interface SearchOptions {
   mageId?: number,
+  attackerId?: number,
+  defenderId?: number,
+
   mageName?: string,
   startTime?: number,
   endTime?: number,

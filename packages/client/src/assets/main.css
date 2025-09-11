@@ -96,6 +96,12 @@ table > tr.active {
   gap: 5px;
 }
 
+.error {
+  color: #e41;
+  background: #200;
+  font-size: 100%;
+}
+
 
 /******************************************
 * Entry forms

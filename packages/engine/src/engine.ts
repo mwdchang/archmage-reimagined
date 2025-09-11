@@ -58,6 +58,7 @@ import {
   EffectOrigin,
   KingdomArmyEffect
 } from 'shared/types/effects';
+import { NetPowerRangeError } from 'shared/src/errors';
 
 import { randomInt } from './random';
 
@@ -80,6 +81,8 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
+import { warTable } from './base/config';
+import { mageName } from './util';
 
 
 const EPIDEMIC_RATE = 0.5;
@@ -893,12 +896,22 @@ class Engine {
     await this.adapter.updateMage(mage);
   }
 
-
   async rankList(_listingType: string): Promise<MageRank[]> {
     return this.adapter.getRankList();
   }
 
-  async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
+  /**
+   * Check if
+   * - attacker has enough turns
+   * - defender mage is not defeated
+   * - defender mage is not damaged
+   * - in attack range
+  **/
+  async preBattleCheck(
+    mage: Mage, 
+    targetId: number, 
+    battleType: 'siege' | 'regular' | 'pillage' 
+  ): Promise<string[]>  {
     const errors = [];
     const defenderMage = await this.getMage(targetId);
 
@@ -908,8 +921,52 @@ class Engine {
     if (defenderMage.status === 'defeated') {
       errors.push('Target mage is already defeated');
     }
+
+    // now check for counter status, which negates the next checks
+    const end = Date.now();
+    const start = end - 86400000;
+    const prevAttacks = await this.adapter.getBattles({
+      attackerId: mage.id,
+      defenderId: defenderMage.id,
+      startTime: start,
+      endTime: end
+    });
+
+    const prevDefends = await this.adapter.getBattles({
+      attackerId: defenderMage.id,
+      defenderId: mage.id,
+      startTime: start,
+      endTime: end
+    });
+
+    const percentDamageDealt = prevAttacks.reduce((acc, battle) => {
+      return battle.defenderPowerLossPercentage + acc;
+    }, 0);
+
+    const percentDamageReceived = prevDefends.reduce((acc, battle) => {
+      return battle.defenderPowerLossPercentage + acc;
+    }, 0);
+
+    // Damage owed, no need to proceed with status or range check
+    if (percentDamageDealt < percentDamageReceived) {
+      return errors;
+    }
+
     if (defenderMage.status === 'damaged') {
       errors.push('Target mage is in damaged status');
+    }
+
+    // Check if opponent is in allowable range
+    const warConfig = warTable[battleType];
+    const attackerNP = totalNetPower(mage);
+    const defenderNP = totalNetPower(defenderMage);
+
+    if (
+      (attackerNP * warConfig.range.max) < defenderNP ||
+      (attackerNP * warConfig.range.min) > defenderNP
+    ) {
+      console.warn(`${defenderMage.id} not in range of ${mage.id}`);
+      errors.push(`${mageName(defenderMage)} is not in your attack range`);
     }
     return errors;
   }
@@ -946,6 +1003,7 @@ class Engine {
   ) {
     const defenderMage = await this.getMage(targetId);
     const MAX_STACKS = 10;
+
 
     // For attacker, the army is formed by selected ids
     const aBattleStackIds = stackIds.slice(0, MAX_STACKS);

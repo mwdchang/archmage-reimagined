@@ -125,6 +125,12 @@ export class SimpleDataAdapter extends DataAdapter {
       if (options.mageId && options.mageId !== s.attackerId && options.mageId !== s.defenderId) {
         return false;
       }
+      if (options.attackerId && options.attackerId !== s.attackerId) {
+        return false;
+      }
+      if (options.defenderId && options.defenderId !== s.defenderId) {
+        return false;
+      }
       if (options.mageName && options.mageName !== s.attackerName && options.mageName !== s.defenderName) {
         return false;
       }

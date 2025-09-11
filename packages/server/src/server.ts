@@ -148,7 +148,7 @@ router.post('/api/war', async (req: any, res) => {
   const { spellId, itemId, stackIds, targetId, battleType } = req.body;
 
   // Do not proceed if there are errors
-  const errors = await engine.preBattleCheck(mage, +targetId);
+  const errors = await engine.preBattleCheck(mage, +targetId, battleType);
   if (errors.length > 0) {
     res.status(200).json({ errors, reportId: null, mage });
     return;

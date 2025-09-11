@@ -1,7 +1,7 @@
 <template>
   <main style="display: flex; flex-direction: column; align-items: center">
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
-    <nav-bar v-if="mage" />
+    <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
 
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
     <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
@@ -56,7 +56,16 @@ const publicRoutes = [
   'home', 'guide', 'encyclopedia',
   'viewUnit', 'viewSpell'
 ];
-const hideHeader = ['status', 'test', 'about', 'viewUnit', 'viewSpell', 'encyclopedia' ];
+const hideHeader = [
+  'status',
+  'test',
+  'about',
+  'viewItem',
+  'viewUnit',
+  'viewSpell',
+  'encyclopedia',
+  'guide'
+];
 
 // Test to see if session already exist
 onMounted(async () => {

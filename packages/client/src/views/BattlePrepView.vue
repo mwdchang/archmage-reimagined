@@ -60,6 +60,10 @@
         {{ readableStr(battleType) }}
       </button>
     </section>
+
+    <div v-for="error of errors" class="error">
+      {{ error }}
+    </div>
   </main>
 </template>
 
@@ -137,6 +141,7 @@ const battleItems = computed(() => {
 
 
 const useAllStacks = ref(false);
+const errors = ref<string[]>([]);
 
 const doBattle = async () => {
   if (!mageStore.mage) return;
@@ -157,6 +162,12 @@ const doBattle = async () => {
     itemId: battleItem.value,
     stackIds
   });
+
+  // eg: not in range, or insufficient number of turns
+  if (res.data.errors) {
+    errors.value = res.data.errors;
+    return;
+  }
 
   if (res.data.reportId) {
     mageStore.setMage(res.data.mage);

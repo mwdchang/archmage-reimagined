@@ -330,15 +330,24 @@ WHERE id = ${mage.id}
     if (options.mageId) {
       whereClauses.push(`(attacker_id = ${options.mageId} OR defender_id = ${options.mageId})`);
     }
+    if (options.attackerId) {
+      whereClauses.push(`(attacker_id = ${options.attackerId}`);
+    }
+    if (options.defenderId) {
+      whereClauses.push(`(defender_id = ${options.defenderId}`);
+    }
     if (options.mageName) {
       whereClauses.push(`(attacker_name like '%${options.mageName}%' OR defender_name like '%${options.mageName})%'`);
     }
+
+    // Manage time
     if (options.startTime !== undefined) {
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
       whereClauses.push(`timestamp <= ${options.startTime}`);
     }
+
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
     }
