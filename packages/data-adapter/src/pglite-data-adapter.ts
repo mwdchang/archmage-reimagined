@@ -331,10 +331,10 @@ WHERE id = ${mage.id}
       whereClauses.push(`(attacker_id = ${options.mageId} OR defender_id = ${options.mageId})`);
     }
     if (options.attackerId) {
-      whereClauses.push(`(attacker_id = ${options.attackerId}`);
+      whereClauses.push(`attacker_id = ${options.attackerId}`);
     }
     if (options.defenderId) {
-      whereClauses.push(`(defender_id = ${options.defenderId}`);
+      whereClauses.push(`defender_id = ${options.defenderId}`);
     }
     if (options.mageName) {
       whereClauses.push(`(attacker_name like '%${options.mageName}%' OR defender_name like '%${options.mageName})%'`);

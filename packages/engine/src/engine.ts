@@ -957,13 +957,12 @@ class Engine {
     }
 
     // Check if opponent is in allowable range
-    const warConfig = warTable[battleType];
     const attackerNP = totalNetPower(mage);
     const defenderNP = totalNetPower(defenderMage);
 
     if (
-      (attackerNP * warConfig.range.max) < defenderNP ||
-      (attackerNP * warConfig.range.min) > defenderNP
+      (attackerNP * warTable.range.max) < defenderNP ||
+      (attackerNP * warTable.range.min) > defenderNP
     ) {
       console.warn(`${defenderMage.id} not in range of ${mage.id}`);
       errors.push(`${mageName(defenderMage)} is not in your attack range`);

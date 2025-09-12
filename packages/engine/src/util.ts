@@ -10,5 +10,5 @@ export const RPretty = (v: any, n: number = 10) => {
   return ' '.repeat(n - str.length) + str;
 };
 export const mageName = (mage: Mage) => {
-  return `${mage.name} (${mage.id})`;
+  return `${mage.name} (#${mage.id})`;
 }

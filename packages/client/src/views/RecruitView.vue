@@ -36,7 +36,9 @@
 
   <table>
     <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
-      <td>{{ r.id }}</td>
+      <td>
+        {{ readableStr(r.id) }}
+      </td>
       <td>{{ r.size }}</td>
       <td> <button @click="deleteOrder(idx)">Remove</button></td>
     </tr>
@@ -53,6 +55,7 @@ import { useMageStore } from '@/stores/mage';
 import { getRecruitableUnits } from 'engine/src/base/references'; 
 import { recruitmentAmount } from 'engine/src/interior';
 import { ArmyUnit } from 'shared/types/mage';
+import { readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 

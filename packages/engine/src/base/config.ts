@@ -164,13 +164,5 @@ export const itemProductionTable = {
 // War
 ////////////////////////////////////////////////////////////////////////////////
 export const warTable = {
-  pillage: {
-    range: { min: 0.80, max: 1.25 }
-  },
-  regular: {
-    range: { min: 0.80, max: 1.25 }
-  },
-  siege: {
-    range: { min: 0.80, max: 1.25 }
-  }
+  range: { min: 0.80, max: 1.25 }
 }

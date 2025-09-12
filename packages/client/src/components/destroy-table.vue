@@ -12,7 +12,9 @@
         <td>-</td>
         <td>{{ readableStr(bType.id) }}</td>
         <td class="text-right">{{ readbleNumber(mage[bType.id]) }} </td>
-        <td> <input type="number" size="6" v-model="userInput[bType.id]"> </td>
+        <td> 
+          <input type="number" size="6" v-model="userInput[bType.id]"> 
+        </td>
       </tr>
     </tbody>
   </table>
@@ -51,6 +53,12 @@ const destroy = () => {
 </script>
 
 <style scoped>
+input {
+  width: 5rem;
+  text-align: right;
+  background: #eee;
+}
+
 tr:nth-child(odd) {
   background: #333;
 }

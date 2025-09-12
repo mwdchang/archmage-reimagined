@@ -36,7 +36,10 @@ export const getRecruitableUnits = (magic: string): Unit[] => {
   const recruitables: Unit[] = [];
 
   unitMap.forEach((unit: Unit) => {
-    if (unit.attributes.includes('special') && unit.magic === magic) {
+    if (
+      (unit.attributes.includes('special') && unit.magic === magic) ||
+      (unit.attributes.includes('basic'))
+    ) {
       recruitables.push(_.cloneDeep(unit));
     }
   });
