@@ -31,9 +31,16 @@ onMounted(async () => {
   line-height: 120%;
 }
 
+::v-deep(.markdown-body h4),
 ::v-deep(.markdown-body h3),
 ::v-deep(.markdown-body h2) {
   margin-top: 20px;
   color: #f80;
+}
+
+::v-deep(.markdown-body pre) {
+  padding: 8px;
+  margin: 8px;
+  background: #333;
 }
 </style>

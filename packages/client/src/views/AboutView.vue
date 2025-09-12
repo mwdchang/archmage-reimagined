@@ -8,7 +8,7 @@
     </p>
 
     <br>
-    <main class="row" style="gap: 50px">
+    <main class="row" style="gap: 30px">
       <section>
         <img style="width: 160px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
         <img style="width: 160px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />

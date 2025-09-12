@@ -971,27 +971,6 @@ class Engine {
   }
 
 
-  /*
-  async doPillage(mage: Mage, targetId: number, stackId: string) {
-    // 1. Calculte if success or not
-    // 2. Engage if caught
-    // 3. Calculate pillage damage
-    const targetMage = await this.getMage(targetId);
-    
-    const pillageArmy = mage.army.find(d => d.id === stackId);
-    if (!pillageArmy) {
-      // error
-      return;
-    }
-
-    const unit = getUnitById(pillageArmy.id)
-    const pillageArmySize = pillageArmy.size;
-    const defenderArmySize = totalUnits(targetMage);
-
-    console.log('!!!'); 
-  }
-  */
-
   async doBattle(
     mage: Mage, 
     targetId: number, 
@@ -1035,8 +1014,6 @@ class Engine {
       const attackerArmyNP = totalArmyPower(attacker.army);
       const defenderArmyNP = totalArmyPower(defender.army);
       const ratio = 100 * (attackerArmyNP / defenderArmyNP);
-
-      console.log('Attacker to defender army ratio', ratio.toFixed(4));
 
       const assignment = defender.mage.assignment;
       if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
@@ -1128,13 +1105,10 @@ class Engine {
       }
     });
 
-    console.log('>> saving battle report');
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
 
-    console.log('>> saving atacking mage');
     await this.adapter.updateMage(mage);
 
-    console.log('>> saving defending mage');
     await this.adapter.updateMage(defenderMage);
 
     this.adapter.updateRank({
