@@ -36,6 +36,7 @@ import cookieParser from 'cookie-parser';
 import { PGliteDataAdapter } from 'data-adapter/src/pglite-data-adapter';
 import { Engine } from 'engine/src/engine';
 import { MAX_AGE, verifyAccessToken } from 'shared/src/auth';
+import { NameError } from 'shared/src/errors';
 
 const PORT = 3000;
 const app = express();
@@ -181,12 +182,19 @@ router.get('/api/chronicles', async (req: any, res) => {
 
 router.post('/api/register', async (req, res) => {
   const { username, password, magic } = req.body;
-  const { user, mage } = await engine.register(username, password, magic);
-  res.cookie('amr-jwt', user.token, {
-    httpOnly: true,
-    maxAge: MAX_AGE * 1000
-  });
-  res.status(200).json(mage);
+
+  try {
+    const { user, mage } = await engine.register(username, password, magic);
+    res.cookie('amr-jwt', user.token, {
+      httpOnly: true,
+      maxAge: MAX_AGE * 1000
+    });
+    res.status(200).json(mage);
+  } catch (err) {
+    if (err instanceof NameError) {
+      res.status(409).json({ error: err.message });
+    }
+  }
 });
 
 router.post('/api/login', async (req, res) => {

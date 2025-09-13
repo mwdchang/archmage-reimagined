@@ -8,15 +8,15 @@
     </p>
 
     <br>
-    <section class="row" style="gap: 30px">
+    <section class="row" style="gap: 25px">
       <section>
-        <img style="width: 150px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
-        <img style="width: 150px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
-        <img style="width: 150px" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
-        <img style="width: 150px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
-        <img style="width: 150px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+        <img style="width: 15vw" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
+        <img style="width: 15vw" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
+        <img style="width: 15vw" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
+        <img style="width: 15vw" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
+        <img style="width: 15vw" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
       </section>
-      <section> 
+      <section style="flex: 1"> 
         <div class="about-row">
           <div> Land </div>
           <div class="row">
@@ -64,7 +64,7 @@
       </section>
     </section>
 
-    <section class="row" style="gap: 35px; align-items: baseline">
+    <section class="row" style="gap: 30px; align-items: baseline">
       <div class="column"> 
         <router-link to="/explore">Explore</router-link>
         <router-link to="/build">Build</router-link>
@@ -181,16 +181,16 @@ section {
 .about-row {
   display: flex;
   flex-direction: row;
-  width: 15vw;
+  width: 15rem;
   justify-content: space-between;
 }
 
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+
+.about {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 </style>

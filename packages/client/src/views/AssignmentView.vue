@@ -25,7 +25,7 @@
 
     <div class="row" style="align-items: baseline">
       <label style="width: 12rem"> Item condition </label>
-      <select v-model="selectedItemCondition" @change="setAssignment()">
+      <select v-model="selectedItemCondition" @change="setAssignment()" style="margin-bottom: 0">
         <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
       </select>
     </div>
