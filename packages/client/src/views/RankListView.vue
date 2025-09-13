@@ -1,5 +1,6 @@
 <template>
-  <section class="form" style="width: 25rem; margin-bottom: 10px">
+  <div class="section-header">Rankings</div>
+  <section class="form" style="width: 25rem; margin-bottom: 10px; padding-bottom: 0">
     <div class="row" style="align-items: baseline; gap: 10px">
       <input type="checkbox" v-model="hideRange" style="width: 15px; height: 15px"> 
       <label>Hide mages not in attack range</label>
@@ -15,21 +16,23 @@
         <td>Fort</td>
         <td>Power</td>
         <td>Status</td>
-        <td>&nbsp;</td>
       </tr>
-      <tr v-for="(rank, idx) of rankListFiltered" 
+      <tr v-for="(rank) of rankListFiltered" 
         :class="{active: rank.id === mageStore.mage.id}"
-        :key="idx">
-        <td> {{ idx + 1 }} </td>
-        <td> (#{{ rank.id }}) {{ rank.name }} </td>
-        <td> <magic :magic="rank.magic" /> </td>
+        :key="rank.id">
+        <td class="text-right"> 
+          {{ rank.rank }}
+        </td>
+        <td> 
+          <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> 
+            {{ rank.name }} (#{{ rank.id }})
+          </router-link>
+        </td>
+        <td> <magic :magic="rank.magic" small /> </td>
         <td class="text-right"> {{ readbleNumber(rank.land) }} </td>
         <td class="text-right"> {{ rank.forts }} </td>
         <td class="text-right"> {{ readbleNumber(rank.netPower) }} </td>
         <td>{{ rank.status }}</td>
-        <td> 
-          <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> view </router-link>
-        </td>
       </tr>
     </tbody>
   </table>
