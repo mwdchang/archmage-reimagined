@@ -1,9 +1,8 @@
 <template>
   <main v-if="targetSummary">
-    <h3>
+    <div class="section-header">
       You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
-    </h3>
-    <br>
+    </div>
     <table>
       <tbody>
         <tr>

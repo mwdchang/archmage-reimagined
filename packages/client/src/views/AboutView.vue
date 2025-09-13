@@ -10,11 +10,11 @@
     <br>
     <section class="row" style="gap: 30px">
       <section>
-        <img style="width: 160px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
-        <img style="width: 160px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
-        <img style="width: 160px" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
-        <img style="width: 160px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
-        <img style="width: 160px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+        <img style="width: 150px" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
+        <img style="width: 150px" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
+        <img style="width: 150px" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
+        <img style="width: 150px" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
+        <img style="width: 150px" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
       </section>
       <section> 
         <div class="about-row">

@@ -9,8 +9,7 @@
       (Max = {{ maxSpellLevel(mageStore.mage) }})
     </p>
     <p> 
-      You are generating {{ rp }} research points per turn. <br>
-      Your magic item generation rate is {{ itemRate }}%.
+      Generating {{ rp }} research points per turn. Item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
       <tbody>

@@ -70,6 +70,9 @@
     </section>
 
     <button @click="register">Register</button>
+    <div class="error">
+      {{ errorStr }}
+    </div>
   </main>
 </template>
 
@@ -83,16 +86,24 @@ import magic from './magic.vue';
 const registerData = ref({ username: '', password: '', magic: 'ascendant' });
 const router = useRouter();
 const mageStore = useMageStore();
+const errorStr = ref('');
 
 const register = async () => {
-  const r = await API.post('/register', registerData.value);
-  console.log('register response', r.data);
-  if (r) {
-    mageStore.setLoginStatus(1);
-    mageStore.setMage(r.data);
-    setTimeout(() => {
-      router.push({ name: 'about' });
-    }, 400);
+  try {
+    const r = await API.post('/register', registerData.value);
+    console.log('register response', r.data);
+    if (r) {
+      mageStore.setLoginStatus(1);
+      mageStore.setMage(r.data);
+      setTimeout(() => {
+        router.push({ name: 'about' });
+      }, 400);
+    }
+  } catch (err: any) {
+    if (err.response?.status === 409) {
+      errorStr.value = err.response?.data.error;
+      console.error(err);
+    }
   }
 };
 </script>
