@@ -1,6 +1,9 @@
 <template>
   <main v-if="mageStore.mage">
     <div class="section-header">Research</div>
+    <div class="row">
+      <img src="@/assets/images/research.png" width="400" class="gen-img" />
+    </div>
     <p> 
       Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
       (Max = {{ maxSpellLevel(mageStore.mage) }})

@@ -1,37 +1,37 @@
 <template>
+  <div class="row">
+  </div>
   <table v-if="mageStore.mage" class="header-info">
     <tbody>
       <tr>
         <td> 
-          <div class="row" style="justify-content:space-between; padding: 0 5px">
-            <div>Turns</div>
-            <div>{{ readbleNumber(mage.currentTurn) }} / {{ readbleNumber(mage.maxTurn) }} </div>
+          <div class="row"> 
+            <svg-icon :name="'hourglass'" :size="16" />
+            <div>{{ readbleNumber(mage.currentTurn) }} </div>
           </div>
         </td>
         <td> 
-          <div class="row" style="justify-content:space-between; padding: 0 5px">
-            <div>Land</div> 
+          <div class="row"> 
+            <svg-icon :name="'land'" :size="16" />
             <div>{{ readbleNumber(totalLand(mage)) }}</div>
           </div>
         </td>
         <td> 
-          <div class="row" style="justify-content:space-between; padding: 0 5px">
-            <div>Mana</div>
-            <div>{{ readbleNumber(mage.currentMana) }} / {{ readbleNumber(manaStorage(mage)) }}</div>
+          <div class="row"> 
+            <svg-icon :name="'mana'" :size="16" />
+            <div>{{ readbleNumber(mage.currentMana) }} </div>
           </div>
         </td>
-      </tr>
-      <tr>
         <td> 
-          <div class="row" style="justify-content:space-between; padding: 0 5px">
-            <div>Geld</div>
+          <div class="row"> 
+            <svg-icon :name="'geld'" :size="16" />
             <div>{{ readbleNumber(mage.currentGeld) }} </div>
           </div>
         </td>
         <td> 
-          <div class="row" style="justify-content:space-between; padding: 0 5px">
-            <div>Pop.</div>
-            <div>{{ readbleNumber(mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mage)) }}</div>
+          <div class="row"> 
+            <svg-icon :name="'population'" :size="16" />
+            <div>{{ readbleNumber(mage.currentPopulation) }} </div>
           </div>
         </td>
         <td> 
@@ -42,16 +42,14 @@
       </tr>
     </tbody>
   </table>
-  <br>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import * as interior from 'engine/src/interior';
 import { totalLand } from 'engine/src/base/mage';
-import { manaStorage } from 'engine/src/magic';
 import magic from './magic.vue';
+import SvgIcon from './svg-icon.vue';
 import { readbleNumber } from '@/util/util';
 import { Mage } from 'shared/types/mage';
 
