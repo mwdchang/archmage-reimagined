@@ -111,7 +111,7 @@
 
     <div class="chronicles" v-if="logs.length > 0" style="max-height: 25rem; overflow-y: scroll">
       <div v-for="(turn) in logs" :key="turn.turn">
-        <div>(Turn {{turn.turn}})</div>
+        <div style="font-weight: 600">Turn {{turn.turn}}: </div>
         <div v-for="(log) in turn.data">
           {{ log }}
         </div>

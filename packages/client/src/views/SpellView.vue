@@ -47,7 +47,7 @@
       </section>
 
       <div v-if="spellResult.length">
-        <div v-for="(d, idx) of spellResult" :key="idx">
+        <div v-for="(d, idx) of spellResult" :key="idx" :class="{'error': d.type === 'error'}">
           {{ d.message }}
         </div>
       </div>
@@ -93,8 +93,8 @@ const castSpell = async () => {
     target: target.value 
   })).data;
 
-  if (res.r) {
-    spellResult.value = res.r;
+  if (res.result) {
+    spellResult.value = res.result;
   }
 
   if (res.mage) {

@@ -15,7 +15,7 @@ import { readableDate } from '@/util/util';
 <style scoped>
 .footer {
   width: 100%;
-  height: 40px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

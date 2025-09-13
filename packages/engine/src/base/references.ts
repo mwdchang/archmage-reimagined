@@ -32,6 +32,10 @@ export const getUnitById = (id: string): Unit => {
   return _.cloneDeep(unit);
 }
 
+export const getAllUnits = (): Unit[] => {
+  return _.clone([...unitMap.values()]);
+}
+
 export const getRecruitableUnits = (magic: string): Unit[] => {
   const recruitables: Unit[] = [];
 
@@ -74,6 +78,10 @@ export const getItemById = (id: string): Item => {
   const item = itemMap.get(id);
   if (!item) throw new Error(`Cannot find item ${id}`);
   return _.cloneDeep(item);
+}
+
+export const getAllItems = (): Item[] => {
+  return _.clone(itemList);
 }
 
 export const getRandomItem = () => {

@@ -1,6 +1,6 @@
 <template>
   <p>
-    Summons {{ effect.unitIds.join(', ') }}
+    Summons {{ effect.unitIds.map(readableStr).join(', ') }}
   </p>
   <div v-for="(magic) in magicTypes" :key="magic">
     <div v-if="effect.magic[magic]"
@@ -20,7 +20,7 @@
 import { UnitSummonEffect } from 'shared/types/effects';
 import { magicTypes } from 'engine/src/base/references';
 import Magic from '@/components/magic.vue';
-import { readbleNumber } from '@/util/util';
+import { readbleNumber, readableStr } from '@/util/util';
 
 defineProps<{
   effect: UnitSummonEffect

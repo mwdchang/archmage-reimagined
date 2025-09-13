@@ -59,6 +59,7 @@ import {
   KingdomArmyEffect
 } from 'shared/types/effects';
 import { NetPowerRangeError } from 'shared/src/errors';
+import { GameMsg } from 'shared/types/common';
 
 import { randomInt } from './random';
 
@@ -88,10 +89,6 @@ import { mageName } from './util';
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
 
-interface GameMsg {
-  type: string,
-  message: string,
-}
 
 const totalArmyPower = (army: ArmyUnit[]) => {
   let netpower = 0;
@@ -629,11 +626,14 @@ class Engine {
 
       if (attributes.includes('selfOnly')) {
         if (attributes.includes('summon')) {
-          this.summon(mage, spellId);
+          const r = await this.summon(mage, spellId);
+          if (r.length) logs.push(...r);
         } else if (spell.attributes.includes('enchantment')) {
-          this.enchant(mage, spellId, null);
+          const r = await this.enchant(mage, spellId, null);
+          if (r.length) logs.push(...r);
         } else if (spell.attributes.includes('instant')) {
-          this.instant(mage, spellId, null);
+          const r = await this.instant(mage, spellId, null);
+          if (r.length) logs.push(...r);
         } else {
           throw new Error(`cannot process attributes ${attributes}`);
         }
@@ -645,9 +645,11 @@ class Engine {
 
         const targetMage = await this.getMage(target);
         if (attributes.includes('enchantment')) {
-          this.enchant(mage, spellId, targetMage);
+          const r = await this.enchant(mage, spellId, targetMage);
+          if (r.length) logs.push(...r);
         } else if (attributes.includes('instant')) {
-          this.instant(mage, spellId, targetMage);
+          const r = await this.instant(mage, spellId, targetMage);
+          if (r.length) logs.push(...r);
         }
         await this.adapter.updateMage(mage);
         await this.adapter.updateMage(targetMage);
@@ -658,6 +660,7 @@ class Engine {
 
   /**
    * instant harmful or beneficial effects
+   * FIXME: GameMSG returns
   **/
   async instant(mage: Mage, spellId: string, targetMage: Mage | null) {
     const spell = getSpellById(spellId);
@@ -667,6 +670,7 @@ class Engine {
       magic: mage.magic,
       targetId: mage.id
     };
+    const logs: GameMsg[] = [];
 
     if (targetMage === null) {
       for (const effect of spell.effects) {
@@ -689,6 +693,7 @@ class Engine {
         }
       }
     }
+    return logs;
   }
 
   async enchant(mage: Mage, spellId: string, targetMage: Mage | null) {
