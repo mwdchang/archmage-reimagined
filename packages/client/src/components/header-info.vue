@@ -63,6 +63,7 @@ const mage = computed<Mage>(() => {
 .header-info {
   width: 55vw;
   font-size: 80%;
+  margin-bottom: 10px;
 }
 
 table > tbody > tr > td {
@@ -70,5 +71,6 @@ table > tbody > tr > td {
   padding-left: 2px;
   line-height: 1.25rem;
   width: 20%;
+  border: 1px solid #333333;
 }
 </style>

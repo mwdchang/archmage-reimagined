@@ -339,7 +339,7 @@
     "name": "Call Griffon",
     "magic": "verdant",
     "rank": "complex",
-    "description": "",
+    "description": "The great wood-elf beastmaster Nefra Wildfire was the first to successfully befriend the deadly and highly intelligent griffons. She risked her life to save one of their injured young from a pack of orc wolf raiders, and further jeopardized herself by travelling to the mountain perch of the infant's clan, from which none had ever returned. Nefra spent many weeks with the clan, learning their ways and communing with them through her beast lore, never once asking them to leave their homes to fight in the Great Wars. As she bid the griffons farewell, the clan elder approached and presented her with a bundle of feathers collected from the wings of griffons from many clans. 'Merely hold a single feather aloft,' the great griffon said, 'and speak my name. The voice of whomever speaks shall ride the winds and reach the ears of all griffons, and we shall come to aid thee and thy bretheren.", 
     "attributes": ["summon", "selfOnly"],
     "researchCost": 3000,
     "castingCost": 34600,

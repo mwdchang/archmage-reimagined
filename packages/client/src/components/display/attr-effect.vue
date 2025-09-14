@@ -15,7 +15,9 @@
         v-for="(val, magic) of attr.magic"
         style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
         <magic :magic="magic as string" />
-        <span>{{ val.value }} </span>
+        <span>
+          {{ val.value }} 
+        </span>
       </div>
     </div>
     <div style="width:100%; border-bottom: 1px solid #888">&nbsp;</div>
@@ -24,7 +26,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { UnitAttrEffect } from 'shared/types/effects';
+import { AllowedMagic, UnitAttrEffect } from 'shared/types/effects';
 import Magic from '@/components/magic.vue';
 
 const props = defineProps<{
@@ -32,7 +34,7 @@ const props = defineProps<{
 }>();
 
 const attributes = computed(() => {
-  const keys = Object.keys(props.effect.attributes);
+  const keys = Object.keys(props.effect.attributes) as AllowedMagic[];
 
   return keys.map(key => {
     return {
