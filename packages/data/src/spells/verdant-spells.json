@@ -183,6 +183,21 @@
         "filters": null,
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "attributes": {
+              "hitPoints": {
+                "rule": "addSpellLevelPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.20 },
+                  "verdant": { "value": 0.37 },
+                  "eradication": { "value": 0.20 },
+                  "nether": { "value": 0.12 },
+                  "phantasm": { "value": 0.12 }
+                }
+              }
+            }
+          }
         ]
       }
     ]
@@ -274,6 +289,22 @@
         ],
         "trigger": null,
         "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "beauty", "extra": null } },
+                  "verdant": { "value": { "name": "beauty", "extra": null } },
+                  "eradication": { "value": { "name": "beauty", "extra": null } },
+                  "nether": { "value": { "name": "beauty", "extra": null } },
+                  "phantasm": { "value": { "name": "beauty", "extra": null } }
+                }
+              }
+            }
+          }
         ]
       }
     ]

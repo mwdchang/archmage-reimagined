@@ -2,12 +2,12 @@
   <template v-for="(attr) of attributes">
     <div style="line-height: 120%">
       Modify {{ attr.key.split(",").join(",&nbsp;") }} by:&nbsp;
-      <span style="font-style: italic; color: #fb0; background-color: #333; padding: 3px; border-radius: 2px;">
+      <span class="special-text">
         <span v-if="attr.rule === 'add'"> value </span>
         <span v-if="attr.rule === 'addPercentageBase'"> value * base </span>
         <span v-if="attr.rule === 'addSpellLevel'"> spell power * value</span>
         <span v-if="attr.rule === 'addSpellLevelPercentage'"> spell power / max spell power * value </span>
-        <span v-if="attr.rule === 'addSpellLevelPercentageBase'"> spell power / max spell power * value * attr</span>
+        <span v-if="attr.rule === 'addSpellLevelPercentageBase'"> spell power / max spell power * value * attrbute</span>
       </span>
     </div>
     <div style="display: flex; flex-direction: column; gap: 2px">
@@ -15,7 +15,10 @@
         v-for="(val, magic) of attr.magic"
         style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
         <magic :magic="magic as string" />
-        <span>
+        <span v-if="attr.key === 'abilities'">
+          {{ val.value.name }} <span v-if="val.value.extra">({{ val.value.extra }})</span>
+        </span>
+        <span v-else>
           {{ val.value }} 
         </span>
       </div>
@@ -34,7 +37,7 @@ const props = defineProps<{
 }>();
 
 const attributes = computed(() => {
-  const keys = Object.keys(props.effect.attributes) as AllowedMagic[];
+  const keys = Object.keys(props.effect.attributes) as string[];
 
   return keys.map(key => {
     return {
