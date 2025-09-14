@@ -40,6 +40,10 @@ export const applyKingdomResourcesEffect = (
     } else  if (effect.target === 'geld') {
       value = mage.currentGeld * base * spellPowerScale;
     }
+  } else if (effect.rule === 'add') {
+    value = base;
+  } else {
+    throw new Error(`Unable to find rule ${effect.rule}`);
   }
   value = Math.floor(value); 
 

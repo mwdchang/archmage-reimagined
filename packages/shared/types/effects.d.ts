@@ -184,7 +184,7 @@ export interface KingdomBuildingsEffect extends Effect {
 }
 
 export interface KingdomResourcesEffect extends Effect {
-  rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
+  rule: 'add' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: 'population' | 'mana' | 'geld' | 'item',
   magic: {
     [key in AllowedMagic]: {
