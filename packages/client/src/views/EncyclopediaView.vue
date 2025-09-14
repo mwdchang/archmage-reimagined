@@ -29,6 +29,9 @@
         <td>
           <div>{{ spell.rank }} </div>
         </td>
+        <td class="text-right">
+          <div>{{ spell.castingTurn }} </div>
+        </td>
         <td>
           <div>{{ spell.attributes.map(readableStr).join(', ') }} </div>
         </td>
