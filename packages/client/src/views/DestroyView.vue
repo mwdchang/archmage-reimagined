@@ -1,5 +1,9 @@
 <template>
   <div class="section-header">Destroy Buildings</div>
+  <div class="row">
+    <img src="@/assets/images/destroy.png" width="400" class="gen-img" />
+  </div>
+
   <destroy-table @destroy="destroy($event)" />
 </template>
 

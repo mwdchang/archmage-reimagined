@@ -7,11 +7,15 @@
     <br>
     <div v-if="mode === 'registerMode'">
       <Register /> 
-      <div> <a @click="mode = 'loginMode'">Login</a> </div>
+      <div> 
+        If you already have a mage, <a @click="mode = 'loginMode'">login</a> here
+      </div>
     </div>
     <div v-if="mode === 'loginMode'">
       <Login />
-      <div> <a @click="mode = 'registerMode'">Register</a> </div>
+      <div> 
+        If you do not have an account , you can <a @click="mode = 'registerMode'">reincarnate</a> a new mage.
+      </div>
     </div>
   </main>
 </template>

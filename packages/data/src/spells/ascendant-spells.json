@@ -334,7 +334,9 @@
         "target": "opponent",
         "targetType": "all",
         "filters": [
-          { "race": "undead" }
+          { 
+            "race": ["undead"]
+          }
         ],
         "trigger": null,
         "effects": [

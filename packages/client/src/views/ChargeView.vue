@@ -3,7 +3,7 @@
     <div class="section-header">Mana Charge</div>
     <section> 
       <p>
-        You raw mana income is {{ readbleNumber(manaIncome(mageStore.mage)) }} per turn.
+        You raw income is {{ readbleNumber(manaIncome(mageStore.mage)) }} mana per turn.
       </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">

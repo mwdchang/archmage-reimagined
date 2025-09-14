@@ -5,6 +5,7 @@ import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { NameError } from 'shared/src/errors';
 
 interface UserTable {
   username: string;
@@ -212,8 +213,16 @@ WHERE username = '${user.username}'
     const hash = await bcrypt.hash(password, saltRounds);
     const token = getToken(username);
 
+    // check duplicates names
+    const res = await this.db.query(`
+      SELECT * from archmage_user where username = '${username}'
+    `);
+    if (res && res.rows.length > 0) {
+      throw new NameError(`The name ${username} is already taken`);
+    }
+
     await this.db.exec(`
-INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
+      INSERT INTO archmage_user values('${username}', '${hash}', '${token}');
     `);
 
     return {
@@ -330,15 +339,24 @@ WHERE id = ${mage.id}
     if (options.mageId) {
       whereClauses.push(`(attacker_id = ${options.mageId} OR defender_id = ${options.mageId})`);
     }
+    if (options.attackerId) {
+      whereClauses.push(`attacker_id = ${options.attackerId}`);
+    }
+    if (options.defenderId) {
+      whereClauses.push(`defender_id = ${options.defenderId}`);
+    }
     if (options.mageName) {
       whereClauses.push(`(attacker_name like '%${options.mageName}%' OR defender_name like '%${options.mageName})%'`);
     }
+
+    // Manage time
     if (options.startTime !== undefined) {
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
       whereClauses.push(`timestamp <= ${options.startTime}`);
     }
+
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
     }

@@ -1,14 +1,21 @@
 <template>
   <main>
     <h2>Login</h2>
-    <div class="row">
-      <span style="width:5rem">Username:</span> <input @keyup.enter="login" name="username" type="text" v-model="loginData.username">
-    </div>
-    <div class="row">
-      <span style="width:5rem">Password:</span> <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
-    </div>
-    <button @click="login">Login</button>
-    <br>
+
+    <section class="form" style="width: 25rem">
+      <div class="row" style="align-items: baseline; gap: 20px">
+        <span style="width:5rem">Username</span> 
+        <input @keyup.enter="login" name="username" type="text" v-model="loginData.username">
+      </div>
+
+      <div class="row" style="align-items: baseline; gap: 20px">
+        <span style="width:5rem">Password:</span> 
+        <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
+      </div>
+
+      <button @click="login">Login</button>
+    </section>
+
     <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
   </main>
 </template>

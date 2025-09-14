@@ -1,17 +1,26 @@
 <template>
   <div class="section-header">Encyclopedia</div>
   <section class="form" style="width: 20rem; margin-bottom: 10px">
-    <input type="text" placeholder="search string" v-model="searchStr" /> 
-    <div> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
+    <div class="row">
+      <select style="width: 10rem" v-model="currentSelection" @change="changeSelection">
+        <option value="spell">Spells</option>
+        <option value="unit">Units</option>
+        <option value="item">Items</option>
+      </select>
+      <input type="text" placeholder="search string" v-model="searchStr" /> 
+    </div>
+
+    <div v-if="currentSelection==='spell'"> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
+    <div v-if="currentSelection==='unit'"> Showing {{ filteredUnits.length }} of {{ units.length}} units.</div>
+    <div v-if="currentSelection==='item'"> Showing {{ filteredItems.length }} of {{ items.length}} items.</div>
   </section>
 
-  <table>
+  <table v-if="currentSelection === 'spell'">
     <tbody>
       <tr v-for="spell of filteredSpells"> 
         <td>
           <div class="row">
             <magic :magic="spell.magic" small />
-
             <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> 
               <div>{{ readableStr(spell.id) }}</div>
             </router-link>
@@ -26,17 +35,68 @@
       </tr>
     </tbody>
   </table>
+
+  <table v-if="currentSelection === 'unit'">
+    <tbody>
+      <tr v-for="unit of filteredUnits"> 
+        <td>
+          <div class="row">
+            <magic :magic="unit.magic" small />
+            <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> 
+              {{ unit.name }}
+            </router-link>
+          </div>
+        </td>
+        <td>
+          hp={{ readbleNumber(unit.hitPoints) }},
+          np={{ readbleNumber(unit.powerRank) }}
+        </td>
+        <td>
+          {{ unit.primaryAttackType.join('+') }} /
+          {{ readbleNumber(unit.primaryAttackPower) }} /
+          {{ unit.primaryAttackInit }}
+        </td>
+        <td>
+          <div v-if="unit.secondaryAttackType.length">
+            {{ unit.secondaryAttackType.join('+') }} /
+            {{ readbleNumber(unit.secondaryAttackPower) }} /
+            {{ unit.secondaryAttackInit }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table v-if="currentSelection === 'item'">
+    <tbody>
+      <tr v-for="item of filteredItems"> 
+        <td> 
+          <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> 
+            {{ item.name }}
+          </router-link>
+        </td>
+        <td>
+          {{ item.attributes.map(readableStr).join(', ') }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue';
 import Magic from '@/components/magic.vue';
-import { getAllSpells } from 'engine/src/base/references';
-import { Spell } from 'shared/types/magic';
-import { readableStr } from '@/util/util';
+import { getAllItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
+import { Item, Spell } from 'shared/types/magic';
+import { readableStr, readbleNumber } from '@/util/util';
+import { Unit } from 'shared/types/unit';
+
+const searchStr = ref('');
+const currentSelection = ref('spell');
 
 const spells = ref<Spell[]>([]);
-const searchStr = ref('');
+const units = ref<Unit[]>([]);
+const items = ref<Item[]>([]);
 
 const filteredSpells = computed(() => {
   const f = searchStr.value ? searchStr.value.toLowerCase() : '';
@@ -45,8 +105,29 @@ const filteredSpells = computed(() => {
   });
 });
 
+const filteredUnits = computed(() => {
+  const f = searchStr.value ? searchStr.value.toLowerCase() : '';
+   return units.value.filter(d => {
+    return d.name.toLowerCase().includes(f) || 
+      d.primaryAttackType.join('.').toLocaleLowerCase().includes(f);
+  });
+});
+
+const filteredItems = computed(() => {
+  const f = searchStr.value ? searchStr.value.toLowerCase() : '';
+   return items.value.filter(d => {
+    return d.name.toLowerCase().includes(f); 
+  });
+});
+
+const changeSelection = () => {
+  searchStr.value = '';
+};
+
 onMounted(() => {
   spells.value = getAllSpells();
+  units.value = getAllUnits();
+  items.value = getAllItems()
 });
 
 </script>

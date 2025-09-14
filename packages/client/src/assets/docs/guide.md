@@ -43,10 +43,34 @@ Duking it out on the battlefield is the easiest way to get ahead. Battle has thr
 - Siege: Same as regular but you get twice the amount of land, however the defending mage receives higher defensive bonuses.
 
 
-You can only engage enemy mages within 80 to 125 percent of your net power. If a mage has received too much damage within a 24 hour window they fall into a damaged state and cannot be engaged in normal circumstances with the exception of counters.
+You can engage enemy mages within 80 to 125 percent of your net power. If a mage has received too much damage within a 24 hour window they fall into a damaged state and cannot be engaged in normal circumstances with the exception of counters.
 
 All attacks incur “counter” tokens that the defender can exercise within a 24 hour window since the battle. If you have a counter against a mage, you can engage regardless of the mage’s status. It should be noted, “all attacks” incur counter tokens, including the counter attack itself.
 
+
+#### Combat
+In combat, unit stacks on opposing sides are paired up by by several rules:
+- Stacks will tend to match up against opposing stacks of similar power
+- Stack will pair up based on whether they are flying, or have ranged attack
+- Based on availability, a stack may be targetd multiple times
+
+The general form of damage calculation is as follows:
+
+```
+damage = 
+    attackPower * 
+    unitModifiers * 
+    accuracy * 
+    efficiency * 
+    (100 - attackResistances)
+```
+
+Explaining the components:
+- attackPower: The unit's attack power, attack power is sampled on a bell-curve. The exceptions are attack types wth `magic` or `psychic` components, which will be sampled at a fixed point.
+- unitModifiers: Affected by units' abilities, the spells/items used within the battle, as well as enchantments on each mage's kingdom
+- accuracy: All units starts with the same accuracy, but can be altered similar to unitModifiers
+- efficiency: Every unit starts with the same efficiency, efficiency decreaases when a unit stack attacks, or gets attacked.
+- attackResistances: How strong the defending unit is against the attacking units' attack type.
 
 
 ### Units

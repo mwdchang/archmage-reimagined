@@ -22,14 +22,14 @@
       </tr>
     </tbody>
   </table>
-  <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
-  <div class="form">
-    <button @click="build"> Build </button>
-  </div>
+  <section class="form" style="margin-top: 10px">
+    <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
+    <button @click="build" :disabled="buildingDisabled"> Build </button>
+  </section>
 </template>
 
 <script setup lang="ts">
-import _ from 'lodash';
+import _, { sum } from 'lodash';
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { buildingTypes, buildingRate } from 'engine/src/interior';
@@ -38,20 +38,25 @@ import { readbleNumber, readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 const emit = defineEmits(['build']);
-const mage = computed(() => mageStore.mage);
+const mage = computed(() => mageStore.mage!);
 
-const land = computed(() => totalLand(mage.value));
+const land = computed(() => totalLand(mage.value!));
 const summary = computed(() => {
   let landUsed = 0;
   let turnsUsed = 0;
 
   buildingTypes.forEach(b => {
     landUsed += userInput.value[b.id];
-    turnsUsed += userInput.value[b.id] /  buildingRate(mage.value, b.id);
+    turnsUsed += userInput.value[b.id] /  buildingRate(mage.value!, b.id);
   });
   turnsUsed = Math.ceil(turnsUsed);
 
   return { landUsed, turnsUsed };
+});
+
+const buildingDisabled = computed(() => {
+  return summary.value.landUsed > mage.value.wilderness || 
+    summary.value.turnsUsed > mage.value.currentTurn;
 });
 
 const userInput =  ref<{ [key: string]: number }>({});

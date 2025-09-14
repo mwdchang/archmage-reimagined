@@ -58,6 +58,8 @@ import {
   EffectOrigin,
   KingdomArmyEffect
 } from 'shared/types/effects';
+import { NetPowerRangeError } from 'shared/src/errors';
+import { GameMsg } from 'shared/types/common';
 
 import { randomInt } from './random';
 
@@ -80,15 +82,14 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
+import { warTable } from './base/config';
+import { mageName } from './util';
+import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 
 
 const EPIDEMIC_RATE = 0.5;
 const TICK = 1000 * 60 * 2; // Every two minute
 
-interface GameMsg {
-  type: string,
-  message: string,
-}
 
 const totalArmyPower = (army: ArmyUnit[]) => {
   let netpower = 0;
@@ -156,7 +157,6 @@ class Engine {
     setTimeout(() => {
       this.updateLoop();
     }, TICK);
-    console.log('engine constructor done');
   }
 
   /**
@@ -187,7 +187,8 @@ class Engine {
     }
   }
 
-  processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
+    const logs: GameMsg[] = [];
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
@@ -210,12 +211,18 @@ class Engine {
               size: res[key]
             });
           }
+          logs.push({
+            type: 'log',
+            message: `added ${res[key]} ${key} into your army`
+          });
         });
       }
     }
+    return logs;
   }
 
-  processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
+    const logs: GameMsg[] = [];
     const mageLand = totalLand(mage);
 
     // handle buildings
@@ -227,12 +234,13 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomBuildingsEffect(mage, effect, {
+        const result = applyKingdomBuildingsEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomBuildingsEffectResult(result));
       }
     }
 
@@ -244,12 +252,13 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomResourcesEffect(mage, effect, {
+        const result = applyKingdomResourcesEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomResourcesEffectResult(result));
       }
     }
 
@@ -261,14 +270,16 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomArmyEffect(mage, effect, {
+        const result = applyKingdomArmyEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomArmyEffectResult(result));
       }
     }
+    return logs;
   }
 
   /**
@@ -277,7 +288,8 @@ class Engine {
    * Note the only async/await part is for updating enchantments from other mages
   **/
   async useTurn(mage: Mage) {
-    console.log('[Turn]');
+    const turnLogs: GameMsg[] = [];
+
     // 1. use turn
     mage.currentTurn --;
     mage.turnsUsed ++;
@@ -319,7 +331,10 @@ class Engine {
     for (let i = 0; i < recruits.length; i++) {
       doRecruit(recruits[i].id, recruits[i].size);
       mage.recruitments[i].size -= recruits[i].size;
-      console.log(`recruited ${recruits[i].size} of ${recruits[i].id}`);
+      turnLogs.push({
+        type: 'log',
+        message: `recruited ${recruits[i].size} of ${recruits[i].id}`
+      });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
 
@@ -327,8 +342,10 @@ class Engine {
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
-    this.processTurnEnchantmentSummon(mage, enchantments);
-    this.processTurnEnchantmentDamage(mage, enchantments);
+    const enchant1 = this.processTurnEnchantmentSummon(mage, enchantments);
+    const enchant2 = this.processTurnEnchantmentDamage(mage, enchantments);
+    turnLogs.push(...enchant1);
+    turnLogs.push(...enchant2);
 
 
     // Enchantment life and upkeep
@@ -406,19 +423,27 @@ class Engine {
     const deltaMana = mage.currentMana - beforeMana;
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
 
-    const logs: string[] = [];
 
     const researchItem = Object.values(mage.currentResearch).find(d => {
       if (!d) return false;
       return d.active === true;
     });
     if (researchItem) {
-      logs.push(`You are researching ${researchItem.id}`);
+      turnLogs.push({
+        type: 'log',
+        message: `You are researching ${researchItem.id}`
+      });
     }
     if (mage.enchantments.length > 0) {
-      logs.push(`You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`);
+      turnLogs.push({
+        type: 'log',
+        message: `You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`
+      });
     }
-    logs.push(`You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`);
+    turnLogs.push({
+      type: 'log',
+      message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
+    });
 
     // Save turn chronicle to DB 
     this.adapter.saveChronicles([
@@ -427,7 +452,7 @@ class Engine {
         name: mage.name,
         turn: mage.turnsUsed,
         timestamp: Date.now(),
-        data: logs
+        data: turnLogs 
       }
     ]);
     this.adapter.updateRank({
@@ -529,6 +554,7 @@ class Engine {
   }
 
 
+  // FIXME: non-summoning items
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const item = getItemById(itemId);
     if (item.attributes.includes('summon')) {
@@ -626,11 +652,14 @@ class Engine {
 
       if (attributes.includes('selfOnly')) {
         if (attributes.includes('summon')) {
-          this.summon(mage, spellId);
+          const r = await this.summon(mage, spellId);
+          if (r.length) logs.push(...r);
         } else if (spell.attributes.includes('enchantment')) {
-          this.enchant(mage, spellId, null);
+          const r = await this.enchant(mage, spellId, null);
+          if (r.length) logs.push(...r);
         } else if (spell.attributes.includes('instant')) {
-          this.instant(mage, spellId, null);
+          const r = await this.instant(mage, spellId, null);
+          if (r.length) logs.push(...r);
         } else {
           throw new Error(`cannot process attributes ${attributes}`);
         }
@@ -642,9 +671,11 @@ class Engine {
 
         const targetMage = await this.getMage(target);
         if (attributes.includes('enchantment')) {
-          this.enchant(mage, spellId, targetMage);
+          const r = await this.enchant(mage, spellId, targetMage);
+          if (r.length) logs.push(...r);
         } else if (attributes.includes('instant')) {
-          this.instant(mage, spellId, targetMage);
+          const r = await this.instant(mage, spellId, targetMage);
+          if (r.length) logs.push(...r);
         }
         await this.adapter.updateMage(mage);
         await this.adapter.updateMage(targetMage);
@@ -664,28 +695,36 @@ class Engine {
       magic: mage.magic,
       targetId: mage.id
     };
+    const logs: GameMsg[] = [];
 
     if (targetMage === null) {
       for (const effect of spell.effects) {
         if (effect.effectType === 'KingdomResourcesEffect') {
-          applyKingdomResourcesEffect(mage, effect as any, origin);
+          const result = applyKingdomResourcesEffect(mage, effect as any, origin);
+          logs.push(...fromKingdomResourcesEffectResult(result));
         } else if (effect.effectType === 'KingdomBuildingsEffect') {
-          applyKingdomBuildingsEffect(mage, effect as any, origin);
+          const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
+          logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === 'WishEffect') {
-          applyWishEffect(mage, effect as any, origin);
+          const wishResult = applyWishEffect(mage, effect as any, origin);
+          logs.push(...fromWishEffectResult(wishResult));
         }
       }
     } else {
       for (const effect of spell.effects) {
         if (effect.effectType === 'KingdomResourcesEffect') {
-          applyKingdomResourcesEffect(targetMage, effect as any, origin);
+          const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
+          logs.push(...fromKingdomResourcesEffectResult(result));
         } else if (effect.effectType === 'KingdomBuildingsEffect') {
-          applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+          const result = applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+          logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === 'StealEffect') {
-          applyStealEffect(mage, effect as any, origin, targetMage);
+          const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
+          logs.push(...fromStealEffectResult(stealResult));
         }
       }
     }
+    return logs;
   }
 
   async enchant(mage: Mage, spellId: string, targetMage: Mage | null) {
@@ -893,12 +932,22 @@ class Engine {
     await this.adapter.updateMage(mage);
   }
 
-
   async rankList(_listingType: string): Promise<MageRank[]> {
     return this.adapter.getRankList();
   }
 
-  async preBattleCheck(mage: Mage, targetId: number): Promise<string[]>  {
+  /**
+   * Check if
+   * - attacker has enough turns
+   * - defender mage is not defeated
+   * - defender mage is not damaged
+   * - in attack range
+  **/
+  async preBattleCheck(
+    mage: Mage, 
+    targetId: number, 
+    battleType: 'siege' | 'regular' | 'pillage' 
+  ): Promise<string[]>  {
     const errors = [];
     const defenderMage = await this.getMage(targetId);
 
@@ -908,33 +957,55 @@ class Engine {
     if (defenderMage.status === 'defeated') {
       errors.push('Target mage is already defeated');
     }
+
+    // now check for counter status, which negates the next checks
+    const end = Date.now();
+    const start = end - 86400000;
+    const prevAttacks = await this.adapter.getBattles({
+      attackerId: mage.id,
+      defenderId: defenderMage.id,
+      startTime: start,
+      endTime: end
+    });
+
+    const prevDefends = await this.adapter.getBattles({
+      attackerId: defenderMage.id,
+      defenderId: mage.id,
+      startTime: start,
+      endTime: end
+    });
+
+    const percentDamageDealt = prevAttacks.reduce((acc, battle) => {
+      return battle.defenderPowerLossPercentage + acc;
+    }, 0);
+
+    const percentDamageReceived = prevDefends.reduce((acc, battle) => {
+      return battle.defenderPowerLossPercentage + acc;
+    }, 0);
+
+    // Damage owed, no need to proceed with status or range check
+    if (percentDamageDealt < percentDamageReceived) {
+      return errors;
+    }
+
     if (defenderMage.status === 'damaged') {
       errors.push('Target mage is in damaged status');
+    }
+
+    // Check if opponent is in allowable range
+    const attackerNP = totalNetPower(mage);
+    const defenderNP = totalNetPower(defenderMage);
+
+    if (
+      (attackerNP * warTable.range.max) < defenderNP ||
+      (attackerNP * warTable.range.min) > defenderNP
+    ) {
+      console.warn(`${defenderMage.id} not in range of ${mage.id}`);
+      errors.push(`${mageName(defenderMage)} is not in your attack range`);
     }
     return errors;
   }
 
-
-  /*
-  async doPillage(mage: Mage, targetId: number, stackId: string) {
-    // 1. Calculte if success or not
-    // 2. Engage if caught
-    // 3. Calculate pillage damage
-    const targetMage = await this.getMage(targetId);
-    
-    const pillageArmy = mage.army.find(d => d.id === stackId);
-    if (!pillageArmy) {
-      // error
-      return;
-    }
-
-    const unit = getUnitById(pillageArmy.id)
-    const pillageArmySize = pillageArmy.size;
-    const defenderArmySize = totalUnits(targetMage);
-
-    console.log('!!!'); 
-  }
-  */
 
   async doBattle(
     mage: Mage, 
@@ -946,6 +1017,7 @@ class Engine {
   ) {
     const defenderMage = await this.getMage(targetId);
     const MAX_STACKS = 10;
+
 
     // For attacker, the army is formed by selected ids
     const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
@@ -978,8 +1050,6 @@ class Engine {
       const attackerArmyNP = totalArmyPower(attacker.army);
       const defenderArmyNP = totalArmyPower(defender.army);
       const ratio = 100 * (attackerArmyNP / defenderArmyNP);
-
-      console.log('Attacker to defender army ratio', ratio.toFixed(4));
 
       const assignment = defender.mage.assignment;
       if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
@@ -1071,13 +1141,10 @@ class Engine {
       }
     });
 
-    console.log('>> saving battle report');
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
 
-    console.log('>> saving atacking mage');
     await this.adapter.updateMage(mage);
 
-    console.log('>> saving defending mage');
     await this.adapter.updateMage(defenderMage);
 
     this.adapter.updateRank({

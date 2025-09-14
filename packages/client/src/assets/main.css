@@ -51,28 +51,8 @@ table {
 
 td, th {
   border: 1px solid #484848;
-  padding: 3px;
+  padding: 2px 3px;
 }
-
-button {
-  padding: 5px 20px;
-  border-radius: 4px;
-  margin: 1px 1px;
-  cursor: pointer;
-}
-
-button:disabled,
-button[disabled]{
-  background: #777;
-  color: #BBB;
-  cursor: not-allowed;
-}
-
-select {
-  padding: 1px 4px;
-  margin: 1px 1px;
-}
-
 
 table > tr.active {
   background: #53A !important;
@@ -96,13 +76,19 @@ table > tr.active {
   gap: 5px;
 }
 
+.error {
+  color: #e41;
+  background: #200;
+  font-size: 100%;
+}
+
 
 /******************************************
 * Entry forms
 *******************************************/
 .form {
   max-width: 500px;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   background-color: #1e1e1e;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -117,7 +103,7 @@ table > tr.active {
 .form input,
 .form select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.3rem;
   margin-bottom: 1.0rem;
   border: 1px solid #444;
   border-radius: 4px;
@@ -127,6 +113,7 @@ table > tr.active {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
 }
+
 .form input:focus,
 .form select:focus {
   border-color: #4a90e2;
@@ -158,6 +145,11 @@ table > tr.active {
 }
 
 
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
 
 
 /******************************************

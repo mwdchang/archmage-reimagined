@@ -18,3 +18,10 @@ export interface ChronicleTurn {
   // FIXME: string for now, maybe structured
   data: any[]; 
 }
+
+
+export interface GameMsg {
+  type: string,
+  message: string,
+}
+

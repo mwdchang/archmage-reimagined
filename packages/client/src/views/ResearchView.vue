@@ -1,13 +1,15 @@
 <template>
   <main v-if="mageStore.mage">
     <div class="section-header">Research</div>
+    <div class="row">
+      <img src="@/assets/images/research.png" width="400" class="gen-img" />
+    </div>
     <p> 
       Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
       (Max = {{ maxSpellLevel(mageStore.mage) }})
     </p>
     <p> 
-      You are generating {{ rp }} research points per turn. <br>
-      Your magic item generation rate is {{ itemRate }}%.
+      Generating {{ rp }} research points per turn. Item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch">
       <tbody>

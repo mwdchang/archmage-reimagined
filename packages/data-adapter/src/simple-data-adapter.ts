@@ -5,6 +5,7 @@ import { getToken } from 'shared/src/auth';
 import type { Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { NameError } from 'shared/src/errors';
 
 interface User {
   username: string
@@ -36,6 +37,10 @@ export class SimpleDataAdapter extends DataAdapter {
   async register(username: string, password: string) {
     const saltRounds = 5;
     const hash = await bcrypt.hash(password, saltRounds);
+
+    if (this.userTable.has(username)) {
+      throw new NameError(`The name ${username} is already taken`);
+    }
 
     const token = getToken(username);
     this.userTable.set(username, {
@@ -123,6 +128,12 @@ export class SimpleDataAdapter extends DataAdapter {
         return false;
       }
       if (options.mageId && options.mageId !== s.attackerId && options.mageId !== s.defenderId) {
+        return false;
+      }
+      if (options.attackerId && options.attackerId !== s.attackerId) {
+        return false;
+      }
+      if (options.defenderId && options.defenderId !== s.defenderId) {
         return false;
       }
       if (options.mageName && options.mageName !== s.attackerName && options.mageName !== s.defenderName) {

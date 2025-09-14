@@ -677,17 +677,33 @@
     "name": "Touch of Necromancy",
     "magic": "nether",
     "rank": "complex",
-    "description": "The spell will empower the caster with the power to bring the dead back to undead to serve in their afterlife. A part of the slained enemies will rise from the dead and turn into mindless zombies and join your army. The more powerful the archmage, the more zombies can be raised among the fallen ranks. However, this spell will drain part of your mana to sustain the zombies.",
+    "description": "The spell will empower the caster to more efficiently manage their undead army",
     "attributes": ["enchantment", "selfOnly"],
     "researchCost": 3000,
     "castingCost": 50000,
     "castingTurn": 10,
     "upkeep": {
       "geld": 0,
-      "mana": 50,
+      "mana": 300,
       "population":0 
     },
     "effects": [
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": [
+          {
+            "race": ["undead", "demon"]
+          }
+        ],
+        "rule": "addPercentageBase",
+        "magic": {
+          "ascendant": { "value": { "geld": 0, "mana": -0.01, "population": -0.01 } },
+          "verdant": { "value": { "geld": 0, "mana": -0.01, "population": -0.01 } },
+          "eradication": { "value": { "geld": 0, "mana": -0.02, "population": -0.02 } },
+          "nether": { "value": { "geld": 0, "mana": -0.05, "population": -0.05 } },
+          "phantasm": { "value": { "geld": 0, "mana": -0.02, "population": -0.02 } }
+        }
+      }
     ]
   },
   {
