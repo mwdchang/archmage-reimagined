@@ -82,6 +82,19 @@ table > tr.active {
   font-size: 100%;
 }
 
+.special-text {
+  font-style: italic; 
+  font-size: 100%;
+  color: #fb0; background-color: #333; 
+  padding: 2px 5px; 
+  border-radius: 2px;
+}
+
+.display-section {
+  border-left: 2px solid #8ab;
+  padding-left: 20px;
+}
+
 
 /******************************************
 * Entry forms

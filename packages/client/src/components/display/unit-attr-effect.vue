@@ -1,6 +1,9 @@
 <template>
   <template v-for="(attr) of attributes">
-    <div style="line-height: 120%">
+    <div v-if="attr.rule === 'set'">
+      Set {{ attr.key.split(",").join(",&nbsp;") }} to:&nbsp;
+    </div>
+    <div v-else style="line-height: 120%">
       Modify {{ attr.key.split(",").join(",&nbsp;") }} by:&nbsp;
       <span class="special-text">
         <span v-if="attr.rule === 'add'"> value </span>
@@ -10,6 +13,7 @@
         <span v-if="attr.rule === 'addSpellLevelPercentageBase'"> spell power / max spell power * value * attrbute</span>
       </span>
     </div>
+
     <div style="display: flex; flex-direction: column; gap: 2px">
       <div 
         v-for="(val, magic) of attr.magic"
@@ -23,7 +27,6 @@
         </span>
       </div>
     </div>
-    <div style="width:100%; border-bottom: 1px solid #888">&nbsp;</div>
   </template>
 </template>
 

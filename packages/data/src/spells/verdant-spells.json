@@ -956,8 +956,8 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
-            "primaryAttackPower,secondaryAttackPower": {
-              "accuracy": {
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "verdant": { "value": 0.13 }
@@ -991,8 +991,8 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
-            "primaryAttackPower": {
-              "accuracy": {
+            "attributes": {
+              "primaryAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "verdant": { "value": 0.23 }
@@ -1015,7 +1015,7 @@
       },
       {
         "effectType": "ProductionEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "addPercentageBase",
         "production": "land",
         "magic": {
           "verdant": { "value": 0.50 }
