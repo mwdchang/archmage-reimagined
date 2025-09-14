@@ -113,7 +113,7 @@
       <div v-for="(turn) in logs" :key="turn.turn">
         <div style="font-weight: 600">Turn {{turn.turn}}: </div>
         <div v-for="(log) in turn.data">
-          {{ log }}
+          {{ log.message }}
         </div>
       </div>
     </div>

@@ -84,7 +84,7 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { warTable } from './base/config';
 import { mageName } from './util';
-import { fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 
 
 const EPIDEMIC_RATE = 0.5;
@@ -157,7 +157,6 @@ class Engine {
     setTimeout(() => {
       this.updateLoop();
     }, TICK);
-    console.log('engine constructor done');
   }
 
   /**
@@ -188,7 +187,8 @@ class Engine {
     }
   }
 
-  processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
+    const logs: GameMsg[] = [];
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
@@ -211,12 +211,18 @@ class Engine {
               size: res[key]
             });
           }
+          logs.push({
+            type: 'log',
+            message: `added ${res[key]} ${key} into your army`
+          });
         });
       }
     }
+    return logs;
   }
 
-  processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]) {
+  processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
+    const logs: GameMsg[] = [];
     const mageLand = totalLand(mage);
 
     // handle buildings
@@ -228,12 +234,13 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomBuildingsEffect(mage, effect, {
+        const result = applyKingdomBuildingsEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomBuildingsEffectResult(result));
       }
     }
 
@@ -245,12 +252,13 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomResourcesEffect(mage, effect, {
+        const result = applyKingdomResourcesEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomResourcesEffectResult(result));
       }
     }
 
@@ -262,14 +270,16 @@ class Engine {
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
-        applyKingdomArmyEffect(mage, effect, {
+        const result = applyKingdomArmyEffect(mage, effect, {
           id: enchantment.casterId,
           magic: enchantment.casterMagic,
           spellLevel: enchantment.spellLevel,
           targetId: enchantment.targetId
         });
+        logs.push(...fromKingdomArmyEffectResult(result));
       }
     }
+    return logs;
   }
 
   /**
@@ -278,7 +288,8 @@ class Engine {
    * Note the only async/await part is for updating enchantments from other mages
   **/
   async useTurn(mage: Mage) {
-    console.log('[Turn]');
+    const turnLogs: GameMsg[] = [];
+
     // 1. use turn
     mage.currentTurn --;
     mage.turnsUsed ++;
@@ -320,7 +331,10 @@ class Engine {
     for (let i = 0; i < recruits.length; i++) {
       doRecruit(recruits[i].id, recruits[i].size);
       mage.recruitments[i].size -= recruits[i].size;
-      console.log(`recruited ${recruits[i].size} of ${recruits[i].id}`);
+      turnLogs.push({
+        type: 'log',
+        message: `recruited ${recruits[i].size} of ${recruits[i].id}`
+      });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
 
@@ -328,8 +342,10 @@ class Engine {
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
-    this.processTurnEnchantmentSummon(mage, enchantments);
-    this.processTurnEnchantmentDamage(mage, enchantments);
+    const enchant1 = this.processTurnEnchantmentSummon(mage, enchantments);
+    const enchant2 = this.processTurnEnchantmentDamage(mage, enchantments);
+    turnLogs.push(...enchant1);
+    turnLogs.push(...enchant2);
 
 
     // Enchantment life and upkeep
@@ -407,19 +423,27 @@ class Engine {
     const deltaMana = mage.currentMana - beforeMana;
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
 
-    const logs: string[] = [];
 
     const researchItem = Object.values(mage.currentResearch).find(d => {
       if (!d) return false;
       return d.active === true;
     });
     if (researchItem) {
-      logs.push(`You are researching ${researchItem.id}`);
+      turnLogs.push({
+        type: 'log',
+        message: `You are researching ${researchItem.id}`
+      });
     }
     if (mage.enchantments.length > 0) {
-      logs.push(`You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`);
+      turnLogs.push({
+        type: 'log',
+        message: `You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`
+      });
     }
-    logs.push(`You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`);
+    turnLogs.push({
+      type: 'log',
+      message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
+    });
 
     // Save turn chronicle to DB 
     this.adapter.saveChronicles([
@@ -428,7 +452,7 @@ class Engine {
         name: mage.name,
         turn: mage.turnsUsed,
         timestamp: Date.now(),
-        data: logs
+        data: turnLogs 
       }
     ]);
     this.adapter.updateRank({
@@ -530,6 +554,7 @@ class Engine {
   }
 
 
+  // FIXME: non-summoning items
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const item = getItemById(itemId);
     if (item.attributes.includes('summon')) {

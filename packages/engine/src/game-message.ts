@@ -3,6 +3,7 @@ import { WishEffectResult } from "./effects/apply-wish-effect";
 import { StealEffectResult } from "./effects/apply-steal-effect";
 import { KingdomResourcesEffectResult } from "./effects/apply-kingdom-resources";
 import { KingdomBuildingsEffectResult } from "./effects/apply-kingdom-buildings";
+import { KingdomArmyEffectResult } from "./effects/apply-kingdom-army-effect";
 
 export const fromWishEffectResult = (result: WishEffectResult): GameMsg[] => {
   const logs: GameMsg[] = [];
@@ -38,6 +39,19 @@ export const fromKingdomBuildingsEffectResult = (result: KingdomBuildingsEffectR
   const logs: GameMsg[] = [];
   for (const key of Object.keys(result.buildings)) {
     const v = result.buildings[key];
+    const dir = v < 0 ? 'lost' : 'gained';
+    logs.push({
+      type: 'log',
+      message: `${result.name} (#${result.id}) ${dir} ${Math.abs(v)} ${key}`
+    });
+  }
+  return logs;
+}
+
+export const fromKingdomArmyEffectResult = (result: KingdomArmyEffectResult): GameMsg[] => {
+  const logs: GameMsg[] = [];
+  for (const key of Object.keys(result.army)) {
+    const v = result.army[key];
     const dir = v < 0 ? 'lost' : 'gained';
     logs.push({
       type: 'log',
