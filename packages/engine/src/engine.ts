@@ -84,6 +84,7 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { warTable } from './base/config';
 import { mageName } from './util';
+import { fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 
 
 const EPIDEMIC_RATE = 0.5;
@@ -660,7 +661,6 @@ class Engine {
 
   /**
    * instant harmful or beneficial effects
-   * FIXME: GameMSG returns
   **/
   async instant(mage: Mage, spellId: string, targetMage: Mage | null) {
     const spell = getSpellById(spellId);
@@ -675,21 +675,27 @@ class Engine {
     if (targetMage === null) {
       for (const effect of spell.effects) {
         if (effect.effectType === 'KingdomResourcesEffect') {
-          applyKingdomResourcesEffect(mage, effect as any, origin);
+          const result = applyKingdomResourcesEffect(mage, effect as any, origin);
+          logs.push(...fromKingdomResourcesEffectResult(result));
         } else if (effect.effectType === 'KingdomBuildingsEffect') {
-          applyKingdomBuildingsEffect(mage, effect as any, origin);
+          const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
+          logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === 'WishEffect') {
-          applyWishEffect(mage, effect as any, origin);
+          const wishResult = applyWishEffect(mage, effect as any, origin);
+          logs.push(...fromWishEffectResult(wishResult));
         }
       }
     } else {
       for (const effect of spell.effects) {
         if (effect.effectType === 'KingdomResourcesEffect') {
-          applyKingdomResourcesEffect(targetMage, effect as any, origin);
+          const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
+          logs.push(...fromKingdomResourcesEffectResult(result));
         } else if (effect.effectType === 'KingdomBuildingsEffect') {
-          applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+          const result = applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+          logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === 'StealEffect') {
-          applyStealEffect(mage, effect as any, origin, targetMage);
+          const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
+          logs.push(...fromStealEffectResult(stealResult));
         }
       }
     }
