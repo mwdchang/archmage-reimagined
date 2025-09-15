@@ -770,5 +770,157 @@
         }
       }
     ]
+  },
+  {
+    "id": "strangeMetalicCan",
+    "name": "Strange Metalic Can",
+    "description": "The small can looks oddly metallic. The label reads \"contents hazardous to health, only usuable in extreme situation\". Puff of smoke steams out when you open the strange metallic can. Your head feels a bit dizzy but to your surprise, you see your wounds healing up slowly",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "percentage",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 25 },
+              "verdant": { "value": 25 },
+              "eradication": { "value": 25 },
+              "nether": { "value": 25 },
+              "phantasm": { "value": 25 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ointmentOfHealing",
+    "name": "Ointment Of Healing",
+    "description": "This salve is contained in small jars. It is useful for drawing poison and healing wounds.",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 5 },
+              "verdant": { "value": 5 },
+              "eradication": { "value": 5 },
+              "nether": { "value": 5 },
+              "phantasm": { "value": 5 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pouchOfHerbs",
+    "name": "Pouch Of Herbs",
+    "description": "The pouch contains strange and mystical herbs which have the power to heal. A cup of herbal tea brewed with herbs from the pouch can revive and refresh a person and increase his/her healing powers",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "percentage",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 11 },
+              "verdant": { "value": 11 },
+              "eradication": { "value": 11 },
+              "nether": { "value": 11 },
+              "phantasm": { "value": 11 }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistance.poision": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 10.0 },
+                  "verdant": { "value": 10.0 },
+                  "eradication": { "value": 10.0 },
+                  "nether": { "value": 10.0 },
+                  "phantasm": { "value": 10.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "monkeyBrains",
+    "name": "Monkey Brains",
+    "description": "These fresh cut monkey brains are an exotic and fresh, new food to please the culinary senses. However, this food does more than just please the palate; monkey brains are the favorite food of mindflayers for a reason. It can increase brain power, thus enhancing psychic attacks of any kind.Area of effects: all units with psychic attack type",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": [
+          {
+            "allAttackType": ["psychic"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2.0 },
+                  "verdant": { "value": 2.0 },
+                  "eradication": { "value": 2.0 },
+                  "nether": { "value": 2.0 },
+                  "phantasm": { "value": 2.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
+
 ]
