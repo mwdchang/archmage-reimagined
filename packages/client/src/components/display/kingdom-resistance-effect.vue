@@ -1,7 +1,7 @@
 <template>
   <section class="display-section">
     <div v-if="effect.rule === 'spellLevel'">
-      Modify by {{ effect.resistance}} by <span class="special-text">spell power * value</span>
+      Modify {{ effect.resistance}} resistance by <span class="special-text">spell power * value</span>
     </div>
 
     <div 

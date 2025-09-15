@@ -48,6 +48,8 @@
       <KingdomArmyEffect v-if="effect.effectType === 'KingdomArmyEffect'" :effect="effect as any" />
       <ArmyUpkeepEffect v-if="effect.effectType === 'ArmyUpkeepEffect'" :effect="effect as any" />
       <ProductionEffect v-if="effect.effectType === 'ProductionEffect'" :effect="effect as any" />
+      <WishEffect v-if="effect.effectType === 'WishEffect'" :effect="effect as any" />
+      <StealEffect v-if="effect.effectType === 'StealEffect'" :effect="effect as any" />
     </div>
   </main>
 </template>
@@ -64,6 +66,8 @@ import KingdomBuildingsEffect from '@/components/display/kingdom-buildings-effec
 import KingdomArmyEffect from '@/components/display/kingdom-army-effect.vue';
 import ArmyUpkeepEffect from '@/components/display/army-upkeep-effect.vue';
 import ProductionEffect from '@/components/display/production-effect.vue';
+import WishEffect from '@/components/display/wish-effect.vue';
+import StealEffect from '@/components/display/steal-effect.vue';
 
 import Magic from '@/components/magic.vue';
 
