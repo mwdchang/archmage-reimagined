@@ -1,7 +1,8 @@
 <template>
   <section class="display-section">
     <p>
-      Summons {{ effect.unitIds.map(readableStr).join(', ') }}
+      Summons <span v-if="effect.summonType === 'random'"> one of </span>:
+      {{ effect.unitIds.map(readableStr).join(', ') }}
     </p>
     <div v-for="(magic) in magicTypes" :key="magic">
       <div v-if="effect.magic[magic]"
