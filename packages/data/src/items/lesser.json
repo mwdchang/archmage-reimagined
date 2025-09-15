@@ -566,6 +566,54 @@
     ]
   },
   {
+    "id": "powderKeg",
+    "name": "Powder Keg",
+    "description": "This small, red hot keg is full of powder and will blow out fire upon command",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": { "min": 80000, "max": 100000 }}, 
+              "verdant": { "value": { "min": 80000, "max": 100000 }},
+              "eradication": { "value":  { "min": 80000, "max": 100000 }},
+              "nether": { "value":  { "min": 80000, "max": 100000 }},
+              "phantasm": { "value": { "min": 80000, "max": 100000 }}
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -8.0 },
+                  "verdant": { "value": -8.0 },
+                  "eradication": { "value": -8.0 },
+                  "nether": { "value": -8.0 },
+                  "phantasm": { "value": -8.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "flaskOfHolyWater",
     "name": "Flask Of Holy Water",
     "description": "These small flasks are fillled with holy water that has blessed by the high priest in the serving ceremony. They carry great attack power against undead creatures. The water burns like acid on the creatures when the flasks are thrown.",
@@ -772,6 +820,28 @@
     ]
   },
   {
+    "id": "rottenFood",
+    "name": "Rotten Food",
+    "description": "This decaying and rotten food is kept in large sacks. When the sack of rotten food is deposited in another mage's kingdom, it will generate worms , attract bugs, and spread disease in that kingdom, making the people of the kingdom sick.",
+    "attributes": ["oneUse", "instant"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": -10000, "max": -30000 } },
+          "verdant": { "value": { "min": -10000, "max": -30000 } },
+          "eradication": { "value": { "min": -10000, "max": -30000 } },
+          "nether": { "value": { "min": -10000, "max": -30000 } },
+          "phantasm": { "value": { "min": -10000, "max": -30000 } }
+        }
+      }
+    ]
+  },
+  {
     "id": "strangeMetalicCan",
     "name": "Strange Metalic Can",
     "description": "The small can looks oddly metallic. The label reads \"contents hazardous to health, only usuable in extreme situation\". Puff of smoke steams out when you open the strange metallic can. Your head feels a bit dizzy but to your surprise, you see your wounds healing up slowly",
@@ -921,6 +991,73 @@
         ]
       }
     ]
+  },
+  {
+    "id": "ringOfAnimalCommand",
+    "name": "ringOfAnimalCommand",
+    "description": "This ring is made from moose bones and is enchanted with magic. When worn on the finger of a mage, it can be used to wield control over a herd of animals, rendering them helpless and unable to move, therefore making them unable to attack.",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": [
+          {
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 1.0 },
+                  "verdant": { "value": 1.0 },
+                  "eradication": { "value": 1.0 },
+                  "nether": { "value": 1.0 },
+                  "phantasm": { "value": 1.0 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetStack": "all",
+        "filters": [
+          {
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -1.0 },
+                  "verdant": { "value": -1.0 },
+                  "eradication": { "value": -1.0 },
+                  "nether": { "value": -1.0 },
+                  "phantasm": { "value": -1.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
-
 ]
