@@ -519,11 +519,11 @@
             "rule": "fixed", 
             "target": null,
             "magic": {
-              "ascendant": { "value": 2000 },
-              "verdant": { "value": 2000 },
-              "eradication": { "value": 2000 },
-              "nether": { "value": 2000 },
-              "phantasm": { "value": 2000 }
+              "ascendant": { "value": 3000 },
+              "verdant": { "value": 3000 },
+              "eradication": { "value": 3000 },
+              "nether": { "value": 3000 },
+              "phantasm": { "value": 3000 }
             }
           }
         ]
@@ -559,6 +559,54 @@
               "eradication": { "value":  { "min": 500, "max": 250000 }},
               "nether": { "value":  { "min": 500, "max": 250000 }},
               "phantasm": { "value": { "min": 500, "max": 250000 }}
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "powderKeg",
+    "name": "Powder Keg",
+    "description": "This small, red hot keg is full of powder and will blow out fire upon command",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["fire"],
+            "rule": "direct",
+            "magic": {
+              "ascendant": { "value": { "min": 80000, "max": 100000 }}, 
+              "verdant": { "value": { "min": 80000, "max": 100000 }},
+              "eradication": { "value":  { "min": 80000, "max": 100000 }},
+              "nether": { "value":  { "min": 80000, "max": 100000 }},
+              "phantasm": { "value": { "min": 80000, "max": 100000 }}
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -8.0 },
+                  "verdant": { "value": -8.0 },
+                  "eradication": { "value": -8.0 },
+                  "nether": { "value": -8.0 },
+                  "phantasm": { "value": -8.0 }
+                }
+              }
             }
           }
         ]
@@ -643,6 +691,369 @@
               "eradication": { "value": 120000 },
               "nether": { "value": 120000 },
               "phantasm": { "value": 120000 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sageStone",
+    "name": "Sage Stone",
+    "description": "This mystical stone, created by the alchemist, is produced when mercury, lead, and other substances are boiled together. When the surface of the stone wears off, the sage stone transforms into geld.",
+    "attributes": ["oneUse", "instant", "selfOnly"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "geld",
+        "magic": {
+          "ascendant": { "value": { "min": 3000000, "max": 12000000 } },
+          "verdant": { "value": { "min": 3000000, "max": 12000000 } },
+          "eradication": { "value": { "min": 3000000, "max": 12000000 } },
+          "nether": { "value": { "min": 3000000, "max": 12000000 } },
+          "phantasm": { "value": { "min": 3000000, "max": 12000000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "manaCrystal",
+    "name": "Mana Crystal",
+    "description": "This clear, small crystal stores internal energy. Anyone holding the crystal will feel energy flowing into his/her body.",
+    "attributes": ["oneUse", "instant", "selfOnly"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "mana",
+        "magic": {
+          "ascendant": { "value": { "min": 30000, "max": 80000 } },
+          "verdant": { "value": { "min": 30000, "max": 80000 } },
+          "eradication": { "value": { "min": 30000, "max": 80000 } },
+          "nether": { "value": { "min": 30000, "max": 80000 } },
+          "phantasm": { "value": { "min": 30000, "max": 80000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "manaVortex",
+    "name": "Mana Vortex",
+    "description": "It looks like a small pebble in all aspects. However, whenever it comes within 100 feet of a node, it will begin to suck mana from the surrounding area until it cannot absorb anymore. Then the mana vortex will explode into thousands of pieces.",
+    "attributes": ["oneUse", "instant"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "mana",
+        "magic": {
+          "ascendant": { "value": { "min": -8000, "max": -30000 } },
+          "verdant": { "value": { "min": -8000, "max": -30000 } },
+          "eradication": { "value": { "min": -8000, "max": -30000 } },
+          "nether": { "value": { "min": -8000, "max": -30000 } },
+          "phantasm": { "value": { "min": -8000, "max": -30000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "bookOfProphecy",
+    "name": "Book Of Prophecy",
+    "description": "This small handbook teaches the second coming of the one true god. It tells the follower to repent their sins and follow the path of the heaven. It is generally used by preachers to attract followers.",
+    "attributes": ["oneUse", "instant", "selfOnly"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": 5000, "max": 20000 } },
+          "verdant": { "value": { "min": 5000, "max": 20000 } },
+          "eradication": { "value": { "min": 5000, "max": 20000 } },
+          "nether": { "value": { "min": 5000, "max": 20000 } },
+          "phantasm": { "value": { "min": 5000, "max": 20000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "pipeOfTheSewer",
+    "name": "Pipe Of The Sewer",
+    "description": "The pipes have the power to control mice. When the pipes are blown, hordes of mice suddenly swarm out from nowhere and begin to follow the piper. Once the piper stops playing the pipes, the mice scatter around, looking for food to eat and destroying everything in sight in the process. A typical , effective usage of the pipes is to hire a bard and have him/her pipe in another mage's realm to amass a horde of mice to irritate the opponent mage by reducing his/her geld and population.",
+    "attributes": ["oneUse", "instant"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": -10000, "max": -10000 } },
+          "verdant": { "value": { "min": -10000, "max": -10000 } },
+          "eradication": { "value": { "min": -10000, "max": -10000 } },
+          "nether": { "value": { "min": -10000, "max": -10000 } },
+          "phantasm": { "value": { "min": -10000, "max": -10000 } }
+        }
+      },
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "geld",
+        "magic": {
+          "ascendant": { "value": { "min": -25000000, "max": -25000000 } },
+          "verdant": { "value": { "min": -25000000, "max": -25000000 } },
+          "eradication": { "value": { "min": -25000000, "max": -25000000 } },
+          "nether": { "value": { "min": -25000000, "max": -25000000 } },
+          "phantasm": { "value": { "min": -25000000, "max": -25000000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "rottenFood",
+    "name": "Rotten Food",
+    "description": "This decaying and rotten food is kept in large sacks. When the sack of rotten food is deposited in another mage's kingdom, it will generate worms , attract bugs, and spread disease in that kingdom, making the people of the kingdom sick.",
+    "attributes": ["oneUse", "instant"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "population",
+        "magic": {
+          "ascendant": { "value": { "min": -10000, "max": -30000 } },
+          "verdant": { "value": { "min": -10000, "max": -30000 } },
+          "eradication": { "value": { "min": -10000, "max": -30000 } },
+          "nether": { "value": { "min": -10000, "max": -30000 } },
+          "phantasm": { "value": { "min": -10000, "max": -30000 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "strangeMetalicCan",
+    "name": "Strange Metalic Can",
+    "description": "The small can looks oddly metallic. The label reads \"contents hazardous to health, only usuable in extreme situation\". Puff of smoke steams out when you open the strange metallic can. Your head feels a bit dizzy but to your surprise, you see your wounds healing up slowly",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "percentage",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 25 },
+              "verdant": { "value": 25 },
+              "eradication": { "value": 25 },
+              "nether": { "value": 25 },
+              "phantasm": { "value": 25 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ointmentOfHealing",
+    "name": "Ointment Of Healing",
+    "description": "This salve is contained in small jars. It is useful for drawing poison and healing wounds.",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 5 },
+              "verdant": { "value": 5 },
+              "eradication": { "value": 5 },
+              "nether": { "value": 5 },
+              "phantasm": { "value": 5 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pouchOfHerbs",
+    "name": "Pouch Of Herbs",
+    "description": "The pouch contains strange and mystical herbs which have the power to heal. A cup of herbal tea brewed with herbs from the pouch can revive and refresh a person and increase his/her healing powers",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "percentage",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 11 },
+              "verdant": { "value": 11 },
+              "eradication": { "value": 11 },
+              "nether": { "value": 11 },
+              "phantasm": { "value": 11 }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistance.poision": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 10.0 },
+                  "verdant": { "value": 10.0 },
+                  "eradication": { "value": 10.0 },
+                  "nether": { "value": 10.0 },
+                  "phantasm": { "value": 10.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "monkeyBrains",
+    "name": "Monkey Brains",
+    "description": "These fresh cut monkey brains are an exotic and fresh, new food to please the culinary senses. However, this food does more than just please the palate; monkey brains are the favorite food of mindflayers for a reason. It can increase brain power, thus enhancing psychic attacks of any kind.Area of effects: all units with psychic attack type",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": [
+          {
+            "allAttackType": ["psychic"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2.0 },
+                  "verdant": { "value": 2.0 },
+                  "eradication": { "value": 2.0 },
+                  "nether": { "value": 2.0 },
+                  "phantasm": { "value": 2.0 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ringOfAnimalCommand",
+    "name": "ringOfAnimalCommand",
+    "description": "This ring is made from moose bones and is enchanted with magic. When worn on the finger of a mage, it can be used to wield control over a herd of animals, rendering them helpless and unable to move, therefore making them unable to attack.",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetStack": "all",
+        "filters": [
+          {
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 1.0 },
+                  "verdant": { "value": 1.0 },
+                  "eradication": { "value": 1.0 },
+                  "nether": { "value": 1.0 },
+                  "phantasm": { "value": 1.0 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetStack": "all",
+        "filters": [
+          {
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -1.0 },
+                  "verdant": { "value": -1.0 },
+                  "eradication": { "value": -1.0 },
+                  "nether": { "value": -1.0 },
+                  "phantasm": { "value": -1.0 }
+                }
+              }
             }
           }
         ]

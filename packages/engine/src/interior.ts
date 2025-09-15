@@ -60,7 +60,7 @@ export const explorationRate = (mage: Mage) => {
 
     for (const effect of productionEffects) {
       if (effect.production === 'land') {
-        if (effect.rule === 'addSpellLevelPercentageBase') {
+        if (effect.rule === 'addPercentageBase') {
           extra += rate * effect.magic[enchantment.casterMagic].value;
         }
         // Always add 1

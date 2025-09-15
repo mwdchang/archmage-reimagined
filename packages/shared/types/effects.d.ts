@@ -106,10 +106,10 @@ export interface PostbattleEffect extends Effect {
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
   attributes: {
-    [key in AllowedMagic]: {
+    [key: string ]: {
       rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
       magic: {
-        [key: string]: {
+        [key in AllowedMagic]: {
           value: any
         }
       }
@@ -184,7 +184,7 @@ export interface KingdomBuildingsEffect extends Effect {
 }
 
 export interface KingdomResourcesEffect extends Effect {
-  rule: 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
+  rule: 'add' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: 'population' | 'mana' | 'geld' | 'item',
   magic: {
     [key in AllowedMagic]: {

@@ -609,14 +609,14 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "self",
+        "target": "opponent",
         "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
-            "checkResistance": false,
+            "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterPower": {
                 "rule": "addSpellLevelPercentageBase",
