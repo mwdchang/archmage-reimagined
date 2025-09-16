@@ -555,16 +555,6 @@ class Engine {
   }
 
 
-  // FIXME: non-summoning items
-  // async useItem(mage: Mage, itemId: string, num: number, target: number) {
-  //   const item = getItemById(itemId);
-  //   if (item.attributes.includes('summon')) {
-  //     return await this.summonByItem(mage, itemId, num);
-  //   }
-  //   await this.useTurn(mage);
-  //   await this.adapter.updateMage(mage);
-  // }
-
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const logs: GameMsg[] = [];
 
