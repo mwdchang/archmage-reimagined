@@ -46,7 +46,7 @@
         "unitIds": ["stoneGolem"],
         "summonType": "all",
         "summonNetPower": 40000,
-        "rule": "absolute",
+        "rule": "fixed",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -312,7 +312,7 @@
         "unitIds": ["knight"],
         "summonType": "all",
         "summonNetPower": 100000,
-        "rule": "absolute",
+        "rule": "fixed",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -336,7 +336,7 @@
         "unitIds": ["lich", "vampire", "wraith", "ghoul", "zombie"],
         "summonType": "random",
         "summonNetPower": 100000,
-        "rule": "absolute",
+        "rule": "fixed",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -360,7 +360,7 @@
         "unitIds": ["gorilla"],
         "summonType": "all",
         "summonNetPower": 100000,
-        "rule": "absolute",
+        "rule": "fixed",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -384,7 +384,7 @@
         "unitIds": ["frog", "squirrel", "sheep"],
         "summonType": "random",
         "summonNetPower": 10000,
-        "rule": "absolute",
+        "rule": "fixed",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -994,7 +994,7 @@
   },
   {
     "id": "ringOfAnimalCommand",
-    "name": "ringOfAnimalCommand",
+    "name": "Ring Of Animal Command",
     "description": "This ring is made from moose bones and is enchanted with magic. When worn on the finger of a mage, it can be used to wield control over a herd of animals, rendering them helpless and unable to move, therefore making them unable to attack.",
     "attributes": ["oneUse", "battle"],
     "chargeTurns": 0,

@@ -2,7 +2,7 @@
   <div class="section-header">War</div>
 
   <section class="form">
-    <p> All attack type cost 2 turns </p>
+    <div style="margin-bottom: 10px"> All attack type cost 2 turns </div>
     <select v-model="battleType">
       <option value="regular">Regular</option>
       <option value="siege">Siege</option>
