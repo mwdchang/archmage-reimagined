@@ -628,6 +628,9 @@ class Engine {
       } else if (effect.effectType === 'KingdomBuildingsEffect') {
         const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
         logs.push(...fromKingdomBuildingsEffectResult(result));
+      } else if (effect.effectType === 'UnitSummonEffect') {
+        const result = this.summonByItem(mage, effect as any, origin);
+        logs.push(...result);
       }
     }
     return logs
@@ -872,57 +875,26 @@ class Engine {
     }
   }
 
-  async summonByItem(mage: Mage, itemId: string, num: number) {
-    const item = getItemById(itemId);
-    const spellLevel = currentSpellLevel(mage);
-
-    const result: GameMsg[] = [];
-    for (let i = 0; i < num; i++) {
-      // Check if items are availble for use
-      if (mage.items[itemId] && mage.items[itemId] > 0) {
-        mage.items[itemId] --;
-        result.push({
-          type: 'log',
-          message: `You used ${item.name}, it is destroyed after use`
-        });
+  summonByItem(mage: Mage, effect: UnitSummonEffect, origin: EffectOrigin) {
+    const logs: GameMsg[] = [];
+    const res = summonUnit(effect, origin);
+    Object.keys(res).forEach(key => {
+      const stack = mage.army.find(d => d.id === key);
+      if (stack) {
+        stack.size += res[key];
       } else {
-        result.push({
-          type: 'log',
-          message: `You do not have ${item.name} in your inventory`
+        mage.army.push({
+          id: key,
+          size: res[key]
         });
-        break;
       }
 
-      const effects: UnitSummonEffect[] = item.effects as UnitSummonEffect[];
-      effects.forEach(effect => {
-        const res = summonUnit(effect, {
-          id: mage.id,
-          magic: mage.magic,
-          spellLevel: spellLevel,
-          targetId: mage.id
-        });
-
-        // Add to existing army
-        Object.keys(res).forEach(key => {
-          const stack = mage.army.find(d => d.id === key);
-          if (stack) {
-            stack.size += res[key];
-          } else {
-            mage.army.push({
-              id: key,
-              size: res[key]
-            });
-          }
-          result.push({
-            type: 'log',
-            message: `Summoned ${res[key]} ${key} into your army`
-          });
-        });
+      logs.push({
+        type: 'log',
+        message: `Summoned ${res[key]} ${key} into your army`
       });
-      await this.useTurn(mage);
-    }
-    await this.adapter.updateMage(mage);
-    return result;
+    });
+    return logs;
   }
 
   async summon(mage: Mage, spellId: string) {
