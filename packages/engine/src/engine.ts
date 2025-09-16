@@ -85,6 +85,7 @@ import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { warTable } from './base/config';
 import { mageName } from './util';
 import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { Item } from 'shared/types/magic';
 
 
 const EPIDEMIC_RATE = 0.5;
@@ -555,13 +556,107 @@ class Engine {
 
 
   // FIXME: non-summoning items
+  // async useItem(mage: Mage, itemId: string, num: number, target: number) {
+  //   const item = getItemById(itemId);
+  //   if (item.attributes.includes('summon')) {
+  //     return await this.summonByItem(mage, itemId, num);
+  //   }
+  //   await this.useTurn(mage);
+  //   await this.adapter.updateMage(mage);
+  // }
+
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
+    const logs: GameMsg[] = [];
+
     const item = getItemById(itemId);
-    if (item.attributes.includes('summon')) {
-      return this.summonByItem(mage, itemId, num);
+    if (target) {
+      const targetMage = await this.getMage(target);
+      for (let i = 0; i < num; i++) {
+        if (!mage.items[itemId] || mage.items[itemId] <= 0) {
+          logs.push({
+            type: 'error',
+            message: `No ${itemId} left in your inventory`
+          });
+          continue;
+        } else {
+          mage.items[itemId] --;
+        }
+
+        logs.push(...await this.useItemOpponent(mage, item, targetMage));
+        await this.useTurn(mage);
+      }
+      await this.adapter.updateMage(targetMage);
+    } else {
+      for (let i = 0; i < num; i++) {
+        if (!mage.items[itemId] || mage.items[itemId] <= 0) {
+          logs.push({
+            type: 'error',
+            message: `No ${itemId} left in your inventory`
+          });
+          continue;
+        } else {
+          mage.items[itemId] --;
+        }
+
+        logs.push(...await this.useItemSelf(mage, item));
+        await this.useTurn(mage);
+      }
     }
-    await this.useTurn(mage);
+
     await this.adapter.updateMage(mage);
+    return logs;
+  }
+
+  async useItemSelf(mage: Mage, item: Item) {
+    const logs: GameMsg[] = [];
+
+    // Origin is generaily not used for items
+    const origin: EffectOrigin = {
+      id: mage.id,
+      spellLevel: currentSpellLevel(mage),
+      magic: mage.magic,
+      targetId: mage.id
+    };
+
+    for (const effect of item.effects) {
+      if (effect.effectType === 'WishEffect') {
+        const result = applyWishEffect(mage, effect as any, origin);
+        logs.push(...fromWishEffectResult(result));
+      } else if (effect.effectType === 'KingdomResourcesEffect') {
+        const result = applyKingdomResourcesEffect(mage, effect as any, origin);
+        logs.push(...fromKingdomResourcesEffectResult(result));
+      } else if (effect.effectType === 'KingdomBuildingsEffect') {
+        const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
+        logs.push(...fromKingdomBuildingsEffectResult(result));
+      }
+    }
+    return logs
+  }
+
+  async useItemOpponent(mage: Mage, item: Item, targetMage: Mage) {
+    const logs: GameMsg[] = [];
+
+    // Origin is generaily not used for items
+    const origin: EffectOrigin = {
+      id: mage.id,
+      spellLevel: currentSpellLevel(mage),
+      magic: mage.magic,
+      targetId: targetMage.id
+    };
+
+    for (const effect of item.effects) {
+      if (effect.effectType === 'KingdomResourcesEffect') {
+        const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
+        logs.push(...fromKingdomResourcesEffectResult(result));
+      } else if (effect.effectType === 'KingdomBuildingsEffect') {
+        const result = applyKingdomBuildingsEffect(targetMage, effect as any, origin);
+        logs.push(...fromKingdomBuildingsEffectResult(result));
+      } else if (effect.effectType === 'StealEffect') {
+        const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
+        logs.push(...fromStealEffectResult(stealResult));
+      }
+    }
+    return logs;
   }
 
   async dispel(mage:Mage, enchantId: string, mana: number) {
@@ -693,7 +788,7 @@ class Engine {
       id: mage.id,
       spellLevel: currentSpellLevel(mage),
       magic: mage.magic,
-      targetId: mage.id
+      targetId: targetMage ? targetMage.id : mage.id
     };
     const logs: GameMsg[] = [];
 
