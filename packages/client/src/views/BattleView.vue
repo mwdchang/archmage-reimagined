@@ -1,5 +1,8 @@
 <template>
   <div class="section-header">War</div>
+  <div class="row">
+    <img src="@/assets/images/battle.png" width="400" class="gen-img" />
+  </div>
 
   <section class="form">
     <div style="margin-bottom: 10px"> All attack type cost 2 turns </div>

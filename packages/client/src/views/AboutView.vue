@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="about-row">
-          <div>Spell Level</div>
+          <div>Spell Power</div>
           <div>{{ spellLevel }} / {{ maxSpellLevel(mageStore.mage) }} </div>
         </div>
         <div class="about-row">
@@ -181,7 +181,7 @@ section {
 .about-row {
   display: flex;
   flex-direction: row;
-  width: 15rem;
+  width: 20rem;
   justify-content: space-between;
 }
 

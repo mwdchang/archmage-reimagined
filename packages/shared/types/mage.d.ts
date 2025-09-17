@@ -57,10 +57,15 @@ export interface Mage {
   name: string;
   rank?: number;
   status: string;
+  type: string;
 
   // magic
   magic: string;
   testingSpellLevel: number; // For testing only
+
+  // FIXME: customize adjacent/opposite alignment
+  adjacent: string[];
+  opposite: string[];
 
   spellbook: {
     ascendant: string[],

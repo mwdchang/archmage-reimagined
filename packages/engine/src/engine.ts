@@ -137,19 +137,30 @@ class Engine {
       const mage = await this.getMageByUser(name);
       if (!mage) {
         console.log('creating test mage', name);
-        const mage = createMage(name, magic);
-        mage.assignment.itemId = 'potionOfValor';
-        mage.assignment.itemCondition = 75;
+        const bot = createMage(name, magic, {
+          type: 'bot',
+          testingSpellLevel: 777,
+          farms: 1500,
+          towns: 800,
+          nodes: 800,
+          barracks: 100,
+          guilds: 100,
+          forts: 40,
+          army: [
+            { id: 'redDragon', size: 20 },
+            { id: 'efreeti', size: 1000 }
+          ]
+        });
 
-        await this.adapter.createMage(name, mage);
+        await this.adapter.createMage(name, bot);
         await this.adapter.createRank({
-          id: mage.id,
-          name: mage.name,
-          magic: mage.magic,
-          forts: mage.forts,
-          land: totalLand(mage),
+          id: bot.id,
+          name: bot.name,
+          magic: bot.magic,
+          forts: bot.forts,
+          land: totalLand(bot),
           status: '',
-          netPower: totalNetPower(mage)
+          netPower: totalNetPower(bot)
         });
       }
     }
