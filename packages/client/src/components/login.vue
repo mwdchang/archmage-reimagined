@@ -9,7 +9,7 @@
       </div>
 
       <div class="row" style="align-items: baseline; gap: 20px">
-        <span style="width:5rem">Password:</span> 
+        <span style="width:5rem">Password</span> 
         <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
       </div>
 
