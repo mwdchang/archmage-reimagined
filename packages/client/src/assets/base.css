@@ -53,6 +53,12 @@
   }
 }
 
+@media (max-width: 600px) {
+  :root {
+    font-size: 12px;
+  }
+}
+
 *,
 *::before,
 *::after {
