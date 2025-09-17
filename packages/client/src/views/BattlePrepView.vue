@@ -3,6 +3,9 @@
     <div class="section-header">
       You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
     </div>
+    <div class="row" style="margin-bottom: 10px">
+      <img src="@/assets/images/battle.png" width="400" class="gen-img" />
+    </div>
     <table>
       <tbody>
         <tr>
@@ -163,7 +166,7 @@ const doBattle = async () => {
   });
 
   // eg: not in range, or insufficient number of turns
-  if (res.data.errors) {
+  if (res.data.errors.length > 0) {
     errors.value = res.data.errors;
     return;
   }

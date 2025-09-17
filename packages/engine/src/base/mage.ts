@@ -10,8 +10,12 @@ export const createMage = (name: string, magic: string, override?:Partial<Mage>)
     id: ++_id,
     name: name,
     status: '',
+    type: '',
 
     magic: magic,
+    adjacent: [],
+    opposite: [],
+
     testingSpellLevel: 0,
 
     spellbook: {
@@ -32,13 +36,13 @@ export const createMage = (name: string, magic: string, override?:Partial<Mage>)
     focusResearch: false,
 
     netPower: 0, // Deprecated
-    currentTurn: 2000,
-    maxTurn: 2000,
+    currentTurn: 1000,
+    maxTurn: 1000,
     turnsUsed: 0,
 
-    currentPopulation: 1000,
-    currentMana: 1000,
-    currentGeld: 2000000,
+    currentPopulation: 60000,
+    currentMana: 10000,
+    currentGeld: 4000000,
 
     farms: mageStartTable.buildings.farms,
     towns: mageStartTable.buildings.towns,

@@ -3,6 +3,9 @@
   <div class="row">
     <img src="@/assets/images/destroy.png" width="400" class="gen-img" />
   </div>
+  <p v-if="mageStore">
+    You have {{ readbleNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+  </p>
 
   <destroy-table @destroy="destroy($event)" />
 </template>
@@ -12,6 +15,7 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { Mage } from 'shared/types/mage';
 import DestroyTable from '@/components/destroy-table.vue';
+import { readbleNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 

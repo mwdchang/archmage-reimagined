@@ -1,9 +1,9 @@
 <template>
-  <div class="section-header">Assign magic and item for defence</div>
+  <div class="section-header">Assign spell and item for defence</div>
 
   <section class="form">
     <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Spell for defence </label>
+      <label style="width: 12rem"> Spell </label>
       <select v-model="selectedSpellId" @change="setAssignment()">
         <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} </option>
       </select>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Item for defence </label>
+      <label style="width: 12rem"> Item </label>
       <select v-model="selectedItemId" @change="setAssignment()">
         <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }} )</option>
       </select>

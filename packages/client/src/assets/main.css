@@ -163,11 +163,3 @@ table > tr.active {
     display: none;
   }
 }
-
-
-/******************************************
-* Variables
-*******************************************/
-:root {
-  header-background-colour: #222222
-}
