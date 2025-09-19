@@ -13,6 +13,20 @@ export interface MageRank {
   rank: number;
 }
 
+// Default settings
+export interface GameTable {
+  explorationLimit: number
+  maxTurns: number;
+  turnRate: number;
+
+  war: {
+    range: {
+      min: number;
+      max: number;
+    }
+  }
+}
+
 
 export interface ChronicleTurn {
   id: number;
