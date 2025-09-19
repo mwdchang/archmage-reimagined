@@ -641,6 +641,15 @@ class Engine {
       targetId: targetMage.id
     };
 
+    const kingdomResistances = calcKingdomResistance(targetMage);
+    if (Math.random() <= kingdomResistances['barriers']) {
+      logs.push({
+        type: 'error',
+        message: `You item hit the barriers and fizzled.`
+      });
+      return logs;
+    }
+
     for (const effect of item.effects) {
       if (effect.effectType === 'KingdomResourcesEffect') {
         const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);

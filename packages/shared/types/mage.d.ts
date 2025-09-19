@@ -46,7 +46,7 @@ export interface Enchantment {
   targetId: number;
 
   spellId: string;
-  spellMagic: string; // not used???
+  // spellMagic: string; // not used???
   spellLevel: number;
 
   isEpidemic: boolean;

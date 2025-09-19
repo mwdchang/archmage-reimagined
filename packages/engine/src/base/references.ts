@@ -92,7 +92,7 @@ export const getRandomItem = () => {
 export const initializeResearchTree = () => {
   if (spellMap.size === 0) throw new Error('No spells available');
 
-  const magicTypes = Object.keys(magicAlignmentTable);
+  const magicTypes = allowedMagicList;
 
   // Reset research tree
   researchTree.clear();
