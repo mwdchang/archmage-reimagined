@@ -10,11 +10,14 @@
     <br>
     <section class="row" style="gap: 25px">
       <section>
+        <img style="width: 15vw" :src="sigilPath" />
+        <!--
         <img style="width: 15vw" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
         <img style="width: 15vw" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
         <img style="width: 15vw" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
         <img style="width: 15vw" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
         <img style="width: 15vw" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+        -->
       </section>
       <section style="flex: 1"> 
         <div class="about-row">
@@ -136,6 +139,10 @@ import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();
 const logs = ref<ChronicleTurn[]>([]);
+
+const sigilPath = computed(() => {
+  return (new URL(`../assets/images/${mageStore.mage!.magic}-new.png`, import.meta.url)).href
+});
 
 const numItems = computed(() => {
   const keys = Object.keys(mageStore.mage!.items);

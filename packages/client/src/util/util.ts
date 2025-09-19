@@ -7,6 +7,7 @@ import {
 import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
 import { Mage } from 'shared/types/mage';
+import { allowedMagicList } from 'shared/src/common';
 
 export interface MageItem {
   id: string,
@@ -29,27 +30,13 @@ export const spellDisplay = (spell: Spell, magic: string) => {
 export const getSpells = (mage: Mage) => {
   if (!mage) return [];
   const result: any = [];
-  mage.spellbook.ascendant.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.verdant.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.eradication.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.nether.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
-  mage.spellbook.phantasm.forEach(spellId => {
-    const spell = getSpellById(spellId);
-    result.push(spellDisplay(spell, mage.magic));
-  });
 
+  for (const magic of allowedMagicList) {
+    mage.spellbook[magic].forEach(spellId => {
+      const spell = getSpellById(spellId);
+      result.push(spellDisplay(spell, mage.magic));
+    });
+  }
   return result;
 }
 

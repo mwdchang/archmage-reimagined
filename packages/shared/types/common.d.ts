@@ -1,3 +1,7 @@
+import { allowedMagicList } from "../src/common.ts";
+
+export type AllowedMagic = typeof allowedMagicList[number];
+
 export interface MageRank {
   id: number;
   name: string;

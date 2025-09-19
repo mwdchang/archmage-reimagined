@@ -7,7 +7,6 @@ import {
   getSpellById,
   getItemById,
   initializeResearchTree,
-  magicTypes,
   getUnitById
 } from './base/references';
 import {
@@ -86,6 +85,7 @@ import { warTable } from './base/config';
 import { mageName } from './util';
 import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 import { Item } from 'shared/types/magic';
+import { allowedMagicList } from 'shared/src/common';
 
 
 const EPIDEMIC_RATE = 0.5;
@@ -131,7 +131,7 @@ class Engine {
 
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
-      const magic = magicTypes[randomInt(5)];
+      const magic = allowedMagicList[randomInt(allowedMagicList.length)];
       const name = `Robot${i}`;
 
       const mage = await this.getMageByUser(name);

@@ -1,3 +1,5 @@
+import type { AllowedMagic } from './common.d.ts'
+
 export interface ArmyUnit {
   id: string; // Refers to unit ids
   size: number;
@@ -68,20 +70,13 @@ export interface Mage {
   opposite: string[];
 
   spellbook: {
-    ascendant: string[],
-    verdant: string[],
-    eradication: string[],
-    nether: string[],
-    phantasm: string[]
+    [k in AllowedMagic]: string[]
   },
 
   currentResearch: {
-    ascendant: ResearchItem | null,
-    verdant: ResearchItem | null,
-    eradication: ResearchItem | null,
-    nether: ResearchItem | null,
-    phantasm: ResearchItem | null
+    [k in AllowedMagic]: ResearchItem | null
   },
+  
   focusResearch: boolean,
 
   netPower: number;

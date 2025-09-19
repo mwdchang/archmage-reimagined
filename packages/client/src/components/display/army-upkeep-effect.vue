@@ -16,7 +16,7 @@
     </div>
 
     <div 
-      v-for="(magic) of magicTypes"
+      v-for="(magic) of allowedMagicList"
       style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
       <div class="row" v-if="effect.magic[magic]">
         <magic :magic="magic as string" />
@@ -32,9 +32,9 @@
 
 <script lang="ts" setup>
 import { ArmyUpkeepEffect } from 'shared/types/effects';
-import { magicTypes } from 'engine/src/base/references';
 import Magic from '@/components/magic.vue';
 import UFilter from '@/components/display/ufilter.vue';
+import { allowedMagicList } from 'shared/src/common';
 
 defineProps<{
   effect: ArmyUpkeepEffect

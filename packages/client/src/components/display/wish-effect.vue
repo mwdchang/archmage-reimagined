@@ -25,7 +25,6 @@
 
 <script lang="ts" setup>
 import { WishEffect } from 'shared/types/effects';
-import { magicTypes } from 'engine/src/base/references';
 import { readbleNumber } from '@/util/util';
 import Magic from '@/components/magic.vue';
 

@@ -5,7 +5,6 @@ import {
 } from './base/config';
 import { Enchantment, Mage } from 'shared/types/mage';
 import {
-  magicTypes,
   getUnitById,
   getSpellById,
   getMaxSpellLevels,

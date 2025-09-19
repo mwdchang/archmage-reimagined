@@ -64,7 +64,7 @@ const rsize = ref(0);    // Recruitment size
 const currentRecruitments = ref<ArmyUnit[]>([]);
 
 const recruitableUnits = ref<Unit[]>([]);
-recruitableUnits.value = getRecruitableUnits('ascendant');
+recruitableUnits.value = getRecruitableUnits(mageStore.mage!.magic);
 
 const resourceDisplay = (v: any) => {
   return `${v.geld.toFixed(2)}/${v.mana.toFixed(2)}/${v.population.toFixed(2)}`;

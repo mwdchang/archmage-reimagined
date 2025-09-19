@@ -63,11 +63,12 @@ import { computed, ref } from 'vue';
 import magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { getSpellById, magicTypes } from 'engine/src/base/references';
+import { getSpellById } from 'engine/src/base/references';
 import { itemGenerationRate, maxSpellLevel, researchPoints } from 'engine/src/magic';
 import { Mage } from '../../../shared/types/mage';
 import { readbleNumber, readableStr } from '@/util/util';
 import { currentSpellLevel } from 'engine/src/base/mage';
+import { allowedMagicList } from 'shared/src/common';
 
 const mageStore = useMageStore();
 
@@ -105,7 +106,7 @@ const researchResultStr = computed(() => {
 });
 
 const filteredMagicTypes = computed(() => {
-  return magicTypes.filter(m => {
+  return allowedMagicList.filter(m => {
     return mageStore.mage?.currentResearch[m];
   });
 });

@@ -1,12 +1,6 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
-
-type AllowedMagic = 
-  'ascendant' |
-  'verdant' |
-  'eradication' |
-  'nether' | 
-  'phantasm';
+import type { AllowedMagic } from './common.js';
 
 export interface Effect {
   effectType: string
