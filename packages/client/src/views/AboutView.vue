@@ -2,19 +2,19 @@
   <main class="about" v-if="mageStore.mage">
     <h3>{{ mageStore.mage.name }} (# {{ mageStore.mage.id }})</h3>
     <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readbleNumber(totalNetPower(mageStore.mage)) }} </div>
+    <p v-if="gameTable">
+      {{ readbleNumber(mageStore.mage.currentTurn) }} /
+      {{ readbleNumber(gameTable.maxTurns) }} turns available,
+      additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
+    </p>
     <p>
-      You have {{ readbleNumber(mageStore.mage.currentTurn) }} turns available,
-      {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used.
+      total {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used, 
     </p>
 
     <br>
     <section class="row" style="gap: 25px">
       <section>
-        <img style="width: 15vw" v-if="mageStore.mage.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
-        <img style="width: 15vw" v-if="mageStore.mage.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
-        <img style="width: 15vw" v-if="mageStore.mage.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
-        <img style="width: 15vw" v-if="mageStore.mage.magic === 'nether'" src="@/assets/images/nether-new.png" />
-        <img style="width: 15vw" v-if="mageStore.mage.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+        <img style="width: 15vw" :src="sigilPath" />
       </section>
       <section style="flex: 1"> 
         <div class="about-row">
@@ -130,12 +130,18 @@ import { manaStorage } from 'engine/src/magic';
 import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
-import { ChronicleTurn } from 'shared/types/common';
+import { ChronicleTurn, GameTable } from 'shared/types/common';
 import { readbleNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();
 const logs = ref<ChronicleTurn[]>([]);
+
+const gameTable = ref<GameTable | null>(null);
+
+const sigilPath = computed(() => {
+  return (new URL(`../assets/images/${mageStore.mage!.magic}-new.png`, import.meta.url)).href
+});
 
 const numItems = computed(() => {
   const keys = Object.keys(mageStore.mage!.items);
@@ -155,7 +161,8 @@ const spellLevel = computed(() => {
 onMounted(async () => {
   const res = await API.get<{ chronicles: ChronicleTurn[]}>('/chronicles');
   logs.value = res.data.chronicles;
-  // console.log(logs.value);
+
+  gameTable.value = (await API.get<GameTable>('/game-table')).data;
 });
 
 

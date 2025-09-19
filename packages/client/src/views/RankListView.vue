@@ -45,7 +45,7 @@ import { API } from '@/api/api';
 import Magic from '@/components/magic.vue';
 import type { MageRank } from 'shared/types/common';
 import { readbleNumber } from '@/util/util';
-import { warTable } from 'engine/src/base/config';
+import { gameTable } from 'engine/src/base/config';
 
 const rankList = ref<MageRank[]>([]);
 const mageStore = useMageStore();
@@ -57,8 +57,8 @@ const rankListFiltered = computed(() => {
     if (!mageRank) return rankList.value;
 
     return rankList.value.filter(rank => {
-      return mageRank.netPower * warTable.range.max >= rank.netPower &&
-        mageRank.netPower * warTable.range.min <= rank.netPower;
+      return mageRank.netPower * gameTable.war.range.max >= rank.netPower &&
+        mageRank.netPower * gameTable.war.range.min <= rank.netPower;
     });
   }
   return rankList.value;

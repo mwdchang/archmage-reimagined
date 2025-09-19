@@ -1,7 +1,7 @@
 <template>
   <div class="section-header">War</div>
   <div class="row">
-    <img src="@/assets/images/battle.png" width="400" class="gen-img" />
+    <img src="@/assets/images/battle.png" class="gen-img" />
   </div>
 
   <section class="form">

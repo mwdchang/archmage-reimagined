@@ -1,7 +1,9 @@
-import type { Mage } from 'shared/types/mage';
+import type { Mage, ResearchItem } from 'shared/types/mage';
 import { createStackByNumber } from './unit';
 import { researchTree, getSpellById, getUnitById } from './references';
 import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
+import { allowedMagicList } from 'shared/src/common';
+import { AllowedMagic } from 'shared/types/common';
 
 let _id = 0;
 
@@ -18,21 +20,16 @@ export const createMage = (name: string, magic: string, override?:Partial<Mage>)
 
     testingSpellLevel: 0,
 
-    spellbook: {
-      ascendant: [],
-      verdant: [],
-      eradication: [],
-      nether: [],
-      phantasm: []
-    },
+    spellbook: allowedMagicList.reduce((acc, key) => {
+      acc[key] = [];
+      return acc;
+    }, {} as Record<AllowedMagic, string[]>),
 
-    currentResearch: {
-      ascendant: null,
-      verdant: null,
-      eradication: null,
-      nether: null,
-      phantasm: null
-    },
+    currentResearch: allowedMagicList.reduce((acc, key) => {
+      acc[key] = null;
+      return acc;
+    }, {} as Record<AllowedMagic, ResearchItem | null>),
+
     focusResearch: false,
 
     netPower: 0, // Deprecated
@@ -75,9 +72,7 @@ export const createMage = (name: string, magic: string, override?:Partial<Mage>)
 
   // Seed research, default to reserch on mage's magic colour
   const tree = researchTree.get(mage.magic);
-  const spellMagicTypes = ['ascendant', 'verdant', 'eradication', 'nether', 'phantasm'];
-
-  spellMagicTypes.forEach(spellMagicType => {
+  allowedMagicList.forEach(spellMagicType => {
     const spellId = tree.get(spellMagicType)[0];
     if (!spellId) return;
 
@@ -174,13 +169,9 @@ export const currentSpellLevel = (mage: Mage) => {
     result += rankPower;
   }
 
-  mage.spellbook.ascendant.forEach(addSpellPower);
-  mage.spellbook.verdant.forEach(addSpellPower);
-  mage.spellbook.eradication.forEach(addSpellPower);
-  mage.spellbook.nether.forEach(addSpellPower);
-  mage.spellbook.phantasm.forEach(addSpellPower);
-
-  // TODO: others
+  for (const magic of allowedMagicList) {
+    mage.spellbook[magic].forEach(addSpellPower);
+  }
   return result;
 }
 

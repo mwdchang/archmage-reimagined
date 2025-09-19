@@ -95,6 +95,14 @@ table > tr.active {
   padding-left: 20px;
 }
 
+.gen-img {
+  width: 40vw
+}
+@media (max-width: 600px) {
+  .gen-img {
+    width: 80vw
+  }
+}
 
 /******************************************
 * Entry forms

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
 import { getUnitById } from "./base/references";
-import { productionTable, explorationLimit } from "./base/config";
+import { productionTable, gameTable } from "./base/config";
 import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import {
@@ -48,8 +48,8 @@ export const buildingRate = (mage: Mage, buildType: string) => {
 export const explorationRate = (mage: Mage) => {
   const current = totalLand(mage);
   let rate = 0;
-  if (current < explorationLimit) {
-    rate = Math.sqrt(explorationLimit - current) / 3;
+  if (current < gameTable.explorationLimit) {
+    rate = Math.sqrt(gameTable.explorationLimit - current) / 3;
   }
 
   let extra = 0;

@@ -1,8 +1,12 @@
 <template>
   <div class="section-header">Your item inventory</div>
   <p>
-    You have {{ itemList.length }} spells in your spell book.
+    You have {{ itemList.length }} spells in your items storage.
   </p>
+  <div class="row">
+    <img src="@/assets/images/item.png" class="gen-img" />
+  </div>
+
 
   <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">

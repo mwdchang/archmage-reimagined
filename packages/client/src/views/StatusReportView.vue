@@ -64,59 +64,15 @@
             {{ numberFormatter(resistanceStatus.barriers) }} 
           </td>
         </tr>
-        <tr>
+        <tr v-for="(magic) of allowedMagicList" :key="magic">
           <td> 
             <div class="row">
-              <magic :magic="'ascendant'" />
-              Ascendant 
+              <magic :magic="magic" />
+              {{ readableStr(magic) }}
             </div>
           </td> 
           <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.ascendant) }} 
-          </td>
-        </tr>
-        <tr>
-          <td> 
-            <div class="row">
-              <magic :magic="'verdant'" />
-              Verdant 
-            </div>
-          </td> 
-          <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.verdant) }} 
-          </td>
-        </tr>
-        <tr>
-          <td> 
-            <div class="row">
-              <magic :magic="'eradication'" />
-              Eradication 
-            </div>
-          </td> 
-          <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.eradication) }} 
-          </td>
-        </tr>
-        <tr>
-          <td> 
-            <div class="row">
-              <magic :magic="'nether'" />
-              Nether 
-            </div>
-          </td> 
-          <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.nether) }} 
-          </td>
-        </tr>
-        <tr>
-          <td> 
-            <div class="row">
-              <magic :magic="'phantasm'" />
-              Phantasm 
-            </div>
-          </td> 
-          <td class="text-right"> 
-            {{ numberFormatter(resistanceStatus.phantasm) }} 
+            {{ numberFormatter(resistanceStatus[magic]) }} 
           </td>
         </tr>
       </tbody>
@@ -345,6 +301,7 @@ import {
 } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import { readbleNumber, readableStr } from '@/util/util';  
+import { allowedMagicList } from 'shared/src/common';
 
 const mageStore = useMageStore();
 const totalArmyPower = ref(0);

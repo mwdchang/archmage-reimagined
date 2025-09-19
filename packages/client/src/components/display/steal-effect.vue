@@ -13,7 +13,7 @@
     </div>
 
     <div 
-      v-for="(magic) of magicTypes"
+      v-for="(magic) of allowedMagicList"
       style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
       <div class="row" v-if="effect.magic[magic]">
         <magic :magic="magic as string" />
@@ -28,9 +28,9 @@
 
 <script lang="ts" setup>
 import { StealEffect } from 'shared/types/effects';
-import { magicTypes } from 'engine/src/base/references';
 import Magic from '@/components/magic.vue';
 import { readbleNumber } from '@/util/util';
+import { allowedMagicList } from 'shared/src/common';
 
 defineProps<{
   effect: StealEffect 

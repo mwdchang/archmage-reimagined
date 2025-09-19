@@ -93,28 +93,12 @@
 
     <table>
       <tbody>
-        <tr style="background: #333">
+        <tr style="background: #333; border-bottom: solid 2px #555">
           <td colspan="2">Spell Resistances</td>
         </tr>
-        <tr style="border-top: solid 2px #555">
-          <td>Ascendant</td>
-          <td class="text-right">{{ unit.spellResistances.ascendant }}</td>
-        </tr>
-        <tr>
-          <td>Verdant</td>
-          <td class="text-right">{{ unit.spellResistances.verdant }}</td>
-        </tr>
-        <tr>
-          <td>Eradication</td>
-          <td class="text-right">{{ unit.spellResistances.eradication }}</td>
-        </tr>
-        <tr>
-          <td>Nether</td>
-          <td class="text-right">{{ unit.spellResistances.nether }}</td>
-        </tr>
-        <tr>
-          <td>Phantasm</td>
-          <td class="text-right">{{ unit.spellResistances.phantasm }}</td>
+        <tr v-for="(magic) of allowedMagicList" :key="magic">
+          <td>{{ readableStr(magic) }}</td>
+          <td class="text-right">{{ unit.spellResistances[magic] }}</td>
         </tr>
 
         <tr style="background: #333">
@@ -179,6 +163,7 @@ import { getUnitById } from 'engine/src/base/references';
 import { Unit } from 'shared/types/unit';
 import { readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
+import { allowedMagicList } from 'shared/src/common';
 
 const props = defineProps<{ id: string }>(); 
 

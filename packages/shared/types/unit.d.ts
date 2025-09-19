@@ -1,9 +1,7 @@
-export interface SpellResistances {
-  ascendant: number,
-  verdant: number,
-  eradication: number,
-  nether: number,
-  phantasm: number
+import type { AllowedMagic } from './common.d.ts'
+
+export type SpellResistances = {
+  [k in AllowedMagic]: number
 }
 
 export interface AttackResistances {
