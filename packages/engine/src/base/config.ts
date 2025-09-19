@@ -1,8 +1,15 @@
 /* Various configuration and rules */
+import { GameTable } from "shared/types/common"
 
+export const gameTable: GameTable = {
+  explorationLimit: 6000,
+  maxTurns: 1000,
+  turnRate: 180,
 
-export const explorationLimit = 6000;
-
+  war: {
+    range: { min: 0.80, max: 1.25 }
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Kingdom start statistics
@@ -163,6 +170,6 @@ export const itemProductionTable = {
 ////////////////////////////////////////////////////////////////////////////////
 // War
 ////////////////////////////////////////////////////////////////////////////////
-export const warTable = {
-  range: { min: 0.80, max: 1.25 }
-}
+// export const warTable = {
+//   range: { min: 0.80, max: 1.25 }
+// }

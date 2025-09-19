@@ -1,7 +1,7 @@
 <template>
   <div class="section-header">Destroy Buildings</div>
   <div class="row">
-    <img src="@/assets/images/destroy.png" width="400" class="gen-img" />
+    <img src="@/assets/images/destroy.png" class="gen-img" />
   </div>
   <p v-if="mageStore">
     You have {{ readbleNumber(mageStore.mage!.wilderness) }} acres of wilderness.

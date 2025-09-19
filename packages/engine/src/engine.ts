@@ -57,7 +57,6 @@ import {
   EffectOrigin,
   KingdomArmyEffect
 } from 'shared/types/effects';
-import { NetPowerRangeError } from 'shared/src/errors';
 import { GameMsg } from 'shared/types/common';
 
 import { randomInt } from './random';
@@ -81,15 +80,13 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
-import { warTable } from './base/config';
 import { mageName } from './util';
 import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 import { Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
-
+import { gameTable } from './base/config';
 
 const EPIDEMIC_RATE = 0.5;
-const TICK = 1000 * 60 * 2; // Every two minute
 
 
 const totalArmyPower = (army: ArmyUnit[]) => {
@@ -168,14 +165,14 @@ class Engine {
     // Start loop
     setTimeout(() => {
       this.updateLoop();
-    }, TICK);
+    }, gameTable.turnRate * 1000);
   }
 
   /**
    * Next server turn cycle
   **/
   async serverTurn() {
-    await this.adapter.nextTurn({ maxTurn: 2000 });
+    await this.adapter.nextTurn({ maxTurn: gameTable.maxTurns });
   }
 
   updateLoop() {
@@ -190,7 +187,7 @@ class Engine {
 
     setTimeout(() => {
       this.updateLoop()
-    }, TICK);
+    }, gameTable.turnRate * 1000);
   }
 
   async useTurns(mage: Mage, turns: number) {
@@ -1065,8 +1062,8 @@ class Engine {
     const defenderNP = totalNetPower(defenderMage);
 
     if (
-      (attackerNP * warTable.range.max) < defenderNP ||
-      (attackerNP * warTable.range.min) > defenderNP
+      (attackerNP * gameTable.war.range.max) < defenderNP ||
+      (attackerNP * gameTable.war.range.min) > defenderNP
     ) {
       console.warn(`${defenderMage.id} not in range of ${mage.id}`);
       errors.push(`${mageName(defenderMage)} is not in your attack range`);
@@ -1330,6 +1327,10 @@ class Engine {
 
   async getMageByUser(username: string) {
     return this.adapter.getMageByUser(username);
+  }
+
+  async getGameTable() {
+    return _.clone(gameTable);
   }
 }
 

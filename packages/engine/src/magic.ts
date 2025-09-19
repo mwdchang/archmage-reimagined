@@ -18,6 +18,7 @@ import {
   KingdomResistanceEffect,
   CastingEffect
 } from 'shared/types/effects';
+import { allowedMagicList } from 'shared/src/common';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -70,12 +71,12 @@ export const doResearch = (mage: Mage, points: number) => {
   // Apply points to current research
   let done = false;
   let magicToAdvance: any = null;
-  magicTypes.forEach(magic => {
+  allowedMagicList.forEach(magic => {
     if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
       currentResearch[magic].remainingCost -= points;
       if (currentResearch[magic].remainingCost <= 0 ) {
         magicToAdvance = magic;
-        console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
+        // console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
         spillOverPoints = Math.abs(currentResearch[magic].remainingCost);
       }
       done = true;

@@ -236,6 +236,12 @@ router.post('/api/mages', async (req: any, res) => {
   res.status(200).json({ mages });
 });
 
+router.get('/api/game-table', async (req: any, res) => {
+  const settings = await engine.getGameTable();
+  res.status(200).json(settings);
+});
+
+
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {
 //   console.log('cookies!!! ', req.user);
 //   res.status(200).json({ user: req.user });

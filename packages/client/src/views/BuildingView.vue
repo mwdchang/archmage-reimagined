@@ -1,7 +1,7 @@
 <template>
   <h3 class="section-header">Build</h3>
   <div class="row">
-    <img src="@/assets/images/building.png" width="400" class="gen-img" />
+    <img src="@/assets/images/building.png" class="gen-img" />
   </div>
   <p v-if="mageStore">
     You have {{ readbleNumber(mageStore.mage!.wilderness) }} acres of wilderness.

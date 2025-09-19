@@ -4,7 +4,7 @@
       You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
     </div>
     <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/battle.png" width="400" class="gen-img" />
+      <img src="@/assets/images/battle.png" class="gen-img" />
     </div>
     <table>
       <tbody>
