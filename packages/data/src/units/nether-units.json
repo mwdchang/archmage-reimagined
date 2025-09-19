@@ -552,6 +552,64 @@
     ]
   },
   {
+    "id": "demonKnight",
+    "name": "Demon Knight",
+    "magic": "nether",
+    "description": "Perverting the chivalric code of the Knights of the Ascendant Order, these demons adopt many of the characteristics of their counterparts, such as wearing armor, using weapons, and following their lords with utmost loyalty, though, being demons, they have added their own evil twists to their design. The fine, knightly armor they wear bears daemonic enchantments that grant them high resistances to certain types of damage. Their weapons are soul stealing runeblades that radiate the stark chill of the grave, but they prefer to cast vile magics from a distance, striking down their foes with withering hexes and blights. Whenever the forces of light face these Demon Knights in battle, they gaze upon the looking glass darkly, seeing a twisted mockery of everything they represent.",
+    "powerRank": 1850,
+    "hitPoints": 8500,
+    "race": ["demon"],
+    "attributes": ["summon"],
+
+    "primaryAttackPower": 10000,
+    "primaryAttackType": ["cold", "melee"],
+    "primaryAttackInit": 2,
+    "counterAttackPower": 6000,
+
+    "secondaryAttackPower": 8000,
+    "secondaryAttackType": ["poison", "ranged"],
+    "secondaryAttackInit": 3,
+
+    "recruitCost": { 
+      "geld": 0,
+      "mana": 0,
+      "population": 0 
+    },
+    "upkeepCost": {
+      "geld": 0,
+      "mana": 2.25,
+      "population": 3.0
+    },
+    "spellResistances": {
+      "ascendant": 0,
+      "verdant": 25,
+      "eradication": 60,
+      "nether": 0,
+      "phantasm": 20 
+    },
+    "attackResistances": {
+      "missile": 70,
+      "fire": 60,
+      "poison": 75,
+      "breath": 0,
+      "magic": 60,
+      "melee": 85,
+      "ranged": 70,
+      "lightning": 70,
+      "cold": 75,
+      "paralyse": 60,
+      "psychic": 50,
+      "holy": 30 
+    },
+    "abilities": [
+      { "name": "additionalStrike", "extra": null },
+      { "name": "endurance", "extra": null },
+      { "name": "swift", "extra": null },
+      { "name": "stealLife", "extra": 5 }
+    ]
+  },
+
+  {
     "id": "fallenAngel",
     "name": "Fallen Angel",
     "magic": "nether",

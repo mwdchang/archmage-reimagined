@@ -85,6 +85,7 @@ import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKing
 import { Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
+import { createBot } from './bot';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -134,21 +135,7 @@ class Engine {
       const mage = await this.getMageByUser(name);
       if (!mage) {
         console.log('creating test mage', name);
-        const bot = createMage(name, magic, {
-          type: 'bot',
-          testingSpellLevel: 777,
-          farms: 1500,
-          towns: 800,
-          nodes: 800,
-          barracks: 100,
-          guilds: 100,
-          forts: 40,
-          army: [
-            { id: 'redDragon', size: 20 },
-            { id: 'efreeti', size: 1000 }
-          ]
-        });
-
+        const bot = createBot(name, magic);
         await this.adapter.createMage(name, bot);
         await this.adapter.createRank({
           id: bot.id,
@@ -475,6 +462,10 @@ class Engine {
     });
   }
 
+  /**
+   * Explore new land (increase in wilderness) 
+   * for a number of turns
+  **/
   async exploreLand(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -491,7 +482,9 @@ class Engine {
     return landGained
   }
 
-  // geld for num turns
+  /**
+   * Gelding for num turns
+  **/
   async gelding(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -508,6 +501,9 @@ class Engine {
     return geldGained;
   }
 
+  /**
+   * Mana change for a number of turns
+  **/
   async manaCharge(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -529,7 +525,7 @@ class Engine {
 
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
-    magicTypes.forEach(m => {
+    allowedMagicList.forEach(m => {
       if (mage.currentResearch[m]) {
         mage.currentResearch[m].active = false;
       }
@@ -844,7 +840,7 @@ class Engine {
       targetId: mage.id,
 
       spellId: spell.id,
-      spellMagic: spell.magic,
+      // spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
       isEpidemic: spell.attributes.includes('epidemic'),
@@ -1139,15 +1135,23 @@ class Engine {
     }
 
 
-    // FIXME: need to model order, right now
-    // we take one turn to go attack, and one turn to return home ???
-    await this.useTurn(mage);
+    // Right now we simulate battle as follows
+    // - it ake one turn to go attack, and 
+    // - it takes one turn to return home
+    //
+    // Bots do not take turns
+    if (mage.type !== 'bot') {
+      await this.useTurn(mage);
+    }
+
     const battleReport = isPillageSuccess === false? 
       battle(battleType, attacker, defender):
       successPillage(attacker, defender);
-
     resolveBattle(mage, defenderMage, battleReport);
-    await this.useTurn(mage);
+
+    if (mage.type !== 'bot') {
+      await this.useTurn(mage);
+    }
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
@@ -1212,6 +1216,7 @@ class Engine {
 
     await this.adapter.updateMage(defenderMage);
 
+
     this.adapter.updateRank({
       id: defenderMage.id,
       name: defenderMage.name,
@@ -1221,6 +1226,14 @@ class Engine {
       status: '',
       netPower: totalNetPower(defenderMage)
     });
+
+
+    // FIXME: Update turn chronicles for participting mages,
+    // unless the mage is a bot
+    if (mage.type !== 'bot') {
+    }
+    if (defenderMage.type !== 'bot') {
+    }
 
     return battleReport;
   }
