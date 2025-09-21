@@ -250,6 +250,14 @@ export interface WishEffect extends Effect {
   } []
 }
 
+
+export interface RemoveEnchantmentEffect extends Effect {
+  trigger: {
+    min: number;
+    max: number;
+  }
+}
+
 /**
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/

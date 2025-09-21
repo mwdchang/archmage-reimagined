@@ -81,11 +81,12 @@ import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
-import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 import { Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
+import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -359,14 +360,17 @@ class Engine {
         if (casterMage.currentGeld <= 0 && upkeep.geld) {
           casterMage.currentGeld = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         if (casterMage.currentMana <= 0 && upkeep.mana) {
           casterMage.currentMana = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         if (casterMage.currentPopulation <= 0 && upkeep.population) {
           casterMage.currentPopulation = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         await this.adapter.updateMage(casterMage);
       }
@@ -375,19 +379,23 @@ class Engine {
       if (enchant.life && enchant.life > 0) {
         enchant.life --;
       }
+      if (enchant.life <= 0 && enchant.isPermanent === false) {
+        enchant.isActive = false;
+      }
     }
 
     // Refresh functioning enchantments
-    mage.enchantments = mage.enchantments.filter(enchant => {
-      if (enchant.life === 0 && enchant.isPermanent === false) {
-        console.log(`${enchant.casterId} ${enchant.spellId} expired`)
-      }
+    // mage.enchantments = mage.enchantments.filter(enchant => {
+    //   if (enchant.life === 0 && enchant.isPermanent === false) {
+    //     enchant.isActive = false;
+    //     console.log(`${enchant.casterId} ${enchant.spellId} expired`)
+    //   }
+    //   if (enchant.isPermanent === false) {
+    //     return enchant.life > 0;
+    //   }
+    //   return true;
+    // });
 
-      if (enchant.isPermanent === false) {
-        return enchant.life > 0;
-      }
-      return true;
-    });
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
@@ -809,6 +817,9 @@ class Engine {
         } else if (effect.effectType === 'WishEffect') {
           const wishResult = applyWishEffect(mage, effect as any, origin);
           logs.push(...fromWishEffectResult(wishResult));
+        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+          const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, null);
+          logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
       }
     } else {
@@ -822,6 +833,9 @@ class Engine {
         } else if (effect.effectType === 'StealEffect') {
           const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
           logs.push(...fromStealEffectResult(stealResult));
+        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+          const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, targetMage);
+          logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
       }
     }
@@ -852,6 +866,7 @@ class Engine {
       // spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
+      isActive: true,
       isEpidemic: spell.attributes.includes('epidemic'),
       isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
