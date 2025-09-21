@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
-import type { Mage } from 'shared/types/mage';
+import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
@@ -28,7 +28,8 @@ export class SimpleDataAdapter extends DataAdapter {
   battleReportTable: BattleReport[] = [];
   battleSummaryTable: BattleReportSummary[] = [];
   turnTable: ChronicleTurn[] = [];
-  rankTable: MageRank[] = []
+  rankTable: MageRank[] = [];
+  enchantmentTable: Enchantment[] = [];
 
   constructor() { super(); }
 
@@ -97,6 +98,23 @@ export class SimpleDataAdapter extends DataAdapter {
 
   async getAllMages() {
     return this.mageTable;
+  }
+
+  async setEnchantments(enchantments: Enchantment[]) {
+    for (const enchant of enchantments) {
+      const idx = this.enchantmentTable.findIndex(d => d.id === enchant.id);
+      if (idx < 0) {
+        this.enchantmentTable.push(enchant);
+      } else {
+      }
+        this.enchantmentTable[idx] = enchant;
+    }
+  }
+
+  async getEnchantments(mageId: number) {
+    return this.enchantmentTable.filter(d => {
+      return d.casterId === mageId || d.targetId === mageId;
+    });
   }
 
   async createRank(mr :Omit<MageRank, 'rank'>) {
