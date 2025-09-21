@@ -150,10 +150,17 @@ class Engine {
       }
     }
 
+    // Start server clock
+    await this.adapter.setServerClock(0, 25000);
+
     // Start loop
     setTimeout(() => {
       this.updateLoop();
     }, gameTable.turnRate * 1000);
+  }
+
+  async getServerClock() {
+    await this.adapter.getServerClock();
   }
 
   /**

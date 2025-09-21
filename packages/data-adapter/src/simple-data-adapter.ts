@@ -4,7 +4,7 @@ import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 
 interface User {
@@ -30,6 +30,11 @@ export class SimpleDataAdapter extends DataAdapter {
   turnTable: ChronicleTurn[] = [];
   rankTable: MageRank[] = [];
   enchantmentTable: Enchantment[] = [];
+
+  clock: ServerClock = {
+    currentTurn: 0,
+    endTurn: 0
+  }
 
   constructor() { super(); }
 
@@ -75,6 +80,16 @@ export class SimpleDataAdapter extends DataAdapter {
         mage.currentTurn ++;
       }
     }
+    this.clock.currentTurn ++;
+  }
+
+  async setServerClock(currentTurn: number, endTurn: number): Promise<void> {
+    this.clock.currentTurn = currentTurn;
+    this.clock.endTurn = endTurn;
+  }
+
+  async getServerClock(): Promise<ServerClock> {
+    return this.clock;
   }
 
   async createMage(username: string, mage: Mage) {

@@ -35,7 +35,6 @@ export abstract class DataAdapter {
 
   // server clock
   abstract setServerClock(currentTurn: number, endTurn: number): Promise<void>
-  abstract serverTurn(): Promise<void>
   abstract getServerClock(): Promise<ServerClock>
 
   // Mage CRUD

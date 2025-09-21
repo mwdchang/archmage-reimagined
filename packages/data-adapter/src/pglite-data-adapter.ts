@@ -261,13 +261,6 @@ export class PGliteDataAdapter extends DataAdapter {
     return result.rows.map(toCamelCase<ServerClock>)[0];
   }
 
-  async serverTurn(): Promise<void> {
-    await this.db.exec(`
-      UPDATE clock
-      SET current_turn = current_turn + 1
-    `);
-  }
-
   async getUser(username: string) {
     const result = await this.db.query<UserTable>(`
       SELECT * from archmage_user where username = '${username}'
@@ -637,6 +630,12 @@ WHERE id = ${mage.id}
       WHERE (mage->>'currentTurn')::int < ${options.maxTurn};
     `);
     this.refreshRankView();
+
+    await this.db.exec(`
+      UPDATE clock
+      SET current_turn = current_turn + 1
+    `);
+
 
     /*
     await this.db.query(`
