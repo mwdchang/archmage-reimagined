@@ -1,4 +1,4 @@
-import { shuffle } from "lodash";
+import _ from "lodash";
 import { EffectOrigin, RemoveEnchantmentEffect } from "shared/types/effects";
 import { Mage } from "shared/types/mage";
 import { betweenInt } from "../random";
@@ -39,7 +39,7 @@ export const applyRemoveEnchantmentEffect = (
       // Remove random enchantments
       const enchants = targetMage.enchantments.filter(d => d.isActive === true);
       if (enchants.length === 0) continue;
-      const shuffled = shuffle(enchants);
+      const shuffled = _.shuffle(enchants);
       shuffled[0].isActive = false;
       result.spellIds.push(shuffled[0].spellId);
     } else {
@@ -51,11 +51,11 @@ export const applyRemoveEnchantmentEffect = (
       if (otherEnchants.length === 0) {
         const ownEnchants = enchants.filter(d => d.casterId === mage.id);
         if (ownEnchants.length === 0) continue;
-        const shuffled = shuffle(ownEnchants);
+        const shuffled = _.shuffle(ownEnchants);
         shuffled[0].isActive = false;
         result.spellIds.push(shuffled[0].spellId);
       } else {
-        const shuffled = shuffle(otherEnchants);
+        const shuffled = _.shuffle(otherEnchants);
         shuffled[0].isActive = false;
         result.spellIds.push(shuffled[0].spellId);
       }

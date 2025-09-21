@@ -4,7 +4,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 
 interface UserTable {
@@ -27,6 +27,7 @@ interface BattleReportTable {
 
 const DB_INIT = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
+  DROP TABLE IF EXISTS click;
   DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
@@ -34,6 +35,16 @@ const DB_INIT = `
   DROP TABLE IF EXISTS battle_report;
   DROP TABLE IF EXISTS battle_summary;
   DROP TABLE IF EXISTS turn_chronicle;
+  DROP TABLE IF EXISTS market_price;
+  DROP TABLE IF EXISTS market;
+  DROP TABLE IF EXISTS market_bid;
+  COMMIT;
+
+
+  CREATE TABLE IF NOT EXISTS clock (
+    current_turn int,
+    end_turn int
+  );
   COMMIT;
 
 
@@ -110,7 +121,31 @@ const DB_INIT = `
   );
   COMMIT;
 
-  
+
+  CREATE TABLE IF NOT EXISTS market_price(
+    id varchar(64) PRIMARY KEY,
+    type varchar(64),
+    extra json,
+    price bigint
+  );
+  COMMIT;
+
+  CREATE TABLE IF NOT EXISTS market(
+    id varchar(64) PRIMARY KEY,
+    item_id varchar(64),
+    origin varchar(16),
+    expiration int
+  );
+  COMMIT;
+
+  CREATE TABLE IF NOT EXISTS market_bid(
+    id varchar(64) REFERENCES market(id),
+    mage_id int,
+    bid bigint
+  );
+  COMMIT;
+
+
   CREATE TABLE IF NOT EXISTS rank(
     id integer,
     name varchar(64),
@@ -212,9 +247,30 @@ export class PGliteDataAdapter extends DataAdapter {
     }
   }
 
+  async setServerClock(currentTurn: number, endTurn: number): Promise<void> {
+    await this.db.exec(`
+      DELETE FROM clock;
+      INSERT INTO clock values (${currentTurn}, ${endTurn})
+    `);
+  }
+
+  async getServerClock(): Promise<ServerClock> {
+    const result = await this.db.query<any>(`
+      SELECT * from clock
+    `);
+    return result.rows.map(toCamelCase<ServerClock>)[0];
+  }
+
+  async serverTurn(): Promise<void> {
+    await this.db.exec(`
+      UPDATE clock
+      SET current_turn = current_turn + 1
+    `);
+  }
+
   async getUser(username: string) {
     const result = await this.db.query<UserTable>(`
-SELECT * from archmage_user where username = '${username}'
+      SELECT * from archmage_user where username = '${username}'
     `);
     return result.rows[0];
   }

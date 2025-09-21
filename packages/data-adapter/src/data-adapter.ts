@@ -1,6 +1,6 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 
 
 export interface SearchOptions {
@@ -33,6 +33,11 @@ export abstract class DataAdapter {
   abstract login(username: string, password: string): Promise<any>
   abstract logout(): Promise<any>
 
+  // server clock
+  abstract setServerClock(currentTurn: number, endTurn: number): Promise<void>
+  abstract serverTurn(): Promise<void>
+  abstract getServerClock(): Promise<ServerClock>
+
   // Mage CRUD
   abstract createMage(username: string, mage: Mage): Promise<void>
   abstract getMageByUser(username: string): Promise<Mage>
@@ -56,6 +61,11 @@ export abstract class DataAdapter {
   // Chronicles
   abstract saveChronicles(data: ChronicleTurn[]): Promise<void>
   abstract getChronicles(options: SearchOptions): Promise<any[]>
+
+  // Market
+  // abstract createMarketItem(id: string, type: string, price: number): Promise<void>
+  // abstract updateMarketItem(id: string, price: number): Promise<void>
+
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>
