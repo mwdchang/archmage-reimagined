@@ -1,6 +1,7 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 
 export interface SearchOptions {
@@ -61,10 +62,19 @@ export abstract class DataAdapter {
   abstract saveChronicles(data: ChronicleTurn[]): Promise<void>
   abstract getChronicles(options: SearchOptions): Promise<any[]>
 
-  // Market
-  // abstract createMarketItem(id: string, type: string, price: number): Promise<void>
-  // abstract updateMarketItem(id: string, price: number): Promise<void>
+  // Market price
+  abstract createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void>
+  abstract updateMarketPrice(id: string, price: number): Promise<void>
+  abstract getMarketPrices(): Promise<MarketPrice[]>
 
+  // Market
+  abstract addMarketItem(marketItem: MarketItem): Promise<void>
+  abstract removeMarketItem(id: string): Promise<void>
+
+  // Market bids
+  abstract addMarketBid(marketBid: MarketBid): Promise<void>
+  abstract getMarketBids(id: string): Promise<MarketBid[]>
+  abstract removeMarketBids(id: string): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

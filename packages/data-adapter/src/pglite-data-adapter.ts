@@ -6,6 +6,7 @@ import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 interface UserTable {
   username: string;
@@ -35,9 +36,10 @@ const DB_INIT = `
   DROP TABLE IF EXISTS battle_report;
   DROP TABLE IF EXISTS battle_summary;
   DROP TABLE IF EXISTS turn_chronicle;
-  DROP TABLE IF EXISTS market_price;
-  DROP TABLE IF EXISTS market;
+
   DROP TABLE IF EXISTS market_bid;
+  DROP TABLE IF EXISTS market;
+  DROP TABLE IF EXISTS market_price;
   COMMIT;
 
 
@@ -133,7 +135,7 @@ const DB_INIT = `
   CREATE TABLE IF NOT EXISTS market(
     id varchar(64) PRIMARY KEY,
     item_id varchar(64),
-    origin varchar(16),
+    mage_id int,
     expiration int
   );
   COMMIT;
@@ -649,4 +651,77 @@ WHERE id = ${mage.id}
     `);
     */
   }
+
+  async createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void> {
+    const ex = extra ? extra : null;
+
+    await this.db.query(`
+      INSERT INTO market_price (id, type, price, extra)
+      VALUES (
+        ${Q(id)},
+        ${Q(type)},
+        ${price},
+        ${Q(JSON.stringify(ex))}
+      )
+    `);
+  }
+
+  async updateMarketPrice(id: string, price: number) {
+    await this.db.query(`
+      UPDATE market_price 
+      SET price = ${price}
+      where id = ${Q(id)}
+    `);
+  }
+
+  async getMarketPrices(): Promise<MarketPrice[]> {
+    const result = await this.db.query(`
+      SELECT * from market_price
+    `)
+    return result.rows.map(toCamelCase<MarketPrice>);
+  }
+
+  async addMarketItem(marketItem: MarketItem) {
+    await this.db.query(`
+      INSERT INTO market (id, item_id, mage_id, expiration)
+      VALUES (
+        ${Q(marketItem.id)},
+        ${Q(marketItem.itemId)},
+        ${marketItem.mageId},
+        ${marketItem.expiration}
+      )
+    `);
+  }
+
+  async removeMarketItem(id: string): Promise<void> {
+    await this.db.exec(`
+      DELETE FROM market where id = ${Q(id)}
+    `);
+  }
+
+
+  async addMarketBid(marketBid: MarketBid): Promise<void> {
+    await this.db.exec(`
+      INSERT INTO market_bid (id, mage_id, bid)
+      VALUES (
+        ${Q(marketBid.id)},
+        ${marketBid.mageId},
+        ${marketBid.bid}
+      )
+    `);
+  }
+
+  async getMarketBids(id: string): Promise<MarketBid[]> {
+    const result = await this.db.query(`
+      SELECT * from market_bid where id = ${Q(id)}
+    `);
+    return result.rows.map(toCamelCase<MarketBid>);
+  }
+
+  async removeMarketBids(id: string): Promise<void> {
+    await this.db.exec(`
+      DELETE FROM market_bid where id = ${Q(id)}
+    `);
+  }
+
 }

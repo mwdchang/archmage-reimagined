@@ -7,7 +7,8 @@ import {
   getSpellById,
   getItemById,
   initializeResearchTree,
-  getUnitById
+  getUnitById,
+  getAllItems
 } from './base/references';
 import {
   createMage,
@@ -153,6 +154,9 @@ class Engine {
     // Start server clock
     await this.adapter.setServerClock(0, 25000);
 
+    // Setart market
+    await this.initializeMarket();
+
     // Start loop
     setTimeout(() => {
       this.updateLoop();
@@ -160,7 +164,8 @@ class Engine {
   }
 
   async getServerClock() {
-    await this.adapter.getServerClock();
+    const clock = await this.adapter.getServerClock();
+    return clock;
   }
 
   /**
@@ -177,8 +182,11 @@ class Engine {
      * - increment mage turns
      * - black market and other things
      */
-    console.log(`=== Server turn ===`);
-    this.serverTurn()
+    this.serverTurn().then(() => {
+      this.getServerClock().then(d => {
+        console.log(`=== Server turn [${d.currentTurn}]===`);
+      });
+    });
 
     setTimeout(() => {
       this.updateLoop()
@@ -1375,6 +1383,21 @@ class Engine {
 
   async getGameTable() {
     return _.clone(gameTable);
+  }
+
+  async initializeMarket() {
+    const mp = await this.adapter.getMarketPrices();
+    if (mp.length > 0) return;
+
+    const items = getAllItems();
+    for (const item of items) {
+      this.adapter.createMarketPrice(
+        item.id,
+        'item',
+        1000000,
+        null
+      )
+    }
   }
 }
 

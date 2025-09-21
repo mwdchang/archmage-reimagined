@@ -6,6 +6,7 @@ import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 interface User {
   username: string
@@ -30,6 +31,10 @@ export class SimpleDataAdapter extends DataAdapter {
   turnTable: ChronicleTurn[] = [];
   rankTable: MageRank[] = [];
   enchantmentTable: Enchantment[] = [];
+
+  marketPriceTable: MarketPrice[] = [];
+  marketItemTable: MarketItem[] = [];
+  marketBidTable: MarketBid[] = [];
 
   clock: ServerClock = {
     currentTurn: 0,
@@ -201,6 +206,49 @@ export class SimpleDataAdapter extends DataAdapter {
         return false;
       }
     }).sort((a, b) => b.turn - a.turn);
+  }
+
+  async createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void> {
+    this.marketPriceTable.push({
+      id, type, price, extra
+    });
+  }
+
+  async updateMarketPrice(id: string, price: number): Promise<void> {
+    const mp = this.marketPriceTable.find(d => d.id === id);
+    if (mp) {
+      mp.price = price;
+    }
+  }
+
+  async getMarketPrices(): Promise<MarketPrice[]> {
+    return this.marketPriceTable;
+  }
+
+
+  async addMarketItem(marketItem: MarketItem): Promise<void> {
+    this.marketItemTable.push(marketItem);
+  }
+
+  async removeMarketItem(id: string): Promise<void> {
+    this.marketItemTable = this.marketItemTable.filter(d => {
+      d.id !== id;
+    });
+  }
+
+
+  async addMarketBid(marketBid: MarketBid): Promise<void> {
+    this.marketBidTable.push(marketBid);
+  }
+
+  async getMarketBids(id: string): Promise<MarketBid[]> {
+    return this.marketBidTable.filter(d => d.id === id);
+  }
+
+  async removeMarketBids(id: string): Promise<void> {
+    this.marketBidTable = this.marketBidTable.filter(d => {
+      return d.id !== id;
+    });
   }
 }
 
