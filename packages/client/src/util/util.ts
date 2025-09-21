@@ -6,7 +6,7 @@ import {
 } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
-import { Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
 
 export interface MageItem {
@@ -113,6 +113,13 @@ export const getBattleArmy = (mage: Mage) => {
   });
   return result;
 }
+
+
+export const enchantMagic = (enchantment: Enchantment) => {
+  const spell = getSpellById(enchantment.spellId);
+  return spell.magic;
+};
+
 
 /**
  * Human readable string for spell and item assignment conditions

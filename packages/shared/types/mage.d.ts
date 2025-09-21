@@ -39,18 +39,17 @@ export interface ResearchItem {
 
 export interface Enchantment {
   id: string; // instance id
-  rank?: number; // populated as needed
 
   casterId: number;
   casterMagic: string;
   targetId: number;
 
   spellId: string;
-  // spellMagic: string; // not used???
   spellLevel: number;
 
   isEpidemic: boolean;
   isPermanent: boolean;
+  isActive: boolean;
   life: number;
 }
 

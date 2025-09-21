@@ -22,6 +22,7 @@ import {
 } from './magic';
 import { 
   currentSpellLevel,
+  totalLand,
   totalNetPower,
 } from './base/mage';
 import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'shared/types/battle';
@@ -541,7 +542,12 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
   battleReport.defender.army = _.cloneDeep(defendingArmy);
 
 
-  const army = attacker.army[0];
+  const pillageStack = attacker.army[0];
+  const unit = getUnitById(pillageStack.id);
+
+  let pillagePower = (pillageStack.size * unit.powerRank) / (4000 * totalLand(defender.mage));
+  pillagePower = Math.min(1.0, pillagePower);
+
   const mage = attacker.mage;
   const origin: EffectOrigin = {
     id: mage.id,
@@ -555,7 +561,7 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
     rule: 'addPercentage',
     target: 'geld',
     magic: {
-      [mage.magic]: { value: { min: 0.02, max: 0.06, stealPercent: 1.0 } }
+      [mage.magic]: { value: { min: 0.03 * pillagePower, max: 0.08 * pillagePower, stealPercent: 1.0 } }
     }
   };
 

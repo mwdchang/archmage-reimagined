@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
-import type { Mage } from 'shared/types/mage';
+import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, MageRank } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
@@ -30,6 +30,7 @@ const DB_INIT = `
   DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
+  DROP TABLE IF EXISTS enchantment;
   DROP TABLE IF EXISTS battle_report;
   DROP TABLE IF EXISTS battle_summary;
   DROP TABLE IF EXISTS turn_chronicle;
@@ -48,6 +49,24 @@ const DB_INIT = `
     username varchar(64),
     id integer,
     mage json 
+  );
+  COMMIT;
+
+
+  CREATE TABLE IF NOT EXISTS enchantment (
+    id varchar(64) PRIMARY KEY,
+
+    caster_id integer,
+    caster_magic varchar(32),
+    target_id integer,
+
+    spell_id varchar(64),
+    spell_level integer,
+
+    is_active boolean,
+    is_epidemic boolean,
+    is_permanent boolean,
+    life integer 
   );
   COMMIT;
 
@@ -262,6 +281,8 @@ UPDATE mage
 SET mage = '${JSON.stringify(mage)}'
 WHERE id = ${mage.id}
     `);
+
+    await this.setEnchantments(mage.enchantments);
   }
 
   async getMage(id: number) {
@@ -273,8 +294,12 @@ WHERE id = ${mage.id}
     const mageRank = await this.db.query<MageRank>(`
       select * from rank_view where id = ${mage.id}
     `);
+
+    const enchantments = await this.getEnchantments(mage.id);
+
     mage.rank = mageRank.rows[0].rank; 
     mage.status = mageRank.rows[0].status;
+    mage.enchantments = enchantments;
     return mage;
   }
 
@@ -306,6 +331,50 @@ WHERE id = ${mage.id}
   async getRankList(): Promise<MageRank[]> {
     const result = await this.db.query<any>('SELECT * from rank_view order by rank asc');
     return result.rows.map(toCamelCase<MageRank>);
+  }
+
+  async setEnchantments(enchantments: Enchantment[]) {
+    if (enchantments.length === 0) return;
+
+    for (const enchant of enchantments) {
+      await this.db.exec(`
+        INSERT into enchantment 
+        VALUES (
+          ${Q(enchant.id)},
+          ${enchant.casterId},
+          ${Q(enchant.casterMagic)},
+          ${enchant.targetId},
+          ${Q(enchant.spellId)},
+          ${enchant.spellLevel},
+          ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          ${enchant.isEpidemic},
+          ${enchant.isPermanent},
+          ${enchant.life}
+        )
+        ON CONFLICT (id)
+        DO UPDATE set 
+          caster_id = ${enchant.casterId},
+          caster_magic = ${Q(enchant.casterMagic)},
+          target_id = ${enchant.targetId},
+          spell_id = ${Q(enchant.spellId)},
+          spell_level = ${enchant.spellLevel},
+          is_active = ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          is_epidemic = ${enchant.isEpidemic},
+          is_permanent = ${enchant.isPermanent},
+          life = ${enchant.life}
+        ;
+      `);
+    }
+  }
+
+  async getEnchantments(mageId: number) {
+    const result = await this.db.query<any>(`
+      SELECT * 
+      FROM enchantment 
+      WHERE (target_id = ${mageId} OR cater_id = ${mageId})
+      AND is_active = true
+    `);
+    return result.rows.map(toCamelCase<Enchantment>);
   }
 
   async createRank(mr : MageRank) {

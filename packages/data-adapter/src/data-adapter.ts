@@ -1,5 +1,5 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/types/mage';
 import { ChronicleTurn, MageRank } from 'shared/types/common';
 
 
@@ -40,6 +40,9 @@ export abstract class DataAdapter {
   abstract updateMage(mage: Mage): Promise<void>
   abstract getMage(id: number): Promise<Mage>
 
+  // Enchants
+  abstract setEnchantments(enchantments: Enchantment[]): Promise<void>
+  abstract getEnchantments(mageId: number): Promise<Enchantment[]>
 
   abstract createRank(mr :Omit<MageRank, 'rank'>): Promise<void>
   abstract getRankList(): Promise<MageRank[]>

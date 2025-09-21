@@ -25,6 +25,7 @@ export const createBot = (name: string, magic: AllowedMagic) => {
       targetId: botMage.id,
       spellId: spellId,
       spellLevel: botMage.testingSpellLevel,
+      isActive: true,
       isEpidemic: false,
       isPermanent: true,
       life: 0
