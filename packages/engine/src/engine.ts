@@ -8,7 +8,8 @@ import {
   getItemById,
   initializeResearchTree,
   getUnitById,
-  getAllItems
+  getAllItems,
+  getRandomItem
 } from './base/references';
 import {
   createMage,
@@ -104,6 +105,7 @@ const totalArmyPower = (army: ArmyUnit[]) => {
 class Engine {
   adapter: DataAdapter;
   debug: boolean = false;
+  currentTurn: number = 0;
 
   constructor(adapter: DataAdapter, debug: boolean = false) {
     // Load dependencies
@@ -175,21 +177,39 @@ class Engine {
     await this.adapter.nextTurn({ maxTurn: gameTable.maxTurns });
   }
 
-  updateLoop() {
-    /**
-     * Main update logic goes here
-     * - update server state
-     * - increment mage turns
-     * - black market and other things
-     */
-    this.serverTurn().then(() => {
-      this.getServerClock().then(d => {
-        console.log(`=== Server turn [${d.currentTurn}]===`);
-      });
-    });
+  /**
+   * Main update logic goes here
+   * - black market and other things
+   * - increment server clock and mage turns
+  **/
+  async updateLoop() {
+    // Update server state and mage turns
+    await this.serverTurn();
+    const c = await this.getServerClock();
+    this.currentTurn = c.currentTurn;
+    console.log(`=== Server turn [${this.currentTurn}]===`);
 
-    setTimeout(() => {
-      this.updateLoop()
+    // resolve bids
+    const marketItems = await this.adapter.getMarketItems();
+    for (const mi of marketItems) {
+      console.log('market item', mi.id, mi.itemId);
+    }
+
+    // new items arrived on market
+    for (let i = 0; i < 5; i++) {
+      if (Math.random() > 0.7) {
+        const item = getRandomItem();
+        await this.adapter.addMarketItem({
+          id: uuidv4(),
+          itemId: item.id,
+          mageId: null,
+          expiration: this.currentTurn + 2
+        });
+      }
+    }
+
+    setTimeout(async () => {
+      await this.updateLoop()
     }, gameTable.turnRate * 1000);
   }
 
@@ -1389,9 +1409,11 @@ class Engine {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
 
+    console.log('initialie market pricing');
+
     const items = getAllItems();
     for (const item of items) {
-      this.adapter.createMarketPrice(
+      await this.adapter.createMarketPrice(
         item.id,
         'item',
         1000000,

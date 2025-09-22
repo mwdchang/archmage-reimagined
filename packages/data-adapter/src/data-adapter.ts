@@ -69,6 +69,7 @@ export abstract class DataAdapter {
 
   // Market
   abstract addMarketItem(marketItem: MarketItem): Promise<void>
+  abstract getMarketItems(): Promise<MarketItem[]>
   abstract removeMarketItem(id: string): Promise<void>
 
   // Market bids

@@ -682,7 +682,7 @@ WHERE id = ${mage.id}
   }
 
   async addMarketItem(marketItem: MarketItem) {
-    await this.db.query(`
+    await this.db.exec(`
       INSERT INTO market (id, item_id, mage_id, expiration)
       VALUES (
         ${Q(marketItem.id)},
@@ -691,6 +691,13 @@ WHERE id = ${mage.id}
         ${marketItem.expiration}
       )
     `);
+  }
+
+  async getMarketItems(): Promise<MarketItem[]> {
+    const result = await this.db.query(`
+      SELECT * from market
+    `);
+    return result.rows.map(toCamelCase<MarketItem>);
   }
 
   async removeMarketItem(id: string): Promise<void> {

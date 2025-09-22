@@ -230,6 +230,10 @@ export class SimpleDataAdapter extends DataAdapter {
     this.marketItemTable.push(marketItem);
   }
 
+  async getMarketItems(): Promise<MarketItem[]> {
+    return this.marketItemTable;
+  }
+
   async removeMarketItem(id: string): Promise<void> {
     this.marketItemTable = this.marketItemTable.filter(d => {
       d.id !== id;
