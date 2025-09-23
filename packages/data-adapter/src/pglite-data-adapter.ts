@@ -422,7 +422,7 @@ WHERE id = ${mage.id}
     const result = await this.db.query<any>(`
       SELECT * 
       FROM enchantment 
-      WHERE (target_id = ${mageId} OR cater_id = ${mageId})
+      WHERE (target_id = ${mageId} OR caster_id = ${mageId})
       AND is_active = true
     `);
     return result.rows.map(toCamelCase<Enchantment>);
