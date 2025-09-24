@@ -8,6 +8,7 @@ export interface MarketPrice {
 export interface MarketItem {
   id: string;
   itemId: string;
+  basePrice: number;
 
   // where did the item came from, eg generated or auctioned
   mageId: number|null; 

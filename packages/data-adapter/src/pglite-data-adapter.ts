@@ -135,6 +135,7 @@ const DB_INIT = `
   CREATE TABLE IF NOT EXISTS market(
     id varchar(64) PRIMARY KEY,
     item_id varchar(64),
+    base_price bigint,
     mage_id int,
     expiration int
   );
@@ -683,10 +684,11 @@ WHERE id = ${mage.id}
 
   async addMarketItem(marketItem: MarketItem) {
     await this.db.exec(`
-      INSERT INTO market (id, item_id, mage_id, expiration)
+      INSERT INTO market (id, item_id, base_price, mage_id, expiration)
       VALUES (
         ${Q(marketItem.id)},
         ${Q(marketItem.itemId)},
+        ${marketItem.basePrice},
         ${marketItem.mageId},
         ${marketItem.expiration}
       )

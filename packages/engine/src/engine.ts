@@ -89,6 +89,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
+import { MarketItem } from 'shared/types/market';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -189,7 +190,7 @@ class Engine {
     this.currentTurn = c.currentTurn;
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
-    // resolve bids
+    // FIXME: resolve bids
     const marketItems = await this.adapter.getMarketItems();
     for (const mi of marketItems) {
       console.log('market item', mi.id, mi.itemId);
@@ -202,6 +203,7 @@ class Engine {
         await this.adapter.addMarketItem({
           id: uuidv4(),
           itemId: item.id,
+          basePrice: 1000000,
           mageId: null,
           expiration: this.currentTurn + 2
         });
@@ -1409,8 +1411,7 @@ class Engine {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
 
-    console.log('initialie market pricing');
-
+    console.log('initialize market pricing');
     const items = getAllItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
@@ -1420,6 +1421,34 @@ class Engine {
         null
       )
     }
+
+    console.log('seeding market items');
+    for (let i = 0; i < 10; i++) {
+      const item = getRandomItem();
+      await this.adapter.addMarketItem({
+        id: uuidv4(),
+        itemId: item.id,
+        basePrice: 1000000,
+        mageId: null,
+        expiration: this.currentTurn + 2
+      });
+    }
+  }
+
+  async getMarketItems(): Promise<MarketItem[]> {
+    return this.adapter.getMarketItems();
+  }
+
+  async makeMarketBid(mageId: number, itemId: string, bid: number) {
+    await this.adapter.addMarketBid({
+      id: itemId,
+      mageId: mageId,
+      bid: bid
+    })
+  }
+
+  async getMarketBids(itemId: string) {
+    return this.adapter.getMarketBids(itemId);
   }
 }
 
