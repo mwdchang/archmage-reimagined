@@ -208,9 +208,9 @@ export class SimpleDataAdapter extends DataAdapter {
     }).sort((a, b) => b.turn - a.turn);
   }
 
-  async createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void> {
+  async createMarketPrice(id: string, type: string, price: number): Promise<void> {
     this.marketPriceTable.push({
-      id, type, price, extra
+      id, type, price
     });
   }
 
@@ -234,6 +234,10 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.marketItemTable;
   }
 
+  async getMarketItem(id: string): Promise<MarketItem> {
+    return this.marketItemTable.find(d => d.id === id);
+  }
+
   async removeMarketItem(id: string): Promise<void> {
     this.marketItemTable = this.marketItemTable.filter(d => {
       d.id !== id;
@@ -242,6 +246,12 @@ export class SimpleDataAdapter extends DataAdapter {
 
 
   async addMarketBid(marketBid: MarketBid): Promise<void> {
+    const item = await this.getMarketItem(marketBid.id);
+
+    if (item.basePrice >= marketBid.bid) {
+      throw new Error(`Cannot make bid on ${item.itemId}, check bidding price`);
+    }
+
     this.marketBidTable.push(marketBid);
   }
 
@@ -252,6 +262,47 @@ export class SimpleDataAdapter extends DataAdapter {
   async removeMarketBids(id: string): Promise<void> {
     this.marketBidTable = this.marketBidTable.filter(d => {
       return d.id !== id;
+    });
+  }
+
+  async getWinningBids(turn: number): Promise<MarketBid[]> {
+    const expired = this.marketItemTable.filter(d => d.expiration === turn);
+
+    const expiredIds = expired.map(d => d.id);
+    const bids = this.marketBidTable.filter(d => {
+      return expiredIds.includes(d.id);
+    });
+
+
+    const tracker: Record<string, {
+      id: string,
+      mageIds: number[],
+      bid: number
+    }> = {};
+
+    for (const bid of bids) {
+      const entry = tracker[bid.id];
+      if (entry) {
+        if (bid.bid > entry.bid) {
+          entry.bid = bid.bid;
+          entry.mageIds = [bid.mageId];
+        } else if (bid.bid === entry.bid) {
+          entry.mageIds.push(bid.mageId);
+        }
+      } else {
+        tracker[bid.id] = {
+          id: bid.id,
+          mageIds: [bid.mageId],
+          bid: bid.bid
+        }
+      }
+    }
+
+    return bids.filter(d => { 
+      const entry = tracker[d.id];
+
+      return entry.mageIds.length === 1 && 
+        entry.mageIds.includes(d.mageId);
     });
   }
 }

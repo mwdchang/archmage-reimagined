@@ -63,19 +63,21 @@ export abstract class DataAdapter {
   abstract getChronicles(options: SearchOptions): Promise<any[]>
 
   // Market price
-  abstract createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void>
+  abstract createMarketPrice(id: string, type: string, price: number): Promise<void>
   abstract updateMarketPrice(id: string, price: number): Promise<void>
   abstract getMarketPrices(): Promise<MarketPrice[]>
 
   // Market
   abstract addMarketItem(marketItem: MarketItem): Promise<void>
   abstract getMarketItems(): Promise<MarketItem[]>
+  abstract getMarketItem(id: string): Promise<MarketItem>
   abstract removeMarketItem(id: string): Promise<void>
 
   // Market bids
   abstract addMarketBid(marketBid: MarketBid): Promise<void>
   abstract getMarketBids(id: string): Promise<MarketBid[]>
   abstract removeMarketBids(id: string): Promise<void>
+  abstract getWinningBids(turn: number): Promise<MarketBid[]>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

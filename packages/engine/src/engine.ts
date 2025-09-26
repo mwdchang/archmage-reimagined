@@ -90,6 +90,7 @@ import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { MarketItem } from 'shared/types/market';
+import { priceDecrease, priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -161,9 +162,11 @@ class Engine {
     await this.initializeMarket();
 
     // Start loop
-    setTimeout(() => {
-      this.updateLoop();
-    }, gameTable.turnRate * 1000);
+    if (this.debug === false) {
+      setTimeout(() => {
+        this.updateLoop();
+      }, gameTable.turnRate * 1000);
+    }
   }
 
   async getServerClock() {
@@ -191,28 +194,55 @@ class Engine {
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
     // FIXME: resolve bids
+    /*
     const marketItems = await this.adapter.getMarketItems();
     for (const mi of marketItems) {
-      console.log('market item', mi.id, mi.itemId);
-    }
+      if (mi.expiration > c.currentTurn) continue;
 
-    // new items arrived on market
+      console.log('resolving market item', mi.id, mi.itemId);
+      const bids = (await this.adapter.getMarketBids(mi.id))
+        .sort((a, b) => b.bid - a.bid);
+
+      if (bids.length === 0) {
+        mi.basePrice = priceDecrease(mi.basePrice);
+      } else if (bids.length >= 2 && (bids[0].bid === bids[1].bid)) {
+        // There are ties
+        mi.basePrice = priceIncrease(mi.basePrice, mi.basePrice);
+      } else {
+        const winningBid = bids.shift()
+        mi.basePrice = priceIncrease(mi.basePrice, winningBid.bid);
+      }
+      // Update price
+    }
+    */
+
+    // New items arrived on market
+    /*
+    const marketPriceList = await this.adapter.getMarketPrices();
+
     for (let i = 0; i < 5; i++) {
       if (Math.random() > 0.7) {
         const item = getRandomItem();
         await this.adapter.addMarketItem({
           id: uuidv4(),
           itemId: item.id,
-          basePrice: 1000000,
+          basePrice: marketPriceList.find(d => d.id === item.id).price,
           mageId: null,
           expiration: this.currentTurn + 2
         });
       }
     }
+    */
+    const winningBids = await this.adapter.getWinningBids(c.currentTurn);
+    for (const bid of winningBids) {
+      console.log('>> ', bid);
+    }
 
-    setTimeout(async () => {
-      await this.updateLoop()
-    }, gameTable.turnRate * 1000);
+    if (this.debug === false) {
+      setTimeout(async () => {
+        await this.updateLoop()
+      }, gameTable.turnRate * 1000);
+    }
   }
 
   async useTurns(mage: Mage, turns: number) {
@@ -1411,14 +1441,14 @@ class Engine {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
 
+    const defaultPrice = 1000000;
     console.log('initialize market pricing');
     const items = getAllItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
         item.id,
         'item',
-        1000000,
-        null
+        defaultPrice
       )
     }
 
@@ -1428,7 +1458,7 @@ class Engine {
       await this.adapter.addMarketItem({
         id: uuidv4(),
         itemId: item.id,
-        basePrice: 1000000,
+        basePrice: defaultPrice,
         mageId: null,
         expiration: this.currentTurn + 2
       });

@@ -127,16 +127,16 @@ const DB_INIT = `
   CREATE TABLE IF NOT EXISTS market_price(
     id varchar(64) PRIMARY KEY,
     type varchar(64),
-    extra json,
     price bigint
   );
   COMMIT;
 
   CREATE TABLE IF NOT EXISTS market(
     id varchar(64) PRIMARY KEY,
-    item_id varchar(64),
+    item_id varchar(64) REFERENCES market_price(id),
     base_price bigint,
     mage_id int,
+    extra json,
     expiration int
   );
   COMMIT;
@@ -653,16 +653,14 @@ WHERE id = ${mage.id}
     */
   }
 
-  async createMarketPrice(id: string, type: string, price: number, extra?: any): Promise<void> {
-    const ex = extra ? extra : null;
+  async createMarketPrice(id: string, type: string, price: number): Promise<void> {
 
     await this.db.query(`
-      INSERT INTO market_price (id, type, price, extra)
+      INSERT INTO market_price (id, type, price)
       VALUES (
         ${Q(id)},
         ${Q(type)},
-        ${price},
-        ${Q(JSON.stringify(ex))}
+        ${price}
       )
     `);
   }
@@ -683,16 +681,26 @@ WHERE id = ${mage.id}
   }
 
   async addMarketItem(marketItem: MarketItem) {
+    // Sanity check
+    
     await this.db.exec(`
-      INSERT INTO market (id, item_id, base_price, mage_id, expiration)
+      INSERT INTO market (id, item_id, base_price, mage_id, extra, expiration)
       VALUES (
         ${Q(marketItem.id)},
         ${Q(marketItem.itemId)},
         ${marketItem.basePrice},
-        ${marketItem.mageId},
+        ${marketItem.mageId || null},
+        ${Q(JSON.stringify(marketItem.extra || null))},
         ${marketItem.expiration}
       )
     `);
+  }
+
+  async getMarketItem(id: string): Promise<MarketItem> {
+    const result = await this.db.query(`
+      SELECT * from market where id = ${Q(id)}
+    `);
+    return result.rows.map(toCamelCase<MarketItem>)[0];
   }
 
   async getMarketItems(): Promise<MarketItem[]> {
@@ -708,8 +716,12 @@ WHERE id = ${mage.id}
     `);
   }
 
-
   async addMarketBid(marketBid: MarketBid): Promise<void> {
+    const item = await this.getMarketItem(marketBid.id);
+    if (item.basePrice >= marketBid.bid) {
+      throw new Error(`Cannot make bid on ${item.itemId}, check bidding price`);
+    }
+
     await this.db.exec(`
       INSERT INTO market_bid (id, mage_id, bid)
       VALUES (
@@ -731,6 +743,46 @@ WHERE id = ${mage.id}
     await this.db.exec(`
       DELETE FROM market_bid where id = ${Q(id)}
     `);
+  }
+
+  async getWinningBids(turn: number): Promise<MarketBid[]> {
+    const query = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      max_bids AS (
+        SELECT
+          mb.id AS market_id,
+          MAX(mb.bid) AS max_bid
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.id = em.id
+        GROUP BY mb.id
+      ),
+      bid_counts AS (
+        SELECT
+          mb.id AS market_id,
+          mb.bid,
+          COUNT(*) AS bid_count
+        FROM market_bid mb
+        INNER JOIN max_bids mb_max
+          ON mb.id = mb_max.market_id AND mb.bid = mb_max.max_bid
+        GROUP BY mb.id, mb.bid
+      ),
+      winning_bids AS (
+        SELECT
+          mb.*
+        FROM market_bid mb
+        INNER JOIN bid_counts bc
+          ON mb.id = bc.market_id AND mb.bid = bc.bid
+        WHERE bc.bid_count = 1
+      )
+      SELECT * FROM winning_bids;
+    `;
+
+    const result = await this.db.query(query);
+    return result.rows.map(toCamelCase<MarketBid>);
   }
 
 }

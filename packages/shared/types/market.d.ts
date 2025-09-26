@@ -1,7 +1,6 @@
 export interface MarketPrice {
   id: string;
   type: string;  /*'item' | 'spell';*/
-  extra?: any;
   price: number;
 }
 
@@ -11,7 +10,8 @@ export interface MarketItem {
   basePrice: number;
 
   // where did the item came from, eg generated or auctioned
-  mageId: number|null; 
+  mageId?: number; 
+  extra?: any;
 
   // when the item is resolved and taken off the market
   expiration: number; 
