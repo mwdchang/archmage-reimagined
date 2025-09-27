@@ -46,7 +46,7 @@ const items = ref<ItemSummary[]>([]);
 onMounted(async () => {
   const itemList = (await API.get<MarketItem[]>('/market-items')).data;
 
-  const itemGroups = _.groupBy(itemList, d => d.itemId);
+  const itemGroups = _.groupBy(itemList, d => d.priceId);
   const finalList: ItemSummary[] = [];
 
   Object.keys(itemGroups).forEach(key => {
