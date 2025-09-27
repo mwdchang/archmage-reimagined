@@ -6,7 +6,7 @@ export interface MarketPrice {
 
 export interface MarketItem {
   id: string;
-  itemId: string;
+  priceId: string;
   basePrice: number;
 
   // where did the item came from, eg generated or auctioned
@@ -20,6 +20,7 @@ export interface MarketItem {
 export interface MarketBid {
   // Same as market.id
   id: string; 
+  marketId: string;
   mageId: number;
   bid: number;
 }

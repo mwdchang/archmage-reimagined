@@ -238,18 +238,18 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.marketItemTable.find(d => d.id === id);
   }
 
-  async removeMarketItem(id: string): Promise<void> {
+  async removeMarketItem(ids: string[]): Promise<void> {
     this.marketItemTable = this.marketItemTable.filter(d => {
-      d.id !== id;
+      return ids.includes(d.id) === false;
     });
   }
 
 
   async addMarketBid(marketBid: MarketBid): Promise<void> {
-    const item = await this.getMarketItem(marketBid.id);
+    const item = await this.getMarketItem(marketBid.marketId);
 
     if (item.basePrice >= marketBid.bid) {
-      throw new Error(`Cannot make bid on ${item.itemId}, check bidding price`);
+      throw new Error(`Cannot make bid on ${item.priceId}, check bidding price`);
     }
 
     this.marketBidTable.push(marketBid);
@@ -259,29 +259,29 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.marketBidTable.filter(d => d.id === id);
   }
 
-  async removeMarketBids(id: string): Promise<void> {
+  async removeMarketBids(ids: string[]): Promise<void> {
     this.marketBidTable = this.marketBidTable.filter(d => {
-      return d.id !== id;
+      return ids.includes(d.id) === false;
     });
+    console.log('hihihihi', ids, this.marketBidTable);
   }
 
   async getWinningBids(turn: number): Promise<MarketBid[]> {
     const expired = this.marketItemTable.filter(d => d.expiration === turn);
-
     const expiredIds = expired.map(d => d.id);
     const bids = this.marketBidTable.filter(d => {
-      return expiredIds.includes(d.id);
+      return expiredIds.includes(d.marketId);
     });
 
 
     const tracker: Record<string, {
-      id: string,
+      marketId: string,
       mageIds: number[],
       bid: number
     }> = {};
 
     for (const bid of bids) {
-      const entry = tracker[bid.id];
+      const entry = tracker[bid.marketId];
       if (entry) {
         if (bid.bid > entry.bid) {
           entry.bid = bid.bid;
@@ -290,8 +290,8 @@ export class SimpleDataAdapter extends DataAdapter {
           entry.mageIds.push(bid.mageId);
         }
       } else {
-        tracker[bid.id] = {
-          id: bid.id,
+        tracker[bid.marketId] = {
+          marketId: bid.marketId,
           mageIds: [bid.mageId],
           bid: bid.bid
         }
@@ -299,11 +299,34 @@ export class SimpleDataAdapter extends DataAdapter {
     }
 
     return bids.filter(d => { 
-      const entry = tracker[d.id];
+      const entry = tracker[d.marketId];
 
       return entry.mageIds.length === 1 && 
         entry.mageIds.includes(d.mageId);
     });
+  }
+
+  async cleanupMarket(turn: number): Promise<void> {
+    const expired = this.marketItemTable.filter(d => d.expiration === turn);
+    const expiredIds = expired.map(d => d.id);
+    const bids = this.marketBidTable.filter(d => {
+      return expiredIds.includes(d.marketId);
+    });
+
+    console.log('>>>>>>>>>>', turn, expiredIds, bids);
+    console.log('');
+
+    // Return bid
+    for (const bid of bids) {
+      const mage = await this.getMage(bid.mageId);
+      mage.currentGeld += bid.bid;
+      console.log('returning', mage.id, bid.bid);
+      await this.updateMage(mage);
+    }
+
+    // Clean up
+    await this.removeMarketBids(bids.map(d => d.id));
+    await this.removeMarketItem(expired.map(d => d.id));
   }
 }
 

@@ -89,7 +89,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
-import { MarketItem } from 'shared/types/market';
+import { MarketItem, MarketPrice } from 'shared/types/market';
 import { priceDecrease, priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
@@ -191,30 +191,9 @@ class Engine {
     await this.serverTurn();
     const c = await this.getServerClock();
     this.currentTurn = c.currentTurn;
+    console.log('');
+    console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
-
-    // FIXME: resolve bids
-    /*
-    const marketItems = await this.adapter.getMarketItems();
-    for (const mi of marketItems) {
-      if (mi.expiration > c.currentTurn) continue;
-
-      console.log('resolving market item', mi.id, mi.itemId);
-      const bids = (await this.adapter.getMarketBids(mi.id))
-        .sort((a, b) => b.bid - a.bid);
-
-      if (bids.length === 0) {
-        mi.basePrice = priceDecrease(mi.basePrice);
-      } else if (bids.length >= 2 && (bids[0].bid === bids[1].bid)) {
-        // There are ties
-        mi.basePrice = priceIncrease(mi.basePrice, mi.basePrice);
-      } else {
-        const winningBid = bids.shift()
-        mi.basePrice = priceIncrease(mi.basePrice, winningBid.bid);
-      }
-      // Update price
-    }
-    */
 
     // New items arrived on market
     /*
@@ -233,9 +212,91 @@ class Engine {
       }
     }
     */
+
+    /**
+     * Resolve bids
+     * - Find winning bids
+     * - Add items to buyer
+     * - Add geld to sellers
+     * - Update pricing
+     * - Remove all expired items
+    **/
+    const marketItems = await this.adapter.getMarketItems();
+    const marketPrices = await this.adapter.getMarketPrices();
+
+    const priceMap: Map<string, MarketPrice> = new Map();
+    const itemMap: Map<string, MarketItem> = new Map();
+
+    const mageMap: Map<number, Mage> = new Map();
+    const priceUpdate: Map<string, MarketPrice> = new Map();
+
+    for (const marketItem of marketItems) {
+      itemMap.set(marketItem.id, marketItem);
+    }
+    for (const marketPrice of marketPrices) {
+      priceMap.set(marketPrice.id, marketPrice);
+    }
+
     const winningBids = await this.adapter.getWinningBids(c.currentTurn);
     for (const bid of winningBids) {
-      console.log('>> ', bid);
+      console.log('winning bid >> ', bid);
+
+      const marketItem = itemMap.get(bid.marketId);
+      const marketPrice = priceMap.get(marketItem.priceId);
+
+      if (!mageMap.has(bid.mageId)) {
+        const m = await this.adapter.getMage(bid.mageId);
+        mageMap.set(bid.mageId, m);
+      }
+      const mage = mageMap.get(bid.mageId);
+
+      // Resolve item
+      if (marketPrice.type === 'item') {
+        if (mage.items[marketPrice.id]) {
+          mage.items[marketPrice.id] ++;
+        } else {
+          mage.items[marketPrice.id] = 1;
+        }
+      }
+
+      // Resolve if item came from a mage instead of generated
+      if (marketItem.mageId) {
+        if (!mageMap.has(marketItem.mageId)) {
+          const m = await this.adapter.getMage(bid.mageId);
+          mageMap.set(bid.mageId, m);
+        }
+        const mage2 = mageMap.get(bid.mageId);
+        mage2.currentGeld += marketItem.basePrice;
+      }
+
+      marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
+      priceUpdate.set(marketPrice.id, marketPrice);
+    }
+
+    // delete market bids and delete market items
+    await this.adapter.removeMarketBids(winningBids.map(d => d.id));
+    await this.adapter.cleanupMarket(c.currentTurn);
+
+    // update prices and mages
+    for (const p of priceUpdate.values()) {
+      await this.adapter.updateMarketPrice(p.id, p.price);
+    }
+    for (const m of mageMap.values()) {
+      await this.adapter.updateMage(m);
+    }
+
+    // generate new items
+    for (let i = 0; i < 5; i++) {
+      if (Math.random() > 0.7) {
+        const item = getRandomItem();
+        await this.adapter.addMarketItem({
+          id: uuidv4(),
+          priceId: item.id,
+          basePrice: priceMap.get(item.id).price,
+          mageId: null,
+          expiration: this.currentTurn + 2
+        });
+      }
     }
 
     if (this.debug === false) {
@@ -1457,7 +1518,7 @@ class Engine {
       const item = getRandomItem();
       await this.adapter.addMarketItem({
         id: uuidv4(),
-        itemId: item.id,
+        priceId: item.id,
         basePrice: defaultPrice,
         mageId: null,
         expiration: this.currentTurn + 2
@@ -1470,11 +1531,16 @@ class Engine {
   }
 
   async makeMarketBid(mageId: number, itemId: string, bid: number) {
+    const mage = await this.adapter.getMage(mageId);
+    mage.currentGeld -= bid;
+
     await this.adapter.addMarketBid({
-      id: itemId,
+      id: uuidv4(),
+      marketId: itemId,
       mageId: mageId,
       bid: bid
-    })
+    });
+    await this.adapter.updateMage(mage);
   }
 
   async getMarketBids(itemId: string) {

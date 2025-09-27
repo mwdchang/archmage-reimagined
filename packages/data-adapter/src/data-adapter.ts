@@ -70,14 +70,16 @@ export abstract class DataAdapter {
   // Market
   abstract addMarketItem(marketItem: MarketItem): Promise<void>
   abstract getMarketItems(): Promise<MarketItem[]>
+  abstract removeMarketItem(ids: string[]): Promise<void>
   abstract getMarketItem(id: string): Promise<MarketItem>
-  abstract removeMarketItem(id: string): Promise<void>
 
   // Market bids
   abstract addMarketBid(marketBid: MarketBid): Promise<void>
   abstract getMarketBids(id: string): Promise<MarketBid[]>
-  abstract removeMarketBids(id: string): Promise<void>
+  abstract removeMarketBids(id: string[]): Promise<void>
+
   abstract getWinningBids(turn: number): Promise<MarketBid[]>
+  abstract cleanupMarket(turn: number): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

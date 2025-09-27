@@ -133,7 +133,7 @@ const DB_INIT = `
 
   CREATE TABLE IF NOT EXISTS market(
     id varchar(64) PRIMARY KEY,
-    item_id varchar(64) REFERENCES market_price(id),
+    price_id varchar(64) REFERENCES market_price(id),
     base_price bigint,
     mage_id int,
     extra json,
@@ -142,7 +142,8 @@ const DB_INIT = `
   COMMIT;
 
   CREATE TABLE IF NOT EXISTS market_bid(
-    id varchar(64) REFERENCES market(id),
+    id varchar(64),
+    market_id varchar(64) REFERENCES market(id),
     mage_id int,
     bid bigint
   );
@@ -684,10 +685,10 @@ WHERE id = ${mage.id}
     // Sanity check
     
     await this.db.exec(`
-      INSERT INTO market (id, item_id, base_price, mage_id, extra, expiration)
+      INSERT INTO market (id, price_id, base_price, mage_id, extra, expiration)
       VALUES (
         ${Q(marketItem.id)},
-        ${Q(marketItem.itemId)},
+        ${Q(marketItem.priceId)},
         ${marketItem.basePrice},
         ${marketItem.mageId || null},
         ${Q(JSON.stringify(marketItem.extra || null))},
@@ -710,22 +711,25 @@ WHERE id = ${mage.id}
     return result.rows.map(toCamelCase<MarketItem>);
   }
 
-  async removeMarketItem(id: string): Promise<void> {
+  async removeMarketItem(ids: string[]): Promise<void> {
+    if (ids.length === 0) return;
+
     await this.db.exec(`
-      DELETE FROM market where id = ${Q(id)}
+      DELETE FROM market where id in (${ids.map(Q).join(',')})
     `);
   }
 
   async addMarketBid(marketBid: MarketBid): Promise<void> {
-    const item = await this.getMarketItem(marketBid.id);
+    const item = await this.getMarketItem(marketBid.marketId);
     if (item.basePrice >= marketBid.bid) {
-      throw new Error(`Cannot make bid on ${item.itemId}, check bidding price`);
+      throw new Error(`Cannot make bid on ${item.priceId}, check bidding price`);
     }
 
     await this.db.exec(`
-      INSERT INTO market_bid (id, mage_id, bid)
+      INSERT INTO market_bid (id, market_id, mage_id, bid)
       VALUES (
         ${Q(marketBid.id)},
+        ${Q(marketBid.marketId)},
         ${marketBid.mageId},
         ${marketBid.bid}
       )
@@ -739,9 +743,11 @@ WHERE id = ${mage.id}
     return result.rows.map(toCamelCase<MarketBid>);
   }
 
-  async removeMarketBids(id: string): Promise<void> {
+  async removeMarketBids(ids: string[]): Promise<void> {
+    if (ids.length === 0) return
+
     await this.db.exec(`
-      DELETE FROM market_bid where id = ${Q(id)}
+      DELETE FROM market_bid where id IN (${ids.map(Q).join(',')})
     `);
   }
 
@@ -754,28 +760,28 @@ WHERE id = ${mage.id}
       ),
       max_bids AS (
         SELECT
-          mb.id AS market_id,
+          mb.market_id AS market_id,
           MAX(mb.bid) AS max_bid
         FROM market_bid mb
-        INNER JOIN expired_markets em ON mb.id = em.id
-        GROUP BY mb.id
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.market_id
       ),
       bid_counts AS (
         SELECT
-          mb.id AS market_id,
+          mb.market_id AS market_id,
           mb.bid,
           COUNT(*) AS bid_count
         FROM market_bid mb
         INNER JOIN max_bids mb_max
-          ON mb.id = mb_max.market_id AND mb.bid = mb_max.max_bid
-        GROUP BY mb.id, mb.bid
+          ON mb.market_id = mb_max.market_id AND mb.bid = mb_max.max_bid
+        GROUP BY mb.market_id, mb.bid
       ),
       winning_bids AS (
         SELECT
           mb.*
         FROM market_bid mb
         INNER JOIN bid_counts bc
-          ON mb.id = bc.market_id AND mb.bid = bc.bid
+          ON mb.market_id = bc.market_id AND mb.bid = bc.bid
         WHERE bc.bid_count = 1
       )
       SELECT * FROM winning_bids;
@@ -783,6 +789,73 @@ WHERE id = ${mage.id}
 
     const result = await this.db.query(query);
     return result.rows.map(toCamelCase<MarketBid>);
+  }
+
+  async cleanupMarket(turn: number): Promise<void> {
+
+    let blah = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      refunds AS (
+        SELECT
+          mb.mage_id,
+          SUM(mb.bid) AS total_refund
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.mage_id
+      )
+      SELECT * from refunds
+    `;
+    const res = await this.db.query(blah);
+    console.log('!!!', res.rows);
+
+
+
+    // Return geld
+    let sql = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      refunds AS (
+        SELECT
+          mb.mage_id,
+          SUM(mb.bid) AS total_refund
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.mage_id
+      )
+
+      UPDATE mage
+      SET mage = jsonb_set(
+          mage::jsonb,
+          '{currentGeld}',
+          ((COALESCE(mage->>'currentGeld', '0')::bigint + r.total_refund)::text)::jsonb
+      )
+      FROM refunds r
+      WHERE mage.id = r.mage_id;
+    `;
+    await this.db.exec(sql);
+    
+
+    // Remove bids
+    sql = `
+      DELETE FROM market_bid
+      WHERE market_id in (
+        SELECT id from market where expiration = ${turn}
+      )
+    `
+    await this.db.exec(sql);
+
+    // Remove market
+    sql = `
+      DELETE FROM market where expiration = ${turn}
+    `
+    await this.db.exec(sql);
   }
 
 }
