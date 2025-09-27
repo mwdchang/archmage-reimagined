@@ -241,6 +241,15 @@ router.get('/api/game-table', async (req: any, res) => {
   res.status(200).json(settings);
 });
 
+router.get('/api/server-clock', async (req: any, res) => {
+  const clock = await engine.getServerClock();
+  res.status(200).json(clock);
+});
+
+router.get('/api/market-items', async (req, res) => {
+  const result = await engine.getMarketItems();
+  res.status(200).json(result);
+});
 
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {
 //   console.log('cookies!!! ', req.user);

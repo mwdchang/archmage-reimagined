@@ -4,7 +4,7 @@
   <table>
     <tbody>
       <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
-        <td> <magic :magic="enchant.spellMagic" /></td>
+        <td> <magic :magic="enchantMagic(enchant)" /></td>
         <td>{{readableStr(enchant.spellId)}}</td>
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
@@ -19,7 +19,7 @@
   <table>
     <tbody>
       <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 
-        <td> <magic :magic="enchant.spellMagic" /></td>
+        <td> <magic :magic="enchantMagic(enchant)" /></td>
         <td>{{readableStr(enchant.spellId)}}</td>
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
@@ -43,13 +43,16 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import Magic from '@/components/magic.vue';
 import { dispelEnchantment } from 'engine/src/magic';
-import { readableStr } from '@/util/util';
+import { readableStr, enchantMagic } from '@/util/util';
+import { Enchantment } from 'shared/types/mage';
+import { getSpellById } from 'engine/src/base/references';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
 
 const selectedEnchant = ref<string>('');
 const dispelMana = ref<number>(0);
+
 
 const selfEnchantments = computed(() => {
   return mage.value?.enchantments.filter(d => {

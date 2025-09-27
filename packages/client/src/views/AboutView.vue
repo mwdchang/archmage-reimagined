@@ -83,7 +83,7 @@
         <router-link to="/rankList">Rankings</router-link>
         <router-link to="/charge">Mana Charge</router-link>
         <router-link to="/geld">Gelding</router-link>
-        <div>Black market</div>
+        <router-link to="/market">Market</router-link>
       </div>
       
       <div class="column">
