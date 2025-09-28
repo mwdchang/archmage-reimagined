@@ -54,8 +54,12 @@ const engine = new Engine(dataAdapter);
 router.post('/api/explore', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
-  const landGained = await engine.exploreLand(mage, turns);
-  res.status(200).json({ mage, landGained });
+  try {
+    const landGained = await engine.exploreLand(mage, turns);
+    res.status(200).json({ mage, landGained });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/geld', async (req: any, res) => {
@@ -75,15 +79,23 @@ router.post('/api/charge', async (req: any, res) => {
 router.post('/api/build', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const payload = req.body;
-  await engine.build(mage, payload);
-  res.status(200).json({ mage });
+  try {
+    await engine.build(mage, payload);
+    res.status(200).json({ mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/destroy', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const payload = req.body;
-  await engine.destroy(mage, payload);
-  res.status(200).json({ mage });
+  try {
+    await engine.destroy(mage, payload);
+    res.status(200).json({ mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.get('/api/ranklist', async (_req: any, res) => {

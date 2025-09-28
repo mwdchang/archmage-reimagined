@@ -37,7 +37,8 @@ export class SimpleDataAdapter extends DataAdapter {
   marketBidTable: MarketBid[] = [];
 
   clock: ServerClock = {
-    startTime: Date.now(),
+    currentTurnTime: Date.now(),
+    interval: 0,
     currentTurn: 0,
     endTurn: 0
   }

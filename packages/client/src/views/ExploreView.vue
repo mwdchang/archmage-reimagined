@@ -16,13 +16,16 @@
       <div>
         {{ exploreMsg }}
       </div>
+      <div class="error" v-if="errorStr">
+        {{ errorStr }}
+      </div>
     </section> 
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { explorationRate } from 'engine/src/interior';
 import type { Mage } from 'shared/types/mage';
@@ -35,11 +38,33 @@ const exploreRate = computed(() => {
 });
 
 const exploreMsg = ref('');
+const errorStr = ref('');
 
 const exploreLand = async () => {
-  const res = await API.post('/explore', { turns: turnsToExplore.value });
-  mageStore.setMage(res.data.mage);
-  exploreMsg.value = `You used ${turnsToExplore.value} and found ${res.data.landGained} wilderness.`
+  /*
+  try {
+    const res = await API.post('/explore', { turns: turnsToExplore.value });
+    mageStore.setMage(res.data.mage);
+    exploreMsg.value = `You used ${turnsToExplore.value} and found ${res.data.landGained} wilderness.`
+  } catch (err) {
+  }
+  */
+
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    exploreMsg.value = '';
+    return API.post('/explore', { turns: turnsToExplore.value });
+  })
+  
+  if (error) {
+    errorStr.value = error;
+    return;
+  }
+
+  if (data) {
+    mageStore.setMage(data.mage);
+    exploreMsg.value = `You used ${turnsToExplore.value} and found ${data.landGained} wilderness.`
+  }
 };
 
 onMounted(() => {

@@ -591,7 +591,7 @@ class Engine {
   **/
   async exploreLand(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Insufficient number of turns to perform action');
     }
     let landGained = 0;
     for (let i = 0; i < num; i++) {
@@ -1069,6 +1069,9 @@ class Engine {
     let turnsUsed = 0;
 
     buildingTypes.forEach(b => {
+      if (payload[b.id] < 0) {
+        throw new Error(`Building ${b.id} amount cannot be negative`);
+      }
       landUsed += payload[b.id];
       turnsUsed += payload[b.id] /  buildingRate(mage, b.id);
     });
@@ -1076,10 +1079,10 @@ class Engine {
     landUsed = Math.ceil(landUsed);
 
     if (landUsed > mage.wilderness) {
-      return;
+      throw new Error(`Not enough wilderness to construct buildings`);
     }
     if (turnsUsed > mage.currentTurn) {
-      return;
+      throw new Error('Insufficient number of turns to perform action');
     }
 
     // 1. Build first using the current rates
@@ -1101,6 +1104,16 @@ class Engine {
   async destroy(mage: Mage, payload: DestroyPayload) {
     buildingTypes.forEach(b => {
       const num = payload[b.id];
+      if (num < 0) {
+        throw new Error(`Building ${num} amount cannot be negative`);
+      }
+      if (num > mage[b.id]) {
+        throw new Error(`Cannot destroy more buildings than you have`);
+      }
+      if (b.id === 'forts' && num >= mage[b.id]) {
+        throw new Error(`Cannot destroy forts down to 0`);
+      }
+
       mage[b.id] -= num;
       mage.wilderness += num;
     });
