@@ -27,11 +27,12 @@
       <select v-model="rselect">
         <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
       </select>
-      <input type="text" v-model="rsize" size="8">
+      <input type="number" v-model="rsize" size="8">
     </div>
 
     <button @click="addOrder">Add</button>
   </section>
+  <div v-if="errorStr" class="error">{{ errorStr }}</div>
   <br>
 
   <table>
@@ -48,7 +49,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { ref, onMounted } from 'vue';
 import { Unit } from 'shared/types/unit';
 import { useMageStore } from '@/stores/mage';
@@ -62,6 +63,7 @@ const mageStore = useMageStore();
 const rselect = ref(''); // Selected unit
 const rsize = ref(0);    // Recruitment size
 const currentRecruitments = ref<ArmyUnit[]>([]);
+const errorStr = ref('');
 
 const recruitableUnits = ref<Unit[]>([]);
 recruitableUnits.value = getRecruitableUnits(mageStore.mage!.magic);
@@ -87,12 +89,19 @@ const deleteOrder = (idx: number) => {
 }
 
 const update = async () => {
-  const res = await API.post('recruitments', {
-    recruitments: currentRecruitments.value
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('recruitments', {
+      recruitments: currentRecruitments.value
+    });
   });
 
-  if (res.data.mage) {
-    mageStore.setMage(res.data.mage);
+  if (error) {
+    errorStr.value = error;
+  }
+
+  if (data) {
+    mageStore.setMage(data.mage);
   }
 }
 

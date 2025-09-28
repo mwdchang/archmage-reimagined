@@ -58,6 +58,7 @@ router.post('/api/explore', async (req: any, res) => {
     const landGained = await engine.exploreLand(mage, turns);
     res.status(200).json({ mage, landGained });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -69,6 +70,7 @@ router.post('/api/geld', async (req: any, res) => {
     const geldGained = await engine.gelding(mage, turns);
     res.status(200).json({ mage, geldGained });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -80,6 +82,7 @@ router.post('/api/charge', async (req: any, res) => {
     const manaGained = await engine.manaCharge(mage, turns);
     res.status(200).json({ mage, manaGained });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -91,6 +94,7 @@ router.post('/api/build', async (req: any, res) => {
     await engine.build(mage, payload);
     res.status(200).json({ mage });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -102,6 +106,7 @@ router.post('/api/destroy', async (req: any, res) => {
     await engine.destroy(mage, payload);
     res.status(200).json({ mage });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -125,6 +130,7 @@ router.post('/api/dispel', async (req: any, res) => {
     const result = await engine.dispel(mage, enchantId, mana);
     res.status(200).json({ result, mage });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -141,16 +147,26 @@ router.post('/api/recruitments', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const body = req.body;
 
-  await engine.setRecruitments(mage, body.recruitments);
-  res.status(200).json({ mage });
+  try {
+    await engine.setRecruitments(mage, body.recruitments);
+    res.status(200).json({ mage });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/disband', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const body = req.body;
 
-  await engine.disbandUnits(mage, body.disbands);
-  res.status(200).json({ mage });
+  try {
+    await engine.disbandUnits(mage, body.disbands);
+    res.status(200).json({ mage });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/item', async (req: any, res) => {

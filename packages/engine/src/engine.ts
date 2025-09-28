@@ -1145,13 +1145,39 @@ class Engine {
   }
 
   async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
+    for (const au of payload) {
+      if (au.size < 0) {
+        throw new Error('Cannot recruit negative amount of units');
+      }
+      const unit = payload[au.id];
+      if (unit.magic !== mage.magic || unit.attributes.includes('special') === false) {
+        throw new Error(`Cannot recruit ${unit.id}`);
+      }
+    }
+    
     mage.recruitments = _.cloneDeep(payload);
     await this.adapter.updateMage(mage);
   }
 
   async disbandUnits(mage: Mage, payload: { [key: string]: ArmyUnit }) {
+    Object.values(payload).forEach(au => {
+      if (au.size < 0) {
+        throw new Error('Cannot disband negative amount of units');
+      }
+
+      const existingArmyUnit = mage.army.find(d => d.id === au.id);
+      if (!existingArmyUnit) {
+        throw new Error(`Cannot disband non-existing unit ${au.id}`);
+      }
+      if (existingArmyUnit.size < au.size) {
+        throw new Error('Cannot disband more units than you have');
+      }
+    });
+
     mage.army.forEach(armyUnit => {
       const u = payload[armyUnit.id];
+      if (!u) return;
+
       const unit = getUnitById(u.id);
 
       if (u && unit.attributes.includes('undisbandable') === false) {
