@@ -113,8 +113,12 @@ router.post('/api/spell', async (req: any, res) => {
 router.post('/api/dispel', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { enchantId, mana } = req.body;
-  const result = await engine.dispel(mage, enchantId, mana);
-  res.status(200).json({ result, mage });
+  try {
+    const result = await engine.dispel(mage, enchantId, mana);
+    res.status(200).json({ result, mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/defence-assignment', async (req: any, res) => {
@@ -152,8 +156,13 @@ router.post('/api/item', async (req: any, res) => {
 router.post('/api/research', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { magic, focus, turns } = req.body;
-  const result = await engine.research(mage, magic, focus, turns);
-  res.status(200).json({ result, mage });
+
+  try {
+    const result = await engine.research(mage, magic, focus, turns);
+    res.status(200).json({ result, mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/war', async (req: any, res) => {

@@ -25,6 +25,7 @@ const errorStr = ref('');
 const destroy = async (payload: any) => {
 
   const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
     return API.post('destroy', payload);
   });
 

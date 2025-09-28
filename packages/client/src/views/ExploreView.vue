@@ -41,15 +41,6 @@ const exploreMsg = ref('');
 const errorStr = ref('');
 
 const exploreLand = async () => {
-  /*
-  try {
-    const res = await API.post('/explore', { turns: turnsToExplore.value });
-    mageStore.setMage(res.data.mage);
-    exploreMsg.value = `You used ${turnsToExplore.value} and found ${res.data.landGained} wilderness.`
-  } catch (err) {
-  }
-  */
-
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
     exploreMsg.value = '';

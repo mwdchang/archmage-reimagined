@@ -648,6 +648,10 @@ class Engine {
 
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    if (turns <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
+
     allowedMagicList.forEach(m => {
       if (mage.currentResearch[m]) {
         mage.currentResearch[m].active = false;
@@ -791,6 +795,14 @@ class Engine {
   async dispel(mage:Mage, enchantId: string, mana: number) {
     const enchantment = mage.enchantments.find(d => d.id === enchantId);
     let success = false;
+
+    if (mana < 0) {
+      throw new Error('Mana for dispel cannot be negative');
+    }
+    if (!enchantment) {
+      throw new Error('No enchantment selected');
+    }
+
     if (enchantment) {
       await this.useTurn(mage);
 

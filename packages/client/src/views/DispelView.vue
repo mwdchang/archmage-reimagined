@@ -34,18 +34,17 @@
     <label>Success rate for {{ dispelProb }}%</label>
     <button @click="dispelEnchant">Dispel</button>
   </section>
+  <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
 
 <script lang="ts" setup>
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import Magic from '@/components/magic.vue';
 import { dispelEnchantment } from 'engine/src/magic';
 import { readableStr, enchantMagic } from '@/util/util';
-import { Enchantment } from 'shared/types/mage';
-import { getSpellById } from 'engine/src/base/references';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
@@ -53,6 +52,7 @@ const { mage } = storeToRefs(mageStore);
 const selectedEnchant = ref<string>('');
 const dispelMana = ref<number>(0);
 
+const errorStr = ref('');
 
 const selfEnchantments = computed(() => {
   return mage.value?.enchantments.filter(d => {
@@ -75,15 +75,21 @@ const dispelProb = computed(() => {
 
 const dispelEnchant = async () => {
   if (selectedEnchant.value === '') return;
-  if (dispelMana.value <= 0) return;
 
-  const res = (await API.post('dispel', { 
-    enchantId: selectedEnchant.value,
-    mana: dispelMana.value
-  })).data;
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('dispel', { 
+      enchantId: selectedEnchant.value,
+      mana: dispelMana.value
+    });
+  });
+  
+  if (error) {
+    errorStr.value = error
+  }
 
-  if (res.mage) {
-    mageStore.setMage(res.mage);
+  if (data) {
+    mageStore.setMage(data.mage);
   }
 };
 </script>

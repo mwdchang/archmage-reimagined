@@ -24,6 +24,7 @@ const errorStr = ref('');
 const build = async (payload: any) => {
 
   const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
     return API.post('build', payload);
   });
 
