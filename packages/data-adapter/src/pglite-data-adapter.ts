@@ -28,7 +28,7 @@ interface BattleReportTable {
 
 const DB_INIT = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
-  DROP TABLE IF EXISTS click;
+  DROP TABLE IF EXISTS clock;
   DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
@@ -45,7 +45,9 @@ const DB_INIT = `
 
   CREATE TABLE IF NOT EXISTS clock (
     current_turn int,
-    end_turn int
+    current_turn_time bigint,
+    end_turn int,
+    interval int
   );
   COMMIT;
 
@@ -251,10 +253,16 @@ export class PGliteDataAdapter extends DataAdapter {
     }
   }
 
-  async setServerClock(currentTurn: number, endTurn: number): Promise<void> {
+  async setServerClock(clock: ServerClock): Promise<void> {
     await this.db.exec(`
       DELETE FROM clock;
-      INSERT INTO clock values (${currentTurn}, ${endTurn})
+      INSERT INTO clock (current_turn, current_turn_time, end_turn, interval)
+      Values (
+        ${clock.currentTurn}, 
+        ${clock.currentTurnTime}, 
+        ${clock.endTurn},
+        ${clock.interval}
+      )
     `);
   }
 
@@ -638,6 +646,7 @@ WHERE id = ${mage.id}
     await this.db.exec(`
       UPDATE clock
       SET current_turn = current_turn + 1
+      ,   current_turn_time = ${Date.now()}
     `);
 
 
@@ -736,9 +745,11 @@ WHERE id = ${mage.id}
     `);
   }
 
-  async getMarketBids(id: string): Promise<MarketBid[]> {
+  async getMarketBids(priceId: string): Promise<MarketBid[]> {
     const result = await this.db.query(`
-      SELECT * from market_bid where id = ${Q(id)}
+      SELECT * from market_bid where market_id IN ( 
+        SELECT id from market where price_id = ${Q(priceId)}
+      )
     `);
     return result.rows.map(toCamelCase<MarketBid>);
   }
@@ -810,8 +821,6 @@ WHERE id = ${mage.id}
       SELECT * from refunds
     `;
     const res = await this.db.query(blah);
-    console.log('!!!', res.rows);
-
 
 
     // Return geld

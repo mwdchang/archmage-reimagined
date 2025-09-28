@@ -115,7 +115,7 @@ const router = createRouter({
       component: MarketView
     },
     {
-      path: '/market/:itemId',
+      path: '/market/:priceId',
       name: 'submarket',
       component: SubMarketView,
       props: true

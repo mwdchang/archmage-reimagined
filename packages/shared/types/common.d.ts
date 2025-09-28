@@ -3,7 +3,10 @@ import { allowedMagicList } from "../src/common.ts";
 export type AllowedMagic = typeof allowedMagicList[number];
 
 export interface ServerClock {
+  interval: number;
+
   currentTurn: number,
+  currentTurnTime: number,
   endTurn: number
 }
 

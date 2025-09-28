@@ -35,7 +35,7 @@ export abstract class DataAdapter {
   abstract logout(): Promise<any>
 
   // server clock
-  abstract setServerClock(currentTurn: number, endTurn: number): Promise<void>
+  abstract setServerClock(clock: ServerClock): Promise<void>
   abstract getServerClock(): Promise<ServerClock>
 
   // Mage CRUD
@@ -75,7 +75,7 @@ export abstract class DataAdapter {
 
   // Market bids
   abstract addMarketBid(marketBid: MarketBid): Promise<void>
-  abstract getMarketBids(id: string): Promise<MarketBid[]>
+  abstract getMarketBids(priceId: string): Promise<MarketBid[]>
   abstract removeMarketBids(id: string[]): Promise<void>
 
   abstract getWinningBids(turn: number): Promise<MarketBid[]>

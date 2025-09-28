@@ -89,7 +89,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
-import { MarketItem, MarketPrice } from 'shared/types/market';
+import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceDecrease, priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
@@ -156,7 +156,12 @@ class Engine {
     }
 
     // Start server clock
-    await this.adapter.setServerClock(0, 25000);
+    await this.adapter.setServerClock({
+      currentTurn: 0,
+      currentTurnTime: Date.now(),
+      endTurn: 25000,
+      interval: gameTable.turnRate * 1000 
+    });
 
     // Setart market
     await this.initializeMarket();
@@ -194,24 +199,6 @@ class Engine {
     console.log('');
     console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
-
-    // New items arrived on market
-    /*
-    const marketPriceList = await this.adapter.getMarketPrices();
-
-    for (let i = 0; i < 5; i++) {
-      if (Math.random() > 0.7) {
-        const item = getRandomItem();
-        await this.adapter.addMarketItem({
-          id: uuidv4(),
-          itemId: item.id,
-          basePrice: marketPriceList.find(d => d.id === item.id).price,
-          mageId: null,
-          expiration: this.currentTurn + 2
-        });
-      }
-    }
-    */
 
     /**
      * Resolve bids
@@ -1530,21 +1517,34 @@ class Engine {
     return this.adapter.getMarketItems();
   }
 
-  async makeMarketBid(mageId: number, itemId: string, bid: number) {
+  // FIXME: error messages
+  async makeMarketBids(mageId: number, bids: Bid[]): Promise<boolean> {
     const mage = await this.adapter.getMage(mageId);
-    mage.currentGeld -= bid;
 
-    await this.adapter.addMarketBid({
-      id: uuidv4(),
-      marketId: itemId,
-      mageId: mageId,
-      bid: bid
-    });
+    for (const bid of bids) {
+      const item = await this.adapter.getMarketItem(bid.marketId);
+
+      if (bid.bid > mage.currentGeld) {
+        return false;
+      }
+      if (bid.bid <= item.basePrice || bid.bid <= 0) {
+        continue;
+      }
+
+      await this.adapter.addMarketBid({
+        id: uuidv4(),
+        marketId: bid.marketId,
+        mageId: mageId,
+        bid: bid.bid
+      });
+      mage.currentGeld -= bid.bid;
+    }
     await this.adapter.updateMage(mage);
+    return true;
   }
 
-  async getMarketBids(itemId: string) {
-    return this.adapter.getMarketBids(itemId);
+  async getMarketBids(priceId: string) {
+    return this.adapter.getMarketBids(priceId);
   }
 }
 

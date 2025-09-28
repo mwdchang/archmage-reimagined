@@ -11,13 +11,25 @@
         <option value="item">Items</option>
       </select>
     </section>
+
     <table>
+      <thead>
+        <tr>
+          <th>Item name</th>
+          <th># available</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr v-for="item of items" :key="item.itemId">
-          <td> {{ readableStr(item.itemId) }} </td>
-          <td> {{ item.amount }} </td>
+        <tr v-for="item of items" :key="item.priceId">
           <td> 
-            <router-link :to="{ name: 'marketBid', params: { itemId: item.itemId }}"> Bid </router-link>
+            <router-link :to="{ name: 'viewItem', params: { id: item.priceId }}"> 
+              {{ readableStr(item.priceId) }} 
+            </router-link>
+          </td>
+          <td class="text-right"> {{ item.amount }} </td>
+          <td> 
+            <router-link :to="{ name: 'submarket', params: { priceId: item.priceId }}"> Bid </router-link>
           </td>
         </tr>
       </tbody>
@@ -37,7 +49,7 @@ const currentSelection = ref('item');
 const changeSelection = () => {}
 
 interface ItemSummary {
-  itemId: string;
+  priceId: string;
   amount: number;
 }
 
@@ -51,12 +63,12 @@ onMounted(async () => {
 
   Object.keys(itemGroups).forEach(key => {
     finalList.push({
-      itemId: key,
+      priceId: key,
       amount: itemGroups[key].length
     });
   });
 
-  items.value = finalList.sort((a, b) => a.itemId.localeCompare(b.itemId));
+  items.value = finalList.sort((a, b) => a.priceId.localeCompare(b.priceId));
 })
 
 </script>

@@ -37,6 +37,7 @@ export class SimpleDataAdapter extends DataAdapter {
   marketBidTable: MarketBid[] = [];
 
   clock: ServerClock = {
+    startTime: Date.now(),
     currentTurn: 0,
     endTurn: 0
   }
@@ -85,12 +86,17 @@ export class SimpleDataAdapter extends DataAdapter {
         mage.currentTurn ++;
       }
     }
+
+    // Update clock
     this.clock.currentTurn ++;
+    this.clock.currentTurnTime = Date.now();
   }
 
-  async setServerClock(currentTurn: number, endTurn: number): Promise<void> {
-    this.clock.currentTurn = currentTurn;
-    this.clock.endTurn = endTurn;
+  async setServerClock(clock: ServerClock): Promise<void> {
+    this.clock.currentTurn = clock.currentTurn;
+    this.clock.endTurn = clock.endTurn;
+    this.clock.currentTurnTime = clock.currentTurnTime;
+    this.clock.interval = clock.interval;
   }
 
   async getServerClock(): Promise<ServerClock> {
@@ -255,8 +261,11 @@ export class SimpleDataAdapter extends DataAdapter {
     this.marketBidTable.push(marketBid);
   }
 
-  async getMarketBids(id: string): Promise<MarketBid[]> {
-    return this.marketBidTable.filter(d => d.id === id);
+  async getMarketBids(priceId: string): Promise<MarketBid[]> {
+    const marketIds = this.marketItemTable.filter(d => d.priceId === priceId).map(d => d.id);
+    return this.marketBidTable.filter(d => {
+      return marketIds.includes(d.marketId);
+    });
   }
 
   async removeMarketBids(ids: string[]): Promise<void> {
