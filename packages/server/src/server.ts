@@ -236,11 +236,34 @@ router.post('/api/mages', async (req: any, res) => {
   res.status(200).json({ mages });
 });
 
-router.get('/api/game-table', async (req: any, res) => {
+router.get('/api/game-table', async (_req: any, res) => {
   const settings = await engine.getGameTable();
   res.status(200).json(settings);
 });
 
+router.get('/api/server-clock', async (_req: any, res) => {
+  const clock = await engine.getServerClock();
+  res.status(200).json(clock);
+});
+
+router.get('/api/market-items', async (_req, res) => {
+  const result = await engine.getMarketItems();
+  res.status(200).json(result);
+});
+
+router.get('/api/market-bids/:priceId', async (req, res) => {
+  const id = req.params.priceId;
+  const result = await engine.getMarketBids(id);
+  res.status(200).json(result);
+});
+
+router.post('/api/market-bids', async (req: any, res) => {
+  const bids = req.body;
+  const mage = await engine.getMageByUser(req.user.username);
+  await engine.makeMarketBids(mage.id, bids);
+
+  res.status(200).json({});
+});
 
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {
 //   console.log('cookies!!! ', req.user);

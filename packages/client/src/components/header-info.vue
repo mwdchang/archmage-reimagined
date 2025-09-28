@@ -36,7 +36,7 @@
         </td>
         <td> 
           <div class="row" style="gap: 2px">
-            <magic v-for="(enchant, idx) of mage.enchantments" :Key="idx" :magic="enchant.spellMagic" small />
+            <magic v-for="(enchant, idx) of mage.enchantments" :Key="idx" :magic="enchantMagic(enchant)" small />
           </div>
         </td>
       </tr>
@@ -50,7 +50,7 @@ import { useMageStore } from '@/stores/mage';
 import { totalLand } from 'engine/src/base/mage';
 import magic from './magic.vue';
 import SvgIcon from './svg-icon.vue';
-import { readbleNumber } from '@/util/util';
+import { readbleNumber, enchantMagic } from '@/util/util';
 import { Mage } from 'shared/types/mage';
 
 const mageStore = useMageStore();

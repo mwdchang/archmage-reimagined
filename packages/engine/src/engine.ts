@@ -7,7 +7,9 @@ import {
   getSpellById,
   getItemById,
   initializeResearchTree,
-  getUnitById
+  getUnitById,
+  getAllItems,
+  getRandomItem
 } from './base/references';
 import {
   createMage,
@@ -81,10 +83,14 @@ import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
-import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
 import { Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
+import { createBot } from './bot';
+import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
+import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
+import { priceDecrease, priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -101,6 +107,7 @@ const totalArmyPower = (army: ArmyUnit[]) => {
 class Engine {
   adapter: DataAdapter;
   debug: boolean = false;
+  currentTurn: number = 0;
 
   constructor(adapter: DataAdapter, debug: boolean = false) {
     // Load dependencies
@@ -134,21 +141,7 @@ class Engine {
       const mage = await this.getMageByUser(name);
       if (!mage) {
         console.log('creating test mage', name);
-        const bot = createMage(name, magic, {
-          type: 'bot',
-          testingSpellLevel: 777,
-          farms: 1500,
-          towns: 800,
-          nodes: 800,
-          barracks: 100,
-          guilds: 100,
-          forts: 40,
-          army: [
-            { id: 'redDragon', size: 20 },
-            { id: 'efreeti', size: 1000 }
-          ]
-        });
-
+        const bot = createBot(name, magic);
         await this.adapter.createMage(name, bot);
         await this.adapter.createRank({
           id: bot.id,
@@ -162,10 +155,28 @@ class Engine {
       }
     }
 
+    // Start server clock
+    await this.adapter.setServerClock({
+      currentTurn: 0,
+      currentTurnTime: Date.now(),
+      endTurn: 25000,
+      interval: gameTable.turnRate * 1000 
+    });
+
+    // Setart market
+    await this.initializeMarket();
+
     // Start loop
-    setTimeout(() => {
-      this.updateLoop();
-    }, gameTable.turnRate * 1000);
+    if (this.debug === false) {
+      setTimeout(() => {
+        this.updateLoop();
+      }, gameTable.turnRate * 1000);
+    }
+  }
+
+  async getServerClock() {
+    const clock = await this.adapter.getServerClock();
+    return clock;
   }
 
   /**
@@ -175,19 +186,111 @@ class Engine {
     await this.adapter.nextTurn({ maxTurn: gameTable.maxTurns });
   }
 
-  updateLoop() {
-    /**
-     * Main update logic goes here
-     * - update server state
-     * - increment mage turns
-     * - black market and other things
-     */
-    console.log(`=== Server turn ===`);
-    this.serverTurn()
+  /**
+   * Main update logic goes here
+   * - black market and other things
+   * - increment server clock and mage turns
+  **/
+  async updateLoop() {
+    // Update server state and mage turns
+    await this.serverTurn();
+    const c = await this.getServerClock();
+    this.currentTurn = c.currentTurn;
+    console.log('');
+    console.log('');
+    console.log(`=== Server turn [${this.currentTurn}]===`);
 
-    setTimeout(() => {
-      this.updateLoop()
-    }, gameTable.turnRate * 1000);
+    /**
+     * Resolve bids
+     * - Find winning bids
+     * - Add items to buyer
+     * - Add geld to sellers
+     * - Update pricing
+     * - Remove all expired items
+    **/
+    const marketItems = await this.adapter.getMarketItems();
+    const marketPrices = await this.adapter.getMarketPrices();
+
+    const priceMap: Map<string, MarketPrice> = new Map();
+    const itemMap: Map<string, MarketItem> = new Map();
+
+    const mageMap: Map<number, Mage> = new Map();
+    const priceUpdate: Map<string, MarketPrice> = new Map();
+
+    for (const marketItem of marketItems) {
+      itemMap.set(marketItem.id, marketItem);
+    }
+    for (const marketPrice of marketPrices) {
+      priceMap.set(marketPrice.id, marketPrice);
+    }
+
+    const winningBids = await this.adapter.getWinningBids(c.currentTurn);
+    for (const bid of winningBids) {
+      console.log('winning bid >> ', bid);
+
+      const marketItem = itemMap.get(bid.marketId);
+      const marketPrice = priceMap.get(marketItem.priceId);
+
+      if (!mageMap.has(bid.mageId)) {
+        const m = await this.adapter.getMage(bid.mageId);
+        mageMap.set(bid.mageId, m);
+      }
+      const mage = mageMap.get(bid.mageId);
+
+      // Resolve item
+      if (marketPrice.type === 'item') {
+        if (mage.items[marketPrice.id]) {
+          mage.items[marketPrice.id] ++;
+        } else {
+          mage.items[marketPrice.id] = 1;
+        }
+      }
+
+      // Resolve if item came from a mage instead of generated
+      if (marketItem.mageId) {
+        if (!mageMap.has(marketItem.mageId)) {
+          const m = await this.adapter.getMage(bid.mageId);
+          mageMap.set(bid.mageId, m);
+        }
+        const mage2 = mageMap.get(bid.mageId);
+        mage2.currentGeld += marketItem.basePrice;
+      }
+
+      marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
+      priceUpdate.set(marketPrice.id, marketPrice);
+    }
+
+    // delete market bids and delete market items
+    await this.adapter.removeMarketBids(winningBids.map(d => d.id));
+    await this.adapter.cleanupMarket(c.currentTurn);
+
+    // update prices and mages
+    for (const p of priceUpdate.values()) {
+      await this.adapter.updateMarketPrice(p.id, p.price);
+    }
+    for (const m of mageMap.values()) {
+      await this.adapter.updateMage(m);
+    }
+
+    // generate new items
+    for (let i = 0; i < 5; i++) {
+      if (Math.random() > 0.7) {
+        const item = getRandomItem();
+        await this.adapter.addMarketItem({
+          id: uuidv4(),
+          priceId: item.id,
+          basePrice: priceMap.get(item.id).price,
+          mageId: null,
+          expiration: this.currentTurn + 2
+        });
+      }
+    }
+
+    if (this.debug === false) {
+      setTimeout(async () => {
+        await this.updateLoop()
+      }, gameTable.turnRate * 1000);
+    }
   }
 
   async useTurns(mage: Mage, turns: number) {
@@ -372,14 +475,17 @@ class Engine {
         if (casterMage.currentGeld <= 0 && upkeep.geld) {
           casterMage.currentGeld = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         if (casterMage.currentMana <= 0 && upkeep.mana) {
           casterMage.currentMana = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         if (casterMage.currentPopulation <= 0 && upkeep.population) {
           casterMage.currentPopulation = 0;
           enchant.life = 0;
+          enchant.isActive = false;
         }
         await this.adapter.updateMage(casterMage);
       }
@@ -388,19 +494,23 @@ class Engine {
       if (enchant.life && enchant.life > 0) {
         enchant.life --;
       }
+      if (enchant.life <= 0 && enchant.isPermanent === false) {
+        enchant.isActive = false;
+      }
     }
 
     // Refresh functioning enchantments
-    mage.enchantments = mage.enchantments.filter(enchant => {
-      if (enchant.life === 0 && enchant.isPermanent === false) {
-        console.log(`${enchant.casterId} ${enchant.spellId} expired`)
-      }
+    // mage.enchantments = mage.enchantments.filter(enchant => {
+    //   if (enchant.life === 0 && enchant.isPermanent === false) {
+    //     enchant.isActive = false;
+    //     console.log(`${enchant.casterId} ${enchant.spellId} expired`)
+    //   }
+    //   if (enchant.isPermanent === false) {
+    //     return enchant.life > 0;
+    //   }
+    //   return true;
+    // });
 
-      if (enchant.isPermanent === false) {
-        return enchant.life > 0;
-      }
-      return true;
-    });
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
@@ -475,6 +585,10 @@ class Engine {
     });
   }
 
+  /**
+   * Explore new land (increase in wilderness) 
+   * for a number of turns
+  **/
   async exploreLand(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -491,7 +605,9 @@ class Engine {
     return landGained
   }
 
-  // geld for num turns
+  /**
+   * Gelding for num turns
+  **/
   async gelding(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -508,6 +624,9 @@ class Engine {
     return geldGained;
   }
 
+  /**
+   * Mana change for a number of turns
+  **/
   async manaCharge(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
       return;
@@ -529,7 +648,7 @@ class Engine {
 
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
-    magicTypes.forEach(m => {
+    allowedMagicList.forEach(m => {
       if (mage.currentResearch[m]) {
         mage.currentResearch[m].active = false;
       }
@@ -644,6 +763,15 @@ class Engine {
       magic: mage.magic,
       targetId: targetMage.id
     };
+
+    const kingdomResistances = calcKingdomResistance(targetMage);
+    if (Math.random() <= kingdomResistances['barriers']) {
+      logs.push({
+        type: 'error',
+        message: `You item hit the barriers and fizzled.`
+      });
+      return logs;
+    }
 
     for (const effect of item.effects) {
       if (effect.effectType === 'KingdomResourcesEffect') {
@@ -804,6 +932,9 @@ class Engine {
         } else if (effect.effectType === 'WishEffect') {
           const wishResult = applyWishEffect(mage, effect as any, origin);
           logs.push(...fromWishEffectResult(wishResult));
+        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+          const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, null);
+          logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
       }
     } else {
@@ -817,6 +948,9 @@ class Engine {
         } else if (effect.effectType === 'StealEffect') {
           const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
           logs.push(...fromStealEffectResult(stealResult));
+        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+          const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, targetMage);
+          logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
       }
     }
@@ -844,9 +978,10 @@ class Engine {
       targetId: mage.id,
 
       spellId: spell.id,
-      spellMagic: spell.magic,
+      // spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
+      isActive: true,
       isEpidemic: spell.attributes.includes('epidemic'),
       isPermanent: spell.life > 0 ? false : true,
       life: spell.life ? spell.life : 0
@@ -1139,15 +1274,23 @@ class Engine {
     }
 
 
-    // FIXME: need to model order, right now
-    // we take one turn to go attack, and one turn to return home ???
-    await this.useTurn(mage);
+    // Right now we simulate battle as follows
+    // - it ake one turn to go attack, and 
+    // - it takes one turn to return home
+    //
+    // Bots do not take turns
+    if (mage.type !== 'bot') {
+      await this.useTurn(mage);
+    }
+
     const battleReport = isPillageSuccess === false? 
       battle(battleType, attacker, defender):
       successPillage(attacker, defender);
-
     resolveBattle(mage, defenderMage, battleReport);
-    await this.useTurn(mage);
+
+    if (mage.type !== 'bot') {
+      await this.useTurn(mage);
+    }
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
@@ -1212,6 +1355,7 @@ class Engine {
 
     await this.adapter.updateMage(defenderMage);
 
+
     this.adapter.updateRank({
       id: defenderMage.id,
       name: defenderMage.name,
@@ -1221,6 +1365,14 @@ class Engine {
       status: '',
       netPower: totalNetPower(defenderMage)
     });
+
+
+    // FIXME: Update turn chronicles for participting mages,
+    // unless the mage is a bot
+    if (mage.type !== 'bot') {
+    }
+    if (defenderMage.type !== 'bot') {
+    }
 
     return battleReport;
   }
@@ -1331,6 +1483,68 @@ class Engine {
 
   async getGameTable() {
     return _.clone(gameTable);
+  }
+
+  async initializeMarket() {
+    const mp = await this.adapter.getMarketPrices();
+    if (mp.length > 0) return;
+
+    const defaultPrice = 1000000;
+    console.log('initialize market pricing');
+    const items = getAllItems();
+    for (const item of items) {
+      await this.adapter.createMarketPrice(
+        item.id,
+        'item',
+        defaultPrice
+      )
+    }
+
+    console.log('seeding market items');
+    for (let i = 0; i < 10; i++) {
+      const item = getRandomItem();
+      await this.adapter.addMarketItem({
+        id: uuidv4(),
+        priceId: item.id,
+        basePrice: defaultPrice,
+        mageId: null,
+        expiration: this.currentTurn + 2
+      });
+    }
+  }
+
+  async getMarketItems(): Promise<MarketItem[]> {
+    return this.adapter.getMarketItems();
+  }
+
+  // FIXME: error messages
+  async makeMarketBids(mageId: number, bids: Bid[]): Promise<boolean> {
+    const mage = await this.adapter.getMage(mageId);
+
+    for (const bid of bids) {
+      const item = await this.adapter.getMarketItem(bid.marketId);
+
+      if (bid.bid > mage.currentGeld) {
+        return false;
+      }
+      if (bid.bid <= item.basePrice || bid.bid <= 0) {
+        continue;
+      }
+
+      await this.adapter.addMarketBid({
+        id: uuidv4(),
+        marketId: bid.marketId,
+        mageId: mageId,
+        bid: bid.bid
+      });
+      mage.currentGeld -= bid.bid;
+    }
+    await this.adapter.updateMage(mage);
+    return true;
+  }
+
+  async getMarketBids(priceId: string) {
+    return this.adapter.getMarketBids(priceId);
   }
 }
 

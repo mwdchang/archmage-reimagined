@@ -2,6 +2,14 @@ import { allowedMagicList } from "../src/common.ts";
 
 export type AllowedMagic = typeof allowedMagicList[number];
 
+export interface ServerClock {
+  interval: number;
+
+  currentTurn: number,
+  currentTurnTime: number,
+  endTurn: number
+}
+
 export interface MageRank {
   id: number;
   name: string;
@@ -24,6 +32,13 @@ export interface GameTable {
       min: number;
       max: number;
     }
+  },
+
+  blackmarket: {
+    minimum: number;
+    commission: number;
+    priceIncreaseFactor: number;
+    priceDecreaseFactor: number;
   }
 }
 

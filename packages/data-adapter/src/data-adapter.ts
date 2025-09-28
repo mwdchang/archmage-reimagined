@@ -1,6 +1,7 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { Mage } from 'shared/types/mage';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { Enchantment, Mage } from 'shared/types/mage';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 
 export interface SearchOptions {
@@ -33,6 +34,10 @@ export abstract class DataAdapter {
   abstract login(username: string, password: string): Promise<any>
   abstract logout(): Promise<any>
 
+  // server clock
+  abstract setServerClock(clock: ServerClock): Promise<void>
+  abstract getServerClock(): Promise<ServerClock>
+
   // Mage CRUD
   abstract createMage(username: string, mage: Mage): Promise<void>
   abstract getMageByUser(username: string): Promise<Mage>
@@ -40,6 +45,9 @@ export abstract class DataAdapter {
   abstract updateMage(mage: Mage): Promise<void>
   abstract getMage(id: number): Promise<Mage>
 
+  // Enchants
+  abstract setEnchantments(enchantments: Enchantment[]): Promise<void>
+  abstract getEnchantments(mageId: number): Promise<Enchantment[]>
 
   abstract createRank(mr :Omit<MageRank, 'rank'>): Promise<void>
   abstract getRankList(): Promise<MageRank[]>
@@ -53,6 +61,25 @@ export abstract class DataAdapter {
   // Chronicles
   abstract saveChronicles(data: ChronicleTurn[]): Promise<void>
   abstract getChronicles(options: SearchOptions): Promise<any[]>
+
+  // Market price
+  abstract createMarketPrice(id: string, type: string, price: number): Promise<void>
+  abstract updateMarketPrice(id: string, price: number): Promise<void>
+  abstract getMarketPrices(): Promise<MarketPrice[]>
+
+  // Market
+  abstract addMarketItem(marketItem: MarketItem): Promise<void>
+  abstract getMarketItems(): Promise<MarketItem[]>
+  abstract removeMarketItem(ids: string[]): Promise<void>
+  abstract getMarketItem(id: string): Promise<MarketItem>
+
+  // Market bids
+  abstract addMarketBid(marketBid: MarketBid): Promise<void>
+  abstract getMarketBids(priceId: string): Promise<MarketBid[]>
+  abstract removeMarketBids(id: string[]): Promise<void>
+
+  abstract getWinningBids(turn: number): Promise<MarketBid[]>
+  abstract cleanupMarket(turn: number): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

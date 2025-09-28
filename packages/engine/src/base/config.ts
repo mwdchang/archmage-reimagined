@@ -8,6 +8,13 @@ export const gameTable: GameTable = {
 
   war: {
     range: { min: 0.80, max: 1.25 }
+  },
+
+  blackmarket: {
+    minimum: 0.05,
+    commission: 0.23,
+    priceIncreaseFactor: 0.30,
+    priceDecreaseFactor: 0.20
   }
 }
 

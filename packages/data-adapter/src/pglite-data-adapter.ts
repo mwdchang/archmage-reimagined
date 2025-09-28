@@ -2,10 +2,11 @@ import bcrypt from 'bcryptjs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
-import type { Mage } from 'shared/types/mage';
+import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 interface UserTable {
   username: string;
@@ -27,12 +28,27 @@ interface BattleReportTable {
 
 const DB_INIT = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
+  DROP TABLE IF EXISTS clock;
   DROP TABLE IF EXISTS rank;
   DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
+  DROP TABLE IF EXISTS enchantment;
   DROP TABLE IF EXISTS battle_report;
   DROP TABLE IF EXISTS battle_summary;
   DROP TABLE IF EXISTS turn_chronicle;
+
+  DROP TABLE IF EXISTS market_bid;
+  DROP TABLE IF EXISTS market;
+  DROP TABLE IF EXISTS market_price;
+  COMMIT;
+
+
+  CREATE TABLE IF NOT EXISTS clock (
+    current_turn int,
+    current_turn_time bigint,
+    end_turn int,
+    interval int
+  );
   COMMIT;
 
 
@@ -48,6 +64,24 @@ const DB_INIT = `
     username varchar(64),
     id integer,
     mage json 
+  );
+  COMMIT;
+
+
+  CREATE TABLE IF NOT EXISTS enchantment (
+    id varchar(64) PRIMARY KEY,
+
+    caster_id integer,
+    caster_magic varchar(32),
+    target_id integer,
+
+    spell_id varchar(64),
+    spell_level integer,
+
+    is_active boolean,
+    is_epidemic boolean,
+    is_permanent boolean,
+    life integer 
   );
   COMMIT;
 
@@ -91,7 +125,33 @@ const DB_INIT = `
   );
   COMMIT;
 
-  
+
+  CREATE TABLE IF NOT EXISTS market_price(
+    id varchar(64) PRIMARY KEY,
+    type varchar(64),
+    price bigint
+  );
+  COMMIT;
+
+  CREATE TABLE IF NOT EXISTS market(
+    id varchar(64) PRIMARY KEY,
+    price_id varchar(64) REFERENCES market_price(id),
+    base_price bigint,
+    mage_id int,
+    extra json,
+    expiration int
+  );
+  COMMIT;
+
+  CREATE TABLE IF NOT EXISTS market_bid(
+    id varchar(64),
+    market_id varchar(64) REFERENCES market(id),
+    mage_id int,
+    bid bigint
+  );
+  COMMIT;
+
+
   CREATE TABLE IF NOT EXISTS rank(
     id integer,
     name varchar(64),
@@ -193,9 +253,29 @@ export class PGliteDataAdapter extends DataAdapter {
     }
   }
 
+  async setServerClock(clock: ServerClock): Promise<void> {
+    await this.db.exec(`
+      DELETE FROM clock;
+      INSERT INTO clock (current_turn, current_turn_time, end_turn, interval)
+      Values (
+        ${clock.currentTurn}, 
+        ${clock.currentTurnTime}, 
+        ${clock.endTurn},
+        ${clock.interval}
+      )
+    `);
+  }
+
+  async getServerClock(): Promise<ServerClock> {
+    const result = await this.db.query<any>(`
+      SELECT * from clock
+    `);
+    return result.rows.map(toCamelCase<ServerClock>)[0];
+  }
+
   async getUser(username: string) {
     const result = await this.db.query<UserTable>(`
-SELECT * from archmage_user where username = '${username}'
+      SELECT * from archmage_user where username = '${username}'
     `);
     return result.rows[0];
   }
@@ -262,6 +342,8 @@ UPDATE mage
 SET mage = '${JSON.stringify(mage)}'
 WHERE id = ${mage.id}
     `);
+
+    await this.setEnchantments(mage.enchantments);
   }
 
   async getMage(id: number) {
@@ -273,8 +355,12 @@ WHERE id = ${mage.id}
     const mageRank = await this.db.query<MageRank>(`
       select * from rank_view where id = ${mage.id}
     `);
+
+    const enchantments = await this.getEnchantments(mage.id);
+
     mage.rank = mageRank.rows[0].rank; 
     mage.status = mageRank.rows[0].status;
+    mage.enchantments = enchantments;
     return mage;
   }
 
@@ -306,6 +392,50 @@ WHERE id = ${mage.id}
   async getRankList(): Promise<MageRank[]> {
     const result = await this.db.query<any>('SELECT * from rank_view order by rank asc');
     return result.rows.map(toCamelCase<MageRank>);
+  }
+
+  async setEnchantments(enchantments: Enchantment[]) {
+    if (enchantments.length === 0) return;
+
+    for (const enchant of enchantments) {
+      await this.db.exec(`
+        INSERT into enchantment 
+        VALUES (
+          ${Q(enchant.id)},
+          ${enchant.casterId},
+          ${Q(enchant.casterMagic)},
+          ${enchant.targetId},
+          ${Q(enchant.spellId)},
+          ${enchant.spellLevel},
+          ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          ${enchant.isEpidemic},
+          ${enchant.isPermanent},
+          ${enchant.life}
+        )
+        ON CONFLICT (id)
+        DO UPDATE set 
+          caster_id = ${enchant.casterId},
+          caster_magic = ${Q(enchant.casterMagic)},
+          target_id = ${enchant.targetId},
+          spell_id = ${Q(enchant.spellId)},
+          spell_level = ${enchant.spellLevel},
+          is_active = ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          is_epidemic = ${enchant.isEpidemic},
+          is_permanent = ${enchant.isPermanent},
+          life = ${enchant.life}
+        ;
+      `);
+    }
+  }
+
+  async getEnchantments(mageId: number) {
+    const result = await this.db.query<any>(`
+      SELECT * 
+      FROM enchantment 
+      WHERE (target_id = ${mageId} OR caster_id = ${mageId})
+      AND is_active = true
+    `);
+    return result.rows.map(toCamelCase<Enchantment>);
   }
 
   async createRank(mr : MageRank) {
@@ -513,6 +643,13 @@ WHERE id = ${mage.id}
     `);
     this.refreshRankView();
 
+    await this.db.exec(`
+      UPDATE clock
+      SET current_turn = current_turn + 1
+      ,   current_turn_time = ${Date.now()}
+    `);
+
+
     /*
     await this.db.query(`
       UPDATE mage
@@ -525,4 +662,209 @@ WHERE id = ${mage.id}
     `);
     */
   }
+
+  async createMarketPrice(id: string, type: string, price: number): Promise<void> {
+
+    await this.db.query(`
+      INSERT INTO market_price (id, type, price)
+      VALUES (
+        ${Q(id)},
+        ${Q(type)},
+        ${price}
+      )
+    `);
+  }
+
+  async updateMarketPrice(id: string, price: number) {
+    await this.db.query(`
+      UPDATE market_price 
+      SET price = ${price}
+      where id = ${Q(id)}
+    `);
+  }
+
+  async getMarketPrices(): Promise<MarketPrice[]> {
+    const result = await this.db.query(`
+      SELECT * from market_price
+    `)
+    return result.rows.map(toCamelCase<MarketPrice>);
+  }
+
+  async addMarketItem(marketItem: MarketItem) {
+    // Sanity check
+    
+    await this.db.exec(`
+      INSERT INTO market (id, price_id, base_price, mage_id, extra, expiration)
+      VALUES (
+        ${Q(marketItem.id)},
+        ${Q(marketItem.priceId)},
+        ${marketItem.basePrice},
+        ${marketItem.mageId || null},
+        ${Q(JSON.stringify(marketItem.extra || null))},
+        ${marketItem.expiration}
+      )
+    `);
+  }
+
+  async getMarketItem(id: string): Promise<MarketItem> {
+    const result = await this.db.query(`
+      SELECT * from market where id = ${Q(id)}
+    `);
+    return result.rows.map(toCamelCase<MarketItem>)[0];
+  }
+
+  async getMarketItems(): Promise<MarketItem[]> {
+    const result = await this.db.query(`
+      SELECT * from market
+    `);
+    return result.rows.map(toCamelCase<MarketItem>);
+  }
+
+  async removeMarketItem(ids: string[]): Promise<void> {
+    if (ids.length === 0) return;
+
+    await this.db.exec(`
+      DELETE FROM market where id in (${ids.map(Q).join(',')})
+    `);
+  }
+
+  async addMarketBid(marketBid: MarketBid): Promise<void> {
+    const item = await this.getMarketItem(marketBid.marketId);
+    if (item.basePrice >= marketBid.bid) {
+      throw new Error(`Cannot make bid on ${item.priceId}, check bidding price`);
+    }
+
+    await this.db.exec(`
+      INSERT INTO market_bid (id, market_id, mage_id, bid)
+      VALUES (
+        ${Q(marketBid.id)},
+        ${Q(marketBid.marketId)},
+        ${marketBid.mageId},
+        ${marketBid.bid}
+      )
+    `);
+  }
+
+  async getMarketBids(priceId: string): Promise<MarketBid[]> {
+    const result = await this.db.query(`
+      SELECT * from market_bid where market_id IN ( 
+        SELECT id from market where price_id = ${Q(priceId)}
+      )
+    `);
+    return result.rows.map(toCamelCase<MarketBid>);
+  }
+
+  async removeMarketBids(ids: string[]): Promise<void> {
+    if (ids.length === 0) return
+
+    await this.db.exec(`
+      DELETE FROM market_bid where id IN (${ids.map(Q).join(',')})
+    `);
+  }
+
+  async getWinningBids(turn: number): Promise<MarketBid[]> {
+    const query = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      max_bids AS (
+        SELECT
+          mb.market_id AS market_id,
+          MAX(mb.bid) AS max_bid
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.market_id
+      ),
+      bid_counts AS (
+        SELECT
+          mb.market_id AS market_id,
+          mb.bid,
+          COUNT(*) AS bid_count
+        FROM market_bid mb
+        INNER JOIN max_bids mb_max
+          ON mb.market_id = mb_max.market_id AND mb.bid = mb_max.max_bid
+        GROUP BY mb.market_id, mb.bid
+      ),
+      winning_bids AS (
+        SELECT
+          mb.*
+        FROM market_bid mb
+        INNER JOIN bid_counts bc
+          ON mb.market_id = bc.market_id AND mb.bid = bc.bid
+        WHERE bc.bid_count = 1
+      )
+      SELECT * FROM winning_bids;
+    `;
+
+    const result = await this.db.query(query);
+    return result.rows.map(toCamelCase<MarketBid>);
+  }
+
+  async cleanupMarket(turn: number): Promise<void> {
+
+    let blah = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      refunds AS (
+        SELECT
+          mb.mage_id,
+          SUM(mb.bid) AS total_refund
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.mage_id
+      )
+      SELECT * from refunds
+    `;
+    const res = await this.db.query(blah);
+
+
+    // Return geld
+    let sql = `
+      WITH expired_markets AS (
+        SELECT id
+        FROM market
+        WHERE expiration = ${turn}
+      ),
+      refunds AS (
+        SELECT
+          mb.mage_id,
+          SUM(mb.bid) AS total_refund
+        FROM market_bid mb
+        INNER JOIN expired_markets em ON mb.market_id = em.id
+        GROUP BY mb.mage_id
+      )
+
+      UPDATE mage
+      SET mage = jsonb_set(
+          mage::jsonb,
+          '{currentGeld}',
+          ((COALESCE(mage->>'currentGeld', '0')::bigint + r.total_refund)::text)::jsonb
+      )
+      FROM refunds r
+      WHERE mage.id = r.mage_id;
+    `;
+    await this.db.exec(sql);
+    
+
+    // Remove bids
+    sql = `
+      DELETE FROM market_bid
+      WHERE market_id in (
+        SELECT id from market where expiration = ${turn}
+      )
+    `
+    await this.db.exec(sql);
+
+    // Remove market
+    sql = `
+      DELETE FROM market where expiration = ${turn}
+    `
+    await this.db.exec(sql);
+  }
+
 }

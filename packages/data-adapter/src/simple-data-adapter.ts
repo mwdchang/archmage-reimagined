@@ -2,10 +2,11 @@ import bcrypt from 'bcryptjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
-import type { Mage } from 'shared/types/mage';
+import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank } from 'shared/types/common';
+import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 interface User {
   username: string
@@ -28,7 +29,18 @@ export class SimpleDataAdapter extends DataAdapter {
   battleReportTable: BattleReport[] = [];
   battleSummaryTable: BattleReportSummary[] = [];
   turnTable: ChronicleTurn[] = [];
-  rankTable: MageRank[] = []
+  rankTable: MageRank[] = [];
+  enchantmentTable: Enchantment[] = [];
+
+  marketPriceTable: MarketPrice[] = [];
+  marketItemTable: MarketItem[] = [];
+  marketBidTable: MarketBid[] = [];
+
+  clock: ServerClock = {
+    startTime: Date.now(),
+    currentTurn: 0,
+    endTurn: 0
+  }
 
   constructor() { super(); }
 
@@ -74,6 +86,21 @@ export class SimpleDataAdapter extends DataAdapter {
         mage.currentTurn ++;
       }
     }
+
+    // Update clock
+    this.clock.currentTurn ++;
+    this.clock.currentTurnTime = Date.now();
+  }
+
+  async setServerClock(clock: ServerClock): Promise<void> {
+    this.clock.currentTurn = clock.currentTurn;
+    this.clock.endTurn = clock.endTurn;
+    this.clock.currentTurnTime = clock.currentTurnTime;
+    this.clock.interval = clock.interval;
+  }
+
+  async getServerClock(): Promise<ServerClock> {
+    return this.clock;
   }
 
   async createMage(username: string, mage: Mage) {
@@ -97,6 +124,23 @@ export class SimpleDataAdapter extends DataAdapter {
 
   async getAllMages() {
     return this.mageTable;
+  }
+
+  async setEnchantments(enchantments: Enchantment[]) {
+    for (const enchant of enchantments) {
+      const idx = this.enchantmentTable.findIndex(d => d.id === enchant.id);
+      if (idx < 0) {
+        this.enchantmentTable.push(enchant);
+      } else {
+      }
+        this.enchantmentTable[idx] = enchant;
+    }
+  }
+
+  async getEnchantments(mageId: number) {
+    return this.enchantmentTable.filter(d => {
+      return d.casterId === mageId || d.targetId === mageId;
+    });
   }
 
   async createRank(mr :Omit<MageRank, 'rank'>) {
@@ -168,6 +212,130 @@ export class SimpleDataAdapter extends DataAdapter {
         return false;
       }
     }).sort((a, b) => b.turn - a.turn);
+  }
+
+  async createMarketPrice(id: string, type: string, price: number): Promise<void> {
+    this.marketPriceTable.push({
+      id, type, price
+    });
+  }
+
+  async updateMarketPrice(id: string, price: number): Promise<void> {
+    const mp = this.marketPriceTable.find(d => d.id === id);
+    if (mp) {
+      mp.price = price;
+    }
+  }
+
+  async getMarketPrices(): Promise<MarketPrice[]> {
+    return this.marketPriceTable;
+  }
+
+
+  async addMarketItem(marketItem: MarketItem): Promise<void> {
+    this.marketItemTable.push(marketItem);
+  }
+
+  async getMarketItems(): Promise<MarketItem[]> {
+    return this.marketItemTable;
+  }
+
+  async getMarketItem(id: string): Promise<MarketItem> {
+    return this.marketItemTable.find(d => d.id === id);
+  }
+
+  async removeMarketItem(ids: string[]): Promise<void> {
+    this.marketItemTable = this.marketItemTable.filter(d => {
+      return ids.includes(d.id) === false;
+    });
+  }
+
+
+  async addMarketBid(marketBid: MarketBid): Promise<void> {
+    const item = await this.getMarketItem(marketBid.marketId);
+
+    if (item.basePrice >= marketBid.bid) {
+      throw new Error(`Cannot make bid on ${item.priceId}, check bidding price`);
+    }
+
+    this.marketBidTable.push(marketBid);
+  }
+
+  async getMarketBids(priceId: string): Promise<MarketBid[]> {
+    const marketIds = this.marketItemTable.filter(d => d.priceId === priceId).map(d => d.id);
+    return this.marketBidTable.filter(d => {
+      return marketIds.includes(d.marketId);
+    });
+  }
+
+  async removeMarketBids(ids: string[]): Promise<void> {
+    this.marketBidTable = this.marketBidTable.filter(d => {
+      return ids.includes(d.id) === false;
+    });
+    console.log('hihihihi', ids, this.marketBidTable);
+  }
+
+  async getWinningBids(turn: number): Promise<MarketBid[]> {
+    const expired = this.marketItemTable.filter(d => d.expiration === turn);
+    const expiredIds = expired.map(d => d.id);
+    const bids = this.marketBidTable.filter(d => {
+      return expiredIds.includes(d.marketId);
+    });
+
+
+    const tracker: Record<string, {
+      marketId: string,
+      mageIds: number[],
+      bid: number
+    }> = {};
+
+    for (const bid of bids) {
+      const entry = tracker[bid.marketId];
+      if (entry) {
+        if (bid.bid > entry.bid) {
+          entry.bid = bid.bid;
+          entry.mageIds = [bid.mageId];
+        } else if (bid.bid === entry.bid) {
+          entry.mageIds.push(bid.mageId);
+        }
+      } else {
+        tracker[bid.marketId] = {
+          marketId: bid.marketId,
+          mageIds: [bid.mageId],
+          bid: bid.bid
+        }
+      }
+    }
+
+    return bids.filter(d => { 
+      const entry = tracker[d.marketId];
+
+      return entry.mageIds.length === 1 && 
+        entry.mageIds.includes(d.mageId);
+    });
+  }
+
+  async cleanupMarket(turn: number): Promise<void> {
+    const expired = this.marketItemTable.filter(d => d.expiration === turn);
+    const expiredIds = expired.map(d => d.id);
+    const bids = this.marketBidTable.filter(d => {
+      return expiredIds.includes(d.marketId);
+    });
+
+    console.log('>>>>>>>>>>', turn, expiredIds, bids);
+    console.log('');
+
+    // Return bid
+    for (const bid of bids) {
+      const mage = await this.getMage(bid.mageId);
+      mage.currentGeld += bid.bid;
+      console.log('returning', mage.id, bid.bid);
+      await this.updateMage(mage);
+    }
+
+    // Clean up
+    await this.removeMarketBids(bids.map(d => d.id));
+    await this.removeMarketItem(expired.map(d => d.id));
   }
 }
 

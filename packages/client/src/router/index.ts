@@ -17,6 +17,8 @@ import BattleView from '@/views/BattleView.vue';
 import BattlePrepView from '@/views/BattlePrepView.vue';
 import ResearchView from '@/views/ResearchView.vue';
 import ItemView from '@/views/ItemView.vue';
+import MarketView from '@/views/MarketView.vue';
+import SubMarketView from '@/views/SubMarketView.vue';
 import BattleResultView from '@/views/BattleResultView.vue';
 import ChroniclesView from '@/views/ChroniclesView.vue';
 import AssignmentView from '@/views/AssignmentView.vue';
@@ -107,6 +109,18 @@ const router = createRouter({
       name: 'item',
       component: ItemView 
     },
+    {
+      path: '/market',
+      name: 'market',
+      component: MarketView
+    },
+    {
+      path: '/market/:priceId',
+      name: 'submarket',
+      component: SubMarketView,
+      props: true
+    },
+
     {
       path: '/assignment',
       name: 'assignment',

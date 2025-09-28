@@ -4,6 +4,20 @@ import { StealEffectResult } from "./effects/apply-steal-effect";
 import { KingdomResourcesEffectResult } from "./effects/apply-kingdom-resources";
 import { KingdomBuildingsEffectResult } from "./effects/apply-kingdom-buildings";
 import { KingdomArmyEffectResult } from "./effects/apply-kingdom-army-effect";
+import { RemoveEnchantmentEffectResult } from "./effects/apply-remove-enchantment-effect";
+
+export const fromRemoveEnchantmentEffectResult = (
+  result: RemoveEnchantmentEffectResult
+) => {
+  const logs: GameMsg[] = [];
+  logs.push({
+    type: 'log',
+    message: result.targetId ?
+      `You purified ${result.targetName} (#${result.targetId})` :
+      `You purified yourself`
+  });
+  return logs;
+}
 
 export const fromWishEffectResult = (result: WishEffectResult): GameMsg[] => {
   const logs: GameMsg[] = [];
