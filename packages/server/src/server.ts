@@ -65,15 +65,23 @@ router.post('/api/explore', async (req: any, res) => {
 router.post('/api/geld', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
-  const geldGained = await engine.gelding(mage, turns);
-  res.status(200).json({ mage, geldGained });
+  try {
+    const geldGained = await engine.gelding(mage, turns);
+    res.status(200).json({ mage, geldGained });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/charge', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
-  const manaGained = await engine.manaCharge(mage, turns);
-  res.status(200).json({ mage, manaGained });
+  try {
+    const manaGained = await engine.manaCharge(mage, turns);
+    res.status(200).json({ mage, manaGained });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 router.post('/api/build', async (req: any, res) => {

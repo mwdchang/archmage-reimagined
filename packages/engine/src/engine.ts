@@ -609,8 +609,11 @@ class Engine {
    * Gelding for num turns
   **/
   async gelding(mage: Mage, num: number) {
+    if (num <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Not enough turns');
     }
 
     let geldGained = 0;
@@ -628,8 +631,11 @@ class Engine {
    * Mana change for a number of turns
   **/
   async manaCharge(mage: Mage, num: number) {
+    if (num <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Not enough turns');
     }
 
     let manaGained = 0;
