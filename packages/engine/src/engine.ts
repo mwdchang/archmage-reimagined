@@ -61,7 +61,7 @@ import {
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
-import { randomInt } from './random';
+import { betweenInt, randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -197,7 +197,6 @@ class Engine {
     const c = await this.getServerClock();
     this.currentTurn = c.currentTurn;
     console.log('');
-    console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
     /**
@@ -226,8 +225,6 @@ class Engine {
 
     const winningBids = await this.adapter.getWinningBids(c.currentTurn);
     for (const bid of winningBids) {
-      console.log('winning bid >> ', bid);
-
       const marketItem = itemMap.get(bid.marketId);
       const marketPrice = priceMap.get(marketItem.priceId);
 
@@ -281,7 +278,7 @@ class Engine {
           priceId: item.id,
           basePrice: priceMap.get(item.id).price,
           mageId: null,
-          expiration: this.currentTurn + 2
+          expiration: this.currentTurn + betweenInt(20, 50)
         });
       }
     }
@@ -498,18 +495,6 @@ class Engine {
         enchant.isActive = false;
       }
     }
-
-    // Refresh functioning enchantments
-    // mage.enchantments = mage.enchantments.filter(enchant => {
-    //   if (enchant.life === 0 && enchant.isPermanent === false) {
-    //     enchant.isActive = false;
-    //     console.log(`${enchant.casterId} ${enchant.spellId} expired`)
-    //   }
-    //   if (enchant.isPermanent === false) {
-    //     return enchant.life > 0;
-    //   }
-    //   return true;
-    // });
 
 
     // 6. calculate upkeep
@@ -1565,7 +1550,7 @@ class Engine {
         priceId: item.id,
         basePrice: defaultPrice,
         mageId: null,
-        expiration: this.currentTurn + 2
+        expiration: this.currentTurn + betweenInt(20, 50)
       });
     }
   }

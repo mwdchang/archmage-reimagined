@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import _, { sum } from 'lodash';
+import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { buildingTypes, buildingRate } from 'engine/src/interior';
