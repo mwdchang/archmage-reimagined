@@ -442,7 +442,7 @@ class Engine {
       mage.recruitments[i].size -= recruits[i].size;
       turnLogs.push({
         type: 'log',
-        message: `recruited ${recruits[i].size} of ${recruits[i].id}`
+        message: `You recruited ${recruits[i].size} units of ${recruits[i].id}`
       });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
@@ -1134,7 +1134,7 @@ class Engine {
       if (au.size < 0) {
         throw new Error('Cannot recruit negative amount of units');
       }
-      const unit = payload[au.id];
+      const unit = getUnitById(au.id);
       if (unit.magic !== mage.magic || unit.attributes.includes('special') === false) {
         throw new Error(`Cannot recruit ${unit.id}`);
       }
@@ -1409,13 +1409,45 @@ class Engine {
     });
 
 
+    let verb = 'sieged';
+    if (battleType === 'regular') {
+      verb = 'attacked';
+    } else if (battleType === 'pillage') {
+      verb = 'pillaged';
+    }
+
     // FIXME: Update turn chronicles for participting mages,
     // unless the mage is a bot
     if (mage.type !== 'bot') {
+      this.adapter.saveChronicles([{
+        id: mage.id,
+        name: mage.name,
+        turn: mage.turnsUsed,
+        timestamp: battleReport.timestamp,
+        data: [
+          {
+            type: 'battleLog', 
+            id: battleReport.id,
+            message: `You ${verb} ${defenderMage.name} (#${defenderMage.id})'s kingdom`
+          }
+        ]
+      }]);
     }
     if (defenderMage.type !== 'bot') {
+      this.adapter.saveChronicles([{
+        id: defenderMage.id,
+        name: defenderMage.name,
+        turn: defenderMage.turnsUsed,
+        timestamp: battleReport.timestamp,
+        data: [
+          {
+            type: 'battleLog',
+            id: battleReport.id,
+            message: `${mage.name} (#${mage.id}) ${verb} your kingdom`
+          }
+        ]
+      }])
     }
-
     return battleReport;
   }
 

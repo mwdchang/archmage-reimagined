@@ -113,7 +113,14 @@
       <div v-for="(turn) in logs" :key="turn.turn">
         <div style="font-weight: 600">Turn {{turn.turn}}: </div>
         <div v-for="(log) in turn.data">
-          {{ log.message }}
+          <div v-if="log.type === 'battleLog'">
+            <router-link :to="{ name: 'battleResult', params: { id: log.id }}"> 
+              {{ log.message }} 
+            </router-link>
+          </div>
+          <div v-else>
+            {{ log.message }}
+          </div>
         </div>
       </div>
     </div>
