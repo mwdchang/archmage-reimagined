@@ -84,13 +84,14 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
 import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
-import { Item } from 'shared/types/magic';
+import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceDecrease, priceIncrease } from './blackmarket';
+import { isImportDeclaration } from 'typescript';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -518,15 +519,102 @@ class Engine {
     mage.currentMana -= recruitCost.mana;
     mage.currentPopulation -= recruitCost.population
 
-    if (mage.currentGeld < 0) mage.currentGeld = 0;
-    if (mage.currentMana < 0) mage.currentMana = 0;
-    if (mage.currentPopulation < 0) mage.currentPopulation = 0;
+    // Check geld, mana, and population implosion
+    const implosions = [
+      { type: 'army', data: armyCost },
+      { type: 'building', data: buildingCost },
+      { type: 'enchantment', data: spellCost }
+    ]
 
+    const implodeArmy = ( compareFn: (a: ArmyUnit, b: ArmyUnit) => number) => {
+      const army = mage.army;
+      army.sort(compareFn);
+      army.shift();
+      mage.army = army;
+      turnLogs.push({
+        type: 'log',
+        message: 'Insufficient resources, you have lost some units'
+      });
+    };
+
+    const implodeEnchantments = ( checkFn: (s: Spell) => boolean ) => {
+      mage.enchantments = mage.enchantments.filter(enchant => {
+        if (enchant.casterId !== mage.id) {
+          return true;
+        }
+        const spell = getSpellById(enchant.spellId);
+        if (checkFn(spell)) {
+          return false;
+        }
+        return true;
+      });
+      turnLogs.push({
+        type: 'log',
+        message: 'Insufficient resources, you have lost some enchantments'
+      });
+    };
+
+    if (mage.currentGeld < 0) { 
+      console.log('insufficient geld'); 
+      mage.currentGeld = 0;
+      implosions.sort((a, b) => b.data.geld - a.data.geld);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.geld * b.size - aUnit.upkeepCost.geld * a.size;
+        });
+      } else if (target.type === 'building') {
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.geld > 0 ? true : false
+        });
+      }
+    }
+
+    if (mage.currentMana < 0) {
+      console.log('insufficient mana'); 
+      mage.currentMana = 0;
+      implosions.sort((a, b) => b.data.mana - a.data.mana);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.mana * b.size - aUnit.upkeepCost.mana * a.size;
+        });
+      } else if (target.type === 'building') {
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.mana > 0 ? true : false
+        });
+      }
+    }
+
+    if (mage.currentPopulation < 0) {
+      console.log('insufficient population'); 
+      mage.currentPopulation = 0;
+      implosions.sort((a, b) => b.data.population - a.data.population);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population* a.size;
+        });
+      } else if (target.type === 'building') {
+        // Nothing
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.population > 0 ? true : false
+        });
+      }
+    }
 
     const deltaGeld = mage.currentGeld - beforeGeld;
     const deltaMana = mage.currentMana - beforeMana;
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
-
 
     const researchItem = Object.values(mage.currentResearch).find(d => {
       if (!d) return false;
@@ -568,6 +656,8 @@ class Engine {
       status: '',
       netPower: totalNetPower(mage)
     });
+
+    return turnLogs;
   }
 
   /**

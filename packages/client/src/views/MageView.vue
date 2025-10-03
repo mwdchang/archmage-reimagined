@@ -1,10 +1,9 @@
 <template>
-  <div>Lookup a Mage </div>
+  <div class="section-header">
+    {{ mageSummary.name }} (#{{ mageSummary.id }}) 
+  </div>
   <table v-if="mageSummary.id">
     <tbody>
-      <tr>
-        <td>Country</td><td>{{ mageSummary.name }} (#{{ mageSummary.id }}) </td>
-      </tr>
       <tr>
         <td>Magic</td>
         <td>
