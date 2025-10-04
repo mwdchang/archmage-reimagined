@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h1> Archmage Reimagined </h1>
+    <h1 style="margin-bottom: 5px"> Archmage Reimagined </h1>
     <p style="max-width: 50rem; line-height: 1.25">
       Archmage Reimagined is a reimagination of the classica MMORPG Archmage, with new features and twists designed to be exciting for a modern audience.
     </p>

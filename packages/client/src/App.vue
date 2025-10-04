@@ -30,6 +30,7 @@ import {
   loadItemData,
   initializeResearchTree 
 } from 'engine/src/base/references';
+import { ServerClock } from 'shared/types/common';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -54,7 +55,7 @@ const { mage } = storeToRefs(mageStore);
 
 const publicRoutes = [
   'home', 'guide', 'encyclopedia',
-  'viewUnit', 'viewSpell'
+  'viewUnit', 'viewSpell', 'finals'
 ];
 const hideHeader = [
   'status',
@@ -84,6 +85,12 @@ onMounted(async () => {
   initializeResearchTree();
 
   loadItemData(lesserItems);
+
+  const clock = (await API.get<ServerClock>('server-clock')).data;
+  if (clock.currentTurn >= clock.endTurn) {
+    router.push({ name: 'finals' });
+    return;
+  }
 
   try {
     const r = await API.get('mage');
