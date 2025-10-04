@@ -83,15 +83,21 @@ import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
-import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { 
+  fromKingdomArmyEffectResult,
+  fromKingdomBuildingsEffectResult,
+  fromKingdomResourcesEffectResult,
+  fromRemoveEnchantmentEffectResult,
+  fromStealEffectResult,
+  fromWishEffectResult 
+} from './game-message';
 import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
-import { priceDecrease, priceIncrease } from './blackmarket';
-import { isImportDeclaration } from 'typescript';
+import { priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -566,6 +572,21 @@ class Engine {
           return bUnit.upkeepCost.geld * b.size - aUnit.upkeepCost.geld * a.size;
         });
       } else if (target.type === 'building') {
+        ['farms', 'towns', 'workshops', 'barracks', 'guilds'].forEach(bType => {
+          const bLost = Math.floor(0.2 * mage[bType]);
+          mage[bType] -= bLost;
+          mage.wilderness += bLost;
+        });
+        const fortsLost = Math.min(
+          Math.floor(0.2 * mage.forts) + 4,
+          mage.forts
+        );
+        mage.forts -= fortsLost;
+        mage.wilderness += fortsLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.geld > 0 ? true : false
@@ -585,6 +606,16 @@ class Engine {
           return bUnit.upkeepCost.mana * b.size - aUnit.upkeepCost.mana * a.size;
         });
       } else if (target.type === 'building') {
+        const barriersLost = Math.min(
+          Math.floor(0.2 * mage.barriers) + 8,
+          mage.barriers
+        );
+        mage.barriers -= barriersLost;
+        mage.wilderness += barriersLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.mana > 0 ? true : false
@@ -604,7 +635,21 @@ class Engine {
           return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population* a.size;
         });
       } else if (target.type === 'building') {
-        // Nothing
+        ['farms', 'towns', 'workshops', 'barracks', 'guilds'].forEach(bType => {
+          const bLost = Math.floor(0.2 * mage[bType]);
+          mage[bType] -= bLost;
+          mage.wilderness += bLost;
+        });
+        const fortsLost = Math.min(
+          Math.floor(0.2 * mage.forts) + 4,
+          mage.forts
+        );
+        mage.forts -= fortsLost;
+        mage.wilderness += fortsLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.population > 0 ? true : false
