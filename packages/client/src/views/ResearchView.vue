@@ -55,13 +55,14 @@
     <div style="display: flex; align-items: center; margin-top: 10px; max-width: 25rem;">
       {{ researchResultStr }}
     </div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
   </main>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import magic from '@/components/magic.vue';
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getSpellById } from 'engine/src/base/references';
 import { itemGenerationRate, maxSpellLevel, researchPoints } from 'engine/src/magic';
@@ -84,6 +85,8 @@ const currentResearch = ref(mageStore.mage!.currentResearch);
 
 const focusResearch = ref(mageStore.mage!.focusResearch? true : false);
 const turns = ref(0);
+
+const errorStr = ref('');
 
 const spellName = (id: string) => {
   return getSpellById(id).name;
@@ -125,16 +128,28 @@ const submitResearch = async () => {
       magic = m;
     }
   });
-  const response = await API.post('research', {
-    magic,
-    focus: focusResearch.value,
-    turns: turns.value
-  });
-  researchResult.value = response.data.result; 
 
-  mageStore.setMage(response.data.mage as Mage);
-  currentResearch.value = mageStore.mage?.currentResearch!;
-  focusResearch.value = mageStore.mage?.focusResearch as boolean;
+
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('research', {
+      magic,
+      focus: focusResearch.value,
+      turns: turns.value
+    });
+  })
+
+  if (error) {
+    errorStr.value = error;
+    return;
+  }
+
+  if (data) {
+    researchResult.value = data.result; 
+    mageStore.setMage(data.mage as Mage);
+    currentResearch.value = mageStore.mage?.currentResearch!;
+    focusResearch.value = mageStore.mage?.focusResearch as boolean;
+  }
 };
 
 </script>

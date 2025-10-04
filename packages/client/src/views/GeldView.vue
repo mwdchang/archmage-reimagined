@@ -13,13 +13,14 @@
       <div>
         {{ geldMsg }}
       </div>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { API } from '@/api/api';
+import { ref } from 'vue';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { geldIncome } from 'engine/src/interior';
 import { readbleNumber } from '@/util/util';
@@ -27,18 +28,24 @@ import { readbleNumber } from '@/util/util';
 const turnsToGeld = ref(0);
 const mageStore = useMageStore();
 
-const exploreMsg = ref('');
 const geldMsg = ref('');
+const errorStr = ref('');
 
 const geld = async () => {
-  const res = await API.post('/geld', { turns: turnsToGeld.value });
-  mageStore.setMage(res.data.mage);
-  geldMsg.value = `You used ${turnsToGeld.value} turn and gelded ${res.data.geldGained} geld.`
-};
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('/geld', { turns: turnsToGeld.value });
+  });
 
-onMounted(() => {
-  exploreMsg.value = '';
-});
+  if (error) {
+    errorStr.value = error;
+  }
+
+  if (data) {
+    mageStore.setMage(data.mage);
+    geldMsg.value = `You used ${turnsToGeld.value} turn and gelded ${data.geldGained} geld.`
+  }
+};
 </script>
 
 <style scoped>

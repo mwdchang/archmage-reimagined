@@ -44,12 +44,12 @@
 
     <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
   </section>
-
+  <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getArmy, ArmyItem } from '@/util/util';
 import { getUnitById } from 'engine/src/base/references';
@@ -67,6 +67,7 @@ const mageStore = useMageStore();
 const confirmDisband = ref(false);
 
 const disbandPayload = ref<{[key: string]: number }>({});
+const errorStr = ref('');
 
 const unitsStatus = computed<DisbandArmyItem[]>(() => {
   if (!mageStore.mage) return []
@@ -110,16 +111,27 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
 const disbandUnits = async () => {
   const payload: any = {};
   Object.keys(disbandPayload.value).forEach(k => {
-    if (disbandPayload.value[k] > 0) {
-      payload[k] = {
-        id: k,
-        size: +disbandPayload.value[k]
-      };
-    }
+    payload[k] = {
+      id: k,
+      size: +disbandPayload.value[k]
+    };
   });
 
-  const res = await API.post('/disband', { disbands: payload });
-  mageStore.setMage(res.data.mage);
+  console.log('>>>>>>>>>', payload);
+
+
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('/disband', { disbands: payload });
+  });
+
+  if (error) {
+    errorStr.value = error;
+  }
+  
+  if (data) {
+    mageStore.setMage(data.mage);
+  }
 };
 
 watch(

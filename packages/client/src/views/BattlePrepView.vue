@@ -62,17 +62,17 @@
         {{ readableStr(battleType) }}
       </button>
     </section>
-
-    <div v-for="error of errors" class="error">
-      {{ error }}
-    </div>
   </main>
+  <div v-for="error of errorStrs" class="error">
+    {{ error }}
+  </div>
+
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { API } from '@/api/api';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { 
   getSpells, getItems, getBattleArmy, readbleNumber,
@@ -143,7 +143,7 @@ const battleItems = computed(() => {
 
 
 const useAllStacks = ref(false);
-const errors = ref<string[]>([]);
+const errorStrs = ref<string[]>([]);
 
 const doBattle = async () => {
   if (!mageStore.mage) return;
@@ -167,7 +167,7 @@ const doBattle = async () => {
 
   // eg: not in range, or insufficient number of turns
   if (res.data.errors.length > 0) {
-    errors.value = res.data.errors;
+    errorStrs.value = res.data.errors;
     return;
   }
 
@@ -185,10 +185,27 @@ const doBattle = async () => {
 
 onMounted(async () => {
   // Resolve target
-  const res = await API.get(`/mage/${props.targetId}`);
-  targetSummary.value = res.data.mageSummary;
+  const { data, error } = await APIWrapper(() => {
+    errorStrs.value = [];
+    return API.get(`/mage/${props.targetId}`)
+  });
 
-  if (!mageStore.mage) return;
+  if (error) {
+    errorStrs.value.push(`Cannot find mage id ${props.targetId}`);
+    return
+  }
+
+  if (data) {
+    targetSummary.value = data.mageSummary;
+  }
+
+  // const res = await API.get(`/mage/${props.targetId}`);
+  // targetSummary.value = res.data.mageSummary;
+
+  if (!mageStore.mage) {
+    errorStrs.value.push('Cannot find mage data');
+    return;
+  }
 
   // Resolve army
   const rawArmy = getBattleArmy(mageStore.mage);

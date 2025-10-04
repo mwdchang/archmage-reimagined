@@ -76,7 +76,7 @@ const timeRemaining = (marketItem: MarketItem) => {
 
   const turns = (marketItem.expiration - clock.value.currentTurn);
   const remainTime = (turns * clock.value.interval + clock.value.currentTurnTime) - Date.now();
-  return (remainTime / 1000 / 60).toFixed(2);
+  return (remainTime / 1000 / 60).toFixed(0);
 }
 
 const refresh = async () => {

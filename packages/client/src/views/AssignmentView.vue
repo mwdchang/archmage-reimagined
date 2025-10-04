@@ -51,7 +51,6 @@ const selectedItemCondition = ref(mage.value?.assignment.itemCondition);
 
 const activateConditions = [-1, 0, 25, 50, 75, 100];
 
-// FIXME: composable
 const itemList = computed(() => {
   if (!mage.value) return [];
 

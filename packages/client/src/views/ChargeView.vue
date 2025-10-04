@@ -12,13 +12,14 @@
       <div>
         {{ manaMsg }}
       </div>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { API } from '@/api/api';
+import { ref } from 'vue';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { manaIncome } from 'engine/src/magic';
 import { readbleNumber } from '@/util/util';
@@ -26,18 +27,25 @@ import { readbleNumber } from '@/util/util';
 const turnsToCharge = ref(0);
 const mageStore = useMageStore();
 
-const exploreMsg = ref('');
 const manaMsg = ref('');
+const errorStr = ref('');
 
 const charge = async () => {
-  const res = await API.post('/charge', { turns: turnsToCharge.value });
-  mageStore.setMage(res.data.mage);
-  manaMsg.value = `You used ${turnsToCharge.value} turn and charged ${res.data.manaGained} mana.`
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('/charge', { turns: turnsToCharge.value });
+  });
+
+  if (error) {
+    errorStr.value = error;
+  }
+
+  if (data) {
+    mageStore.setMage(data.mage);
+    manaMsg.value = `You used ${turnsToCharge.value} turn and charged ${data.manaGained} mana.`
+  }
 };
 
-onMounted(() => {
-  exploreMsg.value = '';
-});
 </script>
 
 <style scoped>

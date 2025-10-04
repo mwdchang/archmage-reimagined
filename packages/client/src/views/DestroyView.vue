@@ -8,21 +8,35 @@
   </p>
 
   <destroy-table @destroy="destroy($event)" />
+  <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
 
 <script setup lang="ts">
-import { API } from '@/api/api';
+import { ref } from 'vue';
+import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { Mage } from 'shared/types/mage';
 import DestroyTable from '@/components/destroy-table.vue';
 import { readbleNumber } from '@/util/util';
 
 const mageStore = useMageStore();
+const errorStr = ref('');
 
 const destroy = async (payload: any) => {
-  console.log('destroy', payload);
-  const res = await API.post('destroy', payload);
-  mageStore.setMage(res.data.mage as Mage);
+
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post('destroy', payload);
+  });
+
+  if (error) {
+    errorStr.value = error;
+    return;
+  }
+  
+  if (data) {
+    mageStore.setMage(data.mage as Mage);
+  }
 };
 
 </script>

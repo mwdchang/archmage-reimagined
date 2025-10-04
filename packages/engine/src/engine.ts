@@ -61,7 +61,7 @@ import {
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
-import { randomInt } from './random';
+import { betweenInt, randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -84,13 +84,14 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
 import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
-import { Item } from 'shared/types/magic';
+import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceDecrease, priceIncrease } from './blackmarket';
+import { isImportDeclaration } from 'typescript';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -197,7 +198,6 @@ class Engine {
     const c = await this.getServerClock();
     this.currentTurn = c.currentTurn;
     console.log('');
-    console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
     /**
@@ -226,8 +226,6 @@ class Engine {
 
     const winningBids = await this.adapter.getWinningBids(c.currentTurn);
     for (const bid of winningBids) {
-      console.log('winning bid >> ', bid);
-
       const marketItem = itemMap.get(bid.marketId);
       const marketPrice = priceMap.get(marketItem.priceId);
 
@@ -281,7 +279,7 @@ class Engine {
           priceId: item.id,
           basePrice: priceMap.get(item.id).price,
           mageId: null,
-          expiration: this.currentTurn + 2
+          expiration: this.currentTurn + betweenInt(20, 50)
         });
       }
     }
@@ -445,7 +443,7 @@ class Engine {
       mage.recruitments[i].size -= recruits[i].size;
       turnLogs.push({
         type: 'log',
-        message: `recruited ${recruits[i].size} of ${recruits[i].id}`
+        message: `You recruited ${recruits[i].size} units of ${recruits[i].id}`
       });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
@@ -499,18 +497,6 @@ class Engine {
       }
     }
 
-    // Refresh functioning enchantments
-    // mage.enchantments = mage.enchantments.filter(enchant => {
-    //   if (enchant.life === 0 && enchant.isPermanent === false) {
-    //     enchant.isActive = false;
-    //     console.log(`${enchant.casterId} ${enchant.spellId} expired`)
-    //   }
-    //   if (enchant.isPermanent === false) {
-    //     return enchant.life > 0;
-    //   }
-    //   return true;
-    // });
-
 
     // 6. calculate upkeep
     const armyCost = armyUpkeep(mage);
@@ -533,15 +519,102 @@ class Engine {
     mage.currentMana -= recruitCost.mana;
     mage.currentPopulation -= recruitCost.population
 
-    if (mage.currentGeld < 0) mage.currentGeld = 0;
-    if (mage.currentMana < 0) mage.currentMana = 0;
-    if (mage.currentPopulation < 0) mage.currentPopulation = 0;
+    // Check geld, mana, and population implosion
+    const implosions = [
+      { type: 'army', data: armyCost },
+      { type: 'building', data: buildingCost },
+      { type: 'enchantment', data: spellCost }
+    ]
 
+    const implodeArmy = ( compareFn: (a: ArmyUnit, b: ArmyUnit) => number) => {
+      const army = mage.army;
+      army.sort(compareFn);
+      army.shift();
+      mage.army = army;
+      turnLogs.push({
+        type: 'log',
+        message: 'Insufficient resources, you have lost some units'
+      });
+    };
+
+    const implodeEnchantments = ( checkFn: (s: Spell) => boolean ) => {
+      mage.enchantments = mage.enchantments.filter(enchant => {
+        if (enchant.casterId !== mage.id) {
+          return true;
+        }
+        const spell = getSpellById(enchant.spellId);
+        if (checkFn(spell)) {
+          return false;
+        }
+        return true;
+      });
+      turnLogs.push({
+        type: 'log',
+        message: 'Insufficient resources, you have lost some enchantments'
+      });
+    };
+
+    if (mage.currentGeld < 0) { 
+      console.log('insufficient geld'); 
+      mage.currentGeld = 0;
+      implosions.sort((a, b) => b.data.geld - a.data.geld);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.geld * b.size - aUnit.upkeepCost.geld * a.size;
+        });
+      } else if (target.type === 'building') {
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.geld > 0 ? true : false
+        });
+      }
+    }
+
+    if (mage.currentMana < 0) {
+      console.log('insufficient mana'); 
+      mage.currentMana = 0;
+      implosions.sort((a, b) => b.data.mana - a.data.mana);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.mana * b.size - aUnit.upkeepCost.mana * a.size;
+        });
+      } else if (target.type === 'building') {
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.mana > 0 ? true : false
+        });
+      }
+    }
+
+    if (mage.currentPopulation < 0) {
+      console.log('insufficient population'); 
+      mage.currentPopulation = 0;
+      implosions.sort((a, b) => b.data.population - a.data.population);
+      const target = implosions[0];
+      if (target.type === 'army') {
+        implodeArmy((a, b) => {
+          const aUnit = getUnitById(a.id);
+          const bUnit = getUnitById(b.id);
+          return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population* a.size;
+        });
+      } else if (target.type === 'building') {
+        // Nothing
+      } else if (target.type === 'enchantment') {
+        implodeEnchantments((s) => {
+          return s.upkeep.population > 0 ? true : false
+        });
+      }
+    }
 
     const deltaGeld = mage.currentGeld - beforeGeld;
     const deltaMana = mage.currentMana - beforeMana;
     const deltaPopulation = mage.currentPopulation - beforePopuplation;
-
 
     const researchItem = Object.values(mage.currentResearch).find(d => {
       if (!d) return false;
@@ -583,6 +656,8 @@ class Engine {
       status: '',
       netPower: totalNetPower(mage)
     });
+
+    return turnLogs;
   }
 
   /**
@@ -591,7 +666,7 @@ class Engine {
   **/
   async exploreLand(mage: Mage, num: number) {
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Insufficient number of turns to perform action');
     }
     let landGained = 0;
     for (let i = 0; i < num; i++) {
@@ -609,8 +684,11 @@ class Engine {
    * Gelding for num turns
   **/
   async gelding(mage: Mage, num: number) {
+    if (num <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Not enough turns');
     }
 
     let geldGained = 0;
@@ -628,8 +706,11 @@ class Engine {
    * Mana change for a number of turns
   **/
   async manaCharge(mage: Mage, num: number) {
+    if (num <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
     if (num > mage.currentTurn) {
-      return;
+      throw new Error('Not enough turns');
     }
 
     let manaGained = 0;
@@ -648,6 +729,10 @@ class Engine {
 
 
   async research(mage: Mage, magic: string, focus: boolean, turns: number) {
+    if (turns <= 0) {
+      throw new Error('Turn usage must be positive');
+    }
+
     allowedMagicList.forEach(m => {
       if (mage.currentResearch[m]) {
         mage.currentResearch[m].active = false;
@@ -791,6 +876,14 @@ class Engine {
   async dispel(mage:Mage, enchantId: string, mana: number) {
     const enchantment = mage.enchantments.find(d => d.id === enchantId);
     let success = false;
+
+    if (mana < 0) {
+      throw new Error('Mana for dispel cannot be negative');
+    }
+    if (!enchantment) {
+      throw new Error('No enchantment selected');
+    }
+
     if (enchantment) {
       await this.useTurn(mage);
 
@@ -1069,6 +1162,9 @@ class Engine {
     let turnsUsed = 0;
 
     buildingTypes.forEach(b => {
+      if (payload[b.id] < 0) {
+        throw new Error(`Building ${b.id} amount cannot be negative`);
+      }
       landUsed += payload[b.id];
       turnsUsed += payload[b.id] /  buildingRate(mage, b.id);
     });
@@ -1076,10 +1172,10 @@ class Engine {
     landUsed = Math.ceil(landUsed);
 
     if (landUsed > mage.wilderness) {
-      return;
+      throw new Error(`Not enough wilderness to construct buildings`);
     }
     if (turnsUsed > mage.currentTurn) {
-      return;
+      throw new Error('Insufficient number of turns to perform action');
     }
 
     // 1. Build first using the current rates
@@ -1101,6 +1197,16 @@ class Engine {
   async destroy(mage: Mage, payload: DestroyPayload) {
     buildingTypes.forEach(b => {
       const num = payload[b.id];
+      if (num < 0) {
+        throw new Error(`Building ${num} amount cannot be negative`);
+      }
+      if (num > mage[b.id]) {
+        throw new Error(`Cannot destroy more buildings than you have`);
+      }
+      if (b.id === 'forts' && num >= mage[b.id]) {
+        throw new Error(`Cannot destroy forts down to 0`);
+      }
+
       mage[b.id] -= num;
       mage.wilderness += num;
     });
@@ -1114,13 +1220,39 @@ class Engine {
   }
 
   async setRecruitments(mage: Mage, payload: ArmyUnit[]) {
+    for (const au of payload) {
+      if (au.size < 0) {
+        throw new Error('Cannot recruit negative amount of units');
+      }
+      const unit = getUnitById(au.id);
+      if (unit.magic !== mage.magic || unit.attributes.includes('special') === false) {
+        throw new Error(`Cannot recruit ${unit.id}`);
+      }
+    }
+    
     mage.recruitments = _.cloneDeep(payload);
     await this.adapter.updateMage(mage);
   }
 
   async disbandUnits(mage: Mage, payload: { [key: string]: ArmyUnit }) {
+    Object.values(payload).forEach(au => {
+      if (au.size < 0) {
+        throw new Error('Cannot disband negative amount of units');
+      }
+
+      const existingArmyUnit = mage.army.find(d => d.id === au.id);
+      if (!existingArmyUnit) {
+        throw new Error(`Cannot disband non-existing unit ${au.id}`);
+      }
+      if (existingArmyUnit.size < au.size) {
+        throw new Error('Cannot disband more units than you have');
+      }
+    });
+
     mage.army.forEach(armyUnit => {
       const u = payload[armyUnit.id];
+      if (!u) return;
+
       const unit = getUnitById(u.id);
 
       if (u && unit.attributes.includes('undisbandable') === false) {
@@ -1367,13 +1499,45 @@ class Engine {
     });
 
 
+    let verb = 'sieged';
+    if (battleType === 'regular') {
+      verb = 'attacked';
+    } else if (battleType === 'pillage') {
+      verb = 'pillaged';
+    }
+
     // FIXME: Update turn chronicles for participting mages,
     // unless the mage is a bot
     if (mage.type !== 'bot') {
+      this.adapter.saveChronicles([{
+        id: mage.id,
+        name: mage.name,
+        turn: mage.turnsUsed,
+        timestamp: battleReport.timestamp,
+        data: [
+          {
+            type: 'battleLog', 
+            id: battleReport.id,
+            message: `You ${verb} ${defenderMage.name} (#${defenderMage.id})'s kingdom`
+          }
+        ]
+      }]);
     }
     if (defenderMage.type !== 'bot') {
+      this.adapter.saveChronicles([{
+        id: defenderMage.id,
+        name: defenderMage.name,
+        turn: defenderMage.turnsUsed,
+        timestamp: battleReport.timestamp,
+        data: [
+          {
+            type: 'battleLog',
+            id: battleReport.id,
+            message: `${mage.name} (#${mage.id}) ${verb} your kingdom`
+          }
+        ]
+      }])
     }
-
     return battleReport;
   }
 
@@ -1508,7 +1672,7 @@ class Engine {
         priceId: item.id,
         basePrice: defaultPrice,
         mageId: null,
-        expiration: this.currentTurn + 2
+        expiration: this.currentTurn + betweenInt(20, 50)
       });
     }
   }
