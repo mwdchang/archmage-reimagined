@@ -5,11 +5,10 @@ import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 
-let _id = 0;
 
-export const createMage = (name: string, magic: string, override?:Partial<Mage>): Mage => {
+export const createMage = (id: number, name: string, magic: string, override?:Partial<Mage>): Mage => {
   const mage: Mage = {
-    id: ++_id,
+    id: id,
     name: name,
     status: '',
     type: '',

@@ -170,7 +170,9 @@ class Engine {
       const mage = await this.getMageByUser(name);
       if (!mage) {
         console.log('creating test mage', name);
-        const bot = createBot(name, magic);
+
+        const newId = await this.adapter.nextMageId();
+        const bot = createBot(newId, name, magic);
         await this.adapter.createMage(name, bot);
         await this.adapter.createRank({
           id: bot.id,
@@ -1631,11 +1633,13 @@ class Engine {
     const res = await this.adapter.register(username, password);
 
     // 2. return mage
-    const mage = createMage(username, magic, override);
+    const newId = await this.adapter.nextMageId();
+    let mage = createMage(newId, username, magic, override);
 
     // 3. Write to data store
-    this.adapter.createMage(username, mage);
-    this.adapter.createRank({
+    mage = await this.adapter.createMage(username, mage);
+    
+    await this.adapter.createRank({
       id: mage.id,
       name: mage.name,
       magic: mage.magic,

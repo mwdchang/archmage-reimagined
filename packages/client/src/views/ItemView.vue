@@ -14,7 +14,7 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Attributes</th>
+            <!--<th>Attributes</th>-->
             <th>Amount</th>
           </tr>
         </thead>
@@ -23,7 +23,7 @@
             <td>
               <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
             </td>
-            <td>{{ item.attributes.join(', ') }}</td>
+            <!--<td>{{ item.attributes.join(', ') }}</td>-->
             <td class="text-right">{{ item.amount }}</td>
           </tr>
         </tbody>
@@ -77,7 +77,7 @@ const itemList = computed(() => {
   if (!mage.value) return [];
 
   let result = getItems(mage.value);
-  return result;
+  return result.sort((a, b) => a.id.localeCompare(b.id));
 });
 
 const usableItems = computed(() => {

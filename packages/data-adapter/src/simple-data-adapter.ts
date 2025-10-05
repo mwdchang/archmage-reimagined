@@ -43,10 +43,13 @@ export class SimpleDataAdapter extends DataAdapter {
     endTurn: 0
   }
 
+  mageSeq: 0;
+
   constructor() { super(); }
 
   async resetData(): Promise<void> {}
   async initialize(): Promise<void> {}
+
 
   async register(username: string, password: string) {
     const saltRounds = 5;
@@ -105,8 +108,13 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.clock;
   }
 
+  async nextMageId(): Promise<number> {
+    return ++this.mageSeq;
+  }
+
   async createMage(username: string, mage: Mage) {
     this.mageTable.push(mage);
+    return mage;
   }
 
   async updateMage(mage: Mage) {

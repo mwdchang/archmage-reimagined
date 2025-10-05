@@ -4,8 +4,8 @@ import { getMaxSpellLevels } from "./base/references";
 import { v4 as uuidv4 } from 'uuid';
 import { Mage } from "shared/types/mage";
 
-export const createBot = (name: string, magic: AllowedMagic) => {
-  const botMage = createMage(name, magic, {
+export const createBot = (id: number, name: string, magic: AllowedMagic) => {
+  const botMage = createMage(id, name, magic, {
     type: 'bot',
     testingSpellLevel: getMaxSpellLevels()[magic],
     farms: 1500,
