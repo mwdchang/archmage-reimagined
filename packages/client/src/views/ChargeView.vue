@@ -1,6 +1,9 @@
 <template>
   <main v-if="mageStore.mage">
     <div class="section-header">Mana Charge</div>
+    <div class="row" style="margin-bottom: 10px">
+      <img src="@/assets/images/charge.png" class="gen-img" />
+    </div>
     <section> 
       <p>
         You raw income is {{ readbleNumber(manaIncome(mageStore.mage)) }} mana per turn.

@@ -1,6 +1,9 @@
 <template>
   <main v-if="mageStore.mage">
     <div class="section-header">Gelding</div>
+    <div class="row" style="margin-bottom: 10px">
+      <img src="@/assets/images/geld.png" class="gen-img" />
+    </div>
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 
