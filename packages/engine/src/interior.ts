@@ -261,11 +261,87 @@ export const recruitUpkeep = (mage: Mage) => {
   return { geld, mana, population, recruits };
 }
 
+
+export const unitUpkeep = (mage: Mage, unitId: string) => {
+  const u = getUnitById(unitId);
+  const upkeep = _.cloneDeep(u.upkeepCost);
+
+  // Enchantment modifiers. The effecacy is calculated by level of the enchantment, not the
+  // current level of the mage
+  for (const enchantment of mage.enchantments) {
+    const spell = getSpellById(enchantment.spellId);
+    const enchantMaxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
+
+    const armyUpkeepEffects = spell.effects.filter(d => d.effectType === 'ArmyUpkeepEffect') as ArmyUpkeepEffect[];
+    if (armyUpkeepEffects.length === 0) continue;
+
+    for (const effect of armyUpkeepEffects) {
+      const filters = effect.filters;
+
+      // Check if effect matches unit
+      let isMatch = filters === null ? true : false;
+      if (isMatch === false) {
+        for (const filter of filters) {
+          if (matchesFilter(u, filter) === true) {
+            isMatch = true;
+            break;
+          }
+        }
+      }
+
+      // Finally apply the effect
+      if (isMatch === true) {
+        const base = effect.magic[enchantment.casterMagic];
+
+        if (effect.rule === 'addSpellLevelPercentageBase') {
+          const percentage = (enchantment.spellLevel / enchantMaxSpellLevel);
+          if (base.value.geld) {
+            upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
+          }
+          if (base.value.mana) {
+            upkeep.mana += percentage * u.upkeepCost.mana * base.value.mana;
+          }
+          if (base.value.population) {
+            upkeep.population += percentage * u.upkeepCost.population * base.value.population;
+          }
+        } else if (effect.rule === 'addPercentageBase') {
+          if (base.value.geld) {
+            upkeep.geld += u.upkeepCost.geld * base.value.geld;
+          }
+          if (base.value.mana) {
+            upkeep.mana += u.upkeepCost.mana * base.value.mana;
+          }
+          if (base.value.population) {
+            upkeep.population += u.upkeepCost.population * base.value.population;
+          }
+        }
+      }
+    }
+  }
+
+  // Ensure no weirdness
+  if (upkeep.geld < 0) upkeep.geld = 0;
+  if (upkeep.mana < 0) upkeep.mana = 0;
+  if (upkeep.population < 0) upkeep.population = 0;
+
+  return upkeep;
+}
+
+
 export const armyUpkeep = (mage: Mage) => {
   let mana = 0;
   let geld = 0;
   let pop = 0;
 
+  mage.army.forEach(stack => {
+    const upkeep = unitUpkeep(mage, stack.id);
+
+    mana += Math.ceil(upkeep.mana * stack.size);
+    pop += Math.ceil(upkeep.population * stack.size);
+    geld += Math.ceil(upkeep.geld * stack.size);
+  });
+
+  /*
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
     const upkeep = _.cloneDeep(u.upkeepCost);
@@ -332,6 +408,8 @@ export const armyUpkeep = (mage: Mage) => {
     pop += Math.ceil(upkeep.population * stack.size);
     geld += Math.ceil(upkeep.geld * stack.size);
   });
+  */
+
 
   return {
     mana: mana,
