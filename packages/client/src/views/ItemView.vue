@@ -1,7 +1,7 @@
 <template>
   <div class="section-header">Your item inventory</div>
   <p>
-    You have {{ itemList.length }} spells in your items storage.
+    You have {{ itemList.length }} items in your inventory storage.
   </p>
   <div class="row">
     <img src="@/assets/images/item.png" class="gen-img" />

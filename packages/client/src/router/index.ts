@@ -186,10 +186,10 @@ const router = createRouter({
       component: GuideView
     },
     {
-      path: '/encyclopedia',
+      path: '/encyclopedia/:type',
       name: 'encyclopedia',
       component: EncyclopediaView,
-      props: false 
+      props: true
     },
     {
       path: '/view-unit/:id',

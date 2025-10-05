@@ -10,12 +10,12 @@
       <input type="text" placeholder="search string" v-model="searchStr" /> 
     </div>
 
-    <div v-if="currentSelection==='spell'"> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
-    <div v-if="currentSelection==='unit'"> Showing {{ filteredUnits.length }} of {{ units.length}} units.</div>
-    <div v-if="currentSelection==='item'"> Showing {{ filteredItems.length }} of {{ items.length}} items.</div>
+    <div v-if="type ==='spell'"> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
+    <div v-if="type ==='unit'"> Showing {{ filteredUnits.length }} of {{ units.length}} units.</div>
+    <div v-if="type ==='item'"> Showing {{ filteredItems.length }} of {{ items.length}} items.</div>
   </section>
 
-  <table v-if="currentSelection === 'spell'">
+  <table v-if="type === 'spell'">
     <tbody>
       <tr v-for="spell of filteredSpells"> 
         <td>
@@ -39,7 +39,7 @@
     </tbody>
   </table>
 
-  <table v-if="currentSelection === 'unit'">
+  <table v-if="type === 'unit'">
     <tbody>
       <tr v-for="unit of filteredUnits"> 
         <td>
@@ -70,7 +70,7 @@
     </tbody>
   </table>
 
-  <table v-if="currentSelection === 'item'">
+  <table v-if="type === 'item'">
     <tbody>
       <tr v-for="item of filteredItems"> 
         <td> 
@@ -87,15 +87,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import Magic from '@/components/magic.vue';
 import { getAllItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
 import { Item, Spell } from 'shared/types/magic';
 import { readableStr, readbleNumber } from '@/util/util';
 import { Unit } from 'shared/types/unit';
 
+
+const props = defineProps<{ type: string }>(); 
+
 const searchStr = ref('');
-const currentSelection = ref('spell');
+const currentSelection = ref('');
+const router = useRouter();
+
 
 const spells = ref<Spell[]>([]);
 const units = ref<Unit[]>([]);
@@ -125,6 +131,7 @@ const filteredItems = computed(() => {
 
 const changeSelection = () => {
   searchStr.value = '';
+  router.push({ name: 'encyclopedia', params: { type: currentSelection.value } });
 };
 
 onMounted(() => {
@@ -132,5 +139,15 @@ onMounted(() => {
   units.value = getAllUnits();
   items.value = getAllItems()
 });
+
+watch(
+  () => props.type,
+  () => {
+    if (props.type) {
+      currentSelection.value = props.type;
+    }
+  },
+  { immediate: true }
+)
 
 </script>

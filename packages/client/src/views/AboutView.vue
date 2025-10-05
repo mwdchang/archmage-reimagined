@@ -5,10 +5,10 @@
     <p v-if="gameTable">
       {{ readbleNumber(mageStore.mage.currentTurn) }} /
       {{ readbleNumber(gameTable.maxTurns) }} turns available,
-      additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
+      {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used. 
     </p>
-    <p>
-      total {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used, 
+    <p v-if="gameTable">
+      Additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
     </p>
 
     <br>
@@ -68,14 +68,14 @@
       <div class="column"> 
         <router-link to="/explore">Explore</router-link>
         <router-link to="/build">Build</router-link>
-        <router-link to="/destroy" style="color: #d40">Destroy</router-link>
+        <router-link to="/destroy" style="color: #d80">Destroy</router-link>
       </div>
 
       <div class="column">
         <router-link to="/spell">Cast Magic</router-link>
         <router-link to="/item">Use Item</router-link>
         <router-link to="/research">Research</router-link>
-        <router-link to="/dispel" style="color: #d40">Dispel Magic</router-link>
+        <router-link to="/dispel" style="color: #d80">Dispel Magic</router-link>
       </div>
 
       <div class="column">
@@ -91,12 +91,12 @@
         <router-link to="/assignment">Assignment</router-link>
         <router-link to="/chronicles">Chronicles</router-link>
         <router-link to="/recruit">Recruit</router-link>
-        <router-link to="/disband" style="color: #d40">Disband</router-link>
+        <router-link to="/disband" style="color: #d80">Disband</router-link>
       </div>
     </section>
 
     <section class="row" style="gap: 30px; margin-top: 20px; background: #181818; border-radius: 3px">
-      <router-link to="/encyclopedia">Encyclopedia</router-link>
+      <router-link to="/encyclopedia/spell">Encyclopedia</router-link>
       <router-link to="/guide">Guide</router-link>
       <div>About</div>
     </section>
