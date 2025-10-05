@@ -9,8 +9,6 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
-  AllowedMagic,
-  Effect
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility } from "./base/unit";
@@ -43,7 +41,6 @@ import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
-import Stream from 'node:stream';
 
 ////////////////////////////////////////////////////////////////////////////////
 

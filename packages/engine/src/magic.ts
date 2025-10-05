@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import {
-  magicAlignmentTable, spellRankTable, productionTable, itemProductionTable
+  magicAlignmentTable, productionTable, itemProductionTable
 } from './base/config';
 import { Enchantment, Mage } from 'shared/types/mage';
 import {

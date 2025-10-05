@@ -41,7 +41,7 @@
     <section class="form">
       <button @click="makeBid"> Bid </button>
     </section>
-
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
   </main>
 </template>
 
@@ -70,6 +70,8 @@ const clock = ref<ServerClock|null>(null);
 const bidItems = ref<BidContainer[]>([]);
 const currentBidMap = ref<{[key: string]: number}>({});
 const mageBidMap = ref<{[key: string]: number}>({});
+
+const errorStr = ref('');
 
 const timeRemaining = (marketItem: MarketItem) => {
   if (!clock.value) return '';
@@ -106,6 +108,15 @@ const refresh = async () => {
 };
 
 const makeBid = async () => {
+
+  const badBids = bidItems.value.filter(item => {
+    return item.bid <= item.marketItem.basePrice;
+  });
+  if (badBids.length > 0) {
+    errorStr.value = 'You cannot bid less than the base prices';
+    return;
+  }
+
   const payload: Bid[] = bidItems.value
     .filter(d => d.bid >= 0)
     .map(d => { 
