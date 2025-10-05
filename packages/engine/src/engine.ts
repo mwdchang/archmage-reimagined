@@ -122,7 +122,7 @@ class Engine {
     this.debug = debug;
   }
 
-  async initialize() {
+  async initialize(resetData: boolean) {
     loadUnitData(plainUnits);
     loadUnitData(ascendantUnits);
     loadUnitData(verdantUnits);
@@ -138,6 +138,28 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+
+
+    // Reset server data and defaults
+    if (resetData === true) {
+      console.log('Restarting from scratch ...');
+      await this.adapter.resetData();
+      await this.adapter.initialize();
+
+      // Start server clock
+      await this.adapter.setServerClock({
+        currentTurn: 0,
+        currentTurnTime: Date.now(),
+        endTurn: 25000,
+        interval: gameTable.turnRate * 1000 
+      });
+
+      // Setart market
+      await this.initializeMarket();
+    } else {
+      console.log('Resume from previous DB state ...');
+      this.adapter.initialize();
+    }
 
 
     // Create a several dummy mages for testing
@@ -161,17 +183,6 @@ class Engine {
         });
       }
     }
-
-    // Start server clock
-    await this.adapter.setServerClock({
-      currentTurn: 0,
-      currentTurnTime: Date.now(),
-      endTurn: 25000,
-      interval: gameTable.turnRate * 1000 
-    });
-
-    // Setart market
-    await this.initializeMarket();
 
     // Start loop
     if (this.debug === false) {

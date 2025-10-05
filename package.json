@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "serverX": "ts-node-esm packages/server/src/server.ts",
-    "server": "export UNITS_FILE=$PWD/packages/data/plain-units.json && yarn workspace server run dev",
+    "server": "yarn workspace server run dev",
+    "server-resume": "yarn workspace server run dev -- false",
     "client": "yarn workspace client run dev"
   }
 }

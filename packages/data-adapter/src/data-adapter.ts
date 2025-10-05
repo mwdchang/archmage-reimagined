@@ -27,6 +27,7 @@ export interface TurnOptions {
 export abstract class DataAdapter {
   constructor() {}
 
+  abstract resetData(): Promise<void>;
   abstract initialize(): Promise<void>
 
   // Authentication

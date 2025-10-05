@@ -26,7 +26,7 @@ interface BattleReportTable {
 }
 
 
-const DB_INIT = `
+const DB_CLEAN = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
   DROP TABLE IF EXISTS clock;
   DROP TABLE IF EXISTS rank;
@@ -41,8 +41,9 @@ const DB_INIT = `
   DROP TABLE IF EXISTS market;
   DROP TABLE IF EXISTS market_price;
   COMMIT;
+`;
 
-
+const DB_INIT = `
   CREATE TABLE IF NOT EXISTS clock (
     current_turn int,
     current_turn_time bigint,
@@ -164,7 +165,7 @@ const DB_INIT = `
   COMMIT;
 
 
-  CREATE MATERIALIZED VIEW rank_view AS
+  CREATE MATERIALIZED VIEW IF NOT EXISTS rank_view AS
   WITH 
   recent_battles AS (
     SELECT
@@ -244,10 +245,15 @@ export class PGliteDataAdapter extends DataAdapter {
     this.db.exec('REFRESH MATERIALIZED VIEW rank_view');
   }
 
-  async initialize() {
+  async resetData(): Promise<void> {
+    await this.db.exec(DB_CLEAN);
+  }
+
+  async initialize(): Promise<void> {
     try {
       console.log('initialize database...');
       await this.db.exec(DB_INIT);
+      await this.refreshRankView();
     } catch (err) {
       console.log(err);
     }
