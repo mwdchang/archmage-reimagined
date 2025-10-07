@@ -324,9 +324,12 @@ app.listen(PORT, ()=>{
   console.log('================================');
 });
 
+
+// Simple parsing
+let restart = process.argv[2] || 'true';
+
 async function run() {
-  await dataAdapter.initialize();
-  await engine.initialize();
+  await engine.initialize(restart === 'true' ? true : false);
 }
 
 run();

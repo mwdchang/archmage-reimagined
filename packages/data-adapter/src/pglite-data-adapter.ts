@@ -26,7 +26,7 @@ interface BattleReportTable {
 }
 
 
-const DB_INIT = `
+const DB_CLEAN = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
   DROP TABLE IF EXISTS clock;
   DROP TABLE IF EXISTS rank;
@@ -40,8 +40,16 @@ const DB_INIT = `
   DROP TABLE IF EXISTS market_bid;
   DROP TABLE IF EXISTS market;
   DROP TABLE IF EXISTS market_price;
-  COMMIT;
 
+
+  DROP SEQUENCE IF EXISTS mage_seq;
+
+  COMMIT;
+`;
+
+const DB_INIT = `
+  CREATE SEQUENCE IF NOT EXISTS mage_seq START WITH 0 MINVALUE 0;
+  COMMIT;
 
   CREATE TABLE IF NOT EXISTS clock (
     current_turn int,
@@ -164,7 +172,7 @@ const DB_INIT = `
   COMMIT;
 
 
-  CREATE MATERIALIZED VIEW rank_view AS
+  CREATE MATERIALIZED VIEW IF NOT EXISTS rank_view AS
   WITH 
   recent_battles AS (
     SELECT
@@ -244,10 +252,20 @@ export class PGliteDataAdapter extends DataAdapter {
     this.db.exec('REFRESH MATERIALIZED VIEW rank_view');
   }
 
-  async initialize() {
+  async resetData(): Promise<void> {
+    await this.db.exec(DB_CLEAN);
+  }
+
+  async initialize(): Promise<void> {
     try {
       console.log('initialize database...');
       await this.db.exec(DB_INIT);
+
+      await this.db.exec(`
+        SELECT setval('mage_seq', COALESCE((SELECT MAX(id) FROM mage), 0), true);
+      `);
+
+      await this.refreshRankView();
     } catch (err) {
       console.log(err);
     }
@@ -323,7 +341,16 @@ WHERE username = '${user.username}'
 
   async logout() { }
 
+  async nextMageId(): Promise<number> {
+    // Auto generated id
+    const seqSQL = `SELECT nextval('mage_seq')`;
+    const r = await this.db.query(seqSQL);
+    const newId = r.rows[0]['nextval'];
+    return newId;
+  }
+
   async createMage(username: string, mage: Mage) {
+    // Create
     const sql = `
       INSERT INTO mage values('${username}', '${mage.id}', '${JSON.stringify(mage)}');
     `;
@@ -334,6 +361,7 @@ WHERE username = '${user.username}'
       console.error(err);
     }
     this.refreshRankView();
+    return mage;
   }
 
   async updateMage(mage: Mage) {
@@ -365,13 +393,13 @@ WHERE id = ${mage.id}
   }
 
   async getMageByUser(username: string) {
-    // console.log('pglite: getMageByUser');
     const result = await this.db.query<MageTable>(`
       SELECT mage from mage where username = '${username}'
     `);
     if (result.rows.length === 0) {
       return null;
     }
+
     const mage: Mage = result.rows[0].mage;
     const mageRank = await this.db.query<MageRank>(`
       select * from rank_view where id = ${mage.id}
@@ -450,6 +478,8 @@ WHERE id = ${mage.id}
         ${mr.netPower}
       );
     `)
+
+    await this.refreshRankView();
   }
 
   async updateRank(mr : MageRank) {
@@ -499,7 +529,6 @@ WHERE id = ${mage.id}
     if (options.from > 0) {
       sqlQuery += ` OFFSET ${options.from} `;
     }
-    // console.log("SQL", sqlQuery);
     const result = await this.db.query<any>(sqlQuery);
 
     return result.rows.map(toCamelCase<BattleReportSummary>);

@@ -4,10 +4,14 @@ import {
   getItemById,
   getUnitById
 } from 'engine/src/base/references';
+import {
+  unitUpkeep
+} from 'engine/src/interior';
 import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
+
 
 export interface MageItem {
   id: string,
@@ -76,10 +80,12 @@ export const getArmy = (mage: Mage) => {
     const unit = getUnitById(stack.id);
     const multiplier = npMultiplier(unit);
 
+    const modUpkeep = unitUpkeep(mage, stack.id);
+
     const upkeep = {
-      geld: Math.ceil(stack.size * unit.upkeepCost.geld),
-      mana: Math.ceil(stack.size * unit.upkeepCost.mana),
-      population: Math.ceil(stack.size * unit.upkeepCost.population)
+      geld: Math.ceil(stack.size * modUpkeep.geld),
+      mana: Math.ceil(stack.size * modUpkeep.mana),
+      population: Math.ceil(stack.size * modUpkeep.population)
     };
 
     result.push({

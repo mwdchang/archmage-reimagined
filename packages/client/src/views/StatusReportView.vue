@@ -258,7 +258,9 @@
           <td> 
             <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
           </td>
-          <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
+          <td class="text-right"> 
+            {{ readbleNumber(u.upkeep.geld) }} / {{ readbleNumber(u.upkeep.mana) }} / {{ readbleNumber(u.upkeep.population) }} 
+          </td>
           <td class="text-right" style="padding-left: 10px"> {{ readbleNumber(u.size) }} </td>
           <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
         </tr>

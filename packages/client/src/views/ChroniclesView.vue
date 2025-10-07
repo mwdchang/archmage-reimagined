@@ -1,9 +1,9 @@
 <template>
   <main>
     <div class="section-header">Previous Engagements</div>
+    <br>
     <div v-for="(d, idx) of chronicles" :key="idx" style="margin-bottom: 10px"> 
-      <div>{{ formatEpochToUTC(d.timestamp) }}</div>
-      <div class="row" style="max-width: 25rem; align-items: flex-start; gap: 10px">
+      <div class="row" style="max-width: 35rem; gap: 10px; align-items: flex-start">
         <img 
           v-if="mage.id === d.attackerId && d.isSuccessful === true"
           src="@/assets/images/attack-win.png" 
@@ -24,13 +24,14 @@
           src="@/assets/images/defend-loss.png" 
           class="icon loss"
         />
-        <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
-          <p>
+        <div>
+          <div>{{ formatEpochToUTC(d.timestamp) }}</div>
+          <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
             {{d.attackerName }} (#{{ d.attackerId }}) army {{ d.attackType }} {{ d.defenderName }} (#{{ d.defenderId }}) army on the battlefield, 
             {{d.attackerName }} (#{{ d.attackerId }}) slew {{ d.defenderUnitsLoss }} units and lost {{ d.attackerUnitsLoss }} units.
-            The attack was a {{ d.isSuccessful ? 'success' : 'failure' }}
-          </p>
-        </router-link>
+            The attack {{ d.isSuccessful ? 'succedded' : 'failed' }}
+          </router-link>
+        </div>
       </div>
     </div>
   </main>

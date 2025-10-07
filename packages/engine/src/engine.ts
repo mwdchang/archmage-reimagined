@@ -83,15 +83,21 @@ import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName } from './util';
-import { fromKingdomArmyEffectResult, fromKingdomBuildingsEffectResult, fromKingdomResourcesEffectResult, fromRemoveEnchantmentEffectResult, fromStealEffectResult, fromWishEffectResult } from './game-message';
+import { 
+  fromKingdomArmyEffectResult,
+  fromKingdomBuildingsEffectResult,
+  fromKingdomResourcesEffectResult,
+  fromRemoveEnchantmentEffectResult,
+  fromStealEffectResult,
+  fromWishEffectResult 
+} from './game-message';
 import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
-import { priceDecrease, priceIncrease } from './blackmarket';
-import { isImportDeclaration } from 'typescript';
+import { priceIncrease } from './blackmarket';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -116,7 +122,7 @@ class Engine {
     this.debug = debug;
   }
 
-  async initialize() {
+  async initialize(resetData: boolean) {
     loadUnitData(plainUnits);
     loadUnitData(ascendantUnits);
     loadUnitData(verdantUnits);
@@ -134,6 +140,28 @@ class Engine {
     loadItemData(lesserItems);
 
 
+    // Reset server data and defaults
+    if (resetData === true) {
+      console.log('Restarting from scratch ...');
+      await this.adapter.resetData();
+      await this.adapter.initialize();
+
+      // Start server clock
+      await this.adapter.setServerClock({
+        currentTurn: 0,
+        currentTurnTime: Date.now(),
+        endTurn: 25000,
+        interval: gameTable.turnRate * 1000 
+      });
+
+      // Setart market
+      await this.initializeMarket();
+    } else {
+      console.log('Resume from previous DB state ...');
+      this.adapter.initialize();
+    }
+
+
     // Create a several dummy mages for testing
     for (let i = 0; i < 10; i++) {
       const magic = allowedMagicList[randomInt(allowedMagicList.length)];
@@ -142,7 +170,9 @@ class Engine {
       const mage = await this.getMageByUser(name);
       if (!mage) {
         console.log('creating test mage', name);
-        const bot = createBot(name, magic);
+
+        const newId = await this.adapter.nextMageId();
+        const bot = createBot(newId, name, magic);
         await this.adapter.createMage(name, bot);
         await this.adapter.createRank({
           id: bot.id,
@@ -155,17 +185,6 @@ class Engine {
         });
       }
     }
-
-    // Start server clock
-    await this.adapter.setServerClock({
-      currentTurn: 0,
-      currentTurnTime: Date.now(),
-      endTurn: 25000,
-      interval: gameTable.turnRate * 1000 
-    });
-
-    // Setart market
-    await this.initializeMarket();
 
     // Start loop
     if (this.debug === false) {
@@ -566,6 +585,21 @@ class Engine {
           return bUnit.upkeepCost.geld * b.size - aUnit.upkeepCost.geld * a.size;
         });
       } else if (target.type === 'building') {
+        ['farms', 'towns', 'workshops', 'barracks', 'guilds'].forEach(bType => {
+          const bLost = Math.floor(0.2 * mage[bType]);
+          mage[bType] -= bLost;
+          mage.wilderness += bLost;
+        });
+        const fortsLost = Math.min(
+          Math.floor(0.2 * mage.forts) + 4,
+          mage.forts
+        );
+        mage.forts -= fortsLost;
+        mage.wilderness += fortsLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.geld > 0 ? true : false
@@ -585,6 +619,16 @@ class Engine {
           return bUnit.upkeepCost.mana * b.size - aUnit.upkeepCost.mana * a.size;
         });
       } else if (target.type === 'building') {
+        const barriersLost = Math.min(
+          Math.floor(0.2 * mage.barriers) + 8,
+          mage.barriers
+        );
+        mage.barriers -= barriersLost;
+        mage.wilderness += barriersLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.mana > 0 ? true : false
@@ -604,7 +648,21 @@ class Engine {
           return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population* a.size;
         });
       } else if (target.type === 'building') {
-        // Nothing
+        ['farms', 'towns', 'workshops', 'barracks', 'guilds'].forEach(bType => {
+          const bLost = Math.floor(0.2 * mage[bType]);
+          mage[bType] -= bLost;
+          mage.wilderness += bLost;
+        });
+        const fortsLost = Math.min(
+          Math.floor(0.2 * mage.forts) + 4,
+          mage.forts
+        );
+        mage.forts -= fortsLost;
+        mage.wilderness += fortsLost;
+        turnLogs.push({
+          type: 'log',
+          message: 'Insufficient resources, you have lost some buildings'
+        });
       } else if (target.type === 'enchantment') {
         implodeEnchantments((s) => {
           return s.upkeep.population > 0 ? true : false
@@ -1575,11 +1633,13 @@ class Engine {
     const res = await this.adapter.register(username, password);
 
     // 2. return mage
-    const mage = createMage(username, magic, override);
+    const newId = await this.adapter.nextMageId();
+    let mage = createMage(newId, username, magic, override);
 
     // 3. Write to data store
-    this.adapter.createMage(username, mage);
-    this.adapter.createRank({
+    mage = await this.adapter.createMage(username, mage);
+    
+    await this.adapter.createRank({
       id: mage.id,
       name: mage.name,
       magic: mage.magic,

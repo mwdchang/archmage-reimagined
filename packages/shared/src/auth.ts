@@ -17,10 +17,12 @@ export const getToken = (username: string) => {
   return token;
 }
 
+// Routes that do not need a mage/user
 const whitelist = [
   '/api/register',
   '/api/login',
-  '/api/logout'
+  '/api/logout',
+  '/api/server-clock'
 ];
 
 // See http://expressjs.com/en/guide/using-middleware.html

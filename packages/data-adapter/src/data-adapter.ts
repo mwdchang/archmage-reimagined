@@ -27,6 +27,7 @@ export interface TurnOptions {
 export abstract class DataAdapter {
   constructor() {}
 
+  abstract resetData(): Promise<void>;
   abstract initialize(): Promise<void>
 
   // Authentication
@@ -39,7 +40,8 @@ export abstract class DataAdapter {
   abstract getServerClock(): Promise<ServerClock>
 
   // Mage CRUD
-  abstract createMage(username: string, mage: Mage): Promise<void>
+  abstract nextMageId(): Promise<number>
+  abstract createMage(username: string, mage: Mage): Promise<Mage>
   abstract getMageByUser(username: string): Promise<Mage>
   abstract getAllMages(): Promise<Mage[]>;
   abstract updateMage(mage: Mage): Promise<void>

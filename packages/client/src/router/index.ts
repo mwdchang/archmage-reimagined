@@ -30,6 +30,7 @@ import DisplayItemView from '@/views/DisplayItemView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
 import EncyclopediaView from '@/views/EncyclopediaView.vue';
 import GuideView from '@/views/GuideView.vue';
+import FinalsView from '@/views/FinalsView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -120,7 +121,6 @@ const router = createRouter({
       component: SubMarketView,
       props: true
     },
-
     {
       path: '/assignment',
       name: 'assignment',
@@ -174,6 +174,11 @@ const router = createRouter({
       name: 'chronicles',
       component: ChroniclesView
     },
+    {
+      path: '/finals',
+      name: 'finals',
+      component:FinalsView 
+    },
     // Misc
     {
       path: '/guide',
@@ -181,10 +186,10 @@ const router = createRouter({
       component: GuideView
     },
     {
-      path: '/encyclopedia',
+      path: '/encyclopedia/:type',
       name: 'encyclopedia',
       component: EncyclopediaView,
-      props: false 
+      props: true
     },
     {
       path: '/view-unit/:id',

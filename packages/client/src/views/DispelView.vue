@@ -2,6 +2,16 @@
   <div class="section-header">Dispel Magic</div>
   <div> Your enchantments in effect </div>
   <table>
+    <thead>
+      <tr>
+        <th>&nbsp</th>
+        <th>Enchantment</th>
+        <th>Life</th>
+        <th>Spell level</th>
+        <th>Caster</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
     <tbody>
       <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
         <td> <magic :magic="enchantMagic(enchant)" /></td>
@@ -17,6 +27,16 @@
   <br/>
   <div> Other enchantments in effect </div>
   <table>
+    <thead>
+      <tr>
+        <th>&nbsp</th>
+        <th>Enchantment</th>
+        <th>Life</th>
+        <th>Spell level</th>
+        <th>Caster</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
     <tbody>
       <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 
         <td> <magic :magic="enchantMagic(enchant)" /></td>
@@ -31,7 +51,7 @@
 
   <section class="form">
     <input type="number" v-model="dispelMana" />
-    <label>Success rate for {{ dispelProb }}%</label>
+    <label>Success rate for {{ (100 * dispelProb).toFixed(2) }}%</label>
     <button @click="dispelEnchant">Dispel</button>
   </section>
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
