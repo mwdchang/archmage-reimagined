@@ -54,6 +54,7 @@
     <label>Success rate for {{ (100 * dispelProb).toFixed(2) }}%</label>
     <button @click="dispelEnchant">Dispel</button>
   </section>
+  <div v-if="resultStr">{{ resultStr }}</div>
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
 
@@ -72,6 +73,7 @@ const { mage } = storeToRefs(mageStore);
 const selectedEnchant = ref<string>('');
 const dispelMana = ref<number>(0);
 
+const resultStr = ref('');
 const errorStr = ref('');
 
 const selfEnchantments = computed(() => {
@@ -98,6 +100,7 @@ const dispelEnchant = async () => {
 
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
+    resultStr.value = '';
     return API.post('dispel', { 
       enchantId: selectedEnchant.value,
       mana: dispelMana.value
@@ -109,6 +112,9 @@ const dispelEnchant = async () => {
   }
 
   if (data) {
+    if (data.result) {
+      resultStr.value = `You dispelled ${selectedEnchant.value}`;
+    }
     mageStore.setMage(data.mage);
   }
 };

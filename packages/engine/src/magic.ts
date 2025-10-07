@@ -331,7 +331,7 @@ export const calcKingdomResistance = (mage: Mage) => {
 
       const resistEffect = effect as KingdomResistanceEffect;
       if (resistEffect.rule === 'spellLevel') {
-        resistance[resistEffect.resistance] += currentSpellLevel(mage) * resistEffect.magic[mage.magic].value;
+        resistance[resistEffect.resistance] += enchantment.spellLevel * resistEffect.magic[mage.magic].value;
       }
     });
   });
