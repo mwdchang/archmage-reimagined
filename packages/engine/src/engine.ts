@@ -951,8 +951,8 @@ class Engine {
       }
 
       const probability = dispelEnchantment(mage, enchantment, mana);
-      if (Math.random() <= probability) {
-        mage.enchantments = mage.enchantments.filter(d => d.id !== enchantId);
+      if (Math.random() <= probability || enchantment.casterId === mage.id) {
+        enchantment.isActive = false;
         success = true;
       }
     }

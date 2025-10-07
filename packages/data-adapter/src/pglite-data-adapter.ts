@@ -366,12 +366,13 @@ WHERE username = '${user.username}'
 
   async updateMage(mage: Mage) {
     await this.db.exec(`
-UPDATE mage 
-SET mage = '${JSON.stringify(mage)}'
-WHERE id = ${mage.id}
+      UPDATE mage 
+      SET mage = '${JSON.stringify(mage)}'
+      WHERE id = ${mage.id}
     `);
 
     await this.setEnchantments(mage.enchantments);
+    mage.enchantments = await this.getEnchantments(mage.id);
   }
 
   async getMage(id: number) {
@@ -404,8 +405,11 @@ WHERE id = ${mage.id}
     const mageRank = await this.db.query<MageRank>(`
       select * from rank_view where id = ${mage.id}
     `);
+    const enchantments = await this.getEnchantments(mage.id);
+
     mage.rank = mageRank.rows[0].rank; 
     mage.status = mageRank.rows[0].status;
+    mage.enchantments = enchantments;
 
     return mage;
   }
@@ -435,7 +439,7 @@ WHERE id = ${mage.id}
           ${enchant.targetId},
           ${Q(enchant.spellId)},
           ${enchant.spellLevel},
-          ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          ${enchant.isActive},
           ${enchant.isEpidemic},
           ${enchant.isPermanent},
           ${enchant.life}
@@ -447,7 +451,7 @@ WHERE id = ${mage.id}
           target_id = ${enchant.targetId},
           spell_id = ${Q(enchant.spellId)},
           spell_level = ${enchant.spellLevel},
-          is_active = ${enchant.isPermanent === false && enchant.life <= 0 ? true : false},
+          is_active = ${enchant.isActive},
           is_epidemic = ${enchant.isEpidemic},
           is_permanent = ${enchant.isPermanent},
           life = ${enchant.life}

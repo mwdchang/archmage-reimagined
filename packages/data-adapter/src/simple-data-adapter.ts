@@ -120,6 +120,9 @@ export class SimpleDataAdapter extends DataAdapter {
   async updateMage(mage: Mage) {
     const index = this.mageTable.findIndex(d => d.id === mage.id);
     this.mageTable[index] = mage;
+
+    await this.setEnchantments(mage.enchantments);
+    mage.enchantments = await this.getEnchantments(mage.id);
   }
 
   async getMage(id: number) {
@@ -142,14 +145,14 @@ export class SimpleDataAdapter extends DataAdapter {
       if (idx < 0) {
         this.enchantmentTable.push(enchant);
       } else {
-      }
         this.enchantmentTable[idx] = enchant;
+      }
     }
   }
 
   async getEnchantments(mageId: number) {
     return this.enchantmentTable.filter(d => {
-      return d.casterId === mageId || d.targetId === mageId;
+      return d.isActive === true && (d.casterId === mageId || d.targetId === mageId);
     });
   }
 

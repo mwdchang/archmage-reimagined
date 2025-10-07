@@ -170,7 +170,7 @@ export const spellRankTable = {
 }
 
 export const itemProductionTable = {
-  itemGenerationRate: 0.1
+  itemGenerationRate: 0.02
 }
 
 
