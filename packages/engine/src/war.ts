@@ -609,10 +609,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       const castingRate = successCastingRate(attacker.mage, attacker.spellId);
       if (Math.random() * 100 > castingRate) {
         preBattle.attacker.spellResult = 'lostConcentration';
-      } else if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      } else if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.spellResult = 'barriers';
       } else {
-        if (Math.random() <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+        if (Math.random() * 100 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
           preBattle.attacker.spellResult = 'barriers';
         } else {
           preBattle.attacker.spellResult = 'success';
@@ -627,7 +627,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
 
-      if (Math.random() <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.itemResult = 'barriers';
       } else {
         preBattle.attacker.itemResult = 'success';

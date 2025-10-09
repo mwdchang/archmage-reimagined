@@ -379,6 +379,7 @@
       "holy": 0 
     },
     "abilities": [
+      { "name": "flying", "extra": null },
       { "name": "stealLife", "extra": 5 },
       { "name": "weakness", "extra": "holy" },
       { "name": "charm", "extra": null },

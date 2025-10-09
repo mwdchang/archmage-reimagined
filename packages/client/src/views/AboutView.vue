@@ -61,6 +61,11 @@
           <div>Items</div>
           <div>{{ numItems }}</div>
         </div>
+        <div class="about-row">
+          <div>Units</div>
+          <div>{{ readbleNumber(numArmy) }}</div>
+        </div>
+
       </section>
     </section>
 
@@ -132,7 +137,7 @@ import { computed, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import * as interior from 'engine/src/interior';
-import { totalLand } from 'engine/src/base/mage';
+import { totalLand, totalUnits } from 'engine/src/base/mage';
 import { manaStorage } from 'engine/src/magic';
 import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
@@ -148,6 +153,11 @@ const gameTable = ref<GameTable | null>(null);
 
 const sigilPath = computed(() => {
   return (new URL(`../assets/images/${mageStore.mage!.magic}-new.png`, import.meta.url)).href
+});
+
+
+const numArmy = computed(() => {
+  return totalUnits(mageStore.mage!);
 });
 
 const numItems = computed(() => {

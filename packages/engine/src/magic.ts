@@ -312,6 +312,9 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
   return adjustedProb;
 }
 
+/**
+ * Returns blocking chance  (0 to 100)
+**/
 export const calcKingdomResistance = (mage: Mage) => {
   const resistance: { [key: string]: number } = {
     barriers: 0,

@@ -87,11 +87,11 @@
       <tbody>
         <tr>
           <td>Max Residential Space</td>
-          <td class="text-right">{{ readbleNumber(maxPopulation(mage)) }}</td>
+          <td class="text-right">{{ readbleNumber(Math.floor(maxPopulation(mage))) }}</td>
         </tr>
         <tr>
           <td>Food Production</td>
-          <td class="text-right">{{ readbleNumber(maxFood(mage)) }}</td>
+          <td class="text-right">{{ readbleNumber(Math.floor(maxFood(mage))) }}</td>
         </tr>
         <!--
         <tr>
@@ -101,11 +101,11 @@
         -->
         <tr>
           <td>Space for Units</td>
-          <td class="text-right">{{ readbleNumber(spacesForUnits(mage)) }}</td>
+          <td class="text-right">{{ readbleNumber(Math.floor(spacesForUnits(mage))) }}</td>
         </tr>
         <tr>
           <td>Real Max Population</td>
-          <td class="text-right">{{ readbleNumber(realMaxPopulation(mage)) }}</td>
+          <td class="text-right">{{ readbleNumber(Math.floor(realMaxPopulation(mage))) }}</td>
         </tr>
       </tbody>
     </table>

@@ -908,7 +908,7 @@ class Engine {
     };
 
     const kingdomResistances = calcKingdomResistance(targetMage);
-    if (Math.random() <= kingdomResistances['barriers']) {
+    if (Math.random() * 100 <= kingdomResistances['barriers']) {
       logs.push({
         type: 'error',
         message: `You item hit the barriers and fizzled.`
@@ -1006,8 +1006,8 @@ class Engine {
         const targetMage = await this.getMage(target);
         const kingdomResistances = calcKingdomResistance(targetMage);
         if (
-          Math.random() <= kingdomResistances['barriers'] ||
-          Math.random() <= kingdomResistances[spell.magic]
+          Math.random() * 100 <= kingdomResistances['barriers'] ||
+          Math.random() * 100 <= kingdomResistances[spell.magic]
         ) {
           logs.push({
             type: 'error',
@@ -1763,6 +1763,8 @@ class Engine {
       });
       mage.currentGeld -= bid.bid;
     }
+
+    await this.useTurn(mage);
     await this.adapter.updateMage(mage);
     return true;
   }
