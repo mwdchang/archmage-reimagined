@@ -14,7 +14,7 @@ import { between, betweenInt, randomBM, randomInt, randomWeighted } from './rand
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
-    calcKingdomResistance,
+  calcKingdomResistance,
   castingCost,
   successCastingRate
 } from './magic';
@@ -607,12 +607,15 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       attacker.mage.currentMana -= cost;
 
       const castingRate = successCastingRate(attacker.mage, attacker.spellId);
+      const roll1 = Math.random() * 100;
+      const roll2 = Math.random() * 100;
+
       if (Math.random() * 100 > castingRate) {
         preBattle.attacker.spellResult = 'lostConcentration';
-      } else if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.spellResult = 'barriers';
       } else {
-        if (Math.random() * 100 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+        if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
           preBattle.attacker.spellResult = 'barriers';
         } else {
           preBattle.attacker.spellResult = 'success';
@@ -627,7 +630,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
 
-      if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      const roll = Math.random() * 100;
+      if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.itemResult = 'barriers';
       } else {
         preBattle.attacker.itemResult = 'success';

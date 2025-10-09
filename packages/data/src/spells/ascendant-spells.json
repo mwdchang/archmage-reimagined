@@ -512,7 +512,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "resistance.eradication": {
+              "spellResistances.eradication": {
                 "rule": "addSpellLevel",
                 "magic": {
                   "ascendant": { "value": 0.05 },

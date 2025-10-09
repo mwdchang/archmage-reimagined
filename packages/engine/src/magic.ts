@@ -343,7 +343,7 @@ export const calcKingdomResistance = (mage: Mage) => {
   // Max barrier is 2.5% of the land, max normal barrier is 75
   if (mage.barriers > 0) {
     const land = 0.025 * totalLand(mage);
-    const barriers = Math.floor((mage.barriers / land) * 75);
+    const barriers = Math.min(1.0, (mage.barriers / land)) * 75;
     resistance.barriers = barriers;
   }
   return resistance;
