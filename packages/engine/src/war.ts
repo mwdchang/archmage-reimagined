@@ -642,28 +642,35 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     }
   }
 
-  if (defender.spellId) {
-    const cost = castingCost(defender.mage, defender.spellId);
-    if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-      defender.mage.currentMana -= cost;
+  if (defender.mage.type === 'bot') {
+    preBattle.defender.spellResult = 'success';
+    hasDefenderSpell = true;
+    preBattle.defender.itemResult = 'success';
+    hasDefenderItem = true;
+  } else {
+    if (defender.spellId) {
+      const cost = castingCost(defender.mage, defender.spellId);
+      if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
+        defender.mage.currentMana -= cost;
 
-      const castingRate = successCastingRate(defender.mage, defender.spellId);
-      if (Math.random() * 100 > castingRate) {
-        preBattle.defender.spellResult = 'lostConcentration';
+        const castingRate = successCastingRate(defender.mage, defender.spellId);
+        if (Math.random() * 100 > castingRate) {
+          preBattle.defender.spellResult = 'lostConcentration';
+        }
+        preBattle.defender.spellResult = 'success';
+        hasDefenderSpell = true;
+      } else {
+        preBattle.defender.spellResult = 'noMana';
       }
-      preBattle.defender.spellResult = 'success';
-      hasDefenderSpell = true;
-    } else {
-      preBattle.defender.spellResult = 'noMana';
     }
-  }
-  if (defender.itemId) {
-    if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-      defender.mage.items[defender.itemId] --;
-      preBattle.defender.itemResult = 'success';
-      hasDefenderItem = true;
-    } else {
-      preBattle.defender.itemResult = 'noItem';
+    if (defender.itemId) {
+      if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
+        defender.mage.items[defender.itemId] --;
+        preBattle.defender.itemResult = 'success';
+        hasDefenderItem = true;
+      } else {
+        preBattle.defender.itemResult = 'noItem';
+      }
     }
   }
 
@@ -851,7 +858,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';
-      if (hasAbility(dUnit, 'bursting') && isPillage === true) {
+      if (hasAbility(dUnit, 'bursting') && isPillage === false) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {

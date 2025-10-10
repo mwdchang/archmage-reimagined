@@ -94,7 +94,7 @@ import {
 import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
-import { createBot } from './bot';
+import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceIncrease } from './blackmarket';
@@ -1283,7 +1283,12 @@ class Engine {
         throw new Error('Cannot recruit negative amount of units');
       }
       const unit = getUnitById(au.id);
-      if (unit.magic !== mage.magic || unit.attributes.includes('special') === false) {
+
+      if (unit.attributes.includes('special') === false) {
+        throw new Error(`Cannot recruit ${unit.id}`);
+      }
+
+      if (unit.magic !== mage.magic && unit.magic !== 'plain') { 
         throw new Error(`Cannot recruit ${unit.id}`);
       }
     }
@@ -1439,14 +1444,20 @@ class Engine {
       // Check if defense assignment is triggered
       const attackerArmyNP = totalArmyPower(attacker.army);
       const defenderArmyNP = totalArmyPower(defender.army);
-      const ratio = 100 * (attackerArmyNP / defenderArmyNP);
 
-      const assignment = defender.mage.assignment;
-      if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
-        defender.spellId = assignment.spellId;
-      }
-      if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
-        defender.itemId = assignment.itemId;
+      if (defender.mage.type === 'bot') {
+        const botAssignment = getBotAssignment(defender.mage.magic as any);
+        defender.spellId = botAssignment.spellId;
+        defender.itemId = botAssignment.itemId;
+      } else {
+        const ratio = 100 * (attackerArmyNP / defenderArmyNP);
+        const assignment = defender.mage.assignment;
+        if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
+          defender.spellId = assignment.spellId;
+        }
+        if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
+          defender.itemId = assignment.itemId;
+        }
       }
     }
 

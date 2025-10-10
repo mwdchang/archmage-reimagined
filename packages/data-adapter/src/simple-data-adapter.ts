@@ -114,6 +114,9 @@ export class SimpleDataAdapter extends DataAdapter {
 
   async createMage(username: string, mage: Mage) {
     this.mageTable.push(mage);
+    if (mage.enchantments) {
+      await this.setEnchantments(mage.enchantments);
+    }
     return mage;
   }
 

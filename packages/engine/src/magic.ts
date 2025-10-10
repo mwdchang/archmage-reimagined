@@ -207,7 +207,8 @@ export const manaIncome = (mage: Mage) => {
   const nodes = mage.nodes;
 
   const x = Math.floor(nodes * 100 / land);
-  const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
+  const manaYield = x * land * (110 - x) / 1000;
+  // const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
 
   let valueBuffer = 0;
   for (const enchantment of mage.enchantments) {

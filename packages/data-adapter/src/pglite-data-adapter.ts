@@ -357,6 +357,9 @@ WHERE username = '${user.username}'
 
     try {
       await this.db.exec(sql);
+      if (mage.enchantments) {
+        await this.setEnchantments(mage.enchantments);
+      }
     } catch (err) {
       console.error(err);
     }

@@ -150,7 +150,7 @@
           {{ nameById(log.defender.id) }} created {{ Math.abs(log.defender.unitsLoss) }} {{ log.defender.unitId }}
         </p>
       </div>
-      <div v-if="log.type.startsWith('burst')">
+      <div v-if="log.type === 'burst'">
         <p>
           {{ log.type }} from {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} slew
           {{ nameById(log.attacker.id) }} {{ log.attacker.unitsLoss }} {{ log.attacker.unitId }}
@@ -254,6 +254,7 @@ const nameById = (id: number) => {
 const checkGap = (curr: EngagementLog | null, next: EngagementLog | null) => {
   if (curr && next) {
     if (next.type === 'counter') return false;
+    if (curr.type === 'burst') return false;
     return true;
   }
   return false;

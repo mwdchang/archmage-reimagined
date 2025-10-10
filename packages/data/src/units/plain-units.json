@@ -7,7 +7,7 @@
     "powerRank": 9,
     "hitPoints": 80,
     "race": ["human"],
-    "attributes": ["basic"],
+    "attributes": ["basic", "special"],
 
     "primaryAttackPower": 80,
     "primaryAttackType": ["melee"],
@@ -63,7 +63,7 @@
     "powerRank": 12,
     "hitPoints": 80,
     "race": ["human"],
-    "attributes": ["basic"],
+    "attributes": ["basic", "special"],
 
     "primaryAttackPower": 80,
     "primaryAttackType": ["missile", "ranged"],
@@ -117,7 +117,7 @@
     "powerRank": 14,
     "hitPoints": 100,
     "race": ["human"],
-    "attributes": ["basic"],
+    "attributes": ["basic", "special"],
 
     "primaryAttackPower": 90,
     "primaryAttackType": ["melee"],
@@ -172,7 +172,7 @@
     "powerRank": 12,
     "hitPoints": 90,
     "race": ["human"],
-    "attributes": ["basic"],
+    "attributes": ["basic", "special"],
 
     "primaryAttackPower": 100,
     "primaryAttackType": ["melee"],
@@ -227,7 +227,7 @@
     "powerRank": 18,
     "hitPoints": 120,
     "race": ["human"],
-    "attributes": ["basic"],
+    "attributes": ["basic", "special"],
 
     "primaryAttackPower": 180,
     "primaryAttackType": ["melee"],

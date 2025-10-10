@@ -3,6 +3,7 @@ import { createMage } from "./base/mage";
 import { getMaxSpellLevels } from "./base/references";
 import { v4 as uuidv4 } from 'uuid';
 import { Mage } from "shared/types/mage";
+import { betweenInt } from "./random";
 
 export const createBot = (id: number, name: string, magic: AllowedMagic) => {
   const botMage = createMage(id, name, magic, {
@@ -35,23 +36,28 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
   switch(magic) {
     case 'ascendant':
       botMage.army = [
-        { id: 'archangel', size: 1800 },
-        { id: 'nagaQueen', size: 900 },
-        { id: 'unicorn', size: 2500 },
-        { id: 'knightTemplar', size: 15000 }
+        { id: 'archangel', size: 2300 },
+        { id: 'nagaQueen', size: 1200 },
+        { id: 'unicorn', size: 4500 },
+        { id: 'knightTemplar', size: 19000 },
+        { id: 'highPriest', size: 22000 },
+        { id: 'titan', size: 50 }
       ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'loveAndPeace'),
         makeEnchantment(botMage, 'theHolyLight'),
         makeEnchantment(botMage, 'protectionFromEvil'),
+        makeEnchantment(botMage, 'mindBar'),
+        makeEnchantment(botMage, 'sunray')
       ]
       break;
     case 'verdant':
       botMage.army = [
-        { id: 'treant', size: 4800 },
-        { id: 'mandrake', size: 7500 },
-        { id: 'earthElemental', size: 80 },
-        { id: 'highElf', size: 480 }
+        { id: 'treant', size: 7800 },
+        { id: 'mandrake', size: 12500 },
+        { id: 'earthElemental', size: 110 },
+        { id: 'highElf', size: 1480 },
+        { id: 'elvenMagician', size: 25000 }
       ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'plantGrowth'),
@@ -62,8 +68,9 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       break;
     case 'eradication':
       botMage.army = [
-        { id: 'fireElemental', size: 150 },
+        { id: 'fireElemental', size: 220 },
         { id: 'dwarvenShaman', size: 2000 },
+        { id: 'efreeti', size: 2000 },
         { id: 'bulwarkHorror', size: 600 }
       ];
       botMage.enchantments = [
@@ -73,11 +80,12 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       break;
     case 'nether':
       botMage.army = [
-        { id: 'bulwarkHorror', size: 800 },
-        { id: 'demonKnight', size: 800 },
-        { id: 'hornedDemon', size: 3600 },
-        { id: 'unholyReaver', size: 60 },
-        { id: 'vampire', size: 560 },
+        { id: 'bulwarkHorror', size: 1100 },
+        { id: 'demonKnight', size: 1400 },
+        { id: 'hornedDemon', size: 7600 },
+        { id: 'unholyReaver', size: 120 },
+        { id: 'vampire', size: 260 },
+        { id: 'lich', size: 260 }
       ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'shroudOfDarkness'),
@@ -89,9 +97,10 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       botMage.army = [
         { id: 'waterElemental', size: 80 },
         { id: 'iceElemental', size: 80 },
-        { id: 'archangel', size: 1300 },
-        { id: 'medusa', size: 600 },
-        { id: 'empyreanInquisitor', size: 560 },
+        { id: 'archangel', size: 2300 },
+        { id: 'medusa', size: 2600 },
+        { id: 'empyreanInquisitor', size: 960 },
+        { id: 'bulwarkHorror', size: 960 }
       ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'shroudOfDarkness'),
@@ -103,4 +112,43 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       break;
   }
   return botMage;
+}
+
+interface BotAssignment {
+  spellId: string;
+  itemId: string;
+}
+
+export const getBotAssignment = (magic: AllowedMagic): BotAssignment => {
+  const botTable: Record<string, BotAssignment[]> = {
+    ascendant: [
+      { spellId: 'swordOfLight', itemId: 'candleOfSleeping' },
+      { spellId: 'miracle', itemId: 'bubbleWine' }
+    ],
+    verdant: [
+      { spellId: 'rustArmor', itemId: 'candleOfSleeping' },
+      { spellId: 'flameBlade', itemId: 'candleOfSleeping' },
+      { spellId: 'rustArmor', itemId: 'carpetOfFlyig' },
+      { spellId: 'flameBlade', itemId: 'ashOfInvisibility' }
+    ],
+    eradication: [
+      { spellId: 'stun', itemId: 'candleOfSleeping' },
+      { spellId: 'flameBlade', itemId: 'oilFlasks' },
+      { spellId: 'flameShield', itemId: 'oilFlasks' }
+    ],
+    nether: [
+      { spellId: 'stun', itemId: 'candleOfSleeping' },
+      { spellId: 'foulWater', itemId: 'candleOfSleeping' },
+      { spellId: 'foulWater', itemId: 'monkeyBrains' }
+    ],
+    phantasm: [
+      { spellId: 'paralyze', itemId: 'candleOfSleeping' },
+      { spellId: 'slow', itemId: 'theSpidersWeb' }
+    ]
+  };
+
+  const target = botTable[magic];
+  const idx = betweenInt(0, target.length - 1);
+
+  return target[idx];
 }
