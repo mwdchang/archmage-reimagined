@@ -113,51 +113,51 @@
       <!--{{ log }}-->
       <div v-if="log.type === 'primary' || log.type === 'secondary'">
         <p>
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }} attacks
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }}
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} attacks
+          {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }}
         </p>
         <p>
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }} slew
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitsLoss }} {{ log.defender.unitId }}
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} slew
+          {{ nameById(log.defender.id) }}'s {{ log.defender.unitsLoss }} {{ unitName(log.defender.unitId) }}
         </p>
         <p v-if="log.attacker.unitsLoss < 0">
-          {{ nameById(log.attacker.id) }} created {{ Math.abs(log.attacker.unitsLoss) }} {{ log.attacker.unitId }}
+          {{ nameById(log.attacker.id) }} created {{ Math.abs(log.attacker.unitsLoss) }} {{ unitName(log.attacker.unitId) }}
         </p>
       </div>
       <div v-if="log.type === 'additionalStrike'">
         <p>
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }} attacks
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} again
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} attacks
+          {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }} again
         </p>
         <p>
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }} slew
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitsLoss }} {{ log.defender.unitId }}
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} slew
+          {{ nameById(log.defender.id) }}'s {{ log.defender.unitsLoss }} {{ unitName(log.defender.unitId) }}
         </p>
         <p v-if="log.attacker.unitsLoss < 0">
-          {{ nameById(log.attacker.id) }} created {{ Math.abs(log.attacker.unitsLoss) }} {{ log.attacker.unitId }}
+          {{ nameById(log.attacker.id) }} created {{ Math.abs(log.attacker.unitsLoss) }} {{ unitName(log.attacker.unitId) }}
         </p>
       </div>
       <div v-if="log.type === 'counter'"> 
         <p>
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} struck back at
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitId }}
+          {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }} struck back at
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }}
         </p>
         <p>
-          {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} slew
-          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitsLoss }} {{ log.attacker.unitId }}
+          {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }} slew
+          {{ nameById(log.attacker.id) }}'s {{ log.attacker.unitsLoss }} {{ unitName(log.attacker.unitId) }}
         </p>
         <p v-if="log.defender.unitsLoss < 0">
-          {{ nameById(log.defender.id) }} created {{ Math.abs(log.defender.unitsLoss) }} {{ log.defender.unitId }}
+          {{ nameById(log.defender.id) }} created {{ Math.abs(log.defender.unitsLoss) }} {{ unitName(log.defender.unitId) }}
         </p>
       </div>
       <div v-if="log.type === 'burst'">
         <p>
-          {{ log.type }} from {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} slew
-          {{ nameById(log.attacker.id) }} {{ log.attacker.unitsLoss }} {{ log.attacker.unitId }}
+          {{ log.type }} from {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }} slew
+          {{ nameById(log.attacker.id) }} {{ log.attacker.unitsLoss }} {{ unitName(log.attacker.unitId) }}
         </p>
         <p>
-          {{ log.type }} from {{ nameById(log.defender.id) }}'s {{ log.defender.unitId }} slew
-          {{ nameById(log.defender.id) }} {{ log.defender.unitsLoss }} {{ log.defender.unitId }}
+          {{ log.type }} from {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }} slew
+          {{ nameById(log.defender.id) }} {{ log.defender.unitsLoss }} {{ unitName(log.defender.unitId) }}
         </p>
       </div>
       <div v-if="checkGap(report.engagement.logs[idx], report.engagement.logs[idx+1])" style="margin-bottom: 0.5rem" />
@@ -167,39 +167,35 @@
     <h3 class="section-header">Assault Result</h3>
     <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx" class="br-row">
       <p>
-        {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ log.unitId }} were slain in battle
+        {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ unitName(log.unitId) }} were slain in battle
       </p>
       <p>
-        {{ nameById(log.id) }}'s {{ log.unitsHealed }} {{ log.unitId }} resurrected
+        {{ nameById(log.id) }}'s {{ log.unitsHealed }} {{ unitName(log.unitId) }} resurrected
       </p>
     </div>
     <br>
 
     <h3 class="section-header">Summary</h3>
-      <div>
-        <div>Attacker lost
-          {{ report.result.attacker.unitsLoss }} / {{ report.result.attacker.startingUnits }} units and
-          {{ report.result.attacker.armyNetPowerLoss }} power
-        </div>
+    <div>
+      <div>Attacker lost
+        {{ report.result.attacker.unitsLoss }} / {{ report.result.attacker.startingUnits }} units and
+        {{ report.result.attacker.armyNetPowerLoss }} power
       </div>
-      <div>
-        <div>Defender lost
-          {{ report.result.defender.unitsLoss }} / {{ report.result.defender.startingUnits }} units and
-          {{ report.result.defender.armyNetPowerLoss }} power
-        </div>
+    </div>
+    <div>
+      <div>Defender lost
+        {{ report.result.defender.unitsLoss }} / {{ report.result.defender.startingUnits }} units and
+        {{ report.result.defender.armyNetPowerLoss }} power
       </div>
-      <div>
-        <div v-if="report.result.isSuccessful">
-          {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} was successful 
-        </div>
-        <div v-else>
-          {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} failed
-        </div>
+    </div>
+    <div>
+      <div v-if="report.result.isSuccessful">
+        {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} was successful 
       </div>
-      <!--
-        {{ report.summary.attacker }}
-        {{ report.summary.defender }}
-      -->
+      <div v-else>
+        {{ nameById(report.attacker.id) }}'s attack on {{ nameById(report.defender.id)}} failed
+      </div>
+    </div>
     <br>
 
     <h3 class="section-header">Result</h3>
@@ -222,7 +218,7 @@
 import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
-import { readableStr } from '@/util/util';
+import { readableStr, pluralize } from '@/util/util';
 import type { EngagementLog, BattleReport } from 'shared/types/battle';
 
 const props = defineProps<{ id: string }>();
@@ -248,6 +244,10 @@ const nameById = (id: number) => {
     return attackerStr;
   }
   return defenderStr;
+};
+
+const unitName = (name: string) => {
+  return pluralize(readableStr(name));
 };
 
 // Make the battle report easier to read
