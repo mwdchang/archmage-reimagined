@@ -92,6 +92,56 @@
     ]
   },
   {
+    "id": "bubbleWine",
+    "name": "Bubble Wine",
+    "description": "It smells like some kind of alcoholic drink but bubbles keep floating up from the bottom of the wine. It is believed to be the result of an unsuccessful spell casting by an unknown mage. No one knows the recipe of it, but bottles of bubble wine are being brewed somewhere. It is known that those who drink this wine can become a lot tougher and hit a little harder.",
+    "attributes": ["battle", "oneUse"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.10 },
+                  "verdant": { "value": 0.10 },
+                  "eradication": { "value": 0.10 },
+                  "nether": { "value": 0.10 },
+                  "phantasm": { "value": 0.10 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.30 },
+                  "verdant": { "value": 0.30 },
+                  "eradication": { "value": 0.30 },
+                  "nether": { "value": 0.30 },
+                  "phantasm": { "value": 0.30 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "candleOfSleeping",
     "name": "Candle of Sleeping",
     "description": "This red candle, when burned, gives out a sweet-smelling smoke which makes enemies within its range drowsy and eventually fall asleep. Area of Effect: all enemy units",
@@ -1054,6 +1104,60 @@
                   "phantasm": { "value": -1.0 }
                 }
               }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "voodooDoll ",
+    "name": "Voodoo Doll",
+    "description": "This voodoo doll is enchanted by voodoo witch doctors. All you need to do is to write the true name of the person in a piece of yellow paper and put it in the doll. Then stab the doll with a large pin. The victim will then suffer from a severe headache and cannot do anything at all for a while. Once the doll has been stabbed for many times, the magic sealed within is lost.",
+    "attributes": ["oneUse", "instant"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "KingdomResourcesEffect",
+        "rule": "add",
+        "target": "turn",
+        "magic": {
+          "ascendant": { "value": { "min": -3, "max": -8 } },
+          "verdant": { "value": { "min": -3, "max": -8 } },
+          "eradication": { "value": { "min": -3, "max": -8 } },
+          "nether": { "value": { "min": -3, "max": -8 } },
+          "phantasm": { "value": { "min": -3, "max": -8 } }
+        }
+      }
+    ]
+  },
+  {
+    "id": "theHeadOfMedusa",
+    "name": "The Head Of Medusa",
+    "description": "The Head of Medusa has the power to turn people into stone. When the head is drawn out of the sack, those who gaze into its eyes will be horrified, and turn into stone, by its sheer ugliness. After the initial use, the eyes of Medusa will close forever, and all its magical powers will be lost. The possessor must be careful not to take a look into the eyes of the head himself/herself, lest he/she also turn into stone",
+    "attributes": ["oneUse", "battle"],
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetStack": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": ["melee"],
+            "rule": "unitLoss",
+            "magic": {
+              "ascendant": { "value": { "min": 2, "max": 12 }},
+              "verdant": { "value":  { "min": 2, "max": 12 }},
+              "eradication": { "value":  { "min": 2, "max": 12 }},
+              "nether": { "value":  { "min": 2, "max": 12 }},
+              "phantasm": { "value": { "min": 2, "max": 12 }}
             }
           }
         ]

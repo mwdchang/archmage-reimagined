@@ -121,7 +121,7 @@ type DamageValue = number | { min: number, max: number };
 export interface UnitDamageEffect extends Effect {
   checkResistance: boolean;
   damageType: string[],
-  rule: 'direct' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
+  rule: 'direct' | 'unitLoss' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
   magic: {
     [key in AllowedMagic ]: {
       value: DamageValue
@@ -179,7 +179,7 @@ export interface KingdomBuildingsEffect extends Effect {
 
 export interface KingdomResourcesEffect extends Effect {
   rule: 'add' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
-  target: 'population' | 'mana' | 'geld' | 'item',
+  target: 'population' | 'mana' | 'geld' | 'item' | 'turn',
   magic: {
     [key in AllowedMagic]: {
       value: { min: number, max: number }

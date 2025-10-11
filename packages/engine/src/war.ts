@@ -222,9 +222,11 @@ const applyDamageEffect = (
       rawDamage = base * casterSpellLevel * stack.size;
     } else if (rule === 'direct') {
       rawDamage = base;
+    } else  if (rule === 'unitLoss') {
+      rawDamage = base;
     }
 
-    if (rule === 'spellLevelUnitLoss') {
+    if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
       let unitsLoss = Math.floor(rawDamage);
       // Give it a bit of randomness
       unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);
@@ -244,7 +246,7 @@ const applyDamageEffect = (
       });
       console.log(`dealing unitDamage units=${unitsLoss}`);
       return;
-    }
+    } 
 
     const resistance = calcResistance(stack.unit, damageType);
     const damage = rawDamage * ((100 - resistance) / 100);
