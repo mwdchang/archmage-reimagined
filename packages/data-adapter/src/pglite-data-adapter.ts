@@ -357,6 +357,9 @@ WHERE username = '${user.username}'
 
     try {
       await this.db.exec(sql);
+      if (mage.enchantments) {
+        await this.setEnchantments(mage.enchantments);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -518,7 +521,7 @@ WHERE username = '${user.username}'
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`timestamp <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.endTime}`);
     }
 
     if (whereClauses.length > 0) {
@@ -644,7 +647,7 @@ WHERE username = '${user.username}'
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`timestamp <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.endTime}`);
     }
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');

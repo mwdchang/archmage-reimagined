@@ -11,7 +11,7 @@
         <tr>
           <td>Unit</td> 
           <td>Size</td>
-          <td>Power</td>
+          <!--<td>Power</td>-->
           <td>Power %</td>
           <td> 
             <input type="checkbox" v-model="useAllStacks" v-if="battleType !== 'pillage'"> 
@@ -23,7 +23,9 @@
             <router-link :to="{ name: 'viewUnit', params: { id: stack.id }}"> {{ stack.name }} </router-link>
           </td>
           <td class="text-right"> {{ readbleNumber(stack.size) }} </td>
+          <!--
           <td class="text-right"> {{ readbleNumber(stack.power) }} </td>
+          -->
           <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
           <td>
               <input type="checkbox" v-model="stack.active" v-if="battleType !== 'pillage'">

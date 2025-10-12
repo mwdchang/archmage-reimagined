@@ -14,7 +14,7 @@ import { between, betweenInt, randomBM, randomInt, randomWeighted } from './rand
 import { hasAbility } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
-    calcKingdomResistance,
+  calcKingdomResistance,
   castingCost,
   successCastingRate
 } from './magic';
@@ -222,9 +222,11 @@ const applyDamageEffect = (
       rawDamage = base * casterSpellLevel * stack.size;
     } else if (rule === 'direct') {
       rawDamage = base;
+    } else  if (rule === 'unitLoss') {
+      rawDamage = base;
     }
 
-    if (rule === 'spellLevelUnitLoss') {
+    if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
       let unitsLoss = Math.floor(rawDamage);
       // Give it a bit of randomness
       unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);
@@ -244,7 +246,7 @@ const applyDamageEffect = (
       });
       console.log(`dealing unitDamage units=${unitsLoss}`);
       return;
-    }
+    } 
 
     const resistance = calcResistance(stack.unit, damageType);
     const damage = rawDamage * ((100 - resistance) / 100);
@@ -607,12 +609,15 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       attacker.mage.currentMana -= cost;
 
       const castingRate = successCastingRate(attacker.mage, attacker.spellId);
+      const roll1 = Math.random() * 100;
+      const roll2 = Math.random() * 100;
+
       if (Math.random() * 100 > castingRate) {
         preBattle.attacker.spellResult = 'lostConcentration';
-      } else if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.spellResult = 'barriers';
       } else {
-        if (Math.random() * 100 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+        if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
           preBattle.attacker.spellResult = 'barriers';
         } else {
           preBattle.attacker.spellResult = 'success';
@@ -627,7 +632,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
 
-      if (Math.random() * 100 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+      const roll = Math.random() * 100;
+      if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
         preBattle.attacker.itemResult = 'barriers';
       } else {
         preBattle.attacker.itemResult = 'success';
@@ -638,28 +644,35 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     }
   }
 
-  if (defender.spellId) {
-    const cost = castingCost(defender.mage, defender.spellId);
-    if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-      defender.mage.currentMana -= cost;
+  if (defender.mage.type === 'bot') {
+    preBattle.defender.spellResult = 'success';
+    hasDefenderSpell = true;
+    preBattle.defender.itemResult = 'success';
+    hasDefenderItem = true;
+  } else {
+    if (defender.spellId) {
+      const cost = castingCost(defender.mage, defender.spellId);
+      if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
+        defender.mage.currentMana -= cost;
 
-      const castingRate = successCastingRate(defender.mage, defender.spellId);
-      if (Math.random() * 100 > castingRate) {
-        preBattle.defender.spellResult = 'lostConcentration';
+        const castingRate = successCastingRate(defender.mage, defender.spellId);
+        if (Math.random() * 100 > castingRate) {
+          preBattle.defender.spellResult = 'lostConcentration';
+        }
+        preBattle.defender.spellResult = 'success';
+        hasDefenderSpell = true;
+      } else {
+        preBattle.defender.spellResult = 'noMana';
       }
-      preBattle.defender.spellResult = 'success';
-      hasDefenderSpell = true;
-    } else {
-      preBattle.defender.spellResult = 'noMana';
     }
-  }
-  if (defender.itemId) {
-    if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-      defender.mage.items[defender.itemId] --;
-      preBattle.defender.itemResult = 'success';
-      hasDefenderItem = true;
-    } else {
-      preBattle.defender.itemResult = 'noItem';
+    if (defender.itemId) {
+      if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
+        defender.mage.items[defender.itemId] --;
+        preBattle.defender.itemResult = 'success';
+        hasDefenderItem = true;
+      } else {
+        preBattle.defender.itemResult = 'noItem';
+      }
     }
   }
 
@@ -847,7 +860,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';
-      if (hasAbility(dUnit, 'bursting') && isPillage === true) {
+      if (hasAbility(dUnit, 'bursting') && isPillage === false) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {

@@ -94,7 +94,7 @@ import {
 import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
-import { createBot } from './bot';
+import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceIncrease } from './blackmarket';
@@ -293,6 +293,11 @@ class Engine {
     for (let i = 0; i < 5; i++) {
       if (Math.random() > 0.7) {
         const item = getRandomItem();
+
+        if (priceMap.has(item.id) === false) {
+          continue;
+        }
+
         await this.adapter.addMarketItem({
           id: uuidv4(),
           priceId: item.id,
@@ -1283,7 +1288,12 @@ class Engine {
         throw new Error('Cannot recruit negative amount of units');
       }
       const unit = getUnitById(au.id);
-      if (unit.magic !== mage.magic || unit.attributes.includes('special') === false) {
+
+      if (unit.attributes.includes('special') === false) {
+        throw new Error(`Cannot recruit ${unit.id}`);
+      }
+
+      if (unit.magic !== mage.magic && unit.magic !== 'plain') { 
         throw new Error(`Cannot recruit ${unit.id}`);
       }
     }
@@ -1439,14 +1449,20 @@ class Engine {
       // Check if defense assignment is triggered
       const attackerArmyNP = totalArmyPower(attacker.army);
       const defenderArmyNP = totalArmyPower(defender.army);
-      const ratio = 100 * (attackerArmyNP / defenderArmyNP);
 
-      const assignment = defender.mage.assignment;
-      if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
-        defender.spellId = assignment.spellId;
-      }
-      if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
-        defender.itemId = assignment.itemId;
+      if (defender.mage.type === 'bot') {
+        const botAssignment = getBotAssignment(defender.mage.magic as any);
+        defender.spellId = botAssignment.spellId;
+        defender.itemId = botAssignment.itemId;
+      } else {
+        const ratio = 100 * (attackerArmyNP / defenderArmyNP);
+        const assignment = defender.mage.assignment;
+        if (assignment.spellCondition > -1 && ratio >= assignment.spellCondition) {
+          defender.spellId = assignment.spellId;
+        }
+        if (assignment.itemCondition > -1 && ratio >= assignment.itemCondition) {
+          defender.itemId = assignment.itemId;
+        }
       }
     }
 
@@ -1514,6 +1530,11 @@ class Engine {
     reportSummary.defenderPowerLoss = Math.max(0, (result.defender.startNetPower - result.defender.endNetPower));
     reportSummary.attackerPowerLossPercentage = reportSummary.attackerPowerLoss / result.attacker.startNetPower;
     reportSummary.defenderPowerLossPercentage = reportSummary.defenderPowerLoss / result.defender.startNetPower;
+
+    // Log 2% for every pillage
+    if (battleType === 'pillage' && isPillageSuccess === true) {
+      reportSummary.defenderPowerLossPercentage = 0.02;
+    }
 
     // epidemic: attacker to defender
     mage.enchantments.forEach(enchantment => {
@@ -1600,10 +1621,30 @@ class Engine {
   }
 
   async getBattleReport(mage: Mage, reportId: string) {
-    // TODO: Obfuscate based on which side
-
     const report = await this.adapter.getBattleReport(reportId);
+
+    if (gameTable.war.obfuscateReport === false) {
+      return report
+    }
+
+    // Obfuscate defender army
+    if (mage.id === report.attacker.id) {
+      report.defender.army.forEach(d => {
+        d.size = null;
+      });
+    }
+
+    // Obfuscate attacker army
+    if (mage.id === report.defender.id) {
+      report.attacker.army.forEach(d => {
+        d.size = null;
+      })
+    }
+    return report;
+
+    /*
     if (report) {
+
       if (typeof report === 'string') {
         return JSON.parse(report) as BattleReport;
       } else {
@@ -1612,11 +1653,14 @@ class Engine {
     } else {
       return null;
     }
+    */
   }
 
   async getMageBattles(mage: Mage) {
     return await this.adapter.getBattles({ 
       mageId: mage.id,
+      endTime: Date.now(),
+      startTime: Date.now() - (24 * 60 * 60 * 1000),
       limit: 100
     });
   }

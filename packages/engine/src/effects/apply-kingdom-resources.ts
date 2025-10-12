@@ -39,6 +39,8 @@ export const applyKingdomResourcesEffect = (
       value = mage.currentMana * base * spellPowerScale;
     } else  if (effect.target === 'geld') {
       value = mage.currentGeld * base * spellPowerScale;
+    } else if (effect.target === 'turn') {
+      throw new Error('addSpellLevelPercentage not supported for turns');
     }
   } else if (effect.rule === 'add') {
     value = base;
@@ -99,6 +101,15 @@ export const applyKingdomResourcesEffect = (
     }
     result.target = 'item';
     result.value = value;
+  } else if (effect.target === 'turn') {
+    if (mage.currentTurn + value <= 0) {
+      value = -mage.currentTurn;
+    }
+    mage.currentTurn += value;
+
+    result.target = 'turn';
+    result.value = value;
+    console.log(`mage(#${mage.id}) lost ${value} turns`);
   }
 
   return result;

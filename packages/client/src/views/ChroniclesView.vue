@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="section-header">Previous Engagements</div>
+    <div class="section-header">Engagements in last 24 hours</div>
     <br>
     <div v-for="(d, idx) of chronicles" :key="idx" style="margin-bottom: 10px"> 
       <div class="row" style="max-width: 35rem; gap: 10px; align-items: flex-start">

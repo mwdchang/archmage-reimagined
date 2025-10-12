@@ -173,3 +173,85 @@ export const readableDate = (date: Date | string | number) => {
     timeZone: 'UTC'
   }).format(d) + ' UTC';
 };
+
+
+const irregularPlurals = {
+  man: 'men',
+  woman: 'women',
+  child: 'children',
+  person: 'people',
+  mouse: 'mice',
+  goose: 'geese',
+  foot: 'feet',
+  tooth: 'teeth',
+  elf: 'elves',
+  shelf: 'shelves',
+  wolf: 'wolves',
+  knife: 'knives',
+  life: 'lives',
+  leaf: 'leaves',
+  cactus: 'cacti',
+  focus: 'foci',
+  fungus: 'fungi',
+  nucleus: 'nuclei',
+  syllabus: 'syllabi',
+  analysis: 'analyses',
+  thesis: 'theses',
+  crisis: 'crises',
+  axis: 'axes',
+  oasis: 'oases',
+  index: 'indices',
+  appendix: 'appendices'
+};
+
+
+function pluralizeWord(word: string) {
+  const lower = word.toLowerCase();
+
+  // Irregular word
+  if (irregularPlurals[lower]) {
+    const plural = irregularPlurals[lower];
+    return matchCase(word, plural);
+  }
+
+  // Regular rules
+  if (word.match(/[^aeiou]y$/i)) {
+    return word.replace(/y$/i, 'ies');
+  }
+
+  if (word.match(/(s|x|z|ch|sh)$/i)) {
+    return word + 'es';
+  }
+
+  if (word.match(/f$/i)) {
+    return word.replace(/f$/i, 'ves');
+  }
+
+  if (word.match(/fe$/i)) {
+    return word.replace(/fe$/i, 'ves');
+  }
+
+  return word + 's';
+}
+
+// Preserve original casing
+function matchCase(original: string, replacement: string) {
+  if (original === original.toUpperCase()) return replacement.toUpperCase();
+  if (original[0] === original[0].toUpperCase()) {
+    return replacement[0].toUpperCase() + replacement.slice(1);
+  }
+  return replacement;
+}
+
+export const pluralize = (input: string) => {
+  const words = input.trim().split(/\s+/);
+  if (words.length === 1) {
+    return pluralizeWord(words[0]);
+  }
+
+  // Pluralize the last word (assumed to be the noun)
+  const last = words.pop();
+  const pluralLast = pluralizeWord(last!);
+  return [...words, pluralLast].join(' ');
+}
+

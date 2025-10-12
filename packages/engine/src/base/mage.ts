@@ -38,7 +38,7 @@ export const createMage = (id: number, name: string, magic: string, override?:Pa
 
     currentPopulation: 60000,
     currentMana: 10000,
-    currentGeld: 4000000,
+    currentGeld: 8000000,
 
     farms: mageStartTable.buildings.farms,
     towns: mageStartTable.buildings.towns,
