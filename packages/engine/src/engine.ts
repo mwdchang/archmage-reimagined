@@ -1531,6 +1531,11 @@ class Engine {
     reportSummary.attackerPowerLossPercentage = reportSummary.attackerPowerLoss / result.attacker.startNetPower;
     reportSummary.defenderPowerLossPercentage = reportSummary.defenderPowerLoss / result.defender.startNetPower;
 
+    // Log 2% for every pillage
+    if (battleType === 'pillage' && isPillageSuccess === true) {
+      reportSummary.defenderPowerLossPercentage = 0.02;
+    }
+
     // epidemic: attacker to defender
     mage.enchantments.forEach(enchantment => {
       if (enchantment.isEpidemic && Math.random() < EPIDEMIC_RATE) {
@@ -1654,6 +1659,8 @@ class Engine {
   async getMageBattles(mage: Mage) {
     return await this.adapter.getBattles({ 
       mageId: mage.id,
+      endTime: Date.now(),
+      startTime: Date.now() - (24 * 60 * 60 * 1000),
       limit: 100
     });
   }

@@ -521,7 +521,7 @@ WHERE username = '${user.username}'
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`timestamp <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.endTime}`);
     }
 
     if (whereClauses.length > 0) {
@@ -647,7 +647,7 @@ WHERE username = '${user.username}'
       whereClauses.push(`timestamp >= ${options.startTime}`);
     }
     if (options.endTime !== undefined) {
-      whereClauses.push(`timestamp <= ${options.startTime}`);
+      whereClauses.push(`timestamp <= ${options.endTime}`);
     }
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
