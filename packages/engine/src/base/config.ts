@@ -7,7 +7,8 @@ export const gameTable: GameTable = {
   turnRate: 180,
 
   war: {
-    range: { min: 0.80, max: 1.25 }
+    obfuscateReport: true,
+    range: { min: 0.01, max: 99.99 }
   },
 
   blackmarket: {
@@ -40,6 +41,20 @@ export const mageStartTable = {
     barriers: 0,
     wilderness: 181
   }
+
+  /*
+  buildings: {
+    farms: 150,
+    towns: 60,
+    workshops: 150,
+    nodes: 30,
+    barracks: 10,
+    guilds: 10,
+    forts: 9,
+    barriers: 0,
+    wilderness: 181
+  }
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -28,10 +28,11 @@ export interface GameTable {
   turnRate: number;
 
   war: {
+    obfuscateReport: boolean,
     range: {
       min: number;
       max: number;
-    }
+    },
   },
 
   blackmarket: {

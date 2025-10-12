@@ -293,6 +293,11 @@ class Engine {
     for (let i = 0; i < 5; i++) {
       if (Math.random() > 0.7) {
         const item = getRandomItem();
+
+        if (priceMap.has(item.id) === false) {
+          continue;
+        }
+
         await this.adapter.addMarketItem({
           id: uuidv4(),
           priceId: item.id,
@@ -1611,10 +1616,30 @@ class Engine {
   }
 
   async getBattleReport(mage: Mage, reportId: string) {
-    // TODO: Obfuscate based on which side
-
     const report = await this.adapter.getBattleReport(reportId);
+
+    if (gameTable.war.obfuscateReport === false) {
+      return report
+    }
+
+    // Obfuscate defender army
+    if (mage.id === report.attacker.id) {
+      report.defender.army.forEach(d => {
+        d.size = null;
+      });
+    }
+
+    // Obfuscate attacker army
+    if (mage.id === report.defender.id) {
+      report.attacker.army.forEach(d => {
+        d.size = null;
+      })
+    }
+    return report;
+
+    /*
     if (report) {
+
       if (typeof report === 'string') {
         return JSON.parse(report) as BattleReport;
       } else {
@@ -1623,6 +1648,7 @@ class Engine {
     } else {
       return null;
     }
+    */
   }
 
   async getMageBattles(mage: Mage) {
