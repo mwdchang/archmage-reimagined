@@ -82,7 +82,7 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
-import { mageName } from './util';
+import { mageName, readableStr } from './util';
 import { 
   fromKingdomArmyEffectResult,
   fromKingdomBuildingsEffectResult,
@@ -98,6 +98,7 @@ import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceIncrease } from './blackmarket';
+import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -347,7 +348,7 @@ class Engine {
           }
           logs.push({
             type: 'log',
-            message: `added ${res[key]} ${key} into your army`
+            message: `${res[key]} ${readableStr(key)} joined your army`
           });
         });
       }
@@ -467,7 +468,7 @@ class Engine {
       mage.recruitments[i].size -= recruits[i].size;
       turnLogs.push({
         type: 'log',
-        message: `You recruited ${recruits[i].size} units of ${recruits[i].id}`
+        message: `You recruited ${recruits[i].size} units of ${readableStr(recruits[i].id)}`
       });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
@@ -686,13 +687,13 @@ class Engine {
     if (researchItem) {
       turnLogs.push({
         type: 'log',
-        message: `You are researching ${researchItem.id}`
+        message: `You are researching ${readableStr(researchItem.id)}`
       });
     }
     if (mage.enchantments.length > 0) {
       turnLogs.push({
         type: 'log',
-        message: `You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`
+        message: `You are under the power of ${mage.enchantments.map(d => readableStr(d.spellId)).join(', ')}`
       });
     }
     turnLogs.push({
@@ -981,7 +982,6 @@ class Engine {
           type: 'error',
           message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
         });
-        console.log('============ no mana');
         continue;
       }
       if (mage.currentTurn < castingTurn) {
@@ -989,7 +989,6 @@ class Engine {
           type: 'error',
           message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
         });
-        console.log('============ no turn');
         continue;
       }
       
@@ -1059,6 +1058,52 @@ class Engine {
         }
         await this.adapter.updateMage(mage);
         await this.adapter.updateMage(targetMage);
+
+        const timestamp = Date.now();
+
+        // Target gets notification in log
+        this.adapter.saveChronicles([
+          {
+            id: targetMage.id,
+            name: targetMage.name,
+            turn: targetMage.turnsUsed,
+            timestamp: timestamp,
+            data: [
+              {
+                type: 'log',
+                message: `${mage.name} (# ${mage.id}) casted ${readableStr(spellId)} on your kingdom`
+              }
+            ]
+          }
+        ]);
+
+        // The caster gives a counter, we will use a dummy report
+        const reportId = uuidv4();
+        const reportSummary: BattleReportSummary = {
+          id: reportId,
+          timestamp: timestamp,
+          attackType: spellId,
+
+          attackerId: mage.id,
+          attackerName: mage.name,
+          attackerStartingUnits: 0,
+          attackerUnitsLoss: 0,
+          attackerPowerLoss: 0,
+          attackerPowerLossPercentage: 0,
+
+          defenderId: targetMage.id,
+          defenderName: targetMage.name,
+          defenderStartingUnits: 0,
+          defenderUnitsLoss: 0,
+          defenderPowerLoss: 0,
+          defenderPowerLossPercentage: 0.02,
+
+          isSuccessful: true,
+          isDefenderDefeated: targetMage.forts > 0 ? false : true,
+          landGain: 0,
+          landLoss: 0
+        };
+        await this.adapter.saveBattleReport(mage.id, reportId, null, reportSummary);
       }
     }
     return logs;

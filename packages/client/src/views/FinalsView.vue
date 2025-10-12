@@ -13,13 +13,41 @@
     <p> 
       Terra has been obliterated, these are the mages who have gained their place in the Hall of Immmortality
     </p>
+
+    <table> 
+      <thead>
+        <tr>
+          <td>Rank</td>
+          <td>Name</td>
+          <td>&nbsp;</td>
+          <td>Land</td>
+          <td>Fort</td>
+          <td>Power</td>
+          <td>Status</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(rank) of rankList" :key="rank.id">
+          <td class="text-right"> {{ rank.rank }} </td>
+          <td> {{ rank.name }} (#{{ rank.id }}) </td>
+          <td> <magic :magic="rank.magic" small /> </td>
+          <td class="text-right"> {{ readbleNumber(rank.land) }} </td>
+          <td class="text-right"> {{ rank.forts }} </td>
+          <td class="text-right"> {{ readbleNumber(rank.netPower) }} </td>
+          <td>{{ rank.status }}</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { API } from '@/api/api';
 import { onMounted, ref } from 'vue';
-import { ServerClock } from 'shared/types/common';
+import { MageRank, ServerClock } from 'shared/types/common';
+import { readbleNumber } from '@/util/util';
+
+const rankList = ref<MageRank[]>([]);
 
 const resetEnded = ref(false);
 const serverClock = ref<ServerClock>();
@@ -31,6 +59,10 @@ onMounted(async () => {
     resetEnded.value = true;
   }
   serverClock.value = clock;
+
+  if (resetEnded.value === true) {
+    rankList.value = (await API.get('ranklist')).data.rankList;
+  }
 });
 
 </script>

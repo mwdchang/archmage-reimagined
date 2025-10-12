@@ -502,6 +502,7 @@ WHERE username = '${user.username}'
   async getBattles(options: SearchOptions) {
     let sqlQuery = 'SELECT * from battle_summary ';
     const whereClauses: string[] = [];
+    whereClauses.push(`attack_type in ('pillage', 'regular', 'siege')`);
 
     if (options.mageId) {
       whereClauses.push(`(attacker_id = ${options.mageId} OR defender_id = ${options.mageId})`);
@@ -603,10 +604,12 @@ WHERE username = '${user.username}'
       )
     `);
 
-    await this.db.exec(`
-      INSERT INTO battle_report(id, data) 
-      VALUES (${Q(reportId)}, ${Q(JSON.stringify(report))})
-    `);
+    if (report) {
+      await this.db.exec(`
+        INSERT INTO battle_report(id, data) 
+        VALUES (${Q(reportId)}, ${Q(JSON.stringify(report))})
+      `);
+    }
 
     this.refreshRankView();
   }
