@@ -217,6 +217,11 @@ class Engine {
     await this.serverTurn();
     const c = await this.getServerClock();
     this.currentTurn = c.currentTurn;
+
+    if (this.currentTurn > c.endTurn) {
+      console.log('=== Reset finished ===');
+      return;
+    }
     console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
