@@ -59,7 +59,9 @@ const formatEpochToUTC = (epochMillis: number) => {
 
 onMounted(async () => {
   const res = (await API.get<{ battles: BattleReportSummary[]}>(`/mage-battles`)).data;
-  chronicles.value = res.battles;
+  chronicles.value = res.battles.filter(d => {
+    return ['siege', 'regular', 'pillage'].includes(d.attackType) === true;
+  });;
 });
 </script>
 

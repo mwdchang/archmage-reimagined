@@ -183,9 +183,9 @@ export class SimpleDataAdapter extends DataAdapter {
 
   async getBattles(options: SearchOptions) {
     return this.battleSummaryTable.filter(s => {
-      if (['pillage', 'regular', 'siege'].includes(s.attackType)) {
-        return false;
-      }
+      // if (['pillage', 'regular', 'siege'].includes(s.attackType)) {
+      //   return false;
+      // }
 
       if (options.endTime && options.endTime > s.timestamp) {
         return false;
