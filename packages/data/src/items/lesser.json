@@ -20,11 +20,11 @@
               "primaryAttackInit,secondaryAttackInit": {
                 "rule": "add",
                 "magic": {
-                  "ascendant": { "value": 5 },
-                  "verdant": { "value": 5 },
-                  "eradication": { "value": 5 },
-                  "nether": { "value": 5 },
-                  "phantasm": { "value": 5 }
+                  "ascendant": { "value": 6 },
+                  "verdant": { "value": 6 },
+                  "eradication": { "value": 6 },
+                  "nether": { "value": 6 },
+                  "phantasm": { "value": 6 }
                 }
               }
             }
