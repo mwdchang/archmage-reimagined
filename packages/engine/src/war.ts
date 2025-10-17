@@ -631,6 +631,9 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   if (attacker.itemId) {
     if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
       attacker.mage.items[attacker.itemId] --;
+      if (attacker.mage.items[attacker.itemId] <= 0) {
+        delete attacker.mage.items[attacker.itemId];
+      }
 
       const roll = Math.random() * 100;
       if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
@@ -668,6 +671,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (defender.itemId) {
       if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
         defender.mage.items[defender.itemId] --;
+        if (defender.mage.items[defender.itemId] <= 0) {
+          delete defender.mage.items[defender.itemId];
+        }
+        
         preBattle.defender.itemResult = 'success';
         hasDefenderItem = true;
       } else {

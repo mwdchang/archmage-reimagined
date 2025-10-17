@@ -41,7 +41,7 @@
         <input type="text" v-model="target" tabindex=2 />
 
         <label># of times</label> 
-        <input type="text" v-model="turns" tabindex=3 />
+        <input type="number" v-model="turns" tabindex=3 />
 
         <button @click="castSpell">Cast spell</button>
       </section>

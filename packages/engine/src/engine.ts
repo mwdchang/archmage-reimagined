@@ -851,6 +851,9 @@ class Engine {
           continue;
         } else {
           mage.items[itemId] --;
+          if (mage.items[itemId] <= 0) {
+            delete mage.items[itemId];
+          }
         }
 
         logs.push(...await this.useItemOpponent(mage, item, targetMage));
@@ -867,6 +870,9 @@ class Engine {
           continue;
         } else {
           mage.items[itemId] --;
+          if (mage.items[itemId] <= 0) {
+            delete mage.items[itemId];
+          }
         }
 
         logs.push(...await this.useItemSelf(mage, item));
@@ -1836,14 +1842,14 @@ class Engine {
   }
 
   // FIXME: error messages
-  async makeMarketBids(mageId: number, bids: Bid[]): Promise<boolean> {
+  async makeMarketBids(mageId: number, bids: Bid[]): Promise<Mage> {
     const mage = await this.adapter.getMage(mageId);
 
     for (const bid of bids) {
       const item = await this.adapter.getMarketItem(bid.marketId);
 
       if (bid.bid > mage.currentGeld) {
-        return false;
+        continue;
       }
       if (bid.bid <= item.basePrice || bid.bid <= 0) {
         continue;
@@ -1860,7 +1866,7 @@ class Engine {
 
     await this.useTurn(mage);
     await this.adapter.updateMage(mage);
-    return true;
+    return mage;
   }
 
   async getMarketBids(priceId: string) {
