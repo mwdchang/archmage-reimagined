@@ -43,7 +43,7 @@ export class SimpleDataAdapter extends DataAdapter {
     endTurn: 0
   }
 
-  mageSeq: 0;
+  mageSeq:number = 0;
 
   constructor() { super(); }
 
@@ -109,7 +109,8 @@ export class SimpleDataAdapter extends DataAdapter {
   }
 
   async nextMageId(): Promise<number> {
-    return ++this.mageSeq;
+    this.mageSeq++;
+    return this.mageSeq;
   }
 
   async createMage(username: string, mage: Mage) {

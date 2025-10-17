@@ -497,7 +497,11 @@ const battleItem = (
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (eff.effectType === 'UnitDamageEffect') {
           const damageEffect = eff as UnitDamageEffect;
-          applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          logs.push(...damageLogs);
+        } else if (eff.effectType === 'UnitHealEffect') {
+          const healEffect = eff as UnitHealEffect;
+          applyHealEffect(effectOrigin, healEffect, affectedArmy);
         } else if (eff.effectType === 'TemporaryUnitEffect') {
           const tempUnitEffect = eff as TemporaryUnitEffect;
           const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
@@ -790,7 +794,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       }
 
       if (unitLoss > 0) {
-        console.log('!!!', stack.unit.id, unitLoss)
         stack.sustainedDamage = 0;
       }
       stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
@@ -816,7 +819,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       }
 
       if (unitLoss > 0) {
-        console.log('!!!', stack.unit.id, unitLoss)
         stack.sustainedDamage = 0;
       }
       stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
@@ -871,7 +873,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {
-          console.log('handle burst', burstingAbility);
 
           // default
           let burstingType = dUnit.primaryAttackType;
