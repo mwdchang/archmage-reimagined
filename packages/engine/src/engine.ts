@@ -1011,7 +1011,6 @@ class Engine {
           type: 'error',
           message: `You lost your concentration`
         });
-        console.log('============ no concentration');
         castingSuccessful = false;
       }
 
@@ -1028,7 +1027,6 @@ class Engine {
             type: 'error',
             message: `You spell hit the barriers and fizzled.`
           });
-          console.log('============ fizzled on barriers');
           castingSuccessful = false;
         } 
       }

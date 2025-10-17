@@ -97,8 +97,6 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
       moveDown = num;
     }
 
-    // console.log(armyItem.id, moveUp, moveDown);
-    
     return {
       ...armyItem,
       moveUp: moveUp,
@@ -117,11 +115,9 @@ const disbandUnits = async () => {
     };
   });
 
-  console.log('>>>>>>>>>', payload);
-
-
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
+    confirmDisband.value = false;
     return API.post('/disband', { disbands: payload });
   });
 
