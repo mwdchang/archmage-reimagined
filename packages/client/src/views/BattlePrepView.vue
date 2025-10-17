@@ -138,6 +138,9 @@ const battleItems = computed(() => {
     attributes: [],
     amount: 0
   }
+
+  result.sort((a, b) => a.id.localeCompare(b.id));
+
   result.unshift(noItem);
 
   return result;

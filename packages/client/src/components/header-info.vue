@@ -39,8 +39,12 @@
           <Barchart :value="populationVal" color="#F88" style="height: 2px" />
         </td>
         <td> 
-          <div class="row" style="gap: 2px">
-            <magic v-for="(enchant, idx) of mage.enchantments" :Key="idx" :magic="enchantMagic(enchant)" small />
+          <div class="row" style="gap: 1px">
+            <magic v-for="(enchant) of mage.enchantments" 
+              :key="enchant.id" 
+              :magic="enchantMagic(enchant)" 
+              :title="readableStr(enchant.spellId)"
+              small />
           </div>
         </td>
       </tr>
@@ -55,7 +59,7 @@ import { totalLand } from 'engine/src/base/mage';
 import magic from './magic.vue';
 import SvgIcon from './svg-icon.vue';
 import Barchart from './barchart.vue';
-import { readbleNumber, enchantMagic } from '@/util/util';
+import { readbleNumber, readableStr, enchantMagic } from '@/util/util';
 import { Mage } from 'shared/types/mage';
 import { maxMana } from 'engine/src/magic';
 import { maxPopulation } from 'engine/src/interior';

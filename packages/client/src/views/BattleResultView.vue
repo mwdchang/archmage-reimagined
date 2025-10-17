@@ -84,6 +84,9 @@
           <div v-if="preBattle.attacker.itemResult === 'barriers'">
             The item hit barriers and fizzled.
           </div>
+          <div v-if="preBattle.attacker.itemResult === 'noItem'">
+            Item not available
+          </div>
         </div>
       </div>
       <div>

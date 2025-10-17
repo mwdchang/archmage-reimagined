@@ -36,9 +36,14 @@
           </div>
         </td>
         <td>
-          <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+          <div v-if="['pillage', 'regular', 'siege'].includes(summary.attackType)">
+            <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+              {{ readableStr(summary.attackType) }}
+            </router-link>
+          </div>
+          <div v-else>
             {{ readableStr(summary.attackType) }}
-          </router-link>
+          </div>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
@@ -68,9 +73,14 @@
           </div>
         </td>
         <td>
-          <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+          <div v-if="['pillage', 'regular', 'siege'].includes(summary.attackType)">
+            <router-link :to="{ name: 'battleResult', params: { id: summary.id }}">
+              {{ readableStr(summary.attackType) }}
+            </router-link>
+          </div>
+          <div v-else>
             {{ readableStr(summary.attackType) }}
-          </router-link>
+          </div>
         </td>
         <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>

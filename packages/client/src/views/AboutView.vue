@@ -192,6 +192,7 @@ section {
 }
 
 .chronicles {
+  max-width: 45rem;
   display: flex;
   flex-direction: column;
   font-size: 14px;

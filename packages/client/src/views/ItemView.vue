@@ -43,7 +43,7 @@
         <input type="text" v-model="target" />
 
         <label># of times</label>
-        <input type="text" v-model="turns" />
+        <input type="number" v-model="turns" />
 
         <button @click="useItem">Use Item</button>
       </section>
