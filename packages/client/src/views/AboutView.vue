@@ -173,16 +173,12 @@ const spellLevel = computed(() => {
   return currentSpellLevel(mageStore.mage!);
 });
 
-
-
 onMounted(async () => {
   const res = await API.get<{ chronicles: ChronicleTurn[]}>('/chronicles');
   logs.value = res.data.chronicles;
 
   gameTable.value = (await API.get<GameTable>('/game-table')).data;
 });
-
-
 
 </script>
 

@@ -443,6 +443,7 @@ class Engine {
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
 
+
     const maxPop = realMaxPopulation(mage);
     if (mage.currentPopulation >= maxPop) {
       mage.currentPopulation = maxPop;
@@ -1845,6 +1846,10 @@ class Engine {
 
     for (const bid of bids) {
       const item = await this.adapter.getMarketItem(bid.marketId);
+
+      if (!item) {
+        continue;
+      }
 
       if (bid.bid > mage.currentGeld) {
         continue;

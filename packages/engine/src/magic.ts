@@ -154,6 +154,8 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
     power *= magicBase;
   } else if (effect.rule === 'fixed') {
     power = effect.summonNetPower;
+  } else if (effect.rule === 'power') {
+    power = (0.5 + 0.75 * randomBM()) * effect.summonNetPower;
   }
 
 

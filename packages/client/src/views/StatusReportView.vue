@@ -151,9 +151,9 @@
           </tr>
           <tr>
             <td> Net income </td>
-            <td class="text-right"> {{ readbleNumber(netStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(netStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(netStatus.population) }} </td>
+            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.geld) }} </td>
+            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.population) }} </td>
           </tr>
         </tbody>
       </table>
@@ -272,17 +272,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
+import { useEngine } from '@/composables/useEngine';
 import { storeToRefs } from 'pinia'
 import { 
   maxPopulation,
   maxFood,
   spacesForUnits,
-  geldIncome,
-  populationIncome,
-  armyUpkeep,
-  buildingUpkeep,
   realMaxPopulation,
-  recruitUpkeep
 } from 'engine/src/interior';
 
 import { 
@@ -293,10 +289,8 @@ import {
 } from 'engine/src/base/mage';
 import { 
   maxSpellLevel,
-  manaIncome,
   maxMana,
   calcKingdomResistance,
-enchantmentUpkeep,
 } from 'engine/src/magic';
 import {
   getArmy, conditionString
@@ -306,8 +300,15 @@ import { readbleNumber, readableStr } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';
 
 const mageStore = useMageStore();
-const totalArmyPower = ref(0);
 const { mage } = storeToRefs(mageStore);
+const { 
+  productionStatus,
+  armyUpkeepStatus,
+  buildingUpkeepStatus,
+  recruitUpkeepStatus,
+  enchantmentUpkeepStatus,
+  netUpkeepStatus
+} = useEngine();
 
 const numberFormatter = (v: number) => {
   return v.toFixed(2);
@@ -331,58 +332,12 @@ const resistanceStatus = computed(() => {
   return calcKingdomResistance(mageStore.mage!);
 });
 
-const productionStatus = computed(() => {
-  const geld = geldIncome(mageStore.mage!);
-  const mana = manaIncome(mageStore.mage!);
-  const population = populationIncome(mageStore.mage!);
-  return { geld, mana, population };
-});
-
-const armyUpkeepStatus = computed(() => {
-  return armyUpkeep(mageStore.mage!);
-});
-
-const recruitUpkeepStatus = computed(() => {
-  return recruitUpkeep(mageStore.mage!);
-});
-
-const buildingUpkeepStatus = computed(() => {
-  return buildingUpkeep(mageStore.mage!);
-});
-
-const enchantmentUpkeepStatus = computed(() => {
-  return enchantmentUpkeep(mageStore.mage!);
-});
-
-const netStatus = computed(() => {
-  const geld = productionStatus.value.geld
-    - armyUpkeepStatus.value.geld 
-    - buildingUpkeepStatus.value.geld
-    - enchantmentUpkeepStatus.value.geld
-    - recruitUpkeepStatus.value.geld;
-
-  const mana = productionStatus.value.mana
-    - armyUpkeepStatus.value.mana
-    - buildingUpkeepStatus.value.mana
-    - enchantmentUpkeepStatus.value.mana
-    - recruitUpkeepStatus.value.mana;
-
-  const population = productionStatus.value.population
-    - armyUpkeepStatus.value.population
-    - buildingUpkeepStatus.value.population
-    - enchantmentUpkeepStatus.value.population
-    - recruitUpkeepStatus.value.population;
-
-  return { geld, mana, population };
-});
-
 const unitsStatus = computed(() => {
   if (!mageStore.mage) return []
   let rawArmy = getArmy(mageStore.mage);
 
   return rawArmy.sort((a, b) => b.power - a.power);
 });
-
 
 </script>
 
