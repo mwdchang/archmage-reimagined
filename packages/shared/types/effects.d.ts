@@ -148,7 +148,7 @@ export interface UnitHealEffect extends Effect {
 export interface UnitSummonEffect extends Effect {
   unitIds: string[],
   summonType: 'random' | 'all',
-  rule: 'spellLevel' | 'fixed',
+  rule: 'spellLevel' | 'fixed' | 'power',
   summonNetPower: number,
   magic: {
     [key in AllowedMagic]: {

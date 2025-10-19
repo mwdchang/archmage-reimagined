@@ -11,7 +11,7 @@ import {
   StealEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
-import { hasAbility } from "./base/unit";
+import { hasAbility, isRanged } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
   calcKingdomResistance,
@@ -869,7 +869,12 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';
-      if (hasAbility(dUnit, 'bursting') && isPillage === false) {
+
+      const canTriggerBurst = isRanged(aUnit) == false && 
+        aUnit.primaryAttackType.includes('magic') == false &&
+        aUnit.primaryAttackType.includes('psychic') == false; 
+
+      if (hasAbility(dUnit, 'bursting') && isPillage === false && canTriggerBurst) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {

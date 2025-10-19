@@ -1,17 +1,27 @@
 <template>
   <div class="section-header">Disband Units</div>
   <table v-if="mageStore.mage">
-    <tbody>
+    <thead>
       <tr>
-        <td> Name </td>
-        <td> Upkeep </td>
-        <td> Number </td>
-        <td> Power </td>
-        <td> &nbsp; </td>
-        <td> &nbsp; </td>
-        <td> Disband </td>
+        <th>&nbsp;</th>
+        <th> Name </th>
+        <th> Upkeep </th>
+        <th> Number </th>
+        <th> Power </th>
+        <th> &nbsp; </th>
+        <th> &nbsp; </th>
+        <th> Disband </th>
       </tr>
+    </thead>
+    <tbody>
       <tr v-for="(u) of unitsStatus" :key="u.id">
+        <td>
+          <input 
+            :disabled="u.attributes.includes('undisbandable') === true" 
+            v-model="u.checked"
+            @change="toggleWholeStack(u)"
+            type="checkbox">
+        </td>
         <td> 
           <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
         </td>
@@ -60,6 +70,7 @@ interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
   moveDown: number;
   disbandAmount: number;
+  checked: boolean;
 };
 
 const mageStore = useMageStore();
@@ -101,10 +112,19 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
       ...armyItem,
       moveUp: moveUp,
       moveDown: moveDown,
+      checked: false,
       disbandAmount: 0
     };
   });
 });
+
+const toggleWholeStack = (u: DisbandArmyItem) => {
+  if (u.checked === true) {
+    disbandPayload.value[u.id] = u.size;
+  } else {
+    disbandPayload.value[u.id] = 0;
+  }
+}
 
 const disbandUnits = async () => {
   const payload: any = {};
