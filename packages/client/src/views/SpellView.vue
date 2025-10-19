@@ -57,7 +57,7 @@
         </div>
         <div v-else>
           <p>
-            You can configure your battle spells under
+            You can configure your defensive battle spells under
             <router-link :to="{ name: 'assignment' }">
               Assignment
             </router-link>

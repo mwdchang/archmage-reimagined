@@ -191,7 +191,6 @@ table > tr.active {
   background-color: #3e3e3e;
   color: #e8e8e8;
   border-bottom: 2px solid #4a90e2;
-  font-weight: 600;
 }
 
 @media (max-width: 600px) {

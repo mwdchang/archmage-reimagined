@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, _idx) of itemList" :key="item.id">
+          <tr v-for="(item, _idx) of usableItems" :key="item.id">
             <td>
               <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
             </td>
@@ -33,19 +33,35 @@
       </div>
     </div>
     <div> 
-      <section class="form">
-        <label>Use item</label>
-        <select v-model="selected" v-if="usableItems.length > 0">
-          <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
-        </select>
+      <section class="form" style="max-width: 20rem">
+        <div class="form-tabs">
+          <div class="tab" :class="{ active: tabView === 'instant' }" @click="changeView('instant')">Instant</div>
+          <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
+        </div>
 
-        <label>Target</label>
-        <input type="text" v-model="target" />
+        <div v-if="tabView !== 'battle'">
+          <label>Use item</label>
+          <select v-model="selected" v-if="usableItems.length > 0">
+            <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+          </select>
 
-        <label># of times</label>
-        <input type="number" v-model="turns" />
+          <label>Target</label>
+          <input type="text" v-model="target" />
 
-        <button @click="useItem">Use Item</button>
+          <label># of times</label>
+          <input type="number" v-model="turns" />
+
+          <button @click="useItem">Use Item</button>
+        </div>
+        <div v-else>
+          <p>
+            You can configure your defensive battle items under
+            <router-link :to="{ name: 'assignment' }">
+              Assignment
+            </router-link>
+          </p>
+
+        </div>
       </section>
 
       <div v-if="itemResult.length">
@@ -70,6 +86,13 @@ const turns = ref<number>(1);
 const target = ref<string>('');
 const itemResult = ref<any[]>([]);
 
+const tabView = ref('instant');
+
+const changeView = (v: string) => {
+  tabView.value = v;
+  selected.value = '';
+};
+
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
 
@@ -83,6 +106,10 @@ const itemList = computed(() => {
 const usableItems = computed(() => {
   return itemList.value.filter(item => {
     const attrs = item.attributes;
+
+    if (tabView.value === 'battle') {
+      return attrs.includes('oneUse') && attrs.includes('battle');
+    }
     return attrs.includes('oneUse') && !attrs.includes('battle');
   });
 });
