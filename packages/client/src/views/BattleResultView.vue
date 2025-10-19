@@ -64,7 +64,7 @@
 
     <h3 class="section-header">Spells and items</h3>
     <div>
-      <div v-if="report.attacker.spellId">
+      <div v-if="report.attacker.spellId && preBattle.attacker.spellResult !== 'notUsed'">
         {{ attackerStr }} casts 
         <router-link :to="{ name: 'viewSpell', params: { id: report.attacker.spellId }}">
           {{ readableStr(report.attacker.spellId) }}
@@ -76,7 +76,7 @@
           Not enough mana to cast the spell
         </div>
       </div>
-      <div v-if="report.attacker.itemId">
+      <div v-if="report.attacker.itemId && preBattle.attacker.itemResult !== 'notUsed'">
         {{ attackerStr }} uses 
         <router-link :to="{ name: 'viewItem', params: { id: report.attacker.itemId }}">
           {{ readableStr(report.attacker.itemId) }}
@@ -90,7 +90,7 @@
       </div>
     </div>
     <div>
-      <div v-if="report.defender.spellId">
+      <div v-if="report.defender.spellId && preBattle.defender.spellResult !== 'notUsed'">
         {{ defenderStr }} casts 
         <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
           {{ readableStr(report.defender.spellId) }}
@@ -99,7 +99,7 @@
           Spell failed.
         </div>
       </div>
-      <div v-if="report.defender.itemId">
+      <div v-if="report.defender.itemId && preBattle.defender.itemResult !== 'notUsed'">
         {{ defenderStr }} uses
         <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
          {{ readableStr(report.defender.itemId) }}
