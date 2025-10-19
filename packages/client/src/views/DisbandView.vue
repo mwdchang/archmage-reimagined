@@ -1,67 +1,73 @@
 <template>
   <div class="section-header">Disband Units</div>
-  <table v-if="mageStore.mage">
-    <thead>
-      <tr>
-        <th>&nbsp;</th>
-        <th> Name </th>
-        <th> Upkeep </th>
-        <th> Number </th>
-        <th> Power </th>
-        <th> &nbsp; </th>
-        <th> &nbsp; </th>
-        <th> Disband </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(u) of unitsStatus" :key="u.id">
-        <td>
-          <input 
-            :disabled="u.attributes.includes('undisbandable') === true" 
-            v-model="u.checked"
-            @change="toggleWholeStack(u)"
-            type="checkbox">
-        </td>
-        <td> 
-          <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
-        </td>
-        <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
-        <td class="text-right" style="padding-left: 10px"> {{ u.size }} </td>
-        <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
-        <td class="text-right" style="font-size: 75%"> 
-          +{{ u.moveUp }}
-        </td>
-        <td class="text-right" style="font-size: 75%"> 
-          -{{ u.moveDown }}
-        </td>
-        <td>
-          <input
-            :disabled="u.attributes.includes('undisbandable') === true" 
-            type="text" 
-            size=12 
-            v-model="disbandPayload[u.id]">
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <br/>
+  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+    <!-- left -->
+    <table v-if="mageStore.mage">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th> Name </th>
+          <!--<th> Upkeep </th>-->
+          <th> Number </th>
+          <th> Power </th>
+          <th> &nbsp; </th>
+          <th> &nbsp; </th>
+          <th> Disband </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(u) of unitsStatus" :key="u.id">
+          <td>
+            <input 
+              :disabled="u.attributes.includes('undisbandable') === true" 
+              v-model="u.checked"
+              @change="toggleWholeStack(u)"
+              type="checkbox">
+          </td>
+          <td> 
+            <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
+          </td>
+          <!--
+          <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
+          -->
+          <td class="text-right" style="padding-left: 10px"> {{ readbleNumber(u.size) }} </td>
+          <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
+          <td class="text-right" style="font-size: 75%"> 
+            +{{ u.moveUp }}
+          </td>
+          <td class="text-right" style="font-size: 75%"> 
+            -{{ u.moveDown }}
+          </td>
+          <td>
+            <input
+              :disabled="u.attributes.includes('undisbandable') === true" 
+              type="text" 
+              size=12 
+              v-model="disbandPayload[u.id]">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- left -->
+    <section class="form">
+      <div class="row" style="align-items: baseline">
+        <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
+        <label>Disband confirmation&nbsp;</label>
+      </div>
 
-  <section class="form">
-    <div class="row" style="align-items: baseline">
-      <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
-      <label>Disband confirmation&nbsp;</label>
-    </div>
-
-    <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
+      <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    </section>
   </section>
-  <div v-if="errorStr" class="error">{{ errorStr }}</div>
+
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { getArmy, ArmyItem } from '@/util/util';
+import { getArmy, ArmyItem, readbleNumber } from '@/util/util';
 import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
 

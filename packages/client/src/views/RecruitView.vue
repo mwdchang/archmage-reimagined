@@ -1,50 +1,58 @@
 <template>
   <div class="section-header">Recruitment</div>
-  <table v-if="mageStore.mage">
-    <tbody>
-      <tr>
-        <td> Name </td>
-        <td> Cost </td>
-        <td> Upkeep </td>
-        <td> Max/Turn </td>
-      </tr>
-      <tr v-for="(unit) of recruitableUnits">
-        <td> 
-          <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> {{ unit.name }} </router-link>
-        </td>
-        <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
-        <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
-        <td class="text-right"> {{ recruitmentAmount(mageStore.mage, unit.id) }} </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <br>
-  <section class="form" style="width: 25rem">
-    <label>Recruit units</label> 
+  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+    <!-- left -->
+    <table v-if="mageStore.mage">
+      <tbody>
+        <tr>
+          <td> Name </td>
+          <!--<td> Cost </td> -->
+          <td> Upkeep </td>
+          <td> Max/Turn </td>
+        </tr>
+        <tr v-for="(unit) of recruitableUnits">
+          <td> 
+            <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> {{ unit.name }} </router-link>
+          </td>
+          <!--
+          <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
+          -->
+          <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
+          <td class="text-right"> {{ recruitmentAmount(mageStore.mage, unit.id) }} </td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="row">
-      <select v-model="rselect">
-        <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
-      </select>
-      <input type="number" v-model="rsize" size="8">
+    <!-- right -->
+    <div>
+      <section class="form" style="width: 25rem">
+        <label>Recruit units</label> 
+
+        <div class="row">
+          <select v-model="rselect">
+            <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
+          </select>
+          <input type="number" v-model="rsize" size="8">
+        </div>
+
+        <button @click="addOrder">Add</button>
+      </section>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+
+      <!-- current recruitment -->
+      <p style="margin-top: 10px">Recruitment Queue</p>
+      <table> 
+        <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
+          <td>
+            {{ readableStr(r.id) }}
+          </td>
+          <td>{{ r.size }}</td>
+          <td> <button @click="deleteOrder(idx)">Remove</button></td>
+        </tr>
+      </table>
     </div>
-
-    <button @click="addOrder">Add</button>
   </section>
-  <div v-if="errorStr" class="error">{{ errorStr }}</div>
-  <br>
-
-  <table>
-    <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
-      <td>
-        {{ readableStr(r.id) }}
-      </td>
-      <td>{{ r.size }}</td>
-      <td> <button @click="deleteOrder(idx)">Remove</button></td>
-    </tr>
-  </table>
-
 </template>
 
 <script setup lang="ts">
