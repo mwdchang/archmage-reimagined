@@ -56,8 +56,27 @@
         <label>Disband confirmation&nbsp;</label>
       </div>
 
+
       <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
       <div v-if="errorStr" class="error">{{ errorStr }}</div>
+
+      <p style="margin-top: 10px"> Net Income </p>
+      <table style="min-width: 16rem;">
+        <tbody>
+          <tr>
+            <td style="width: 7rem"> Geld </td>
+            <td class="text-right">{{ readbleNumber(estimatedIncome.geld) }} </td>
+          </tr>
+          <tr>
+            <td> Mana </td>
+            <td class="text-right">{{ readbleNumber(estimatedIncome.mana) }} </td>
+          </tr>
+          <tr>
+            <td> Population </td>
+            <td class="text-right">{{ readbleNumber(estimatedIncome.population) }} </td>
+          </tr>
+        </tbody>
+      </table>
     </section>
   </section>
 
@@ -70,7 +89,8 @@ import { useMageStore } from '@/stores/mage';
 import { getArmy, ArmyItem, readbleNumber } from '@/util/util';
 import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
-
+import { useEngine } from '@/composables/useEngine';
+import { unitUpkeep } from 'engine/src/interior';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
@@ -80,6 +100,7 @@ interface DisbandArmyItem extends ArmyItem {
 };
 
 const mageStore = useMageStore();
+const { netUpkeepStatus } = useEngine();
 
 const confirmDisband = ref(false);
 
@@ -122,6 +143,25 @@ const unitsStatus = computed<DisbandArmyItem[]>(() => {
       disbandAmount: 0
     };
   });
+});
+
+const estimatedIncome = computed(() => {
+  let { geld, mana, population } = netUpkeepStatus.value;
+  const keys = Object.keys(disbandPayload.value);
+
+  for (const key of keys) {
+    const upkeep = unitUpkeep(mageStore.mage!, key);
+    const amount = disbandPayload.value[key];
+
+    geld += amount * upkeep.geld;
+    mana += amount * upkeep.mana;
+    population += amount * upkeep.population;
+  }
+  return { 
+    geld: Math.floor(geld), 
+    mana: Math.floor(mana), 
+    population: Math.floor(population) 
+  };
 });
 
 const toggleWholeStack = (u: DisbandArmyItem) => {
