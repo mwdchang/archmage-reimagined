@@ -16,17 +16,79 @@ export interface Building {
   id: string,
   geldCost: number
   manaCost: number,
+  upkeep: {
+    geld: number,
+    mana: number,
+    population: number,
+  }
 }
 
 export const buildingTypes: Building[] = [
-  { id: 'farms', geldCost: 50, manaCost: 0 },
-  { id: 'towns', geldCost: 300, manaCost: 0 },
-  { id: 'workshops', geldCost: 100, manaCost: 0 },
-  { id: 'barracks', geldCost: 50, manaCost: 0 },
-  { id: 'nodes', geldCost: 300, manaCost: 0 },
-  { id: 'guilds', geldCost: 200, manaCost: 0 },
-  { id: 'forts', geldCost: 3000, manaCost: 0 },
-  { id: 'barriers', geldCost: 50, manaCost: 0 }
+  {
+    id: 'farms', geldCost: 50, manaCost: 0,
+    upkeep: {
+      geld: 20,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'towns', geldCost: 300, manaCost: 0,
+    upkeep: {
+      geld: 50,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'workshops', geldCost: 100, manaCost: 0,
+    upkeep: {
+      geld: 20,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'barracks', geldCost: 50, manaCost: 0,
+    upkeep: {
+      geld: 20,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'nodes', geldCost: 300, manaCost: 0,
+    upkeep: {
+      geld: 0,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'guilds', geldCost: 200, manaCost: 0,
+    upkeep: {
+      geld: 30,
+      mana: 0,
+      population: 0
+    }
+  },
+  // FIXME: forts has special rules
+  {
+    id: 'forts', geldCost: 3000, manaCost: 0,
+    upkeep: {
+      geld: 0,
+      mana: 0,
+      population: 0
+    }
+  },
+  {
+    id: 'barriers', geldCost: 50, manaCost: 0,
+    upkeep: {
+      geld: 0,
+      mana: 60,
+      population: 0
+    }
+  }
 ];
 export const getBuildingTypes = () => {
   return buildingTypes.map(d => d.id);
@@ -355,17 +417,18 @@ export const buildingUpkeep = (mage: Mage) => {
     population: 0
   };
 
-  result.geld += 20 * mage.farms;
-  result.geld += 50 * mage.towns
-  result.geld += 20 * mage.workshops;
-  result.geld += 20 * mage.barracks;
-  result.geld += 30 * mage.guilds;
+  buildingTypes.forEach(bType => {
+    if (bType.id === 'forts') return;
 
+    result.geld += bType.upkeep.geld * mage[bType.id];
+    result.mana += bType.upkeep.mana * mage[bType.id];
+    result.population += bType.upkeep.population * mage[bType.id];
+  });
+
+  // Fort has special rule
   const n = mage.forts;
   result.geld += (240 * n + 30 * n * (n + 1));
 
-
-  result.mana += 30 * mage.barriers;
   return result;
 }
 
