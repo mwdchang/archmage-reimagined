@@ -52,6 +52,7 @@ import { useMageStore } from '@/stores/mage';
 import { readableStr, readbleNumber } from '@/util/util';
 import { MarketItem, MarketBid, Bid } from 'shared/types/market';
 import { ServerClock } from 'shared/types/common';
+import { Mage } from 'shared/types/mage';
 
 const mageStore = useMageStore();
 const mage = mageStore.mage!;
@@ -108,9 +109,8 @@ const refresh = async () => {
 };
 
 const makeBid = async () => {
-
   const badBids = bidItems.value.filter(item => {
-    return item.bid <= item.marketItem.basePrice;
+    return item.bid > 0 && item.bid <= item.marketItem.basePrice;
   });
   if (badBids.length > 0) {
     errorStr.value = 'You cannot bid less than the base prices';
@@ -123,7 +123,9 @@ const makeBid = async () => {
       return { marketId: d.marketItem.id, bid: d.bid }
     });
 
-  const result = await API.post('/market-bids', payload);
+  const result = (await API.post<{mage: Mage}>('/market-bids', payload)).data;
+  mageStore.setMage(result.mage);
+
   await refresh();
 }
 

@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="spell of spells" :key="spell.id">
+          <tr v-for="spell of castingSpells" :key="spell.id">
             <td>
               <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
             </td>
@@ -26,24 +26,43 @@
         </tbody>
       </table>
       <div v-else style="max-width: 250px">
-        You do not have any spells in your spellbook. 
+        You do not have any spells in your spellbook.
         Use <router-link :to="{ name: 'research' }">research</router-link> to learn new spells.
       </div>
     </div>
-    <div> 
-      <section class="form">
-        <label>Select spell</label>
-        <select v-model="selected" v-if="spells.length > 0" style="max-width:175px" tabindex=1>
-          <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
-        </select>
 
-        <label>Target</label>
-        <input type="text" v-model="target" tabindex=2 />
+    <div>
+      <section class="form" style="max-width: 20rem">
+        <div class="form-tabs">
+          <div class="tab" :class="{ active: tabView === 'summon' }" @click="changeView('summon')">Summon</div>
+          <div class="tab" :class="{ active: tabView === 'spell' }" @click="changeView('spell')">Spells</div>
+          <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
+        </div>
 
-        <label># of times</label> 
-        <input type="text" v-model="turns" tabindex=3 />
+        <div v-if="tabView !== 'battle'">
+          <label>Select spell</label>
+          <select v-model="selected" v-if="spells.length > 0" style="max-width:175px" tabindex=1>
+            <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+          </select>
 
-        <button @click="castSpell">Cast spell</button>
+          <div v-if="tabView === 'spell'">
+            <label>Target</label>
+            <input type="text" v-model="target" tabindex=2 />
+          </div>
+
+          <label># of times</label>
+          <input type="number" v-model="turns" tabindex=3 />
+
+          <button @click="castSpell">Cast spell</button>
+        </div>
+        <div v-else>
+          <p>
+            You can configure your defensive battle spells under
+            <router-link :to="{ name: 'assignment' }">
+              Assignment
+            </router-link>
+          </p>
+        </div>
       </section>
 
       <div v-if="spellResult.length">
@@ -52,6 +71,7 @@
         </div>
       </div>
     </div>
+
   </section>
 </template>
 
@@ -62,6 +82,7 @@ import { useMageStore } from '@/stores/mage';
 import { getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import { readbleNumber } from '@/util/util';
+import { Spell } from 'shared/types/magic';
 
 const mageStore = useMageStore();
 
@@ -69,28 +90,43 @@ const selected = ref<string>('');
 const turns = ref<number>(1);
 const target = ref<string>('');
 
+const tabView = ref('summon');
+
 const spellResult = ref<any[]>([]);
 
-const spells = computed(() => {
-  const mage = mageStore.mage; 
+const spells = computed<Spell[]>(() => {
+  const mage = mageStore.mage;
   if (!mage) return [];
 
   const result = getSpells(mage);
   return result;
 });
 
-
 const castingSpells = computed(() => {
-  return spells.value.filter(d => d.castingTurn > 0);
-})
+  return spells.value
+    .filter(spell => {
+
+      if (tabView.value === 'battle') {
+        return spell.castingTurn <= 0;
+      } else if (tabView.value === 'summon') {
+        return spell.castingTurn > 0 && spell.attributes.includes('summon');
+      }
+      return spell.castingTurn > 0 && spell.attributes.includes('summon') === false;
+    });
+});
+
+const changeView = (v: string) => {
+  tabView.value = v;
+  selected.value = '';
+};
 
 const castSpell = async () => {
   if (!selected.value) return;
 
-  const res = (await API.post('spell', { 
-    spellId: selected.value, 
-    num: turns.value, 
-    target: target.value 
+  const res = (await API.post('spell', {
+    spellId: selected.value,
+    num: turns.value,
+    target: target.value
   })).data;
 
   if (res.result) {

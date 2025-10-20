@@ -25,7 +25,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.005,
+      "mana": 0.01,
       "population": 0 
     },
     "spellResistances": {
@@ -79,7 +79,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.01,
+      "mana": 0.02,
       "population": 0 
     },
     "spellResistances": {
@@ -134,7 +134,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.05,
+      "mana": 0.10,
       "population": 0 
     },
     "spellResistances": {
@@ -189,7 +189,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.05,
+      "mana": 0.10,
       "population": 0.03 
     },
     "spellResistances": {
@@ -244,7 +244,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.125,
+      "mana": 0.25,
       "population": 0.2 
     },
     "spellResistances": {
@@ -299,7 +299,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 0.15,
+      "mana": 0.30,
       "population": 0.2 
     },
     "spellResistances": {
@@ -354,7 +354,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 1.25,
+      "mana": 2.50,
       "population": 5.0
     },
     "spellResistances": {
@@ -413,7 +413,7 @@
     },
     "upkeepCost": {
       "geld": 0.00,
-      "mana": 2.5,
+      "mana": 5.0,
       "population": 2.5
     },
     "spellResistances": {
@@ -468,7 +468,7 @@
     },
     "upkeepCost": {
       "geld": 0.0,
-      "mana": 4.75,
+      "mana": 9.50,
       "population": 2.5
     },
     "spellResistances": {
@@ -524,7 +524,7 @@
     },
     "upkeepCost": {
       "geld": 45,
-      "mana": 0.9,
+      "mana": 1.8,
       "population": 0
     },
     "spellResistances": {
@@ -578,7 +578,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 2.25,
+      "mana": 4.50,
       "population": 3.0
     },
     "spellResistances": {
@@ -636,7 +636,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 1,
+      "mana": 2,
       "population": 0
     },
     "spellResistances": {
@@ -692,7 +692,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 5.0,
+      "mana": 10.0,
       "population": 0
     },
     "spellResistances": {
@@ -748,7 +748,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 290,
+      "mana": 580,
       "population": 0
     },
     "spellResistances": {
@@ -860,7 +860,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 62.5,
+      "mana": 125.0,
       "population": 70
     },
     "spellResistances": {
@@ -917,7 +917,7 @@
     },
     "upkeepCost": {
       "geld": 0,
-      "mana": 0.25,
+      "mana": 0.50,
       "population": 1 
     },
     "spellResistances": {
@@ -975,7 +975,7 @@
     },
     "upkeepCost": {
       "geld": 4.80,
-      "mana": 0.05,
+      "mana": 0.10,
       "population": 0 
     },
     "spellResistances": {
@@ -1030,7 +1030,7 @@
     },
     "upkeepCost": {
       "geld": 8.0,
-      "mana": 0.05,
+      "mana": 0.10,
       "population": 0
     },
     "spellResistances": {
@@ -1086,7 +1086,7 @@
     },
     "upkeepCost": {
       "geld": 3.2,
-      "mana": 0.075,
+      "mana": 0.15,
       "population": 0
     },
     "spellResistances": {
@@ -1140,7 +1140,7 @@
     },
     "upkeepCost": {
       "geld": 2.4,
-      "mana": 0.02,
+      "mana": 0.04,
       "population": 0
     },
     "spellResistances": {
@@ -1194,7 +1194,7 @@
     },
     "upkeepCost": {
       "geld": 0.16,
-      "mana": 0.005,
+      "mana": 0.01,
       "population": 0
     },
     "spellResistances": {
@@ -1249,7 +1249,7 @@
     },
     "upkeepCost": {
       "geld": 0.16,
-      "mana": 0.005,
+      "mana": 0.01,
       "population": 0
     },
     "spellResistances": {
@@ -1304,7 +1304,7 @@
     },
     "upkeepCost": {
       "geld": 5,
-      "mana": 0.03,
+      "mana": 0.06,
       "population": 0
     },
     "spellResistances": {

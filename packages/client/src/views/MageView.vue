@@ -1,16 +1,14 @@
 <template>
-  <div class="section-header">
+  <div class="section-header row">
+    <magic :magic="mageSummary.magic" />
     {{ mageSummary.name }} (#{{ mageSummary.id }}) 
   </div>
   <table v-if="mageSummary.id">
     <tbody>
       <tr>
-        <td>Magic</td>
-        <td>
-          <div class="row">
-            <magic :magic="mageSummary.magic" />
-            <div>{{ mageSummary.magic }} </div>
-          </div>
+        <td>Specialty</td>
+        <td class="text-right">
+          <div>{{ readableStr(mageSummary.magic) }} </div>
         </td>
       </tr>
       <tr>
@@ -63,7 +61,7 @@ import { ref, onMounted } from 'vue';
 import magic from '@/components/magic.vue';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
-import { readbleNumber } from '@/util/util';
+import { readbleNumber, readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 

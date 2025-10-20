@@ -42,7 +42,7 @@ const color = computed(() => {
 }
 
 .small {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
 }
 </style>

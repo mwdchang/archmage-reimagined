@@ -997,7 +997,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
             "attributes": {
-              "counterAttackPower": {
+              "abilities": {
                 "rule": "remove",
                 "magic": {
                   "ascendant": { "value": { "name": "bursting", "extra": null } },
@@ -1028,7 +1028,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "filter": null,
+        "filters": null,
         "trigger": null,
         "targetType": "all",
         "effects": [

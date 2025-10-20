@@ -47,6 +47,7 @@ buildingTypes.forEach(b => {
 });
 
 const destroy = () => {
+  confirmDestroy.value = false;
   emit('destroy', userInput.value);
 };
 

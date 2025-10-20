@@ -82,7 +82,7 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
-import { mageName } from './util';
+import { mageName, readableStr } from './util';
 import { 
   fromKingdomArmyEffectResult,
   fromKingdomBuildingsEffectResult,
@@ -98,6 +98,7 @@ import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
 import { priceIncrease } from './blackmarket';
+import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -216,6 +217,11 @@ class Engine {
     await this.serverTurn();
     const c = await this.getServerClock();
     this.currentTurn = c.currentTurn;
+
+    if (this.currentTurn > c.endTurn) {
+      console.log('=== Reset finished ===');
+      return;
+    }
     console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
@@ -347,7 +353,7 @@ class Engine {
           }
           logs.push({
             type: 'log',
-            message: `added ${res[key]} ${key} into your army`
+            message: `${res[key]} ${readableStr(key)} joined your army`
           });
         });
       }
@@ -437,6 +443,7 @@ class Engine {
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
 
+
     const maxPop = realMaxPopulation(mage);
     if (mage.currentPopulation >= maxPop) {
       mage.currentPopulation = maxPop;
@@ -467,7 +474,7 @@ class Engine {
       mage.recruitments[i].size -= recruits[i].size;
       turnLogs.push({
         type: 'log',
-        message: `You recruited ${recruits[i].size} units of ${recruits[i].id}`
+        message: `You recruited ${recruits[i].size} units of ${readableStr(recruits[i].id)}`
       });
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
@@ -686,13 +693,13 @@ class Engine {
     if (researchItem) {
       turnLogs.push({
         type: 'log',
-        message: `You are researching ${researchItem.id}`
+        message: `You are researching ${readableStr(researchItem.id)}`
       });
     }
     if (mage.enchantments.length > 0) {
       turnLogs.push({
         type: 'log',
-        message: `You are under the poewr of ${mage.enchantments.map(d => d.spellId).join(', ')}`
+        message: `You are under the power of ${mage.enchantments.map(d => readableStr(d.spellId)).join(', ')}`
       });
     }
     turnLogs.push({
@@ -845,6 +852,9 @@ class Engine {
           continue;
         } else {
           mage.items[itemId] --;
+          if (mage.items[itemId] <= 0) {
+            delete mage.items[itemId];
+          }
         }
 
         logs.push(...await this.useItemOpponent(mage, item, targetMage));
@@ -861,6 +871,9 @@ class Engine {
           continue;
         } else {
           mage.items[itemId] --;
+          if (mage.items[itemId] <= 0) {
+            delete mage.items[itemId];
+          }
         }
 
         logs.push(...await this.useItemSelf(mage, item));
@@ -981,7 +994,6 @@ class Engine {
           type: 'error',
           message: `Spell costs ${cost} mana, you only have ${mage.currentMana}`
         });
-        console.log('============ no mana');
         continue;
       }
       if (mage.currentTurn < castingTurn) {
@@ -989,7 +1001,6 @@ class Engine {
           type: 'error',
           message: `Spell costs ${castingTurn} turns, you only have ${mage.currentTurn}`
         });
-        console.log('============ no turn');
         continue;
       }
       
@@ -1001,7 +1012,6 @@ class Engine {
           type: 'error',
           message: `You lost your concentration`
         });
-        console.log('============ no concentration');
         castingSuccessful = false;
       }
 
@@ -1018,7 +1028,6 @@ class Engine {
             type: 'error',
             message: `You spell hit the barriers and fizzled.`
           });
-          console.log('============ fizzled on barriers');
           castingSuccessful = false;
         } 
       }
@@ -1059,6 +1068,52 @@ class Engine {
         }
         await this.adapter.updateMage(mage);
         await this.adapter.updateMage(targetMage);
+
+        const timestamp = Date.now();
+
+        // Target gets notification in log
+        this.adapter.saveChronicles([
+          {
+            id: targetMage.id,
+            name: targetMage.name,
+            turn: targetMage.turnsUsed,
+            timestamp: timestamp,
+            data: [
+              {
+                type: 'log',
+                message: `${mage.name} (# ${mage.id}) casted ${readableStr(spellId)} on your kingdom`
+              }
+            ]
+          }
+        ]);
+
+        // The caster gives a counter, we will use a dummy report
+        const reportId = uuidv4();
+        const reportSummary: BattleReportSummary = {
+          id: reportId,
+          timestamp: timestamp,
+          attackType: spellId,
+
+          attackerId: mage.id,
+          attackerName: mage.name,
+          attackerStartingUnits: 0,
+          attackerUnitsLoss: 0,
+          attackerPowerLoss: 0,
+          attackerPowerLossPercentage: 0,
+
+          defenderId: targetMage.id,
+          defenderName: targetMage.name,
+          defenderStartingUnits: 0,
+          defenderUnitsLoss: 0,
+          defenderPowerLoss: 0,
+          defenderPowerLossPercentage: 0.02,
+
+          isSuccessful: true,
+          isDefenderDefeated: targetMage.forts > 0 ? false : true,
+          landGain: 0,
+          landLoss: 0
+        };
+        await this.adapter.saveBattleReport(mage.id, reportId, null, reportSummary);
       }
     }
     return logs;
@@ -1786,14 +1841,18 @@ class Engine {
   }
 
   // FIXME: error messages
-  async makeMarketBids(mageId: number, bids: Bid[]): Promise<boolean> {
+  async makeMarketBids(mageId: number, bids: Bid[]): Promise<Mage> {
     const mage = await this.adapter.getMage(mageId);
 
     for (const bid of bids) {
       const item = await this.adapter.getMarketItem(bid.marketId);
 
+      if (!item) {
+        continue;
+      }
+
       if (bid.bid > mage.currentGeld) {
-        return false;
+        continue;
       }
       if (bid.bid <= item.basePrice || bid.bid <= 0) {
         continue;
@@ -1810,7 +1869,7 @@ class Engine {
 
     await this.useTurn(mage);
     await this.adapter.updateMage(mage);
-    return true;
+    return mage;
   }
 
   async getMarketBids(priceId: string) {

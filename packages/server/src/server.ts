@@ -304,10 +304,10 @@ router.get('/api/market-bids/:priceId', async (req, res) => {
 
 router.post('/api/market-bids', async (req: any, res) => {
   const bids = req.body;
-  const mage = await engine.getMageByUser(req.user.username);
-  await engine.makeMarketBids(mage.id, bids);
+  let mage = await engine.getMageByUser(req.user.username);
+  mage = await engine.makeMarketBids(mage.id, bids);
 
-  res.status(200).json({});
+  res.status(200).json({ mage });
 });
 
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {

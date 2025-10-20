@@ -63,50 +63,64 @@
     <br>
 
     <h3 class="section-header">Spells and items</h3>
-      <div>
-        <div v-if="report.attacker.spellId">
-          {{ attackerStr }} casts 
-          <router-link :to="{ name: 'viewSpell', params: { id: report.attacker.spellId }}">
-            {{ readableStr(report.attacker.spellId) }}
-          </router-link>
-          <div v-if="preBattle.attacker.spellResult === 'barriers'">
-            The spell hit barriers and fizzled.
-          </div>
-          <div v-if="preBattle.attacker.spellResult === 'noMana'">
-            Not enough mana to cast the spell
-          </div>
+    <div>
+      <div v-if="report.attacker.spellId && preBattle.attacker.spellResult !== 'notUsed'">
+        {{ attackerStr }} casts 
+        <router-link :to="{ name: 'viewSpell', params: { id: report.attacker.spellId }}">
+          {{ readableStr(report.attacker.spellId) }}
+        </router-link>
+        <div v-if="preBattle.attacker.spellResult === 'barriers'">
+          The spell hit barriers and fizzled.
         </div>
-        <div v-if="report.attacker.itemId">
-          {{ attackerStr }} uses 
-          <router-link :to="{ name: 'viewItem', params: { id: report.attacker.itemId }}">
-            {{ readableStr(report.attacker.itemId) }}
-          </router-link>
-          <div v-if="preBattle.attacker.itemResult === 'barriers'">
-            The item hit barriers and fizzled.
-          </div>
+        <div v-if="preBattle.attacker.spellResult === 'noMana'">
+          Not enough mana to cast the spell
         </div>
       </div>
-      <div>
-        <div v-if="report.defender.spellId">
-          {{ defenderStr }} casts 
-          <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
-            {{ readableStr(report.defender.spellId) }}
-          </router-link>
-          <div v-if="preBattle.defender.spellResult !== 'success'">
-            Spell failed.
-          </div>
+      <div v-if="report.attacker.itemId && preBattle.attacker.itemResult !== 'notUsed'">
+        {{ attackerStr }} uses 
+        <router-link :to="{ name: 'viewItem', params: { id: report.attacker.itemId }}">
+          {{ readableStr(report.attacker.itemId) }}
+        </router-link>
+        <div v-if="preBattle.attacker.itemResult === 'barriers'">
+          The item hit barriers and fizzled.
         </div>
-        <div v-if="report.defender.itemId">
-          {{ defenderStr }} uses
-          <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
-           {{ readableStr(report.defender.itemId) }}
-          </router-link>
-          <div v-if="preBattle.defender.itemResult !== 'success'">
-            Item failed.
-          </div>
+        <div v-if="preBattle.attacker.itemResult === 'noItem'">
+          Item not available
         </div>
       </div>
+    </div>
+    <div>
+      <div v-if="report.defender.spellId && preBattle.defender.spellResult !== 'notUsed'">
+        {{ defenderStr }} casts 
+        <router-link :to="{ name: 'viewSpell', params: { id: report.defender.spellId }}">
+          {{ readableStr(report.defender.spellId) }}
+        </router-link>
+        <div v-if="preBattle.defender.spellResult !== 'success'">
+          Spell failed.
+        </div>
+      </div>
+      <div v-if="report.defender.itemId && preBattle.defender.itemResult !== 'notUsed'">
+        {{ defenderStr }} uses
+        <router-link :to="{ name: 'viewItem', params: { id: report.defender.itemId }}">
+         {{ readableStr(report.defender.itemId) }}
+        </router-link>
+        <div v-if="preBattle.defender.itemResult !== 'success'">
+          Item failed.
+        </div>
+      </div>
+    </div>
     <br>
+
+    
+    <section>
+      <div v-for="(log, idx) of preBattle.logs" :key="idx" class="br-row">
+        <p v-if="log.effectType === 'slain'">
+          {{ nameById(log.id) }}'s {{ log.value }} {{ unitName(log.unitId) }} are slain
+        </p>
+      </div>
+    </section>
+    <br>
+
 
     <h3 class="section-header">Assault</h3>
     <div v-for="(log, idx) of report.engagement.logs" :key="idx" class="br-row">

@@ -1006,7 +1006,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["preacher"],
         "summonType": "all",
-        "summonNetPower": 3500,
+        "summonNetPower": 2500,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 }

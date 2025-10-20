@@ -11,7 +11,7 @@ import {
   StealEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
-import { hasAbility } from "./base/unit";
+import { hasAbility, isRanged } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
 import {
   calcKingdomResistance,
@@ -497,7 +497,11 @@ const battleItem = (
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (eff.effectType === 'UnitDamageEffect') {
           const damageEffect = eff as UnitDamageEffect;
-          applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+          logs.push(...damageLogs);
+        } else if (eff.effectType === 'UnitHealEffect') {
+          const healEffect = eff as UnitHealEffect;
+          applyHealEffect(effectOrigin, healEffect, affectedArmy);
         } else if (eff.effectType === 'TemporaryUnitEffect') {
           const tempUnitEffect = eff as TemporaryUnitEffect;
           const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
@@ -597,81 +601,115 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   let hasDefenderItem = false;
   const kingdomResistances = calcKingdomResistance(defender.mage);
 
+  const defenderHasArmy = defender.army.length > 0;
+
   /**
    * Check if spell and item pass barriers
    * - spell goes throw two stages: barrier resist and magic resist.
    * - item goes through only barrier resist
   **/
-  if (attacker.spellId) {
-    const cost = castingCost(attacker.mage, attacker.spellId);
-    if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
-      const spell = getSpellById(attacker.spellId);
-      attacker.mage.currentMana -= cost;
+  if (attacker.spellId) { 
+    if (defenderHasArmy)  {
+      const cost = castingCost(attacker.mage, attacker.spellId);
+      if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
+        const spell = getSpellById(attacker.spellId);
+        attacker.mage.currentMana -= cost;
 
-      const castingRate = successCastingRate(attacker.mage, attacker.spellId);
-      const roll1 = Math.random() * 100;
-      const roll2 = Math.random() * 100;
+        const castingRate = successCastingRate(attacker.mage, attacker.spellId);
+        const roll1 = Math.random() * 100;
+        const roll2 = Math.random() * 100;
 
-      if (Math.random() * 100 > castingRate) {
-        preBattle.attacker.spellResult = 'lostConcentration';
-      } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-        preBattle.attacker.spellResult = 'barriers';
-      } else {
-        if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+        if (Math.random() * 100 > castingRate) {
+          preBattle.attacker.spellResult = 'lostConcentration';
+        } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
           preBattle.attacker.spellResult = 'barriers';
         } else {
-          preBattle.attacker.spellResult = 'success';
-          hasAttackerSpell = true;
+          if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
+            preBattle.attacker.spellResult = 'barriers';
+          } else {
+            preBattle.attacker.spellResult = 'success';
+            hasAttackerSpell = true;
+          }
         }
+      } else {
+        preBattle.attacker.spellResult = 'noMana';
       }
     } else {
-      preBattle.attacker.spellResult = 'noMana';
+      preBattle.attacker.spellResult = 'notUsed';
     }
   }
-  if (attacker.itemId) {
-    if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
-      attacker.mage.items[attacker.itemId] --;
 
-      const roll = Math.random() * 100;
-      if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-        preBattle.attacker.itemResult = 'barriers';
+  if (attacker.itemId) {
+    if (defenderHasArmy) {
+      if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
+        attacker.mage.items[attacker.itemId] --;
+        if (attacker.mage.items[attacker.itemId] <= 0) {
+          delete attacker.mage.items[attacker.itemId];
+        }
+
+        const roll = Math.random() * 100;
+        if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
+          preBattle.attacker.itemResult = 'barriers';
+        } else {
+          preBattle.attacker.itemResult = 'success';
+          hasAttackerItem = true
+        }
       } else {
-        preBattle.attacker.itemResult = 'success';
-        hasAttackerItem = true
+        preBattle.attacker.itemResult = 'noItem';
       }
     } else {
-      preBattle.attacker.itemResult = 'noItem';
+      preBattle.attacker.itemResult = 'notUsed';
     }
   }
 
   if (defender.mage.type === 'bot') {
-    preBattle.defender.spellResult = 'success';
-    hasDefenderSpell = true;
-    preBattle.defender.itemResult = 'success';
-    hasDefenderItem = true;
+    if (defenderHasArmy) {
+      preBattle.defender.spellResult = 'success';
+      hasDefenderSpell = true;
+      preBattle.defender.itemResult = 'success';
+      hasDefenderItem = true;
+    } else {
+      preBattle.defender.spellResult = 'notUsed';
+      hasDefenderSpell = false;
+      preBattle.defender.itemResult = 'notUsed';
+      hasDefenderItem = false;
+    }
   } else {
-    if (defender.spellId) {
-      const cost = castingCost(defender.mage, defender.spellId);
-      if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-        defender.mage.currentMana -= cost;
+    if (defender.spellId) { 
+      if (defenderHasArmy) {
+        const cost = castingCost(defender.mage, defender.spellId);
+        if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
+          defender.mage.currentMana -= cost;
 
-        const castingRate = successCastingRate(defender.mage, defender.spellId);
-        if (Math.random() * 100 > castingRate) {
-          preBattle.defender.spellResult = 'lostConcentration';
+          const castingRate = successCastingRate(defender.mage, defender.spellId);
+          if (Math.random() * 100 > castingRate) {
+            preBattle.defender.spellResult = 'lostConcentration';
+          }
+          preBattle.defender.spellResult = 'success';
+          hasDefenderSpell = true;
+        } else {
+          preBattle.defender.spellResult = 'noMana';
         }
-        preBattle.defender.spellResult = 'success';
-        hasDefenderSpell = true;
       } else {
-        preBattle.defender.spellResult = 'noMana';
+        preBattle.defender.spellResult = 'notUsed';
       }
     }
-    if (defender.itemId) {
-      if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-        defender.mage.items[defender.itemId] --;
-        preBattle.defender.itemResult = 'success';
-        hasDefenderItem = true;
+
+    if (defender.itemId) { 
+      if (defenderHasArmy) {
+        if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
+          defender.mage.items[defender.itemId] --;
+          if (defender.mage.items[defender.itemId] <= 0) {
+            delete defender.mage.items[defender.itemId];
+          }
+          
+          preBattle.defender.itemResult = 'success';
+          hasDefenderItem = true;
+        } else {
+          preBattle.defender.itemResult = 'noItem';
+        }
       } else {
-        preBattle.defender.itemResult = 'noItem';
+        preBattle.defender.itemResult = 'notUsed';
       }
     }
   }
@@ -680,6 +718,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   // Create mutable data for the battle
   const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
+
 
   // Prebattle spell effects
   if (hasAttackerSpell) {
@@ -701,7 +740,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleItemLogs);
   }
 
-  
   ////////////////////////////////////////////////////////////////////////////////
   // TODO:: 
   //  - Hero effects
@@ -783,7 +821,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       }
 
       if (unitLoss > 0) {
-        console.log('!!!', stack.unit.id, unitLoss)
         stack.sustainedDamage = 0;
       }
       stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
@@ -809,7 +846,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       }
 
       if (unitLoss > 0) {
-        console.log('!!!', stack.unit.id, unitLoss)
         stack.sustainedDamage = 0;
       }
       stack.sustainedDamage += (totalDamage % stack.unit.hitPoints);
@@ -860,11 +896,15 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';
-      if (hasAbility(dUnit, 'bursting') && isPillage === false) {
+
+      const canTriggerBurst = isRanged(aUnit) == false && 
+        aUnit.primaryAttackType.includes('magic') == false &&
+        aUnit.primaryAttackType.includes('psychic') == false; 
+
+      if (hasAbility(dUnit, 'bursting') && isPillage === false && canTriggerBurst) {
         const burstingAbilities = dUnit.abilities.filter(d => d.name === 'bursting');
 
         for (const burstingAbility of burstingAbilities) {
-          console.log('handle burst', burstingAbility);
 
           // default
           let burstingType = dUnit.primaryAttackType;
@@ -1282,7 +1322,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     return battleReport;
   }
 
-  if (brA.armyNetPowerLoss < brD.armyNetPowerLoss && brD.armyNetPowerLoss >= 0.1 * brD.armyNetPower) {
+  // Calculate if battle was successful
+  const takenLessDamage = brA.armyNetPowerLoss < brD.armyNetPowerLoss;
+  const dealtEnoughDamage = brD.armyNetPowerLoss >= 0.1 * brD.armyNetPower;
+
+  if ((takenLessDamage && dealtEnoughDamage) || defenderHasArmy === false) {
     battleReport.isSuccessful = true;
     battleReport.result.isSuccessful = true;
   } else {
