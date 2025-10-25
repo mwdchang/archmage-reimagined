@@ -195,6 +195,7 @@ const DB_INIT = `
       r.net_power,
       COALESCE(
         CASE
+          WHEN r.forts <= 0 THEN 'defeated'
           WHEN rb.total_loss_pct > 0.3 THEN 'damaged'
           ELSE 'normal'
         END,
@@ -599,6 +600,7 @@ WHERE username = '${user.username}'
         ${reportSummary.defenderUnitsLoss}, 
         ${reportSummary.isSuccessful}, 
         ${reportSummary.isDefenderDefeated}, 
+
         ${reportSummary.landGain}, 
         ${reportSummary.landLoss}
       )

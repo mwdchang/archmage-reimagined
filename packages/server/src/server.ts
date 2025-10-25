@@ -291,6 +291,11 @@ router.get('/api/server-clock', async (_req: any, res) => {
   res.status(200).json(clock);
 });
 
+router.get('/api/market-prices', async (_req, res) => {
+  const result = await engine.getMarketPrices();
+  res.status(200).json(result);
+})
+
 router.get('/api/market-items', async (_req, res) => {
   const result = await engine.getMarketItems();
   res.status(200).json(result);

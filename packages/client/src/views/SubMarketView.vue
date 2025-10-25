@@ -23,7 +23,7 @@
             <!--{{ item.marketItem.expiration }} / -->
             {{ timeRemaining(item.marketItem) }} min
           </td>
-          <td>
+          <td class="text-right">
             {{ currentBidMap[item.marketItem.id] ? currentBidMap[item.marketItem.id] : 0 }}
           </td>
           <td class="text-right">

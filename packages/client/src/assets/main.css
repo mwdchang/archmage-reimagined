@@ -96,7 +96,7 @@ table > tr.active {
 }
 
 .gen-img {
-  width: 35vw
+  width: 30vw
 }
 @media (max-width: 600px) {
   .gen-img {
