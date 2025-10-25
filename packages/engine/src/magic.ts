@@ -62,34 +62,12 @@ export const doItemGeneration = (mage: Mage, force: boolean = false) => {
   return null;
 }
 
-// Do research
-export const doResearch = (mage: Mage, points: number) => {
+
+// Set next spell
+export const nextResearch = (mage: Mage, magicToAdvance: string) => {
   const researchTree = getResearchTree();
   const currentResearch = mage.currentResearch;
-  let spillOverPoints = 0;
 
-  // Apply points to current research
-  let done = false;
-  let magicToAdvance: any = null;
-  allowedMagicList.forEach(magic => {
-    if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
-      currentResearch[magic].remainingCost -= points;
-      if (currentResearch[magic].remainingCost <= 0 ) {
-        magicToAdvance = magic;
-        // console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
-        spillOverPoints = Math.abs(currentResearch[magic].remainingCost);
-      }
-      done = true;
-    }
-  });
-
-  if (!magicToAdvance) return;
-
-  // Add to spellbook
-  mage.spellbook[magicToAdvance].push(currentResearch[magicToAdvance].id);
-  currentResearch[magicToAdvance] = null; // Temporary reset
-
-  // Set next spell
   const spellList = researchTree.get(mage.magic).get(magicToAdvance);
   for (let i = 0; i < spellList.length; i++) {
     const spellId = spellList[i];
@@ -121,6 +99,37 @@ export const doResearch = (mage: Mage, points: number) => {
       researchables[0].active = true;
     }
   }
+}
+
+// Do research
+export const doResearch = (mage: Mage, points: number) => {
+  const researchTree = getResearchTree();
+  const currentResearch = mage.currentResearch;
+  let spillOverPoints = 0;
+
+  // Apply points to current research
+  let done = false;
+  let magicToAdvance: any = null;
+  allowedMagicList.forEach(magic => {
+    if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
+      currentResearch[magic].remainingCost -= points;
+      if (currentResearch[magic].remainingCost <= 0 ) {
+        magicToAdvance = magic;
+        // console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
+        spillOverPoints = Math.abs(currentResearch[magic].remainingCost);
+      }
+      done = true;
+    }
+  });
+
+  if (!magicToAdvance) return;
+
+  // Add to spellbook
+  mage.spellbook[magicToAdvance].push(currentResearch[magicToAdvance].id);
+  currentResearch[magicToAdvance] = null; // Temporary reset
+
+  // Set next spell
+  nextResearch(mage, magicToAdvance);
 
   // Spend remaining points
   if (spillOverPoints > 0) {
