@@ -281,7 +281,7 @@
     "powerRank": 21,
     "hitPoints": 1,
     "race": ["human"],
-    "attributes": ["special", "temporary"],
+    "attributes": ["special", "temporary", "noMarket"],
 
     "primaryAttackPower": 500,
     "primaryAttackType": ["melee"],
@@ -335,7 +335,7 @@
     "powerRank": 1,
     "hitPoints": 10,
     "race": ["animal"],
-    "attributes": ["special"],
+    "attributes": ["special", "noMarket"],
 
     "primaryAttackPower": 10,
     "primaryAttackType": ["melee"],
@@ -388,7 +388,7 @@
     "powerRank": 1,
     "hitPoints": 10,
     "race": ["animal"],
-    "attributes": ["special"],
+    "attributes": ["special", "noMarket"],
 
     "primaryAttackPower": 10,
     "primaryAttackType": ["melee"],
@@ -442,7 +442,7 @@
     "powerRank": 1,
     "hitPoints": 10,
     "race": ["animal"],
-    "attributes": ["special"],
+    "attributes": ["special", "noMarket"],
 
     "primaryAttackPower": 10,
     "primaryAttackType": ["melee"],

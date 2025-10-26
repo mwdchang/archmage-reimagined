@@ -618,7 +618,7 @@
     "powerRank": 193,
     "hitPoints": 1500,
     "race": ["angel"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 2400,
     "primaryAttackType": ["magic"],
@@ -674,7 +674,7 @@
     "powerRank": 750,
     "hitPoints": 7500,
     "race": ["angel"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 12000,
     "primaryAttackType": ["magic"],
@@ -730,7 +730,7 @@
     "powerRank": 59020,
     "hitPoints": 120000,
     "race": ["angel"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 600000,
     "primaryAttackType": ["magic"],
@@ -787,7 +787,7 @@
     "powerRank": 18586,
     "hitPoints": 40000,
     "race": ["demon"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 100000,
     "primaryAttackType": ["fire"],
@@ -842,7 +842,7 @@
     "powerRank": 50000,
     "hitPoints": 85000,
     "race": ["demon"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 210000,
     "primaryAttackType": ["melee", "paralyse"],
@@ -899,7 +899,7 @@
     "powerRank": 29,
     "hitPoints": 50,
     "race": ["demon"],
-    "attributes": ["summon", "temporary"],
+    "attributes": ["summon", "temporary", "noMarket"],
 
     "primaryAttackPower": 200,
     "primaryAttackType": ["psychic"],

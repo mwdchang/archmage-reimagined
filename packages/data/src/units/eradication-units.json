@@ -616,7 +616,7 @@
     "powerRank": 82378,
     "hitPoints": 120000,
     "race": ["dragon"],
-    "attributes": ["summon", "undisbandable"],
+    "attributes": ["summon", "undisbandable", "noMarket"],
 
     "primaryAttackPower": 250000,
     "primaryAttackType": [ "melee" ],
@@ -675,7 +675,7 @@
     "powerRank": 21000,
     "hitPoints": 85000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 100000,
     "primaryAttackType": [ "fire" ],

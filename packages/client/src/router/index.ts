@@ -112,11 +112,16 @@ const router = createRouter({
     },
     {
       path: '/market',
-      name: 'market',
-      component: MarketView
+      redirect: '/market/item'
     },
     {
-      path: '/market/:priceId',
+      path: '/market/:type',
+      name: 'market',
+      component: MarketView,
+      props: true
+    },
+    {
+      path: '/submarket/:priceId',
       name: 'submarket',
       component: SubMarketView,
       props: true

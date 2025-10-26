@@ -447,7 +447,7 @@
     "powerRank": 25000,
     "hitPoints": 65000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 300000,
     "primaryAttackType": ["lightning", "ranged"],
@@ -502,7 +502,7 @@
     "powerRank": 21800,
     "hitPoints": 90000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 200000,
     "primaryAttackType": ["cold", "ranged"],
@@ -556,7 +556,7 @@
     "powerRank": 19406,
     "hitPoints": 72000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 400000,
     "primaryAttackType": ["poison", "ranged"],
@@ -610,7 +610,7 @@
     "powerRank": 49500,
     "hitPoints": 100000,
     "race": ["giant"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 200000,
     "primaryAttackType": ["melee"],

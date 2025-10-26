@@ -64,7 +64,7 @@ import {
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
-import { betweenInt, randomInt } from './random';
+import { betweenInt, randomBM, randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -100,7 +100,15 @@ import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
-import { generateMarketItems, getMarketableSpells, getRandomMarketableSpell, priceIncrease, resolveWinningBids } from './blackmarket';
+import { 
+  generateMarketItems,
+  getMarketableSpells,
+  getMarketableUnits,
+  getRandomMarketableSpell,
+  getRandomMarketableUnit,
+  priceIncrease,
+  resolveWinningBids
+} from './blackmarket';
 import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
@@ -1746,6 +1754,7 @@ class Engine {
 
     const defaultItemPrice = 1000000;
     const defaultSpellPrice = 1000000;
+    const defaultUnitPrice = 1000000;
 
     console.log('initialize market pricing');
     const items = getAllItems();
@@ -1766,6 +1775,15 @@ class Engine {
       );
     }
 
+    const units = getMarketableUnits();
+    for (const unit of units) {
+      await this.adapter.createMarketPrice(
+        unit.id,
+        'unit',
+        defaultSpellPrice
+      );
+    }
+
     console.log('seeding market items');
     for (let i = 0; i < 10; i++) {
       const item = getRandomItem();
@@ -1778,20 +1796,6 @@ class Engine {
       });
     }
 
-    
-    // const testSpells = getAllSpells().filter(spell => {
-    //   return spell.magic === 'ascendant' && spell.rank === 'simple';
-    // });
-    // for (const spell of testSpells) {
-    //   await this.adapter.addMarketItem({
-    //     id: uuidv4(),
-    //     priceId: spell.id,
-    //     basePrice: defaultSpellPrice,
-    //     mageId: null,
-    //     expiration: this.currentTurn + betweenInt(30, 60)
-    //   });
-    // }
-
     console.log('seeding market spells');
     for (let i = 0; i < 2; i++) {
       const spell = getRandomMarketableSpell();
@@ -1799,6 +1803,22 @@ class Engine {
         id: uuidv4(),
         priceId: spell.id,
         basePrice: defaultSpellPrice,
+        mageId: null,
+        expiration: this.currentTurn + betweenInt(30, 70)
+      });
+    }
+
+    console.log('seeding market units');
+    for (let i = 0; i < 3; i++) {
+      const unit = getRandomMarketableUnit();
+      const np = 30000 + Math.floor(50000 * randomBM());
+      const size = Math.ceil(np / unit.powerRank);
+
+      await this.adapter.addMarketItem({
+        id: uuidv4(),
+        priceId: unit.id,
+        basePrice: defaultUnitPrice,
+        extra: { size },
         mageId: null,
         expiration: this.currentTurn + betweenInt(30, 70)
       });

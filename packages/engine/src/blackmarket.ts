@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { DataAdapter } from "data-adapter/src/data-adapter";
 import { gameTable } from "./base/config"
-import { getAllSpells, getRandomItem, getSpellById } from "./base/references";
-import { betweenInt, randomInt } from "./random";
+import { getAllSpells, getAllUnits, getRandomItem, getSpellById } from "./base/references";
+import { betweenInt, randomBM, randomInt } from "./random";
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Mage } from 'shared/types/mage';
 import { nextResearch } from './magic';
@@ -15,9 +15,9 @@ export const priceDecrease = (base: number) => {
   return base * (1 - gameTable.blackmarket.priceDecreaseFactor);
 }
 
+// Spellbooks
 export const getMarketableSpells = () => {
   const candidateSpells = getAllSpells().filter(spell => {
-    // return spell.rank !== 'ultimate' && spell.rank !== 'simple';
     return spell.rank !== 'ultimate'; 
   });
   return candidateSpells;
@@ -28,6 +28,22 @@ export const getRandomMarketableSpell = () => {
   return candidateSpells[randomInt(candidateSpells.length)];
 }
 
+// Units
+export const getMarketableUnits = () => {
+  const candidateUnits = getAllUnits().filter(unit => {
+    const attrs = unit.attributes;
+    if (attrs.includes('special') || attrs.includes('noMarket')) {
+      return false;
+    }
+    return true;
+  });
+  return candidateUnits;
+}
+
+export const getRandomMarketableUnit = () => {
+  const candidateUnits = getMarketableUnits();
+  return candidateUnits[randomInt(candidateUnits.length)];
+}
 
 /**
  * Resolve market winning bids
@@ -78,6 +94,19 @@ export const resolveWinningBids = async (
         mage.currentResearch[spell.magic] = null;
         nextResearch(mage, spell.magic);
       }
+    } else if (marketPrice.type === 'unit') {
+      const size = marketItem.extra?.size;
+      const unitId = marketPrice.id;
+
+      const stack = mage.army.find(d => d.id === unitId);
+      if (stack) {
+        stack.size += size;
+      } else {
+        mage.army.push({
+          id: unitId,
+          size: size
+        });
+      }
     }
 
     // Resolve if the item sold came from a mage instead of generated
@@ -120,7 +149,6 @@ export const generateMarketItems = async (
   for (let i = 0; i < 5; i++) {
     if (Math.random() > 0.7) {
       const item = getRandomItem();
-
       if (priceMap.has(item.id) === false) {
         continue;
       }
@@ -136,16 +164,31 @@ export const generateMarketItems = async (
   }
 
   // Generate new spellbooks
-  for (let i = 0; i < 2; i++) {
-    if (Math.random() > 0.9) {
-      const spell = getRandomMarketableSpell();
-      if (priceMap.has(spell.id) === false) {
-        continue;
-      }
+  if (Math.random() > 0.95) {
+    const spell = getRandomMarketableSpell();
+    if (priceMap.has(spell.id) === true) {
       await adapter.addMarketItem({
         id: uuidv4(),
         priceId: spell.id,
         basePrice: priceMap.get(spell.id).price,
+        mageId: null,
+        expiration: currentTurn + betweenInt(20, 50)
+      });
+    }
+  }
+
+  // Generate new unit
+  if (Math.random() > 0.75) {
+    const unit = getRandomMarketableUnit();
+    if (priceMap.has(unit.id) === true) {
+      const np = 30000 + Math.floor(50000 * randomBM());
+      const size = Math.ceil(np / unit.powerRank);
+
+      await adapter.addMarketItem({
+        id: uuidv4(),
+        priceId: unit.id,
+        basePrice: priceMap.get(unit.id).price,
+        extra: { size },
         mageId: null,
         expiration: currentTurn + betweenInt(20, 50)
       });
