@@ -78,9 +78,10 @@
       </tbody>
     </table>
 
+    <!--
     <div class="section-header">Relation with Gods</div>
     <div>--</div>
-
+    -->
 
     <div class="section-header">Residential Info</div>
     <table v-if="mage">
@@ -241,9 +242,27 @@
 
     <div class="section-header">Recruiting</div>
     <div>--</div>
+    <table v-if="mage">
+      <tbody>
+        <tr>
+          <td>Unit</td>
+          <td class="text-right">Size</td>
+        </tr>
+        <tr v-for="recruit of mage.recruitments">
+          <td> 
+            <router-link :to="{ name: 'viewUnit', params: { id: recruit.id }}"> 
+              {{ readableStr(recruit.id) }} 
+            </router-link>
+          </td>
+          <td class="text-right"> {{ readbleNumber(recruit.size) }} </td>
+        </tr>
+      </tbody>
+    </table>
 
+    <!--
     <div class="section-header">Skills</div>
     <div>--</div>
+    -->
 
     <div class="section-header">Units</div>
     <table v-if="mage">
@@ -298,6 +317,7 @@ import {
 import Magic from '@/components/magic.vue';
 import { readbleNumber, readableStr } from '@/util/util';  
 import { allowedMagicList } from 'shared/src/common';
+import { getUnitById } from 'engine/src/base/references';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
@@ -360,5 +380,9 @@ td {
   min-width: 80px;
   padding: 0;
   padding-right: 10px;
+}
+
+.section-header {
+  margin-top: 15px;
 }
 </style>

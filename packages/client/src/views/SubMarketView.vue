@@ -17,13 +17,19 @@
       </thead>
       <tbody>
         <tr v-for="item of bidItems" :key="item.marketItem.id">
-          <td>{{ readableStr(item.marketItem.priceId) }} </td>
+          <td>
+            {{ readableStr(item.marketItem.priceId) }} 
+
+            <span v-if="item.marketItem.extra">
+              {{ item.marketItem.extra }}
+            </span>
+          </td>
           <td class="text-right">{{ readbleNumber(item.marketItem.basePrice) }} </td>
           <td class="text-right">
             <!--{{ item.marketItem.expiration }} / -->
             {{ timeRemaining(item.marketItem) }} min
           </td>
-          <td>
+          <td class="text-right">
             {{ currentBidMap[item.marketItem.id] ? currentBidMap[item.marketItem.id] : 0 }}
           </td>
           <td class="text-right">

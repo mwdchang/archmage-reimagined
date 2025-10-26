@@ -619,7 +619,7 @@
     "powerRank": 22000,
     "hitPoints": 100000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 100000,
     "primaryAttackType": ["melee"],
@@ -673,7 +673,7 @@
     "powerRank": 36883,
     "hitPoints": 70000,
     "race": ["elemental"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 200000,
     "primaryAttackType": ["magic"],

@@ -9,7 +9,9 @@ import {
   initializeResearchTree,
   getUnitById,
   getAllItems,
-  getRandomItem
+  getRandomItem,
+  getAllSpells,
+  getResearchTree
 } from './base/references';
 import {
   createMage,
@@ -47,7 +49,8 @@ import {
   successCastingRate,
   enchantmentUpkeep,
   dispelEnchantment,
-  calcKingdomResistance
+  calcKingdomResistance,
+  nextResearch
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -61,7 +64,7 @@ import {
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
-import { betweenInt, randomInt } from './random';
+import { betweenInt, randomBM, randomInt } from './random';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -97,7 +100,15 @@ import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
-import { priceIncrease } from './blackmarket';
+import { 
+  generateMarketItems,
+  getMarketableSpells,
+  getMarketableUnits,
+  getRandomMarketableSpell,
+  getRandomMarketableUnit,
+  priceIncrease,
+  resolveWinningBids
+} from './blackmarket';
 import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
@@ -225,22 +236,11 @@ class Engine {
     console.log('');
     console.log(`=== Server turn [${this.currentTurn}]===`);
 
-    /**
-     * Resolve bids
-     * - Find winning bids
-     * - Add items to buyer
-     * - Add geld to sellers
-     * - Update pricing
-     * - Remove all expired items
-    **/
     const marketItems = await this.adapter.getMarketItems();
     const marketPrices = await this.adapter.getMarketPrices();
 
     const priceMap: Map<string, MarketPrice> = new Map();
     const itemMap: Map<string, MarketItem> = new Map();
-
-    const mageMap: Map<number, Mage> = new Map();
-    const priceUpdate: Map<string, MarketPrice> = new Map();
 
     for (const marketItem of marketItems) {
       itemMap.set(marketItem.id, marketItem);
@@ -250,69 +250,9 @@ class Engine {
     }
 
     const winningBids = await this.adapter.getWinningBids(c.currentTurn);
-    for (const bid of winningBids) {
-      const marketItem = itemMap.get(bid.marketId);
-      const marketPrice = priceMap.get(marketItem.priceId);
+    await resolveWinningBids(this.currentTurn, winningBids, priceMap, itemMap, this.adapter);
 
-      if (!mageMap.has(bid.mageId)) {
-        const m = await this.adapter.getMage(bid.mageId);
-        mageMap.set(bid.mageId, m);
-      }
-      const mage = mageMap.get(bid.mageId);
-
-      // Resolve item
-      if (marketPrice.type === 'item') {
-        if (mage.items[marketPrice.id]) {
-          mage.items[marketPrice.id] ++;
-        } else {
-          mage.items[marketPrice.id] = 1;
-        }
-      }
-
-      // Resolve if item came from a mage instead of generated
-      if (marketItem.mageId) {
-        if (!mageMap.has(marketItem.mageId)) {
-          const m = await this.adapter.getMage(bid.mageId);
-          mageMap.set(bid.mageId, m);
-        }
-        const mage2 = mageMap.get(bid.mageId);
-        mage2.currentGeld += marketItem.basePrice;
-      }
-
-      marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
-      priceUpdate.set(marketPrice.id, marketPrice);
-    }
-
-    // delete market bids and delete market items
-    await this.adapter.removeMarketBids(winningBids.map(d => d.id));
-    await this.adapter.cleanupMarket(c.currentTurn);
-
-    // update prices and mages
-    for (const p of priceUpdate.values()) {
-      await this.adapter.updateMarketPrice(p.id, p.price);
-    }
-    for (const m of mageMap.values()) {
-      await this.adapter.updateMage(m);
-    }
-
-    // generate new items
-    for (let i = 0; i < 5; i++) {
-      if (Math.random() > 0.7) {
-        const item = getRandomItem();
-
-        if (priceMap.has(item.id) === false) {
-          continue;
-        }
-
-        await this.adapter.addMarketItem({
-          id: uuidv4(),
-          priceId: item.id,
-          basePrice: priceMap.get(item.id).price,
-          mageId: null,
-          expiration: this.currentTurn + betweenInt(20, 50)
-        });
-      }
-    }
+    await generateMarketItems(this.currentTurn, priceMap, this.adapter);
 
     if (this.debug === false) {
       setTimeout(async () => {
@@ -1812,15 +1752,36 @@ class Engine {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
 
-    const defaultPrice = 1000000;
+    const defaultItemPrice = 1000000;
+    const defaultSpellPrice = 1000000;
+    const defaultUnitPrice = 1000000;
+
     console.log('initialize market pricing');
     const items = getAllItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
         item.id,
         'item',
-        defaultPrice
-      )
+        defaultItemPrice
+      );
+    }
+
+    const spells = getMarketableSpells();
+    for (const spell of spells) {
+      await this.adapter.createMarketPrice(
+        spell.id,
+        'spell',
+        defaultSpellPrice
+      );
+    }
+
+    const units = getMarketableUnits();
+    for (const unit of units) {
+      await this.adapter.createMarketPrice(
+        unit.id,
+        'unit',
+        defaultSpellPrice
+      );
     }
 
     console.log('seeding market items');
@@ -1829,11 +1790,43 @@ class Engine {
       await this.adapter.addMarketItem({
         id: uuidv4(),
         priceId: item.id,
-        basePrice: defaultPrice,
+        basePrice: defaultItemPrice,
         mageId: null,
         expiration: this.currentTurn + betweenInt(20, 50)
       });
     }
+
+    console.log('seeding market spells');
+    for (let i = 0; i < 2; i++) {
+      const spell = getRandomMarketableSpell();
+      await this.adapter.addMarketItem({
+        id: uuidv4(),
+        priceId: spell.id,
+        basePrice: defaultSpellPrice,
+        mageId: null,
+        expiration: this.currentTurn + betweenInt(30, 70)
+      });
+    }
+
+    console.log('seeding market units');
+    for (let i = 0; i < 3; i++) {
+      const unit = getRandomMarketableUnit();
+      const np = 30000 + Math.floor(50000 * randomBM());
+      const size = Math.ceil(np / unit.powerRank);
+
+      await this.adapter.addMarketItem({
+        id: uuidv4(),
+        priceId: unit.id,
+        basePrice: defaultUnitPrice,
+        extra: { size },
+        mageId: null,
+        expiration: this.currentTurn + betweenInt(30, 70)
+      });
+    }
+  }
+
+  async getMarketPrices(): Promise<MarketPrice[]> {
+    return this.adapter.getMarketPrices();
   }
 
   async getMarketItems(): Promise<MarketItem[]> {

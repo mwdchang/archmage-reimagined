@@ -503,7 +503,7 @@
     "powerRank": 50000,
     "hitPoints": 85000,
     "race": ["giant"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 200000,
     "primaryAttackType": ["melee", "holy"],
@@ -560,7 +560,7 @@
     "powerRank": 39013,
     "hitPoints": 80000,
     "race": ["angel"],
-    "attributes": ["summon"],
+    "attributes": ["summon", "noMarket"],
 
     "primaryAttackPower": 200000,
     "primaryAttackType": ["holy"],
