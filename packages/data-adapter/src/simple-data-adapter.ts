@@ -40,7 +40,8 @@ export class SimpleDataAdapter extends DataAdapter {
     currentTurnTime: Date.now(),
     interval: 0,
     currentTurn: 0,
-    endTurn: 0
+    endTurn: 0,
+    startTime: 0
   }
 
   mageSeq:number = 0;
@@ -102,6 +103,7 @@ export class SimpleDataAdapter extends DataAdapter {
     this.clock.endTurn = clock.endTurn;
     this.clock.currentTurnTime = clock.currentTurnTime;
     this.clock.interval = clock.interval;
+    this.clock.startTime = clock.startTime;
   }
 
   async getServerClock(): Promise<ServerClock> {

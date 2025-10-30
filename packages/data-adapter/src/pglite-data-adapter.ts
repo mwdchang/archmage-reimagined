@@ -55,6 +55,7 @@ const DB_INIT = `
     current_turn int,
     current_turn_time bigint,
     end_turn int,
+    start_time bigint,
     interval int
   );
   COMMIT;
@@ -275,12 +276,13 @@ export class PGliteDataAdapter extends DataAdapter {
   async setServerClock(clock: ServerClock): Promise<void> {
     await this.db.exec(`
       DELETE FROM clock;
-      INSERT INTO clock (current_turn, current_turn_time, end_turn, interval)
+      INSERT INTO clock (current_turn, current_turn_time, end_turn, interval, start_time)
       Values (
         ${clock.currentTurn}, 
         ${clock.currentTurnTime}, 
         ${clock.endTurn},
-        ${clock.interval}
+        ${clock.interval},
+        ${clock.startTime}
       )
     `);
   }
