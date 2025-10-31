@@ -163,7 +163,8 @@ class Engine {
         currentTurn: 0,
         currentTurnTime: Date.now(),
         endTurn: 25000,
-        interval: gameTable.turnRate * 1000 
+        interval: gameTable.turnRate * 1000, 
+        startTime: Date.now()
       });
 
       // Setart market

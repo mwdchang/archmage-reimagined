@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -14,9 +15,11 @@ export default defineConfig({
     }
   },
   server: {
-    host: '0.0.0.0',
+    // host: '0.0.0.0',
+    host: true,
     port: 9000,
     strictPort: true,
+    allowedHosts: ['archmage-reimagined.xyz'],
     proxy: {
       '/api': {
          target: 'http://localhost:3000',

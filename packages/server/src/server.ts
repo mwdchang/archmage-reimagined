@@ -302,8 +302,16 @@ router.get('/api/market-items', async (_req, res) => {
 });
 
 router.get('/api/market-bids/:priceId', async (req, res) => {
-  const id = req.params.priceId;
-  const result = await engine.getMarketBids(id);
+  // const id = req.params.priceId;
+  // const result = await engine.getMarketBids(id);
+  // res.status(200).json(result);
+  
+  const ids = req.params.priceId.split(',').map(d => d.trim());
+  let result = [];
+  for (const id of ids) {
+    const r = await engine.getMarketBids(id);
+    result = result.concat(r);
+  }
   res.status(200).json(result);
 });
 

@@ -7,6 +7,8 @@ export interface ServerClock {
 
   currentTurn: number,
   currentTurnTime: number,
+
+  startTime: number,
   endTurn: number
 }
 

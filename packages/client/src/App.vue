@@ -6,7 +6,10 @@
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
     <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
 
+    <!--
     <Footer v-if="mageStore.mage && route.name !== 'home' && route.name !== 'about' " />
+    -->
+    <Footer />
 
     <!--
     <RouterView v-if="route.name === 'home'" />
@@ -52,6 +55,7 @@ const mageStore = useMageStore();
 const router = useRouter();
 const route = useRoute();
 const { mage } = storeToRefs(mageStore);
+
 
 const publicRoutes = [
   'home', 'guide', 'encyclopedia',

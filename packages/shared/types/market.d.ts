@@ -25,8 +25,13 @@ export interface MarketBid {
   bid: number;
 }
 
-
 export interface Bid {
   marketId: string,
   bid: number
 }
+
+export interface BidContainer {
+  marketItem: MarketItem,
+  bid: number
+}
+
