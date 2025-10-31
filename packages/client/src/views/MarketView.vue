@@ -8,9 +8,9 @@
 
     <section class="form" style="margin-bottom: 10px">
       <select style="width: 10rem; margin-bottom: 0" v-model="currentSelection" @change="changeSelection">
-        <option value="item">Items</option>
-        <option value="spell">Spells</option>
-        <option value="unit">Units</option>
+        <option value="item">Antique Store</option>
+        <option value="spell">Exotic Mageware</option>
+        <option value="unit">Spawning Hatchery</option>
       </select>
     </section>
 

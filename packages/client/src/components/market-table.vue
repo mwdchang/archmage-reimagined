@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th> Name </th>
+        <th v-if="modelValue[0].marketItem.extra"> Number </th>
         <th> Minimum price</th>
         <th> Time remaining </th>
         <th> # bids</th>
@@ -13,14 +14,12 @@
       <tr v-for="item of modelValue" :key="item.marketItem.id">
         <td>
           {{ readableStr(item.marketItem.priceId) }} 
-
-          <span v-if="item.marketItem.extra">
-            {{ item.marketItem.extra }}
-          </span>
+        </td>
+        <td v-if="item.marketItem.extra" class="text-right">
+          {{ readbleNumber(item.marketItem.extra.size) }}
         </td>
         <td class="text-right">{{ readbleNumber(item.marketItem.basePrice) }} </td>
         <td class="text-right">
-          <!--{{ item.marketItem.expiration }} / -->
           {{ timeRemaining(item.marketItem) }} min
         </td>
         <td class="text-right">
