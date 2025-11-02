@@ -15,12 +15,8 @@
     </section>
 
 
-    <section>
-      <market-table 
-        v-if="bidItems.length > 0 && currentSelection !== 'item'"
-        v-model="bidItems" 
-      />
-
+    <section v-if="bidItems.length > 0 && currentSelection !== 'item'">
+      <market-table v-model="bidItems" />
       <div class="form">
         <button @click="makeBid"> Bid </button>
       </div>

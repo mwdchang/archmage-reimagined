@@ -19,7 +19,7 @@
           <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
           -->
           <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
-          <td class="text-right"> {{ recruitmentAmount(mageStore.mage, unit.id) }} </td>
+          <td class="text-right"> {{ readbleNumber(recruitmentAmount(mageStore.mage, unit.id)) }} </td>
         </tr>
       </tbody>
     </table>
@@ -44,11 +44,17 @@
       <p style="margin-top: 10px">Recruitment Queue</p>
       <table> 
         <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
-          <td>
+          <td style="min-width: 8rem">
             {{ readableStr(r.id) }}
           </td>
-          <td>{{ r.size }}</td>
-          <td> <button @click="deleteOrder(idx)">Remove</button></td>
+          <td class="text-right">{{ readbleNumber(r.size) }}</td>
+          <td> 
+            <div class="form" style="padding: 4px">
+              <button @click="deleteOrder(idx)" style="padding: 5px; background: #d80">
+                Remove
+              </button>
+            </div>
+          </td>
         </tr>
       </table>
     </div>
@@ -64,7 +70,7 @@ import { useMageStore } from '@/stores/mage';
 import { getRecruitableUnits } from 'engine/src/base/references'; 
 import { recruitmentAmount } from 'engine/src/interior';
 import { ArmyUnit } from 'shared/types/mage';
-import { readableStr } from '@/util/util';
+import { readableStr, readbleNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 
