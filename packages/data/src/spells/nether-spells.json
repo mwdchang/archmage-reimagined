@@ -213,7 +213,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["ghoul"],
         "summonType": "all",
-        "summonNetPower": 110000,
+        "summonNetPower": 180000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -271,7 +271,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["hornedDemon"],
         "summonType": "all",
-        "summonNetPower": 170000,
+        "summonNetPower": 185000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -299,7 +299,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["wraith"],
         "summonType": "all",
-        "summonNetPower": 170000,
+        "summonNetPower": 180000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -660,7 +660,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["zombie", "wraith", "lich", "vampire", "shadow"],
         "summonType": "random",
-        "summonNetPower": 180000,
+        "summonNetPower": 120000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -722,7 +722,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["darkElfMagician"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 450000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -750,7 +750,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["bulwarkHorror"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 630000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -778,7 +778,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["lich"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 620000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -806,7 +806,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["vampire"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 640000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -834,7 +834,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["demonKnight"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 640000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.3 },
@@ -1006,7 +1006,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["unholyReaver"],
         "summonType": "all",
-        "summonNetPower": 2000000,
+        "summonNetPower": 2200000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.0 },
