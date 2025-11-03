@@ -211,7 +211,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["astralMagician"],
         "summonType": "all",
-        "summonNetPower": 150000,
+        "summonNetPower": 270000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -239,7 +239,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["angel"],
         "summonType": "all",
-        "summonNetPower": 140000,
+        "summonNetPower": 270000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -650,7 +650,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["archangel", "angel", "knight", "unicorn"],
         "summonType": "random",
-        "summonNetPower": 180000,
+        "summonNetPower": 120000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -678,7 +678,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["archangel"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 540000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -706,7 +706,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["spiritWarrior"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 430000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -734,7 +734,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["unicorn"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 440000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -762,7 +762,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["empyreanInquisitor"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 440000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -790,7 +790,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["nagaQueen"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 560000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -818,7 +818,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["dominion"],
         "summonType": "all",
-        "summonNetPower": 2000000,
+        "summonNetPower": 2200000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },
@@ -846,7 +846,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["titan"],
         "summonType": "all",
-        "summonNetPower": 2000000,
+        "summonNetPower": 2200000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 },

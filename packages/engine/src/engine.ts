@@ -134,6 +134,11 @@ class Engine {
     this.debug = debug;
   }
 
+  /**
+   * Initialize the game config and state
+   *
+   * @resetData whether to reset the database
+  **/
   async initialize(resetData: boolean) {
     loadUnitData(plainUnits);
     loadUnitData(ascendantUnits);
@@ -163,7 +168,8 @@ class Engine {
         currentTurn: 0,
         currentTurnTime: Date.now(),
         endTurn: 25000,
-        interval: gameTable.turnRate * 1000 
+        interval: gameTable.turnRate * 1000, 
+        startTime: Date.now()
       });
 
       // Setart market
@@ -926,6 +932,15 @@ class Engine {
     const castingTurn = spell.castingTurn;
     const cost = castingCost(mage, spellId);
     const logs: GameMsg[] = [];
+
+    // Check if spell exists in spellbook
+    if (mage.spellbook[spell.magic].includes(spell.id) === false) {
+      logs.push({
+        type: 'error',
+        message: `You do not have ${spell.id} in your spellbook`
+      });
+      return logs;
+    }
 
     for (let i = 0; i < num; i++) {
       // Check if we meet turn/cost prerequisite

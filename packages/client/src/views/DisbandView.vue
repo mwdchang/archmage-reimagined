@@ -51,13 +51,13 @@
     
     <!-- left -->
     <section class="form">
-      <div class="row" style="align-items: baseline">
+      <div class="row" style="align-items: baseline; gap: 10px">
         <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
-        <label>Disband confirmation&nbsp;</label>
+        <label>Confirmation</label>
       </div>
 
 
-      <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband units</button>
+      <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband</button>
       <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
       <p style="margin-top: 10px"> Net Income </p>

@@ -51,7 +51,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["lizardman"],
         "summonType": "all",
-        "summonNetPower": 50000,
+        "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -79,7 +79,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["dwarvenDeathSeeker"],
         "summonType": "all",
-        "summonNetPower": 50000,
+        "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -107,7 +107,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["goblin"],
         "summonType": "all",
-        "summonNetPower": 55000,
+        "summonNetPower": 70000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -266,7 +266,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["wyvern"],
         "summonType": "all",
-        "summonNetPower": 170000,
+        "summonNetPower": 270000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -294,7 +294,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["salamander"],
         "summonType": "all",
-        "summonNetPower": 160000,
+        "summonNetPower": 270000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -322,7 +322,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["hellHound"],
         "summonType": "all",
-        "summonNetPower": 160000,
+        "summonNetPower": 260000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -829,7 +829,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["chimera"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 430000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -857,7 +857,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["efreeti"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 440000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -885,7 +885,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["hydra"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 540000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -913,7 +913,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["dwarvenShaman"],
         "summonType": "all",
-        "summonNetPower": 400000,
+        "summonNetPower": 440000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -941,7 +941,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["stormGiant"],
         "summonType": "all",
-        "summonNetPower": 450000,
+        "summonNetPower": 550000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.2 },
@@ -997,7 +997,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["redDragon"],
         "summonType": "all",
-        "summonNetPower": 2000000,
+        "summonNetPower": 2500000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.0 },

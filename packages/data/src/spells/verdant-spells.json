@@ -218,7 +218,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["mandrake"],
         "summonType": "all",
-        "summonNetPower": 150000,
+        "summonNetPower": 180000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -325,7 +325,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["nymph"],
         "summonType": "all",
-        "summonNetPower": 130000,
+        "summonNetPower": 180000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -353,7 +353,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["werebear"],
         "summonType": "all",
-        "summonNetPower": 150000,
+        "summonNetPower": 185000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -381,7 +381,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["griffon"],
         "summonType": "all",
-        "summonNetPower": 420000,
+        "summonNetPower": 450000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -409,7 +409,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["venusFlytrap"],
         "summonType": "all",
-        "summonNetPower": 400000, 
+        "summonNetPower": 540000, 
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -437,7 +437,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["elvenBladeDancer"],
         "summonType": "all",
-        "summonNetPower": 400000, 
+        "summonNetPower": 510000, 
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -465,7 +465,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["highElf"],
         "summonType": "all",
-        "summonNetPower": 400000, 
+        "summonNetPower": 430000, 
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -493,7 +493,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["treant"],
         "summonType": "all",
-        "summonNetPower": 400000, 
+        "summonNetPower": 420000, 
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
@@ -843,7 +843,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["phoenix"],
         "summonType": "all",
-        "summonNetPower": 2000000, 
+        "summonNetPower": 1900000, 
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 0.6 },
