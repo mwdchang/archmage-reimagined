@@ -3,31 +3,6 @@ import type { Unit, UnitFilter } from 'shared/types/unit';
 import { ArmyUnit } from 'shared/types/mage';
 import { getUnitById } from './references';
 
-const attackTypes = new Set([
-  'missile', 'fire', 'poison', 
-  'breath', 'magic', 'melee', 
-  'ranged', 'lightning', 'cold', 
-  'paralyse', 'psychic', 'holy'
-]);
-
-// Validation function
-export const validateUnit = (u: Unit) => {
-  for (const type of u.primaryAttackType) {
-    if (!attackTypes.has(type)) {
-      throw new Error(`${u.id}: ${type} does not match valid attack types`);
-    }
-  }
-  for (const type of u.secondaryAttackType) {
-    if (!attackTypes.has(type)) {
-      throw new Error(`${u.id}: ${type} does not match valid attack types`);
-    }
-  }
-  for (const r of Object.keys(u.attackResistances)) {
-    if (!attackTypes.has(r)) {
-      throw new Error(`${u.id}: ${r} does not match valid resistances`);
-    }
-  }
-}
 
 export const hasAbility = (u:Unit, abilityStr: string) => {
   return u.abilities.map(d => d.name).includes(abilityStr);

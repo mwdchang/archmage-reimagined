@@ -5,7 +5,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomInt } from '../random';
-import { validateUnit } from './unit';
+import { validateUnit } from './validate';
 
 
 export const unitMap = new Map<string, Unit>();

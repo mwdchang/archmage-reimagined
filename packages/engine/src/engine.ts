@@ -10,8 +10,6 @@ import {
   getUnitById,
   getAllItems,
   getRandomItem,
-  getAllSpells,
-  getResearchTree
 } from './base/references';
 import {
   createMage,
@@ -50,7 +48,6 @@ import {
   enchantmentUpkeep,
   dispelEnchantment,
   calcKingdomResistance,
-  nextResearch
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -106,10 +103,8 @@ import {
   getMarketableUnits,
   getRandomMarketableSpell,
   getRandomMarketableUnit,
-  priceIncrease,
   resolveWinningBids
 } from './blackmarket';
-import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
 
