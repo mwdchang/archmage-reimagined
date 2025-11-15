@@ -99,6 +99,7 @@ export interface PostbattleEffect extends Effect {
 **/
 export interface UnitAttrEffect extends Effect {
   checkResistance: boolean;
+  activation?: 'attack' | 'defence';
   attributes: {
     [key: string ]: {
       rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',

@@ -343,6 +343,7 @@ const applyTemporaryUnitEffect = (
  * - all: All stacks get all effects
  */
 const battleSpell = (
+  stance: 'attack' | 'defend',
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
@@ -414,6 +415,13 @@ const battleSpell = (
 
         if (effect.effectType === 'UnitAttrEffect') {
           const unitAttrEffect = effect as UnitAttrEffect;
+
+          // Check if there are specific attack or defend triggers
+          if (unitAttrEffect.activation) {
+            if (unitAttrEffect.activation !== stance) {
+              continue;
+            }
+          }
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (effect.effectType === 'UnitDamageEffect') {
           const damageEffect = effect as UnitDamageEffect;
@@ -722,11 +730,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Prebattle spell effects
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
+    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
 
@@ -752,6 +760,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   console.log('>> apply attacker enchantments')
   attacker.mage.enchantments.forEach(enchant => {
     battleSpell(
+      'attack',
       attacker,
       attackingArmy,
       defender,
@@ -763,6 +772,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   console.log('>> apply defender enchantments')
   defender.mage.enchantments.forEach(enchant => {
     battleSpell(
+      'defend',
       defender,
       defendingArmy,
       attacker,
@@ -781,7 +791,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Run through spells and items
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'BattleEffect');
+    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, 'BattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
@@ -789,7 +799,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'BattleEffect');
+    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, 'BattleEffect');
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {
