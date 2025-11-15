@@ -956,7 +956,7 @@
     "attributes": ["special"],
 
     "primaryAttackPower": 200,
-    "primaryAttackType": [ "poision" ],
+    "primaryAttackType": [ "poison" ],
     "primaryAttackInit": 1,
     "counterAttackPower": 36,
 

@@ -5,6 +5,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomInt } from '../random';
+import { validateUnit } from './unit';
 
 
 export const unitMap = new Map<string, Unit>();
@@ -23,6 +24,7 @@ const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
+    validateUnit(units[i]);
     unitMap.set(units[i].id, units[i]);
   }
 }

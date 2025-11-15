@@ -618,7 +618,7 @@
     "counterAttackPower": 50000,
 
     "secondaryAttackPower": 300000,
-    "secondaryAttackType": ["ranged", "poision"],
+    "secondaryAttackType": ["ranged", "poison"],
     "secondaryAttackInit": 3,
 
     "recruitCost": { 

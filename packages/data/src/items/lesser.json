@@ -987,7 +987,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "attackResistance.poision": {
+              "attackResistance.poison": {
                 "rule": "add",
                 "magic": {
                   "ascendant": { "value": 10.0 },
