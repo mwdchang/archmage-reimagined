@@ -1,5 +1,5 @@
 import { allowedEffect as E, allowedMagicList } from "shared/src/common";
-import { ArmyUpkeepEffect, BattleEffect, CastingEffect, Effect, KingdomArmyEffect, KingdomBuildingsEffect, KingdomResistanceEffect, KingdomResourcesEffect, PostbattleEffect, ProductionEffect, StealEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect, WishEffect } from "shared/types/effects";
+import { ArmyUpkeepEffect, BattleEffect, CastingEffect, Effect, KingdomArmyEffect, KingdomBuildingsEffect, KingdomResistanceEffect, KingdomResourcesEffect, PostbattleEffect, ProductionEffect, StealEffect, TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect, WishEffect } from "shared/types/effects";
 import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
 import { WishEffectResult } from "../effects/apply-wish-effect";
@@ -70,7 +70,7 @@ export const validateSpellOrItem = (s: Spell | Item) => {
   }
 }
 
-export const validateEffect = (eff: Effect<any>, spellId: string) => {
+export const validateEffect = (eff: Effect<any>, refId: string) => {
   const type = eff.effectType;
 
   if (eff.effectType === E.UnitAttrEffect) {
@@ -81,16 +81,16 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
 
         if (f1 === 'attackResistances' && f2) {
           if (!attackTypes.has(f2)) {
-            throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+            throw new Error(`${refId}:${effect.effectType} attribute ${attr} not valid`);
           }
         }
         if (f1 === 'spellResistances' && f2) {
           if (!magicTypes.has(f2)) {
-            throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+            throw new Error(`${refId}:${effect.effectType} attribute ${attr} not valid`);
           }
         }
         if (!attrTypes.has(f1)) {
-          throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+          throw new Error(`${refId}:${effect.effectType} attribute ${attr} not valid`);
         }
       }
 
@@ -99,12 +99,12 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
         'addSpellLevel', 'addSpellLevelPercentage', 
         'addSpellLevelPercentageBase'
       ].includes(v.rule)) {
-        throw new Error(`${spellId}:${effect.effectType} rule ${v} not valid`);
+        throw new Error(`${refId}:${effect.effectType} rule ${v} not valid`);
       }
 
       for (const [k2, v2] of Object.entries(v.magic)) {
         if (!magicTypes.has(k2)) {
-          throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+          throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
         }
       }
     }
@@ -117,18 +117,18 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
       'direct', 'unitLoss', 'spellLevel',
       'spellLevelUnitLoss', 'spellLevelUnitDamage'
     ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const dtype of effect.damageType) {
       if (!attackTypes.has(dtype)) {
-        throw new Error(`${spellId}:${effect.effectType} damageType ${dtype} not valid`);
+        throw new Error(`${refId}:${effect.effectType} damageType ${dtype} not valid`);
       }
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -136,16 +136,16 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
   if (eff.effectType === E.UnitHealEffect) {
     const effect = eff as UnitHealEffect;
     if (!['points', 'percentage', 'units'].includes(effect.healType)) {
-      throw new Error(`${spellId}:${effect.effectType} healType ${effect.healType} not valid`);
+      throw new Error(`${refId}:${effect.effectType} healType ${effect.healType} not valid`);
     }
 
     if (!['none', 'spellLevel'].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -153,16 +153,16 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
   if (eff.effectType === E.KingdomResistanceEffect) {
     const effect = eff as KingdomResistanceEffect;
     if (!magicTypes.has(effect.resistance)) {
-      throw new Error(`${spellId}:${effect.effectType} resistance ${effect.resistance} not valid`);
+      throw new Error(`${refId}:${effect.effectType} resistance ${effect.resistance} not valid`);
     }
 
     if (!['spellLevel'].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -171,7 +171,7 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     const effect = eff as KingdomBuildingsEffect;
 
     if (!['landPercentageLoss'].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const bType of effect.target.split(',')) {
@@ -180,13 +180,13 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
         'workshops', 'nodes', 'barracks',
         'guilds', 'forts', 'barriers', 'wilderness'
       ].includes(bType)) {
-        throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
+        throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
       }
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -197,19 +197,19 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     if (![
       'add', 'addSpellLevelPercentage', 'addSpellLevelPercentageBase'
     ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     if (![
       'population', 'mana', 'geld', 
       'item', 'turn'
     ].includes(effect.target)) {
-      throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
+      throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -218,12 +218,12 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     const effect = eff as KingdomArmyEffect;
 
     if (![ 'addSpellLevelPercentageBase' ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -234,18 +234,18 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     if (![ 
       'spellLevel', 'addPercentageBase', 'addSpellLevelPercentageBase'
     ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     if (![ 
       'farms', 'guilds', 'nodes', 'geld', 'population', 'land', 'barrack'
     ].includes(effect.production)) {
-      throw new Error(`${spellId}:${effect.effectType} production ${effect.production} not valid`);
+      throw new Error(`${refId}:${effect.effectType} production ${effect.production} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -256,12 +256,12 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     if (![ 
       'addSpellLevelPercentageBase', 'addPercentageBase'
     ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -270,16 +270,16 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     const effect = eff as CastingEffect;
 
     if (![ 'spellLevel' ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     if (![ 'castingSuccess' ].includes(effect.type)) {
-      throw new Error(`${spellId}:${effect.effectType} type ${effect.type} not valid`);
+      throw new Error(`${refId}:${effect.effectType} type ${effect.type} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
@@ -292,9 +292,13 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
         'geld', 'population', 'mana',
         'turn', 'item', null
       ].includes(roll.target)) {
-        throw new Error(`${spellId}:${effect.effectType} roll ${roll.target} not valid`);
+        throw new Error(`${refId}:${effect.effectType} roll ${roll.target} not valid`);
       }
     }
+  }
+
+  if (eff.effectType === E.RemoveEnchantmentEffect) {
+    // nothing for now
   }
 
   if (eff.effectType === E.StealEffect) {
@@ -303,18 +307,37 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
     if (![ 
       'addSpellLevelPercentageBase', 'addSpellLevelPercentage', 'addPercentage'
     ].includes(effect.rule)) {
-      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
     if (![ 'mana', 'geld', 'item' ].includes(effect.target)) {
-      throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
+      throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
       if (!magicTypes.has(k2)) {
-        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
       }
     }
   }
 
+  if (eff.effectType === E.TemporaryUnitEffect) {
+    const effect = eff as TemporaryUnitEffect;
+
+    if (![ 
+      'spellLevelPercentageBase', 'fixed'
+    ].includes(effect.rule)) {
+      throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    if (![ 'population', null ].includes(effect.target)) {
+      throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${refId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
 }
