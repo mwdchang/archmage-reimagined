@@ -453,7 +453,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.43 },
@@ -618,7 +618,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": -0.15 },
@@ -921,7 +921,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.13 }
@@ -980,7 +980,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": -0.20 }

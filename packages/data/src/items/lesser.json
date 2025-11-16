@@ -1026,7 +1026,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": 2.0 },
@@ -1065,7 +1065,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": 1.0 },
@@ -1094,7 +1094,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addPercentageBase",
                 "magic": {
                   "ascendant": { "value": -1.0 },

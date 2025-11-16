@@ -1,5 +1,5 @@
-import { allowedEffect as E } from "shared/src/common";
-import { BattleEffect, Effect, PostbattleEffect } from "shared/types/effects";
+import { allowedEffect as E, allowedMagicList } from "shared/src/common";
+import { BattleEffect, Effect, PostbattleEffect, UnitAttrEffect } from "shared/types/effects";
 import { Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
 
@@ -8,6 +8,17 @@ const attackTypes = new Set([
   'breath', 'magic', 'melee', 
   'ranged', 'lightning', 'cold', 
   'paralyse', 'psychic', 'holy'
+]);
+
+const magicTypes = new Set([...allowedMagicList] as string[]);
+
+const attrTypes = new Set([
+  'hitPoints',
+  'primaryAttackPower', 'primaryAttackType', 'primaryAttackInit', 'counterAttackPower',
+  'secondaryAttackPower', 'secondaryAttackType', 'secondaryAttackInit',
+  'spellResistances', 'attackResistances',
+  'accuracy', 'efficiency',
+  'abilities', 'abilities2'
 ]);
 
 
@@ -48,7 +59,7 @@ export const validateSpell = (s: Spell) => {
         throw new Error(`${s.id}: effect target ${effect.target} not valid`);
       }
       if (!['win', 'all'].includes(effect.condition)) {
-        throw new Error(`${s.id}: effect condiation ${effect.condition} not valid`);
+        throw new Error(`${s.id}: effect condition ${effect.condition} not valid`);
       }
       effect.effects.forEach(d => { validateEffect(d, s.id); });
     } else {
@@ -59,4 +70,35 @@ export const validateSpell = (s: Spell) => {
 
 export const validateEffect = (eff: Effect<any>, spellId: string) => {
   const type = eff.effectType;
+
+  if (eff.effectType === E.UnitAttrEffect) {
+    const effect = eff as UnitAttrEffect;
+    for (const [k, v] of Object.entries(effect.attributes)) {
+      for (const attr of  k.split(',')) {
+        const [f1, f2] = attr.split('.');
+
+        if (f1 === 'attackResistances' && f2) {
+          if (!attackTypes.has(f2)) {
+            throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+          }
+        }
+        if (f1 === 'spellResistances' && f2) {
+          if (!magicTypes.has(f2)) {
+            throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+          }
+        }
+        if (!attrTypes.has(f1)) {
+          throw new Error(`${spellId}:${effect.effectType} attribute ${attr} not valid`);
+        }
+      }
+
+      if (![
+        'set', 'add', 'remove', 'addPercentageBase', 
+        'addSpellLevel', 'addSpellLevelPercentage', 
+        'addSpellLevelPercentageBase'
+      ].includes(v.rule)) {
+        throw new Error(`${spellId}:${effect.effectType} rule ${v} not valid`);
+      }
+    }
+  }
 }
