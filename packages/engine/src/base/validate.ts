@@ -1,5 +1,5 @@
 import { allowedEffect as E, allowedMagicList } from "shared/src/common";
-import { BattleEffect, Effect, PostbattleEffect, UnitAttrEffect } from "shared/types/effects";
+import { BattleEffect, Effect, PostbattleEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect } from "shared/types/effects";
 import { Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
 
@@ -99,6 +99,53 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
       ].includes(v.rule)) {
         throw new Error(`${spellId}:${effect.effectType} rule ${v} not valid`);
       }
+
+      for (const [k2, v2] of Object.entries(v.magic)) {
+        if (!magicTypes.has(k2)) {
+          throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+        }
+      }
     }
   }
+
+  if (eff.effectType === E.UnitDamageEffect) {
+    const effect = eff as UnitDamageEffect;
+
+    if (![
+      'direct', 'unitLoss', 'spellLevel',
+      'spellLevelUnitLoss', 'spellLevelUnitDamage'
+    ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const dtype of effect.damageType) {
+      if (!attackTypes.has(dtype)) {
+        throw new Error(`${spellId}:${effect.effectType} damageType ${dtype} not valid`);
+      }
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.UnitHealEffect) {
+    const effect = eff as UnitHealEffect;
+    if (!['points', 'percentage', 'units'].includes(effect.healType)) {
+      throw new Error(`${spellId}:${effect.effectType} healType ${effect.healType} not valid`);
+    }
+
+    if (!['none', 'spellLevel'].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
 }
