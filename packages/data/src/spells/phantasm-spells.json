@@ -713,7 +713,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
             "attributes": {
-              "abilities,": {
+              "abilities": {
                 "rule": "add",
                 "magic": {
                   "phantasm": { "value": "charm", "extra": null }
@@ -734,7 +734,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
             "attributes": {
-              "abilities,": {
+              "abilities": {
                 "rule": "add",
                 "magic": {
                   "ascendant": { "value": "beauty", "extra": null },

@@ -198,7 +198,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": -0.01 },
@@ -393,7 +393,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
@@ -475,7 +475,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.05 },
@@ -640,7 +640,7 @@
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
             "attributes": {
-              "primaryAttackPower,secondaryAttackPower,counterPower": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
                 "magic": {
                   "ascendant": { "value": 0.02 },
@@ -702,7 +702,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "oponent",
+        "target": "opponent",
         "targetType": "all",
         "filters": null,
         "trigger": null,

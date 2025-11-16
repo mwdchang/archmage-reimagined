@@ -105,7 +105,7 @@
           {
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
-            "damageType": ["paralyze"],
+            "damageType": ["paralyse"],
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": 80 },
@@ -630,7 +630,7 @@
           {
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
-            "damageType": ["paralyze"],
+            "damageType": ["paralyse"],
             "rule": "spellLevelUnitLoss",
             "magic": {
               "ascendant": { "value": 0.021 },

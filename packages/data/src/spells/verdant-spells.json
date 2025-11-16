@@ -126,7 +126,7 @@
     ]
   },
   {
-    "id": "webOfTheSpierWoman",
+    "id": "webOfTheSpiderWoman",
     "name": "Web of the Spider Woman",
     "magic": "verdant",
     "rank": "simple",
@@ -139,7 +139,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "oponent",
+        "target": "opponent",
         "targetType": "random",
         "filters": null,
         "trigger": null,
@@ -519,7 +519,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "oponent",
+        "target": "opponent",
         "targetType": "all",
         "filters": null,
         "trigger": null,

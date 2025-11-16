@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
+import { allowedEffect as E } from "shared/src/common";
 import { 
   UnitAttrEffect,
   UnitDamageEffect,
@@ -348,7 +349,7 @@ const battleSpell = (
   defender: Combatant,
   defenderBattleStack: BattleStack[],
   enchantment: Enchantment | null,
-  effectType: 'BattleEffect' | 'PrebattleEffect'
+  effectType: E.BattleEffect | E.PrebattleEffect
 ) => {
   const logs: BattleEffectLog[] = [];
 
@@ -412,17 +413,17 @@ const battleSpell = (
         }
         console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
 
-        if (effect.effectType === 'UnitAttrEffect') {
+        if (effect.effectType === E.UnitAttrEffect) {
           const unitAttrEffect = effect as UnitAttrEffect;
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-        } else if (effect.effectType === 'UnitDamageEffect') {
+        } else if (effect.effectType === E.UnitDamageEffect) {
           const damageEffect = effect as UnitDamageEffect;
           const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
           logs.push(...damageLogs);
-        } else if (effect.effectType === 'UnitHealEffect') {
+        } else if (effect.effectType === E.UnitHealEffect) {
           const healEffect = effect as UnitHealEffect;
           applyHealEffect(effectOrigin, healEffect, affectedArmy);
-        } else if (effect.effectType === 'TemporaryUnitEffect') {
+        } else if (effect.effectType === E.TemporaryUnitEffect) {
           const tempUnitEffect = effect as TemporaryUnitEffect;
           const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
           newStack.role = casterBattleStack[0].role;
@@ -447,7 +448,7 @@ const battleItem = (
   casterBattleStack: BattleStack[],
   defender: Combatant,
   defenderBattleStack: BattleStack[],
-  effectType: 'BattleEffect' | 'PrebattleEffect'
+  effectType: E.BattleEffect | E.PrebattleEffect 
 ) => {
 
   const logs: BattleEffectLog[] = []
@@ -492,17 +493,17 @@ const battleItem = (
         const eff = battleEffect.effects[i];
         console.log(`Item: Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
 
-        if (eff.effectType === 'UnitAttrEffect') {
+        if (eff.effectType === E.UnitAttrEffect) {
           const unitAttrEffect = eff as UnitAttrEffect;
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-        } else if (eff.effectType === 'UnitDamageEffect') {
+        } else if (eff.effectType === E.UnitDamageEffect) {
           const damageEffect = eff as UnitDamageEffect;
           const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
           logs.push(...damageLogs);
-        } else if (eff.effectType === 'UnitHealEffect') {
+        } else if (eff.effectType === E.UnitHealEffect) {
           const healEffect = eff as UnitHealEffect;
           applyHealEffect(effectOrigin, healEffect, affectedArmy);
-        } else if (eff.effectType === 'TemporaryUnitEffect') {
+        } else if (eff.effectType === E.TemporaryUnitEffect) {
           const tempUnitEffect = eff as TemporaryUnitEffect;
           const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
           newStack.role = casterBattleStack[0].role;
@@ -560,7 +561,7 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
   };
 
   const stealEffect: StealEffect = {
-    effectType: 'StealEffect',
+    effectType: E.StealEffect,
     rule: 'addPercentage',
     target: 'geld',
     magic: {
@@ -722,21 +723,21 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Prebattle spell effects
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'PrebattleEffect');
+    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, E.PrebattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'PrebattleEffect');
+    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, E.PrebattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
 
   // Prebattle item effects
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'PrebattleEffect');
+    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, E.PrebattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'PrebattleEffect');
+    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, E.PrebattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
 
@@ -757,7 +758,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       defender,
       defendingArmy,
       enchant,
-      'BattleEffect');
+      E.BattleEffect);
   });
 
   console.log('>> apply defender enchantments')
@@ -768,7 +769,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       attacker,
       attackingArmy,
       enchant,
-      'BattleEffect');
+      E.BattleEffect);
   });
 
   // Apply fort bonus to defender
@@ -781,19 +782,19 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Run through spells and items
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, 'BattleEffect');
+    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, E.BattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, 'BattleEffect');
+    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, 'BattleEffect');
+    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, E.BattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, 'BattleEffect');
+    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
 
@@ -1340,7 +1341,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   // Calculate any post battle effects from enchantments or spells/items
   for (const enchant of attacker.mage.enchantments) {
     const spell = getSpellById(enchant.spellId);
-    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    const postbattleEffects = spell.effects.filter(d => d.effectType === E.PostbattleEffect) as PostbattleEffect[];
     if (postbattleEffects.length === 0) continue;
 
     const origin = enchant2origin(enchant);
@@ -1350,11 +1351,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
 
       for (const effect of postbattleEffect.effects) {
-        if (effect.effectType === 'KingdomResourcesEffect') {
+        if (effect.effectType === E.KingdomResourcesEffect) {
           postbattleEffect.target === 'self' ?
             applyKingdomResourcesEffect(attacker.mage, effect as any, origin) :
             applyKingdomResourcesEffect(defender.mage, effect as any, origin);
-        } else if (effect.effectType === 'StealEffect') {
+        } else if (effect.effectType === E.StealEffect) {
           const r = applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
           battleReport.postBattle.logs.push(r);
         }
@@ -1364,7 +1365,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   for (const enchant of defender.mage.enchantments) {
     const spell = getSpellById(enchant.spellId);
-    const postbattleEffects = spell.effects.filter(d => d.effectType === 'PostbattleEffect') as PostbattleEffect[];
+    const postbattleEffects = spell.effects.filter(d => d.effectType === E.PostbattleEffect) as PostbattleEffect[];
     if (postbattleEffects.length === 0) continue;
 
     const origin = enchant2origin(enchant);
@@ -1374,11 +1375,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === true) continue;
 
       for (const effect of postbattleEffect.effects) {
-        if (effect.effectType === 'KingdomResourcesEffect') {
+        if (effect.effectType === E.KingdomResourcesEffect) {
           postbattleEffect.target === 'self' ?
             applyKingdomResourcesEffect(defender.mage, effect as any, origin) :
             applyKingdomResourcesEffect(attacker.mage, effect as any, origin); 
-        } else if (effect.effectType === 'StealEffect') {
+        } else if (effect.effectType === E.StealEffect) {
           const r = applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
           battleReport.postBattle.logs.push(r);
         }

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
+import { allowedEffect as E } from "shared/src/common";
 import {
   loadUnitData,
   loadSpellData,
@@ -10,8 +11,6 @@ import {
   getUnitById,
   getAllItems,
   getRandomItem,
-  getAllSpells,
-  getResearchTree
 } from './base/references';
 import {
   createMage,
@@ -50,7 +49,6 @@ import {
   enchantmentUpkeep,
   dispelEnchantment,
   calcKingdomResistance,
-  nextResearch
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -106,10 +104,8 @@ import {
   getMarketableUnits,
   getRandomMarketableSpell,
   getRandomMarketableUnit,
-  priceIncrease,
   resolveWinningBids
 } from './blackmarket';
-import { newBattleReport } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
 
@@ -277,7 +273,7 @@ class Engine {
     const logs: GameMsg[] = [];
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
-      const summonEffects = spell.effects.filter(d => d.effectType === 'UnitSummonEffect') as UnitSummonEffect[];
+      const summonEffects = spell.effects.filter(d => d.effectType === E.UnitSummonEffect) as UnitSummonEffect[];
       if (summonEffects.length === 0) continue;
 
       for (const summonEffect of summonEffects) {
@@ -315,7 +311,7 @@ class Engine {
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
-        .filter(d => d.effectType === 'KingdomBuildingsEffect') as KingdomBuildingsEffect[];
+        .filter(d => d.effectType === E.KingdomBuildingsEffect) as KingdomBuildingsEffect[];
 
       if (effects.length === 0) continue;
 
@@ -334,7 +330,7 @@ class Engine {
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
-        .filter(d => d.effectType === 'KingdomResourcesEffect') as KingdomResourcesEffect[];
+        .filter(d => d.effectType === E.KingdomResourcesEffect) as KingdomResourcesEffect[];
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
@@ -352,7 +348,7 @@ class Engine {
     for (const enchantment of enchantments) {
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
-        .filter(d => d.effectType === 'KingdomArmyEffect') as KingdomArmyEffect[];
+        .filter(d => d.effectType === E.KingdomArmyEffect) as KingdomArmyEffect[];
       if (effects.length === 0) continue;
 
       for (const effect of effects) {
@@ -843,16 +839,16 @@ class Engine {
     };
 
     for (const effect of item.effects) {
-      if (effect.effectType === 'WishEffect') {
+      if (effect.effectType === E.WishEffect) {
         const result = applyWishEffect(mage, effect as any, origin);
         logs.push(...fromWishEffectResult(result));
-      } else if (effect.effectType === 'KingdomResourcesEffect') {
+      } else if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(mage, effect as any, origin);
         logs.push(...fromKingdomResourcesEffectResult(result));
-      } else if (effect.effectType === 'KingdomBuildingsEffect') {
+      } else if (effect.effectType === E.KingdomBuildingsEffect) {
         const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
         logs.push(...fromKingdomBuildingsEffectResult(result));
-      } else if (effect.effectType === 'UnitSummonEffect') {
+      } else if (effect.effectType === E.UnitSummonEffect) {
         const result = this.summonByItem(mage, effect as any, origin);
         logs.push(...result);
       }
@@ -881,13 +877,13 @@ class Engine {
     }
 
     for (const effect of item.effects) {
-      if (effect.effectType === 'KingdomResourcesEffect') {
+      if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
         logs.push(...fromKingdomResourcesEffectResult(result));
-      } else if (effect.effectType === 'KingdomBuildingsEffect') {
+      } else if (effect.effectType === E.KingdomBuildingsEffect) {
         const result = applyKingdomBuildingsEffect(targetMage, effect as any, origin);
         logs.push(...fromKingdomBuildingsEffectResult(result));
-      } else if (effect.effectType === 'StealEffect') {
+      } else if (effect.effectType === E.StealEffect) {
         const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
         logs.push(...fromStealEffectResult(stealResult));
       }
@@ -1089,32 +1085,32 @@ class Engine {
 
     if (targetMage === null) {
       for (const effect of spell.effects) {
-        if (effect.effectType === 'KingdomResourcesEffect') {
+        if (effect.effectType === E.KingdomResourcesEffect) {
           const result = applyKingdomResourcesEffect(mage, effect as any, origin);
           logs.push(...fromKingdomResourcesEffectResult(result));
-        } else if (effect.effectType === 'KingdomBuildingsEffect') {
+        } else if (effect.effectType === E.KingdomBuildingsEffect) {
           const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
           logs.push(...fromKingdomBuildingsEffectResult(result));
-        } else if (effect.effectType === 'WishEffect') {
+        } else if (effect.effectType === E.WishEffect) {
           const wishResult = applyWishEffect(mage, effect as any, origin);
           logs.push(...fromWishEffectResult(wishResult));
-        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+        } else if (effect.effectType === E.RemoveEnchantmentEffect) {
           const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, null);
           logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
       }
     } else {
       for (const effect of spell.effects) {
-        if (effect.effectType === 'KingdomResourcesEffect') {
+        if (effect.effectType === E.KingdomResourcesEffect) {
           const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
           logs.push(...fromKingdomResourcesEffectResult(result));
-        } else if (effect.effectType === 'KingdomBuildingsEffect') {
+        } else if (effect.effectType === E.KingdomBuildingsEffect) {
           const result = applyKingdomBuildingsEffect(targetMage, effect as any, origin);
           logs.push(...fromKingdomBuildingsEffectResult(result));
-        } else if (effect.effectType === 'StealEffect') {
+        } else if (effect.effectType === E.StealEffect) {
           const stealResult = applyStealEffect(mage, effect as any, origin, targetMage);
           logs.push(...fromStealEffectResult(stealResult));
-        } else if (effect.effectType === 'RemoveEnchantmentEffect') {
+        } else if (effect.effectType === E.RemoveEnchantmentEffect) {
           const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, targetMage);
           logs.push(...fromRemoveEnchantmentEffectResult(result));
         }
