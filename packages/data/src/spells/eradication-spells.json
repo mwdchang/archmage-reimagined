@@ -702,7 +702,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "oponent",
+        "target": "opponent",
         "targetType": "all",
         "filters": null,
         "trigger": null,

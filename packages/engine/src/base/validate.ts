@@ -1,4 +1,5 @@
-import { BattleEffect } from "shared/types/effects";
+import { allowedEffect as E } from "shared/src/common";
+import { BattleEffect, Effect, PostbattleEffect } from "shared/types/effects";
 import { Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
 
@@ -32,10 +33,30 @@ export const validateUnit = (u: Unit) => {
 export const validateSpell = (s: Spell) => {
   for (const eff of s.effects) {
     const type = eff.effectType;
-    if (type === 'BattleEffect') {
-    } else if (type === 'PreBattleEffect') {
-    } else if (type === 'UnitSummonEffect') {
-    } else if (type === 'KingdomBuildingsEffect') {
+    if (type === E.BattleEffect || type === E.PrebattleEffect) {
+      const effect = eff as BattleEffect;
+      if (!['self', 'opponent', 'both'].includes(effect.target)) {
+        throw new Error(`${s.id}: effect target ${effect.target} not valid`);
+      }
+      if (!['all', 'random', 'weightedRandom'].includes(effect.targetType)) {
+        throw new Error(`${s.id}: effect targetType ${effect.targetType} not valid`);
+      }
+      effect.effects.forEach(d => { validateEffect(d, s.id); });
+    } else if (type === E.PostbattleEffect) {
+      const effect = eff as PostbattleEffect;
+      if (!['self', 'opponent'].includes(effect.target)) {
+        throw new Error(`${s.id}: effect target ${effect.target} not valid`);
+      }
+      if (!['win', 'all'].includes(effect.condition)) {
+        throw new Error(`${s.id}: effect condiation ${effect.condition} not valid`);
+      }
+      effect.effects.forEach(d => { validateEffect(d, s.id); });
+    } else {
+      validateEffect(eff, s.id);
     }
   }
+}
+
+export const validateEffect = (eff: Effect<any>, spellId: string) => {
+  const type = eff.effectType;
 }

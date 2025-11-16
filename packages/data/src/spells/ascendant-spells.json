@@ -89,7 +89,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetStack": "random",
+        "targetType": "random",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -296,7 +296,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetStack": "all",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -402,7 +402,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "targetStack": "all",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -504,7 +504,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetStack": "all",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -543,7 +543,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetStack": "all",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -873,7 +873,7 @@
       {
         "effectType": "BattleEffect",
         "target": "self",
-        "targetStack": "all",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
