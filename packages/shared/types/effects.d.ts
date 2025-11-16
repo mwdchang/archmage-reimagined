@@ -232,8 +232,8 @@ export interface ArmyUpkeepEffect extends Effect<E.ArmyUpkeepEffect> {
  * - castingRate
  */
 export interface CastingEffect extends Effect<E.CastingEffect> {
-  rule: string,
-  type: string,
+  rule: 'spellLevel',
+  type: 'castingSuccess',
   magic: {
     [key in AllowedMagic]: {
       value: number

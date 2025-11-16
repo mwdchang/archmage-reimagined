@@ -1,7 +1,9 @@
 import { allowedEffect as E, allowedMagicList } from "shared/src/common";
-import { BattleEffect, Effect, PostbattleEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect } from "shared/types/effects";
-import { Spell } from "shared/types/magic";
+import { ArmyUpkeepEffect, BattleEffect, CastingEffect, Effect, KingdomArmyEffect, KingdomBuildingsEffect, KingdomResistanceEffect, KingdomResourcesEffect, PostbattleEffect, ProductionEffect, StealEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect, WishEffect } from "shared/types/effects";
+import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
+import { WishEffectResult } from "../effects/apply-wish-effect";
+import { StealEffectResult } from "../effects/apply-steal-effect";
 
 const attackTypes = new Set([
   'missile', 'fire', 'poison', 
@@ -41,7 +43,7 @@ export const validateUnit = (u: Unit) => {
   }
 }
 
-export const validateSpell = (s: Spell) => {
+export const validateSpellOrItem = (s: Spell | Item) => {
   for (const eff of s.effects) {
     const type = eff.effectType;
     if (type === E.BattleEffect || type === E.PrebattleEffect) {
@@ -139,6 +141,173 @@ export const validateEffect = (eff: Effect<any>, spellId: string) => {
 
     if (!['none', 'spellLevel'].includes(effect.rule)) {
       throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.KingdomResistanceEffect) {
+    const effect = eff as KingdomResistanceEffect;
+    if (!magicTypes.has(effect.resistance)) {
+      throw new Error(`${spellId}:${effect.effectType} resistance ${effect.resistance} not valid`);
+    }
+
+    if (!['spellLevel'].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.KingdomBuildingsEffect) {
+    const effect = eff as KingdomBuildingsEffect;
+
+    if (!['landPercentageLoss'].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const bType of effect.target.split(',')) {
+      if (![
+        'all', 'farms', 'towns',
+        'workshops', 'nodes', 'barracks',
+        'guilds', 'forts', 'barriers', 'wilderness'
+      ].includes(bType)) {
+        throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
+      }
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.KingdomResourcesEffect) {
+    const effect = eff as KingdomResourcesEffect;
+
+    if (![
+      'add', 'addSpellLevelPercentage', 'addSpellLevelPercentageBase'
+    ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    if (![
+      'population', 'mana', 'geld', 
+      'item', 'turn'
+    ].includes(effect.target)) {
+      throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.KingdomArmyEffect) {
+    const effect = eff as KingdomArmyEffect;
+
+    if (![ 'addSpellLevelPercentageBase' ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.ProductionEffect) {
+    const effect = eff as ProductionEffect;
+
+    if (![ 
+      'spellLevel', 'addPercentageBase', 'addSpellLevelPercentageBase'
+    ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    if (![ 
+      'farms', 'guilds', 'nodes', 'geld', 'population', 'land', 'barrack'
+    ].includes(effect.production)) {
+      throw new Error(`${spellId}:${effect.effectType} production ${effect.production} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.ArmyUpkeepEffect) {
+    const effect = eff as ArmyUpkeepEffect;
+
+    if (![ 
+      'addSpellLevelPercentageBase', 'addPercentageBase'
+    ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.CastingEffect) {
+    const effect = eff as CastingEffect;
+
+    if (![ 'spellLevel' ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    if (![ 'castingSuccess' ].includes(effect.type)) {
+      throw new Error(`${spellId}:${effect.effectType} type ${effect.type} not valid`);
+    }
+
+    for (const [k2, v2] of Object.entries(effect.magic)) {
+      if (!magicTypes.has(k2)) {
+        throw new Error(`${spellId}:${effect.effectType} magic ${k2} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.WishEffect) {
+    const effect = eff as WishEffect;
+
+    for (const roll  of effect.rolls) {
+      if (![
+        'geld', 'population', 'mana',
+        'turn', 'item', null
+      ].includes(roll.target)) {
+        throw new Error(`${spellId}:${effect.effectType} roll ${roll.target} not valid`);
+      }
+    }
+  }
+
+  if (eff.effectType === E.StealEffect) {
+    const effect = eff as StealEffect;
+
+    if (![ 
+      'addSpellLevelPercentageBase', 'addSpellLevelPercentage', 'addPercentage'
+    ].includes(effect.rule)) {
+      throw new Error(`${spellId}:${effect.effectType} rule ${effect.rule} not valid`);
+    }
+
+    if (![ 'mana', 'geld', 'item' ].includes(effect.target)) {
+      throw new Error(`${spellId}:${effect.effectType} target ${effect.target} not valid`);
     }
 
     for (const [k2, v2] of Object.entries(effect.magic)) {
