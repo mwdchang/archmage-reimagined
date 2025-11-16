@@ -1,9 +1,11 @@
 /* Effects improved */
 import type { UnitFilter } from './unit.d.ts';
 import type { AllowedMagic } from './common.js';
+import type { allowedEffect as E } from '../src/common.ts';
 
-export interface Effect {
-  effectType: string
+
+export interface Effect<T extends string> {
+  effectType: T
 }
 
 export interface EffectOrigin {
@@ -51,7 +53,7 @@ export interface EffectOrigin {
  * as any other units, however they do not count in the success/failure calculations and are
  * dismissed after the battle.
 **/
-export interface TemporaryUnitEffect extends Effect {
+export interface TemporaryUnitEffect extends Effect<E.TemporaryUnitEffect>{
   checkResistance: false;
   unitId: string,
   rule: 'spellLevelPercentageBase' | 'fixed', 
@@ -69,8 +71,10 @@ export interface TemporaryUnitEffect extends Effect {
  * - Priortize unit attribute changes, eg: set to fix number
  * - Create temporary stacks
 **/
-export interface PrebattleEffect extends BattleEffect{}
-export interface BattleEffect extends Effect {
+export interface PrebattleEffect extends BattleEffect {
+  effectype: E.PrebattleEffect
+}
+export interface BattleEffect extends Effect<E.BattleEffect> {
   target: 'self' | 'opponent' | 'both';
   targetType: 'all' | 'random' | 'weightedRandom'
   filters: UnitFilter[] | null;
@@ -81,7 +85,7 @@ export interface BattleEffect extends Effect {
   effects: (UnitAttrEffect | UnitDamageEffect | UnitHealEffect | TemporaryUnitEffect)[]
 }
 
-export interface PostbattleEffect extends Effect {
+export interface PostbattleEffect extends Effect<E.PostbattleEffect> {
   target: 'self' | 'opponent',
   condition: 'win' | 'all';
   effects: (KingdomResourcesEffect | StealEffect)[]
@@ -97,7 +101,7 @@ export interface PostbattleEffect extends Effect {
  * addSpellLevelPercentage:      value * spellLevel / maxSpellLevel  
  * addSpellLevelPercentageBase:  value * spellLevel / maxSpellLevel * base
 **/
-export interface UnitAttrEffect extends Effect {
+export interface UnitAttrEffect extends Effect<E.UnitAttrEffect> {
   checkResistance: boolean;
   activation?: 'attack' | 'defence';
   attributes: {
@@ -119,7 +123,7 @@ export interface UnitAttrEffect extends Effect {
  * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
 type DamageValue = number | { min: number, max: number };
-export interface UnitDamageEffect extends Effect {
+export interface UnitDamageEffect extends Effect<E.UnitDamageEffect> {
   checkResistance: boolean;
   damageType: string[],
   rule: 'direct' | 'unitLoss' | 'spellLevel' | 'spellLevelUnitLoss' | 'spellLevelUnitDamage',
@@ -130,7 +134,7 @@ export interface UnitDamageEffect extends Effect {
   }
 }
 
-export interface UnitHealEffect extends Effect {
+export interface UnitHealEffect extends Effect<E.UnitHealEffect> {
   checkResistance: boolean; // not used
   healType: 'points' | 'percentage' | 'units',
   rule: 'none' | 'spellLevel',
@@ -146,7 +150,7 @@ export interface UnitHealEffect extends Effect {
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
  * fixed = summonNetPower 
 **/
-export interface UnitSummonEffect extends Effect {
+export interface UnitSummonEffect extends Effect<E.UnitSummonEffect> {
   unitIds: string[],
   summonType: 'random' | 'all',
   rule: 'spellLevel' | 'fixed' | 'power',
@@ -158,7 +162,7 @@ export interface UnitSummonEffect extends Effect {
   }
 }
 
-export interface KingdomResistanceEffect extends Effect {
+export interface KingdomResistanceEffect extends Effect<E.KingdomResistanceEffect> {
   rule: 'spellLevel',
   resistance: string,
   magic: {
@@ -168,7 +172,7 @@ export interface KingdomResistanceEffect extends Effect {
   }
 }
 
-export interface KingdomBuildingsEffect extends Effect {
+export interface KingdomBuildingsEffect extends Effect<E.KingdomBuildingsEffect> {
   rule: 'landPercentageLoss',
   target: string,
   magic: {
@@ -178,7 +182,7 @@ export interface KingdomBuildingsEffect extends Effect {
   }
 }
 
-export interface KingdomResourcesEffect extends Effect {
+export interface KingdomResourcesEffect extends Effect<E.KingdomResourcesEffect> {
   rule: 'add' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
   target: 'population' | 'mana' | 'geld' | 'item' | 'turn',
   magic: {
@@ -188,7 +192,7 @@ export interface KingdomResourcesEffect extends Effect {
   }
 }
 
-export interface KingdomArmyEffect extends Effect {
+export interface KingdomArmyEffect extends Effect<E.KingdomArmyEffect> {
   rule: 'addSpellLevelPercentageBase',
   filters: UnitFilter[] | null,
   checkResistance: boolean;
@@ -199,7 +203,7 @@ export interface KingdomArmyEffect extends Effect {
   }
 }
 
-export interface ProductionEffect extends Effect {
+export interface ProductionEffect extends Effect<E.ProductionEffect> {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
   production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land' | 'barrack',
   magic: {
@@ -209,7 +213,7 @@ export interface ProductionEffect extends Effect {
   }
 }
 
-export interface ArmyUpkeepEffect extends Effect {
+export interface ArmyUpkeepEffect extends Effect<E.ArmyUpkeepEffect> {
   rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
   filters: UnitFilter[] | null;
   magic: {
@@ -228,9 +232,9 @@ export interface ArmyUpkeepEffect extends Effect {
  * - summon
  * - castingRate
  */
-export interface CastingEffect extends Effect {
-  rule: string,
-  type: string,
+export interface CastingEffect extends Effect<E.CastingEffect> {
+  rule: 'spellLevel',
+  type: 'castingSuccess',
   magic: {
     [key in AllowedMagic]: {
       value: number
@@ -238,7 +242,7 @@ export interface CastingEffect extends Effect {
   }
 }
 
-export interface WishEffect extends Effect {
+export interface WishEffect extends Effect<E.WishEffect> {
   trigger: {
     min: number;
     max: number;
@@ -252,7 +256,7 @@ export interface WishEffect extends Effect {
 }
 
 
-export interface RemoveEnchantmentEffect extends Effect {
+export interface RemoveEnchantmentEffect extends Effect<E.RemoveEnchantmentEffect> {
   trigger: {
     min: number;
     max: number;
@@ -262,7 +266,7 @@ export interface RemoveEnchantmentEffect extends Effect {
 /**
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/
-export interface StealEffect extends Effect {
+export interface StealEffect extends Effect<E.StealEffect> {
   rule: 'addSpellLevelPercentageBase' | 'addSpellLevelPercentage' | 'addPercentage',
   target: 'mana' | 'geld' | 'item',
   magic: {

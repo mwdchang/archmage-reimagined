@@ -732,7 +732,7 @@
     "attributes": ["special"],
 
     "primaryAttackPower": 120,
-    "primaryAttackType": ["missle", "ranged"],
+    "primaryAttackType": ["missile", "ranged"],
     "primaryAttackInit": 3,
     "counterAttackPower": 0,
 

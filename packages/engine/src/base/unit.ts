@@ -3,6 +3,7 @@ import type { Unit, UnitFilter } from 'shared/types/unit';
 import { ArmyUnit } from 'shared/types/mage';
 import { getUnitById } from './references';
 
+
 export const hasAbility = (u:Unit, abilityStr: string) => {
   return u.abilities.map(d => d.name).includes(abilityStr);
 }

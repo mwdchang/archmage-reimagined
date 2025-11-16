@@ -5,6 +5,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomInt } from '../random';
+import { validateSpellOrItem, validateUnit } from './validate';
 
 
 export const unitMap = new Map<string, Unit>();
@@ -23,6 +24,7 @@ const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
+    validateUnit(units[i]);
     unitMap.set(units[i].id, units[i]);
   }
 }
@@ -53,6 +55,7 @@ export const getRecruitableUnits = (magic: string): Unit[] => {
 
 export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
+    validateSpellOrItem(spells[i])
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
   }
@@ -70,6 +73,7 @@ export const getAllSpells = (): Spell[] => {
 
 export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
+    validateSpellOrItem(items[i])
     itemMap.set(items[i].id, items[i]);
     itemList.push(items[i]);
   }
