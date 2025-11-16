@@ -17,7 +17,7 @@ export interface Spell {
     mana: number,
     population: number
   } | null,
-  effects: Effect[]
+  effects: Effect<any>[]
 }
 
 export interface Item {
@@ -31,5 +31,5 @@ export interface Item {
     mana: number,
     population: number
   } | null,
-  effects: Effect[]
+  effects: Effect<any>[]
 }

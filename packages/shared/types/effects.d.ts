@@ -275,3 +275,9 @@ export interface StealEffect extends Effect<E.StealEffect> {
     }
   }
 }
+
+// A percentage change to avoid opponent actions
+export interface AvoidEffect extends Effect<E.AvoidEffect> {
+  target: 'spell' | 'item' | 'attack';
+  value: number;
+}

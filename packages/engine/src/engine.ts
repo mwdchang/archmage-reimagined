@@ -58,7 +58,8 @@ import {
   KingdomBuildingsEffect,
   KingdomResourcesEffect,
   EffectOrigin,
-  KingdomArmyEffect
+  KingdomArmyEffect,
+  AvoidEffect
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
@@ -1424,6 +1425,39 @@ class Engine {
     const defenderMage = await this.getMage(targetId);
     const MAX_STACKS = 10;
 
+    // Check if the battle can be avoided all together
+    for (const enchantment of defenderMage.enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const battleAvoidances = spell.effects.filter(eff => {
+        return eff.effectType === E.AvoidEffect;
+      }) as AvoidEffect[];
+
+      for (const eff of battleAvoidances.filter(e => e.target === 'attack')) {
+        if (Math.random() * 100 <= eff.value) {
+          await this.useTurn(mage);
+          await this.useTurn(mage);
+
+          this.adapter.saveChronicles([{
+            id: mage.id,
+            name: mage.name,
+            turn: mage.turnsUsed,
+            timestamp: Date.now(),
+            data: [
+              {
+                type: 'log', 
+                message: `You cound not find ${defenderMage.name} (#${defenderMage.id})'s kingdom`
+              }
+            ]
+          }]);
+
+          return {
+            errors: [`You missed ${defenderMage.name} (#${defenderMage.id})'s kingdom`],
+            battleReport: null
+          }
+        }
+      }
+    }
+
 
     // For attacker, the army is formed by selected ids
     const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
@@ -1623,7 +1657,7 @@ class Engine {
         ]
       }])
     }
-    return battleReport;
+    return { errors: [], battleReport } ;
   }
 
   async getBattleReport(mage: Mage, reportId: string) {

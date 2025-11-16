@@ -1176,6 +1176,11 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "AvoidEffect",
+        "target": "attack",
+        "value": 50
+      }
     ]
   },
   {

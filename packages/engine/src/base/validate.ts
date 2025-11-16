@@ -1,9 +1,16 @@
 import { allowedEffect as E, allowedMagicList } from "shared/src/common";
-import { ArmyUpkeepEffect, BattleEffect, CastingEffect, Effect, KingdomArmyEffect, KingdomBuildingsEffect, KingdomResistanceEffect, KingdomResourcesEffect, PostbattleEffect, ProductionEffect, StealEffect, TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect, UnitHealEffect, WishEffect } from "shared/types/effects";
+import {
+  ArmyUpkeepEffect, AvoidEffect, BattleEffect,
+  CastingEffect, Effect, KingdomArmyEffect,
+  KingdomBuildingsEffect, KingdomResistanceEffect, KingdomResourcesEffect,
+  PostbattleEffect, ProductionEffect, StealEffect,
+  TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect,
+  UnitHealEffect, WishEffect
+} from "shared/types/effects";
 import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
-import { WishEffectResult } from "../effects/apply-wish-effect";
-import { StealEffectResult } from "../effects/apply-steal-effect";
+
+
 
 const attackTypes = new Set([
   'missile', 'fire', 'poison', 
@@ -340,4 +347,15 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
       }
     }
   }
+
+  if (eff.effectType === E.AvoidEffect) {
+    const effect = eff as AvoidEffect;
+    if(![
+      'spell', 'item', 'attack'
+    ].includes(effect.target)) {
+      throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
+    }
+
+  }
+
 }
