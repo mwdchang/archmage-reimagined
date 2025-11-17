@@ -1176,6 +1176,17 @@
       "population": 0
     },
     "effects": [
+      {
+        "effectType": "AvoidEffect",
+        "target": "attack",
+        "magic": {
+          "ascendant": { "value": 0 },
+          "verdant": { "value": 0 },
+          "eradication": { "value": 0 },
+          "nether": { "value": 0 },
+          "phantasm": { "value": 20 }
+        }
+      }
     ]
   },
   {

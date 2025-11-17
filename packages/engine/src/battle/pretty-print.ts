@@ -79,12 +79,19 @@ export const prettyPrintBR = (br: BattleReport) => {
   if (br.preBattle.attacker.spellResult == 'lostConcentration') {
     console.log('Lost concentration');
   }
-
+  if (br.preBattle.attacker.spellResult == 'missed') {
+    console.log('The spell missed');
+  }
 
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
   if (br.preBattle.attacker.itemResult == 'barriers') {
     console.log('The item hit the barriers and fizzled');
   }
+  if (br.preBattle.attacker.itemResult == 'missed') {
+    console.log('The item missed');
+  }
+
+
 
   console.log(`${defenderStr} casts ${br.defender.spellId}`);
   if (br.preBattle.defender.spellResult == 'noMana') {

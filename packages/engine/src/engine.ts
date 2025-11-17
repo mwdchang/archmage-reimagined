@@ -58,7 +58,8 @@ import {
   KingdomBuildingsEffect,
   KingdomResourcesEffect,
   EffectOrigin,
-  KingdomArmyEffect
+  KingdomArmyEffect,
+  AvoidEffect
 } from 'shared/types/effects';
 import { GameMsg } from 'shared/types/common';
 
@@ -968,7 +969,6 @@ class Engine {
 
       // Check if spell past barriers
       if (target) {
-        // FIXME: target barriers if applicable
         const targetMage = await this.getMage(target);
         const kingdomResistances = calcKingdomResistance(targetMage);
         if (
@@ -977,10 +977,34 @@ class Engine {
         ) {
           logs.push({
             type: 'error',
-            message: `You spell hit the barriers and fizzled.`
+            message: `Your spell hit the barriers and fizzled.`
           });
           castingSuccessful = false;
         } 
+
+        // Check if spell miss due to enchantments
+        // TODO: reflect spells?
+        let avoidSpell = false;
+        for (const enchantment of targetMage.enchantments) {
+          const spell = getSpellById(enchantment.spellId);
+          const battleAvoidances = spell.effects.filter(eff => {
+            return eff.effectType === E.AvoidEffect;
+          }) as AvoidEffect[];
+
+          for (const eff of battleAvoidances.filter(e => e.target === 'spell')) {
+            if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
+              avoidSpell = true;
+            }
+          }
+        }
+
+        if (avoidSpell === true) {
+          logs.push({
+            type: 'error',
+            message: `Your spell missed.`
+          });
+          castingSuccessful = false;
+        }
       }
 
       mage.currentMana -= cost;
@@ -1424,6 +1448,39 @@ class Engine {
     const defenderMage = await this.getMage(targetId);
     const MAX_STACKS = 10;
 
+    // Check if the battle can be avoided all together
+    for (const enchantment of defenderMage.enchantments) {
+      const spell = getSpellById(enchantment.spellId);
+      const battleAvoidances = spell.effects.filter(eff => {
+        return eff.effectType === E.AvoidEffect;
+      }) as AvoidEffect[];
+
+      for (const eff of battleAvoidances.filter(e => e.target === 'attack')) {
+        if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
+          await this.useTurn(mage);
+          await this.useTurn(mage);
+
+          this.adapter.saveChronicles([{
+            id: mage.id,
+            name: mage.name,
+            turn: mage.turnsUsed,
+            timestamp: Date.now(),
+            data: [
+              {
+                type: 'log', 
+                message: `You cound not find ${defenderMage.name} (#${defenderMage.id})'s kingdom`
+              }
+            ]
+          }]);
+
+          return {
+            errors: [`You missed ${defenderMage.name} (#${defenderMage.id})'s kingdom`],
+            battleReport: null
+          }
+        }
+      }
+    }
+
 
     // For attacker, the army is formed by selected ids
     const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
@@ -1623,7 +1680,7 @@ class Engine {
         ]
       }])
     }
-    return battleReport;
+    return { errors: [], battleReport } ;
   }
 
   async getBattleReport(mage: Mage, reportId: string) {

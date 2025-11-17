@@ -10,6 +10,7 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
+  AvoidEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -344,6 +345,7 @@ const applyTemporaryUnitEffect = (
  * - all: All stacks get all effects
  */
 const battleSpell = (
+  stance: 'attack' | 'defend',
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
@@ -415,6 +417,13 @@ const battleSpell = (
 
         if (effect.effectType === E.UnitAttrEffect) {
           const unitAttrEffect = effect as UnitAttrEffect;
+
+          // Check if there are specific attack or defend triggers
+          if (unitAttrEffect.activation) {
+            if (unitAttrEffect.activation !== stance) {
+              continue;
+            }
+          }
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (effect.effectType === E.UnitDamageEffect) {
           const damageEffect = effect as UnitDamageEffect;
@@ -628,8 +637,29 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
           if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
             preBattle.attacker.spellResult = 'barriers';
           } else {
-            preBattle.attacker.spellResult = 'success';
-            hasAttackerSpell = true;
+
+            // Check if spell missed
+            // TODO: reflect spells
+            let avoidSpell = false;
+            for (const enchantment of defender.mage.enchantments) {
+              const spell = getSpellById(enchantment.spellId);
+              const battleAvoidances = spell.effects.filter(eff => {
+                return eff.effectType === E.AvoidEffect;
+              }) as AvoidEffect[];
+
+              for (const eff of battleAvoidances.filter(e => e.target === 'spell')) {
+                if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
+                  avoidSpell = true;
+                }
+              }
+            }
+
+            if (avoidSpell === true) {
+              preBattle.attacker.spellResult = 'missed';
+            } else {
+              preBattle.attacker.spellResult = 'success';
+              hasAttackerSpell = true;
+            }
           }
         }
       } else {
@@ -723,11 +753,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Prebattle spell effects
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, E.PrebattleEffect);
+    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, E.PrebattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, E.PrebattleEffect);
+    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, E.PrebattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
 
@@ -753,6 +783,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   console.log('>> apply attacker enchantments')
   attacker.mage.enchantments.forEach(enchant => {
     battleSpell(
+      'attack',
       attacker,
       attackingArmy,
       defender,
@@ -764,6 +795,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   console.log('>> apply defender enchantments')
   defender.mage.enchantments.forEach(enchant => {
     battleSpell(
+      'defend',
       defender,
       defendingArmy,
       attacker,
@@ -782,7 +814,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Run through spells and items
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell(attacker, attackingArmy, defender, defendingArmy, null, E.BattleEffect);
+    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, E.BattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
@@ -790,7 +822,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell(defender, defendingArmy, attacker, attackingArmy, null, E.BattleEffect);
+    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, E.BattleEffect);
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {

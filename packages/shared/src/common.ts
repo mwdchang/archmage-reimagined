@@ -24,6 +24,7 @@ export const enum allowedEffect {
   ProductionEffect = 'ProductionEffect',
   ArmyUpkeepEffect = 'ArmyUpkeepEffect',
   CastingEffect = 'CastingEffect',
+  AvoidEffect = 'AvoidEffect',
 
   // Instants
   KingdomBuildingsEffect = 'KingdomBuildingsEffect',

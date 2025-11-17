@@ -103,6 +103,7 @@ export interface PostbattleEffect extends Effect<E.PostbattleEffect> {
 **/
 export interface UnitAttrEffect extends Effect<E.UnitAttrEffect> {
   checkResistance: boolean;
+  activation?: 'attack' | 'defence';
   attributes: {
     [key: string ]: {
       rule: 'set' | 'add' | 'remove' | 'addPercentageBase' | 'addSpellLevel' | 'addSpellLevelPercentage' | 'addSpellLevelPercentageBase',
@@ -271,6 +272,16 @@ export interface StealEffect extends Effect<E.StealEffect> {
   magic: {
     [key in AllowedMagic]?: {
       value: { min: number, max: number, stealPercent: number | null }
+    }
+  }
+}
+
+// A percentage change to avoid opponent actions
+export interface AvoidEffect extends Effect<E.AvoidEffect> {
+  target: 'spell' | 'item' | 'attack';
+  magic: {
+    [key in AllowedMagic]?: {
+      value: any
     }
   }
 }

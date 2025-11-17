@@ -39,8 +39,8 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
         { id: 'archangel', size: 2300 },
         { id: 'nagaQueen', size: 1200 },
         { id: 'unicorn', size: 4500 },
-        { id: 'knightTemplar', size: 19000 },
-        { id: 'highPriest', size: 22000 },
+        { id: 'knightTemplar', size: 22000 },
+        { id: 'highPriest', size: 30000 },
         { id: 'titan', size: 50 }
       ];
       botMage.enchantments = [
@@ -105,7 +105,8 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       botMage.enchantments = [
         makeEnchantment(botMage, 'shroudOfDarkness'),
         makeEnchantment(botMage, 'protectionFromEvil'),
-        makeEnchantment(botMage, 'mindBar')
+        makeEnchantment(botMage, 'mindBar'),
+        makeEnchantment(botMage, 'hallucination')
       ]
       break;
     default:

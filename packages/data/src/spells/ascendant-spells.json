@@ -1027,5 +1027,34 @@
         }
       }
     ]
+  },
+  {
+    "id": "heavenlyProtection",
+    "name": "Heavenly Protection",
+    "magic": "ascendant",
+    "rank": "ancient",
+    "description": "The spell will place the caster's country under the direct protection of heavens. It can ward off all enemy magic, reflecting spells back to the caster. Although it gives some protection to other magics as well, Ascendant mages will benefit from greatest protection.",
+    "attributes": ["enchantment", "selfOnly"],
+    "researchCost": 0,
+    "castingCost": 300000, 
+    "castingTurn": 10,
+    "upkeep": {
+      "geld": 0,
+      "mana": 250,
+      "population": 0
+    },
+    "effects": [
+      {
+        "effectType": "AvoidEffect",
+        "target": "spell",
+        "magic": {
+          "ascendant": { "value": 30 },
+          "verdant": { "value": 12 },
+          "eradication": { "value": 5 },
+          "nether": { "value": 5 },
+          "phantasm": { "value": 12 }
+        }
+      }
+    ]
   }
 ]

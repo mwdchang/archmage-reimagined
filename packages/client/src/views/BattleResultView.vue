@@ -75,6 +75,9 @@
         <div v-if="preBattle.attacker.spellResult === 'noMana'">
           Not enough mana to cast the spell
         </div>
+        <div v-if="preBattle.attacker.spellResult === 'missed'">
+          The spell missed
+        </div>
       </div>
       <div v-if="report.attacker.itemId && preBattle.attacker.itemResult !== 'notUsed'">
         {{ attackerStr }} uses 
@@ -86,6 +89,9 @@
         </div>
         <div v-if="preBattle.attacker.itemResult === 'noItem'">
           Item not available
+        </div>
+        <div v-if="preBattle.attacker.itemResult === 'missed'">
+          The item missed
         </div>
       </div>
     </div>
