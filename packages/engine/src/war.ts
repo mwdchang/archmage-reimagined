@@ -10,6 +10,7 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
+  AvoidEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -636,8 +637,29 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
           if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
             preBattle.attacker.spellResult = 'barriers';
           } else {
-            preBattle.attacker.spellResult = 'success';
-            hasAttackerSpell = true;
+
+            // Check if spell missed
+            // TODO: reflect spells
+            let avoidSpell = false;
+            for (const enchantment of defender.mage.enchantments) {
+              const spell = getSpellById(enchantment.spellId);
+              const battleAvoidances = spell.effects.filter(eff => {
+                return eff.effectType === E.AvoidEffect;
+              }) as AvoidEffect[];
+
+              for (const eff of battleAvoidances.filter(e => e.target === 'spell')) {
+                if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
+                  avoidSpell = true;
+                }
+              }
+            }
+
+            if (avoidSpell === true) {
+              preBattle.attacker.spellResult = 'missed';
+            } else {
+              preBattle.attacker.spellResult = 'success';
+              hasAttackerSpell = true;
+            }
           }
         }
       } else {
