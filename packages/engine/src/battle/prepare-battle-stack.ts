@@ -55,7 +55,9 @@ export const prepareBattleStack = (army: ArmyUnit[], role: string) => {
       loss: 0,
       netPower: u.powerRank * stack.size,
 
-      isTemporary: false
+      isTemporary: false,
+
+      appliedEffects: []
     }
   });
 

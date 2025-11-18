@@ -35,6 +35,13 @@ export interface BattleStack {
 
   // For faster calculation
   netPower: number,
+
+
+  // Tracks what effect have been applied onto the stack
+  appliedEffects: {
+    id: string;
+    type: 'item' | 'spell';
+  }[]
 }
 
 export interface BattleReportSummary {

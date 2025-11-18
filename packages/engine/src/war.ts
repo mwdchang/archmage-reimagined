@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { filter } from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
 import { allowedEffect as E } from "shared/src/common";
 import { 
@@ -11,6 +11,7 @@ import {
   PostbattleEffect,
   StealEffect,
   AvoidEffect,
+  PrebattleEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -373,8 +374,10 @@ const battleSpell = (
     effectOrigin.spellLevel = enchantment.spellLevel;
   }
 
-  // const battleEffects = casterSpell.effects.filter(d => d.effectType === 'BattleEffect') as BattleEffect[];
-  const battleEffects = casterSpell.effects.filter(d => d.effectType === effectType) as BattleEffect[];
+  const battleEffects = effectType === E.BattleEffect ? 
+    casterSpell.effects.filter(d => d.effectType === effectType) as BattleEffect[] :
+    casterSpell.effects.filter(d => d.effectType === effectType) as PrebattleEffect[]; 
+
   for (const battleEffect of battleEffects) {
     const targetType = battleEffect.targetType;
     const effects = battleEffect.effects;
@@ -413,17 +416,26 @@ const battleSpell = (
             return false;
           });
         }
+
+        // Early exit
+        // Check if there are specific attack or defend triggers
+        if (effect.effectType === E.UnitAttrEffect) {
+          const unitAttrEffect = effect as UnitAttrEffect;
+          if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
+            continue;
+          }
+        }
+
         console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
+        affectedArmy.forEach(bstack => {
+          bstack.appliedEffects.push({
+            id: casterSpell.id,
+            type: 'spell'
+          });
+        });
 
         if (effect.effectType === E.UnitAttrEffect) {
           const unitAttrEffect = effect as UnitAttrEffect;
-
-          // Check if there are specific attack or defend triggers
-          if (unitAttrEffect.activation) {
-            if (unitAttrEffect.activation !== stance) {
-              continue;
-            }
-          }
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
         } else if (effect.effectType === E.UnitDamageEffect) {
           const damageEffect = effect as UnitDamageEffect;
@@ -453,6 +465,7 @@ const battleSpell = (
  * unit level.
  */
 const battleItem = (
+  stance: 'attack' | 'defend',
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
@@ -470,10 +483,12 @@ const battleItem = (
     targetId: defender.mage.id
   };
 
-  casterItem.effects.forEach(effect => {
-    if (effect.effectType !== effectType) return;
+  const battleEffects = effectType === E.BattleEffect ?
+    casterItem.effects.filter(d => d.effectType === effectType) as BattleEffect[] :
+    casterItem.effects.filter(d => d.effectType === effectType) as PrebattleEffect[] ;
 
-    const battleEffect = effect as BattleEffect;
+
+  for (const battleEffect of battleEffects) {
     const army = battleEffect.target === 'self' ? casterBattleStack : defenderBattleStack;
     const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
 
@@ -481,7 +496,7 @@ const battleItem = (
     const targetType = battleEffect.targetType;
 
     // Nothing to do
-    if (filteredArmy.length === 0) return;
+    if (filteredArmy.length === 0) continue;
 
     for (let num = 0; num < numTimes; num++) {
       let randomIdx = -1;
@@ -491,7 +506,7 @@ const battleItem = (
         randomIdx = Math.min(randomWeighted(), filteredArmy.length -1);
       }
 
-      for (let i = 0; i < battleEffect.effects.length; i++) {
+      for (const effect of battleEffect.effects) {
         let affectedArmy: BattleStack[] = [];
         if (targetType === 'random' || targetType === 'weightedRandom') {
           affectedArmy = [filteredArmy[randomIdx]];
@@ -499,21 +514,35 @@ const battleItem = (
           affectedArmy = filteredArmy;
         }
 
-        const eff = battleEffect.effects[i];
-        console.log(`Item: Applying effect ${i+1} (${eff.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+        // Early exit
+        // Check if there are specific attack or defend triggers
+        if (effect.effectType === E.UnitAttrEffect) {
+          const unitAttrEffect = effect as UnitAttrEffect;
+          if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
+            continue;
+          }
+        }
 
-        if (eff.effectType === E.UnitAttrEffect) {
-          const unitAttrEffect = eff as UnitAttrEffect;
+        console.log(`Item: Applying effect (${effect.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
+        affectedArmy.forEach(bstack => {
+          bstack.appliedEffects.push({
+            id: casterItem.id,
+            type: 'item'
+          });
+        });
+
+        if (effect.effectType === E.UnitAttrEffect) {
+          const unitAttrEffect = effect as UnitAttrEffect;
           applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-        } else if (eff.effectType === E.UnitDamageEffect) {
-          const damageEffect = eff as UnitDamageEffect;
+        } else if (effect.effectType === E.UnitDamageEffect) {
+          const damageEffect = effect as UnitDamageEffect;
           const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
           logs.push(...damageLogs);
-        } else if (eff.effectType === E.UnitHealEffect) {
-          const healEffect = eff as UnitHealEffect;
+        } else if (effect.effectType === E.UnitHealEffect) {
+          const healEffect = effect as UnitHealEffect;
           applyHealEffect(effectOrigin, healEffect, affectedArmy);
-        } else if (eff.effectType === E.TemporaryUnitEffect) {
-          const tempUnitEffect = eff as TemporaryUnitEffect;
+        } else if (effect.effectType === E.TemporaryUnitEffect) {
+          const tempUnitEffect = effect as TemporaryUnitEffect;
           const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
           newStack.role = casterBattleStack[0].role;
           casterBattleStack.push(newStack);
@@ -522,9 +551,8 @@ const battleItem = (
           })
         }
       }
-    } // end numTimes
-  });
-
+    }
+  }
   return logs;
 }
 
@@ -763,11 +791,11 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   // Prebattle item effects
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, E.PrebattleEffect);
+    const battleItemLogs = battleItem('attack', attacker, attackingArmy, defender, defendingArmy, E.PrebattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, E.PrebattleEffect);
+    const battleItemLogs = battleItem('defend', defender, defendingArmy, attacker, attackingArmy, E.PrebattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
 
@@ -818,7 +846,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem(attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
+    const battleItemLogs = battleItem('attack', attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderSpell) {
@@ -826,7 +854,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem(defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
+    const battleItemLogs = battleItem('defend', defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
 
