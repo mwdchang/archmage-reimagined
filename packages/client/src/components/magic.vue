@@ -33,8 +33,8 @@ const color = computed(() => {
 
 <style scoped>
 .magic-glyph {
-  width: 16px;
-  height: 16px;
+  width: 1.0rem;
+  height: 1.0rem;
   border-radius: 48%;
   border: 1px solid #999999;
   padding: 2px;
@@ -42,7 +42,7 @@ const color = computed(() => {
 }
 
 .small {
-  width: 11px;
-  height: 11px;
+  width: 0.85rem;
+  height: 0.85rem;
 }
 </style>

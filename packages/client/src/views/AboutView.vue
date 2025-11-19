@@ -21,28 +21,28 @@
           <div> Land </div>
           <div class="row">
             {{ readbleNumber(totalLand(mageStore.mage)) }} 
-            <svg-icon :name="'land'" :size=16 />
+            <svg-icon :name="'land'" size="1.25rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Forts</div>
           <div class="row">
             {{ mageStore.mage.forts }} 
-            <svg-icon :name="'fort'" :size=16 />
+            <svg-icon :name="'fort'" size="1.25rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Geld</div>
           <div class="row">
             {{ readbleNumber(mageStore.mage.currentGeld) }} 
-            <svg-icon :name="'geld'" :size=16 />
+            <svg-icon :name="'geld'" size="1.25rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Population</div>
           <div class="row">
             {{ readbleNumber(mageStore.mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mageStore.mage)) }}
-            <svg-icon :name="'population'" :size=16 />
+            <svg-icon :name="'population'" size="1.25rem" />
           </div>
         </div>
 
@@ -50,7 +50,7 @@
           <div>Magic</div>
           <div class="row">
             {{ readbleNumber(mageStore.mage.currentMana) }} / {{ readbleNumber(manaStorage(mageStore.mage)) }}
-            <svg-icon :name="'mana'" :size=16 />
+            <svg-icon :name="'mana'" size="1.25rem" />
           </div>
         </div>
         <div class="about-row">

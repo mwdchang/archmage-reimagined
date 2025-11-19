@@ -58,13 +58,13 @@ const iconMap = {
     </svg>
   `,
   geld: `
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bbbbbb" stroke-width="1.0" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3"  y="12" width="10" height="2" rx="1" ry="1" fill="none"/>
-      <rect x="3"  y="10" width="10" height="2" rx="1" ry="1" fill="none"/>
-      <rect x="5"  y="8" width="10" height="2" rx="1" ry="1" fill="none"/>
-      <rect x="2"  y="6" width="10" height="2" rx="1" ry="1" fill="none"/>
-      <rect x="5"  y="4"  width="10" height="2" rx="1" ry="1" fill="none"/>
-      <rect x="7"  y="2"  width="11" height="2" rx="1" ry="1" fill="none"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#bbbbbb" stroke-width="1.0" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3"  y="19" width="15" height="3" rx="1" ry="1" fill="none"/>
+      <rect x="3"  y="16" width="15" height="3" rx="1" ry="1" fill="none"/>
+      <rect x="5"  y="13" width="15" height="3" rx="1" ry="1" fill="none"/>
+      <rect x="2"  y="10" width="15" height="3" rx="1" ry="1" fill="none"/>
+      <rect x="5"  y="7"  width="15" height="3" rx="1" ry="1" fill="none"/>
+      <rect x="7"  y="4"  width="16" height="3" rx="1" ry="1" fill="none"/>
     </svg>
   `,
 }
