@@ -88,7 +88,7 @@ const populationVal = computed(() => {
 <style scoped>
 .header-info {
   width: 55vw;
-  font-size: 80%;
+  font-size: 0.8rem;
   margin-bottom: 10px;
 }
 

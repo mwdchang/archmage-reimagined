@@ -191,7 +191,7 @@ section {
   max-width: 45rem;
   display: flex;
   flex-direction: column;
-  font-size: 14px;
+  font-size: 0.9rem;
   line-height: 120%;
   padding: 25px;
   margin: 10px;
