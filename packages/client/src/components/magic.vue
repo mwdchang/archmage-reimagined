@@ -1,5 +1,5 @@
 <template>
-  <div class="magic-glyph" :class="{ 'small': props.small }" :style="{ 'background-image': color }"></div>
+  <div class="magic-glyph" :class="_class" :style="{ 'background-image': color }"></div>
 </template>
 
 <script setup lang="ts">
@@ -7,7 +7,8 @@ import { computed } from 'vue';
 
 const props = defineProps({
   magic: String,
-  small: Boolean
+  small: Boolean,
+  tiny: Boolean
 });
 
 const color = computed(() => {
@@ -28,21 +29,38 @@ const color = computed(() => {
   }
 });
 
+const _class = computed(() => {
+  if (props.tiny) return 'tiny';
+  if (props.small) return 'small';
+  return 'regular';
+});
 
 </script>
 
 <style scoped>
 .magic-glyph {
-  width: 1.0rem;
-  height: 1.0rem;
   border-radius: 48%;
   border: 1px solid #999999;
   padding: 2px;
   margin: 2px;
 }
 
+.regular {
+  width: 1.0rem;
+  height: 1.0rem;
+}
+
 .small {
   width: 0.85rem;
   height: 0.85rem;
 }
+
+.tiny {
+  width: 0.65rem;
+  height: 0.65rem;
+  padding: 0px;
+  margin: 0px;
+}
+
+
 </style>
