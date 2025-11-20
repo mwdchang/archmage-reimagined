@@ -28,7 +28,7 @@
           <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
-            <div class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
               <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
             </div>
           </td>
@@ -65,7 +65,7 @@
           <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
-            <div class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
               <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
             </div>
           </td>
