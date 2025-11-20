@@ -321,7 +321,9 @@ const applyTemporaryUnitEffect = (
   const base = tempEffect.magic[magic].value; 
 
   if (tempEffect.rule === 'spellLevelPercentageBase') {
-    value = Math.floor(mage.currentPopulation * base * spellPowerScale);
+    if (tempEffect.target === 'population') {
+      value = Math.floor(mage.currentPopulation * base * spellPowerScale);
+    }
   } else if (tempEffect.rule === 'fixed') {
     value = Math.floor(base);
   }
@@ -378,7 +380,10 @@ const battleSpell = (
     casterSpell.effects.filter(d => d.effectType === effectType) as BattleEffect[] :
     casterSpell.effects.filter(d => d.effectType === effectType) as PrebattleEffect[]; 
 
+  let cnt = 0;
   for (const battleEffect of battleEffects) {
+    cnt ++;
+    const originKey = `${stance}:${casterSpell.id}:${cnt}`;
     const targetType = battleEffect.targetType;
     const effects = battleEffect.effects;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
@@ -428,7 +433,11 @@ const battleSpell = (
 
         console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
         affectedArmy.forEach(bstack => {
+          if (bstack.appliedEffects.some(d => d.origin === originKey)) {
+            return;
+          }
           bstack.appliedEffects.push({
+            origin: originKey,
             id: casterSpell.id,
             type: 'spell'
           });
@@ -488,7 +497,10 @@ const battleItem = (
     casterItem.effects.filter(d => d.effectType === effectType) as PrebattleEffect[] ;
 
 
+  let cnt = 0;
   for (const battleEffect of battleEffects) {
+    cnt ++;
+    const originKey = `${stance}:${casterItem.id}:${cnt}`;
     const army = battleEffect.target === 'self' ? casterBattleStack : defenderBattleStack;
     const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
 
@@ -525,7 +537,11 @@ const battleItem = (
 
         console.log(`Item: Applying effect (${effect.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
         affectedArmy.forEach(bstack => {
+          if (bstack.appliedEffects.some(d => d.origin === originKey)) {
+            return;
+          }
           bstack.appliedEffects.push({
+            origin: originKey,
             id: casterItem.id,
             type: 'item'
           });

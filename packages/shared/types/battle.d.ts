@@ -39,6 +39,7 @@ export interface BattleStack {
 
   // Tracks what effect have been applied onto the stack
   appliedEffects: {
+    origin: string; // For tracking only
     id: string;
     type: 'item' | 'spell';
   }[]

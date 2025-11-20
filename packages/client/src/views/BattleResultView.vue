@@ -1,5 +1,5 @@
 <template>
-  <main v-if="report">
+  <main v-if="report" style="font-size: 0.95rem">
     <h3 class="section-header"> Attacker {{ attackerStr }} </h3>
     <table>
       <tbody>
@@ -12,6 +12,7 @@
           <td>Counter</td>
           <td>HP</td>
           <td>Accuracy</td>
+          <td>Effects</td>
         </tr>
         <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
           <td>
@@ -26,6 +27,11 @@
           <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
           <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
+          <td>
+            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+              <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -43,6 +49,7 @@
           <td>Counter</td>
           <td>HP</td>
           <td>Accuracy</td>
+          <td>Effects</td>
         </tr>
         <tr v-for="(stack, idx) of report.defender.army" :key="idx">
           <td>
@@ -57,6 +64,11 @@
           <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
           <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
+          <td>
+            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+              <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -240,6 +252,7 @@ import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { readableStr, readbleNumber, pluralize } from '@/util/util';
 import type { EngagementLog, BattleReport } from 'shared/types/battle';
+import { getSpellById } from 'engine/src/base/references';
 
 const props = defineProps<{ id: string }>();
 const report = ref<BattleReport|null>(null);
@@ -268,6 +281,18 @@ const nameById = (id: number) => {
 
 const unitName = (name: string) => {
   return pluralize(readableStr(name));
+};
+
+interface Eff {
+  id: string,
+  type: 'item' | 'spell'
+}
+const getEffectMagic = (eff: Eff) => {
+  if (eff.type === 'item') return 'plain';
+  return getSpellById(eff.id).magic;
+};
+const effectsToString = (effs: Eff[]) => {
+  return effs.map(e => e.id).map(readableStr).join(', ');
 };
 
 // Make the battle report easier to read

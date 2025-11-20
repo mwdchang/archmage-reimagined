@@ -25,6 +25,7 @@ const canAttackSecondary = (a: Unit, b: Unit) => {
 export const calcPairings = (a: BattleStack[], b: BattleStack[]) => {
   log('');
   log('=== Calculate parings ===');
+
   // 1. Fnd viable targets with similar net power
   a.forEach((aStack, aIdx) => {
     log(`calculating by power`, aStack.unit.name);
@@ -32,7 +33,8 @@ export const calcPairings = (a: BattleStack[], b: BattleStack[]) => {
       if (aStack.targetIdx > -1 ) return;
 
       log('\tchecking target', bStack.unit.name);
-      if ((bStack.netPower / aStack.netPower) <= 4.0 || aIdx === 0) {
+      const ratio = bStack.netPower / aStack.netPower;
+      if (( ratio > 0.02 && ratio <= 4.0) || aIdx === 0) {
         const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
         log('\tCan attack', canAttack);
         if (canAttack && bStack.isTarget === false) {
