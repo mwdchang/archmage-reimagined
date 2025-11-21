@@ -1148,12 +1148,22 @@ class Engine {
     const result: GameMsg[] = [];
 
     // Spell already exists and not from 0
-    if (mage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
-      result.push({
-        type: 'error',
-        message: `The spell is alrady in effect, your attempt fizzled`
-      });
-      return result;
+    if (targetMage === null) {
+      if (mage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
+        result.push({
+          type: 'error',
+          message: `The spell is alrady in effect, your attempt fizzled`
+        });
+        return result;
+      }
+    } else {
+      if (targetMage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
+        result.push({
+          type: 'error',
+          message: `The spell is alrady in effect, your attempt fizzled`
+        });
+        return result;
+      }
     }
 
     // Success
@@ -1161,10 +1171,9 @@ class Engine {
       id: uuidv4(),
       casterId: mage.id,
       casterMagic: mage.magic,
-      targetId: mage.id,
+      targetId: targetMage === null ? mage.id : targetMage.id,
 
       spellId: spell.id,
-      // spellMagic: spell.magic,
       spellLevel: currentSpellLevel(mage),
 
       isActive: true,
