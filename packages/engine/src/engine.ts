@@ -462,8 +462,8 @@ class Engine {
         await this.adapter.updateMage(casterMage);
       }
 
-      // If enchantment has life, update
-      if (enchant.life && enchant.life > 0) {
+      // If enchantment has life and target is self, update
+      if (enchant.life && enchant.life > 0 && enchant.targetId === mage.id) {
         enchant.life --;
       }
       if (enchant.life <= 0 && enchant.isPermanent === false) {
