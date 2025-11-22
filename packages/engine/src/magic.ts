@@ -321,6 +321,12 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
   const rawProb = (mana * (1 + currentSpellLevel(mage) / enchantment.spellLevel)) / (2 * castingCost);
   const adjustedProb = Math.max(MIN_DISPEL_PROB, Math.min(MAX_DISPEL_PROB, rawProb));
 
+  // Can always cancel own spells with no mana, unless noDispel is indicated
+  if (enchantment.casterId === mage.id) {
+    if (spell.attributes.includes('noDispel') === false && mana >= 0) {
+      return 1.0;
+    }
+  }
   return adjustedProb;
 }
 
