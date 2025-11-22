@@ -59,6 +59,15 @@
   font-weight: normal;
 }
 
+input,
+button,
+textarea,
+select {
+  font-size: inherit;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
 body {
   min-height: 100vh;
   background: var(--c-background);

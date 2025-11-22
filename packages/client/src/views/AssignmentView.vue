@@ -19,7 +19,7 @@
     <div class="row" style="align-items: baseline">
       <label style="width: 12rem"> Item </label>
       <select v-model="selectedItemId" @change="setAssignment()">
-        <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }} )</option>
+        <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
       </select>
     </div>
 
@@ -80,6 +80,8 @@ const usableItems = computed(() => {
     attributes: [],
     amount: 0
   }
+
+  result.sort((a, b) => a.id.localeCompare(b.id));
   result.unshift(noItem);
 
   return result;

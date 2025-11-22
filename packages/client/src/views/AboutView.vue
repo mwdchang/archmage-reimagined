@@ -14,7 +14,7 @@
     <br>
     <section class="row" style="gap: 25px">
       <section>
-        <img style="width: 15vw" :src="sigilPath" />
+        <img style="width: 10rem" :src="sigilPath" />
       </section>
       <section style="flex: 1"> 
         <div class="about-row">

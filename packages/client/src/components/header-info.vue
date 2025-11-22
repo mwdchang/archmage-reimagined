@@ -1,6 +1,4 @@
 <template>
-  <div class="row">
-  </div>
   <table v-if="mageStore.mage" class="header-info">
     <tbody>
       <tr>
@@ -87,7 +85,7 @@ const populationVal = computed(() => {
 
 <style scoped>
 .header-info {
-  width: 55vw;
+  width: 35rem;
   font-size: 0.8rem;
   margin-bottom: 10px;
 }
