@@ -48,7 +48,7 @@ export const applyKingdomBuildingsEffect = (
     }
 
     // Distribute damage
-    let counter = Math.abs(Math.ceil(totalLand(mage) * percent));
+    let counter = Math.abs(Math.ceil(mageLand * percent));
     while (counter > 0) {
       const r = Math.random() * totalBuildings;
       let acc = 0;
@@ -64,13 +64,15 @@ export const applyKingdomBuildingsEffect = (
 
     // Resolve
     for (const buildingType of buildingTypes) {
+      // Cap
       if (mage[buildingType] - buffer[buildingType] <= 0) {
         buffer[buildingType] = mage[buildingType]
       }
       mage[buildingType] -= buffer[buildingType];
       mage['wilderness'] += buffer[buildingType];
 
-      result.buildings[buildingType] = buffer[buildingType];
+      // Need to make values negative to make messaging consistent
+      result.buildings[buildingType] = -buffer[buildingType];
       console.log(`mage(#${mage.id}) ${buffer[buildingType]} ${buildingType} destroyed`);
     }
   } else {
