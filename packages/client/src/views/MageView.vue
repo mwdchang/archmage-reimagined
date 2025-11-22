@@ -21,11 +21,11 @@
       </tr>
       <tr>
         <td>Power</td>
-        <td class="text-right">{{ readbleNumber(mageSummary.netPower) }} </td>
+        <td class="text-right">{{ readableNumber(mageSummary.netPower) }} </td>
       </tr>
       <tr>
         <td>Land</td>
-        <td class="text-right">{{ readbleNumber(mageSummary.land) }} </td>
+        <td class="text-right">{{ readableNumber(mageSummary.land) }} </td>
       </tr>
       <tr>
         <td>Forts</td>
@@ -61,7 +61,7 @@ import { ref, onMounted } from 'vue';
 import magic from '@/components/magic.vue';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
-import { readbleNumber, readableStr } from '@/util/util';
+import { readableNumber, readableStr } from '@/util/util';
 
 const mageStore = useMageStore();
 

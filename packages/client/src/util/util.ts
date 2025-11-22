@@ -153,7 +153,7 @@ export const readableStr = (str: string) => {
 }
 
 
-export const readbleNumber = (
+export const readableNumber = (
   v: number,
   options?: Intl.NumberFormatOptions
 ) => {

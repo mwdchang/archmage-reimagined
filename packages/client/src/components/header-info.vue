@@ -1,25 +1,23 @@
 <template>
-  <div class="row">
-  </div>
   <table v-if="mageStore.mage" class="header-info">
     <tbody>
       <tr>
         <td> 
           <div class="row"> 
             <svg-icon :name="'land'" size="1rem" />
-            <div>{{ readbleNumber(totalLand(mage)) }}</div>
+            <div>{{ readableNumber(totalLand(mage)) }}</div>
           </div>
         </td>
         <td> 
           <div class="row"> 
             <svg-icon :name="'geld'" size="1rem" />
-            <div>{{ readbleNumber(mage.currentGeld) }} </div>
+            <div>{{ readableNumber(mage.currentGeld) }} </div>
           </div>
         </td>
         <td> 
           <div class="row"> 
             <svg-icon :name="'hourglass'" size="1rem" />
-            <div>{{ readbleNumber(mage.currentTurn) }} </div>
+            <div>{{ readableNumber(mage.currentTurn) }} </div>
           </div>
           <Barchart :value="turnVal" color="#8F8" style="height: 2px" />
         </td>
@@ -27,14 +25,14 @@
         <td> 
           <div class="row"> 
             <svg-icon :name="'mana'" size="1rem" />
-            <div>{{ readbleNumber(mage.currentMana) }} </div>
+            <div>{{ readableNumber(mage.currentMana) }} </div>
           </div>
           <Barchart :value="manaVal" color="#88F" style="height: 2px" />
         </td>
         <td> 
           <div class="row"> 
             <svg-icon :name="'population'" size="1rem" />
-            <div>{{ readbleNumber(mage.currentPopulation) }} </div>
+            <div>{{ readableNumber(mage.currentPopulation) }} </div>
           </div>
           <Barchart :value="populationVal" color="#F88" style="height: 2px" />
         </td>
@@ -59,7 +57,7 @@ import { totalLand } from 'engine/src/base/mage';
 import magic from './magic.vue';
 import SvgIcon from './svg-icon.vue';
 import Barchart from './barchart.vue';
-import { readbleNumber, readableStr, enchantMagic } from '@/util/util';
+import { readableNumber, readableStr, enchantMagic } from '@/util/util';
 import { Mage } from 'shared/types/mage';
 import { maxMana } from 'engine/src/magic';
 import { maxPopulation } from 'engine/src/interior';
@@ -87,7 +85,7 @@ const populationVal = computed(() => {
 
 <style scoped>
 .header-info {
-  width: 55vw;
+  width: 35rem;
   font-size: 0.8rem;
   margin-bottom: 10px;
 }

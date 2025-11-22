@@ -1,11 +1,11 @@
 <template>
   <main class="about" v-if="mageStore.mage">
     <h3>{{ mageStore.mage.name }} (# {{ mageStore.mage.id }})</h3>
-    <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readbleNumber(totalNetPower(mageStore.mage)) }} </div>
+    <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readableNumber(totalNetPower(mageStore.mage)) }} </div>
     <p v-if="gameTable">
-      {{ readbleNumber(mageStore.mage.currentTurn) }} /
-      {{ readbleNumber(gameTable.maxTurns) }} turns available,
-      {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used. 
+      {{ readableNumber(mageStore.mage.currentTurn) }} /
+      {{ readableNumber(gameTable.maxTurns) }} turns available,
+      {{ readableNumber(mageStore.mage.turnsUsed) }} turns used. 
     </p>
     <p v-if="gameTable">
       Additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
@@ -14,43 +14,43 @@
     <br>
     <section class="row" style="gap: 25px">
       <section>
-        <img style="width: 15vw" :src="sigilPath" />
+        <img style="width: 10rem" :src="sigilPath" />
       </section>
       <section style="flex: 1"> 
         <div class="about-row">
           <div> Land </div>
           <div class="row">
-            {{ readbleNumber(totalLand(mageStore.mage)) }} 
-            <svg-icon :name="'land'" size="1.25rem" />
+            {{ readableNumber(totalLand(mageStore.mage)) }} 
+            <svg-icon :name="'land'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Forts</div>
           <div class="row">
             {{ mageStore.mage.forts }} 
-            <svg-icon :name="'fort'" size="1.25rem" />
+            <svg-icon :name="'fort'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Geld</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentGeld) }} 
-            <svg-icon :name="'geld'" size="1.25rem" />
+            {{ readableNumber(mageStore.mage.currentGeld) }} 
+            <svg-icon :name="'geld'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Population</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mageStore.mage)) }}
-            <svg-icon :name="'population'" size="1.25rem" />
+            {{ readableNumber(mageStore.mage.currentPopulation) }} / {{ readableNumber(interior.maxPopulation(mageStore.mage)) }}
+            <svg-icon :name="'population'" size="1.0rem" />
           </div>
         </div>
 
         <div class="about-row">
           <div>Magic</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentMana) }} / {{ readbleNumber(manaStorage(mageStore.mage)) }}
-            <svg-icon :name="'mana'" size="1.25rem" />
+            {{ readableNumber(mageStore.mage.currentMana) }} / {{ readableNumber(manaStorage(mageStore.mage)) }}
+            <svg-icon :name="'mana'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
@@ -63,27 +63,27 @@
         </div>
         <div class="about-row">
           <div>Units</div>
-          <div>{{ readbleNumber(numArmy) }}</div>
+          <div>{{ readableNumber(numArmy) }}</div>
         </div>
 
       </section>
     </section>
 
     <section class="row" style="gap: 30px; align-items: baseline">
-      <div class="column"> 
+      <div class="column" style="gap: 0.25rem"> 
         <router-link to="/explore">Explore</router-link>
         <router-link to="/build">Build</router-link>
         <router-link to="/destroy" style="color: #d80">Destroy</router-link>
       </div>
 
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/spell">Cast Magic</router-link>
         <router-link to="/item">Use Item</router-link>
         <router-link to="/research">Research</router-link>
         <router-link to="/dispel" style="color: #d80">Dispel Magic</router-link>
       </div>
 
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/status">Status Report</router-link>
         <router-link to="/rankList">Rankings</router-link>
         <router-link to="/charge">Mana Charge</router-link>
@@ -91,7 +91,7 @@
         <router-link to="/market">Market</router-link>
       </div>
       
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/battle">Battle</router-link>
         <router-link to="/assignment">Assignment</router-link>
         <router-link to="/chronicles">Chronicles</router-link>
@@ -143,7 +143,7 @@ import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
 import { ChronicleTurn, GameTable } from 'shared/types/common';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();

@@ -273,6 +273,8 @@ class Engine {
   processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
     const logs: GameMsg[] = [];
     for (const enchantment of enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+
       const spell = getSpellById(enchantment.spellId);
       const summonEffects = spell.effects.filter(d => d.effectType === E.UnitSummonEffect) as UnitSummonEffect[];
       if (summonEffects.length === 0) continue;
@@ -304,12 +306,20 @@ class Engine {
     return logs;
   }
 
+  /**
+   * Process per turn damage
+   * - kingdom resources
+   * - army
+   * - buildings
+  **/
   processTurnEnchantmentDamage(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
     const logs: GameMsg[] = [];
     const mageLand = totalLand(mage);
 
     // handle buildings
     for (const enchantment of enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
         .filter(d => d.effectType === E.KingdomBuildingsEffect) as KingdomBuildingsEffect[];
@@ -329,6 +339,8 @@ class Engine {
 
     // handle resources
     for (const enchantment of enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
         .filter(d => d.effectType === E.KingdomResourcesEffect) as KingdomResourcesEffect[];
@@ -347,6 +359,8 @@ class Engine {
 
     // handle army effect
     for (const enchantment of enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+
       const spell = getSpellById(enchantment.spellId);
       const effects = spell.effects
         .filter(d => d.effectType === E.KingdomArmyEffect) as KingdomArmyEffect[];
@@ -422,14 +436,14 @@ class Engine {
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
 
-    // 5. enchantment
+    // 5. process enchantment
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
-    const enchant1 = this.processTurnEnchantmentSummon(mage, enchantments);
-    const enchant2 = this.processTurnEnchantmentDamage(mage, enchantments);
-    turnLogs.push(...enchant1);
-    turnLogs.push(...enchant2);
+    const enchantSummmonResults = this.processTurnEnchantmentSummon(mage, enchantments);
+    const enchantDamageResults  = this.processTurnEnchantmentDamage(mage, enchantments);
+    turnLogs.push(...enchantSummmonResults);
+    turnLogs.push(...enchantDamageResults);
 
 
     // Enchantment life and upkeep
@@ -440,6 +454,7 @@ class Engine {
         const upkeep = spell.upkeep;
         if (!upkeep) continue;
 
+        // FIXME: optimize, don't get own mage
         const casterMage = await this.getMage(enchant.casterId);
         casterMage.currentGeld -= upkeep.geld;
         casterMage.currentMana -= upkeep.mana;

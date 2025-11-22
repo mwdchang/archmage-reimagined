@@ -51,18 +51,18 @@
           </div>
         </td>
         <td>
-          hp={{ readbleNumber(unit.hitPoints) }},
-          np={{ readbleNumber(unit.powerRank) }}
+          hp={{ readableNumber(unit.hitPoints) }},
+          np={{ readableNumber(unit.powerRank) }}
         </td>
         <td>
           {{ unit.primaryAttackType.join('+') }} /
-          {{ readbleNumber(unit.primaryAttackPower) }} /
+          {{ readableNumber(unit.primaryAttackPower) }} /
           {{ unit.primaryAttackInit }}
         </td>
         <td>
           <div v-if="unit.secondaryAttackType.length">
             {{ unit.secondaryAttackType.join('+') }} /
-            {{ readbleNumber(unit.secondaryAttackPower) }} /
+            {{ readableNumber(unit.secondaryAttackPower) }} /
             {{ unit.secondaryAttackInit }}
           </div>
         </td>
@@ -92,7 +92,7 @@ import { useRouter } from 'vue-router';
 import Magic from '@/components/magic.vue';
 import { getAllItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
 import { Item, Spell } from 'shared/types/magic';
-import { readableStr, readbleNumber } from '@/util/util';
+import { readableStr, readableNumber } from '@/util/util';
 import { Unit } from 'shared/types/unit';
 
 

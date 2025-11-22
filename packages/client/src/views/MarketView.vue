@@ -16,7 +16,7 @@
 
 
     <section v-if="bidItems.length > 0 && currentSelection !== 'item'">
-      <market-table v-model="bidItems" />
+      <market-table v-model="bidItems" :item-type="type" />
       <div class="form">
         <button @click="makeBid"> Bid </button>
       </div>
@@ -166,7 +166,7 @@ watch(
   () => {
     if (!props.type) return;
     currentSelection.value = props.type;
-  refresh();
+    refresh();
   },
   { immediate: true }
 )

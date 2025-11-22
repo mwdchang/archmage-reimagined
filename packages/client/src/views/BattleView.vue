@@ -45,7 +45,7 @@
             {{ readableStr(summary.attackType) }}
           </div>
         </td>
-        <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
+        <td class="text-right"> {{ readableNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
         <td> {{ readableDate(summary.timestamp) }} </td>
       </tr>
@@ -82,7 +82,7 @@
             {{ readableStr(summary.attackType) }}
           </div>
         </td>
-        <td class="text-right"> {{ readbleNumber(summary.defenderPowerLoss) }} </td>
+        <td class="text-right"> {{ readableNumber(summary.defenderPowerLoss) }} </td>
         <td class="text-right"> {{ (summary.defenderPowerLossPercentage * 100).toFixed(2) }}% </td>
         <td> {{ readableDate(summary.timestamp) }} </td>
       </tr>
@@ -96,7 +96,7 @@ import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter, useRoute } from 'vue-router';
 import { BattleReportSummary } from 'shared/types/battle';
-import { readbleNumber, readableDate, readableStr } from '@/util/util';
+import { readableNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 
 const router = useRouter();

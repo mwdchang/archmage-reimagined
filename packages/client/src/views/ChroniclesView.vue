@@ -29,7 +29,7 @@
           <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
             {{d.attackerName }} (#{{ d.attackerId }}) army {{ d.attackType }} {{ d.defenderName }} (#{{ d.defenderId }}) army on the battlefield, 
             {{d.attackerName }} (#{{ d.attackerId }}) slew {{ d.defenderUnitsLoss }} units and lost {{ d.attackerUnitsLoss }} units.
-            The attack {{ d.isSuccessful ? 'succedded' : 'failed' }}
+            The attack {{ d.isSuccessful ? 'succeeded' : 'failed' }}
           </router-link>
         </div>
       </div>

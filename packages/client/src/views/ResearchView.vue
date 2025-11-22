@@ -11,29 +11,29 @@
     <p> 
       Generating {{ rp }} research points per turn. Item generation rate is {{ itemRate }}%.
     </p>
-    <table v-if="currentResearch">
+    <table v-if="currentResearch" style="margin-top: 10px">
       <tbody>
         <tr>
-          <td>&nbsp;</td>
+          <td colspan="2">&nbsp;</td>
           <td>Spell</td>
           <td>Research cost (points)</td>
           <td>Turns remaining</td>
         </tr>
         <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" style="cursor: pointer">
-          <td> 
-            <span class="row">
-              <magic :magic="magic" />
-              <span style="font-size: 125%">
-                {{ currentResearch[magic]!.active ? '&check;' : '' }}
-              </span>
+          <td>
+            <span style="font-size: 125%">
+              {{ currentResearch[magic]!.active ? '&check;' : '' }}
             </span>
+          </td>
+          <td> 
+            <magic :magic="magic" />
           </td>
           <td>
             <router-link :to="{ name: 'viewSpell', params: { id: currentResearch[magic]!.id }}"> {{ spellName(currentResearch[magic].id) }} </router-link>
             <!-- {{ currentResearch[magic].id }} -->
           </td>
           <td class="text-right">
-            {{ readbleNumber(currentResearch[magic]!.remainingCost) }}
+            {{ readableNumber(currentResearch[magic]!.remainingCost) }}
           </td>
           <td class="text-right">
             {{ Math.ceil(currentResearch[magic]!.remainingCost / rp) }}
@@ -67,7 +67,7 @@ import { useMageStore } from '@/stores/mage';
 import { getSpellById } from 'engine/src/base/references';
 import { itemGenerationRate, maxSpellLevel, researchPoints } from 'engine/src/magic';
 import { Mage } from '../../../shared/types/mage';
-import { readbleNumber, readableStr } from '@/util/util';
+import { readableNumber, readableStr } from '@/util/util';
 import { currentSpellLevel } from 'engine/src/base/mage';
 import { allowedMagicList } from 'shared/src/common';
 

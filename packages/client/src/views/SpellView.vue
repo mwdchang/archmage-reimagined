@@ -21,7 +21,7 @@
             </td>
             <td><magic :magic="spell.magic" small /></td>
             <td class="text-right">{{ spell.castingTurn }}</td>
-            <td class="text-right">{{ readbleNumber(spell.castingCost) }}</td>
+            <td class="text-right">{{ readableNumber(spell.castingCost) }}</td>
           </tr>
         </tbody>
       </table>
@@ -81,7 +81,7 @@ import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import { Spell } from 'shared/types/magic';
 
 const mageStore = useMageStore();

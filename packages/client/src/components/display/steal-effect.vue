@@ -18,8 +18,8 @@
       <div class="row" v-if="effect.magic[magic]">
         <magic :magic="magic as string" />
         <span>
-          {{ readbleNumber(effect.magic[magic].value.min) }} to
-          {{ readbleNumber(effect.magic[magic].value.max) }}
+          {{ readableNumber(effect.magic[magic].value.min) }} to
+          {{ readableNumber(effect.magic[magic].value.max) }}
         </span>
       </div>
     </div>
@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { StealEffect } from 'shared/types/effects';
 import Magic from '@/components/magic.vue';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';
 
 defineProps<{

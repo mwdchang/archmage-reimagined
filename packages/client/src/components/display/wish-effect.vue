@@ -16,7 +16,7 @@
         <tr v-for="roll of effect.rolls">
           <td> {{ roll.target ? roll.target : 'nothing' }} </td>
           <td class="text-right"> {{ roll.weight }} </td>
-          <td class="text-right"> {{ readbleNumber(roll.min) }} to {{ readbleNumber(roll.max) }}</td>
+          <td class="text-right"> {{ readableNumber(roll.min) }} to {{ readableNumber(roll.max) }}</td>
         </tr>
       </tbody>
     </table>
@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { WishEffect } from 'shared/types/effects';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import Magic from '@/components/magic.vue';
 
 defineProps<{

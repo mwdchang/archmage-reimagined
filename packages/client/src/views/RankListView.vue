@@ -29,9 +29,9 @@
           </router-link>
         </td>
         <td> <magic :magic="rank.magic" small /> </td>
-        <td class="text-right"> {{ readbleNumber(rank.land) }} </td>
+        <td class="text-right"> {{ readableNumber(rank.land) }} </td>
         <td class="text-right"> {{ rank.forts }} </td>
-        <td class="text-right"> {{ readbleNumber(rank.netPower) }} </td>
+        <td class="text-right"> {{ readableNumber(rank.netPower) }} </td>
         <td>{{ rank.status }}</td>
       </tr>
     </tbody>
@@ -44,7 +44,7 @@ import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
 import Magic from '@/components/magic.vue';
 import type { MageRank } from 'shared/types/common';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import { gameTable } from 'engine/src/base/config';
 
 const rankList = ref<MageRank[]>([]);

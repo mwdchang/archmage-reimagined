@@ -44,6 +44,7 @@
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
         <td>#{{enchant.casterId}}</td>
+        <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
       </tr>
     </tbody>
   </table>
@@ -129,5 +130,4 @@ const dispelEnchant = async () => {
   gap: 5px;
 }
 </style>
-
 

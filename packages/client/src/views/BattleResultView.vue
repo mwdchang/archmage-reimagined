@@ -1,17 +1,17 @@
 <template>
-  <main v-if="report" style="font-size: 0.95rem">
+  <main v-if="report" style="font-size: 0.90rem; display: flex; flex-direction: column; align-items: center">
     <h3 class="section-header"> Attacker {{ attackerStr }} </h3>
     <table>
       <tbody>
         <tr>
           <td>Name</td>
           <td>-</td>
-          <td># units</td>
+          <td>#</td>
           <td>Attack</td>
           <td>Extra</td>
           <td>Counter</td>
           <td>HP</td>
-          <td>Accuracy</td>
+          <td>Acc</td>
           <td>Effects</td>
         </tr>
         <tr v-for="(stack, idx) of report.attacker.army" :key="idx">
@@ -20,12 +20,12 @@
               {{ stack.unit.name }}
             </router-link>
           </td>
-          <td><magic :magic="stack.unit.magic" small /></td>
-          <td class="text-right">{{ stack.size ? readbleNumber(stack.size) : '???' }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.primaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.secondaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
+          <td><magic :magic="stack.unit.magic" tiny/></td>
+          <td class="text-right">{{ stack.size ? readableNumber(stack.size) : '???' }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.primaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.secondaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.counterAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
             <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
@@ -43,12 +43,12 @@
         <tr>
           <td>Name</td>
           <td>-</td>
-          <td># units</td>
+          <td>#</td>
           <td>Attack</td>
           <td>Extra</td>
           <td>Counter</td>
           <td>HP</td>
-          <td>Accuracy</td>
+          <td>Acc</td>
           <td>Effects</td>
         </tr>
         <tr v-for="(stack, idx) of report.defender.army" :key="idx">
@@ -57,12 +57,12 @@
               {{ stack.unit.name }}
             </router-link>
           </td>
-          <td><magic :magic="stack.unit.magic" small /></td>
-          <td class="text-right">{{ stack.size ? readbleNumber(stack.size) : '???'}}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.primaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.secondaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
+          <td><magic :magic="stack.unit.magic" tiny/></td>
+          <td class="text-right">{{ stack.size ? readableNumber(stack.size) : '???'}}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.primaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.secondaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.counterAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
             <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
@@ -131,7 +131,7 @@
 
     
     <section>
-      <div v-for="(log, idx) of preBattle.logs" :key="idx" class="br-row">
+      <div v-for="(log, idx) of preBattle.logs" :key="idx">
         <p v-if="log.effectType === 'slain'">
           {{ nameById(log.id) }}'s {{ log.value }} {{ unitName(log.unitId) }} are slain
         </p>
@@ -141,7 +141,7 @@
 
 
     <h3 class="section-header">Assault</h3>
-    <div v-for="(log, idx) of report.engagement.logs" :key="idx" class="br-row">
+    <div v-for="(log, idx) of report.engagement.logs" :key="idx">
       <!--{{ log }}-->
       <div v-if="log.type === 'primary' || log.type === 'secondary'">
         <p>
@@ -197,7 +197,7 @@
     <br>
 
     <h3 class="section-header">Assault Result</h3>
-    <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx" class="br-row">
+    <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx">
       <p>
         {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ unitName(log.unitId) }} were slain in battle
       </p>
@@ -210,14 +210,14 @@
     <h3 class="section-header">Summary</h3>
     <div>
       <div>Attacker lost
-        {{ readbleNumber(report.result.attacker.unitsLoss) }} / {{ readbleNumber(report.result.attacker.startingUnits) }} units and
-        {{ readbleNumber(report.result.attacker.armyNetPowerLoss) }} power
+        {{ readableNumber(report.result.attacker.unitsLoss) }} / {{ readableNumber(report.result.attacker.startingUnits) }} units and
+        {{ readableNumber(report.result.attacker.armyNetPowerLoss) }} power
       </div>
     </div>
     <div>
       <div>Defender lost
-        {{ readbleNumber(report.result.defender.unitsLoss) }} / {{ readbleNumber(report.result.defender.startingUnits) }} units and
-        {{ readbleNumber(report.result.defender.armyNetPowerLoss) }} power
+        {{ readableNumber(report.result.defender.unitsLoss) }} / {{ readableNumber(report.result.defender.startingUnits) }} units and
+        {{ readableNumber(report.result.defender.armyNetPowerLoss) }} power
       </div>
     </div>
     <div>
@@ -250,7 +250,7 @@
 import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
-import { readableStr, readbleNumber, pluralize } from '@/util/util';
+import { readableStr, readableNumber, pluralize } from '@/util/util';
 import type { EngagementLog, BattleReport } from 'shared/types/battle';
 import { getSpellById } from 'engine/src/base/references';
 
@@ -317,7 +317,7 @@ onMounted(async () => {
 
 <style scoped>
 td {
-  padding: 0 5px;
+  padding: 0 4px;
 }
 td:nth-child(odd) {
   background: #202020;
@@ -328,6 +328,4 @@ td:nth-child(even) {
 
 p { line-height: 125% }
 
-.br-row {
-}
 </style>

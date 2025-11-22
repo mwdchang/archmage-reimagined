@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { TemporaryUnitEffect } from 'shared/types/effects';
 import Magic from '@/components/magic.vue';
-import { readbleNumber, readableStr } from '@/util/util';
+import { readableNumber, readableStr } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';
 
 defineProps<{

@@ -19,7 +19,7 @@
           <td class="text-right"> {{ resourceDisplay(unit.recruitCost) }} </td>
           -->
           <td class="text-right"> {{ resourceDisplay(unit.upkeepCost) }} </td>
-          <td class="text-right"> {{ readbleNumber(recruitmentAmount(mageStore.mage, unit.id)) }} </td>
+          <td class="text-right"> {{ readableNumber(recruitmentAmount(mageStore.mage, unit.id)) }} </td>
         </tr>
       </tbody>
     </table>
@@ -47,7 +47,7 @@
           <td style="min-width: 8rem">
             {{ readableStr(r.id) }}
           </td>
-          <td class="text-right">{{ readbleNumber(r.size) }}</td>
+          <td class="text-right">{{ readableNumber(r.size) }}</td>
           <td> 
             <div class="form" style="padding: 4px">
               <button @click="deleteOrder(idx)" style="padding: 5px; background: #d80">
@@ -70,7 +70,7 @@ import { useMageStore } from '@/stores/mage';
 import { getRecruitableUnits } from 'engine/src/base/references'; 
 import { recruitmentAmount } from 'engine/src/interior';
 import { ArmyUnit } from 'shared/types/mage';
-import { readableStr, readbleNumber } from '@/util/util';
+import { readableStr, readableNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 

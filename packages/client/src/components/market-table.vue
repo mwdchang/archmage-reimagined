@@ -13,12 +13,14 @@
     <tbody>
       <tr v-for="item of modelValue" :key="item.marketItem.id">
         <td>
-          {{ readableStr(item.marketItem.priceId) }} 
+          <router-link :to="{ name: encyclopediaView, params: { id: item.marketItem.priceId }}"> 
+            {{ readableStr(item.marketItem.priceId) }} 
+          </router-link>
         </td>
         <td v-if="item.marketItem.extra" class="text-right">
-          {{ readbleNumber(item.marketItem.extra.size) }}
+          {{ readableNumber(item.marketItem.extra.size) }}
         </td>
-        <td class="text-right">{{ readbleNumber(item.marketItem.basePrice) }} </td>
+        <td class="text-right">{{ readableNumber(item.marketItem.basePrice) }} </td>
         <td class="text-right">
           {{ timeRemaining(item.marketItem) }} min
         </td>
@@ -27,7 +29,7 @@
         </td>
         <td class="text-right">
           <div v-if="mageBidMap[item.marketItem.id]">
-            {{ readbleNumber(mageBidMap[item.marketItem.id]) }}
+            {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
             <input type="number" v-model="item.bid" /> 
@@ -43,11 +45,11 @@ import _ from 'lodash';
 import type { BidContainer, MarketItem, MarketBid } from 'shared/types/market';
 import { API } from '@/api/api';
 import { ServerClock } from 'shared/types/common';
-import { readableStr, readbleNumber } from '@/util/util';
-import { onMounted, ref, watch } from 'vue';
+import { readableStr, readableNumber } from '@/util/util';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useMageStore } from '@/stores/mage';
 
-const props = defineProps<{ modelValue: BidContainer[] }>()
+const props = defineProps<{ modelValue: BidContainer[], itemType: string }>()
 
 const mageStore = useMageStore();
 const mage = mageStore.mage!;
@@ -64,6 +66,14 @@ const timeRemaining = (marketItem: MarketItem) => {
   const remainTime = (turns * clock.value.interval + clock.value.currentTurnTime) - Date.now();
   return (remainTime / 1000 / 60).toFixed(0);
 }
+
+const encyclopediaView = computed(() => {
+  if (props.itemType === 'item') return 'viewItem';
+  if (props.itemType === 'spell') return 'viewSpell';
+  if (props.itemType === 'unit') return 'viewUnit';
+  return 'viewUnit';
+});
+
 
 
 const refresh = async () => {
