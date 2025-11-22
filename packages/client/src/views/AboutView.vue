@@ -21,28 +21,28 @@
           <div> Land </div>
           <div class="row">
             {{ readableNumber(totalLand(mageStore.mage)) }} 
-            <svg-icon :name="'land'" size="1.25rem" />
+            <svg-icon :name="'land'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Forts</div>
           <div class="row">
             {{ mageStore.mage.forts }} 
-            <svg-icon :name="'fort'" size="1.25rem" />
+            <svg-icon :name="'fort'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Geld</div>
           <div class="row">
             {{ readableNumber(mageStore.mage.currentGeld) }} 
-            <svg-icon :name="'geld'" size="1.25rem" />
+            <svg-icon :name="'geld'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Population</div>
           <div class="row">
             {{ readableNumber(mageStore.mage.currentPopulation) }} / {{ readableNumber(interior.maxPopulation(mageStore.mage)) }}
-            <svg-icon :name="'population'" size="1.25rem" />
+            <svg-icon :name="'population'" size="1.0rem" />
           </div>
         </div>
 
@@ -50,7 +50,7 @@
           <div>Magic</div>
           <div class="row">
             {{ readableNumber(mageStore.mage.currentMana) }} / {{ readableNumber(manaStorage(mageStore.mage)) }}
-            <svg-icon :name="'mana'" size="1.25rem" />
+            <svg-icon :name="'mana'" size="1.0rem" />
           </div>
         </div>
         <div class="about-row">
@@ -70,20 +70,20 @@
     </section>
 
     <section class="row" style="gap: 30px; align-items: baseline">
-      <div class="column"> 
+      <div class="column" style="gap: 0.25rem"> 
         <router-link to="/explore">Explore</router-link>
         <router-link to="/build">Build</router-link>
         <router-link to="/destroy" style="color: #d80">Destroy</router-link>
       </div>
 
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/spell">Cast Magic</router-link>
         <router-link to="/item">Use Item</router-link>
         <router-link to="/research">Research</router-link>
         <router-link to="/dispel" style="color: #d80">Dispel Magic</router-link>
       </div>
 
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/status">Status Report</router-link>
         <router-link to="/rankList">Rankings</router-link>
         <router-link to="/charge">Mana Charge</router-link>
@@ -91,7 +91,7 @@
         <router-link to="/market">Market</router-link>
       </div>
       
-      <div class="column">
+      <div class="column" style="gap: 0.25rem">
         <router-link to="/battle">Battle</router-link>
         <router-link to="/assignment">Assignment</router-link>
         <router-link to="/chronicles">Chronicles</router-link>

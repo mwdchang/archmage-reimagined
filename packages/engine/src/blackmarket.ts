@@ -146,8 +146,8 @@ export const generateMarketItems = async (
   adapter: DataAdapter
 ) => {
   // Generate new items
-  for (let i = 0; i < 5; i++) {
-    if (Math.random() > 0.7) {
+  for (let i = 0; i < 4; i++) {
+    if (Math.random() > 0.75) {
       const item = getRandomItem();
       if (priceMap.has(item.id) === false) {
         continue;
@@ -158,7 +158,7 @@ export const generateMarketItems = async (
         priceId: item.id,
         basePrice: priceMap.get(item.id).price,
         mageId: null,
-        expiration: currentTurn + betweenInt(20, 50)
+        expiration: currentTurn + betweenInt(30, 60)
       });
     }
   }
@@ -172,16 +172,16 @@ export const generateMarketItems = async (
         priceId: spell.id,
         basePrice: priceMap.get(spell.id).price,
         mageId: null,
-        expiration: currentTurn + betweenInt(20, 50)
+        expiration: currentTurn + betweenInt(30, 60)
       });
     }
   }
 
   // Generate new unit
-  if (Math.random() > 0.75) {
+  if (Math.random() > 0.80) {
     const unit = getRandomMarketableUnit();
     if (priceMap.has(unit.id) === true) {
-      const np = 30000 + Math.floor(50000 * randomBM());
+      const np = 40000 + Math.floor(60000 * randomBM());
       const size = Math.ceil(np / unit.powerRank);
 
       await adapter.addMarketItem({
@@ -190,7 +190,7 @@ export const generateMarketItems = async (
         basePrice: priceMap.get(unit.id).price,
         extra: { size },
         mageId: null,
-        expiration: currentTurn + betweenInt(20, 50)
+        expiration: currentTurn + betweenInt(30, 60)
       });
     }
   }
