@@ -31,9 +31,9 @@
           <td class="text-right"> {{ rank.rank }} </td>
           <td> {{ rank.name }} (#{{ rank.id }}) </td>
           <td> <magic :magic="rank.magic" small /> </td>
-          <td class="text-right"> {{ readbleNumber(rank.land) }} </td>
+          <td class="text-right"> {{ readableNumber(rank.land) }} </td>
           <td class="text-right"> {{ rank.forts }} </td>
-          <td class="text-right"> {{ readbleNumber(rank.netPower) }} </td>
+          <td class="text-right"> {{ readableNumber(rank.netPower) }} </td>
           <td>{{ rank.status }}</td>
         </tr>
       </tbody>
@@ -45,7 +45,7 @@
 import { API } from '@/api/api';
 import { onMounted, ref } from 'vue';
 import { MageRank, ServerClock } from 'shared/types/common';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 
 const rankList = ref<MageRank[]>([]);
 

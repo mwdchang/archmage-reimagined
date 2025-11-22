@@ -22,9 +22,9 @@
           <td> 
             <router-link :to="{ name: 'viewUnit', params: { id: stack.id }}"> {{ stack.name }} </router-link>
           </td>
-          <td class="text-right"> {{ readbleNumber(stack.size) }} </td>
+          <td class="text-right"> {{ readableNumber(stack.size) }} </td>
           <!--
-          <td class="text-right"> {{ readbleNumber(stack.power) }} </td>
+          <td class="text-right"> {{ readableNumber(stack.power) }} </td>
           -->
           <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
           <td>
@@ -77,7 +77,7 @@ import { useRouter } from 'vue-router';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { 
-  getSpells, getItems, getBattleArmy, readbleNumber,
+  getSpells, getItems, getBattleArmy, readableNumber,
   BattleArmyItem, readableStr
 } from '@/util/util';
 

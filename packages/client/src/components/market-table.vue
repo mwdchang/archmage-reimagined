@@ -16,9 +16,9 @@
           {{ readableStr(item.marketItem.priceId) }} 
         </td>
         <td v-if="item.marketItem.extra" class="text-right">
-          {{ readbleNumber(item.marketItem.extra.size) }}
+          {{ readableNumber(item.marketItem.extra.size) }}
         </td>
-        <td class="text-right">{{ readbleNumber(item.marketItem.basePrice) }} </td>
+        <td class="text-right">{{ readableNumber(item.marketItem.basePrice) }} </td>
         <td class="text-right">
           {{ timeRemaining(item.marketItem) }} min
         </td>
@@ -27,7 +27,7 @@
         </td>
         <td class="text-right">
           <div v-if="mageBidMap[item.marketItem.id]">
-            {{ readbleNumber(mageBidMap[item.marketItem.id]) }}
+            {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
             <input type="number" v-model="item.bid" /> 
@@ -43,7 +43,7 @@ import _ from 'lodash';
 import type { BidContainer, MarketItem, MarketBid } from 'shared/types/market';
 import { API } from '@/api/api';
 import { ServerClock } from 'shared/types/common';
-import { readableStr, readbleNumber } from '@/util/util';
+import { readableStr, readableNumber } from '@/util/util';
 import { onMounted, ref, watch } from 'vue';
 import { useMageStore } from '@/stores/mage';
 

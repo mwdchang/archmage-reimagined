@@ -21,11 +21,11 @@
             </router-link>
           </td>
           <td><magic :magic="stack.unit.magic" tiny/></td>
-          <td class="text-right">{{ stack.size ? readbleNumber(stack.size) : '???' }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.primaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.secondaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
+          <td class="text-right">{{ stack.size ? readableNumber(stack.size) : '???' }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.primaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.secondaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.counterAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
             <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
@@ -58,11 +58,11 @@
             </router-link>
           </td>
           <td><magic :magic="stack.unit.magic" tiny/></td>
-          <td class="text-right">{{ stack.size ? readbleNumber(stack.size) : '???'}}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.primaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.secondaryAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.counterAttackPower) }}</td>
-          <td class="text-right">{{ readbleNumber(stack.unit.hitPoints) }}</td>
+          <td class="text-right">{{ stack.size ? readableNumber(stack.size) : '???'}}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.primaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.secondaryAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.counterAttackPower) }}</td>
+          <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
             <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
@@ -210,14 +210,14 @@
     <h3 class="section-header">Summary</h3>
     <div>
       <div>Attacker lost
-        {{ readbleNumber(report.result.attacker.unitsLoss) }} / {{ readbleNumber(report.result.attacker.startingUnits) }} units and
-        {{ readbleNumber(report.result.attacker.armyNetPowerLoss) }} power
+        {{ readableNumber(report.result.attacker.unitsLoss) }} / {{ readableNumber(report.result.attacker.startingUnits) }} units and
+        {{ readableNumber(report.result.attacker.armyNetPowerLoss) }} power
       </div>
     </div>
     <div>
       <div>Defender lost
-        {{ readbleNumber(report.result.defender.unitsLoss) }} / {{ readbleNumber(report.result.defender.startingUnits) }} units and
-        {{ readbleNumber(report.result.defender.armyNetPowerLoss) }} power
+        {{ readableNumber(report.result.defender.unitsLoss) }} / {{ readableNumber(report.result.defender.startingUnits) }} units and
+        {{ readableNumber(report.result.defender.armyNetPowerLoss) }} power
       </div>
     </div>
     <div>
@@ -250,7 +250,7 @@
 import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
-import { readableStr, readbleNumber, pluralize } from '@/util/util';
+import { readableStr, readableNumber, pluralize } from '@/util/util';
 import type { EngagementLog, BattleReport } from 'shared/types/battle';
 import { getSpellById } from 'engine/src/base/references';
 

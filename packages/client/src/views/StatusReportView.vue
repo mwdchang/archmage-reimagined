@@ -8,25 +8,25 @@
           <td>Rank</td>
           <td class="text-right">{{ mage.rank }}</td>
           <td>Power</td>
-          <td class="text-right">{{ readbleNumber(totalNetPower(mage)) }} </td>
+          <td class="text-right">{{ readableNumber(totalNetPower(mage)) }} </td>
         </tr>
         <tr>
           <td>Land</td>
-          <td class="text-right">{{ readbleNumber(totalLand(mage)) }}</td>
+          <td class="text-right">{{ readableNumber(totalLand(mage)) }}</td>
           <td>Forts</td>
           <td class="text-right">{{ mage.forts}}</td>
         </tr>
         <tr>
           <td>Geld</td>
-          <td class="text-right">{{ readbleNumber(mage.currentGeld) }}</td>
+          <td class="text-right">{{ readableNumber(mage.currentGeld) }}</td>
           <td>Items</td>
-          <td class="text-right">{{ readbleNumber(numItems) }}</td>
+          <td class="text-right">{{ readableNumber(numItems) }}</td>
         </tr>
         <tr>
           <td>Units</td>
-          <td class="text-right">{{ readbleNumber(totalUnits(mage)) }}</td>
+          <td class="text-right">{{ readableNumber(totalUnits(mage)) }}</td>
           <td>Turns Left</td>
-          <td class="text-right">{{ readbleNumber(mage.currentTurn) }}</td>
+          <td class="text-right">{{ readableNumber(mage.currentTurn) }}</td>
         </tr>
         <tr><td colspan="4">&nbsp;</td></tr>
         <tr>
@@ -38,13 +38,13 @@
         <tr>
           <td colspan="2">Population</td>
           <td colspan="2"> 
-            {{ readbleNumber(mage.currentPopulation) }}
+            {{ readableNumber(mage.currentPopulation) }}
           </td>
         </tr>
         <tr>
           <td colspan="2">Magic Power</td>
           <td colspan="2"> 
-            {{ readbleNumber(mage.currentMana) }} / {{ readbleNumber(maxMana(mage)) }}
+            {{ readableNumber(mage.currentMana) }} / {{ readableNumber(maxMana(mage)) }}
           </td>
         </tr>
       </tbody>
@@ -88,11 +88,11 @@
       <tbody>
         <tr>
           <td>Max Residential Space</td>
-          <td class="text-right">{{ readbleNumber(Math.floor(maxPopulation(mage))) }}</td>
+          <td class="text-right">{{ readableNumber(Math.floor(maxPopulation(mage))) }}</td>
         </tr>
         <tr>
           <td>Food Production</td>
-          <td class="text-right">{{ readbleNumber(Math.floor(maxFood(mage))) }}</td>
+          <td class="text-right">{{ readableNumber(Math.floor(maxFood(mage))) }}</td>
         </tr>
         <!--
         <tr>
@@ -102,11 +102,11 @@
         -->
         <tr>
           <td>Space for Units</td>
-          <td class="text-right">{{ readbleNumber(Math.floor(spacesForUnits(mage))) }}</td>
+          <td class="text-right">{{ readableNumber(Math.floor(spacesForUnits(mage))) }}</td>
         </tr>
         <tr>
           <td>Real Max Population</td>
-          <td class="text-right">{{ readbleNumber(Math.floor(realMaxPopulation(mage))) }}</td>
+          <td class="text-right">{{ readableNumber(Math.floor(realMaxPopulation(mage))) }}</td>
         </tr>
       </tbody>
     </table>
@@ -122,39 +122,39 @@
           </tr>
           <tr>
             <td> Income </td>
-            <td class="text-right"> {{ readbleNumber(productionStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(productionStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(productionStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(productionStatus.geld) }} </td>
+            <td class="text-right"> {{ readableNumber(productionStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(productionStatus.population) }} </td>
           </tr>
           <tr>
             <td> Unit upkeep </td>
-            <td class="text-right"> {{ readbleNumber(armyUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(armyUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(armyUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.geld) }} </td>
+            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.population) }} </td>
           </tr>
           <tr>
             <td> Buiding upkeep </td>
-            <td class="text-right"> {{ readbleNumber(buildingUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(buildingUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(buildingUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.geld) }} </td>
+            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.population) }} </td>
           </tr>
           <tr>
             <td> Spell upkeep </td>
-            <td class="text-right"> {{ readbleNumber(enchantmentUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(enchantmentUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(enchantmentUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.geld) }} </td>
+            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.population) }} </td>
           </tr>
           <tr>
             <td> Recruit cost </td>
-            <td class="text-right"> {{ readbleNumber(recruitUpkeepStatus.geld) }}</td>
-            <td class="text-right"> {{ readbleNumber(recruitUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(recruitUpkeepStatus.population) }}</td>
+            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.geld) }}</td>
+            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.population) }}</td>
           </tr>
           <tr>
             <td> Net income </td>
-            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readbleNumber(netUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(netUpkeepStatus.geld) }} </td>
+            <td class="text-right"> {{ readableNumber(netUpkeepStatus.mana) }} </td>
+            <td class="text-right"> {{ readableNumber(netUpkeepStatus.population) }} </td>
           </tr>
         </tbody>
       </table>
@@ -164,27 +164,27 @@
       <tbody>
         <tr>
           <td> Land </td>
-          <td class="text-right"> {{ readbleNumber(totalLand(mage)) }} </td>
+          <td class="text-right"> {{ readableNumber(totalLand(mage)) }} </td>
           <td> Wilderness </td>
-          <td class="text-right"> {{ readbleNumber(mage.wilderness) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.wilderness) }} </td>
         </tr>
         <tr>
           <td>Farms</td>
-          <td class="text-right"> {{ readbleNumber(mage.farms) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.farms) }} </td>
           <td>Towns</td>
-          <td class="text-right"> {{ readbleNumber(mage.towns) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.towns) }} </td>
         </tr>
         <tr>
           <td>Workshops</td>
-          <td class="text-right"> {{ readbleNumber(mage.workshops) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.workshops) }} </td>
           <td>Barracks</td>
-          <td class="text-right"> {{ readbleNumber(mage.barracks) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.barracks) }} </td>
         </tr>
         <tr>
           <td>Nodes</td>
-          <td class="text-right"> {{ readbleNumber(mage.nodes) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.nodes) }} </td>
           <td>Guilds</td>
-          <td class="text-right"> {{ readbleNumber(mage.guilds) }} </td>
+          <td class="text-right"> {{ readableNumber(mage.guilds) }} </td>
         </tr>
         <tr>
           <td>Forts</td>
@@ -254,7 +254,7 @@
               {{ readableStr(recruit.id) }} 
             </router-link>
           </td>
-          <td class="text-right"> {{ readbleNumber(recruit.size) }} </td>
+          <td class="text-right"> {{ readableNumber(recruit.size) }} </td>
         </tr>
       </tbody>
     </table>
@@ -278,9 +278,9 @@
             <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
           </td>
           <td class="text-right"> 
-            {{ readbleNumber(u.upkeep.geld) }} / {{ readbleNumber(u.upkeep.mana) }} / {{ readbleNumber(u.upkeep.population) }} 
+            {{ readableNumber(u.upkeep.geld) }} / {{ readableNumber(u.upkeep.mana) }} / {{ readableNumber(u.upkeep.population) }} 
           </td>
-          <td class="text-right" style="padding-left: 10px"> {{ readbleNumber(u.size) }} </td>
+          <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
           <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
         </tr>
       </tbody>
@@ -315,7 +315,7 @@ import {
   getArmy, conditionString
 } from '@/util/util';
 import Magic from '@/components/magic.vue';
-import { readbleNumber, readableStr } from '@/util/util';  
+import { readableNumber, readableStr } from '@/util/util';  
 import { allowedMagicList } from 'shared/src/common';
 import { getUnitById } from 'engine/src/base/references';
 

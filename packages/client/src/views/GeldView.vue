@@ -7,7 +7,7 @@
     <section> 
       <p>
         In times of war and empty treasuries the people have to fullfil their obligations. 
-        Your income is about {{ readbleNumber(geldIncome(mageStore.mage)) }} geld per turn.
+        Your income is about {{ readableNumber(geldIncome(mageStore.mage)) }} geld per turn.
       </p>
       <section class="form" style="width: 25rem">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
@@ -26,7 +26,7 @@ import { ref } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { geldIncome } from 'engine/src/interior';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 
 const turnsToGeld = ref(0);
 const mageStore = useMageStore();

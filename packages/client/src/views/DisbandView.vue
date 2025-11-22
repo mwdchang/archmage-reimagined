@@ -30,7 +30,7 @@
           <!--
           <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
           -->
-          <td class="text-right" style="padding-left: 10px"> {{ readbleNumber(u.size) }} </td>
+          <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
           <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
           <td class="text-right" style="font-size: 75%"> 
             +{{ u.moveUp }}
@@ -65,15 +65,15 @@
         <tbody>
           <tr>
             <td style="width: 7rem"> Geld </td>
-            <td class="text-right">{{ readbleNumber(estimatedIncome.geld) }} </td>
+            <td class="text-right">{{ readableNumber(estimatedIncome.geld) }} </td>
           </tr>
           <tr>
             <td> Mana </td>
-            <td class="text-right">{{ readbleNumber(estimatedIncome.mana) }} </td>
+            <td class="text-right">{{ readableNumber(estimatedIncome.mana) }} </td>
           </tr>
           <tr>
             <td> Population </td>
-            <td class="text-right">{{ readbleNumber(estimatedIncome.population) }} </td>
+            <td class="text-right">{{ readableNumber(estimatedIncome.population) }} </td>
           </tr>
         </tbody>
       </table>
@@ -86,7 +86,7 @@
 import { ref, computed, watch } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { getArmy, ArmyItem, readbleNumber } from '@/util/util';
+import { getArmy, ArmyItem, readableNumber } from '@/util/util';
 import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
 import { useEngine } from '@/composables/useEngine';

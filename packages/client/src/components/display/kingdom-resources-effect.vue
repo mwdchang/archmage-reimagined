@@ -14,8 +14,8 @@
       <div class="row" v-if="effect.magic[magic]">
         <magic :magic="magic as string" />
         <span>
-          {{ effect.magic[magic].value.min }} to
-          {{ effect.magic[magic].value.max }}
+          {{ readableNumber(effect.magic[magic].value.min) }} to
+          {{ readableNumber(effect.magic[magic].value.max) }}
         </span>
       </div>
     </div>
@@ -26,6 +26,7 @@
 import { KingdomResourcesEffect } from 'shared/types/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
+import { readableNumber } from '@/util/util';
 
 defineProps<{
   effect: KingdomResourcesEffect 

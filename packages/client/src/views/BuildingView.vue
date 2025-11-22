@@ -4,7 +4,7 @@
     <img src="@/assets/images/building.png" class="gen-img" />
   </div>
   <p v-if="mageStore">
-    You have {{ readbleNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+    You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
   </p>
   <build-table @build="build($event)" />
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
@@ -16,7 +16,7 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { Mage } from 'shared/types/mage';
 import BuildTable from '@/components/build-table.vue';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 
 const mageStore = useMageStore();
 const errorStr = ref('');

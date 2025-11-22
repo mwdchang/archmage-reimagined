@@ -1,11 +1,11 @@
 <template>
   <main class="about" v-if="mageStore.mage">
     <h3>{{ mageStore.mage.name }} (# {{ mageStore.mage.id }})</h3>
-    <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readbleNumber(totalNetPower(mageStore.mage)) }} </div>
+    <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readableNumber(totalNetPower(mageStore.mage)) }} </div>
     <p v-if="gameTable">
-      {{ readbleNumber(mageStore.mage.currentTurn) }} /
-      {{ readbleNumber(gameTable.maxTurns) }} turns available,
-      {{ readbleNumber(mageStore.mage.turnsUsed) }} turns used. 
+      {{ readableNumber(mageStore.mage.currentTurn) }} /
+      {{ readableNumber(gameTable.maxTurns) }} turns available,
+      {{ readableNumber(mageStore.mage.turnsUsed) }} turns used. 
     </p>
     <p v-if="gameTable">
       Additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
@@ -20,7 +20,7 @@
         <div class="about-row">
           <div> Land </div>
           <div class="row">
-            {{ readbleNumber(totalLand(mageStore.mage)) }} 
+            {{ readableNumber(totalLand(mageStore.mage)) }} 
             <svg-icon :name="'land'" size="1.25rem" />
           </div>
         </div>
@@ -34,14 +34,14 @@
         <div class="about-row">
           <div>Geld</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentGeld) }} 
+            {{ readableNumber(mageStore.mage.currentGeld) }} 
             <svg-icon :name="'geld'" size="1.25rem" />
           </div>
         </div>
         <div class="about-row">
           <div>Population</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentPopulation) }} / {{ readbleNumber(interior.maxPopulation(mageStore.mage)) }}
+            {{ readableNumber(mageStore.mage.currentPopulation) }} / {{ readableNumber(interior.maxPopulation(mageStore.mage)) }}
             <svg-icon :name="'population'" size="1.25rem" />
           </div>
         </div>
@@ -49,7 +49,7 @@
         <div class="about-row">
           <div>Magic</div>
           <div class="row">
-            {{ readbleNumber(mageStore.mage.currentMana) }} / {{ readbleNumber(manaStorage(mageStore.mage)) }}
+            {{ readableNumber(mageStore.mage.currentMana) }} / {{ readableNumber(manaStorage(mageStore.mage)) }}
             <svg-icon :name="'mana'" size="1.25rem" />
           </div>
         </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="about-row">
           <div>Units</div>
-          <div>{{ readbleNumber(numArmy) }}</div>
+          <div>{{ readableNumber(numArmy) }}</div>
         </div>
 
       </section>
@@ -143,7 +143,7 @@ import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
 import { ChronicleTurn, GameTable } from 'shared/types/common';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();

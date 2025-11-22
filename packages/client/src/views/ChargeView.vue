@@ -6,7 +6,7 @@
     </div>
     <section> 
       <p>
-        You raw income is {{ readbleNumber(manaIncome(mageStore.mage)) }} mana per turn.
+        You raw income is {{ readableNumber(manaIncome(mageStore.mage)) }} mana per turn.
       </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
@@ -25,7 +25,7 @@ import { ref } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { manaIncome } from 'engine/src/magic';
-import { readbleNumber } from '@/util/util';
+import { readableNumber } from '@/util/util';
 
 const turnsToCharge = ref(0);
 const mageStore = useMageStore();
