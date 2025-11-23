@@ -272,6 +272,8 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   const enchantments = mage.enchantments;
   let modifier = 0;
   enchantments.forEach(enchant => {
+    if (enchant.targetId !== mage.id) return;
+
     const spell = getSpellById(enchant.spellId);
     const spellLevel = enchant.spellLevel;
 
@@ -329,6 +331,8 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
   const enchantments = mage.enchantments;
   let modifier = 0;
   enchantments.forEach(enchant => {
+    if (enchant.targetId !== mage.id) return;
+
     const spell = getSpellById(enchant.spellId);
     const spellLevel = enchant.spellLevel;
 

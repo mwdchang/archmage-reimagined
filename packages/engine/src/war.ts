@@ -825,7 +825,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   // efficacy is the enchantment spell level, and not that of the caster's
   // current spell level
   console.log('>> apply attacker enchantments')
-  attacker.mage.enchantments.forEach(enchant => {
+  attacker.mage.enchantments.filter(d => d.targetId === attacker.mage.id).forEach(enchant => {
     battleSpell(
       'attack',
       attacker,
@@ -837,7 +837,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   });
 
   console.log('>> apply defender enchantments')
-  defender.mage.enchantments.forEach(enchant => {
+  defender.mage.enchantments.filter(d => d.targetId === defender.mage.id).forEach(enchant => {
     battleSpell(
       'defend',
       defender,
