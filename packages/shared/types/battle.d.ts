@@ -68,6 +68,7 @@ export interface BattleReportSummary {
   isDefenderDefeated: boolean;
   landGain: number;
   landLoss: number;
+  spellsDispelled: string[];
 }
 
 
@@ -144,15 +145,6 @@ export interface BattleReport {
     logs: any[]
   },
 
-  /*
-  postBattleLogs: {
-    id: number,
-    unitId: string,
-    unitsLoss: number,
-    unitsHealed: number
-  }[],
-  */
-
   result: {
     isSuccessful: boolean;
     isDefenderDefeated: boolean;
@@ -175,7 +167,8 @@ export interface BattleReport {
       startingUnits: number,
       unitsLoss: number,
       armyLoss: ArmyUnit[]
-    }
+    },
+    spellsDispelled: string[]
   },
 
   landResult: {

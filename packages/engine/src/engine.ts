@@ -1117,7 +1117,9 @@ class Engine {
           isSuccessful: true,
           isDefenderDefeated: targetMage.forts > 0 ? false : true,
           landGain: 0,
-          landLoss: 0
+          landLoss: 0,
+
+          spellsDispelled: []
         };
         await this.adapter.saveBattleReport(mage.id, reportId, null, reportSummary);
       }
@@ -1601,6 +1603,24 @@ class Engine {
       await this.useTurn(mage);
     }
 
+
+    // Check if any offensive enchantments can be taken off,
+    // both success and failed attacks has a chance to hit a spell off
+    for (const enchantment of mage.enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+      if (enchantment.casterId !== defenderMage.id) continue;
+      if (enchantment.isEpidemic === true) continue;
+
+      if (battleType === 'regular' || battleType === 'siege') {
+        const rate = battleReport.result.isSuccessful ? 0.60 : 0.30;
+        if (Math.random() < rate) {
+          enchantment.isActive = false;
+          battleReport.result.spellsDispelled.push(enchantment.spellId);
+        }
+      }
+    }
+
+
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
  
@@ -1625,7 +1645,9 @@ class Engine {
       isDefenderDefeated: battleReport.result.isDefenderDefeated,
 
       landGain: battleReport.result.landGain,
-      landLoss: battleReport.result.landLoss
+      landLoss: battleReport.result.landLoss,
+
+      spellsDispelled: structuredClone(battleReport.result.spellsDispelled)
     };
 
     const result = battleReport.result;
@@ -1666,7 +1688,6 @@ class Engine {
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
 
     await this.adapter.updateMage(mage);
-
     await this.adapter.updateMage(defenderMage);
 
 

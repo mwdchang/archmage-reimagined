@@ -71,7 +71,8 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
         startingUnits: 0,
         unitsLoss: 0,
         armyLoss: []
-      }
+      },
+      spellsDispelled: []
     },
 
     landResult: {
