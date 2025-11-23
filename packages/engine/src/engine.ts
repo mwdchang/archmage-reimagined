@@ -107,9 +107,10 @@ import {
   getRandomMarketableUnit,
   resolveWinningBids
 } from './blackmarket';
+import { spellOrItemReportSummary } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
-
+const ITEM_WINK_RATE = 0.2;
 
 const totalArmyPower = (army: ArmyUnit[]) => {
   let netpower = 0;
@@ -892,6 +893,27 @@ class Engine {
       return logs;
     }
 
+    this.adapter.saveChronicles([
+      {
+        id: targetMage.id,
+        name: targetMage.name,
+        turn: targetMage.turnsUsed,
+        timestamp: Date.now(),
+        data: [
+          {
+            type: 'log',
+            message: `${mage.name} (# ${mage.id}) used ${readableStr(item.id)} on your kingdom`
+          }
+        ]
+      }
+    ]);
+
+    // There is a chance offensive items will cause counters
+    if (Math.random() < ITEM_WINK_RATE) {
+      const reportSummary = spellOrItemReportSummary(mage, targetMage, item.id, 0.01);
+      await this.adapter.saveBattleReport(mage.id, reportSummary.id, null, reportSummary);
+    }
+
     for (const effect of item.effects) {
       if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
@@ -1094,34 +1116,8 @@ class Engine {
         ]);
 
         // The caster gives a counter, we will use a dummy report
-        const reportId = uuidv4();
-        const reportSummary: BattleReportSummary = {
-          id: reportId,
-          timestamp: timestamp,
-          attackType: spellId,
-
-          attackerId: mage.id,
-          attackerName: mage.name,
-          attackerStartingUnits: 0,
-          attackerUnitsLoss: 0,
-          attackerPowerLoss: 0,
-          attackerPowerLossPercentage: 0,
-
-          defenderId: targetMage.id,
-          defenderName: targetMage.name,
-          defenderStartingUnits: 0,
-          defenderUnitsLoss: 0,
-          defenderPowerLoss: 0,
-          defenderPowerLossPercentage: 0.02,
-
-          isSuccessful: true,
-          isDefenderDefeated: targetMage.forts > 0 ? false : true,
-          landGain: 0,
-          landLoss: 0,
-
-          spellsDispelled: []
-        };
-        await this.adapter.saveBattleReport(mage.id, reportId, null, reportSummary);
+        const reportSummary = spellOrItemReportSummary(mage, targetMage, spellId, 0.02);
+        await this.adapter.saveBattleReport(mage.id, reportSummary.id, null, reportSummary);
       }
     }
     return logs;
