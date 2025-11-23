@@ -1020,12 +1020,28 @@ class Engine {
           });
           castingSuccessful = false;
         }
+
+        this.adapter.saveChronicles([
+          {
+            id: targetMage.id,
+            name: targetMage.name,
+            turn: targetMage.turnsUsed,
+            timestamp: Date.now(),
+            data: [
+              {
+                type: 'log',
+                message: `${mage.name} (# ${mage.id}) tried to cast ${readableStr(spellId)} on your kingdom`
+              }
+            ]
+          }
+        ]);
       }
 
       mage.currentMana -= cost;
       await this.useTurns(mage, spell.castingTurn);
 
       if (castingSuccessful === false) {
+        await this.adapter.updateMage(mage);
         continue;
       }
 
