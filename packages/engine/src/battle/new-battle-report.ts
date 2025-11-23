@@ -1,5 +1,5 @@
-import type { BattleReport } from "shared/types/battle";
-import type { Combatant } from "shared/types/mage";
+import type { BattleReport, BattleReportSummary } from "shared/types/battle";
+import type { Combatant, Mage } from "shared/types/mage";
 import { v4 as uuidv4 } from 'uuid';
 
 export const newBattleReport = (attacker: Combatant, defender: Combatant, attackType: string) => {
@@ -71,7 +71,8 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
         startingUnits: 0,
         unitsLoss: 0,
         armyLoss: []
-      }
+      },
+      spellsDispelled: []
     },
 
     landResult: {
@@ -80,4 +81,42 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
     }
   };
   return battleReport;
+}
+
+
+export const spellOrItemReportSummary = (
+  attacker: Mage, 
+  defender: Mage, 
+  attackType: string,
+  damagePercentage: number,
+) => {
+  const reportId = uuidv4();
+  const reportSummary: BattleReportSummary = {
+    id: reportId,
+    timestamp: Date.now(),
+    attackType: attackType,
+
+    attackerId: attacker.id,
+    attackerName: attacker.name,
+    attackerStartingUnits: 0,
+    attackerUnitsLoss: 0,
+    attackerPowerLoss: 0,
+    attackerPowerLossPercentage: 0,
+
+    defenderId: defender.id,
+    defenderName: defender.name,
+    defenderStartingUnits: 0,
+    defenderUnitsLoss: 0,
+    defenderPowerLoss: 0,
+    defenderPowerLossPercentage: damagePercentage,
+
+    isSuccessful: true,
+    isDefenderDefeated: defender.forts > 0 ? false : true,
+    landGain: 0,
+    landLoss: 0,
+
+    spellsDispelled: []
+  };
+
+  return reportSummary
 }

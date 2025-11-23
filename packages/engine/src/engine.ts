@@ -107,9 +107,10 @@ import {
   getRandomMarketableUnit,
   resolveWinningBids
 } from './blackmarket';
+import { spellOrItemReportSummary } from './battle/new-battle-report';
 
 const EPIDEMIC_RATE = 0.5;
-
+const ITEM_WINK_RATE = 0.2;
 
 const totalArmyPower = (army: ArmyUnit[]) => {
   let netpower = 0;
@@ -892,6 +893,27 @@ class Engine {
       return logs;
     }
 
+    this.adapter.saveChronicles([
+      {
+        id: targetMage.id,
+        name: targetMage.name,
+        turn: targetMage.turnsUsed,
+        timestamp: Date.now(),
+        data: [
+          {
+            type: 'log',
+            message: `${mage.name} (# ${mage.id}) used ${readableStr(item.id)} on your kingdom`
+          }
+        ]
+      }
+    ]);
+
+    // There is a chance offensive items will cause counters
+    if (Math.random() < ITEM_WINK_RATE) {
+      const reportSummary = spellOrItemReportSummary(mage, targetMage, item.id, 0.01);
+      await this.adapter.saveBattleReport(mage.id, reportSummary.id, null, reportSummary);
+    }
+
     for (const effect of item.effects) {
       if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(targetMage, effect as any, origin);
@@ -1094,32 +1116,8 @@ class Engine {
         ]);
 
         // The caster gives a counter, we will use a dummy report
-        const reportId = uuidv4();
-        const reportSummary: BattleReportSummary = {
-          id: reportId,
-          timestamp: timestamp,
-          attackType: spellId,
-
-          attackerId: mage.id,
-          attackerName: mage.name,
-          attackerStartingUnits: 0,
-          attackerUnitsLoss: 0,
-          attackerPowerLoss: 0,
-          attackerPowerLossPercentage: 0,
-
-          defenderId: targetMage.id,
-          defenderName: targetMage.name,
-          defenderStartingUnits: 0,
-          defenderUnitsLoss: 0,
-          defenderPowerLoss: 0,
-          defenderPowerLossPercentage: 0.02,
-
-          isSuccessful: true,
-          isDefenderDefeated: targetMage.forts > 0 ? false : true,
-          landGain: 0,
-          landLoss: 0
-        };
-        await this.adapter.saveBattleReport(mage.id, reportId, null, reportSummary);
+        const reportSummary = spellOrItemReportSummary(mage, targetMage, spellId, 0.02);
+        await this.adapter.saveBattleReport(mage.id, reportSummary.id, null, reportSummary);
       }
     }
     return logs;
@@ -1408,6 +1406,7 @@ class Engine {
 
   /**
    * Check if
+   * - there are offensive enchantment
    * - attacker has enough turns
    * - defender mage is not defeated
    * - defender mage is not damaged
@@ -1426,6 +1425,11 @@ class Engine {
     }
     if (defenderMage.status === 'defeated') {
       errors.push('Target mage is already defeated');
+    }
+
+    // If attacker has offensive enchant by defender, they can always attack
+    if (mage.enchantments.some(d => d.casterId === targetId && d.isActive === true)) {
+      return [];
     }
 
     // now check for counter status, which negates the next checks
@@ -1601,6 +1605,36 @@ class Engine {
       await this.useTurn(mage);
     }
 
+
+    // Check if any offensive enchantments can be taken off,
+    // both success and failed attacks has a chance to hit a spell off
+    for (const enchantment of mage.enchantments) {
+      if (enchantment.targetId !== mage.id) continue;
+      if (enchantment.casterId !== defenderMage.id) continue;
+      if (enchantment.isEpidemic === true || enchantment.isActive === false) continue;
+
+      if (battleType === 'regular' || battleType === 'siege') {
+        const defenderResult = battleReport.result.defender;
+        const defenderDelta = defenderResult.startNetPower - defenderResult.endNetPower;
+        let rate = battleReport.result.isSuccessful ? 0.60 : 0.20;
+        if (defenderDelta <= 0) {
+          rate = 0;
+        }
+
+        if (Math.random() < rate) {
+          enchantment.isActive = false;
+          battleReport.result.spellsDispelled.push(enchantment.spellId);
+        }
+      } else if (battleType === 'pillage') {
+        const rate = battleReport.result.isSuccessful ? 0.25 : 0.0;
+        if (Math.random() < rate) {
+          enchantment.isActive = false;
+          battleReport.result.spellsDispelled.push(enchantment.spellId);
+        }
+      }
+    }
+
+
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
  
@@ -1625,7 +1659,9 @@ class Engine {
       isDefenderDefeated: battleReport.result.isDefenderDefeated,
 
       landGain: battleReport.result.landGain,
-      landLoss: battleReport.result.landLoss
+      landLoss: battleReport.result.landLoss,
+
+      spellsDispelled: structuredClone(battleReport.result.spellsDispelled)
     };
 
     const result = battleReport.result;
@@ -1666,7 +1702,6 @@ class Engine {
     await this.adapter.saveBattleReport(mage.id, battleReport.id, battleReport, reportSummary);
 
     await this.adapter.updateMage(mage);
-
     await this.adapter.updateMage(defenderMage);
 
 
