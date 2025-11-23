@@ -61,3 +61,17 @@ export interface GameMsg {
   message: string,
 }
 
+
+export interface Mail {
+  id: string;
+  type: 'market' | 'guild' | 'normal';
+  priority: number;
+  timestamp: number;
+
+  source: number;
+  target: number;
+
+  subject: string;
+  content: string;
+  read: boolean;
+}

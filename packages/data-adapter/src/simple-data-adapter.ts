@@ -4,7 +4,7 @@ import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
@@ -31,6 +31,7 @@ export class SimpleDataAdapter extends DataAdapter {
   turnTable: ChronicleTurn[] = [];
   rankTable: MageRank[] = [];
   enchantmentTable: Enchantment[] = [];
+  mailTable: Mail[] = [];
 
   marketPriceTable: MarketPrice[] = [];
   marketItemTable: MarketItem[] = [];
@@ -361,6 +362,31 @@ export class SimpleDataAdapter extends DataAdapter {
     // Clean up
     await this.removeMarketBids(bids.map(d => d.id));
     await this.removeMarketItem(expired.map(d => d.id));
+  }
+
+
+  // Sending and receiving messages
+  async saveMail(mail: Mail): Promise<void> {
+    this.mailTable.push(mail);
+  }
+
+  async getMails(mageId: number): Promise<Mail[]> {
+    const results = this.mailTable.filter(d => d.target === mageId);
+    return results;
+  }
+
+  async deleteMails(ids: string[]): Promise<void> {
+    this.mailTable = this.mailTable.filter(mail => {
+      return !ids.includes(mail.id);
+    });
+  }
+
+  async readMails(ids: string[]): Promise<void> {
+    this.mailTable.forEach(mail => {
+      if (ids.includes(mail.id)) {
+        mail.read = true;
+      }
+    });
   }
 }
 

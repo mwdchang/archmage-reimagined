@@ -1,6 +1,10 @@
 <template>
   <main class="about" v-if="mageStore.mage">
-    <h3>{{ mageStore.mage.name }} (# {{ mageStore.mage.id }})</h3>
+    <h3>
+      <router-link to="/manage">
+        {{ mageStore.mage.name }} (# {{ mageStore.mage.id }})
+      </router-link>
+    </h3>
     <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readableNumber(totalNetPower(mageStore.mage)) }} </div>
     <p v-if="gameTable">
       {{ readableNumber(mageStore.mage.currentTurn) }} /
@@ -105,16 +109,8 @@
       <router-link to="/guide">Guide</router-link>
       <div>About</div>
     </section>
-    <!--
-    <router-link to="/status">Status Report</router-link>
-    <router-link to="/battle">Battle</router-link>
-    <router-link to="/rankList">Ranks</router-link>
-    <router-link to="/chronicles">Chronicles</router-link>
-    -->
-    
 
-
-    <div class="chronicles" v-if="logs.length > 0" style="max-height: 25rem; overflow-y: scroll">
+    <div class="chronicles" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
         <div style="font-weight: 600">Turn {{turn.turn}}: </div>
         <div v-for="(log) in turn.data">
@@ -188,15 +184,19 @@ section {
 }
 
 .chronicles {
-  max-width: 45rem;
   display: flex;
+  max-width: 45rem;
+  min-width: 30rem;
+  max-height: 25rem;
+  overflow-y: scroll;
+
   flex-direction: column;
   font-size: 0.9rem;
   line-height: 120%;
-  padding: 25px;
-  margin: 10px;
+  padding: 1.5rem;
+  margin: 0.5rem;
   background: #223;
-  gap: 10px;
+  gap: 1.0rem;
 }
 
 .about-row {
@@ -206,12 +206,10 @@ section {
   justify-content: space-between;
 }
 
-
 .about {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 </style>

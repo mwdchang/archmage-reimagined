@@ -5,6 +5,7 @@ import ExploreView from '@/views/ExploreView.vue';
 import GeldView from '@/views/GeldView.vue';
 import ChargeView from '@/views/ChargeView.vue';
 import AboutView from '@/views/AboutView.vue';
+import ManageView from '@/views/ManageView.vue';
 import BuildingView from '@/views/BuildingView.vue';
 import DestroyView from '@/views/DestroyView.vue';
 import StatusReportView from '@/views/StatusReportView.vue';
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: ManageView
     },
     {
       path: '/defeated',

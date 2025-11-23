@@ -53,14 +53,14 @@
     <section class="form">
       <div class="row" style="align-items: baseline; gap: 10px">
         <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
-        <label>Confirmation</label>
+        <label>Confirm disband</label>
       </div>
 
 
       <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband</button>
       <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
-      <p style="margin-top: 10px"> Net Income </p>
+      <p style="margin-top: 0.5rem; margin-bottom: 0.5rem"> Net Income </p>
       <table style="min-width: 16rem;">
         <tbody>
           <tr>

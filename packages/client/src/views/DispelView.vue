@@ -9,6 +9,7 @@
         <th>Life</th>
         <th>Spell level</th>
         <th>Caster</th>
+        <th>Target</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
@@ -19,6 +20,7 @@
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
         <td>#{{enchant.casterId}}</td>
+        <td>#{{enchant.targetId}}</td>
         <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
       </tr>
     </tbody>
@@ -34,6 +36,7 @@
         <th>Life</th>
         <th>Spell level</th>
         <th>Caster</th>
+        <th>Target</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
@@ -44,6 +47,7 @@
         <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
         <td>{{enchant.spellLevel}}</td>
         <td>#{{enchant.casterId}}</td>
+        <td>#{{enchant.targetId}}</td>
         <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
       </tr>
     </tbody>
@@ -52,7 +56,7 @@
 
   <section class="form">
     <input type="number" v-model="dispelMana" />
-    <label>Success rate for {{ (100 * dispelProb).toFixed(2) }}%</label>
+    <label>Success rate: {{ (100 * dispelProb).toFixed(2) }}%</label>
     <button @click="dispelEnchant">Dispel</button>
   </section>
   <div v-if="resultStr">{{ resultStr }}</div>
@@ -93,7 +97,7 @@ const dispelProb = computed(() => {
   if (selectedEnchant.value === '') return 0;
   const enchantment = mage.value?.enchantments.find(d => d.id === selectedEnchant.value);
   if (!enchantment) return 0;
-  return dispelEnchantment(mage.value!, enchantment, dispelMana.value) * 100;
+  return dispelEnchantment(mage.value!, enchantment, dispelMana.value);
 });
 
 const dispelEnchant = async () => {

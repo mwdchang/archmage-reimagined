@@ -22,8 +22,8 @@
       </tr>
     </tbody>
   </table>
-  <section class="form" style="margin-top: 10px">
-    <div> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
+  <section class="form" style="margin-top: 1.0rem">
+    <div style="margin-bottom: 0.25rem"> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
     <button @click="build" :disabled="buildingDisabled"> Build </button>
   </section>
 </template>

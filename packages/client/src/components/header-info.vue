@@ -42,7 +42,7 @@
               :key="enchant.id" 
               :magic="enchantMagic(enchant)" 
               :title="readableStr(enchant.spellId)"
-              small />
+              tiny />
           </div>
         </td>
       </tr>
