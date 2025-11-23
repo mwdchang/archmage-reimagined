@@ -1410,6 +1410,7 @@ class Engine {
 
   /**
    * Check if
+   * - there are offensive enchantment
    * - attacker has enough turns
    * - defender mage is not defeated
    * - defender mage is not damaged
@@ -1428,6 +1429,11 @@ class Engine {
     }
     if (defenderMage.status === 'defeated') {
       errors.push('Target mage is already defeated');
+    }
+
+    // If attacker has offensive enchant by defender, they can always attack
+    if (mage.enchantments.some(d => d.casterId === targetId && d.isActive === true)) {
+      return [];
     }
 
     // now check for counter status, which negates the next checks
@@ -1609,10 +1615,22 @@ class Engine {
     for (const enchantment of mage.enchantments) {
       if (enchantment.targetId !== mage.id) continue;
       if (enchantment.casterId !== defenderMage.id) continue;
-      if (enchantment.isEpidemic === true) continue;
+      if (enchantment.isEpidemic === true || enchantment.isActive === false) continue;
 
       if (battleType === 'regular' || battleType === 'siege') {
-        const rate = battleReport.result.isSuccessful ? 0.60 : 0.30;
+        const defenderResult = battleReport.result.defender;
+        const defenderDelta = defenderResult.startNetPower - defenderResult.endNetPower;
+        let rate = battleReport.result.isSuccessful ? 0.60 : 0.20;
+        if (defenderDelta <= 0) {
+          rate = 0;
+        }
+
+        if (Math.random() < rate) {
+          enchantment.isActive = false;
+          battleReport.result.spellsDispelled.push(enchantment.spellId);
+        }
+      } else if (battleType === 'pillage') {
+        const rate = battleReport.result.isSuccessful ? 0.25 : 0.0;
         if (Math.random() < rate) {
           enchantment.isActive = false;
           battleReport.result.spellsDispelled.push(enchantment.spellId);
