@@ -1,6 +1,6 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
-import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 
@@ -82,6 +82,13 @@ export abstract class DataAdapter {
 
   abstract getWinningBids(turn: number): Promise<MarketBid[]>
   abstract cleanupMarket(turn: number): Promise<void>
+
+
+  // Messaging
+  abstract saveMail(mail: Mail): Promise<void>
+  abstract getMails(mageId: number): Promise<Mail[]>
+  abstract deleteMails(ids: string[]): Promise<void>
+  abstract readMails(ids: string[]): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

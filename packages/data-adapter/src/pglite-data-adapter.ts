@@ -4,7 +4,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
@@ -25,7 +25,6 @@ interface BattleReportTable {
   data: BattleReport
 }
 
-
 const DB_CLEAN = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
   DROP TABLE IF EXISTS clock;
@@ -41,6 +40,7 @@ const DB_CLEAN = `
   DROP TABLE IF EXISTS market;
   DROP TABLE IF EXISTS market_price;
 
+  DROP TABLE IF EXISTS mail;
 
   DROP SEQUENCE IF EXISTS mage_seq;
 
@@ -211,6 +211,23 @@ const DB_INIT = `
     ROW_NUMBER() OVER (ORDER BY net_power DESC) AS rank
   FROM
     rank_with_status;
+  COMMIT;
+
+
+  CREATE TABLE IF NOT EXISTS mail(
+    id varchar(64),
+    type varchar(16),
+    priority integer,
+    timestamp bigint,
+
+    source integer,
+    target integer,
+
+    subject varchar(256),
+    content text,
+    read boolean
+  );
+  COMMIT;
 
 
   -- CREATE VIEW rank_view AS
@@ -735,7 +752,6 @@ WHERE username = '${user.username}'
 
   async addMarketItem(marketItem: MarketItem) {
     // Sanity check
-    
     await this.db.exec(`
       INSERT INTO market (id, price_id, base_price, mage_id, extra, expiration)
       VALUES (
@@ -908,6 +924,57 @@ WHERE username = '${user.username}'
       DELETE FROM market where expiration = ${turn}
     `
     await this.db.exec(sql);
+  }
+
+
+  async saveMail(mail: Mail): Promise<void> {
+    await this.db.exec(`
+      INSERT INTO mail (
+        id,
+        type,
+        priority,
+        timestamp,
+        source,
+        target,
+        subject,
+        content,
+        read
+      )
+      VALUES (
+        ${Q(mail.id)},
+        ${Q(mail.type)},
+        ${mail.priority},
+        ${mail.timestamp},
+        ${mail.source},
+        ${mail.target},
+        ${Q(mail.subject)},
+        ${Q(mail.content)},
+        ${mail.read}
+      )
+    `);
+  }
+
+  async getMails(mageId: number): Promise<Mail[]> {
+    const results = await this.db.query<any>(`
+      SELECT * 
+      FROM mail 
+      WHERE target = ${mageId}
+    `);
+    return results.rows.map(toCamelCase<Mail>);
+  }
+
+  async deleteMails(ids: string[]): Promise<void> {
+    await this.db.exec(`
+      DELETE FROM mail where id in (${ids.map(Q).join(',')})
+    `);
+  }
+
+  async readMails(ids: string[]): Promise<void> {
+    await this.db.exec(`
+      UPDATE rank 
+      SET read = true
+      WHERE id = (${ids.map(Q).join(',')})
+    `);
   }
 
 }
