@@ -1167,7 +1167,7 @@ class Engine {
       if (mage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
         result.push({
           type: 'error',
-          message: `The spell is alrady in effect, your attempt fizzled`
+          message: `The spell is alrady in effect, your attempt failed`
         });
         return result;
       }
@@ -1175,7 +1175,7 @@ class Engine {
       if (targetMage.enchantments.find(d => d.spellId === spellId && d.casterId !== 0)) {
         result.push({
           type: 'error',
-          message: `The spell is alrady in effect, your attempt fizzled`
+          message: `The spell is alrady in effect, your attempt failed`
         });
         return result;
       }

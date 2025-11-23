@@ -52,10 +52,12 @@ const dataAdapter = new PGliteDataAdapter();
 const engine = new Engine(dataAdapter);
 
 router.post('/api/explore', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
   try {
     const landGained = await engine.exploreLand(mage, turns);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage, landGained });
   } catch (err) {
     console.error(err);
@@ -64,10 +66,12 @@ router.post('/api/explore', async (req: any, res) => {
 });
 
 router.post('/api/geld', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
   try {
     const geldGained = await engine.gelding(mage, turns);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage, geldGained });
   } catch (err) {
     console.error(err);
@@ -76,10 +80,12 @@ router.post('/api/geld', async (req: any, res) => {
 });
 
 router.post('/api/charge', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { turns } = req.body;
   try {
     const manaGained = await engine.manaCharge(mage, turns);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage, manaGained });
   } catch (err) {
     console.error(err);
@@ -88,10 +94,12 @@ router.post('/api/charge', async (req: any, res) => {
 });
 
 router.post('/api/build', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const payload = req.body;
   try {
     await engine.build(mage, payload);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage });
   } catch (err) {
     console.error(err);
@@ -100,10 +108,12 @@ router.post('/api/build', async (req: any, res) => {
 });
 
 router.post('/api/destroy', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const payload = req.body;
   try {
     await engine.destroy(mage, payload);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage });
   } catch (err) {
     console.error(err);
@@ -117,17 +127,21 @@ router.get('/api/ranklist', async (_req: any, res) => {
 });
 
 router.post('/api/spell', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { spellId, num, target } = req.body;
   const result = await engine.castSpell(mage, spellId, num, target);
+
+  mage = await engine.getMageByUser(req.user.username);
   res.status(200).json({ result, mage });
 });
 
 router.post('/api/dispel', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { enchantId, mana } = req.body;
   try {
     const result = await engine.dispel(mage, enchantId, mana);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ result, mage });
   } catch (err) {
     console.error(err);
@@ -136,10 +150,11 @@ router.post('/api/dispel', async (req: any, res) => {
 });
 
 router.post('/api/defence-assignment', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const assignment = req.body;
 
   await engine.setAssignment(mage, assignment);
+  mage = await engine.getMageByUser(req.user.username);
   res.status(200).json({ mage });
 });
 
@@ -157,11 +172,13 @@ router.post('/api/recruitments', async (req: any, res) => {
 });
 
 router.post('/api/disband', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const body = req.body;
 
   try {
     await engine.disbandUnits(mage, body.disbands);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ mage });
   } catch (err) {
     console.error(err);
@@ -170,19 +187,23 @@ router.post('/api/disband', async (req: any, res) => {
 });
 
 router.post('/api/item', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { itemId, num, target } = req.body;
   const r = await engine.useItem(mage, itemId, num, target);
+
+  mage = await engine.getMageByUser(req.user.username);
   res.status(200).json({ r, mage });
 });
 
 
 router.post('/api/research', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { magic, focus, turns } = req.body;
 
   try {
     const result = await engine.research(mage, magic, focus, turns);
+
+    mage = await engine.getMageByUser(req.user.username);
     res.status(200).json({ result, mage });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -190,7 +211,7 @@ router.post('/api/research', async (req: any, res) => {
 });
 
 router.post('/api/war', async (req: any, res) => {
-  const mage = await engine.getMageByUser(req.user.username);
+  let mage = await engine.getMageByUser(req.user.username);
   const { spellId, itemId, stackIds, targetId, battleType } = req.body;
 
   // Do not proceed if there are errors
@@ -201,6 +222,8 @@ router.post('/api/war', async (req: any, res) => {
   }
 
   const result = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
+
+  mage = await engine.getMageByUser(req.user.username);
   res.status(200).json({ errors: result.errors, reportId: result.battleReport?.id, mage });
 });
 
@@ -264,7 +287,7 @@ router.post('/api/logout', async (req, res) => {
 
 
 router.get('/api/mage', async (req: any, res) => {
-  console.log('cookies!!! ', req.user.username);
+  // console.log('cookies!!! ', req.user.username);
   const mage = await engine.getMageByUser(req.user.username);
   res.status(200).json({ mage });
 });
