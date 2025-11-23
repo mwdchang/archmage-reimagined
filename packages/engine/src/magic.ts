@@ -266,6 +266,7 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   if (spellRank === 'ancient') rankModifier = 85;
 
   let successRate = 0.1 * current + rankModifier;
+  const baseRate = successRate;
 
   // Enchantments
   const enchantments = mage.enchantments;
@@ -281,10 +282,15 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
       if (castingEffect.type !== 'castingSuccess') return;
 
       const value = castingEffect.magic[enchant.casterMagic].value;
-      modifier += (value * spellLevel);
+
+      if (value > 0) {
+        modifier += (value * spellLevel);
+      } else {
+        modifier += (1.50 * value * spellLevel);
+      }
     });
   });
-  // console.log('\tenchant modifier:', modifier);
+  successRate += modifier;
 
   // Adjacent and opposiite casting
   if (mage.magic !== spellMagic) {
@@ -295,8 +301,7 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
     }
   }
 
-  // console.log('spell lvl', current);
-  // console.log('success casting rate:', successRate);
+  console.log(`\tSuccess rate ${mage.name}(#${mage.id}): ${spell.id} raw/modifier/final = ${baseRate.toFixed(2)}/${modifier.toFixed(2)}/${successRate.toFixed(2)}`);
   return successRate;
 }
 
