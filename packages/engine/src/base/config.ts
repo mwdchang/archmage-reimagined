@@ -181,7 +181,8 @@ export const spellRankTable = {
   simple: 1,
   average: 3,
   complex: 7,
-  ultimate: 20
+  ultimate: 20,
+  ancient: 15
 }
 
 export const itemProductionTable = {
