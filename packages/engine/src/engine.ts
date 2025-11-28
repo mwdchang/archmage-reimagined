@@ -1131,6 +1131,8 @@ class Engine {
     const origin: EffectOrigin = {
       id: mage.id,
       spellLevel: currentSpellLevel(mage),
+      netPower: totalNetPower(mage),
+
       magic: mage.magic,
       targetId: targetMage ? targetMage.id : mage.id
     };
@@ -1166,6 +1168,9 @@ class Engine {
         } else if (effect.effectType === E.RemoveEnchantmentEffect) {
           const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, targetMage);
           logs.push(...fromRemoveEnchantmentEffectResult(result));
+        } else if (effect.effectType === E.KingdomArmyEffect) {
+          const result = applyKingdomArmyEffect(targetMage, effect as any, origin);
+          logs.push(...fromKingdomArmyEffectResult(result));
         }
       }
     }

@@ -141,3 +141,13 @@ export const getResearchTree = () => {
 export const getMaxSpellLevels = () => {
   return _.clone(maxSpellLevels);
 }
+
+// For debugging
+export const getResearchTreeJSON = () => {
+  return Object.fromEntries(
+    [...getResearchTree().entries()].map(([key, innerMap]) => [
+      key,
+      Object.fromEntries(innerMap),
+    ])
+  ) as { [key in AllowedMagic]: { [key in AllowedMagic]: string [] }}
+}

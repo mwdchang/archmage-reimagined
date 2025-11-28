@@ -53,6 +53,7 @@ export const fromKingdomBuildingsEffectResult = (result: KingdomBuildingsEffectR
   const logs: GameMsg[] = [];
   for (const key of Object.keys(result.buildings)) {
     const v = result.buildings[key];
+    if (v === 0) continue;
     const dir = v < 0 ? 'lost' : 'gained';
     logs.push({
       type: 'log',

@@ -802,6 +802,32 @@
     ]
   },
   {
+    "id": "sunder",
+    "name": "Sunder",
+    "magic": "phantasm",
+    "rank": "complex",
+    "description": "The spell drains enemy mana",
+    "attributes": ["instant"],
+    "researchCost": 4000,
+    "castingCost": 60000,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "StealEffect",
+        "rule": "addSpellLevelPercentage",
+        "target": "mana",
+        "magic": {
+          "ascendant": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
+          "verdant": { "value": { "min": 300, "max": 8000, "stealPercent": null } },
+          "eradication": { "value": { "min": 300, "max": 8000, "stealPercent": null } },
+          "nether": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
+          "phantasm": { "value": { "min": 6000, "max": 30000, "stealPercent": null } }
+        }
+      }
+    ]
+  },
+  {
     "id": "mindBar",
     "name": "Mind Bar",
     "magic": "phantasm",

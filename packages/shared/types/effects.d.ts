@@ -11,6 +11,8 @@ export interface Effect<T extends string> {
 export interface EffectOrigin {
   id: number,
   magic: string,
+  netPower?: number, // FIXME: not optionsl ??
+
   spellLevel: number,
   targetId: number,
   spellId?: string,
@@ -173,7 +175,7 @@ export interface KingdomResistanceEffect extends Effect<E.KingdomResistanceEffec
 }
 
 export interface KingdomBuildingsEffect extends Effect<E.KingdomBuildingsEffect> {
-  rule: 'landPercentageLoss',
+  rule: 'landPercentageLoss' | 'netPowerRanged',
   target: string,
   magic: {
     [key in AllowedMagic]: {

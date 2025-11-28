@@ -3,7 +3,7 @@ import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
 import { getBuildingTypes } from "../interior";
-import { totalLand } from "../base/mage";
+import { totalLand, totalNetPower } from "../base/mage";
 
 
 export interface KingdomBuildingsEffectResult {
@@ -31,9 +31,22 @@ export const applyKingdomBuildingsEffect = (
     buildings: {}
   };
 
-  if (effect.rule === 'landPercentageLoss') {
+  if (effect.rule === 'landPercentageLoss' || effect.rule === 'netPowerRanged') {
     const { min, max } = effect.magic[magic].value as { min: number, max: number };
-    const percent = between(min, max) / 100 * spellPowerScale;
+    let percent = between(min, max) / 100 * spellPowerScale;
+    console.log('base percent', (100 * percent).toFixed(2));
+
+    if (effect.rule === 'netPowerRanged') {
+      const np = totalNetPower(mage);
+      let ratio = (origin.netPower - np) / np;
+      console.log('raw ratio', ratio);
+
+      if (ratio > 1) ratio = 1 / ratio;
+      console.log('adj ratio', ratio);
+
+      percent *= ratio;
+      console.log('netPowerRanged', origin.netPower, np, (100*percent).toFixed(2));
+    }
 
     const buildingTypes = effect.target === 'all' ?
       getBuildingTypes() :

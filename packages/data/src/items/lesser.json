@@ -1111,7 +1111,7 @@
     ]
   },
   {
-    "id": "voodooDoll ",
+    "id": "voodooDoll",
     "name": "Voodoo Doll",
     "description": "This voodoo doll is enchanted by voodoo witch doctors. All you need to do is to write the true name of the person in a piece of yellow paper and put it in the doll. Then stab the doll with a large pin. The victim will then suffer from a severe headache and cannot do anything at all for a while. Once the doll has been stabbed for many times, the magic sealed within is lost.",
     "attributes": ["oneUse", "instant"],
