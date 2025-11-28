@@ -1113,6 +1113,23 @@
     "castingTurn": 10,
     "upkeep": null,
     "effects": [
+      {
+        "effectType": "KingdomBuildingsEffect",
+        "rule": "netPowerRanged",
+        "target": "all",
+        "magic": {
+          "eradication": { "value": { "min": 1.5, "max": 5.5 } }
+        }
+      },
+      {
+        "effectType": "KingdomArmyEffect",
+        "rule": "addSpellLevelPercentageBase",
+        "filters": null,
+        "checkResistance": false,
+        "magic": {
+          "eradication": { "value": { "min": -0.02, "max": -0.05 } }
+        }
+      }
     ]
   }
 ]

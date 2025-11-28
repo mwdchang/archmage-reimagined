@@ -225,6 +225,7 @@
   {
     "id": "scryingMirror",
     "name" : "Scrying Mirror",
+    "disabled": true,
     "magic": "phantasm",
     "rank": "average",
     "description": "This is the most powerful Eradication spell. It will cause most violent volcanic eruptions in your enemy's country. It will destroy land, maim citizens, eradicate armies and leave your enemy thunderstruck with shock and dismay. Fortunately, the Council only allows 10 such spells to be used against any mage. In addition, this spell is most effective when used against enemy with close net power to the caster. It's effectivness drops as the difference in power increases.",
@@ -784,6 +785,7 @@
   {
     "id": "temporalStasisField",
     "name": "Temporal Stasis Field",
+    "disabled": true,
     "magic": "phantasm",
     "rank": "complex",
     "description": "The spell will put a stasis field in an area, thus putting the recipent's country into an state of temporal suspension. Time will flow slower within the area.",
@@ -797,6 +799,32 @@
       "population": 0
     },
     "effects": [
+    ]
+  },
+  {
+    "id": "sunder",
+    "name": "Sunder",
+    "magic": "phantasm",
+    "rank": "complex",
+    "description": "The spell drains enemy mana",
+    "attributes": ["instant"],
+    "researchCost": 4000,
+    "castingCost": 60000,
+    "castingTurn": 3,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "StealEffect",
+        "rule": "addSpellLevelPercentage",
+        "target": "mana",
+        "magic": {
+          "ascendant": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
+          "verdant": { "value": { "min": 300, "max": 8000, "stealPercent": null } },
+          "eradication": { "value": { "min": 300, "max": 8000, "stealPercent": null } },
+          "nether": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
+          "phantasm": { "value": { "min": 6000, "max": 30000, "stealPercent": null } }
+        }
+      }
     ]
   },
   {

@@ -55,6 +55,8 @@ export const getRecruitableUnits = (magic: string): Unit[] => {
 
 export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
+    if (spells[i].disabled === true) continue;
+
     validateSpellOrItem(spells[i])
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
@@ -138,4 +140,14 @@ export const getResearchTree = () => {
 
 export const getMaxSpellLevels = () => {
   return _.clone(maxSpellLevels);
+}
+
+// For debugging
+export const getResearchTreeJSON = () => {
+  return Object.fromEntries(
+    [...getResearchTree().entries()].map(([key, innerMap]) => [
+      key,
+      Object.fromEntries(innerMap),
+    ])
+  ) as { [key in AllowedMagic]: { [key in AllowedMagic]: string [] }}
 }
