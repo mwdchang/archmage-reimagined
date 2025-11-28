@@ -17,7 +17,10 @@ export interface Spell {
     mana: number,
     population: number
   } | null,
-  effects: Effect<any>[]
+  effects: Effect<any>[],
+
+  // For dev purpose
+  disabled?: boolean
 }
 
 export interface Item {

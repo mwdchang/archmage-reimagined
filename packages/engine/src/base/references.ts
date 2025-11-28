@@ -55,6 +55,8 @@ export const getRecruitableUnits = (magic: string): Unit[] => {
 
 export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
+    if (spells[i].disabled === true) continue;
+
     validateSpellOrItem(spells[i])
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
