@@ -16,14 +16,6 @@
           :proxy-fn="exploreLand"
           :label="'Explore'" />
 
-        <!--
-        <button @click="exploreLand"> 
-          <div class="row">
-            <SpinnerIcon class="spinner" />
-            <span>Explore</span>
-          </div>
-        </button>
-        -->
       </div>
       <div>
         {{ exploreMsg }}

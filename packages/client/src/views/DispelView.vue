@@ -57,7 +57,10 @@
   <section class="form">
     <input type="number" v-model="dispelMana" />
     <label>Success rate: {{ (100 * dispelProb).toFixed(2) }}%</label>
-    <button @click="dispelEnchant">Dispel</button>
+    <ActionButton 
+      :proxy-fn="dispelEnchant"
+      :label="'Dispel'" />
+
   </section>
   <div v-if="resultStr">{{ resultStr }}</div>
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
@@ -69,6 +72,7 @@ import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import Magic from '@/components/magic.vue';
+import ActionButton from '@/components/action-button.vue';
 import { dispelEnchantment } from 'engine/src/magic';
 import { readableStr, enchantMagic } from '@/util/util';
 

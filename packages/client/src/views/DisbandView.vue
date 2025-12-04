@@ -56,8 +56,11 @@
         <label>Confirm disband</label>
       </div>
 
+      <ActionButton 
+        :proxy-fn="disbandUnits"
+        :disabled="confirmDisband === false"
+        :label="'Disband'" />
 
-      <button @click="disbandUnits()" :disabled="confirmDisband === false">Disband</button>
       <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
       <p style="margin-top: 0.5rem; margin-bottom: 0.5rem"> Net Income </p>
@@ -91,6 +94,7 @@ import { getUnitById } from 'engine/src/base/references';
 import { npMultiplier } from 'engine/src/base/unit';
 import { useEngine } from '@/composables/useEngine';
 import { unitUpkeep } from 'engine/src/interior';
+import ActionButton from '@/components/action-button.vue';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;

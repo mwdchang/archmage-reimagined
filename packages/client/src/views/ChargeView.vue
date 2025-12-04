@@ -10,7 +10,10 @@
       </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
-        <button @click="charge"> Charge </button>
+        <ActionButton 
+          :proxy-fn="charge"
+          :label="'Charge'" />
+
       </div>
       <div>
         {{ manaMsg }}
@@ -26,6 +29,7 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { manaIncome } from 'engine/src/magic';
 import { readableNumber } from '@/util/util';
+import ActionButton from '@/components/action-button.vue';
 
 const turnsToCharge = ref(0);
 const mageStore = useMageStore();
