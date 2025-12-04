@@ -11,7 +11,19 @@
       </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
-        <button @click="exploreLand"> Explore </button>
+
+        <ActionButton 
+          :proxy-fn="exploreLand"
+          :label="'Explore'" />
+
+        <!--
+        <button @click="exploreLand"> 
+          <div class="row">
+            <SpinnerIcon class="spinner" />
+            <span>Explore</span>
+          </div>
+        </button>
+        -->
       </div>
       <div>
         {{ exploreMsg }}
@@ -28,6 +40,7 @@ import { ref, computed, onMounted } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { explorationRate } from 'engine/src/interior';
+import ActionButton from '@/components/action-button.vue';
 import type { Mage } from 'shared/types/mage';
 
 const turnsToExplore = ref(0);
