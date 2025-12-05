@@ -51,18 +51,17 @@
         </select>
       </div>
 
-      <button 
+      <ActionButton 
         v-if="battleType !== 'pillage'"
-        @click="doBattle" 
-        :disabled="armySelection.filter(d => d.active).length === 0">
-        {{ readableStr(battleType) }}
-      </button>
-      <button 
+        :proxy-fn="doBattle"
+        :disabled="armySelection.filter(d => d.active).length === 0"
+        :label="readableStr(battleType)" />
+      <ActionButton 
         v-if="battleType === 'pillage'"
-        @click="doBattle" 
-        :disabled="pillageStackId === null">
-        {{ readableStr(battleType) }}
-      </button>
+        :proxy-fn="doBattle"
+        :disabled="pillageStackId === null"
+        :label="readableStr(battleType)" />
+
     </section>
   </main>
   <div v-for="error of errorStrs" class="error">
@@ -75,6 +74,7 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { API, APIWrapper } from '@/api/api';
+import ActionButton from '@/components/action-button.vue';
 import { useMageStore } from '@/stores/mage';
 import { 
   getSpells, getItems, getBattleArmy, readableNumber,

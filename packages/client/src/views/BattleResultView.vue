@@ -308,11 +308,7 @@ const checkGap = (curr: EngagementLog | null, next: EngagementLog | null) => {
 onMounted(async () => {
   const res = (await API.get<{ report: BattleReport}>(`/report/${props.id}`)).data;
   report.value = res.report;
-
-  // const m = (await API.get(`mage/${props.mageId}`)).data;
-  // mageSummary.value = m.mageSummary;
 });
-
 </script>
 
 <style scoped>

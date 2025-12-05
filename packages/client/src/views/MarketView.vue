@@ -18,7 +18,10 @@
     <section v-if="bidItems.length > 0 && currentSelection !== 'item'">
       <market-table v-model="bidItems" :item-type="type" />
       <div class="form">
-        <button @click="makeBid"> Bid </button>
+        <ActionButton 
+          :proxy-fn="makeBid"
+          :label="'Bid'" />
+
       </div>
       <div v-if="errorStr" class="error">{{ errorStr }}</div>
     </section>
@@ -60,6 +63,7 @@ import { MarketItem, MarketPrice, BidContainer, Bid } from 'shared/types/market'
 import { readableStr } from '@/util/util';
 import { useMageStore } from '@/stores/mage';
 import MarketTable from '@/components/market-table.vue';
+import ActionButton from '@/components/action-button.vue';
 import { Mage } from 'shared/types/mage';
 
 const props = defineProps<{ type: string }>(); 

@@ -50,7 +50,9 @@
           <label># of times</label>
           <input type="number" v-model="turns" />
 
-          <button @click="useItem">Use Item</button>
+          <ActionButton 
+            :proxy-fn="useItem"
+            :label="'Use Item'" />
         </div>
         <div v-else>
           <p>
@@ -75,6 +77,7 @@
 
 <script setup lang="ts">
 import { API } from '@/api/api';
+import ActionButton from '@/components/action-button.vue';
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMageStore } from '@/stores/mage';

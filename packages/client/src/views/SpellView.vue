@@ -53,7 +53,10 @@
           <label># of times</label>
           <input type="number" v-model="turns" tabindex=3 />
 
-          <button @click="castSpell">Cast spell</button>
+          <ActionButton 
+            :proxy-fn="castSpell"
+            :label="'Cast spell'" />
+
         </div>
         <div v-else>
           <p>
@@ -81,6 +84,7 @@ import { computed, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
+import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
 import { Spell } from 'shared/types/magic';
 

@@ -13,7 +13,9 @@
     </select>
     <input type="text" placeholder="mage id" v-model="targetId" /> 
 
-    <button @click="prepBattle"> War </button>
+    <ActionButton 
+      :proxy-fn="prepBattle"
+      :label="'War'" />
   </section>
 
   <div>Counters you given out</div>
@@ -98,6 +100,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { BattleReportSummary } from 'shared/types/battle';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
+import ActionButton from '@/components/action-button.vue';
 
 const router = useRouter();
 const mageStore = useMageStore();

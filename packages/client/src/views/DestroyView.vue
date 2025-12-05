@@ -38,5 +38,4 @@ const destroy = async (payload: any) => {
     mageStore.setMage(data.mage as Mage);
   }
 };
-
 </script>

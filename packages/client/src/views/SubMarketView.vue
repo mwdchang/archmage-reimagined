@@ -8,10 +8,14 @@
     <market-table 
       v-if="bidItems.length > 0"
       v-model="bidItems" 
+      item-type="item"
     />
 
     <section class="form">
-      <button @click="makeBid"> Bid </button>
+      <ActionButton 
+        :proxy-fn="makeBid"
+        :label="'Bid'" />
+
     </section>
     <div v-if="errorStr" class="error">{{ errorStr }}</div>
   </main>
@@ -21,6 +25,7 @@
 import { onMounted, ref } from 'vue';
 import { API } from '@/api/api';
 import MarketTable from '@/components/market-table.vue';
+import ActionButton from '@/components/action-button.vue';
 import { useMageStore } from '@/stores/mage';
 import { readableStr } from '@/util/util';
 import { MarketItem, Bid, BidContainer } from 'shared/types/market';

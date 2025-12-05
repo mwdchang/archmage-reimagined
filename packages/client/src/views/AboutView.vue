@@ -179,9 +179,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-section {
-  padding: 5px;
-}
 
 .chronicles {
   display: flex;

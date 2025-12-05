@@ -13,7 +13,11 @@
         <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
       </div>
 
-      <button @click="login">Login</button>
+      <ActionButton 
+        :proxy-fn="login"
+        :disabled="loginData.username === '' || loginData.password === ''"
+        :label="'Login'" />
+
     </section>
 
     <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
@@ -25,6 +29,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
+import ActionButton from '@/components/action-button.vue';
 
 const loginData = ref({ username: '', password: '', magic: 'ascendant' });
 const router = useRouter();

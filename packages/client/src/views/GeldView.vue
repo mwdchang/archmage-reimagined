@@ -11,7 +11,10 @@
       </p>
       <section class="form" style="width: 25rem">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
-        <button @click="geld"> Geld </button>
+        <ActionButton 
+          :proxy-fn="geld"
+          :label="'Geld'" />
+
       </section>
       <div>
         {{ geldMsg }}
@@ -27,6 +30,7 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { geldIncome } from 'engine/src/interior';
 import { readableNumber } from '@/util/util';
+import ActionButton from '@/components/action-button.vue';
 
 const turnsToGeld = ref(0);
 const mageStore = useMageStore();

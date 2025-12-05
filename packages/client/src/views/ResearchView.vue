@@ -50,7 +50,10 @@
         <label>&nbsp;Research all spells of this magic</label>
       </div>
 
-      <button @click="submitResearch"> Research </button>
+      <ActionButton 
+        :proxy-fn="submitResearch"
+        :label="'Research'" />
+
     </section>
     <div style="display: flex; align-items: center; margin-top: 10px; max-width: 25rem;">
       {{ researchResultStr }}
@@ -62,6 +65,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import magic from '@/components/magic.vue';
+import ActionButton from '@/components/action-button.vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getSpellById } from 'engine/src/base/references';
