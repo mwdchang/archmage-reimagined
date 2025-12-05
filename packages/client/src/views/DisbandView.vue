@@ -43,6 +43,7 @@
               :disabled="u.attributes.includes('undisbandable') === true" 
               type="text" 
               size=12 
+              style="height: 1.6rem"
               v-model="disbandPayload[u.id]">
           </td>
         </tr>

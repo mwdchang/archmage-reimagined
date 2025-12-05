@@ -71,9 +71,12 @@
           </p>
         </section>
       </div>
-      <button @click="register">Reincarnate</button>
-    </section>
 
+      <ActionButton 
+        :proxy-fn="register"
+        :disabled="registerData.username === '' || registerData.password === ''"
+        :label="'Reincarnate'" />
+    </section>
 
     <div class="error">
       {{ errorStr }}
@@ -86,7 +89,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
-import magic from './magic.vue';
+import magic from '@/components/magic.vue';
+import ActionButton from '@/components/action-button.vue';
 import { readableStr } from '@/util/util';
 
 const registerData = ref({ username: '', password: '', magic: 'ascendant' });

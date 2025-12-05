@@ -32,7 +32,7 @@
             {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
-            <input type="number" v-model="item.bid" /> 
+            <input type="number" v-model="item.bid" style="height: 1.6rem" /> 
           </div>
         </td>
       </tr>
