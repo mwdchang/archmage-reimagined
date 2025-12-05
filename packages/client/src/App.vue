@@ -6,15 +6,7 @@
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
     <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
 
-    <!--
-    <Footer v-if="mageStore.mage && route.name !== 'home' && route.name !== 'about' " />
-    -->
     <Footer />
-
-    <!--
-    <RouterView v-if="route.name === 'home'" />
-    <RouterView v-if="mage && route.name !== 'home'" />
-    -->
   </main>
 </template>
 
@@ -118,22 +110,4 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
