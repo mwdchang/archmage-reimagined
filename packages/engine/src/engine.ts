@@ -2019,9 +2019,11 @@ class Engine {
 
 
   // ==============================
-  async saveMail(mage: Mage, payload: Omit<Mail, 'id'>) {
+  async saveMail(mage: Mage, payload: Omit<Mail, 'id' | 'read' | 'timestamp'>) {
     const mail: Mail = {
       id: uuidv4(),
+      read: false,
+      timestamp: Date.now(),
       ...payload
     }
     return { errors: [], id: mail.id };

@@ -1,18 +1,60 @@
 <template>
-  <main style="display: flex; flex-direction: row">
-    <!-- left pane -->
-    <section class="message-list-pane" id="messageListPane">
-      <div class="message-list" id="messageList">
-        <div v-for="message of messages" 
-          class="message-item"
-          @click="openMail(message)">
-          {{ message.subject }}
+  <main style="display: flex; flex-direction: column; gap: 10">
+
+    <section class="form"> 
+      <div class="row" style="gap: 5">
+        <ActionButton 
+          :proxy-fn="compose"
+          :label="'Compose'" />
+
+        <!--
+        <ActionButton 
+          :proxy-fn="back"
+          :label="'Delete BM'" />
+        -->
+      </div>
+    </section>
+
+    <section class="message-list-pane" ref="composePane">
+      <div class="form" v-if="currentMail">
+        <div class="row" style="align-items: baseline; gap: 5">
+          <input type="text" placeholder="Sending to" v-model="currentMail.target" style="width: 15rem" />
+        </div>
+
+        <div class="row" style="align-items: baseline; gap: 5">
+          <input type="text" placeholder="subject..."/>
+        </div>
+        <textarea
+          style="width: 95%; height: 8rem" 
+          placeholder="content..."></textarea>
+
+        <div class="row" style="gap: 2">
+          <ActionButton 
+            :proxy-fn="back"
+            :label="'Back'" />
+
+          <ActionButton 
+            :proxy-fn="back"
+            :label="'Send'" />
         </div>
       </div>
     </section>
 
-    <!-- right pane -->
-    <section class="message-view-pane" id="messageViewPane">
+    <section class="message-list-pane" ref="listPane">
+      <h3>Messages</h3>
+      <div class="message-list" id="messageList">
+        <div v-for="message of mails" 
+          class="message-item"
+          @click="openMail(message)">
+          {{ message.subject }}
+        </div>
+        <div v-if="mails.length === 0">
+          You have no messages
+        </div>
+      </div>
+    </section>
+
+    <section class="message-view-pane" ref="viewPane">
       <div class="form">
         <div class="message-content" id="messageContent">
           {{ currentMail?.content }}
@@ -23,8 +65,13 @@
         </textarea>
 
         <div class="row" style="gap: 2">
-          <button @click="back">Back</button>
-          <button>Send </button>
+          <ActionButton 
+            :proxy-fn="back"
+            :label="'Back'" />
+
+          <ActionButton 
+            :proxy-fn="back"
+            :label="'Reply'" />
         </div>
       </div>
     </section>
@@ -32,68 +79,112 @@
 </template>
 
 <script lang="ts" setup>
+import { API } from '@/api/api';
 import { Mail } from 'shared/types/common';
 import { onMounted, ref } from 'vue';
 import ActionButton from './action-button.vue';
 
-const currentMail = ref<Mail>();
+const viewPane = ref<HTMLElement>();
+const composePane = ref<HTMLElement>();
+const listPane = ref<HTMLElement>();
+
+const currentMail = ref<Omit<Mail, 'id' | 'read' | 'timestamp'>>({
+  source: 0,
+  target: 0,
+  type: 'normal',
+  priority: 100,
+
+  subject: '',
+  content: ''
+});
+
+const mails = ref<Mail[]>([]);
 
 // Static placeholder messages
-const messages: Mail[] = [
-  {
-    id: '1',
-    type: 'normal',
-    priority: 50,
-    timestamp: Date.now(),
-    source: 0,
-    target: 1,
-    subject: "Your delivery has arrived",
-    content: "Your shipment of iron and wood is ready for pickup at the docks.",
-    read: false
-  },
-  {
-    id: '2',
-    type: 'normal',
-    priority: 50,
-    timestamp: Date.now(),
-    source: 0,
-    target: 1,
-    subject: "New quest available",
-    content: "A new quest has appeared: 'Defend the Village'. Rewards await!",
-    read: false
-  },
-  {
-    id: '3',
-    type: 'normal',
-    priority: 50,
-    timestamp: Date.now(),
-    source: 0,
-    target: 1,
-    subject: "Battle Invitation",
-    content: "You have been invited to fight in the next arena challenge.",
-    read: false
-  }
-];
+// const messages: Mail[] = [
+//   {
+//     id: '1',
+//     type: 'normal',
+//     priority: 50,
+//     timestamp: Date.now(),
+//     source: 0,
+//     target: 1,
+//     subject: "Your delivery has arrived",
+//     content: "Your shipment of iron and wood is ready for pickup at the docks.",
+//     read: false
+//   },
+//   {
+//     id: '2',
+//     type: 'normal',
+//     priority: 50,
+//     timestamp: Date.now(),
+//     source: 0,
+//     target: 1,
+//     subject: "New quest available",
+//     content: "A new quest has appeared: 'Defend the Village'. Rewards await!",
+//     read: false
+//   },
+//   {
+//     id: '3',
+//     type: 'normal',
+//     priority: 50,
+//     timestamp: Date.now(),
+//     source: 0,
+//     target: 1,
+//     subject: "Battle Invitation",
+//     content: "You have been invited to fight in the next arena challenge.",
+//     read: false
+//   }
+// ];
 
 const openMail = (mail: Mail) => {
   currentMail.value = mail;
-  document.getElementById('messageListPane')!.style.display = "none";
-  document.getElementById('messageViewPane')!.style.display = "flex";
+  if (listPane.value && viewPane.value && composePane.value) {
+    listPane.value.style.display = 'none';
+    composePane.value.style.display = 'none'
+    viewPane.value.style.display = 'flex';
+  }
 };
 
-const back = () => {
-  document.getElementById('messageListPane')!.style.display = "flex";
-  document.getElementById('messageViewPane')!.style.display = "none";
+const compose = async () => {
+  if (listPane.value && viewPane.value && composePane.value) {
+    listPane.value.style.display = 'none';
+    composePane.value.style.display = 'flex'
+    viewPane.value.style.display = 'none';
+  }
 };
 
-onMounted(() => {});
+const back = async () => {
+  if (listPane.value && viewPane.value && composePane.value) {
+    listPane.value.style.display = 'flex';
+    composePane.value.style.display = 'none'
+    viewPane.value.style.display = 'none';
+  }
+};
 
+const refreshMails = async () => {
+  const results = await API.get<{ mails: Mail[]}>('/mails');
+  mails.value = results.data.mails;
+};
 
-// Back button (mobile)
-// backButton.addEventListener("click", () => {
-//     messageViewPane.style.display = "none";
-//     messageListPane.style.display = "block";
-// });
+const sendMail = async () => {
+  const result = await API.post<{ id: string; errors: any[] }>('/mails', { mail: currentMail });
+
+  if (listPane.value && viewPane.value && composePane.value) {
+    listPane.value.style.display = 'flex';
+    composePane.value.style.display = 'none'
+    viewPane.value.style.display = 'none';
+  }
+};
+
+onMounted(() => {
+  refreshMails();
+  if (listPane.value && viewPane.value && composePane.value) {
+    listPane.value.style.display = 'flex';
+    composePane.value.style.display = 'none'
+    viewPane.value.style.display = 'none';
+  }
+});
 </script>
 
 <style scoped>
