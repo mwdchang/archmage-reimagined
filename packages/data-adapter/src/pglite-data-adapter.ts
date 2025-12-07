@@ -963,17 +963,20 @@ WHERE username = '${user.username}'
     return results.rows.map(toCamelCase<Mail>);
   }
 
-  async deleteMails(ids: string[]): Promise<void> {
+  async deleteMails(mageId: number, ids: string[]): Promise<void> {
     await this.db.exec(`
-      DELETE FROM mail where id in (${ids.map(Q).join(',')})
+      DELETE FROM mail 
+      WHERE id in (${ids.map(Q).join(',')})
+      AND target = ${mageId}
     `);
   }
 
-  async readMails(ids: string[]): Promise<void> {
+  async readMails(mageId: number, ids: string[]): Promise<void> {
     await this.db.exec(`
       UPDATE rank 
       SET read = true
       WHERE id = (${ids.map(Q).join(',')})
+      AND target = ${mageId}
     `);
   }
 

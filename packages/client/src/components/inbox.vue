@@ -13,20 +13,18 @@
 
     <!-- right pane -->
     <section class="message-view-pane" id="messageViewPane">
-      <div> 
-      </div>
-      <div class="message-content" id="messageContent">
-        {{ currentMail?.content }}
-      </div>
-
       <div class="form">
-        <textarea style="width: 90%; height: 8rem" 
+        <div class="message-content" id="messageContent">
+          {{ currentMail?.content }}
+        </div>
+
+        <textarea style="width: 95%; height: 8rem" 
           placeholder="Reply...">
         </textarea>
 
         <div class="row" style="gap: 2">
-          <button @click="back">← Back</button>
-          <button class="send-btn">Send </button>
+          <button @click="back">Back</button>
+          <button>Send </button>
         </div>
       </div>
     </section>
@@ -36,10 +34,9 @@
 <script lang="ts" setup>
 import { Mail } from 'shared/types/common';
 import { onMounted, ref } from 'vue';
-import ActionButton from './action-button.vue';
+import ActionButton from './action-button.vue';
 
 const currentMail = ref<Mail>();
-
 
 // Static placeholder messages
 const messages: Mail[] = [
@@ -77,9 +74,6 @@ const messages: Mail[] = [
     read: false
   }
 ];
-
-
-const mobileStyle = ref<any>({});
 
 const openMail = (mail: Mail) => {
   currentMail.value = mail;
@@ -132,7 +126,7 @@ main {
 }
 
 .message-item:hover {
-  background: #f0f0f0;
+  background: #505050;
 }
 
 .message-item.active {
@@ -165,33 +159,5 @@ main {
   resize: none;
   height: 80px;
   padding: 8px;
-}
-
-
-.send-btn:hover {
-  background: #0069d9;
-}
-
-/* MOBILE RESPONSIVE MODE */
-@media (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-  }
-
-  .message-list-pane {
-    width: 100%;
-    height: 100vh;
-  }
-
-  .message-view-pane {
-    width: 100%;
-    height: 100vh;
-    display: none;
-    background: white;
-  }
-
-  .mobile-only {
-    display: block;
-  }
 }
 </style>

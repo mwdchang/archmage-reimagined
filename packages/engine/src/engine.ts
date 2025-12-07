@@ -23,7 +23,7 @@ import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import type { BuildPayload, DestroyPayload } from 'shared/types/api';
-import type { MageRank } from 'shared/types/common';
+import type { MageRank, Mail } from 'shared/types/common';
 import {
   explore,
   explorationRate,
@@ -2016,6 +2016,29 @@ class Engine {
   async getMarketBids(priceId: string) {
     return this.adapter.getMarketBids(priceId);
   }
+
+
+  // ==============================
+  async saveMail(mage: Mage, payload: Omit<Mail, 'id'>) {
+    const mail: Mail = {
+      id: uuidv4(),
+      ...payload
+    }
+    return { errors: [], id: mail.id };
+  }
+
+  async getMails(mage: Mage) {
+    return this.adapter.getMails(mage.id);
+  }
+
+  async markAsRead(mage: Mage, ids: string[]) {
+    return this.adapter.readMails(mage.id, ids);
+  }
+
+  async deleteMails(mage: Mage, ids: string[]) {
+    return this.adapter.deleteMails(mage.id, ids);
+  }
+
 }
 
 export { Engine };
