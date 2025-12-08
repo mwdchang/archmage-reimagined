@@ -350,9 +350,14 @@ router.post('/api/market-bids', async (req: any, res) => {
 router.post('/api/mails', async (req: any, res) => {
   const mail = req.body.mail;
   let mage = await engine.getMageByUser(req.user.username);
-  const result = await engine.saveMail(mage, mail);
 
-  res.status(200).json(result);
+  try {
+    const result = await engine.saveMail(mage, mail);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+
 });
 
 router.get('/api/mails', async (req: any, res) => {

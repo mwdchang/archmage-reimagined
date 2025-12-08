@@ -2026,6 +2026,8 @@ class Engine {
       timestamp: Date.now(),
       ...payload
     }
+    this.adapter.saveMail(mail);
+
     return { errors: [], id: mail.id };
   }
 

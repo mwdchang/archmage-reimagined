@@ -22,9 +22,10 @@
         </div>
 
         <div class="row" style="align-items: baseline; gap: 5">
-          <input type="text" placeholder="subject..."/>
+          <input type="text" placeholder="subject..." v-model="currentMail.subject" />
         </div>
         <textarea
+          v-model="currentMail.content"
           style="width: 95%; height: 8rem" 
           placeholder="content..."></textarea>
 
@@ -34,7 +35,7 @@
             :label="'Back'" />
 
           <ActionButton 
-            :proxy-fn="back"
+            :proxy-fn="newMail"
             :label="'Send'" />
         </div>
       </div>
@@ -56,11 +57,20 @@
 
     <section class="message-view-pane" ref="viewPane">
       <div class="form">
+        <div style="font-weight: 600"> {{ currentMail?.subject }} </div>
+
+        <!--
         <div class="message-content" id="messageContent">
           {{ currentMail?.content }}
         </div>
+        -->
+
+        <textarea style="width: 95%; height: 7rem" disabled 
+          :value="currentMail?.content"></textarea>
+
 
         <textarea style="width: 95%; height: 8rem" 
+          v-model="replyContent"
           placeholder="Reply...">
         </textarea>
 
@@ -70,25 +80,39 @@
             :label="'Back'" />
 
           <ActionButton 
-            :proxy-fn="back"
+            :proxy-fn="replyMail"
             :label="'Reply'" />
         </div>
       </div>
     </section>
+
+    <section>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    </section>
+
   </main>
 </template>
 
 <script lang="ts" setup>
-import { API } from '@/api/api';
-import { Mail } from 'shared/types/common';
 import { onMounted, ref } from 'vue';
+import { API, APIWrapper } from '@/api/api';
+import { Mail } from 'shared/types/common';
+import { useMageStore } from '@/stores/mage';
 import ActionButton from './action-button.vue';
+import { error } from 'console';
+
+const mageStore = useMageStore();
 
 const viewPane = ref<HTMLElement>();
 const composePane = ref<HTMLElement>();
 const listPane = ref<HTMLElement>();
 
-const currentMail = ref<Omit<Mail, 'id' | 'read' | 'timestamp'>>({
+const replyContent = ref('');
+const errorStr = ref('');
+
+type NewMail = Omit<Mail, 'id' | 'read' | 'timestamp'>;
+
+const currentMail = ref<NewMail>({
   source: 0,
   target: 0,
   type: 'normal',
@@ -167,14 +191,63 @@ const refreshMails = async () => {
   mails.value = results.data.mails;
 };
 
-const sendMail = async () => {
-  const result = await API.post<{ id: string; errors: any[] }>('/mails', { mail: currentMail });
+const send = async (payload: NewMail) => {
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post<{ id: string }>('/mails', { 
+      mail: payload
+    });
+  });
 
-  if (listPane.value && viewPane.value && composePane.value) {
-    listPane.value.style.display = 'flex';
-    composePane.value.style.display = 'none'
-    viewPane.value.style.display = 'none';
+  if (error) {
+    errorStr.value = error;
   }
+
+  if (data) {
+    if (listPane.value && viewPane.value && composePane.value) {
+      listPane.value.style.display = 'flex';
+      composePane.value.style.display = 'none'
+      viewPane.value.style.display = 'none';
+    }
+  }
+};
+
+const newMail = async () => {
+  // coerce
+  currentMail.value.source = mageStore.mage!.id;
+  currentMail.value.target = +currentMail.value.target;
+  await send(currentMail.value);
+};
+
+const replyMail = async () => {
+  if (replyContent.value === '') {
+    errorStr.value = 'Content is empty';
+    return;
+  }
+
+  let content = currentMail.value.content;
+  const lines = content.split(/\n/);
+  content = '';
+
+  for (const line of lines) {
+    content = content + `~${line.trim()}\n`;
+  }
+  content = `${replyContent.value}\n\n${content}`;
+
+  const replyMail: NewMail = {
+    source: mageStore.mage!.id,
+    target: currentMail.value.source,
+    type: 'normal',
+    priority: 100,
+
+    subject: `RE: ${currentMail.value.subject}`,
+    content: content
+  };
+
+  console.log('...............', content);
+
+  replyContent.value = '';
+  await send(replyMail);
 };
 
 onMounted(() => {
