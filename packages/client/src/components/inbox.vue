@@ -15,7 +15,25 @@
       </div>
     </section>
 
-    <section class="message-list-pane" ref="composePane">
+    <section class="message-list-pane" v-if="currentView === 'listView'">
+      <h3>Messages</h3>
+      <div class="message-list" id="messageList">
+        <div v-for="message of mails" 
+          :key="message.id"
+          class="message-item"
+          @click="openMail(message)">
+          <div class="row" style="justify-content:space-between" :class="{ 'unread': message.read === false}">
+            <div :class="{ 'unread': message.read === false }"> {{ message.subject }}</div>
+            <div :class="{ 'unread': message.read === false }" style="color: #888"> {{ readableDate(message.timestamp) }}</div>
+          </div>
+        </div>
+        <div v-if="mails.length === 0">
+          You have no messages
+        </div>
+      </div>
+    </section>
+
+    <section class="message-list-pane" v-if="currentView === 'composeView'">
       <div class="form" v-if="currentMail">
         <div class="row" style="align-items: baseline; gap: 5">
           <input type="text" placeholder="Sending to" v-model="currentMail.target" style="width: 15rem" />
@@ -26,7 +44,7 @@
         </div>
         <textarea
           v-model="currentMail.content"
-          style="width: 95%; height: 8rem" 
+          style="width: 100%; height: 10rem" 
           placeholder="content..."></textarea>
 
         <div class="row" style="gap: 2">
@@ -41,23 +59,12 @@
       </div>
     </section>
 
-    <section class="message-list-pane" ref="listPane">
-      <h3>Messages</h3>
-      <div class="message-list" id="messageList">
-        <div v-for="message of mails" 
-          class="message-item"
-          @click="openMail(message)">
-          {{ message.subject }}
-        </div>
-        <div v-if="mails.length === 0">
-          You have no messages
-        </div>
-      </div>
-    </section>
-
-    <section class="message-view-pane" ref="viewPane">
+    <section class="message-view-pane" v-if="currentView === 'replyView'">
       <div class="form">
-        <div style="font-weight: 600"> {{ currentMail?.subject }} </div>
+        <div class="row" style="justify-content:space-between">
+          <div style="font-weight: 600"> {{ currentMail?.subject }} </div>
+          <div v-if="currentMail.timestamp" style="color: #888"> {{ readableDate(currentMail.timestamp) }}</div>
+        </div>
 
         <!--
         <div class="message-content" id="messageContent">
@@ -65,11 +72,11 @@
         </div>
         -->
 
-        <textarea style="width: 95%; height: 7rem" disabled 
+        <textarea style="width: 100%; height: 7rem" disabled 
           :value="currentMail?.content"></textarea>
 
 
-        <textarea style="width: 95%; height: 8rem" 
+        <textarea style="width: 100%; height: 8rem" 
           v-model="replyContent"
           placeholder="Reply...">
         </textarea>
@@ -99,18 +106,16 @@ import { API, APIWrapper } from '@/api/api';
 import { Mail } from 'shared/types/common';
 import { useMageStore } from '@/stores/mage';
 import ActionButton from './action-button.vue';
-import { error } from 'console';
+import { readableDate } from '@/util/util';
 
 const mageStore = useMageStore();
 
-const viewPane = ref<HTMLElement>();
-const composePane = ref<HTMLElement>();
-const listPane = ref<HTMLElement>();
+const currentView = ref('listView');
 
 const replyContent = ref('');
 const errorStr = ref('');
 
-type NewMail = Omit<Mail, 'id' | 'read' | 'timestamp'>;
+type NewMail = Partial<Mail>;
 
 const currentMail = ref<NewMail>({
   source: 0,
@@ -124,71 +129,28 @@ const currentMail = ref<NewMail>({
 
 const mails = ref<Mail[]>([]);
 
-// Static placeholder messages
-// const messages: Mail[] = [
-//   {
-//     id: '1',
-//     type: 'normal',
-//     priority: 50,
-//     timestamp: Date.now(),
-//     source: 0,
-//     target: 1,
-//     subject: "Your delivery has arrived",
-//     content: "Your shipment of iron and wood is ready for pickup at the docks.",
-//     read: false
-//   },
-//   {
-//     id: '2',
-//     type: 'normal',
-//     priority: 50,
-//     timestamp: Date.now(),
-//     source: 0,
-//     target: 1,
-//     subject: "New quest available",
-//     content: "A new quest has appeared: 'Defend the Village'. Rewards await!",
-//     read: false
-//   },
-//   {
-//     id: '3',
-//     type: 'normal',
-//     priority: 50,
-//     timestamp: Date.now(),
-//     source: 0,
-//     target: 1,
-//     subject: "Battle Invitation",
-//     content: "You have been invited to fight in the next arena challenge.",
-//     read: false
-//   }
-// ];
-
 const openMail = (mail: Mail) => {
+
   currentMail.value = mail;
-  if (listPane.value && viewPane.value && composePane.value) {
-    listPane.value.style.display = 'none';
-    composePane.value.style.display = 'none'
-    viewPane.value.style.display = 'flex';
+  currentView.value = 'replyView';
+
+  if (mail.read === false) {
+    mail.read = true;
+    API.post('/read-mails', { ids: [currentMail.value.id] });
   }
 };
 
 const compose = async () => {
-  if (listPane.value && viewPane.value && composePane.value) {
-    listPane.value.style.display = 'none';
-    composePane.value.style.display = 'flex'
-    viewPane.value.style.display = 'none';
-  }
+  currentView.value = 'composeView';
 };
 
 const back = async () => {
-  if (listPane.value && viewPane.value && composePane.value) {
-    listPane.value.style.display = 'flex';
-    composePane.value.style.display = 'none'
-    viewPane.value.style.display = 'none';
-  }
+  currentView.value = 'listView';
 };
 
 const refreshMails = async () => {
   const results = await API.get<{ mails: Mail[]}>('/mails');
-  mails.value = results.data.mails;
+  mails.value = results.data.mails.sort((a, b) => b.timestamp - a.timestamp);
 };
 
 const send = async (payload: NewMail) => {
@@ -204,18 +166,15 @@ const send = async (payload: NewMail) => {
   }
 
   if (data) {
-    if (listPane.value && viewPane.value && composePane.value) {
-      listPane.value.style.display = 'flex';
-      composePane.value.style.display = 'none'
-      viewPane.value.style.display = 'none';
-    }
+    await refreshMails();
+    currentView.value = 'listView';
   }
 };
 
 const newMail = async () => {
   // coerce
   currentMail.value.source = mageStore.mage!.id;
-  currentMail.value.target = +currentMail.value.target;
+  currentMail.value.target = +currentMail.value.target!;
   await send(currentMail.value);
 };
 
@@ -225,7 +184,7 @@ const replyMail = async () => {
     return;
   }
 
-  let content = currentMail.value.content;
+  let content = currentMail.value.content!;
   const lines = content.split(/\n/);
   content = '';
 
@@ -244,7 +203,6 @@ const replyMail = async () => {
     content: content
   };
 
-  console.log('...............', content);
 
   replyContent.value = '';
   await send(replyMail);
@@ -252,18 +210,14 @@ const replyMail = async () => {
 
 onMounted(() => {
   refreshMails();
-  if (listPane.value && viewPane.value && composePane.value) {
-    listPane.value.style.display = 'flex';
-    composePane.value.style.display = 'none'
-    viewPane.value.style.display = 'none';
-  }
+  currentView.value = 'listView';
 });
 </script>
 
 <style scoped>
 main {
   /* FIXME: mobile */
-  min-width: 30rem
+  min-width: 35rem
 }
 
 .mobile-only {
@@ -300,7 +254,7 @@ main {
 .message-view-pane {
   flex-grow: 2;
   /* display: flex; */
-  display: none;
+  display: flex;
   flex-direction: column;
 }
 
@@ -323,5 +277,10 @@ main {
   resize: none;
   height: 80px;
   padding: 8px;
+}
+
+.unread {
+  font-weight: 600;
+  background: #333;
 }
 </style>

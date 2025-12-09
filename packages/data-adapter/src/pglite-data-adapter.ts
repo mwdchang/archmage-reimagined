@@ -973,7 +973,7 @@ WHERE username = '${user.username}'
 
   async readMails(mageId: number, ids: string[]): Promise<void> {
     await this.db.exec(`
-      UPDATE rank 
+      UPDATE mail
       SET read = true
       WHERE id = (${ids.map(Q).join(',')})
       AND target = ${mageId}
