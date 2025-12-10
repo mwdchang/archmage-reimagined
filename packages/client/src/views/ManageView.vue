@@ -4,12 +4,16 @@
     <div class="tab" :class="{ active: tabView === 'option' }" @click="changeView('option')">Options</div>
   </div>
 
-  Coming soon ...
+  <Inbox v-if="tabView === 'message'" />
+  <section v-else>
+    Coming soon ...
+  </section>
 
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import Inbox from '@/components/inbox.vue';
 
 const tabView = ref('message');
 

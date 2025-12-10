@@ -86,9 +86,10 @@ export abstract class DataAdapter {
 
   // Messaging
   abstract saveMail(mail: Mail): Promise<void>
+
   abstract getMails(mageId: number): Promise<Mail[]>
-  abstract deleteMails(ids: string[]): Promise<void>
-  abstract readMails(ids: string[]): Promise<void>
+  abstract deleteMails(mageId: number, ids: string[]): Promise<void>
+  abstract readMails(mageId: number, ids: string[]): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

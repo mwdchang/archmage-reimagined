@@ -375,15 +375,15 @@ export class SimpleDataAdapter extends DataAdapter {
     return results;
   }
 
-  async deleteMails(ids: string[]): Promise<void> {
+  async deleteMails(mageId: number, ids: string[]): Promise<void> {
     this.mailTable = this.mailTable.filter(mail => {
-      return !ids.includes(mail.id);
+      return !ids.includes(mail.id) && mail.target === mageId;
     });
   }
 
-  async readMails(ids: string[]): Promise<void> {
+  async readMails(mageId: number, ids: string[]): Promise<void> {
     this.mailTable.forEach(mail => {
-      if (ids.includes(mail.id)) {
+      if (ids.includes(mail.id) && mail.target === mageId) {
         mail.read = true;
       }
     });

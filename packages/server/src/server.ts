@@ -37,6 +37,7 @@ import { PGliteDataAdapter } from 'data-adapter/src/pglite-data-adapter';
 import { Engine } from 'engine/src/engine';
 import { MAX_AGE, verifyAccessToken } from 'shared/src/auth';
 import { NameError } from 'shared/src/errors';
+import { Mail } from 'shared/types/common';
 
 const PORT = 3000;
 const app = express();
@@ -344,6 +345,39 @@ router.post('/api/market-bids', async (req: any, res) => {
   mage = await engine.makeMarketBids(mage.id, bids);
 
   res.status(200).json({ mage });
+});
+
+router.post('/api/mails', async (req: any, res) => {
+  const mail = req.body.mail;
+  let mage = await engine.getMageByUser(req.user.username);
+
+  try {
+    const result = await engine.saveMail(mage, mail);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+
+});
+
+router.get('/api/mails', async (req: any, res) => {
+  let mage = await engine.getMageByUser(req.user.username);
+  const mails = await engine.getMails(mage);
+  res.status(200).json({ mails });
+});
+
+router.post('/api/read-mails', async (req: any, res) => {
+  let mage = await engine.getMageByUser(req.user.username);
+  const ids = req.body.ids;
+  await engine.markAsRead(mage, ids);
+  res.status(200).json({});
+});
+
+router.post('/api/delete-mails', async (req: any, res) => {
+  let mage = await engine.getMageByUser(req.user.username);
+  const ids = req.body.ids;
+  await engine.deleteMails(mage, ids);
+  res.status(200).json({});
 });
 
 // router.route('/api/test').get(verifyAccessToken, async (req: any, res) => {
