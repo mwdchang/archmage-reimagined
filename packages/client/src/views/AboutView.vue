@@ -1,7 +1,7 @@
 <template>
   <main class="about" v-if="mageStore.mage">
     <h3>
-      <router-link to="/manage">
+      <router-link to="/manage" class="row" style="align-items: center">
         {{ mageStore.mage.name }} (# {{ mageStore.mage.id }})
       </router-link>
     </h3>
@@ -209,4 +209,35 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
 }
+
+
+.unread-badge {
+  /*
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  */
+  animation: pulse 1.5s infinite;
+  top: 5px;
+  right: 5px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/*
+.unread-badge {
+  box-shadow: 0 0 0px red;
+  animation: glow 1.5s infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0px red; }
+  50% { box-shadow: 0 0 8px red; }
+}
+*/
 </style>

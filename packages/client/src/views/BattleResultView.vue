@@ -233,12 +233,18 @@
     <h3 class="section-header">Result</h3>
     <div v-if="report.attackType !== 'pillage'">
       Attacker gained {{ report.result.landGain }} acres and defender lost {{ report.result.landLoss }} acres
+
+      <div v-for="log of report.postBattle.logs">
+        <div v-if="log.effectType === 'StealEffect'">
+          {{ nameById(report.attacker.id) }} pillaged {{ log.stealValue }} {{ log.target }}
+        </div>
+      </div>
     </div>
     <div v-else>
       <div v-for="log of report.postBattle.logs">
         <div v-if="log.effectType === 'StealEffect'">
-          {{ nameById(report.defender.id) }} lost {{ log.lossValue }} {{ log.target }}, 
-          {{ nameById(report.attacker.id) }} pillaged {{ log.stealValue }} {{ log.target }}  
+          {{ nameById(report.defender.id) }} lost {{ log.lossValue }} {{ log.target }},
+          {{ nameById(report.attacker.id) }} pillaged {{ log.stealValue }} {{ log.target }}
         </div>
       </div>
     </div>
