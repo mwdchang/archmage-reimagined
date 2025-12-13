@@ -35,8 +35,14 @@
 
     <section class="message-list-pane" v-if="currentView === 'composeView'">
       <div class="form" v-if="currentMail">
-        <div class="row" style="align-items: baseline; gap: 5">
-          <input type="text" placeholder="Sending to" v-model="currentMail.target" style="width: 15rem" />
+        <div class="row" style="align-items: baseline; gap: 1.0rem">
+          <input type="text" placeholder="Sending to" 
+            @blur="checkMage"
+            @input="debounceCheckmage"
+            v-model="currentMail.target" style="width: 8rem" />
+          <span v-if="targetMage">
+            {{ targetMage.name }} (#{{targetMage.id}} )
+          </span>
         </div>
 
         <div class="row" style="align-items: baseline; gap: 5">
@@ -102,15 +108,18 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
 import { Mail } from 'shared/types/common';
 import { useMageStore } from '@/stores/mage';
 import ActionButton from './action-button.vue';
 import { readableDate } from '@/util/util';
+import { MageSummary } from 'shared/types/mage';
 
 const mageStore = useMageStore();
 
 const currentView = ref('listView');
+const targetMage = ref<MageSummary>();
 
 const replyContent = ref('');
 const errorStr = ref('');
@@ -130,7 +139,6 @@ const currentMail = ref<NewMail>({
 const mails = ref<Mail[]>([]);
 
 const openMail = (mail: Mail) => {
-
   currentMail.value = mail;
   currentView.value = 'replyView';
 
@@ -202,11 +210,21 @@ const replyMail = async () => {
     subject: `RE: ${currentMail.value.subject}`,
     content: content
   };
-
-
   replyContent.value = '';
   await send(replyMail);
 };
+
+const checkMage = async () => {
+  const id = currentMail.value.target;
+  const res = await API.get<{ mageSummary: MageSummary }>(`/mage/${id}`);
+
+  if (res.data && res.data.mageSummary) {
+    targetMage.value = res.data.mageSummary;
+  }
+};
+
+const debounceCheckmage = _.debounce(checkMage, 300);
+
 
 onMounted(() => {
   refreshMails();
