@@ -32,6 +32,7 @@ import DefeatedView from '@/views/DefeatedView.vue';
 import EncyclopediaView from '@/views/EncyclopediaView.vue';
 import GuideView from '@/views/GuideView.vue';
 import FinalsView from '@/views/FinalsView.vue';
+import AnalysisView from '@/views/Analysis.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -184,6 +185,11 @@ const router = createRouter({
       path: '/chronicles',
       name: 'chronicles',
       component: ChroniclesView
+    },
+    {
+      path: '/analysis',
+      name: 'analysis',
+      component: AnalysisView
     },
     {
       path: '/finals',
