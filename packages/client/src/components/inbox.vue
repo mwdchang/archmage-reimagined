@@ -78,14 +78,14 @@
         </div>
         -->
 
-        <textarea style="width: 100%; height: 7rem" disabled 
-          :value="currentMail?.content"></textarea>
-
-
         <textarea style="width: 100%; height: 8rem" 
           v-model="replyContent"
           placeholder="Reply...">
         </textarea>
+
+        <textarea style="width: 100%; height: 7rem; background: #555; color: #eee" disabled 
+          :value="currentMail?.content"></textarea>
+
 
         <div class="row" style="gap: 2">
           <ActionButton 
@@ -274,6 +274,7 @@ main {
   /* display: flex; */
   display: flex;
   flex-direction: column;
+  font-size: 0.9rem;
 }
 
 .message-content {

@@ -127,11 +127,46 @@ export const resolveWinningBids = async (
     priceUpdate.set(marketPrice.id, marketPrice);
   }
 
-  // delete market bids and delete market items
+  // Delete winning market bids and delete market items
   await adapter.removeMarketBids(winningBids.map(d => d.id));
+
 
   // TODO: Send messages to mages
   const lostBids = await adapter.getExpiredBids(currentTurn);
+  const lostMageMap: Map<number, MarketBid[]> = new Map();
+
+  for (const lostBid of lostBids) {
+    const mageId = lostBid.mageId;
+    if (lostMageMap.has(mageId)) {
+      lostMageMap.get(mageId).push(lostBid);
+    } else {
+      lostMageMap.set(mageId, [lostBid]);
+    }
+  }
+
+  for (const mageId of lostMageMap.keys()) {
+    const lostBids = lostMageMap.get(mageId);
+    const buffer: string[] = [];
+
+    lostBids.forEach(lostBid => {
+      const marketItem = itemMap.get(lostBid.marketId);
+      buffer.push(`${marketItem.priceId} bid at ${lostBid.bid}`);
+    });
+
+    adapter.saveMail({
+      id: uuidv4(),
+      read: false,
+      timestamp: Date.now(),
+      type: 'market',
+      priority: 100,
+      source: -1,
+      target: mageId,
+      subject: `[Blackmarket] losing bids for turn - ${currentTurn}`,
+      content: `You lost the following bids, the gelds have been returned to you:\n ${buffer.join("\n")}`
+    });
+  }
+
+
 
   await adapter.cleanupMarket(currentTurn);
 
