@@ -861,8 +861,20 @@ WHERE username = '${user.username}'
     return result.rows.map(toCamelCase<MarketBid>);
   }
 
+  async getExpiredBids(turn: number): Promise<MarketBid[]> {
+    const query = `
+      SELECT * from market_bid
+      WHERE market_id in (
+        SELECT id from market where expiration = ${turn}
+      )
+    `;
+    const result = await this.db.query(query);
+    return result.rows.map(toCamelCase<MarketBid>);
+  }
+
   async cleanupMarket(turn: number): Promise<void> {
 
+    /*
     let blah = `
       WITH expired_markets AS (
         SELECT id
@@ -880,6 +892,7 @@ WHERE username = '${user.username}'
       SELECT * from refunds
     `;
     const res = await this.db.query(blah);
+    */
 
 
     // Return geld

@@ -81,6 +81,7 @@ export abstract class DataAdapter {
   abstract removeMarketBids(id: string[]): Promise<void>
 
   abstract getWinningBids(turn: number): Promise<MarketBid[]>
+  abstract getExpiredBids(turn: number): Promise<MarketBid[]>
   abstract cleanupMarket(turn: number): Promise<void>
 
 
