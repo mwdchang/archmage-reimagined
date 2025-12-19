@@ -51,7 +51,8 @@ const { mage } = storeToRefs(mageStore);
 
 const publicRoutes = [
   'home', 'guide', 'encyclopedia',
-  'viewUnit', 'viewSpell', 'finals'
+  'viewUnit', 'viewSpell', 'finals',
+  'analysis'
 ];
 const hideHeader = [
   'status',
@@ -61,7 +62,8 @@ const hideHeader = [
   'viewUnit',
   'viewSpell',
   'encyclopedia',
-  'guide'
+  'guide',
+  'analysis'
 ];
 
 // Test to see if session already exist

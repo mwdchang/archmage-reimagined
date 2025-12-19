@@ -341,6 +341,15 @@ export class SimpleDataAdapter extends DataAdapter {
     });
   }
 
+  async getExpiredBids(turn: number): Promise<MarketBid[]> {
+    const expired = this.marketItemTable.filter(d => d.expiration === turn);
+    const expiredIds = expired.map(d => d.id);
+    const bids = this.marketBidTable.filter(d => {
+      return expiredIds.includes(d.marketId);
+    });
+    return bids;
+  }
+
   async cleanupMarket(turn: number): Promise<void> {
     const expired = this.marketItemTable.filter(d => d.expiration === turn);
     const expiredIds = expired.map(d => d.id);

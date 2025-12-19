@@ -175,7 +175,6 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
       power :
       Math.floor(power / unitPower);
 
-    console.log(`Summoned ${unitsSummoned} ${unit.name}`);
     if (!result[unit.id]) result[unit.id] = 0;
     result[unit.id] += unitsSummoned;
   });
@@ -357,7 +356,7 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
     }
   }
 
-  console.log(`\tDispel rate ${mage.name}(#${mage.id}): ${spell.id} raw/modifier/final = ${rawProb.toFixed(2)}/${modifier.toFixed(2)}/${adjustedProb.toFixed(2)}`);
+  // console.log(`\tDispel rate ${mage.name}(#${mage.id}): ${spell.id} raw/modifier/final = ${rawProb.toFixed(2)}/${modifier.toFixed(2)}/${adjustedProb.toFixed(2)}`);
   return adjustedProb;
 }
 

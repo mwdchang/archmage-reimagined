@@ -783,7 +783,7 @@ WHERE username = '${user.username}'
     if (ids.length === 0) return;
 
     await this.db.exec(`
-      DELETE FROM market where id in (${ids.map(Q).join(',')})
+      DELETE FROM market where id in (${ids.map(Q).join(', ')})
     `);
   }
 
@@ -817,7 +817,7 @@ WHERE username = '${user.username}'
     if (ids.length === 0) return
 
     await this.db.exec(`
-      DELETE FROM market_bid where id IN (${ids.map(Q).join(',')})
+      DELETE FROM market_bid where id IN (${ids.map(Q).join(', ')})
     `);
   }
 
@@ -861,8 +861,20 @@ WHERE username = '${user.username}'
     return result.rows.map(toCamelCase<MarketBid>);
   }
 
+  async getExpiredBids(turn: number): Promise<MarketBid[]> {
+    const query = `
+      SELECT * from market_bid
+      WHERE market_id in (
+        SELECT id from market where expiration = ${turn}
+      )
+    `;
+    const result = await this.db.query(query);
+    return result.rows.map(toCamelCase<MarketBid>);
+  }
+
   async cleanupMarket(turn: number): Promise<void> {
 
+    /*
     let blah = `
       WITH expired_markets AS (
         SELECT id
@@ -880,6 +892,7 @@ WHERE username = '${user.username}'
       SELECT * from refunds
     `;
     const res = await this.db.query(blah);
+    */
 
 
     // Return geld
@@ -966,7 +979,7 @@ WHERE username = '${user.username}'
   async deleteMails(mageId: number, ids: string[]): Promise<void> {
     await this.db.exec(`
       DELETE FROM mail 
-      WHERE id in (${ids.map(Q).join(',')})
+      WHERE id in (${ids.map(Q).join(', ')})
       AND target = ${mageId}
     `);
   }
@@ -975,7 +988,7 @@ WHERE username = '${user.username}'
     await this.db.exec(`
       UPDATE mail
       SET read = true
-      WHERE id = (${ids.map(Q).join(',')})
+      WHERE id = (${ids.map(Q).join(', ')})
       AND target = ${mageId}
     `);
   }

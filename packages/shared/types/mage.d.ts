@@ -118,3 +118,13 @@ export interface Combatant {
   army: ArmyUnit[], 
 }
 
+export interface MageSummary {
+  id: number;
+  name: string;
+  magic: string;
+  rank: number;
+  status: string;
+  land: number;
+  netPower: number;
+  forts: number;
+}

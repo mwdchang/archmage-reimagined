@@ -2,16 +2,17 @@
   <main style="display: flex; flex-direction: column; gap: 10">
 
     <section class="form"> 
-      <div class="row" style="gap: 5">
+      <div class="row" style="justify-content: space-between">
         <ActionButton 
           :proxy-fn="compose"
           :label="'Compose'" />
 
-        <!--
         <ActionButton 
-          :proxy-fn="back"
+          v-if="currentView === 'listView'"
+          :proxy-fn="deleteBM"
+          :type="'warn'"
           :label="'Delete BM'" />
-        -->
+
       </div>
     </section>
 
@@ -24,7 +25,7 @@
           @click="openMail(message)">
           <div class="row" style="justify-content:space-between" :class="{ 'unread': message.read === false}">
             <div :class="{ 'unread': message.read === false }"> {{ message.subject }}</div>
-            <div :class="{ 'unread': message.read === false }" style="color: #888"> {{ readableDate(message.timestamp) }}</div>
+            <div :class="{ 'unread': message.read === false }" style="color: #888; font-size: 0.75rem"> {{ readableDate(message.timestamp) }}</div>
           </div>
         </div>
         <div v-if="mails.length === 0">
@@ -35,8 +36,14 @@
 
     <section class="message-list-pane" v-if="currentView === 'composeView'">
       <div class="form" v-if="currentMail">
-        <div class="row" style="align-items: baseline; gap: 5">
-          <input type="text" placeholder="Sending to" v-model="currentMail.target" style="width: 15rem" />
+        <div class="row" style="align-items: baseline; gap: 1.0rem">
+          <input type="text" placeholder="Sending to" 
+            @blur="checkMage"
+            @input="debounceCheckmage"
+            v-model="currentMail.target" style="width: 8rem" />
+          <span v-if="targetMage">
+            {{ targetMage.name }} (#{{targetMage.id}} )
+          </span>
         </div>
 
         <div class="row" style="align-items: baseline; gap: 5">
@@ -47,13 +54,13 @@
           style="width: 100%; height: 10rem" 
           placeholder="content..."></textarea>
 
-        <div class="row" style="gap: 2">
+        <div class="row" style="gap: 2; justify-content: space-between;">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
 
           <ActionButton 
-            :proxy-fn="newMail"
+            :proxy-fn="sendNewMail"
             :label="'Send'" />
         </div>
       </div>
@@ -66,29 +73,31 @@
           <div v-if="currentMail.timestamp" style="color: #888"> {{ readableDate(currentMail.timestamp) }}</div>
         </div>
 
-        <!--
-        <div class="message-content" id="messageContent">
-          {{ currentMail?.content }}
-        </div>
-        -->
-
-        <textarea style="width: 100%; height: 7rem" disabled 
-          :value="currentMail?.content"></textarea>
-
-
         <textarea style="width: 100%; height: 8rem" 
           v-model="replyContent"
           placeholder="Reply...">
         </textarea>
 
-        <div class="row" style="gap: 2">
+        <textarea style="width: 100%; height: 7rem; background: #555; color: #eee" disabled 
+          :value="currentMail?.content"></textarea>
+
+
+        <div class="row" style="justify-content:space-between">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
 
-          <ActionButton 
-            :proxy-fn="replyMail"
-            :label="'Reply'" />
+          <div class="row" style="gap: 0.5rem">
+            <ActionButton 
+              :proxy-fn="deleteMail"
+              :label="'Delete'" 
+              :type="'warn'" />
+
+            <ActionButton 
+              v-if="currentMail.source! > 0"
+              :proxy-fn="replyMail"
+              :label="'Reply'" />
+          </div>
         </div>
       </div>
     </section>
@@ -102,15 +111,19 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
 import { Mail } from 'shared/types/common';
 import { useMageStore } from '@/stores/mage';
 import ActionButton from './action-button.vue';
 import { readableDate } from '@/util/util';
+import { MageSummary } from 'shared/types/mage';
+import { BlackMarketId } from 'shared/src/common';
 
 const mageStore = useMageStore();
 
 const currentView = ref('listView');
+const targetMage = ref<MageSummary>();
 
 const replyContent = ref('');
 const errorStr = ref('');
@@ -130,7 +143,6 @@ const currentMail = ref<NewMail>({
 const mails = ref<Mail[]>([]);
 
 const openMail = (mail: Mail) => {
-
   currentMail.value = mail;
   currentView.value = 'replyView';
 
@@ -153,7 +165,7 @@ const refreshMails = async () => {
   mails.value = results.data.mails.sort((a, b) => b.timestamp - a.timestamp);
 };
 
-const send = async (payload: NewMail) => {
+const _send = async (payload: NewMail) => {
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
     return API.post<{ id: string }>('/mails', { 
@@ -171,11 +183,40 @@ const send = async (payload: NewMail) => {
   }
 };
 
-const newMail = async () => {
+const _delete = async (ids: string[]) => {
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post<{ id: string }>('/delete-mails', { 
+      ids: ids 
+    });
+  });
+
+  if (error) {
+    errorStr.value = error;
+  }
+
+  if (data) {
+    await refreshMails();
+    currentView.value = 'listView';
+  }
+};
+
+const deleteMail = async () => {
+  if (currentMail.value && currentMail.value.id) {
+    await _delete([currentMail.value.id]);
+  }
+};
+
+const deleteBM = async () => {
+  const bmMailIds = mails.value.filter(m => m.source === BlackMarketId).map(m => m.id);
+  await _delete(bmMailIds);
+};
+
+const sendNewMail = async () => {
   // coerce
   currentMail.value.source = mageStore.mage!.id;
   currentMail.value.target = +currentMail.value.target!;
-  await send(currentMail.value);
+  await _send(currentMail.value);
 };
 
 const replyMail = async () => {
@@ -202,11 +243,21 @@ const replyMail = async () => {
     subject: `RE: ${currentMail.value.subject}`,
     content: content
   };
-
-
   replyContent.value = '';
-  await send(replyMail);
+  await _send(replyMail);
 };
+
+const checkMage = async () => {
+  const id = currentMail.value.target;
+  const res = await API.get<{ mageSummary: MageSummary }>(`/mage/${id}`);
+
+  if (res.data && res.data.mageSummary) {
+    targetMage.value = res.data.mageSummary;
+  }
+};
+
+const debounceCheckmage = _.debounce(checkMage, 300);
+
 
 onMounted(() => {
   refreshMails();
@@ -256,6 +307,7 @@ main {
   /* display: flex; */
   display: flex;
   flex-direction: column;
+  font-size: 0.9rem;
 }
 
 .message-content {

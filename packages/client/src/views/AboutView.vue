@@ -16,7 +16,7 @@
     </p>
 
     <br>
-    <section class="row" style="gap: 25px">
+    <section class="row" style="gap: 25px; margin-bottom: 1rem">
       <section>
         <img style="width: 10rem" :src="sigilPath" />
       </section>
@@ -73,41 +73,38 @@
       </section>
     </section>
 
-    <section class="row" style="gap: 30px; align-items: baseline">
-      <div class="column" style="gap: 0.25rem"> 
-        <router-link to="/explore">Explore</router-link>
-        <router-link to="/build">Build</router-link>
-        <router-link to="/destroy" style="color: #d80">Destroy</router-link>
-      </div>
 
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/spell">Cast Magic</router-link>
-        <router-link to="/item">Use Item</router-link>
-        <router-link to="/research">Research</router-link>
-        <router-link to="/dispel" style="color: #d80">Dispel Magic</router-link>
-      </div>
+    <section class="grid-container">
+      <!-- col 1-->
+      <router-link class="grid-item g-c1 g-r1" to="/explore">Explore</router-link>
+      <router-link class="grid-item g-c1 g-r2" to="/build">Build</router-link>
+      <router-link class="grid-item g-c1 g-r3" to="/destroy" style="color: #d80">Destroy</router-link>
 
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/status">Status Report</router-link>
-        <router-link to="/rankList">Rankings</router-link>
-        <router-link to="/charge">Mana Charge</router-link>
-        <router-link to="/geld">Gelding</router-link>
-        <router-link to="/market">Market</router-link>
-      </div>
-      
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/battle">Battle</router-link>
-        <router-link to="/assignment">Assignment</router-link>
-        <router-link to="/chronicles">Chronicles</router-link>
-        <router-link to="/recruit">Recruit</router-link>
-        <router-link to="/disband" style="color: #d80">Disband</router-link>
-      </div>
+      <!-- col 2-->
+      <router-link class="grid-item g-c2 g-r1" to="/spell">Cast Magic</router-link>
+      <router-link class="grid-item g-c2 g-r2" to="/item">Use Item</router-link>
+      <router-link class="grid-item g-c2 g-r3" to="/research">Research</router-link>
+      <router-link class="grid-item g-c2 g-r4" to="/dispel" style="color: #d80">Dispel Magic</router-link>
+
+      <!-- col 3-->
+      <router-link class="grid-item g-c3 g-r1" to="/status">Status Report</router-link>
+      <router-link class="grid-item g-c3 g-r2" to="/rankList">Rankings</router-link>
+      <router-link class="grid-item g-c3 g-r3" to="/charge">Mana Charge</router-link>
+      <router-link class="grid-item g-c3 g-r4" to="/geld">Gelding</router-link>
+      <router-link class="grid-item g-c3 g-r5" to="/market">Market</router-link>
+
+      <!-- col 4-->
+      <router-link class="grid-item g-c4 g-r1" to="/battle">Battle</router-link>
+      <router-link class="grid-item g-c4 g-r2" to="/assignment">Assignment</router-link>
+      <router-link class="grid-item g-c4 g-r3" to="/chronicles">Chronicles</router-link>
+      <router-link class="grid-item g-c4 g-r4" to="/recruit">Recruit</router-link>
+      <router-link class="grid-item g-c4 g-r5" to="/disband" style="color: #d80">Disband</router-link>
     </section>
 
     <section class="row" style="gap: 30px; margin-top: 20px; background: #181818; border-radius: 3px">
       <router-link to="/encyclopedia/spell">Encyclopedia</router-link>
       <router-link to="/guide">Guide</router-link>
-      <div>About</div>
+      <router-link to="/analysis">Analysis</router-link>
     </section>
 
     <div class="chronicles" v-if="logs.length > 0">
@@ -150,7 +147,6 @@ const gameTable = ref<GameTable | null>(null);
 const sigilPath = computed(() => {
   return (new URL(`../assets/images/${mageStore.mage!.magic}-new.png`, import.meta.url)).href
 });
-
 
 const numArmy = computed(() => {
   return totalUnits(mageStore.mage!);
@@ -209,6 +205,29 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  gap: 0.6rem 1.25rem; /* Optional spacing between columns */
+}
+
+.grid-item {
+  /* background-color: #8bc34a; */
+  background-color: #212120;
+  padding: 0.45rem 1rem;
+  /* color: white; */
+  text-align: center;
+  border-radius: 0.25rem;
+  /* transition: background-color 0.3s ease;  */
+  transition: filter 0.4s ease;
+}
+
+
+.grid-item:hover {
+  filter: brightness(1.2);
+}
+
 
 
 .unread-badge {
