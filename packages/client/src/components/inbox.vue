@@ -53,13 +53,13 @@
           style="width: 100%; height: 10rem" 
           placeholder="content..."></textarea>
 
-        <div class="row" style="gap: 2">
+        <div class="row" style="gap: 2; justify-content: space-between;">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
 
           <ActionButton 
-            :proxy-fn="newMail"
+            :proxy-fn="sendNewMail"
             :label="'Send'" />
         </div>
       </div>
@@ -72,12 +72,6 @@
           <div v-if="currentMail.timestamp" style="color: #888"> {{ readableDate(currentMail.timestamp) }}</div>
         </div>
 
-        <!--
-        <div class="message-content" id="messageContent">
-          {{ currentMail?.content }}
-        </div>
-        -->
-
         <textarea style="width: 100%; height: 8rem" 
           v-model="replyContent"
           placeholder="Reply...">
@@ -87,14 +81,22 @@
           :value="currentMail?.content"></textarea>
 
 
-        <div class="row" style="gap: 2">
+        <div class="row" style="justify-content:space-between">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
 
-          <ActionButton 
-            :proxy-fn="replyMail"
-            :label="'Reply'" />
+          <div class="row" style="gap: 0.5rem">
+            <ActionButton 
+              :proxy-fn="deleteMail"
+              :label="'Delete'" 
+              :type="'warn'" />
+
+            <ActionButton 
+              v-if="currentMail.source! > 0"
+              :proxy-fn="replyMail"
+              :label="'Reply'" />
+          </div>
         </div>
       </div>
     </section>
@@ -161,7 +163,7 @@ const refreshMails = async () => {
   mails.value = results.data.mails.sort((a, b) => b.timestamp - a.timestamp);
 };
 
-const send = async (payload: NewMail) => {
+const _send = async (payload: NewMail) => {
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
     return API.post<{ id: string }>('/mails', { 
@@ -179,11 +181,35 @@ const send = async (payload: NewMail) => {
   }
 };
 
-const newMail = async () => {
+const _delete = async (ids: string[]) => {
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post<{ id: string }>('/delete-mails', { 
+      ids: ids 
+    });
+  });
+
+  if (error) {
+    errorStr.value = error;
+  }
+
+  if (data) {
+    await refreshMails();
+    currentView.value = 'listView';
+  }
+};
+
+const deleteMail = async () => {
+  if (currentMail.value && currentMail.value.id) {
+    await _delete([currentMail.value.id]);
+  }
+};
+
+const sendNewMail = async () => {
   // coerce
   currentMail.value.source = mageStore.mage!.id;
   currentMail.value.target = +currentMail.value.target!;
-  await send(currentMail.value);
+  await _send(currentMail.value);
 };
 
 const replyMail = async () => {
@@ -211,7 +237,7 @@ const replyMail = async () => {
     content: content
   };
   replyContent.value = '';
-  await send(replyMail);
+  await _send(replyMail);
 };
 
 const checkMage = async () => {

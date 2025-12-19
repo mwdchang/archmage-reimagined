@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleClick" :disabled="showSpinner || disabled"> 
+  <button @click="handleClick" :disabled="showSpinner || disabled" :class="type"> 
     <div class="row">
       <SpinnerIcon v-if="showSpinner === true" class="spinner" />
       <span>{{ label }}</span>
@@ -14,7 +14,8 @@ import SpinnerIcon from '@/assets/images/spinner.svg';
 const props = defineProps<{ 
   proxyFn: () => Promise<any>,
   label: string,
-  disabled?: boolean
+  disabled?: boolean,
+  type?: 'warn' | null 
 }>(); 
 
 
@@ -36,3 +37,8 @@ const handleClick = async () => {
 };
 </script>
 
+<style scoped>
+.warn {
+  background: #d80 !important;
+}
+</style>
