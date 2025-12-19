@@ -783,7 +783,7 @@ WHERE username = '${user.username}'
     if (ids.length === 0) return;
 
     await this.db.exec(`
-      DELETE FROM market where id in (${ids.map(Q).join(',')})
+      DELETE FROM market where id in (${ids.map(Q).join(', ')})
     `);
   }
 
@@ -817,7 +817,7 @@ WHERE username = '${user.username}'
     if (ids.length === 0) return
 
     await this.db.exec(`
-      DELETE FROM market_bid where id IN (${ids.map(Q).join(',')})
+      DELETE FROM market_bid where id IN (${ids.map(Q).join(', ')})
     `);
   }
 
@@ -979,7 +979,7 @@ WHERE username = '${user.username}'
   async deleteMails(mageId: number, ids: string[]): Promise<void> {
     await this.db.exec(`
       DELETE FROM mail 
-      WHERE id in (${ids.map(Q).join(',')})
+      WHERE id in (${ids.map(Q).join(', ')})
       AND target = ${mageId}
     `);
   }
@@ -988,7 +988,7 @@ WHERE username = '${user.username}'
     await this.db.exec(`
       UPDATE mail
       SET read = true
-      WHERE id = (${ids.map(Q).join(',')})
+      WHERE id = (${ids.map(Q).join(', ')})
       AND target = ${mageId}
     `);
   }

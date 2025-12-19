@@ -101,39 +101,6 @@
       <router-link class="grid-item g-c4 g-r5" to="/disband" style="color: #d80">Disband</router-link>
     </section>
 
-    <!--
-    <section class="row" style="gap: 30px; align-items: baseline">
-      <div class="column" style="gap: 0.25rem"> 
-        <router-link to="/explore">Explore</router-link>
-        <router-link to="/build">Build</router-link>
-        <router-link to="/destroy" style="color: #d80">Destroy</router-link>
-      </div>
-
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/spell">Cast Magic</router-link>
-        <router-link to="/item">Use Item</router-link>
-        <router-link to="/research">Research</router-link>
-        <router-link to="/dispel" style="color: #d80">Dispel Magic</router-link>
-      </div>
-
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/status">Status Report</router-link>
-        <router-link to="/rankList">Rankings</router-link>
-        <router-link to="/charge">Mana Charge</router-link>
-        <router-link to="/geld">Gelding</router-link>
-        <router-link to="/market">Market</router-link>
-      </div>
-      
-      <div class="column" style="gap: 0.25rem">
-        <router-link to="/battle">Battle</router-link>
-        <router-link to="/assignment">Assignment</router-link>
-        <router-link to="/chronicles">Chronicles</router-link>
-        <router-link to="/recruit">Recruit</router-link>
-        <router-link to="/disband" style="color: #d80">Disband</router-link>
-      </div>
-    </section>
-    -->
-
     <section class="row" style="gap: 30px; margin-top: 20px; background: #181818; border-radius: 3px">
       <router-link to="/encyclopedia/spell">Encyclopedia</router-link>
       <router-link to="/guide">Guide</router-link>

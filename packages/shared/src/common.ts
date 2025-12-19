@@ -35,3 +35,7 @@ export const enum allowedEffect {
   StealEffect = 'StealEffect',
   UnitSummonEffect = 'UnitSummongEffect'
 } 
+
+
+export const BlackMarketId = -2;
+

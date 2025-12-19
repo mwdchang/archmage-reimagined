@@ -2,16 +2,17 @@
   <main style="display: flex; flex-direction: column; gap: 10">
 
     <section class="form"> 
-      <div class="row" style="gap: 5">
+      <div class="row" style="justify-content: space-between">
         <ActionButton 
           :proxy-fn="compose"
           :label="'Compose'" />
 
-        <!--
         <ActionButton 
-          :proxy-fn="back"
+          v-if="currentView === 'listView'"
+          :proxy-fn="deleteBM"
+          :type="'warn'"
           :label="'Delete BM'" />
-        -->
+
       </div>
     </section>
 
@@ -24,7 +25,7 @@
           @click="openMail(message)">
           <div class="row" style="justify-content:space-between" :class="{ 'unread': message.read === false}">
             <div :class="{ 'unread': message.read === false }"> {{ message.subject }}</div>
-            <div :class="{ 'unread': message.read === false }" style="color: #888"> {{ readableDate(message.timestamp) }}</div>
+            <div :class="{ 'unread': message.read === false }" style="color: #888; font-size: 0.75rem"> {{ readableDate(message.timestamp) }}</div>
           </div>
         </div>
         <div v-if="mails.length === 0">
@@ -117,6 +118,7 @@ import { useMageStore } from '@/stores/mage';
 import ActionButton from './action-button.vue';
 import { readableDate } from '@/util/util';
 import { MageSummary } from 'shared/types/mage';
+import { BlackMarketId } from 'shared/src/common';
 
 const mageStore = useMageStore();
 
@@ -203,6 +205,11 @@ const deleteMail = async () => {
   if (currentMail.value && currentMail.value.id) {
     await _delete([currentMail.value.id]);
   }
+};
+
+const deleteBM = async () => {
+  const bmMailIds = mails.value.filter(m => m.source === BlackMarketId).map(m => m.id);
+  await _delete(bmMailIds);
 };
 
 const sendNewMail = async () => {

@@ -6,6 +6,7 @@ import { betweenInt, randomBM, randomInt } from "./random";
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Mage } from 'shared/types/mage';
 import { nextResearch } from './magic';
+import { BlackMarketId } from 'shared/src/common';
 
 export const priceIncrease = (base: number, winningBid: number) => {
   return base + gameTable.blackmarket.priceIncreaseFactor * (winningBid - base);
@@ -159,7 +160,7 @@ export const resolveWinningBids = async (
       timestamp: Date.now(),
       type: 'market',
       priority: 100,
-      source: -1,
+      source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] losing bids for turn - ${currentTurn}`,
       content: `You lost the following bids, the gelds have been returned to you:\n ${buffer.join("\n")}`
@@ -182,7 +183,7 @@ export const resolveWinningBids = async (
       timestamp: Date.now(),
       type: 'market',
       priority: 100,
-      source: -1,
+      source: BlackMarketId,
       target: m.id,
       subject: `[Blackmarket] winning bids for turn - ${currentTurn}`,
       content: mageMessageMap.get(m.id).join('\n')
