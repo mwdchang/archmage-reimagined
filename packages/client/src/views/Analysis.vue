@@ -100,7 +100,7 @@ const selectedSpellLevel = ref(1);
 
 
 const casterSpellLevel = ref(400);
-const dispelMana = ref(500);
+const dispelMana = ref(20000);
 
 const summonSpells = getAllSpells().filter(s => s.attributes.includes('summon'));
 const enchantSpells = getAllSpells().filter(s => {

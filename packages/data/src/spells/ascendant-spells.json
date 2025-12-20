@@ -598,7 +598,7 @@
     "description": "This spell instils the armies of your foe with an overwhelming aversion to violence and robs them of the will to fight. Your opponent's troops will prove substantially less effective in combat as they shy from conflict, and struggle with their disdain for bloodshed.",
     "attributes": ["enchantment"],
     "researchCost": 4000,
-    "castingCost": 20000,
+    "castingCost": 22000,
     "castingTurn": 6,
     "life": 50,
     "upkeep": {

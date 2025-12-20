@@ -245,7 +245,7 @@
     "description": "This enchantment will leave your enemy in a state of perpetual confusion. Your enemy will have difficulty casting spells as they cannot concentrate on their enchantments. It will also hinder his dispel ability.",
     "attributes": ["enchantment"],
     "researchCost": 2000,
-    "castingCost": 10000,
+    "castingCost": 15000,
     "castingTurn": 5,
     "life": 50,
     "upkeep": {
@@ -759,7 +759,7 @@
     "description": "This spell will cause the population of your enemy to turn to drinking, gambling and idling their life away. Your enemy's once productive fields will turn barren as the land is neglected and abandoned.",
     "attributes": ["enchantment"],
     "researchCost": 4000,
-    "castingCost": 100000,
+    "castingCost": 70000,
     "castingTurn": 10,
     "life": 50,
     "upkeep": {
