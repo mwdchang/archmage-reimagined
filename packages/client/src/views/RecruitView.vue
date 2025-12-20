@@ -1,7 +1,7 @@
 <template>
   <div class="section-header">Recruitment</div>
 
-  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <!-- left -->
     <table v-if="mageStore.mage">
       <tbody>
@@ -26,7 +26,7 @@
 
     <!-- right -->
     <div>
-      <section class="form" style="width: 25rem">
+      <section class="form" style="width: 22rem">
         <label>Recruit units</label> 
 
         <div class="row">
@@ -37,26 +37,33 @@
         </div>
 
         <button @click="addOrder">Add</button>
-      </section>
-      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+        <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
-      <!-- current recruitment -->
-      <p style="margin-top: 10px">Recruitment Queue</p>
-      <table> 
-        <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
-          <td style="min-width: 8rem">
-            {{ readableStr(r.id) }}
-          </td>
-          <td class="text-right">{{ readableNumber(r.size) }}</td>
-          <td> 
-            <div class="form" style="padding: 4px">
-              <button @click="deleteOrder(idx)" style="padding: 5px; background: #d80">
-                Remove
-              </button>
-            </div>
-          </td>
-        </tr>
-      </table>
+        <!-- current recruitment -->
+        <table style="margin-top: 0.5rem"> 
+          <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
+            <td style="min-width: 8rem">
+              {{ readableStr(r.id) }}
+            </td>
+            <td class="text-right">{{ readableNumber(r.size) }}</td>
+            <td> 
+              <div class="row" style="gap: 0.25rem; font-size: 0.8rem">
+                <svg-icon class="sicon" name="remove" size="1.25rem" @click="deleteOrder(idx)" />
+                <div>|</div>
+                <svg-icon class="sicon" name="doubleCaretUp" size="1.25rem" @click="moveTop(idx)" />
+                <div>|</div>
+                <svg-icon class="sicon" name="caretUp" size="1.25rem" @click="moveUp(idx)" />
+                <div>|</div>
+                <svg-icon class="sicon" name="caretDown" size="1.25rem" @click="moveDown(idx)" />
+                <div>|</div>
+                <svg-icon class="sicon" name="doubleCaretDown" size="1.25rem" @click="moveBottom(idx)" />
+              </div>
+            </td>
+
+          </tr>
+        </table>
+      </section>
+
     </div>
   </section>
 </template>
@@ -71,6 +78,7 @@ import { getRecruitableUnits } from 'engine/src/base/references';
 import { recruitmentAmount } from 'engine/src/interior';
 import { ArmyUnit } from 'shared/types/mage';
 import { readableStr, readableNumber } from '@/util/util';
+import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();
 
@@ -100,6 +108,42 @@ const addOrder = () => {
 const deleteOrder = (idx: number) => {
   currentRecruitments.value.splice(idx, 1);
   update();
+}
+
+const moveUp = (idx: number) => {
+  if (idx > 0) {
+    const temp = currentRecruitments.value[idx];
+    currentRecruitments.value[idx] = currentRecruitments.value[idx - 1]; 
+    currentRecruitments.value[idx - 1] = temp;
+    update();
+  }
+}
+
+const moveDown = (idx: number) => {
+  if (idx < currentRecruitments.value.length - 1) {
+    const temp = currentRecruitments.value[idx];
+    currentRecruitments.value[idx] = currentRecruitments.value[idx + 1]; 
+    currentRecruitments.value[idx + 1] = temp;
+    update();
+  }
+}
+
+const moveTop = (idx: number) => {
+  if (idx > 0) {
+    const temp = currentRecruitments.value[idx];
+    currentRecruitments.value.splice(idx, 1);
+    currentRecruitments.value.unshift(temp);
+    update();
+  }
+}
+
+const moveBottom = (idx: number) => {
+  if (idx < currentRecruitments.value.length - 1) {
+    const temp = currentRecruitments.value[idx];
+    currentRecruitments.value.splice(idx, 1);
+    currentRecruitments.value.push(temp);
+    update();
+  }
 }
 
 const update = async () => {
@@ -134,4 +178,16 @@ onMounted(() => {
 .row {
   display: flex;
 }
+
+.sicon {
+  cursor: pointer;
+}
+
+.sicon:hover {
+  color: #aaaaee;
+  background: #444444;
+}
+
+
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="section-header">Disband Units</div>
-  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <!-- left -->
     <table v-if="mageStore.mage">
       <thead>
@@ -42,7 +42,7 @@
             <input
               :disabled="u.attributes.includes('undisbandable') === true" 
               type="text" 
-              size=12 
+              size=9 
               style="height: 1.6rem"
               v-model="disbandPayload[u.id]">
           </td>

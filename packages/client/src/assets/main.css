@@ -1,7 +1,7 @@
 @import './base.css';
 
 html {
-  font-size: clamp(10px, 1.25vw, 15px);
+  font-size: clamp(8px, 1.05vw, 16px);
 }
 
 
@@ -54,29 +54,27 @@ table {
   border-spacing: 0;
 }
 
+/*
 table tr:first-child td:first-child {
-  /* border: 2px solid orange; */
   border-top-left-radius: 8px;
   padding-left: 0.3rem;
 }
 
 table tr:first-child td:last-child {
-  /* border: 2px solid orange; */
   border-top-right-radius: 8px;
   padding-right: 0.3rem;
 }
 
 table tr:last-child td:first-child {
-  /* border: 2px solid orange; */
   border-bottom-left-radius: 8px;
   padding-left: 0.3rem;
 }
 
 table tr:last-child td:last-child {
-  /* border: 2px solid orange; */
   border-bottom-right-radius: 8px;
   padding-right: 0.3rem;
 }
+*/
 
 
 

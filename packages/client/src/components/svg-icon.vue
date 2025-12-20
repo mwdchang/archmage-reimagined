@@ -67,6 +67,51 @@ const iconMap = {
       <rect x="7"  y="4"  width="16" height="3" rx="1" ry="1" fill="none"/>
     </svg>
   `,
+  caretUp: `
+    <svg viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M6 14l6-6 6 6" />
+    </svg>
+  `,
+  caretDown: `
+    <svg viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M6 10l6 6 6-6" />
+    </svg>
+
+  `,
+  doubleCaretUp: `
+    <svg viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M6 16l6-6 6 6" />
+      <path d="M6 10l6-6 6 6" />
+    </svg>
+  `,
+  doubleCaretDown: `
+    <svg viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M6 8l6 6 6-6" />
+      <path d="M6 14l6 6 6-6" />
+    </svg>
+  `,
+  remove: `
+    <svg viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="8" y1="8" x2="16" y2="16" />
+      <line x1="16" y1="8" x2="8" y2="16" />
+    </svg>
+  `
 }
 
 const iconSvg = computed(() => iconMap[props.name] || '')

@@ -7,7 +7,7 @@
     <img src="@/assets/images/item.png" class="gen-img" />
   </div>
 
-  <section class="row" style="align-items: flex-start; gap: 20px; margin-top: 10px">
+  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
       <table v-if="itemList.length > 0">
         <thead style="position: sticky; top: 0; z-index: 10">
