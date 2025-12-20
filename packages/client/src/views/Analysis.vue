@@ -23,6 +23,7 @@
     <div class="form-tabs">
       <div class="tab" :class="{ active: tabView === 'summon' }" @click="changeView('summon')">Summon</div>
       <div class="tab" :class="{ active: tabView === 'dispel' }" @click="changeView('dispel')">Dispel</div>
+      <div class="tab" :class="{ active: tabView === 'casting' }" @click="changeView('casting')">Casting</div>
     </div>
 
 
@@ -79,6 +80,56 @@
       </div>
     </main>
 
+
+    <!-- summon -->
+    <main v-if="tabView === 'casting'">
+      <div>
+        Concentration: {{ concentrationLevel }}
+
+        <!-- Force rerender with :key -->
+        <input type="range" 
+          v-model="concentrationLevel"
+          :key="maxSpellLevels[selectedMagic]"
+          :min="1" 
+          :max="maxSpellLevels[selectedMagic]" />
+      </div>
+
+      <div class="grid-container4x3">
+        <div class="grid-item">&nbsp;</div>
+        <div class="grid-item row">
+          <Magic :magic="castingData.meta.self" />
+        </div>
+        <div class="grid-item row">
+          <Magic v-for="m of castingData.meta.adjacent" :magic="m" />
+        </div>
+        <div class="grid-item row">
+          <Magic v-for="m of castingData.meta.opposite" :magic="m" />
+        </div>
+
+        <div class="grid-item">Simple</div>
+        <div class="grid-item">{{ castingData.simple.onColor }}</div>
+        <div class="grid-item">{{ castingData.simple.adjacent }}</div>
+        <div class="grid-item">{{ castingData.simple.opposite }}</div>
+
+        <div class="grid-item">Average</div>
+        <div class="grid-item">{{ castingData.average.onColor }}</div>
+        <div class="grid-item">{{ castingData.average.adjacent }}</div>
+        <div class="grid-item">{{ castingData.average.opposite }}</div>
+
+        <div class="grid-item">Complex</div>
+        <div class="grid-item">{{ castingData.complex.onColor }}</div>
+        <div class="grid-item">{{ castingData.complex.adjacent }}</div>
+        <div class="grid-item">{{ castingData.complex.opposite }}</div>
+
+        <div class="grid-item">Ultimate</div>
+        <div class="grid-item">{{ castingData.ultimate.onColor }}</div>
+        <div class="grid-item" style="text-decoration: line-through;">{{ castingData.ultimate.adjacent }}</div>
+        <div class="grid-item" style="text-decoration: line-through;">{{ castingData.ultimate.opposite }}</div>
+
+
+      </div>
+    </main>
+
   </section>
 </template>
 
@@ -88,15 +139,17 @@ import Magic from '@/components/magic.vue';
 import { getAllSpells, getMaxSpellLevels, getSpellById, getUnitById } from 'engine/src/base/references';
 import { AllowedMagic } from 'shared/types/common';
 import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
-import { dispelEnchantment, summonUnit } from 'engine/src/magic';
+import { dispelEnchantment, successCastingRate, summonUnit } from 'engine/src/magic';
 import { readableNumber, readableStr } from '@/util/util';
 import { Enchantment, Mage } from 'shared/types/mage';
+import { magicAlignmentTable } from 'engine/src/base/config';
 
 const maxSpellLevels = getMaxSpellLevels();
 const tabView = ref('summon');
 
 const selectedMagic = ref<AllowedMagic>('ascendant');
 const selectedSpellLevel = ref(1);
+const concentrationLevel = ref(1);
 
 
 const casterSpellLevel = ref(400);
@@ -116,6 +169,32 @@ const getSpellMagic = (spellId: string) => {
   return getSpellById(spellId).magic;
 };
 
+
+const simulateCasting = (spellId: string) => {
+  const dummyMage: Partial<Mage> = {
+    id: 888,
+    name: 'test',
+    magic: selectedMagic.value,
+    testingSpellLevel: selectedSpellLevel.value,
+    enchantments: []
+  };
+  if (concentrationLevel.value > 1) {
+    dummyMage.enchantments!.push({
+      id: 'concentration',
+      casterId: 888,
+      casterMagic: selectedMagic.value,
+      spellId: 'concentration',
+      spellLevel: concentrationLevel.value,
+      isActive: true,
+      targetId: 888,
+      isPermanent: true,
+      isEpidemic: false,
+      life: 0
+    });
+  }
+
+  return readableNumber(successCastingRate(dummyMage as any, spellId));
+}
 
 
 const simulateDispel = (spellId: string) => {
@@ -200,6 +279,52 @@ const dispelData = computed(() => {
   return results;
 });
 
+const castingData = computed(() => {
+  const simples = getAllSpells().filter(s => s.rank === 'simple');
+  const averages = getAllSpells().filter(s => s.rank === 'average');
+  const complexes = getAllSpells().filter(s => s.rank === 'complex');
+  const ultimates = getAllSpells().filter(s => s.rank === 'ultimate');
+
+  const adjacent = magicAlignmentTable[selectedMagic.value].adjacent[0];
+  const opposite = magicAlignmentTable[selectedMagic.value].opposite[0];
+
+  const simple = {
+    onColor: simulateCasting(simples.find(s => s.magic === selectedMagic.value)!.id),
+    adjacent: simulateCasting(simples.find(s => s.magic === adjacent)!.id),
+    opposite: simulateCasting(simples.find(s => s.magic === opposite)!.id)
+  };
+
+  const average = {
+    onColor: simulateCasting(averages.find(s => s.magic === selectedMagic.value)!.id),
+    adjacent: simulateCasting(averages.find(s => s.magic === adjacent)!.id),
+    opposite: simulateCasting(averages.find(s => s.magic === opposite)!.id)
+  };
+
+  const complex = {
+    onColor: simulateCasting(complexes.find(s => s.magic === selectedMagic.value)!.id),
+    adjacent: simulateCasting(complexes.find(s => s.magic === adjacent)!.id),
+    opposite: simulateCasting(complexes.find(s => s.magic === opposite)!.id)
+  };
+
+  const ultimate = {
+    onColor: simulateCasting(ultimates.find(s => s.magic === selectedMagic.value)!.id),
+    adjacent: simulateCasting(ultimates.find(s => s.magic === adjacent)!.id),
+    opposite: simulateCasting(ultimates.find(s => s.magic === opposite)!.id)
+  };
+
+  return { 
+    meta: {
+      self: selectedMagic.value,
+      adjacent: magicAlignmentTable[selectedMagic.value].adjacent,
+      opposite: magicAlignmentTable[selectedMagic.value].opposite
+    },
+    simple,
+    average,
+    complex,
+    ultimate
+  };
+});
+
 watch(
   () => selectedMagic.value,
   () => {
@@ -226,6 +351,15 @@ main {
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6rem 1.25rem;
 }
+
+.grid-container4x3 {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem 1.25rem;
+}
+
+
 
 .grid-item {
   background-color: #212120;
