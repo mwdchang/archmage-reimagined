@@ -24,13 +24,22 @@
           src="@/assets/images/defend-loss.png" 
           class="icon loss"
         />
+        <img 
+          v-if="mage.id !== d.defenderId && mage.id !== d.attackerId"
+          src="@/assets/images/spy.png" 
+          class="icon spy"
+        />
         <div>
           <div>{{ formatEpochToUTC(d.timestamp) }}</div>
-          <router-link :to="{ name: 'battleResult', params: { id: d.id }}"> 
+          <router-link v-if="d.id !== '???'" 
+            :to="{ name: 'battleResult', params: { id: d.id }}"> 
             {{d.attackerName }} (#{{ d.attackerId }}) army {{ d.attackType }} {{ d.defenderName }} (#{{ d.defenderId }}) army on the battlefield, 
             {{d.attackerName }} (#{{ d.attackerId }}) slew {{ d.defenderUnitsLoss }} units and lost {{ d.attackerUnitsLoss }} units.
             The attack {{ d.isSuccessful ? 'succeeded' : 'failed' }}
           </router-link>
+          <div v-else>
+            {{d.attackerName }} (#{{ d.attackerId }}) army {{ d.attackType }} {{ d.defenderName }} (#{{ d.defenderId }}) army on the battlefield, 
+          </div>
         </div>
       </div>
     </div>
@@ -42,8 +51,10 @@ import { onMounted, ref, computed } from 'vue';
 import { API } from '@/api/api';
 import type { BattleReportSummary } from 'shared/types/battle';
 import { useMageStore } from '@/stores/mage';
+import { useRoute } from 'vue-router';
 
 const mageStore = useMageStore();
+const route = useRoute();
 
 const mage = computed(() => {
   return mageStore.mage!;
@@ -58,7 +69,27 @@ const formatEpochToUTC = (epochMillis: number) => {
 }
 
 onMounted(async () => {
-  const res = (await API.get<{ battles: BattleReportSummary[]}>(`/mage-battles`)).data;
+  let targetId = mage.value.id;
+  let window = 24;
+
+  if (route.query.targetId) {
+    targetId = +route.query.targetId
+  }
+  if (route.query.window) {
+    window = +route.query.window;
+  }
+
+  if (window > 72) {
+    window = 72;
+  }
+
+  const res = (await API.get<{ battles: BattleReportSummary[]}>(`/mage-battles`, {
+    params: {
+      targetId,
+      window
+    }
+  })).data;
+
   chronicles.value = res.battles.filter(d => {
     return ['siege', 'regular', 'pillage'].includes(d.attackType) === true;
   });;
@@ -84,4 +115,9 @@ p { line-height: 125% }
 .icon.loss {
   background: #882233;
 }
+.icon.spy {
+  background: #888888;
+}
+
+
 </style>
