@@ -48,7 +48,7 @@
             <td class="text-right">{{ readableNumber(r.size) }}</td>
             <td> 
               <div class="row" style="gap: 0.25rem; font-size: 0.8rem">
-                <svg-icon class="sicon" name="remove" size="1.25rem" @click="deleteOrder(idx)" />
+                <svg-icon class="sicon" name="remove" size="1.10rem" @click="deleteOrder(idx)" />
                 <div>|</div>
                 <svg-icon class="sicon" name="doubleCaretUp" size="1.25rem" @click="moveTop(idx)" />
                 <div>|</div>

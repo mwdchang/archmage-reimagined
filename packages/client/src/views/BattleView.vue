@@ -19,7 +19,7 @@
   </section>
 
   <div>Counters you given out</div>
-  <table>
+  <table style="min-width: 30rem">
     <tbody>
       <tr>
         <td> Name </td>
@@ -56,12 +56,12 @@
   <br/>
 
   <div>Counters you received</div>
-  <table>
+  <table style="min-width: 30rem">
     <tbody>
       <tr>
         <td> Name </td>
         <td> Action </td>
-        <td class="text-right"> Damage dealt </td>
+        <td class="text-right"> Damage received</td>
         <td class="text-right"> Damage % </td>
         <td class="text-right"> Time </td>
       </tr>
