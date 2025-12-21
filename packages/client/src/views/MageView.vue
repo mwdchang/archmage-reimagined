@@ -1,9 +1,10 @@
 <template>
-  <div class="section-header row">
+  <div class="section-header row" style="margin-bottom: 0.5rem">
     <magic :magic="mageSummary.magic" />
     {{ mageSummary.name }} (#{{ mageSummary.id }}) 
   </div>
-  <table v-if="mageSummary.id">
+
+  <table style="min-width: 20rem" v-if="mageSummary.id">
     <tbody>
       <tr>
         <td>Specialty</td>
@@ -31,10 +32,29 @@
         <td>Forts</td>
         <td class="text-right">{{ mageSummary.forts }} </td>
       </tr>
-      <tr>
+      <tr> 
+        <td>Chronicles</td>
+        <td>
+          <div class="row" style="padding: 0 1rem; justify-content: space-between; gap: 1.0rem">
+            <router-link :to="{ name: 'chronicles', query: { targetId: mageSummary.id, window: 1 } }">
+              1H
+            </router-link>
+            <router-link :to="{ name: 'chronicles', query: { targetId: mageSummary.id, window: 24 } }">
+              24H
+            </router-link>
+            <router-link :to="{ name: 'chronicles', query: { targetId: mageSummary.id, window: 48 } }"> 
+              48H
+            </router-link>
+            <router-link :to="{ name: 'chronicles', query: { targetId: mageSummary.id, window: 72 } }"> 
+              72H
+            </router-link>
+          </div>
+        </td>
+      </tr>
+      <tr v-if="mageStore.mage!.id !== mageId"> 
         <td>Attack</td>
-        <td class="text-right">
-          <div class="row" v-if="mageStore.mage!.id !== mageId" style="gap: 8px">
+        <td> 
+          <div class="row" style="padding: 0 1rem; justify-content: space-between; gap: 1.0rem">
             <router-link 
               :to="{ name: 'battlePrep', params: { targetId: mageSummary.id, battleType: 'siege' }}">
               Siege
@@ -77,3 +97,6 @@ onMounted(async () => {
 });
 
 </script>
+
+<style scoped>
+</style>

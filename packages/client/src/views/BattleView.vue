@@ -19,7 +19,7 @@
   </section>
 
   <div>Counters you given out</div>
-  <table>
+  <table style="min-width: 30rem">
     <tbody>
       <tr>
         <td> Name </td>
@@ -56,12 +56,12 @@
   <br/>
 
   <div>Counters you received</div>
-  <table>
+  <table style="min-width: 30rem">
     <tbody>
       <tr>
         <td> Name </td>
         <td> Action </td>
-        <td class="text-right"> Damage dealt </td>
+        <td class="text-right"> Damage received</td>
         <td class="text-right"> Damage % </td>
         <td class="text-right"> Time </td>
       </tr>
@@ -138,7 +138,12 @@ onMounted(async () => {
     targetId.value = route.query.targetId as string;
   }
 
-  const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles')).data;
+  const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles', {
+    params: {
+      targetId: mageStore.mage!.id,
+      window: 24
+    }
+  })).data;
   involvedBattles.value = result.battles;
 
   const ids = [

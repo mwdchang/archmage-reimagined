@@ -33,6 +33,7 @@ import EncyclopediaView from '@/views/EncyclopediaView.vue';
 import GuideView from '@/views/GuideView.vue';
 import FinalsView from '@/views/FinalsView.vue';
 import AnalysisView from '@/views/Analysis.vue';
+import GameTableView from '@/views/GameTableView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -185,6 +186,11 @@ const router = createRouter({
       path: '/chronicles',
       name: 'chronicles',
       component: ChroniclesView
+    },
+    {
+      path: '/game-table',
+      name: 'gameTable',
+      component: GameTableView,
     },
     {
       path: '/analysis',

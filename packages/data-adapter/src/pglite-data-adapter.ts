@@ -4,7 +4,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
@@ -47,7 +47,7 @@ const DB_CLEAN = `
   COMMIT;
 `;
 
-const DB_INIT = `
+const DB_INIT = (gameTable: GameTable) => `
   CREATE SEQUENCE IF NOT EXISTS mage_seq START WITH 0 MINVALUE 0;
   COMMIT;
 
@@ -197,7 +197,7 @@ const DB_INIT = `
       COALESCE(
         CASE
           WHEN r.forts <= 0 THEN 'defeated'
-          WHEN rb.total_loss_pct > 0.3 THEN 'damaged'
+          WHEN rb.total_loss_pct > ${gameTable.war.damagedPercentage} THEN 'damaged'
           ELSE 'normal'
         END,
         'normal'
@@ -275,10 +275,10 @@ export class PGliteDataAdapter extends DataAdapter {
     await this.db.exec(DB_CLEAN);
   }
 
-  async initialize(): Promise<void> {
+  async initialize(gameTable: GameTable): Promise<void> {
     try {
-      console.log('initialize database...');
-      await this.db.exec(DB_INIT);
+      console.log('initialize PGLite database...');
+      await this.db.exec(DB_INIT(gameTable));
 
       await this.db.exec(`
         SELECT setval('mage_seq', COALESCE((SELECT MAX(id) FROM mage), 0), true);

@@ -12,7 +12,9 @@
       {{ readableNumber(mageStore.mage.turnsUsed) }} turns used. 
     </p>
     <p v-if="gameTable">
-      Additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
+      <router-link to="/game-table">
+        Additional turn every {{ (gameTable.turnRate / 60).toFixed(1) }} minutes.
+      </router-link>
     </p>
 
     <br>
@@ -182,6 +184,7 @@ onMounted(async () => {
   min-width: 30rem;
   max-height: 25rem;
   overflow-y: scroll;
+  border-radius: 0.5rem;
 
   flex-direction: column;
   font-size: 0.9rem;
@@ -227,8 +230,6 @@ onMounted(async () => {
 .grid-item:hover {
   filter: brightness(1.2);
 }
-
-
 
 .unread-badge {
   /*

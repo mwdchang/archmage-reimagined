@@ -159,7 +159,7 @@ class Engine {
     if (resetData === true) {
       console.log('Restarting from scratch ...');
       await this.adapter.resetData();
-      await this.adapter.initialize();
+      await this.adapter.initialize(gameTable);
 
       // Start server clock
       await this.adapter.setServerClock({
@@ -174,7 +174,7 @@ class Engine {
       await this.initializeMarket();
     } else {
       console.log('Resume from previous DB state ...');
-      this.adapter.initialize();
+      this.adapter.initialize(gameTable);
     }
 
 
@@ -1799,13 +1799,41 @@ class Engine {
     */
   }
 
-  async getMageBattles(mage: Mage) {
-    return await this.adapter.getBattles({ 
-      mageId: mage.id,
-      endTime: Date.now(),
-      startTime: Date.now() - (24 * 60 * 60 * 1000),
-      limit: 100
+  async getMageBattles(mage: Mage, options: { targetId: number; window: number}) {
+    const endTime = Date.now();
+    const startTime = endTime - (options.window * 60 * 60 * 1000);
+
+    const results = await this.adapter.getBattles({ 
+      mageId: options.targetId,
+      endTime: endTime,
+      startTime: startTime,
+      limit: 200
     });
+
+    // Scrub out outcome summaries if applicable
+    for (const r of results) {
+      if (r.attackerId === mage.id || r.defenderId === mage.id) {
+        continue;
+      }
+
+      r.attackerUnitsLoss = 0;
+      r.attackerStartingUnits = 0;
+      r.attackerPowerLossPercentage = 0;
+      r.attackerPowerLoss = 0;
+
+      r.defenderUnitsLoss = 0;
+      r.defenderStartingUnits = 0;
+      r.defenderPowerLossPercentage = 0;
+      r.defenderPowerLoss = 0;
+
+      r.landGain = 0;
+      r.landLoss = 0;
+      r.spellsDispelled = [];
+      r.isSuccessful = false;
+      r.id = '???';
+    }
+    
+    return results;
   }
 
   async getChronicles(mage: Mage) {

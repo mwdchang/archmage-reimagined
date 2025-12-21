@@ -1,8 +1,8 @@
 <template>
   <div class="section-header">Disband Units</div>
-  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
+  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px" v-if="mageStore.mage">
     <!-- left -->
-    <table v-if="mageStore.mage">
+    <table> 
       <thead>
         <tr>
           <th>&nbsp;</th>
@@ -10,8 +10,10 @@
           <!--<th> Upkeep </th>-->
           <th> Number </th>
           <th> Power </th>
-          <th> &nbsp; </th>
-          <th> &nbsp; </th>
+          <th> &nbsp; 
+          </th>
+          <th> &nbsp; 
+          </th>
           <th> Disband </th>
         </tr>
       </thead>
@@ -32,11 +34,18 @@
           -->
           <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
           <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
-          <td class="text-right" style="font-size: 75%"> 
-            +{{ u.moveUp }}
+          <td class="text-right" style="font-size: 75%; color: #888" :title="u.moveUp + ' units'" > 
+            <div class="row" style="justify-content: end; gap: 0">
+              {{ u.moveUp }}
+              <svg-icon name="caretUp" size="1.25rem" /> 
+            </div>
           </td>
-          <td class="text-right" style="font-size: 75%"> 
-            -{{ u.moveDown }}
+          <td class="text-right" style="font-size: 75%" :title="u.moveDown + ' units'"
+            @click="disbandPayload[u.id] = u.moveDown"> 
+            <div class="row" style="justify-content: end; gap: 0">
+              {{ u.moveDown }}
+              <svg-icon name="caretDown" size="1.25rem" /> 
+            </div>
           </td>
           <td>
             <input
@@ -96,6 +105,7 @@ import { npMultiplier } from 'engine/src/base/unit';
 import { useEngine } from '@/composables/useEngine';
 import { unitUpkeep } from 'engine/src/interior';
 import ActionButton from '@/components/action-button.vue';
+import SvgIcon from '@/components/svg-icon.vue';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
