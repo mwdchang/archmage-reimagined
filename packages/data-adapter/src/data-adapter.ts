@@ -1,6 +1,6 @@
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
-import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, MageRank, Mail, ServerClock, GameTable } from 'shared/types/common';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
 
@@ -28,7 +28,7 @@ export abstract class DataAdapter {
   constructor() {}
 
   abstract resetData(): Promise<void>;
-  abstract initialize(): Promise<void>
+  abstract initialize(gameTable: GameTable): Promise<void>
 
   // Authentication
   abstract register(username: string, password: string): Promise<any> 

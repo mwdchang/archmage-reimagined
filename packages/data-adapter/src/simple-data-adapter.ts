@@ -4,7 +4,7 @@ import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, MageRank, Mail, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 
@@ -50,7 +50,7 @@ export class SimpleDataAdapter extends DataAdapter {
   constructor() { super(); }
 
   async resetData(): Promise<void> {}
-  async initialize(): Promise<void> {}
+  async initialize(_gameTable: GameTable): Promise<void> {}
 
 
   async register(username: string, password: string) {

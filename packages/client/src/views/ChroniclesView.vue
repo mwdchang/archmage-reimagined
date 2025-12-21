@@ -1,6 +1,12 @@
 <template>
   <main>
-    <div class="section-header">Engagements in last 24 hours</div>
+    <div class="section-header">
+      Engagements
+    </div>
+    <div class="row">
+      {{ readableDate(viewingWindow[1]) }} =>
+      {{ readableDate(viewingWindow[0]) }}
+    </div>
     <br>
     <div v-for="(d, idx) of chronicles" :key="idx" style="margin-bottom: 10px"> 
       <div class="row" style="max-width: 35rem; gap: 10px; align-items: flex-start">
@@ -52,6 +58,7 @@ import { API } from '@/api/api';
 import type { BattleReportSummary } from 'shared/types/battle';
 import { useMageStore } from '@/stores/mage';
 import { useRoute } from 'vue-router';
+import { readableDate } from '@/util/util';
 
 const mageStore = useMageStore();
 const route = useRoute();
@@ -67,6 +74,21 @@ const formatEpochToUTC = (epochMillis: number) => {
   const iso = date.toISOString();
   return iso.replace('T', ' ').slice(0, 19);
 }
+
+const viewingWindow = computed(() => {
+  let window = 24;
+  if (route.query.window) {
+    window = +route.query.window;
+    if (window > 72) {
+      window = 72;
+    }
+  }
+
+  return [
+    Date.now(),
+    Date.now() - (window * 60 * 60 * 1000)
+  ];
+});
 
 onMounted(async () => {
   let targetId = mage.value.id;

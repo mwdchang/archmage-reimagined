@@ -8,6 +8,7 @@ export const gameTable: GameTable = {
 
   war: {
     obfuscateReport: true,
+    damagedPercentage: 0.3,
     range: { min: 0.01, max: 99.99 }
   },
 

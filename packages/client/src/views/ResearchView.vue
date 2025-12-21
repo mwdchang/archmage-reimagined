@@ -16,7 +16,7 @@
         <tr>
           <td colspan="2">&nbsp;</td>
           <td>Spell</td>
-          <td>Research cost (points)</td>
+          <td>Cost (points)</td>
           <td>Turns remaining</td>
         </tr>
         <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" style="cursor: pointer">

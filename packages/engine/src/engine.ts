@@ -159,7 +159,7 @@ class Engine {
     if (resetData === true) {
       console.log('Restarting from scratch ...');
       await this.adapter.resetData();
-      await this.adapter.initialize();
+      await this.adapter.initialize(gameTable);
 
       // Start server clock
       await this.adapter.setServerClock({
@@ -174,7 +174,7 @@ class Engine {
       await this.initializeMarket();
     } else {
       console.log('Resume from previous DB state ...');
-      this.adapter.initialize();
+      this.adapter.initialize(gameTable);
     }
 
 
