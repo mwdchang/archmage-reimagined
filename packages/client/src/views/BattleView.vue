@@ -138,7 +138,12 @@ onMounted(async () => {
     targetId.value = route.query.targetId as string;
   }
 
-  const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles')).data;
+  const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles', {
+    params: {
+      targetId: mageStore.mage!.id,
+      window: 24
+    }
+  })).data;
   involvedBattles.value = result.battles;
 
   const ids = [
