@@ -59,7 +59,7 @@ const approxEndTime = computed(() => {
   const rate = gameTable.value.turnRate;
   const remainingTurns = clock.value.endTurn - clock.value.currentTurn;
 
-  const finalTime = currentTime + (rate * remainingTurns);
+  const finalTime = currentTime + (rate * remainingTurns * 1000);
   return finalTime;
 });
 
