@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import {
-  magicAlignmentTable, productionTable, itemProductionTable
+  gameTable, magicAlignmentTable, productionTable
 } from './base/config';
 import { Enchantment, Mage } from 'shared/types/mage';
 import {
@@ -29,7 +29,7 @@ export const maxSpellLevel = (mage: Mage) => {
 
 export const itemGenerationRate = (mage: Mage) => {
   const land = totalLand(mage);
-  const rate = itemProductionTable.itemGenerationRate * Math.sqrt(mage.guilds / land);
+  const rate = gameTable.itemGenerationRate * Math.sqrt(mage.guilds / land);
   return rate;
 }
 

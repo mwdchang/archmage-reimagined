@@ -28,6 +28,7 @@ export interface GameTable {
   explorationLimit: number
   maxTurns: number;
   turnRate: number;
+  itemGenerationRate: number;
 
   war: {
     obfuscateReport: boolean,
