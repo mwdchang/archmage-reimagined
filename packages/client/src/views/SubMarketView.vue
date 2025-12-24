@@ -1,14 +1,22 @@
 <template>
   <main>
-    <div class="section-header">Market: {{ readableStr(priceId) }}</div>
+    <div class="section-header">Market</div>
     <div class="row" style="margin-bottom: 10px">
       <img src="@/assets/images/market.png" class="gen-img" />
+    </div>
+
+    <div style="margin-bottom: 0.5rem">
+      Bidding status for 
+      <router-link :to="{ name: 'viewItem', params: { id: priceId }}"> 
+        {{ readableStr(priceId) }} 
+      </router-link>
     </div>
 
     <market-table 
       v-if="bidItems.length > 0"
       v-model="bidItems" 
       item-type="item"
+      :show-name="false"
     />
 
     <section class="form">

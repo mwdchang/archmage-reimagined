@@ -125,7 +125,8 @@ table > tr.active {
 }
 
 .gen-img {
-  width: 30vw
+  width: 30vw;
+  border-radius: 0.5rem;
 }
 @media (max-width: 600px) {
   .gen-img {

@@ -1,10 +1,10 @@
 <template>
-  <table style="margin-bottom: 10px" v-if="ready">
+  <table style="margin-bottom: 0.5rem" v-if="ready">
     <thead>
       <tr>
-        <th> Name </th>
+        <th v-if="showName"> Name </th>
         <th v-if="modelValue[0].marketItem.extra"> Number </th>
-        <th> Minimum price</th>
+        <th> Minimum bid</th>
         <th> Time remaining </th>
         <th> # bids</th>
         <th> Your bid </th>
@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       <tr v-for="item of modelValue" :key="item.marketItem.id">
-        <td>
+        <td v-if="showName">
           <router-link :to="{ name: encyclopediaView, params: { id: item.marketItem.priceId }}"> 
             {{ readableStr(item.marketItem.priceId) }} 
           </router-link>
@@ -49,7 +49,11 @@ import { readableStr, readableNumber } from '@/util/util';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useMageStore } from '@/stores/mage';
 
-const props = defineProps<{ modelValue: BidContainer[], itemType: string }>()
+const props = defineProps<{ 
+  modelValue: BidContainer[],
+  itemType: string, 
+  showName: boolean
+}>()
 
 const mageStore = useMageStore();
 const mage = mageStore.mage!;
