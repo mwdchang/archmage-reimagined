@@ -2,14 +2,19 @@
   <div id="menu-toggle" class="menu-toggle hide-on-mobile">Menu</div>
   <div class="sidenav" id="mySidenav">
     <a href="javascript:void(0)" class="closebtn" id="closebtn">&times; Close</a>
+
+    <!--
     <router-link to="/about">Kingdom</router-link>
     <router-link to="/status">Status</router-link>
     <div class="divider"></div>
+    -->
+
     <!--
     <router-link to="/chronicles">Chronicles</router-link>
     <router-link to="/rankList">Ranking</router-link>
     -->
 
+    <!--
     <router-link to="/battle">Battle</router-link>
     <router-link to="/spell">Cast Spells</router-link>
     <router-link to="/dispel">Dispel Magic</router-link>
@@ -26,6 +31,7 @@
     <router-link to="/recruit">Recruit</router-link> 
     <router-link to="/disband">Disband</router-link> 
     <div class="divider"></div>
+    -->
     <div>
       <a href="#" @click="logout()">Logout</a>
     </div>

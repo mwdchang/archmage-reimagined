@@ -34,6 +34,7 @@ import GuideView from '@/views/GuideView.vue';
 import FinalsView from '@/views/FinalsView.vue';
 import AnalysisView from '@/views/Analysis.vue';
 import GameTableView from '@/views/GameTableView.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
 
 const router = createRouter({
   //@ts-ignore
@@ -231,6 +232,11 @@ const router = createRouter({
       name: 'viewItem',
       component: DisplayItemView,
       props: true
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: NotFoundView,
     }
   ]
 })

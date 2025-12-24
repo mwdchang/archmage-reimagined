@@ -63,7 +63,8 @@ const hideHeader = [
   'viewSpell',
   'encyclopedia',
   'guide',
-  'analysis'
+  'analysis',
+  'notFound'
 ];
 
 // Test to see if session already exist
