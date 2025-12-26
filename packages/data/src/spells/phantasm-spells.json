@@ -1225,7 +1225,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": true,
-            "activation": "defence",
+            "activation": "defend",
             "attributes": {
               "efficiency": {
                 "rule": "add",
