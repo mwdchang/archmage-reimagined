@@ -12,6 +12,7 @@ import netherUnits from 'data/src/units/nether-units.json';
 import phantasmUnits from 'data/src/units/phantasm-units.json';
 
 import lesserItems from 'data/src/items/lesser.json';
+import uniqueItems from 'data/src/items/unique.json';
 
 import { 
   loadSpellData,
@@ -36,4 +37,5 @@ export const loadUnitsAndSpells = () => {
   initializeResearchTree();
 
   loadItemData(lesserItems);
+  loadItemData(uniqueItems);
 }

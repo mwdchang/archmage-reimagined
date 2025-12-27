@@ -28,7 +28,8 @@ export interface Item {
   name: string,
   description: string,
   attributes: string[],
-  chargeTurns: number,
+  weight: number,
+  chargeTurns: number, // not used
   upkeep: {
     geld: number,
     mana: number,

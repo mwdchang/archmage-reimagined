@@ -1,9 +1,10 @@
+import _ from "lodash";
 import { AllowedMagic } from "shared/types/common";
 import { createMage } from "./base/mage";
-import { getMaxSpellLevels } from "./base/references";
+import { getMaxSpellLevels, getUnitById } from "./base/references";
 import { v4 as uuidv4 } from 'uuid';
-import { Mage } from "shared/types/mage";
-import { betweenInt } from "./random";
+import { ArmyUnit, Mage } from "shared/types/mage";
+import { betweenInt, randomBM } from "./random";
 
 export const createBot = (id: number, name: string, magic: AllowedMagic) => {
   const botMage = createMage(id, name, magic, {
@@ -33,16 +34,12 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
     }
   };
 
+  const minimumNP = 3000000;
+  const variableNP = 14000000;
+  botMage.army = getBotArmy(magic, minimumNP + variableNP * randomBM());
+
   switch(magic) {
     case 'ascendant':
-      botMage.army = [
-        { id: 'archangel', size: 2300 },
-        { id: 'nagaQueen', size: 1200 },
-        { id: 'unicorn', size: 4500 },
-        { id: 'knightTemplar', size: 22000 },
-        { id: 'highPriest', size: 30000 },
-        { id: 'titan', size: 50 }
-      ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'loveAndPeace'),
         makeEnchantment(botMage, 'theHolyLight'),
@@ -52,13 +49,6 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       ]
       break;
     case 'verdant':
-      botMage.army = [
-        { id: 'treant', size: 7800 },
-        { id: 'mandrake', size: 12500 },
-        { id: 'earthElemental', size: 110 },
-        { id: 'highElf', size: 1480 },
-        { id: 'elvenMagician', size: 25000 }
-      ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'plantGrowth'),
         makeEnchantment(botMage, 'enlargeAnimal'),
@@ -67,26 +57,12 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       ]
       break;
     case 'eradication':
-      botMage.army = [
-        { id: 'fireElemental', size: 220 },
-        { id: 'dwarvenShaman', size: 2000 },
-        { id: 'efreeti', size: 2000 },
-        { id: 'bulwarkHorror', size: 600 }
-      ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'battleChant'),
         makeEnchantment(botMage, 'sunray'),
       ]
       break;
     case 'nether':
-      botMage.army = [
-        { id: 'bulwarkHorror', size: 1100 },
-        { id: 'demonKnight', size: 1400 },
-        { id: 'hornedDemon', size: 7600 },
-        { id: 'unholyReaver', size: 120 },
-        { id: 'vampire', size: 260 },
-        { id: 'lich', size: 260 }
-      ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'shroudOfDarkness'),
         makeEnchantment(botMage, 'mindBar'),
@@ -94,14 +70,6 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
       ]
       break;
     case 'phantasm':
-      botMage.army = [
-        { id: 'waterElemental', size: 80 },
-        { id: 'iceElemental', size: 80 },
-        { id: 'archangel', size: 2300 },
-        { id: 'medusa', size: 2600 },
-        { id: 'empyreanInquisitor', size: 960 },
-        { id: 'bulwarkHorror', size: 960 }
-      ];
       botMage.enchantments = [
         makeEnchantment(botMage, 'shroudOfDarkness'),
         makeEnchantment(botMage, 'protectionFromEvil'),
@@ -124,7 +92,9 @@ export const getBotAssignment = (magic: AllowedMagic): BotAssignment => {
   const botTable: Record<string, BotAssignment[]> = {
     ascendant: [
       { spellId: 'swordOfLight', itemId: 'candleOfSleeping' },
-      { spellId: 'miracle', itemId: 'bubbleWine' }
+      { spellId: 'miracle', itemId: 'bubbleWine' },
+      { spellId: 'swordOfLight', itemId: 'ashOfInvisibility' },
+      { spellId: 'blindingFlash', itemId: 'satchelOfMist' },
     ],
     verdant: [
       { spellId: 'rustArmor', itemId: 'candleOfSleeping' },
@@ -152,4 +122,79 @@ export const getBotAssignment = (magic: AllowedMagic): BotAssignment => {
   const idx = betweenInt(0, target.length - 1);
 
   return target[idx];
+}
+
+
+export const getBotArmy = (magic: AllowedMagic, armyNetPower: number): ArmyUnit[] => {
+  const botTable: Record<string, ArmyUnit[][]>  = {
+    ascendant: [
+      [
+        { id: 'archangel', size: 11 },
+        { id: 'empyreanInquisitor', size: 15.5 },
+        { id: 'nagaQueen', size: 15 },
+        { id: 'unicorn', size: 14 },
+        { id: 'knightTemplar', size: 13 },
+        { id: 'titan', size: 10 },
+        { id: 'highElf', size: 10 },
+        { id: 'highPriest', size: 9 },
+      ]
+    ],
+    verdant: [
+      [
+        { id: 'treant', size: 35 },
+        { id: 'mandrake', size: 25 },
+        { id: 'earthElemental', size: 20 },
+        { id: 'highElf', size: 20 },
+        { id: 'elvenMagician', size: 10 }
+      ]
+    ],
+    eradication: [
+      [
+        { id: 'fireElemental', size: 50 },
+        { id: 'dwarvenShaman', size: 30 },
+        { id: 'efreeti', size: 25 },
+        { id: 'bulwarkHorror', size: 15 }
+      ]
+    ],
+    nether: [
+      [
+        { id: 'wolfRaider', size: 30 },
+        { id: 'bulwarkHorror', size: 28 },
+        { id: 'demonKnight', size: 25 },
+        { id: 'lich', size: 25 },
+        { id: 'hornedDemon', size: 15 },
+        { id: 'unholyReaver', size: 13 },
+        { id: 'vampire', size: 7 },
+      ]
+    ],
+    phantasm: [
+      [
+        { id: 'archangel', size: 9 },
+        { id: 'empyreanInquisitor', size: 12 },
+        { id: 'bulwarkHorror', size: 11 },
+        { id: 'waterElemental', size: 15 },
+        { id: 'darkElfMagician', size: 14 },
+        { id: 'efreeti', size: 13 },
+        { id: 'iceElemental', size: 11 },
+        { id: 'highElf', size: 10 },
+        { id: 'leviathan', size: 8.5 },
+        { id: 'hornedDemon', size: 6 },
+      ]
+    ]
+  };
+
+  const baseStacks = _.shuffle(botTable[magic])[0];
+  const total = baseStacks.reduce((acc, u) => acc + u.size, 0);
+
+  const results: ArmyUnit[] = [];
+  baseStacks.forEach(stack => {
+    const np = (stack.size / total) * armyNetPower
+
+    results.push({
+      id: stack.id,
+      size: Math.ceil(np / getUnitById(stack.id).powerRank)
+    });
+  });
+
+  return results;
 }

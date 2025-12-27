@@ -4,7 +4,7 @@ import { Spell, Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
-import { randomInt } from '../random';
+import { randomInt, randomWeighted } from '../random';
 import { validateSpellOrItem, validateUnit } from './validate';
 
 
@@ -92,7 +92,16 @@ export const getAllItems = (): Item[] => {
 }
 
 export const getRandomItem = () => {
-  return itemList[randomInt(itemList.length)];
+  const totalW = itemList.reduce((acc, item) => acc + item.weight, 0);
+  const weightTable = itemList.map((item, idx) => { 
+    return { value: idx, weight: 100 * item.weight / totalW }; 
+  }).sort((a, b) => {
+    return b.weight - a.weight;
+  });
+
+  const idx = randomWeighted(weightTable)
+  return itemList[idx];
+  // return itemList[randomInt(itemList.length)];
 }
 
 export const initializeResearchTree = () => {

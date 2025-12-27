@@ -90,6 +90,8 @@ const applyUnitEffect = (
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
 
+  console.log('applyUnitEffect', Object.keys(unitEffect.attributes));
+
   Object.keys(unitEffect.attributes).forEach(attrKey => {
     const attr = unitEffect.attributes[attrKey];
     const fields = attrKey.split(',').map(d => d.trim());
@@ -657,6 +659,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   const defenderHasArmy = defender.army.length > 0;
 
+
+  // FIXME: Check that we can actually cast said spell!!!
   /**
    * Check if spell and item pass barriers
    * - spell goes throw two stages: barrier resist and magic resist.

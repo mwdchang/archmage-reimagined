@@ -4,6 +4,7 @@
     "name": "Ash of Invisibility",
     "description": "The ashes are kept inside a silk pouch. When the pouch is shaken, the ashes dust an area of the possessor's choice. All things dusted by the ashes reflect and bend light, thus rendering a unit invisible.", 
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -38,6 +39,7 @@
     "name": "Book of Golem Summoning",
     "description": "This heavy book is inscribed with magical runes and writings, which record the secret of creating Stone Golems. The book's magic will be gone once the creation process of the Stone Golem is finished.",
     "attributes": ["oneUse", "summon"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -62,6 +64,7 @@
     "name": "Potion of Valor",
     "description": "This small bottle contains a pink liquid. When a mage drinks it all at once, he/she will begin to act brave, as a hero does, therefore inspiring his/her followers and enhancing their performance for a period of time.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -96,6 +99,7 @@
     "name": "Bubble Wine",
     "description": "It smells like some kind of alcoholic drink but bubbles keep floating up from the bottom of the wine. It is believed to be the result of an unsuccessful spell casting by an unknown mage. No one knows the recipe of it, but bottles of bubble wine are being brewed somewhere. It is known that those who drink this wine can become a lot tougher and hit a little harder.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -146,6 +150,7 @@
     "name": "Candle of Sleeping",
     "description": "This red candle, when burned, gives out a sweet-smelling smoke which makes enemies within its range drowsy and eventually fall asleep. Area of Effect: all enemy units",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -180,6 +185,7 @@
     "name": "Pixi Dust",
     "description": "Pixies are known for guile and charm, sprinkling magical dust upon the unwilling in order to lower their defenses and take what they wish.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -218,6 +224,7 @@
     "name": "Oil Flasks",
     "description": "Different kinds of oils are stored in glass flasks. When these flasks of oil are thrown at the enemy, the glass breaks and oil spills out, making it easier to ignite them",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -252,6 +259,7 @@
     "name": "Brooch Of Protection",
     "description": "This large ornamental pin is embalmed with magic. It can create a force field that blocks attacks. The magic of the brooch disappears when the force field is broken by an enemy attack.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -286,6 +294,7 @@
     "name": "Missile Shield",
     "description": "This six foot tall shield of great magnitude is the result of a failed experiment. However, it has been magnified through to experiment to attract all iron substances within a given area. All arrows will be attracted to it like a moth to fire. The shield will lose its magic powers after it has been struck by a large number of arrows.", 
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -320,6 +329,7 @@
     "name": "Scroll Of Protection From Fire",
     "description": "This scroll is inscribed with magical runes, writings, and symbols. When a mage recites the scroll, the scroll provides limited protection for a random unit from fire damage for an amount of time. Area of Effects: all units",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -354,6 +364,7 @@
     "name": "Horn of Valhalla",
     "description": "The possessor of the Horn of Valhalla has the power to summon knight troops to his/her side in battle. When the horn is blown, it draws the attention of knight troops nearby, who join in on the glory of battle.",
     "attributes": ["oneUse", "summon"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -378,6 +389,7 @@
     "name": "Coffin",
     "description": "The possessor of the coffin gains undeads which move at his/her command when the coffin is opened. Dark powers which permeate the world create dark forces of evil, whose undead may prove to be a great asset, or a possible hindrance.",
     "attributes": ["oneUse", "summon"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -402,6 +414,7 @@
     "name": "Peaches",
     "description": "These are enchanted peaches for summoning gorillas to your troops. When these peaches are placed on the shrine, gorillas within a mile radius of the shrine will be able to smell them and come to your aid.",
     "attributes": ["oneUse", "summon"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -426,6 +439,7 @@
     "name": "Total Newbie Handlbook",
     "description": "This small handbook contains a FAQ and other notes on how to get started as an apprentice mage. The only thing that you found interesting is some cantrip spells attached at the end of the handbook.",
     "attributes": ["oneUse", "summon"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -451,6 +465,7 @@
     "name": "Carpet of Flying",
     "description": "This magical Oriental rug is woven with special magical techniques, which enable it to fly. On command, it will fly through the air carrying whatever the magician wishes.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -485,6 +500,7 @@
     "name": "Satchel of Mist",
     "description": "The Satchel of Mist cloaks the battlefield with mist, reducing the accuracy of both the attacker and the defender by 10 percent.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -519,6 +535,7 @@
     "name": "The Spider's Web",
     "description": "The Spider's Web ejects a sticky liquid from a metal tube, when the button is pressed. The sticky liquid transforms into a thick web, which strikes every enemy units, slowing down that unit's attack. The technological mystery of how to enclose such webs inside a small tube, as well as the material of the tube and the web itself, suggest an alien origin for this item",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -553,6 +570,7 @@
     "name": "Capsule Monster",
     "description": "It looks like an ovoid shape egg but it is made up of some kind of tree sap like material. There is a number inscribed on one side and the word \"capsule\" on the other side. When the capsule is thrown or dropped, a horde of monsters will emerge from within. They will obey your order but after some times, they will dispatch into nothingness. It is rumoured that these capsules are made by the alchemists of the Old World. Nowadays, no one knows how to make these capsules because the capsule itself does not radiate any magic at all. But these capsules can still be found among the ruins of those lost civilizations.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -585,6 +603,7 @@
     "name": "Javelin Of Lightning Bolt",
     "description": "This Javelin may look like a normal javelin, but when it is thrown, it turns into a bolt of lightning that strikes those in its path.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -620,6 +639,7 @@
     "name": "Powder Keg",
     "description": "This small, red hot keg is full of powder and will blow out fire upon command",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -668,6 +688,7 @@
     "name": "Flask Of Holy Water",
     "description": "These small flasks are fillled with holy water that has blessed by the high priest in the serving ceremony. They carry great attack power against undead creatures. The water burns like acid on the creatures when the flasks are thrown.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -704,6 +725,7 @@
     "name": "Staff Of Illusion",
     "description": "This foot long, ivory staff is topped by a large crystal ball. It can be used to create audio and visual illusions. Half of those who are zapped by the staff realize that it is merely an illusion and are not affected. However, the other half suffer magic and psychic damages, which are as real and devastating as physical damages. After releasing its magical powers, the crystal ball will shatter, losing its effectiveness and thus becoming obsolete.",
     "attributes": ["battle", "oneUse"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -752,6 +774,7 @@
     "name": "Sage Stone",
     "description": "This mystical stone, created by the alchemist, is produced when mercury, lead, and other substances are boiled together. When the surface of the stone wears off, the sage stone transforms into geld.",
     "attributes": ["oneUse", "instant", "selfOnly"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -774,6 +797,7 @@
     "name": "Mana Crystal",
     "description": "This clear, small crystal stores internal energy. Anyone holding the crystal will feel energy flowing into his/her body.",
     "attributes": ["oneUse", "instant", "selfOnly"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -796,6 +820,7 @@
     "name": "Mana Vortex",
     "description": "It looks like a small pebble in all aspects. However, whenever it comes within 100 feet of a node, it will begin to suck mana from the surrounding area until it cannot absorb anymore. Then the mana vortex will explode into thousands of pieces.",
     "attributes": ["oneUse", "instant"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -818,6 +843,7 @@
     "name": "Book Of Prophecy",
     "description": "This small handbook teaches the second coming of the one true god. It tells the follower to repent their sins and follow the path of the heaven. It is generally used by preachers to attract followers.",
     "attributes": ["oneUse", "instant", "selfOnly"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -840,6 +866,7 @@
     "name": "Pipe Of The Sewer",
     "description": "The pipes have the power to control mice. When the pipes are blown, hordes of mice suddenly swarm out from nowhere and begin to follow the piper. Once the piper stops playing the pipes, the mice scatter around, looking for food to eat and destroying everything in sight in the process. A typical , effective usage of the pipes is to hire a bard and have him/her pipe in another mage's realm to amass a horde of mice to irritate the opponent mage by reducing his/her geld and population.",
     "attributes": ["oneUse", "instant"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -874,6 +901,7 @@
     "name": "Rotten Food",
     "description": "This decaying and rotten food is kept in large sacks. When the sack of rotten food is deposited in another mage's kingdom, it will generate worms , attract bugs, and spread disease in that kingdom, making the people of the kingdom sick.",
     "attributes": ["oneUse", "instant"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -896,6 +924,7 @@
     "name": "Strange Metalic Can",
     "description": "The small can looks oddly metallic. The label reads \"contents hazardous to health, only usuable in extreme situation\". Puff of smoke steams out when you open the strange metallic can. Your head feels a bit dizzy but to your surprise, you see your wounds healing up slowly",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -928,6 +957,7 @@
     "name": "Ointment Of Healing",
     "description": "This salve is contained in small jars. It is useful for drawing poison and healing wounds.",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -960,6 +990,7 @@
     "name": "Pouch Of Herbs",
     "description": "The pouch contains strange and mystical herbs which have the power to heal. A cup of herbal tea brewed with herbs from the pouch can revive and refresh a person and increase his/her healing powers",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -1008,6 +1039,7 @@
     "name": "Monkey Brains",
     "description": "These fresh cut monkey brains are an exotic and fresh, new food to please the culinary senses. However, this food does more than just please the palate; monkey brains are the favorite food of mindflayers for a reason. It can increase brain power, thus enhancing psychic attacks of any kind.Area of effects: all units with psychic attack type",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -1047,6 +1079,7 @@
     "name": "Ring Of Animal Command",
     "description": "This ring is made from moose bones and is enchanted with magic. When worn on the finger of a mage, it can be used to wield control over a herd of animals, rendering them helpless and unable to move, therefore making them unable to attack.",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -1115,6 +1148,7 @@
     "name": "Voodoo Doll",
     "description": "This voodoo doll is enchanted by voodoo witch doctors. All you need to do is to write the true name of the person in a piece of yellow paper and put it in the doll. Then stab the doll with a large pin. The victim will then suffer from a severe headache and cannot do anything at all for a while. Once the doll has been stabbed for many times, the magic sealed within is lost.",
     "attributes": ["oneUse", "instant"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -1137,6 +1171,7 @@
     "name": "The Head Of Medusa",
     "description": "The Head of Medusa has the power to turn people into stone. When the head is drawn out of the sack, those who gaze into its eyes will be horrified, and turn into stone, by its sheer ugliness. After the initial use, the eyes of Medusa will close forever, and all its magical powers will be lost. The possessor must be careful not to take a look into the eyes of the head himself/herself, lest he/she also turn into stone",
     "attributes": ["oneUse", "battle"],
+    "weight": 100,
     "chargeTurns": 0,
     "upkeep": null,
     "effects": [
@@ -1159,6 +1194,44 @@
               "nether": { "value":  { "min": 2, "max": 12 }},
               "phantasm": { "value": { "min": 2, "max": 12 }}
             }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "treasureChest",
+    "name": "Treasure Chest",
+    "description": "",
+    "attributes": ["oneUse", "instant", "selfOnly"],
+    "weight": 10,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "WishEffect",
+        "trigger": {
+          "min": 1,
+          "max": 1
+        },
+        "rolls": [
+          {
+            "target": null,
+            "min": 0,
+            "max": 0,
+            "weight": 80 
+          },
+          {
+            "target": "geld",
+            "min": 1000000,
+            "max": 1000000,
+            "weight": 80
+          },
+          {
+            "target": "item",
+            "min": 1,
+            "max": 3,
+            "weight": 80
           }
         ]
       }

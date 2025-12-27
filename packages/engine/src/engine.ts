@@ -79,6 +79,8 @@ import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
+import uniqueItems from 'data/src/items/unique.json';
+
 import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
@@ -153,6 +155,7 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+    loadItemData(uniqueItems);
 
 
     // Reset server data and defaults
@@ -176,6 +179,9 @@ class Engine {
       console.log('Resume from previous DB state ...');
       this.adapter.initialize(gameTable);
     }
+
+    // We need to (re)regiter unique items to ensure uniqueness
+    await this.adapter.registerUniqueItems(uniqueItems);
 
 
     // Create a several dummy mages for testing

@@ -7,6 +7,7 @@ import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
+import { Item } from 'shared/types/magic';
 
 interface User {
   username: string
@@ -36,6 +37,8 @@ export class SimpleDataAdapter extends DataAdapter {
   marketPriceTable: MarketPrice[] = [];
   marketItemTable: MarketItem[] = [];
   marketBidTable: MarketBid[] = [];
+
+  uniqueItemTable: Map<string, number>;
 
   clock: ServerClock = {
     currentTurnTime: Date.now(),
@@ -397,120 +400,25 @@ export class SimpleDataAdapter extends DataAdapter {
       }
     });
   }
-}
 
-/*
-export class SimpleDataAdapter extends DataAdapter {
-  userAuthMap: Map<string, User> = new Map();
-
-  // Mage data
-  mageMap: Map<number, Mage> = new Map();
-  userMageMap: Map<string, number> = new Map();
-
-  // Battle reports datas
-  mageBattleMap: Map<number, any[]> = new Map();
-
-  constructor() {
-    super();
-
-    if (!existsSync(`${DATA_DIR}`)) {
-      mkdirSync(`${DATA_DIR}`);
-    }
-    if (existsSync(`${DATA_DIR}/userAuth.sav`)) {
-      let data = readFileSync(`${DATA_DIR}/userAuth.sav`, { encoding: 'utf-8' });
-      this.userAuthMap.clear();
-      this.userAuthMap = new Map<string, User>(JSON.parse(data));
-    }
-    if (existsSync(`${DATA_DIR}/mage.sav`)) {
-      let data = readFileSync(`${DATA_DIR}/mage.sav`, { encoding: 'utf-8' });
-      this.mageMap.clear();
-      this.mageMap = new Map<number, Mage>(JSON.parse(data));
-    }
-    if (existsSync(`${DATA_DIR}/userMage.sav`)) {
-      let data = readFileSync(`${DATA_DIR}/userMage.sav`, { encoding: 'utf-8' });
-      this.userMageMap.clear();
-      this.userMageMap = new Map<string, number>(JSON.parse(data));
-    }
-    if (existsSync(`${DATA_DIR}/mageBattle.sav`)) {
-      let data = readFileSync(`${DATA_DIR}/mageBattle.sav`, { encoding: 'utf-8' });
-      this.mageBattleMap.clear();
-      this.mageBattleMap = new Map<number, any[]>(JSON.parse(data));
-    }
-    if (!existsSync(`${DATA_DIR}/${REPORT_DIR}`)) {
-      console.log('Creating report directory', REPORT_DIR);
-      mkdirSync(`${DATA_DIR}/${REPORT_DIR}`);
+  /* Unique items */
+  async registerUniqueItems(items: Item[]): Promise<void> {
+    for (const item of items) {
+      this.uniqueItemTable.set(item.id, 0);
     }
   }
 
-  async initialize() {}
-
-  async register(username: string, password: string) {
-    const saltRounds = 5;
-    const hash = await bcrypt.hash(password, saltRounds);
-
-    const token = getToken(username);
-    this.userAuthMap.set(username, {
-      username, hash , token
-    });
-
-    return { 
-      user: this.userAuthMap.get(username)
-    };
+  async assignUniqueItem(id: string, mageId: number): Promise<void> {
+    this.uniqueItemTable.set(id, mageId);
   }
 
-  async login(username: string, password: string) {
-    const user = this.userAuthMap.get(username);
-    if (!user) return null;
-
-    const isValid = await bcrypt.compare(password, user.hash);
-    if (!isValid) return null;
-    const token = getToken(username);
-    this.userAuthMap.get(username).token = token;
-
-    return {
-      user: this.userAuthMap.get(username)
-    };
-  }
-
-  async getMageBattles(id: number, options: any) {
-    if (this.mageBattleMap.has(id)) {
-      return this.mageBattleMap.get(id);
-    }
-    return []
-  }
-
-  async getBattleReport(id: string) {
-    if (existsSync(`${DATA_DIR}/${REPORT_DIR}/${id}`)) {
-      let data = readFileSync(`${DATA_DIR}/${REPORT_DIR}/${id}`, { encoding: 'utf-8' });
-      return JSON.parse(data);
-    }
-    return null;
-  }
-
-  async saveBattleReport(id: number, reportId: string, report: any, reportSummary: any) {
-    if (!this.mageBattleMap.has(id)) {
-      this.mageBattleMap.set(id, [])
-    }
-    this.mageBattleMap.get(id).push(reportSummary);
-    writeFileSync(`${DATA_DIR}/${REPORT_DIR}/${reportId}`, JSON.stringify(report))
-  }
-
-  async nextTurn() {
-    this.mageMap.forEach((mage, _username) => {
-      if (mage.currentTurn < mage.maxTurn) {
-        mage.currentTurn ++;
+  async getAvailableUniqueItems(): Promise<string[]> {
+    const ids: string[] = [];
+    for (const id of this.uniqueItemTable.keys()) {
+      if (this.uniqueItemTable.get(id) > 0) {
+        ids.push(id);
       }
-    })
-    this.saveState();
-  }
-
-  saveState() {
-    // Write out to disk to save state
-    console.log('saving state');
-    writeFileSync(`${DATA_DIR}/userAuth.sav`, JSON.stringify(Array.from(this.userAuthMap.entries())));
-    writeFileSync(`${DATA_DIR}/mage.sav`, JSON.stringify(Array.from(this.mageMap.entries())));
-    writeFileSync(`${DATA_DIR}/userMage.sav`, JSON.stringify(Array.from(this.userMageMap.entries())));
-    writeFileSync(`${DATA_DIR}/mageBattle.sav`, JSON.stringify(Array.from(this.mageBattleMap.entries())));
+    }
+    return ids;
   }
 }
-*/
