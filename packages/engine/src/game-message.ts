@@ -22,10 +22,17 @@ export const fromRemoveEnchantmentEffectResult = (
 export const fromWishEffectResult = (result: WishEffectResult): GameMsg[] => {
   const logs: GameMsg[] = [];
   for (const r of result.results) {
-    logs.push({
-      type: 'log',
-      message: `${result.name} (#${result.id}) ${r.value < 0 ? 'lost' : 'gained'} ${Math.abs(r.value)} ${r.target}`
-    })
+    if (!r.target || r.target === '') {
+      logs.push({
+        type: 'log',
+        message: `Nothing happend...`
+      })
+    } else {
+      logs.push({
+        type: 'log',
+        message: `${result.name} (#${result.id}) ${r.value < 0 ? 'lost' : 'gained'} ${Math.abs(r.value)} ${r.target}`
+      })
+    }
   }
   return logs;
 }

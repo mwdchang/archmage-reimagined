@@ -51,6 +51,7 @@
           <input type="number" v-model="turns" />
 
           <ActionButton 
+            :disabled="selected === ''"
             :proxy-fn="useItem"
             :label="'Use Item'" />
         </div>
