@@ -863,7 +863,7 @@ class Engine {
 
     for (const effect of item.effects) {
       if (effect.effectType === E.WishEffect) {
-        const result = applyWishEffect(mage, effect as any, origin);
+        const result = await applyWishEffect(mage, effect as any, origin, this._assignRandomUniqueItem);
         logs.push(...fromWishEffectResult(result));
       } else if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(mage, effect as any, origin);
@@ -1153,7 +1153,7 @@ class Engine {
           const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
           logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === E.WishEffect) {
-          const wishResult = applyWishEffect(mage, effect as any, origin);
+          const wishResult = await applyWishEffect(mage, effect as any, origin, this._assignRandomUniqueItem);
           logs.push(...fromWishEffectResult(wishResult));
         } else if (effect.effectType === E.RemoveEnchantmentEffect) {
           const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, null);
@@ -2075,6 +2075,20 @@ class Engine {
 
   async deleteMails(mage: Mage, ids: string[]) {
     return this.adapter.deleteMails(mage.id, ids);
+  }
+
+
+  // === Handle unique items ===
+  
+  // Call back 
+  async _assignRandomUniqueItem(mage: Mage) {
+    const availableUniques = await this.adapter.getAvailableUniqueItems();
+    if (availableUniques.length === 0) return null;
+
+    const chosen = _.shuffle(availableUniques)[0];
+    mage.items[chosen] = 1;
+    await this.adapter.assignUniqueItem(chosen, mage.id);
+    return chosen;
   }
 
 }
