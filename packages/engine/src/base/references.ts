@@ -87,9 +87,14 @@ export const getItemById = (id: string): Item => {
   return _.cloneDeep(item);
 }
 
-export const getAllItems = (): Item[] => {
+export const getAllLesserItems = (): Item[] => {
   const lessers = itemList.filter(item => item.attributes.includes('lesser'));
   return _.clone(lessers);
+}
+
+export const getAllUniqueItems = (): Item[] => {
+  const uniques = itemList.filter(item => item.attributes.includes('unique'));
+  return _.clone(uniques);
 }
 
 export const getRandomItem = () => {

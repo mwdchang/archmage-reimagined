@@ -9,7 +9,7 @@
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table v-if="itemList.length > 0">
+      <table v-if="itemList.length > 0" style="min-width: 15rem">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
             <th>Name</th>
@@ -65,7 +65,7 @@
           </p>
         </div>
         <div v-else>
-          <p> Special items </p>
+          <p> Special and passive items</p>
         </div>
       </section>
 

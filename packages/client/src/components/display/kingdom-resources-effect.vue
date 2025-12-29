@@ -8,11 +8,15 @@
       Modify {{ effect.target }} by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 
+    <div v-if="effect.rule === 'add'">
+      Modify {{ effect.target }} by <span class="special-text">value</span> below
+    </div>
+
     <div 
       v-for="(magic) of allowedMagicList"
-      style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
+      style="align-items: center; margin-left: 1rem; gap: 15px">
       <div class="row" v-if="effect.magic[magic]">
-        <magic :magic="magic as string" />
+        <magic :magic="magic as string" small />
         <span>
           {{ readableNumber(effect.magic[magic].value.min) }} to
           {{ readableNumber(effect.magic[magic].value.max) }}

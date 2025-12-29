@@ -9,7 +9,7 @@ import {
   getItemById,
   initializeResearchTree,
   getUnitById,
-  getAllItems,
+  getAllLesserItems,
   getRandomItem,
 } from './base/references';
 import {
@@ -1942,7 +1942,7 @@ class Engine {
     const defaultUnitPrice = 1000000;
 
     console.log('initialize market pricing');
-    const items = getAllItems();
+    const items = getAllLesserItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
         item.id,

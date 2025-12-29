@@ -4,7 +4,7 @@
       Set {{ attr.key.split(",").join(",&nbsp;") }} to:&nbsp;
     </div>
     <div v-else style="line-height: 120%">
-      Modify {{ attr.key.split(",").join(",&nbsp;") }} by:&nbsp;
+      Modify {{ attr.key.split(",").map(readableStr).join(",&nbsp;") }} by:&nbsp;
       <span class="special-text">
         <span v-if="attr.rule === 'add'"> value </span>
         <span v-if="attr.rule === 'addPercentageBase'"> value * base </span>
@@ -18,7 +18,7 @@
       <div 
         v-for="(val, magic) of attr.magic"
         style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
-        <magic :magic="magic as string" />
+        <magic :magic="magic as string" small />
         <span v-if="attr.key === 'abilities'">
           {{ val.value.name }} <span v-if="val.value.extra">({{ val.value.extra }})</span>
         </span>
@@ -34,6 +34,7 @@
 import { computed } from 'vue';
 import { UnitAttrEffect } from 'shared/types/effects';
 import Magic from '@/components/magic.vue';
+import { readableStr } from '@/util/util';
 
 const props = defineProps<{
   effect: UnitAttrEffect

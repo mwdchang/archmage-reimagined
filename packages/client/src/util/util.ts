@@ -146,6 +146,10 @@ const userLocale =
 export const readableStr = (str: string) => {
   if (!str) return '';
 
+  if (str.includes('.')) {
+    return str.split('.').map(readableStr).join(': ');
+  }
+
   // Insert space before capital letters and capitalize the first word
   return str
     .replace(/([A-Z])/g, ' $1')   // insert space before capital letters

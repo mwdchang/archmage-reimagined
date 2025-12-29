@@ -2,7 +2,7 @@
   {
     "id": "excalibur",
     "name": "Excalibur",
-    "description": "",
+    "description": "The long blade shines with a mystical light when it is drawn out of its scabbard. You notice that there are many runes inscribed on the blade. You feel the power of the sword flowing into your body, and you know immediately that this must be the sword of legends.",
     "attributes": ["battle", "unique"],
     "weight": 100,
     "chargeTurns": 0,

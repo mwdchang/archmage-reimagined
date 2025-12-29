@@ -343,7 +343,7 @@
           {
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
-            "damageType": ["lightning"],
+            "damageType": ["holy"],
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": 550 },

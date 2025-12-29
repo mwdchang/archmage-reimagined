@@ -113,16 +113,23 @@ table > tr.active {
 
 .special-text {
   font-style: italic; 
-  font-size: 100%;
-  color: #fb0; background-color: #333; 
-  padding: 2px 5px; 
-  border-radius: 2px;
+  font-weight: 600;
+  color: #fb0; 
 }
 
-.display-section {
-  border-left: 2px solid #8ab;
-  padding-left: 20px;
+.f600 {
+  font-weight: 600;
 }
+
+
+.display-section {
+  border-left: 1px solid #8ab;
+  padding-left: 20px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  background: #1D1D1D;
+}
+
 
 .gen-img {
   width: 30vw;
