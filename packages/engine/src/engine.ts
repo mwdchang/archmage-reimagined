@@ -863,7 +863,10 @@ class Engine {
 
     for (const effect of item.effects) {
       if (effect.effectType === E.WishEffect) {
-        const result = await applyWishEffect(mage, effect as any, origin, this._assignRandomUniqueItem);
+        const result = await applyWishEffect(mage, effect as any, origin, async (mage: Mage) => {
+          const result = await this._assignRandomUniqueItem(mage)
+          return result;
+        });
         logs.push(...fromWishEffectResult(result));
       } else if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(mage, effect as any, origin);

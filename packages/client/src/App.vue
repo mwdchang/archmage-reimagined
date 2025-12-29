@@ -42,6 +42,7 @@ import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
+import uniqueItems from 'data/src/items/unique.json';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -84,6 +85,7 @@ onMounted(async () => {
   initializeResearchTree();
 
   loadItemData(lesserItems);
+  loadItemData(uniqueItems);
 
   const clock = (await API.get<ServerClock>('server-clock')).data;
   if (clock.currentTurn >= clock.endTurn) {

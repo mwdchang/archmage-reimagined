@@ -1,2 +1,37 @@
 [
+  {
+    "id": "excalibur",
+    "name": "Excalibur",
+    "description": "",
+    "attributes": ["battle", "unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.15 },
+                  "verdant": { "value": 0.15 },
+                  "eradication": { "value": 0.15 },
+                  "nether": { "value": 0.15 },
+                  "phantasm": { "value": 0.15 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
 ]
