@@ -303,7 +303,6 @@ export const geldIncome = (mage: Mage) => {
     const uitem = uniqueItems.find(d => d.id === itemId);
     if (!uitem) continue;
 
-    console.log('unique item', uitem.id);
     const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
     if (productionEffects.length === 0) continue;
     

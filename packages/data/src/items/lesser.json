@@ -1219,19 +1219,25 @@
             "target": null,
             "min": 0,
             "max": 0,
-            "weight": 80 
+            "weight": 100 
           },
           {
             "target": "geld",
             "min": 1000000,
             "max": 1000000,
-            "weight": 80
+            "weight": 100
           },
           {
             "target": "item",
-            "min": 1,
+            "min": 2,
             "max": 3,
-            "weight": 80
+            "weight": 100
+          },
+          {
+            "target": "uniqueItem",
+            "min": 1,
+            "max": 1,
+            "weight": 10 
           }
         ]
       }
