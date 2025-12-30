@@ -74,7 +74,7 @@ export const productionTable = {
     forts: 500,
     wilderness: 10
   },
-  research: 10,
+  research: 20,
   manaStorage: 1000
 }
 
