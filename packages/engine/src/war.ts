@@ -954,7 +954,9 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   });
 
 
-
+  // Unique item battle effects
+  applyUniqueItems('attack', attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
+  applyUniqueItems('defend', defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
 
 
   // Apply fort bonus to defender
