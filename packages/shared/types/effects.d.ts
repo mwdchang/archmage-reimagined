@@ -206,7 +206,7 @@ export interface KingdomArmyEffect extends Effect<E.KingdomArmyEffect> {
 }
 
 export interface ProductionEffect extends Effect<E.ProductionEffect> {
-  rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase',
+  rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase' | 'add',
   production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land' | 'barrack',
   magic: {
     [key in AllowedMagic]: {

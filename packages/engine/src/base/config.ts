@@ -5,6 +5,7 @@ export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
   turnRate: 180,
+  itemGenerationRate: 0.08,
 
   war: {
     obfuscateReport: true,
@@ -73,7 +74,7 @@ export const productionTable = {
     forts: 500,
     wilderness: 10
   },
-  research: 10,
+  research: 20,
   manaStorage: 1000
 }
 
@@ -185,8 +186,3 @@ export const spellRankTable = {
   ultimate: 20,
   ancient: 15
 }
-
-export const itemProductionTable = {
-  itemGenerationRate: 0.08
-}
-

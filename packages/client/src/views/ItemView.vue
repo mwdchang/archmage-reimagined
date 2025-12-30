@@ -9,7 +9,7 @@
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table v-if="itemList.length > 0">
+      <table v-if="itemList.length > 0" style="min-width: 15rem">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
             <th>Name</th>
@@ -36,9 +36,10 @@
         <div class="form-tabs">
           <div class="tab" :class="{ active: tabView === 'instant' }" @click="changeView('instant')">Instant</div>
           <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
+          <div class="tab" :class="{ active: tabView === 'special' }" @click="changeView('special')">Special</div>
         </div>
 
-        <div v-if="tabView !== 'battle'">
+        <div v-if="tabView === 'instant'">
           <label>Use item</label>
           <select v-model="selected" v-if="usableItems.length > 0">
             <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
@@ -51,17 +52,20 @@
           <input type="number" v-model="turns" />
 
           <ActionButton 
+            :disabled="selected === ''"
             :proxy-fn="useItem"
             :label="'Use Item'" />
         </div>
-        <div v-else>
+        <div v-if="tabView === 'battle'">
           <p>
             You can configure your defensive battle items under
             <router-link :to="{ name: 'assignment' }">
               Assignment
             </router-link>
           </p>
-
+        </div>
+        <div v-else>
+          <p> Special and passive items</p>
         </div>
       </section>
 
@@ -111,8 +115,11 @@ const usableItems = computed(() => {
 
     if (tabView.value === 'battle') {
       return attrs.includes('oneUse') && attrs.includes('battle');
+    } else if (tabView.value === 'instant') {
+      return attrs.includes('oneUse') && attrs.includes('instant');
+    } else {
+      return attrs.includes('unique'); 
     }
-    return attrs.includes('oneUse') && !attrs.includes('battle');
   });
 });
 

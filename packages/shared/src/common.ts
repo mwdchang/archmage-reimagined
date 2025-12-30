@@ -33,7 +33,7 @@ export const enum allowedEffect {
   WishEffect = 'WishEffect',
   RemoveEnchantmentEffect = 'RemoveEnchantmentEffect',
   StealEffect = 'StealEffect',
-  UnitSummonEffect = 'UnitSummongEffect'
+  UnitSummonEffect = 'UnitSummonEffect'
 } 
 
 

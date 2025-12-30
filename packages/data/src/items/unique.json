@@ -1,0 +1,60 @@
+[
+  {
+    "id": "pouchOfInfiniteWealth",
+    "name": "Pouch Of Infinite Wealth",
+    "description": "",
+    "attributes": ["unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "add",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": 300000 },
+          "verdant": { "value": 300000 },
+          "eradication": { "value": 300000 },
+          "nether": { "value": 300000 },
+          "phantasm": { "value": 300000 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "excalibur",
+    "name": "Excalibur",
+    "description": "The long blade shines with a mystical light when it is drawn out of its scabbard. You notice that there are many runes inscribed on the blade. You feel the power of the sword flowing into your body, and you know immediately that this must be the sword of legends.",
+    "attributes": ["battle", "unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.15 },
+                  "verdant": { "value": 0.15 },
+                  "eradication": { "value": 0.15 },
+                  "nether": { "value": 0.15 },
+                  "phantasm": { "value": 0.15 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

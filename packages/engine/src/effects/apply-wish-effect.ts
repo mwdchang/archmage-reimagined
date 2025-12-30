@@ -14,10 +14,15 @@ export interface WishEffectResult {
   }[]
 }
 
-export const applyWishEffect = (
+export const applyWishEffect = async (
   mage: Mage,
   effect: WishEffect,
-  origin: EffectOrigin
+  origin: EffectOrigin,
+
+  // Kind of a hack in order to access DataAdapter, we need this for things that
+  // do not only exist at the mage level, such as unque-items which requires the 
+  // global unique pool to be updated as well.
+  uniqueItemHook: (mage: Mage) => Promise<null|string> 
 ) => {
   let num = 1;
   if (effect.trigger) {
@@ -113,6 +118,20 @@ export const applyWishEffect = (
         value: value
       });
       console.log(`You gained ${Math.abs(value)} ${item.id}`);
+    } else if (target === 'uniqueItem') {
+      const result = await uniqueItemHook(mage);
+
+      if (result === null) {
+        wishResult.results.push({
+          target: null,
+          value: null
+        });
+      } else {
+        wishResult.results.push({
+          target: result,
+          value: 1
+        });
+      }
     } else if (target === null) {
       wishResult.results.push({
         target: null,

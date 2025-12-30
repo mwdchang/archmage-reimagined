@@ -90,7 +90,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Magic from '@/components/magic.vue';
-import { getAllItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
+import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
 import { Item, Spell } from 'shared/types/magic';
 import { readableStr, readableNumber } from '@/util/util';
 import { Unit } from 'shared/types/unit';
@@ -137,7 +137,7 @@ const changeSelection = () => {
 onMounted(() => {
   spells.value = getAllSpells();
   units.value = getAllUnits();
-  items.value = getAllItems()
+  items.value = [...getAllLesserItems(), ...getAllUniqueItems()].sort((a, b) => a.id.localeCompare(b.id));
 });
 
 watch(

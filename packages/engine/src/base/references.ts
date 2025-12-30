@@ -4,7 +4,7 @@ import { Spell, Item } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
-import { randomInt } from '../random';
+import { randomWeighted } from '../random';
 import { validateSpellOrItem, validateUnit } from './validate';
 
 
@@ -87,12 +87,27 @@ export const getItemById = (id: string): Item => {
   return _.cloneDeep(item);
 }
 
-export const getAllItems = (): Item[] => {
-  return _.clone(itemList);
+export const getAllLesserItems = (): Item[] => {
+  const lessers = itemList.filter(item => item.attributes.includes('lesser'));
+  return _.clone(lessers);
+}
+
+export const getAllUniqueItems = (): Item[] => {
+  const uniques = itemList.filter(item => item.attributes.includes('unique'));
+  return _.clone(uniques);
 }
 
 export const getRandomItem = () => {
-  return itemList[randomInt(itemList.length)];
+  const lessers = itemList.filter(item => item.attributes.includes('lesser'));
+  const totalW = lessers.reduce((acc, item) => acc + item.weight, 0);
+  const weightTable = lessers.map((item, idx) => { 
+    return { value: idx, weight: 100 * item.weight / totalW }; 
+  }).sort((a, b) => {
+    return b.weight - a.weight;
+  });
+
+  const idx = randomWeighted(weightTable)
+  return lessers[idx];
 }
 
 export const initializeResearchTree = () => {

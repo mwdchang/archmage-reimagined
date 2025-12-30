@@ -7,6 +7,7 @@ import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
+import { Item } from 'shared/types/magic';
 
 interface UserTable {
   username: string;
@@ -41,6 +42,8 @@ const DB_CLEAN = `
   DROP TABLE IF EXISTS market_price;
 
   DROP TABLE IF EXISTS mail;
+
+  DROP TABLE IF EXISTS unique_table;
 
   DROP SEQUENCE IF EXISTS mage_seq;
 
@@ -229,6 +232,13 @@ const DB_INIT = (gameTable: GameTable) => `
   );
   COMMIT;
 
+
+  CREATE TABLE IF NOT EXISTS unique_table(
+    item_id varchar(64) PRIMARY KEY,
+    owner_id integer
+  );
+  COMMIT;
+  
 
   -- CREATE VIEW rank_view AS
   -- SELECT
@@ -993,4 +1003,31 @@ WHERE username = '${user.username}'
     `);
   }
 
+  /* Unique item */
+  async registerUniqueItems(items: Item[]): Promise<void> {
+    for (const item of items) {
+      await this.db.exec(`
+        INSERT INTO unique_table(item_id, owner_id)
+        VALUES (${Q(item.id)}, 0)
+        ON CONFLICT (item_id) DO NOTHING;
+      `);
+    }
+  }
+
+  async assignUniqueItem(id: string, mageId: number): Promise<void> {
+    await this.db.exec(`
+      UPDATE unique_table
+      SET owner_id = ${mageId}
+      WHERE item_id = ${Q(id)}
+    `);
+  }
+
+  async getAvailableUniqueItems(): Promise<string[]> {
+    const results = await this.db.query<{item_id: string}>(`
+      SELECT item_id
+      FROM unique_table
+      WHERE owner_id = 0
+    `);
+    return results.rows.map(r => r.item_id);
+  }
 }

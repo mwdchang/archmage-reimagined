@@ -2,6 +2,7 @@ import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { ChronicleTurn, MageRank, Mail, ServerClock, GameTable } from 'shared/types/common';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
+import { Item } from 'shared/types/magic';
 
 
 export interface SearchOptions {
@@ -91,6 +92,11 @@ export abstract class DataAdapter {
   abstract getMails(mageId: number): Promise<Mail[]>
   abstract deleteMails(mageId: number, ids: string[]): Promise<void>
   abstract readMails(mageId: number, ids: string[]): Promise<void>
+
+  // Handling unique items
+  abstract registerUniqueItems(items: Item[]): Promise<void>
+  abstract getAvailableUniqueItems(): Promise<string[]>
+  abstract assignUniqueItem(id: string, mageId: number): Promise<void> 
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

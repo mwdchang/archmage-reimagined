@@ -1214,6 +1214,28 @@
           "nether": { "value": 0 },
           "phantasm": { "value": 20 }
         }
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "filters": null,
+        "trigger": null,
+        "targetType": "all",
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": true,
+            "activation": "defend",
+            "attributes": {
+              "efficiency": {
+                "rule": "add",
+                "magic": {
+                  "phantasm": { "value": -10 }
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },

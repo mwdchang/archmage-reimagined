@@ -16,7 +16,7 @@
 
 
     <section v-if="bidItems.length > 0 && currentSelection !== 'item'">
-      <market-table v-model="bidItems" :item-type="type" />
+      <market-table v-model="bidItems" :item-type="type" :show-name="true" />
       <div class="form">
         <ActionButton 
           :proxy-fn="makeBid"
@@ -27,7 +27,7 @@
     </section>
 
 
-    <table v-if="currentSelection === 'item'">
+    <table v-if="currentSelection === 'item'" style="min-width: 25rem">
       <thead>
         <tr>
           <th>Item name</th>

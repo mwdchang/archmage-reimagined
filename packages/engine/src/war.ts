@@ -1,4 +1,4 @@
-import _, { filter } from 'lodash';
+import _ from 'lodash';
 import { Enchantment, Mage, Combatant } from "shared/types/mage";
 import { allowedEffect as E } from "shared/src/common";
 import { 
@@ -15,7 +15,7 @@ import {
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
-import { getSpellById, getItemById, getUnitById, getMaxSpellLevels } from './base/references';
+import { getSpellById, getItemById, getUnitById, getMaxSpellLevels, getAllUniqueItems } from './base/references';
 import {
   calcKingdomResistance,
   castingCost,
@@ -89,6 +89,8 @@ const applyUnitEffect = (
   const casterMagic = origin.magic;
   const casterSpellLevel = origin.spellLevel;
   const casterMaxSpellLevel = getMaxSpellLevels()[casterMagic];
+
+  console.log('applyUnitEffect', Object.keys(unitEffect.attributes));
 
   Object.keys(unitEffect.attributes).forEach(attrKey => {
     const attr = unitEffect.attributes[attrKey];
@@ -337,6 +339,112 @@ const applyTemporaryUnitEffect = (
   return newStacks[0];
 }
 
+const randomStackIndex = (stacks: BattleStack[], targetType: BattleEffect['targetType'] ) => {
+  let randomIdx = -1;
+  if (targetType === 'random') {
+    randomIdx = randomInt(stacks.length);
+  } else if (targetType === 'weightedRandom') {
+    randomIdx = Math.min(randomWeighted(), stacks.length -1);
+  }
+  return randomIdx;
+}
+
+
+// Handle unique item battle effects
+const applyUniqueItems = (
+  stance: 'attack' | 'defend',
+  attacker: Combatant,
+  attackerBattleStack: BattleStack[],
+  defender: Combatant,
+  defenderBattleStack: BattleStack[],
+  effectType: E.BattleEffect | E.PrebattleEffect
+) => {
+  console.log(`Checking ${attacker.mage.name}(#${attacker.mage.id}) for unique items`);
+  const logs: BattleEffectLog[] = [];
+  const uniqueItems = getAllUniqueItems();
+
+  let effectOrigin: EffectOrigin = {
+    id: attacker.mage.id,
+    magic: attacker.mage.magic,
+    spellLevel: currentSpellLevel(attacker.mage),
+    targetId: defender.mage.id
+  };
+
+  for (const itemId of Object.keys(attacker.mage.items)) {
+    const item = uniqueItems.find(d => d.id === itemId);
+    if (!item) continue;
+
+    const battleEffects = item.effects.filter(d => d.effectType === effectType) as (PrebattleEffect | BattleEffect)[]
+    if (battleEffects.length === 0) continue;
+
+    let cnt = 0;
+    for (const battleEffect of battleEffects) {
+      const originKey = `${stance}:${item.id}:${cnt}`;
+      const targetType = battleEffect.targetType;
+      const effects = battleEffect.effects;
+      const army = battleEffect.target === 'self' ? attackerBattleStack: defenderBattleStack;
+      const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
+
+      // Matching spell filters
+      const filteredArmy = calcFilteredArmy(army, battleEffect.filters);
+
+      for (let num = 0; num < numTimes; num++) {
+        const randomIdx = randomStackIndex(filteredArmy, targetType);
+        for (const effect of effects) {
+          let affectedArmy: BattleStack[] = [];
+          if (targetType === 'random' || targetType === 'weightedRandom') {
+            affectedArmy = [filteredArmy[randomIdx]];
+          } else {
+            affectedArmy = filteredArmy;
+          }
+
+          // Early exit
+          // Check if there are specific attack or defend triggers
+          if (effect.effectType === E.UnitAttrEffect) {
+            const unitAttrEffect = effect as UnitAttrEffect;
+            if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
+              continue;
+            }
+          }
+
+          console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
+          affectedArmy.forEach(bstack => {
+            if (bstack.appliedEffects.some(d => d.origin === originKey)) {
+              return;
+            }
+            bstack.appliedEffects.push({
+              origin: originKey,
+              id: item.id,
+              type: 'spell'
+            });
+          });
+
+          if (effect.effectType === E.UnitAttrEffect) {
+            const unitAttrEffect = effect as UnitAttrEffect;
+            applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
+          } else if (effect.effectType === E.UnitDamageEffect) {
+            const damageEffect = effect as UnitDamageEffect;
+            const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
+            logs.push(...damageLogs);
+          } else if (effect.effectType === E.UnitHealEffect) {
+            const healEffect = effect as UnitHealEffect;
+            applyHealEffect(effectOrigin, healEffect, affectedArmy);
+          } else if (effect.effectType === E.TemporaryUnitEffect) {
+            const tempUnitEffect = effect as TemporaryUnitEffect;
+            const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
+            newStack.role = attackerBattleStack[0].role;
+            attackerBattleStack.push(newStack);
+            attackerBattleStack.sort((a, b) => {
+              return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
+            })
+          }
+        }
+      }
+    }
+  }
+  return logs;
+}
+
 
 /**
  * Entry point for casting battle spells. This ensures the correct caster and affected army
@@ -396,12 +504,7 @@ const battleSpell = (
     if (filteredArmy.length === 0) continue;
 
     for (let num = 0; num < numTimes; num++) {
-      let randomIdx = -1;
-      if (targetType === 'random') {
-        randomIdx = randomInt(filteredArmy.length);
-      } else if (targetType === 'weightedRandom') {
-        randomIdx = Math.min(randomWeighted(), filteredArmy.length -1);
-      }
+      const randomIdx = randomStackIndex(filteredArmy, targetType);
 
       for (const effect of effects) {
         let affectedArmy: BattleStack[] = [];
@@ -657,6 +760,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   const defenderHasArmy = defender.army.length > 0;
 
+
+  // FIXME: Check that we can actually cast said spell!!!
   /**
    * Check if spell and item pass barriers
    * - spell goes throw two stages: barrier resist and magic resist.
@@ -847,6 +952,12 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       enchant,
       E.BattleEffect);
   });
+
+
+  // Unique item battle effects
+  applyUniqueItems('attack', attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
+  applyUniqueItems('defend', defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
+
 
   // Apply fort bonus to defender
   if (battleOptions.useFortBonus === true) {
@@ -1413,6 +1524,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   console.log('');
   console.log('>> Applying postbattle report ');
+
 
   // Calculate any post battle effects from enchantments or spells/items
   for (const enchant of attacker.mage.enchantments) {

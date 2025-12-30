@@ -9,8 +9,9 @@ import {
   getItemById,
   initializeResearchTree,
   getUnitById,
-  getAllItems,
+  getAllLesserItems,
   getRandomItem,
+  getAllUniqueItems,
 } from './base/references';
 import {
   createMage,
@@ -79,6 +80,8 @@ import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
+import uniqueItems from 'data/src/items/unique.json';
+
 import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
@@ -153,6 +156,7 @@ class Engine {
     initializeResearchTree();
 
     loadItemData(lesserItems);
+    loadItemData(uniqueItems);
 
 
     // Reset server data and defaults
@@ -176,6 +180,9 @@ class Engine {
       console.log('Resume from previous DB state ...');
       this.adapter.initialize(gameTable);
     }
+
+    // We need to (re)regiter unique items to ensure uniqueness
+    await this.adapter.registerUniqueItems(uniqueItems);
 
 
     // Create a several dummy mages for testing
@@ -666,6 +673,22 @@ class Engine {
       message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
     });
 
+    // Unique item effects
+    const uniqueItems = getAllUniqueItems().map(item => item.id);
+    const activeUniques: string[] = [];
+    for (const itemId of Object.keys(mage.items)) {
+      if (uniqueItems.includes(itemId)) {
+        activeUniques.push(itemId);
+      }
+    }
+    if (activeUniques.length > 0) {
+      turnLogs.push({
+        type: 'log',
+        message: `You are under the effects of ${activeUniques.join(', ')}`
+      });
+    }
+
+
     // Save turn chronicle to DB 
     this.adapter.saveChronicles([
       {
@@ -857,7 +880,10 @@ class Engine {
 
     for (const effect of item.effects) {
       if (effect.effectType === E.WishEffect) {
-        const result = applyWishEffect(mage, effect as any, origin);
+        const result = await applyWishEffect(mage, effect as any, origin, async (mage: Mage) => {
+          const result = await this._assignRandomUniqueItem(mage)
+          return result;
+        });
         logs.push(...fromWishEffectResult(result));
       } else if (effect.effectType === E.KingdomResourcesEffect) {
         const result = applyKingdomResourcesEffect(mage, effect as any, origin);
@@ -1147,7 +1173,7 @@ class Engine {
           const result = applyKingdomBuildingsEffect(mage, effect as any, origin);
           logs.push(...fromKingdomBuildingsEffectResult(result));
         } else if (effect.effectType === E.WishEffect) {
-          const wishResult = applyWishEffect(mage, effect as any, origin);
+          const wishResult = await applyWishEffect(mage, effect as any, origin, this._assignRandomUniqueItem);
           logs.push(...fromWishEffectResult(wishResult));
         } else if (effect.effectType === E.RemoveEnchantmentEffect) {
           const result = applyRemoveEnchantmentEffect(mage, effect as any, origin, null);
@@ -1933,7 +1959,7 @@ class Engine {
     const defaultUnitPrice = 1000000;
 
     console.log('initialize market pricing');
-    const items = getAllItems();
+    const items = getAllLesserItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
         item.id,
@@ -2069,6 +2095,20 @@ class Engine {
 
   async deleteMails(mage: Mage, ids: string[]) {
     return this.adapter.deleteMails(mage.id, ids);
+  }
+
+
+  // === Handle unique items ===
+  
+  // Call back 
+  async _assignRandomUniqueItem(mage: Mage) {
+    const availableUniques = await this.adapter.getAvailableUniqueItems();
+    if (availableUniques.length === 0) return null;
+
+    const chosen = _.shuffle(availableUniques)[0];
+    mage.items[chosen] = 1;
+    await this.adapter.assignUniqueItem(chosen, mage.id);
+    return chosen;
   }
 
 }
