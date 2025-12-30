@@ -38,7 +38,7 @@ export class SimpleDataAdapter extends DataAdapter {
   marketItemTable: MarketItem[] = [];
   marketBidTable: MarketBid[] = [];
 
-  uniqueItemTable: Map<string, number>;
+  uniqueItemTable: Map<string, number> = new Map();
 
   clock: ServerClock = {
     currentTurnTime: Date.now(),
