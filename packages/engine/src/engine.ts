@@ -11,6 +11,7 @@ import {
   getUnitById,
   getAllLesserItems,
   getRandomItem,
+  getAllUniqueItems,
 } from './base/references';
 import {
   createMage,
@@ -671,6 +672,22 @@ class Engine {
       type: 'log',
       message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
     });
+
+    // Unique item effects
+    const uniqueItems = getAllUniqueItems().map(item => item.id);
+    const activeUniques: string[] = [];
+    for (const itemId of Object.keys(mage.items)) {
+      if (uniqueItems.includes(itemId)) {
+        activeUniques.push(itemId);
+      }
+    }
+    if (activeUniques.length > 0) {
+      turnLogs.push({
+        type: 'log',
+        message: `You are under the effects of ${activeUniques.join(', ')}`
+      });
+    }
+
 
     // Save turn chronicle to DB 
     this.adapter.saveChronicles([

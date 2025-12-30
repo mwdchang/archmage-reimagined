@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
-import { getUnitById } from "./base/references";
+import { getAllUniqueItems, getUnitById } from "./base/references";
 import { productionTable, gameTable } from "./base/config";
 import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
@@ -272,6 +272,7 @@ export const geldIncome = (mage: Mage) => {
   const baseIncome = mage.currentPopulation + 1000;
   let delta = 0
 
+  // Enchantment effects
   for (const enchantment of mage.enchantments) {
     const spell = getSpellById(enchantment.spellId);
     const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
@@ -287,12 +288,36 @@ export const geldIncome = (mage: Mage) => {
       } else if (effect.rule === 'addSpellLevelPercentageBase') {
         const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
         delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel / maxSpellLevel * baseIncome;
+      } else if (effect.rule === 'add') {
+        delta += effect.magic[enchantment.casterMagic].value;
       } else {
         throw new Error(`Unknown rule ${effect.rule}`);
       }
     }
   }
-  return baseIncome + delta;
+
+  // Unique item effects
+  const uniqueItems = getAllUniqueItems()
+  let itemDelta = 0;
+  for (const itemId of Object.keys(mage.items)) {
+    const uitem = uniqueItems.find(d => d.id === itemId);
+    if (!uitem) continue;
+
+    console.log('unique item', uitem.id);
+    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+    
+    for (const effect of productionEffects) {
+      if (effect.production !== 'geld') continue; 
+
+      if (effect.rule === 'addPercentageBase') {
+        itemDelta += effect.magic[mage.magic].value * baseIncome;
+      } else if (effect.rule === 'add') {
+        itemDelta += effect.magic[mage.magic].value;
+      }
+    }
+  }
+  return baseIncome + delta + itemDelta;
 }
 
 

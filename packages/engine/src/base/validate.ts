@@ -239,7 +239,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
     const effect = eff as ProductionEffect;
 
     if (![ 
-      'spellLevel', 'addPercentageBase', 'addSpellLevelPercentageBase'
+      'add', 'spellLevel', 'addPercentageBase', 'addSpellLevelPercentageBase'
     ].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
