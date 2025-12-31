@@ -2,7 +2,7 @@
   {
     "id": "pouchOfInfiniteWealth",
     "name": "Pouch Of Infinite Wealth",
-    "description": "",
+    "description": "It looks like an ordinary leather bag with a hundred coins in it. After you empty the pouch, you throw it into the corner. But the next day, to your surprise, you find that it is filled with coins. And you know that this must be the legendary Pouch of Infinite Wealth. So you begin to empty it again and wait...",
     "attributes": ["unique"],
     "weight": 100,
     "chargeTurns": 0,
@@ -18,6 +18,29 @@
           "eradication": { "value": 300000 },
           "nether": { "value": 300000 },
           "phantasm": { "value": 300000 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "theCrystalOfTear",
+    "name": "The Crystal Of Tear",
+    "description": "This blue crystal is in the shape of a teardrop. When it is placed underneath the open sky, it glows under the moonlight. You can feel the energy of the moon beams flowing into the crystal when you touch the crystal with your finger. The magic power in the crystal suddenly begins to flow into your body, and you suddenly understand that this is the legendary Crystal Tear",
+    "attributes": ["unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "add",
+        "production": "mana",
+        "magic": {
+          "ascendant": { "value": 4000 },
+          "verdant": { "value": 4000 },
+          "eradication": { "value": 4000 },
+          "nether": { "value": 4000 },
+          "phantasm": { "value": 4000 }
         }
       }
     ]
@@ -56,5 +79,41 @@
         ]
       }
     ]
+  },
+  {
+    "id": "pansFlue",
+    "name": "Pan's Flute",
+    "description": "It appears to be a normal instrument, but when you play it, it gives off such a beautiful melody that everyone nearby stops what they are doing to listen to the music. Your enemies can do nothing but listen to the music, thus weakening their attack.",
+    "attributes": ["battle", "unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": -0.10 },
+                  "verdant": { "value": -0.10 },
+                  "eradication": { "value": -0.10 },
+                  "nether": { "value": -0.10 },
+                  "phantasm": { "value": -0.10 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
+
 ]

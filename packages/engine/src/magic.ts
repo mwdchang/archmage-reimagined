@@ -257,7 +257,7 @@ export const manaIncome = (mage: Mage) => {
     if (productionEffects.length === 0) continue;
 
     for (const effect of productionEffects) {
-      if (effect.production !== 'population') continue; 
+      if (effect.production !== 'mana') continue; 
 
       const rule = effect.rule;
       if (rule === 'addPercentageBase') {
