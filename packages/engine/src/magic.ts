@@ -10,6 +10,7 @@ import {
   getMaxSpellLevels,
   getResearchTree,
   getRandomItem,
+  getAllUniqueItems,
 } from './base/references';
 import { totalLand, currentSpellLevel } from './base/mage';
 import { randomBM, randomInt } from './random';
@@ -220,7 +221,7 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = x * land * (110 - x) / 1000;
   // const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
 
-  let valueBuffer = 0;
+  let enchantDelta = 0;
   for (const enchantment of mage.enchantments) {
     const spell = getSpellById(enchantment.spellId);
     const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
@@ -234,19 +235,41 @@ export const manaIncome = (mage: Mage) => {
 
       const rule = effect.rule;
       if (rule === 'spellLevel') {
-        valueBuffer += base.value * enchantment.spellLevel;
+        enchantDelta += base.value * enchantment.spellLevel;
       } else if (rule === 'addPercentageBase') {
-        valueBuffer += manaYield * base.value;
+        enchantDelta += manaYield * base.value;
+      } else if (rule === 'add') {
+        enchantDelta += base.value;
       } else {
         throw new Error(`Unknown rule ${effect.rule}`);
       }
     }
   }
 
-
   // Unique item effects
+  const uniqueItems = getAllUniqueItems()
+  let itemDelta = 0;
+  for (const itemId of Object.keys(mage.items)) {
+    const uitem = uniqueItems.find(d => d.id === itemId);
+    if (!uitem) continue;
 
-  return Math.floor(manaYield + valueBuffer);
+    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+
+    for (const effect of productionEffects) {
+      if (effect.production !== 'population') continue; 
+
+      const rule = effect.rule;
+      if (rule === 'addPercentageBase') {
+        itemDelta += manaYield * effect.magic[mage.magic].value;
+      } else if (rule === 'add') {
+        itemDelta += effect.magic[mage.magic].value;
+      } else {
+        throw new Error(`Unknown rule ${effect.rule}`);
+      }
+    }
+  }
+  return Math.floor(manaYield + enchantDelta + itemDelta);
 }
 
 /**
