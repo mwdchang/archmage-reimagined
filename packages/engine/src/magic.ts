@@ -227,7 +227,7 @@ export const manaIncome = (mage: Mage) => {
     if (productionEffects.length === 0) continue;
 
     for (const effect of productionEffects) {
-      if (effect.production !== 'nodes') continue;
+      if (effect.production !== 'mana') continue;
 
       const base = effect.magic[enchantment.casterMagic];
       if (!base) continue;
@@ -243,7 +243,10 @@ export const manaIncome = (mage: Mage) => {
     }
   }
 
-  return Math.floor(manaYield);
+
+  // Unique item effects
+
+  return Math.floor(manaYield + valueBuffer);
 }
 
 /**

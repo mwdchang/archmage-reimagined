@@ -245,7 +245,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
     }
 
     if (![ 
-      'farms', 'guilds', 'nodes', 'geld', 'population', 'land', 'barrack'
+      'farms', 'guilds', 'mana', 'geld', 'population', 'land', 'barrack'
     ].includes(effect.production)) {
       throw new Error(`${refId}:${effect.effectType} production ${effect.production} not valid`);
     }
