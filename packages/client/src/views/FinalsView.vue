@@ -10,11 +10,12 @@
     </p>
   </section>
   <section v-if="serverClock && resetEnded === true">
-    <p> 
-      Terra has been obliterated, these are the mages who have gained their place in the Hall of Immmortality
+    <h1> Terra is obliterated</h1>
+    <p style="margin-bottom: 0.5rem"> 
+     These are the mages who have gained their place in the Hall of Immmortality. The cycle will restart soon.
     </p>
 
-    <table> 
+    <table style="min-width: 30rem"> 
       <thead>
         <tr>
           <td>Rank</td>
@@ -30,7 +31,7 @@
         <tr v-for="(rank) of rankList" :key="rank.id">
           <td class="text-right"> {{ rank.rank }} </td>
           <td> {{ rank.name }} (#{{ rank.id }}) </td>
-          <td> <magic :magic="rank.magic" small /> </td>
+          <td> <Magic :magic="rank.magic" small /> </td>
           <td class="text-right"> {{ readableNumber(rank.land) }} </td>
           <td class="text-right"> {{ rank.forts }} </td>
           <td class="text-right"> {{ readableNumber(rank.netPower) }} </td>
@@ -46,6 +47,7 @@ import { API } from '@/api/api';
 import { onMounted, ref } from 'vue';
 import { MageRank, ServerClock } from 'shared/types/common';
 import { readableNumber } from '@/util/util';
+import Magic from '@/components/magic.vue';
 
 const rankList = ref<MageRank[]>([]);
 

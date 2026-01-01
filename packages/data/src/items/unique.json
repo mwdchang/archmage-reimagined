@@ -114,6 +114,16 @@
         ]
       }
     ]
+  },
+  {
+    "id": "tomeOfTheYetis",
+    "name": "Tome Of The Yetis",
+    "description": "You feel a strong power emanating from this ancient tome. Its pages are filled with arcane incantations you have never come across before. In the corner of each page is a small drawing of a red fish. All of a sudden, you are reminded of the herring feast you held last winter…",
+    "attributes": ["oneUse", "instant", "selfOnly", "unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+    ]
   }
-
 ]
