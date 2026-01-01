@@ -1,8 +1,12 @@
 <template>
   <main class="about" v-if="mageStore.mage">
-    <h3>
-      <router-link to="/manage" class="row" style="align-items: center">
-        {{ mageStore.mage.name }} (# {{ mageStore.mage.id }})
+    <h3> 
+      <router-link to="/manage"> 
+        {{ mageStore.mage.name }} (# {{ mageStore.mage.id }}) 
+        <sup class="unread-badge" style="color: #f80"
+          v-if="unreadMails > 0">
+          {{ unreadMails }} <svg-icon :name="'message'" />
+        </sup>
       </router-link>
     </h3>
     <div>Ranking {{ mageStore.mage.rank }}, Net power {{ readableNumber(totalNetPower(mageStore.mage)) }} </div>
@@ -137,12 +141,14 @@ import { manaStorage } from 'engine/src/magic';
 import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
-import { ChronicleTurn, GameTable } from 'shared/types/common';
+import { ChronicleTurn, GameTable, Mail } from 'shared/types/common';
 import { readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();
 const logs = ref<ChronicleTurn[]>([]);
+
+const unreadMails = ref(0);
 
 const gameTable = ref<GameTable | null>(null);
 
@@ -172,6 +178,10 @@ onMounted(async () => {
   logs.value = res.data.chronicles;
 
   gameTable.value = (await API.get<GameTable>('/game-table')).data;
+
+
+  const mail = (await API.get<{ mails: Mail[]}>('/mails')).data.mails;
+  unreadMails.value = mail.filter(d => d.read === false).length;
 });
 
 </script>
@@ -232,21 +242,13 @@ onMounted(async () => {
 }
 
 .unread-badge {
-  /*
-  width: 12px;
-  height: 12px;
-  background-color: red;
-  border-radius: 50%;
-  */
   animation: pulse 1.5s infinite;
-  top: 5px;
-  right: 5px;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {  opacity: 1; }
+  50% {  opacity: 0.5; }
+  100% {  opacity: 1; }
 }
 
 /*

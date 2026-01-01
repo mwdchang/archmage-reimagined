@@ -601,7 +601,7 @@ class Engine {
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient geld',
-        content: `You have lost some resources on Turn ${mage.currentTurn}`,
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
         target: mage.id,
         source: KingdomAdvisorId,
         priority: 200
@@ -644,7 +644,7 @@ class Engine {
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient mana',
-        content: `You have lost some resources on Turn ${mage.currentTurn}`,
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
         target: mage.id,
         source: KingdomAdvisorId,
         priority: 200
@@ -682,7 +682,7 @@ class Engine {
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient population',
-        content: `You have lost some resources on Turn ${mage.currentTurn}`,
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
         target: mage.id,
         source: KingdomAdvisorId,
         priority: 200
