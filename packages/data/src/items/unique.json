@@ -116,6 +116,45 @@
     ]
   },
   {
+    "id": "theApparatus",
+    "name": "The Apparatus",
+    "description": "This strange and bulky machine has many strange levers and buttons on it . You have no idea how to operate it, but it gives out a weird noise as if something is being fixed inside of it. Suddenly a large puddle spills out of the machine and slowly takes the shape of a monster.",
+    "attributes": ["unique"],
+    "weight": 100,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["chimera", "hydra"],
+        "summonType": "all",
+        "summonNetPower": 40,
+        "rule": "fixed",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 },
+          "verdant": { "value": 1.0 }
+        }
+      },
+      {
+        "effectType": "UnitSummonEffect",
+        "unitIds": ["hellHound", "salamander"],
+        "summonType": "all",
+        "summonNetPower": 80,
+        "rule": "fixed",
+        "magic": {
+          "ascendant": { "value": 1.0 },
+          "eradication": { "value": 1.0 },
+          "nether": { "value": 1.0 },
+          "phantasm": { "value": 1.0 },
+          "verdant": { "value": 1.0 }
+        }
+      }
+    ]
+  },
+  {
     "id": "tomeOfTheYetis",
     "name": "Tome Of The Yetis",
     "description": "You feel a strong power emanating from this ancient tome. Its pages are filled with arcane incantations you have never come across before. In the corner of each page is a small drawing of a red fish. All of a sudden, you are reminded of the herring feast you held last winter…",

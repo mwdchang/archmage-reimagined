@@ -250,7 +250,7 @@ export interface WishEffect extends Effect<E.WishEffect> {
     max: number;
   } | null,
   rolls: {
-    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | null,
+    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | 'uniqueItem' | 'land' | null,
     min: number,
     max: number,
     weight: number
