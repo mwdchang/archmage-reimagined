@@ -212,6 +212,15 @@
           <td class="text-right"> {{ e.spellLevel }} </td>
           <td class="text-right"> {{ e.life ? e.life : '-' }} </td>
         </tr>
+        <tr v-for="(itemId, idx) of uniqueItemEnchantments" :key="idx">
+          <td>
+            <router-link :to="{ name: 'viewItem', params: { id: itemId }}"> 
+              {{ readableStr(itemId) }}
+            </router-link>
+          </td>
+          <td class="text-right">-</td> 
+          <td class="text-right">-</td>
+        </tr>
       </tbody>
     </table>
 
@@ -317,7 +326,7 @@ import {
 import Magic from '@/components/magic.vue';
 import { readableNumber, readableStr } from '@/util/util';  
 import { allowedMagicList } from 'shared/src/common';
-import { getUnitById } from 'engine/src/base/references';
+import { getAllUniqueItems, getUnitById } from 'engine/src/base/references';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
@@ -357,6 +366,12 @@ const unitsStatus = computed(() => {
   let rawArmy = getArmy(mageStore.mage);
 
   return rawArmy.sort((a, b) => b.power - a.power);
+});
+
+const uniqueItemEnchantments = computed(() => {
+  const uniques = getAllUniqueItems().map(d => d.id);;
+
+  return Object.keys(mageStore.mage!.items).filter(d => uniques.includes(d));
 });
 
 </script>

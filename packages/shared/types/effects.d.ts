@@ -207,7 +207,7 @@ export interface KingdomArmyEffect extends Effect<E.KingdomArmyEffect> {
 
 export interface ProductionEffect extends Effect<E.ProductionEffect> {
   rule: 'spellLevel' | 'addPercentageBase' | 'addSpellLevelPercentageBase' | 'add',
-  production: 'farms' | 'guilds' | 'nodes' | 'geld' | 'population' | 'land' | 'barrack',
+  production: 'farms' | 'guilds' | 'mana' | 'geld' | 'population' | 'land' | 'barrack',
   magic: {
     [key in AllowedMagic]: {
       value: number
@@ -250,7 +250,7 @@ export interface WishEffect extends Effect<E.WishEffect> {
     max: number;
   } | null,
   rolls: {
-    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | null,
+    target: 'geld' | 'population' | 'mana' | 'turn' | 'item' | 'uniqueItem' | 'land' | null,
     min: number,
     max: number,
     weight: number

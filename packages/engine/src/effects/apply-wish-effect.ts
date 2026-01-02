@@ -132,6 +132,16 @@ export const applyWishEffect = async (
           value: 1
         });
       }
+    } else if (target === 'land') {
+      if (value > 0) {
+        mage.wilderness += value;
+        wishResult.results.push({
+          target: 'land',
+          value: value
+        });
+      } else {
+        throw new Error('Negative land wish effect not supported');
+      }
     } else if (target === null) {
       wishResult.results.push({
         target: null,

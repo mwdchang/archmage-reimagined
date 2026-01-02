@@ -896,7 +896,7 @@
       {
         "effectType": "ProductionEffect",
         "rule": "spellLevel",
-        "production": "nodes",
+        "production": "mana",
         "magic": {
           "nether": { "value": 7 }
         }

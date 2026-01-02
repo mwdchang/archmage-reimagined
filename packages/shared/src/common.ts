@@ -38,4 +38,5 @@ export const enum allowedEffect {
 
 
 export const BlackMarketId = -2;
+export const KingdomAdvisorId = -3;
 

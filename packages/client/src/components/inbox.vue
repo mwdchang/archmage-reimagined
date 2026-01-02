@@ -7,11 +7,20 @@
           :proxy-fn="compose"
           :label="'Compose'" />
 
-        <ActionButton 
-          v-if="currentView === 'listView'"
-          :proxy-fn="deleteBM"
-          :type="'warn'"
-          :label="'Delete BM'" />
+        <div class="row" style="gap: 0.5rem">
+          <ActionButton 
+            v-if="currentView === 'listView'"
+            :proxy-fn="deleteBM"
+            :type="'warn'"
+            :label="'Delete BM'" />
+
+          <ActionButton 
+            v-if="currentView === 'listView'"
+            :proxy-fn="markAllRead"
+            :type="'warn'"
+            :label="'Mark all read'" />
+        </div>
+
 
       </div>
     </section>
@@ -210,6 +219,14 @@ const deleteMail = async () => {
 const deleteBM = async () => {
   const bmMailIds = mails.value.filter(m => m.source === BlackMarketId).map(m => m.id);
   await _delete(bmMailIds);
+};
+
+const markAllRead = async () => {
+  const unread = mails.value.filter(m => m.read === false).map(m => m.id);
+  if (unread.length > 0) {
+    API.post('/read-mails', { ids: unread });
+  }
+  refreshMails();
 };
 
 const sendNewMail = async () => {

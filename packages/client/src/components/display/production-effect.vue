@@ -12,6 +12,10 @@
       Modify {{ productionStr(effect.production) }} by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 
+    <div v-if="effect.rule === 'add'" class="row">
+      Modify {{ productionStr(effect.production) }} by <span class="special-text">value</span>
+    </div>
+
     <div 
       v-for="(magic) of allowedMagicList"
       style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">

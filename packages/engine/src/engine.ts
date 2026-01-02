@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { allowedEffect as E } from "shared/src/common";
+import { allowedEffect as E, KingdomAdvisorId } from "shared/src/common";
 import {
   loadUnitData,
   loadSpellData,
@@ -169,7 +169,7 @@ class Engine {
       await this.adapter.setServerClock({
         currentTurn: 0,
         currentTurnTime: Date.now(),
-        endTurn: 25000,
+        endTurn: 100,
         interval: gameTable.turnRate * 1000, 
         startTime: Date.now()
       });
@@ -276,6 +276,46 @@ class Engine {
     for (let i = 0; i < turns; i++) {
       await this.useTurn(mage);
     }
+  }
+
+  processUniqueItemSummon(mage: Mage) {
+    const activeUniqueItems: Item[] = [];
+    for (const itemId of Object.keys(mage.items)) {
+      const item = uniqueItems.find(d => d.id === itemId);
+      if (item && item.attributes.includes('oneUse') === false) {
+        activeUniqueItems.push(item);
+      }
+    }
+
+    const logs: GameMsg[] = [];
+    for (const item of activeUniqueItems) {
+      const summonEffects = item.effects.filter(d => d.effectType === E.UnitSummonEffect) as UnitSummonEffect[];
+      if (summonEffects.length === 0) continue;
+      for (const summonEffect of summonEffects) {
+        const res = summonUnit(summonEffect, {
+          id: mage.id,
+          magic: mage.magic,
+          spellLevel: currentSpellLevel(mage),
+          targetId: mage.id
+        });
+        Object.keys(res).forEach(key => {
+          const stack = mage.army.find(d => d.id === key);
+          if (stack) {
+            stack.size += res[key];
+          } else {
+            mage.army.push({
+              id: key,
+              size: res[key]
+            });
+          }
+          logs.push({
+            type: 'log',
+            message: `${res[key]} ${readableStr(key)} joined your army`
+          });
+        });
+      }
+    }
+    return logs;
   }
 
   processTurnEnchantmentSummon(mage: Mage, enchantments: Enchantment[]): GameMsg[] {
@@ -404,6 +444,8 @@ class Engine {
     const beforeMana = mage.currentMana;
     const beforePopuplation = mage.currentPopulation;
 
+    // Add income to geld/mana/population, these includes the effect of 
+    // unique items
     mage.currentGeld += geldIncome(mage);
     mage.currentPopulation += populationIncome(mage);
     mage.currentMana += manaIncome(mage);
@@ -450,7 +492,10 @@ class Engine {
     const enchantments = mage.enchantments;
     const enchantSummmonResults = this.processTurnEnchantmentSummon(mage, enchantments);
     const enchantDamageResults  = this.processTurnEnchantmentDamage(mage, enchantments);
+    const itemSummonResults = this.processUniqueItemSummon(mage);
+
     turnLogs.push(...enchantSummmonResults);
+    turnLogs.push(...itemSummonResults);
     turnLogs.push(...enchantDamageResults);
 
 
@@ -553,6 +598,15 @@ class Engine {
 
     if (mage.currentGeld < 0) { 
       console.log('insufficient geld'); 
+      this.saveMail(mage, {
+        type: 'normal',
+        subject: '[Alert] Insufficient geld',
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
+        target: mage.id,
+        source: KingdomAdvisorId,
+        priority: 200
+      });
+
       mage.currentGeld = 0;
       implosions.sort((a, b) => b.data.geld - a.data.geld);
       const target = implosions[0];
@@ -587,6 +641,15 @@ class Engine {
 
     if (mage.currentMana < 0) {
       console.log('insufficient mana'); 
+      this.saveMail(mage, {
+        type: 'normal',
+        subject: '[Alert] Insufficient mana',
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
+        target: mage.id,
+        source: KingdomAdvisorId,
+        priority: 200
+      });
+
       mage.currentMana = 0;
       implosions.sort((a, b) => b.data.mana - a.data.mana);
       const target = implosions[0];
@@ -616,6 +679,15 @@ class Engine {
 
     if (mage.currentPopulation < 0) {
       console.log('insufficient population'); 
+      this.saveMail(mage, {
+        type: 'normal',
+        subject: '[Alert] Insufficient population',
+        content: `You have lost some resources on Turn ${mage.turnsUsed}`,
+        target: mage.id,
+        source: KingdomAdvisorId,
+        priority: 200
+      });
+
       mage.currentPopulation = 0;
       implosions.sort((a, b) => b.data.population - a.data.population);
       const target = implosions[0];
@@ -674,17 +746,19 @@ class Engine {
     });
 
     // Unique item effects
-    const uniqueItems = getAllUniqueItems().map(item => item.id);
-    const activeUniques: string[] = [];
+    const uniqueItems = getAllUniqueItems();
+
+    const activeUniques: Item[] = [];
     for (const itemId of Object.keys(mage.items)) {
-      if (uniqueItems.includes(itemId)) {
-        activeUniques.push(itemId);
+      const item = uniqueItems.find(d => d.id === itemId);
+      if (item && item.attributes.includes('oneUse') === false) {
+        activeUniques.push(item);
       }
     }
     if (activeUniques.length > 0) {
       turnLogs.push({
         type: 'log',
-        message: `You are under the effects of ${activeUniques.join(', ')}`
+        message: `You are under the effects of ${activeUniques.map(d => d.id).join(', ')}`
       });
     }
 
@@ -813,7 +887,6 @@ class Engine {
         learnedSpells[key] = after[key];
       }
     }
-
     await this.adapter.updateMage(mage);
     return learnedSpells;
   }
@@ -821,6 +894,11 @@ class Engine {
 
   async useItem(mage: Mage, itemId: string, num: number, target: number) {
     const logs: GameMsg[] = [];
+    const uniqueItems = getAllUniqueItems();
+    if (uniqueItems.find(d => d.id === itemId)) {
+      this.adapter.assignUniqueItem(itemId, 0);
+      console.log(`Releasing ${itemId} back to unique pool`);
+    }
 
     const item = getItemById(itemId);
     if (target) {
