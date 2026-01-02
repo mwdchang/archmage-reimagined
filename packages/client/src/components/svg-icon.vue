@@ -111,6 +111,13 @@ const iconMap = {
       <line x1="8" y1="8" x2="16" y2="16" />
       <line x1="16" y1="8" x2="8" y2="16" />
     </svg>
+  `,
+  message: `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+      fill="none" stroke="currentColor" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="1.75 21.25,1.75 9.75,14.25 9.75,14.25 18.25,5.75 18.25"/>
+    </svg>
   `
 }
 

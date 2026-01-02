@@ -946,7 +946,7 @@
       {
         "effectType": "ProductionEffect",
         "rule": "addPercentageBase",
-        "production": "nodes",
+        "production": "mana",
         "magic": {
           "ascendant": { "value": -0.15 }
         }

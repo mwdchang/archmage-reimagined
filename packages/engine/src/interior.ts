@@ -191,6 +191,7 @@ export const maxFood = (mage: Mage) => {
       }
     });
   })
+
   return food;
 }
 
@@ -265,7 +266,27 @@ export const populationIncome = (mage: Mage) => {
     }
   }
 
-  return baseIncome + delta;
+  // Unique item effects
+  const uniqueItems = getAllUniqueItems()
+  let itemDelta = 0;
+  for (const itemId of Object.keys(mage.items)) {
+    const uitem = uniqueItems.find(d => d.id === itemId);
+    if (!uitem) continue;
+
+    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
+    if (productionEffects.length === 0) continue;
+    
+    for (const effect of productionEffects) {
+      if (effect.production !== 'population') continue; 
+
+      if (effect.rule === 'addPercentageBase') {
+        itemDelta += effect.magic[mage.magic].value * baseIncome;
+      } else if (effect.rule === 'add') {
+        itemDelta += effect.magic[mage.magic].value;
+      }
+    }
+  }
+  return baseIncome + delta + itemDelta;
 }
 
 export const geldIncome = (mage: Mage) => {

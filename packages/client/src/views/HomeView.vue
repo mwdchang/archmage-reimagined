@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main style="margin-bottom: 0.5rem">
     <h1 style="margin-bottom: 5px"> Archmage Reimagined </h1>
     <p style="max-width: 50rem; line-height: 1.25">
       Archmage Reimagined is a reimagination of the classica MMORPG Archmage, with new features and twists designed to be exciting for a modern audience.
@@ -7,14 +7,14 @@
     <br>
     <div v-if="mode === 'registerMode'">
       <Register /> 
-      <div> 
+      <div style="font-size: 1.25rem"> 
         If you already have a mage, <a @click="mode = 'loginMode'">login</a> here
       </div>
     </div>
     <div v-if="mode === 'loginMode'">
       <Login />
-      <div> 
-        If you do not have an account , you can <a @click="mode = 'registerMode'">reincarnate</a> a new mage.
+      <div style="font-size: 1.25rem"> 
+        If you do not have an account , you can <a @click="mode = 'registerMode'">reincarnate a new mage. </a>
       </div>
     </div>
   </main>

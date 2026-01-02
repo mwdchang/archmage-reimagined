@@ -1202,7 +1202,7 @@
   {
     "id": "treasureChest",
     "name": "Treasure Chest",
-    "description": "",
+    "description": "The treasure chest is crafted of sturdy, dark wood and a strong lock. It may reward its finder with treasure, or the finder may end up with just an empty chest.",
     "attributes": ["oneUse", "instant", "selfOnly", "lesser"],
     "weight": 10,
     "chargeTurns": 0,
@@ -1237,7 +1237,33 @@
             "target": "uniqueItem",
             "min": 1,
             "max": 1,
-            "weight": 10 
+            "weight": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "magicCompass",
+    "name": "Magic Compass",
+    "description": "This simple-looking compass, for whatever reason, does not point north. On a whim, you decide to follow its direction and are somewhat surprised to come upon a patch of unclaimed, fertile land.",
+    "attributes": ["oneUse", "instant", "selfOnly", "lesser"],
+    "weight": 10,
+    "chargeTurns": 0,
+    "upkeep": null,
+    "effects": [
+      {
+        "effectType": "WishEffect",
+        "trigger": {
+          "min": 1,
+          "max": 1
+        },
+        "rolls": [
+          {
+            "target": "land",
+            "min": 10,
+            "max": 100,
+            "weight": 100 
           }
         ]
       }

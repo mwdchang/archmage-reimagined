@@ -998,7 +998,7 @@ WHERE username = '${user.username}'
     await this.db.exec(`
       UPDATE mail
       SET read = true
-      WHERE id = (${ids.map(Q).join(', ')})
+      WHERE id in (${ids.map(Q).join(', ')})
       AND target = ${mageId}
     `);
   }
