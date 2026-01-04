@@ -101,7 +101,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
-import { Bid, MarketItem, MarketPrice } from 'shared/types/market';
+import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/types/market';
 import { 
   generateMarketItems,
   getMarketableSpells,
@@ -2033,6 +2033,7 @@ class Engine {
     return _.clone(gameTable);
   }
 
+  // === Market related APIs ===
   async initializeMarket() {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
@@ -2152,6 +2153,48 @@ class Engine {
 
   async getMarketBids(priceId: string) {
     return this.adapter.getMarketBids(priceId);
+  }
+
+
+  // async makeMarketBids(mageId: number, bids: Bid[]): Promise<Mage> {
+  async sellItems(mageId: number, sellItems: SellItem[]) {
+    const mage = await this.adapter.getMage(mageId);
+
+    // sanity check
+    for (const item of sellItems) {
+      if (!mage.items[item.itemId]) {
+        throw new Error(`You do not have ${item.itemId} to sell`);
+      }
+      if (item.sellAmt > mage.items[item.itemId]) {
+        throw new Error(`You are trying to sell ${item.sellAmt} ${readableStr(item.itemId)} but you only have ${item.size}`);
+      }
+    }
+
+    // Get current prices
+    const marketPrices = await this.adapter.getMarketPrices();
+    const priceMap: Map<string, MarketPrice> = new Map();
+    for (const marketPrice of marketPrices) {
+      priceMap.set(marketPrice.id, marketPrice);
+    }
+
+    for (const item of sellItems) {
+      for (let i = 0; i < item.sellAmt; i++) {
+        this.adapter.addMarketItem({
+          id: uuidv4(),
+          priceId: item.itemId,
+          basePrice: priceMap.get(item.itemId).price,
+          expiration: this.currentTurn + 180,
+          mageId: mage.id // Need to mark the seller is human
+        });
+        mage.items[item.itemId] --;
+      }
+      // Clean up
+      if (mage.items[item.itemId] <= 0) {
+        delete mage.items[item.itemId];
+      }
+    }
+    await this.adapter.updateMage(mage);
+    return mage;
   }
 
 
