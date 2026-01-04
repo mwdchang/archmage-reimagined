@@ -64,7 +64,7 @@
             </router-link>
           </p>
         </div>
-        <div v-else>
+        <div v-if="tabView === 'special'">
           <p> Special and passive items</p>
         </div>
       </section>

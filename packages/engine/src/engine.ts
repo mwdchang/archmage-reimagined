@@ -974,6 +974,11 @@ class Engine {
         logs.push(...result);
       }
     }
+
+    logs.push({
+      type: 'log',
+      message: 'The item is destroyed after use'
+    });
     return logs
   }
 
