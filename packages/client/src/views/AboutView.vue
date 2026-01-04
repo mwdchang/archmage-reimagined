@@ -115,7 +115,7 @@
 
     <div class="chronicles" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
-        <div style="font-weight: 600">Turn {{turn.turn}}: </div>
+        <div style="font-weight: 600">Turn {{turn.turn}}: {{ readableDate(turn.timestamp) }} </div>
         <div v-for="(log) in turn.data">
           <div v-if="log.type === 'battleLog'">
             <router-link :to="{ name: 'battleResult', params: { id: log.id }}"> 
@@ -142,7 +142,7 @@ import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
 import { ChronicleTurn, GameTable, Mail } from 'shared/types/common';
-import { readableNumber } from '@/util/util';
+import { readableNumber, readableDate } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 
 const mageStore = useMageStore();

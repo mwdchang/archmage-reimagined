@@ -359,8 +359,6 @@ main {
   gap: 0.6rem 1.25rem;
 }
 
-
-
 .grid-item {
   background-color: #212120;
   padding: 0.45rem 1rem;

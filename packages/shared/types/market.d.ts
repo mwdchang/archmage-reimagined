@@ -35,3 +35,11 @@ export interface BidContainer {
   bid: number
 }
 
+export interface SellItem {
+  itemId: string;
+  size: number;
+  price: number;
+  sellAmt: number;
+}
+
+

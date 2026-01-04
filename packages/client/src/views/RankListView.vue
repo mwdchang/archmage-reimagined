@@ -6,7 +6,7 @@
       <label>Hide mages not in attack range</label>
     </div>
   </section>
-  <table v-if="mageStore.mage">
+  <table v-if="mageStore.mage" style="min-width: 28rem">
     <tbody>
       <tr>
         <td>Rank</td>
