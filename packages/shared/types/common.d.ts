@@ -44,6 +44,7 @@ export interface GameTable {
     commission: number;
     priceIncreaseFactor: number;
     priceDecreaseFactor: number;
+    sellingTimeOnMarket: number;
   }
 }
 

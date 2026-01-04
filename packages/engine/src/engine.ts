@@ -2183,7 +2183,7 @@ class Engine {
           id: uuidv4(),
           priceId: item.itemId,
           basePrice: priceMap.get(item.itemId).price,
-          expiration: this.currentTurn + 180,
+          expiration: this.currentTurn + gameTable.blackmarket.sellingTimeOnMarket,
           mageId: mage.id // Need to mark the seller is human
         });
         mage.items[item.itemId] --;
