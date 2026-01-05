@@ -111,6 +111,7 @@ import {
   resolveWinningBids
 } from './blackmarket';
 import { spellOrItemReportSummary } from './battle/new-battle-report';
+import { createLogger } from './logger';
 
 const EPIDEMIC_RATE = 0.5;
 const ITEM_WINK_RATE = 0.2;
@@ -123,6 +124,8 @@ const totalArmyPower = (army: ArmyUnit[]) => {
   });
   return netpower;
 }
+
+const logger = createLogger('Main');
 
 class Engine {
   adapter: DataAdapter;
@@ -161,7 +164,7 @@ class Engine {
 
     // Reset server data and defaults
     if (resetData === true) {
-      console.log('Restarting from scratch ...');
+      logger('Restarting from scratch ...');
       await this.adapter.resetData();
       await this.adapter.initialize(gameTable);
 
@@ -177,7 +180,7 @@ class Engine {
       // Setart market
       await this.initializeMarket();
     } else {
-      console.log('Resume from previous DB state ...');
+      logger('Resume from previous DB state ...');
       this.adapter.initialize(gameTable);
     }
 
@@ -192,7 +195,7 @@ class Engine {
 
       const mage = await this.getMageByUser(name);
       if (!mage) {
-        console.log('creating test mage', name);
+        logger('creating robot mage', name);
 
         const newId = await this.adapter.nextMageId();
         const bot = createBot(newId, name, magic);
@@ -241,11 +244,11 @@ class Engine {
     this.currentTurn = c.currentTurn;
 
     if (this.currentTurn > c.endTurn) {
-      console.log('=== Reset finished ===');
+      logger('=== Reset finished ===');
       return;
     }
-    console.log('');
-    console.log(`=== Server turn [${this.currentTurn}]===`);
+    logger('');
+    logger(`=== Server turn [${this.currentTurn}] ===`);
 
     const marketItems = await this.adapter.getMarketItems();
     const marketPrices = await this.adapter.getMarketPrices();
@@ -897,7 +900,7 @@ class Engine {
     const uniqueItems = getAllUniqueItems();
     if (uniqueItems.find(d => d.id === itemId)) {
       this.adapter.assignUniqueItem(itemId, 0);
-      console.log(`Releasing ${itemId} back to unique pool`);
+      logger(`Releasing ${itemId} back to unique pool`);
     }
 
     const item = getItemById(itemId);
@@ -2042,7 +2045,7 @@ class Engine {
     const defaultSpellPrice = 1000000;
     const defaultUnitPrice = 1000000;
 
-    console.log('initialize market pricing');
+    logger('initialize market pricing');
     const items = getAllLesserItems();
     for (const item of items) {
       await this.adapter.createMarketPrice(
@@ -2070,7 +2073,7 @@ class Engine {
       );
     }
 
-    console.log('seeding market items');
+    logger('seeding market items');
     for (let i = 0; i < 10; i++) {
       const item = getRandomItem();
       await this.adapter.addMarketItem({
@@ -2082,7 +2085,7 @@ class Engine {
       });
     }
 
-    console.log('seeding market spells');
+    logger('seeding market spells');
     for (let i = 0; i < 2; i++) {
       const spell = getRandomMarketableSpell();
       await this.adapter.addMarketItem({
@@ -2094,7 +2097,7 @@ class Engine {
       });
     }
 
-    console.log('seeding market units');
+    logger('seeding market units');
     for (let i = 0; i < 3; i++) {
       const unit = getRandomMarketableUnit();
       const np = 30000 + Math.floor(50000 * randomBM());

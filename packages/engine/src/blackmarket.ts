@@ -7,6 +7,7 @@ import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Mage } from 'shared/types/mage';
 import { nextResearch } from './magic';
 import { BlackMarketId } from 'shared/src/common';
+import { createLogger } from './logger';
 
 export const priceIncrease = (base: number, winningBid: number) => {
   return base + gameTable.blackmarket.priceIncreaseFactor * (winningBid - base);
@@ -61,7 +62,8 @@ export const resolveWinningBids = async (
   itemMap: Map<string, MarketItem>,
   adapter: DataAdapter
 ) => {
-  console.log(`[BM] Resolving market for turn ${currentTurn}`);
+  const logger = createLogger('BM');
+  logger(`Resolving market for turn ${currentTurn}`);
 
   const mageMap: Map<number, Mage> = new Map();
 
@@ -124,7 +126,7 @@ export const resolveWinningBids = async (
     marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
     priceUpdate.set(marketPrice.id, marketPrice);
   }
-  console.log(`[BM] ${winningBids.length} winning bids`);
+  logger(`${winningBids.length} winning bids`);
 
   // === Send geld to sellers, if applicable ===
   // Note: This only applies for items, you cannot sell units or spells
@@ -151,7 +153,7 @@ export const resolveWinningBids = async (
       }
     }
   }
-  console.log(`[BM] ${itemsSold} items with human sellers`);
+  logger(`${itemsSold} items with human sellers`);
 
 
   // Delete winning market bids
@@ -202,7 +204,7 @@ export const resolveWinningBids = async (
       source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] losing bids for turn - ${currentTurn}`,
-      content: `You lost the following bids, the gelds have been returned to you:\n ${buffer.join("\n")}`
+      content: `You lost the following bids, your gelds have been returned to you:\n ${buffer.join("\n")}`
     });
   }
 
@@ -216,7 +218,7 @@ export const resolveWinningBids = async (
       source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] winning bids for turn - ${currentTurn}`,
-      content: winningMessageMap.get(mageId).join('\n')
+      content: `You have won the following auctions:\n${winningMessageMap.get(mageId).join('\n')}`
     });
   }
 
@@ -230,7 +232,7 @@ export const resolveWinningBids = async (
       source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] proceeds for turn - ${currentTurn}`,
-      content: sellerMessageMap.get(mageId).join('\n')
+      content: `The following items have been shold:\n${sellerMessageMap.get(mageId).join('\n')}`
     });
   }
 }
