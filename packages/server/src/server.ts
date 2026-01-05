@@ -222,10 +222,14 @@ router.post('/api/war', async (req: any, res) => {
     return;
   }
 
-  const result = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
+  try {
+    const result = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
+    mage = await engine.getMageByUser(req.user.username);
+    res.status(200).json({ errors: result.errors, reportId: result.battleReport?.id, mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 
-  mage = await engine.getMageByUser(req.user.username);
-  res.status(200).json({ errors: result.errors, reportId: result.battleReport?.id, mage });
 });
 
 router.get('/api/report/:id', async (req: any, res) => {

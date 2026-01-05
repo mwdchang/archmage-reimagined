@@ -162,6 +162,25 @@ const doBattle = async () => {
     return;
   }
 
+  const { data, error } = await APIWrapper(() => {
+    errorStrs.value = [];
+
+    return API.post('/war', { 
+      targetId: props.targetId,
+      battleType: props.battleType,
+      spellId: battleSpell.value,
+      itemId: battleItem.value,
+      stackIds
+    });
+  });
+
+  if (error) {
+    errorStrs.value.push(error);
+    return
+  }
+
+
+  /*
   const res = await API.post('/war', { 
     targetId: props.targetId,
     battleType: props.battleType,
@@ -169,19 +188,20 @@ const doBattle = async () => {
     itemId: battleItem.value,
     stackIds
   });
+  */
 
   // eg: not in range, or insufficient number of turns
-  if (res.data.errors.length > 0) {
-    errorStrs.value = res.data.errors;
+  if (data.errors.length > 0) {
+    errorStrs.value = data.errors;
     return;
   }
 
-  if (res.data.reportId) {
-    mageStore.setMage(res.data.mage);
+  if (data.reportId) {
+    mageStore.setMage(data.mage);
     router.push({
       name: 'battleResult',
       params: {
-        id: res.data.reportId
+        id: data.reportId
       }
     });
   }

@@ -169,7 +169,7 @@ export const resolveWinningBids = async (
       losingMessageMap.set(mageId, [lostBid]);
     }
   }
-  console.log(`[BM] ${lostBids.length} bids returned`);
+  logger(`${lostBids.length} bids returned`);
 
 
   // clean up database for this server turn

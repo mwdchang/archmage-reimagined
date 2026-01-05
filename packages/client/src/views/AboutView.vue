@@ -115,7 +115,10 @@
 
     <div class="chronicles" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
-        <div style="font-weight: 600">Turn {{turn.turn}}: {{ readableDate(turn.timestamp) }} </div>
+        <div class="row" style="gap: 0.5rem"> 
+          <span style="font-weight: 600">Turn {{turn.turn}}</span>
+          <span style="font-weight: 300; opacity: 0.75">({{ readableDate(turn.timestamp) }})</span> 
+        </div>
         <div v-for="(log) in turn.data">
           <div v-if="log.type === 'battleLog'">
             <router-link :to="{ name: 'battleResult', params: { id: log.id }}"> 
