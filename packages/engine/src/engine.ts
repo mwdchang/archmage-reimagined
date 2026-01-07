@@ -172,7 +172,7 @@ class Engine {
       await this.adapter.setServerClock({
         currentTurn: 0,
         currentTurnTime: Date.now(),
-        endTurn: 100,
+        endTurn: gameTable.endTurn,
         interval: gameTable.turnRate * 1000, 
         startTime: Date.now()
       });

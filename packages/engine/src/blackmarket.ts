@@ -232,7 +232,7 @@ export const resolveWinningBids = async (
       source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] proceeds for turn - ${currentTurn}`,
-      content: `The following items have been shold:\n${sellerMessageMap.get(mageId).join('\n')}`
+      content: `The following items have been sold:\n\n${sellerMessageMap.get(mageId).join('\n')}`
     });
   }
 }

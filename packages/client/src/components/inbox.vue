@@ -60,7 +60,7 @@
         </div>
         <textarea
           v-model="currentMail.content"
-          style="width: 100%; height: 10rem" 
+          class="content-area"
           placeholder="content..."></textarea>
 
         <div class="row" style="gap: 2; justify-content: space-between;">
@@ -69,6 +69,7 @@
             :label="'Back'" />
 
           <ActionButton 
+            :disabled="(!currentMail.target || currentMail.target <= 0) || currentMail.content === ''""
             :proxy-fn="sendNewMail"
             :label="'Send'" />
         </div>
@@ -77,17 +78,21 @@
 
     <section class="message-view-pane" v-if="currentView === 'replyView'">
       <div class="form">
-        <div class="row" style="justify-content:space-between">
+        <div class="row" style="justify-content:space-between; margin-bottom: 0.5rem">
           <div style="font-weight: 600"> {{ currentMail?.subject }} </div>
           <div v-if="currentMail.timestamp" style="color: #888"> {{ readableDate(currentMail.timestamp) }}</div>
         </div>
 
-        <textarea style="width: 100%; height: 8rem" 
+        <textarea 
+          class="content-area"
+          v-if="currentMail.source! > 0"
           v-model="replyContent"
           placeholder="Reply...">
         </textarea>
 
-        <textarea style="width: 100%; height: 7rem; background: #555; color: #eee" disabled 
+        <textarea 
+          class="content-area"
+          disabled 
           :value="currentMail?.content"></textarea>
 
 
@@ -139,15 +144,16 @@ const errorStr = ref('');
 
 type NewMail = Partial<Mail>;
 
-const currentMail = ref<NewMail>({
+const blankMail: NewMail = {
   source: 0,
   target: 0,
   type: 'normal',
   priority: 100,
-
   subject: '',
   content: ''
-});
+};
+
+const currentMail = ref<NewMail>(blankMail);
 
 const mails = ref<Mail[]>([]);
 
@@ -163,6 +169,7 @@ const openMail = (mail: Mail) => {
 
 const compose = async () => {
   currentView.value = 'composeView';
+  currentMail.value = blankMail;
 };
 
 const back = async () => {
@@ -352,4 +359,19 @@ main {
   font-weight: 600;
   background: #333;
 }
+
+textarea.content-area {
+  width: 100%;
+  height: 12rem;
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  border: 1px solid #444;
+  margin-bottom: 0.5rem;
+  padding: 0.50rem;
+}
+
+textarea.content-area[disabled] {
+  color: #bbb;
+}
+
 </style>
