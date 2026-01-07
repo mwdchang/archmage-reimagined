@@ -1,11 +1,18 @@
 <template>
-  <div class="section-header">War</div>
-  <div class="row">
-    <img src="@/assets/images/battle.png" class="gen-img" />
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/battle.png" />
+    <div>
+      <div class="section-header">War</div>
+      <div> 
+        All attack type cost 2 turns. 
+        <br>- Regular destroys 5% land
+        <br>- Siege destroys 10% land
+        <br>- Pillage steals geld
+      </div>
+    </div>
   </div>
 
   <section class="form">
-    <div style="margin-bottom: 10px"> All attack type cost 2 turns </div>
     <select v-model="battleType">
       <option value="regular">Regular</option>
       <option value="siege">Siege</option>
@@ -101,6 +108,7 @@ import { BattleReportSummary } from 'shared/types/battle';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const router = useRouter();
 const mageStore = useMageStore();

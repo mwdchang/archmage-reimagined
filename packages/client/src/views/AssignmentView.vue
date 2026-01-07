@@ -1,5 +1,14 @@
 <template>
-  <div class="section-header">Assign spell and item for defence</div>
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/assignment.png" />
+    <div>
+      <div class="section-header">Assignment</div>
+      <div>
+        Assign the spell and item you want to deploy for defence. 
+        Conditions are based on relative powers of the opposing armies.
+      </div>
+    </div>
+  </div>
 
   <section class="form">
     <div class="row" style="align-items: baseline">
@@ -40,6 +49,7 @@ import { getItemById } from 'engine/src/base/references';
 import { MageItem, getSpells, conditionString } from '@/util/util';
 import { Mage } from '../../../shared/types/mage';
 import { API } from '@/api/api';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);

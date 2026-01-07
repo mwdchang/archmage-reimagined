@@ -1,9 +1,13 @@
 <template>
   <main>
-    <div class="section-header">Market</div>
-    <p>Trade and bid on exotic goods</p>
-    <div class="row">
-      <img src="@/assets/images/market.png" class="gen-img" />
+    <div class="row" style="width: 38rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/market.png" />
+      <div>
+        <div class="section-header">Market</div>
+        <div>
+          Bid on rare, often illicit exotic goods in shadowed alleyways. These shops deal in everything from monsters and cursed relics to legendary heroes, far from the scrutiny of the law.
+        </div>
+      </div>
     </div>
 
     <section class="form" style="margin-bottom: 10px">
@@ -101,6 +105,7 @@ import { readableNumber, readableStr } from '@/util/util';
 import { useMageStore } from '@/stores/mage';
 import MarketTable from '@/components/market-table.vue';
 import ActionButton from '@/components/action-button.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 import { Mage } from 'shared/types/mage';
 
 const props = defineProps<{ type: string }>(); 

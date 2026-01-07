@@ -1,13 +1,13 @@
 <template>
   <main v-if="mageStore.mage">
-    <div class="section-header">Mana Charge</div>
-    <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/charge.png" class="gen-img" />
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/charge.png" />
+      <div>
+        <div class="section-header">Mana Charge</div>
+        You raw mana income is {{ readableNumber(manaIncome(mageStore.mage)) }} per turn.
+      </div>
     </div>
     <section> 
-      <p>
-        You raw income is {{ readableNumber(manaIncome(mageStore.mage)) }} mana per turn.
-      </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
         <ActionButton 
@@ -30,6 +30,8 @@ import { useMageStore } from '@/stores/mage';
 import { manaIncome } from 'engine/src/magic';
 import { readableNumber } from '@/util/util';
 import ActionButton from '@/components/action-button.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
+// import chargeImage from '@/assets/images/ui/charge.png';
 
 const turnsToCharge = ref(0);
 const mageStore = useMageStore();

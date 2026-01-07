@@ -1,12 +1,17 @@
 <template>
   <main v-if="targetSummary">
-    <div class="section-header">
-      You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/battle.png" />
+      <div>
+        <div class="section-header">War</div>
+        You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom. 
+        <span v-if="battleType === 'siege'">
+          Defenders are tougher in siege attacks.
+        </span>
+
+      </div>
     </div>
-    <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/battle.png" class="gen-img" />
-    </div>
-    <table>
+    <table style="min-width: 20rem">
       <tbody>
         <tr>
           <td>Unit</td> 
@@ -80,6 +85,7 @@ import {
   getSpells, getItems, getBattleArmy, readableNumber,
   BattleArmyItem, readableStr
 } from '@/util/util';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const router = useRouter();

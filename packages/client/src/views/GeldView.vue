@@ -1,14 +1,14 @@
 <template>
   <main v-if="mageStore.mage">
-    <div class="section-header">Gelding</div>
-    <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/geld.png" class="gen-img" />
-    </div>
-    <section> 
-      <p>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/geld.png" />
+      <div>
+        <div class="section-header">Gelding</div>
         In times of war and empty treasuries the people have to fullfil their obligations. 
         Your income is about {{ readableNumber(geldIncome(mageStore.mage)) }} geld per turn.
-      </p>
+      </div>
+    </div>
+    <section> 
       <section class="form" style="width: 25rem">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
         <ActionButton 
@@ -31,6 +31,7 @@ import { useMageStore } from '@/stores/mage';
 import { geldIncome } from 'engine/src/interior';
 import { readableNumber } from '@/util/util';
 import ActionButton from '@/components/action-button.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const turnsToGeld = ref(0);
 const mageStore = useMageStore();
