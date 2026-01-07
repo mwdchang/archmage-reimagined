@@ -1,5 +1,15 @@
 <template>
-  <div class="section-header">Dispel Magic</div>
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/dispel.png" />
+    <div>
+      <div class="section-header">Dispel Magic</div>
+      <div>
+        You can undo enchantments that others casted on you, or spells you casted on yourself.
+        Success depends on how much mana you use to undo the enchantment.
+      </div>
+    </div>
+  </div>
+
   <div> Your enchantments in effect </div>
   <table>
     <thead>
@@ -75,6 +85,7 @@ import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { dispelEnchantment } from 'engine/src/magic';
 import { readableStr, enchantMagic } from '@/util/util';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);

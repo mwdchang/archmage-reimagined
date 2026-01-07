@@ -1,5 +1,14 @@
 <template>
-  <div class="section-header">Disband Units</div>
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/disband.png" />
+    <div>
+      <div class="section-header">Disband Units</div>
+      <div>
+        Here you can dismiss troops that you had summoned or recruited. 
+        Some units cannot be dismissed, and you need to find ... other ways.
+      </div>
+    </div>
+  </div>
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px" v-if="mageStore.mage">
     <!-- left -->
     <table> 
@@ -106,6 +115,7 @@ import { useEngine } from '@/composables/useEngine';
 import { unitUpkeep } from 'engine/src/interior';
 import ActionButton from '@/components/action-button.vue';
 import SvgIcon from '@/components/svg-icon.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;

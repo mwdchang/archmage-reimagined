@@ -4,7 +4,9 @@
       <ImageProxy src="/images/ui/charge.png" />
       <div>
         <div class="section-header">Mana Charge</div>
-        You raw mana income is {{ readableNumber(manaIncome(mageStore.mage)) }} per turn.
+        You currently have {{ readableNumber(mageStore.mage.currentMana) }} mana, with max storage of 
+        {{ readableNumber(maxMana(mageStore.mage)) }}. You raw mana income 
+        is {{ readableNumber(manaIncome(mageStore.mage)) }} per turn.
       </div>
     </div>
     <section> 
@@ -13,7 +15,6 @@
         <ActionButton 
           :proxy-fn="charge"
           :label="'Charge'" />
-
       </div>
       <div>
         {{ manaMsg }}
@@ -27,7 +28,7 @@
 import { ref } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { manaIncome } from 'engine/src/magic';
+import { manaIncome, maxMana } from 'engine/src/magic';
 import { readableNumber } from '@/util/util';
 import ActionButton from '@/components/action-button.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
