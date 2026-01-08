@@ -4,8 +4,7 @@
     <div>
       <div class="section-header">Disband Units</div>
       <div>
-        Here you can dismiss troops that you had summoned or recruited. 
-        Some units cannot be dismissed, and you need to find ... other ways.
+        Here, you can dismiss troops that you have summoned or recruited. Some units cannot be dismissed, and you will need to find … other ways.
       </div>
     </div>
   </div>

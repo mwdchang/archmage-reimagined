@@ -4,8 +4,7 @@
     <div>
       <div class="section-header">Dispel Magic</div>
       <div>
-        You can undo enchantments that others casted on you, or spells you casted on yourself.
-        Success depends on how much mana you use to undo the enchantment.
+        You can undo enchantments that others have cast on you, or spells you have cast on yourself. Success depends on how much mana you use to undo the enchantment.
       </div>
     </div>
   </div>

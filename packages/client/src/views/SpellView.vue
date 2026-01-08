@@ -1,8 +1,13 @@
 <template>
-  <div class="section-header">Spells in your Spellbook</div>
-  <p>
-    You have {{ spells.length }} spells in your spell book.
-  </p>
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/spell.png" />
+    <div>
+      <div class="section-header">Cast Magic</div>
+      <div>
+        You have {{ spells.length }} spells in your spell book.
+      </div>
+    </div>
+  </div>
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
       <table v-if="spells.length > 0">
@@ -87,6 +92,7 @@ import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
 import { Spell } from 'shared/types/magic';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 

@@ -1,15 +1,17 @@
 <template>
   <main v-if="mageStore.mage">
-    <div class="section-header">Research</div>
-    <div class="row">
-      <img src="@/assets/images/research.png" width="400" class="gen-img" />
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/research.png" />
+      <div>
+        <div class="section-header">Research</div>
+        <div>
+          You guilds are generating {{ rp }} research points per turn. Your item generation rate is {{ itemRate }}%.
+        </div>
+      </div>
     </div>
     <p> 
       Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
       (Max = {{ maxSpellLevel(mageStore.mage) }})
-    </p>
-    <p> 
-      Generating {{ rp }} research points per turn. Item generation rate is {{ itemRate }}%.
     </p>
     <table v-if="currentResearch" style="margin-top: 10px">
       <tbody>
@@ -74,6 +76,7 @@ import { Mage } from '../../../shared/types/mage';
 import { readableNumber, readableStr } from '@/util/util';
 import { currentSpellLevel } from 'engine/src/base/mage';
 import { allowedMagicList } from 'shared/src/common';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 

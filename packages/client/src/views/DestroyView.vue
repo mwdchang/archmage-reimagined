@@ -1,7 +1,13 @@
 <template>
-  <div class="section-header">Destroy Buildings</div>
-  <div class="row">
-    <img src="@/assets/images/destroy.png" class="gen-img" />
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/destroy.png" />
+    <div>
+      <div class="section-header">Destroy Buildings</div>
+      <div>
+        You can demolish and reclaim your buildings as wilderness acres. 
+        Demolitions takes one turn.
+      </div>
+    </div>
   </div>
   <p v-if="mageStore">
     You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
@@ -18,6 +24,7 @@ import { useMageStore } from '@/stores/mage';
 import { Mage } from 'shared/types/mage';
 import DestroyTable from '@/components/destroy-table.vue';
 import { readableNumber } from '@/util/util';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const errorStr = ref('');

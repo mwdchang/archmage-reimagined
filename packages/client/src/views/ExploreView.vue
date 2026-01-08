@@ -1,14 +1,16 @@
 <template>
   <main v-if="mageStore.mage">
-    <div class="section-header">Explore</div>
-    <div class="row">
-      <img src="@/assets/images/explore.png" class="gen-img" />
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/explore.png" />
+      <div>
+        <div class="section-header">Explore</div>
+        <div>
+          You get an average of {{ exploreRate }} acres of land per turn. 
+          The amount of land explored per turn decreases as your land increases.
+        </div>
+      </div>
     </div>
     <section> 
-      <p>
-        You get an average of {{ exploreRate }} acres of land per turn. 
-        The amount of land explored per turn decreases as your land increases.
-      </p>
       <div class="form">
         <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
 
@@ -34,6 +36,7 @@ import { useMageStore } from '@/stores/mage';
 import { explorationRate } from 'engine/src/interior';
 import ActionButton from '@/components/action-button.vue';
 import type { Mage } from 'shared/types/mage';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const turnsToExplore = ref(0);
 const mageStore = useMageStore();

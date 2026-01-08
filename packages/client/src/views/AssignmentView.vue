@@ -4,8 +4,7 @@
     <div>
       <div class="section-header">Assignment</div>
       <div>
-        Assign the spell and item you want to deploy for defence. 
-        Conditions are based on relative powers of the opposing armies.
+        Assign the spell and item you want to deploy for defense. Conditions depend on the relative strengths of the opposing armies.
       </div>
     </div>
   </div>

@@ -1,10 +1,12 @@
 <template>
-  <div class="section-header">Your item inventory</div>
-  <p>
-    You have {{ itemList.length }} item types in your inventory storage.
-  </p>
-  <div class="row">
-    <img src="@/assets/images/item.png" class="gen-img" />
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/item.png" />
+    <div>
+      <div class="section-header">Item inventory</div>
+      <div>
+        You have {{ numItems }} items in your inventory storage.
+      </div>
+    </div>
   </div>
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
@@ -86,6 +88,7 @@ import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMageStore } from '@/stores/mage';
 import { getItems } from '@/util/util';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const selected = ref('');
 const turns = ref<number>(1);
@@ -107,6 +110,10 @@ const itemList = computed(() => {
 
   let result = getItems(mage.value);
   return result.sort((a, b) => a.id.localeCompare(b.id));
+});
+
+const numItems = computed(() => {
+  return Object.values(mage.value!.items).reduce((acc, v) => acc + v, 0);
 });
 
 const usableItems = computed(() => {
