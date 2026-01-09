@@ -4,7 +4,9 @@ import { GameTable } from "shared/types/common"
 export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
-  turnRate: 180,
+  turnRate: 30, // *fixme: testing*
+  endTurn: 200, // *fixme: testing*
+
   itemGenerationRate: 0.08,
 
   war: {
@@ -17,7 +19,8 @@ export const gameTable: GameTable = {
     minimum: 0.05,
     commission: 0.23,
     priceIncreaseFactor: 0.30,
-    priceDecreaseFactor: 0.20
+    priceDecreaseFactor: 0.20,
+    sellingTimeOnMarket: 15 // *fixme: testing*
   }
 }
 

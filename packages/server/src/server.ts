@@ -222,10 +222,14 @@ router.post('/api/war', async (req: any, res) => {
     return;
   }
 
-  const result = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
+  try {
+    const result = await engine.doBattle(mage, +targetId, battleType, stackIds, spellId, itemId);
+    mage = await engine.getMageByUser(req.user.username);
+    res.status(200).json({ errors: result.errors, reportId: result.battleReport?.id, mage });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 
-  mage = await engine.getMageByUser(req.user.username);
-  res.status(200).json({ errors: result.errors, reportId: result.battleReport?.id, mage });
 });
 
 router.get('/api/report/:id', async (req: any, res) => {
@@ -349,6 +353,21 @@ router.post('/api/market-bids', async (req: any, res) => {
 
   res.status(200).json({ mage });
 });
+
+
+router.post('/api/sell-item', async (req: any, res) => {
+  let mage = await engine.getMageByUser(req.user.username);
+
+  try {
+    const sellItems = req.body;
+    mage = await engine.sellItems(mage.id, sellItems);
+    res.status(200).json({ mage });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.message });
+  }
+});
+
 
 router.post('/api/mails', async (req: any, res) => {
   const mail = req.body.mail;

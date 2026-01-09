@@ -883,28 +883,6 @@ WHERE username = '${user.username}'
   }
 
   async cleanupMarket(turn: number): Promise<void> {
-
-    /*
-    let blah = `
-      WITH expired_markets AS (
-        SELECT id
-        FROM market
-        WHERE expiration = ${turn}
-      ),
-      refunds AS (
-        SELECT
-          mb.mage_id,
-          SUM(mb.bid) AS total_refund
-        FROM market_bid mb
-        INNER JOIN expired_markets em ON mb.market_id = em.id
-        GROUP BY mb.mage_id
-      )
-      SELECT * from refunds
-    `;
-    const res = await this.db.query(blah);
-    */
-
-
     // Return geld
     let sql = `
       WITH expired_markets AS (

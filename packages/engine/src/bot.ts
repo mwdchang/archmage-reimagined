@@ -99,7 +99,7 @@ export const getBotAssignment = (magic: AllowedMagic): BotAssignment => {
     verdant: [
       { spellId: 'rustArmor', itemId: 'candleOfSleeping' },
       { spellId: 'flameBlade', itemId: 'candleOfSleeping' },
-      { spellId: 'rustArmor', itemId: 'carpetOfFlyig' },
+      { spellId: 'rustArmor', itemId: 'carpetOfFlying' },
       { spellId: 'flameBlade', itemId: 'ashOfInvisibility' }
     ],
     eradication: [

@@ -4,3 +4,8 @@ declare module '*.svg' {
   export default component;
 }
 
+/* Image hack */
+declare module '*.png' {
+  const src: string
+  export default src
+}

@@ -1,12 +1,17 @@
 <template>
   <main v-if="targetSummary">
-    <div class="section-header">
-      You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) 
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/battle2.png" />
+      <div>
+        <div class="section-header">War</div>
+        You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom.
+        You can send up to 10 army stacks into battle.
+        <span v-if="battleType === 'siege'">
+          Defenders are tougher in siege attacks.
+        </span>
+      </div>
     </div>
-    <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/battle.png" class="gen-img" />
-    </div>
-    <table>
+    <table style="min-width: 20rem">
       <tbody>
         <tr>
           <td>Unit</td> 
@@ -80,6 +85,7 @@ import {
   getSpells, getItems, getBattleArmy, readableNumber,
   BattleArmyItem, readableStr
 } from '@/util/util';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -162,6 +168,25 @@ const doBattle = async () => {
     return;
   }
 
+  const { data, error } = await APIWrapper(() => {
+    errorStrs.value = [];
+
+    return API.post('/war', { 
+      targetId: props.targetId,
+      battleType: props.battleType,
+      spellId: battleSpell.value,
+      itemId: battleItem.value,
+      stackIds
+    });
+  });
+
+  if (error) {
+    errorStrs.value.push(error);
+    return
+  }
+
+
+  /*
   const res = await API.post('/war', { 
     targetId: props.targetId,
     battleType: props.battleType,
@@ -169,19 +194,20 @@ const doBattle = async () => {
     itemId: battleItem.value,
     stackIds
   });
+  */
 
   // eg: not in range, or insufficient number of turns
-  if (res.data.errors.length > 0) {
-    errorStrs.value = res.data.errors;
+  if (data.errors.length > 0) {
+    errorStrs.value = data.errors;
     return;
   }
 
-  if (res.data.reportId) {
-    mageStore.setMage(res.data.mage);
+  if (data.reportId) {
+    mageStore.setMage(data.mage);
     router.push({
       name: 'battleResult',
       params: {
-        id: res.data.reportId
+        id: data.reportId
       }
     });
   }

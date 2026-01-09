@@ -1,5 +1,14 @@
 <template>
-  <div class="section-header">Recruitment</div>
+  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <ImageProxy src="/images/ui/recruit.png" />
+    <div>
+      <div class="section-header">Recruitment</div>
+      <div>
+        You can recruit troops here, build more barracks to increase the recruitment rates.
+        Be cautious as troops take up gelds and living-spaces.
+      </div>
+    </div>
+  </div>
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <!-- left -->
@@ -79,6 +88,7 @@ import { recruitmentAmount } from 'engine/src/interior';
 import { ArmyUnit } from 'shared/types/mage';
 import { readableStr, readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 

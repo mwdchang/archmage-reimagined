@@ -28,6 +28,7 @@ export interface GameTable {
   explorationLimit: number
   maxTurns: number;
   turnRate: number;
+  endTurn: number;
   itemGenerationRate: number;
 
   war: {
@@ -44,6 +45,7 @@ export interface GameTable {
     commission: number;
     priceIncreaseFactor: number;
     priceDecreaseFactor: number;
+    sellingTimeOnMarket: number;
   }
 }
 

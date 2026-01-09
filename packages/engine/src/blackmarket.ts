@@ -7,6 +7,7 @@ import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Mage } from 'shared/types/mage';
 import { nextResearch } from './magic';
 import { BlackMarketId } from 'shared/src/common';
+import { createLogger } from './logger';
 
 export const priceIncrease = (base: number, winningBid: number) => {
   return base + gameTable.blackmarket.priceIncreaseFactor * (winningBid - base);
@@ -61,11 +62,20 @@ export const resolveWinningBids = async (
   itemMap: Map<string, MarketItem>,
   adapter: DataAdapter
 ) => {
+  const logger = createLogger('BM');
+  logger(`Resolving market for turn ${currentTurn}`);
+
   const mageMap: Map<number, Mage> = new Map();
-  const mageMessageMap: Map<number, string[]> = new Map();
+
+  // Data structure to buffer up messages
+  const winningMessageMap: Map<number, string[]> = new Map();
+  const losingMessageMap: Map<number, MarketBid[]> = new Map();
+  const sellerMessageMap: Map<number, string[]> = new Map();
 
   const priceUpdate: Map<string, MarketPrice> = new Map();
 
+
+  // === Resolve winning bids and add auction item to winning mage ===
   for (const bid of winningBids) {
     const marketItem = itemMap.get(bid.marketId);
     const marketPrice = priceMap.get(marketItem.priceId);
@@ -73,10 +83,10 @@ export const resolveWinningBids = async (
     if (!mageMap.has(bid.mageId)) {
       const m = await adapter.getMage(bid.mageId);
       mageMap.set(bid.mageId, m);
-      mageMessageMap.set(bid.mageId, []);
+      winningMessageMap.set(bid.mageId, []);
     }
     const mage = mageMap.get(bid.mageId);
-    mageMessageMap.get(mage.id).push(`You won ${marketPrice.id} for ${bid.bid}`);
+    winningMessageMap.get(mage.id).push(`You won ${marketPrice.id} for ${bid.bid}`);
 
     // Resolve item
     if (marketPrice.type === 'item') {
@@ -113,40 +123,71 @@ export const resolveWinningBids = async (
         });
       }
     }
-
-    // Resolve if the item sold came from a mage instead of generated
-    if (marketItem.mageId) {
-      if (!mageMap.has(marketItem.mageId)) {
-        const m = await adapter.getMage(bid.mageId);
-        mageMap.set(bid.mageId, m);
-      }
-      const mage2 = mageMap.get(bid.mageId);
-      mage2.currentGeld += marketItem.basePrice;
-    }
-
     marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
     priceUpdate.set(marketPrice.id, marketPrice);
   }
+  logger(`${winningBids.length} winning bids`);
 
-  // Delete winning market bids and delete market items
-  await adapter.removeMarketBids(winningBids.map(d => d.id));
+  // === Send geld to sellers, if applicable ===
+  // Note: This only applies for items, you cannot sell units or spells
+  let itemsSold = 0;
+  for (const [_, marketItem] of itemMap.entries()) {
+    if (marketItem.mageId && marketItem.expiration <= currentTurn) {
+      if (!sellerMessageMap.has(marketItem.mageId)) {
+        sellerMessageMap.set(marketItem.mageId, []);
+      }
+      if (!mageMap.has(marketItem.mageId)) {
+        const m = await adapter.getMage(marketItem.mageId);
+        mageMap.set(m.id, m);
+      }
 
+      itemsSold ++;
 
-  // TODO: Send messages to mages
-  const lostBids = await adapter.getExpiredBids(currentTurn);
-  const lostMageMap: Map<number, MarketBid[]> = new Map();
-
-  for (const lostBid of lostBids) {
-    const mageId = lostBid.mageId;
-    if (lostMageMap.has(mageId)) {
-      lostMageMap.get(mageId).push(lostBid);
-    } else {
-      lostMageMap.set(mageId, [lostBid]);
+      const winningBid = winningBids.find(d => d.marketId === marketItem.id); 
+      if (winningBid) {
+        mageMap.get(marketItem.mageId).currentGeld += marketItem.basePrice;
+        sellerMessageMap.get(marketItem.mageId).push(`${marketItem.basePrice} for ${marketItem.priceId}`);
+      } else {
+        mageMap.get(marketItem.mageId).currentGeld += marketItem.basePrice;
+        sellerMessageMap.get(marketItem.mageId).push(`${marketItem.basePrice} for ${marketItem.priceId}`);
+      }
     }
   }
+  logger(`${itemsSold} items with human sellers`);
 
-  for (const mageId of lostMageMap.keys()) {
-    const lostBids = lostMageMap.get(mageId);
+
+  // Delete winning market bids
+  await adapter.removeMarketBids(winningBids.map(d => d.id));
+
+  // === Process losing bid === 
+  const lostBids = await adapter.getExpiredBids(currentTurn);
+  for (const lostBid of lostBids) {
+    const mageId = lostBid.mageId;
+    if (losingMessageMap.has(mageId)) {
+      losingMessageMap.get(mageId).push(lostBid);
+    } else {
+      losingMessageMap.set(mageId, [lostBid]);
+    }
+  }
+  logger(`${lostBids.length} bids returned`);
+
+
+  // clean up database for this server turn
+  await adapter.cleanupMarket(currentTurn);
+
+  // update item prices and mage status
+  for (const p of priceUpdate.values()) {
+    await adapter.updateMarketPrice(p.id, p.price);
+  }
+
+  // Update mage
+  for (const m of mageMap.values()) {
+    await adapter.updateMage(m);
+  }
+
+
+  for (const mageId of losingMessageMap.keys()) {
+    const lostBids = losingMessageMap.get(mageId);
     const buffer: string[] = [];
 
     lostBids.forEach(lostBid => {
@@ -163,20 +204,11 @@ export const resolveWinningBids = async (
       source: BlackMarketId,
       target: mageId,
       subject: `[Blackmarket] losing bids for turn - ${currentTurn}`,
-      content: `You lost the following bids, the gelds have been returned to you:\n ${buffer.join("\n")}`
+      content: `You lost the following bids, your gelds have been returned to you:\n ${buffer.join("\n")}`
     });
   }
 
-
-
-  await adapter.cleanupMarket(currentTurn);
-
-  // update prices and mages
-  for (const p of priceUpdate.values()) {
-    await adapter.updateMarketPrice(p.id, p.price);
-  }
-  for (const m of mageMap.values()) {
-    await adapter.updateMage(m);
+  for (const mageId of winningMessageMap.keys()) {
     adapter.saveMail({
       id: uuidv4(),
       read: false,
@@ -184,9 +216,23 @@ export const resolveWinningBids = async (
       type: 'market',
       priority: 100,
       source: BlackMarketId,
-      target: m.id,
+      target: mageId,
       subject: `[Blackmarket] winning bids for turn - ${currentTurn}`,
-      content: mageMessageMap.get(m.id).join('\n')
+      content: `You have won the following auctions:\n${winningMessageMap.get(mageId).join('\n')}`
+    });
+  }
+
+  for (const mageId of sellerMessageMap.keys()) {
+    adapter.saveMail({
+      id: uuidv4(),
+      read: false,
+      timestamp: Date.now(),
+      type: 'market',
+      priority: 100,
+      source: BlackMarketId,
+      target: mageId,
+      subject: `[Blackmarket] proceeds for turn - ${currentTurn}`,
+      content: `The following items have been sold:\n\n${sellerMessageMap.get(mageId).join('\n')}`
     });
   }
 }
