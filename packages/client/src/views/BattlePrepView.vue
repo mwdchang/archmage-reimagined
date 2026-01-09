@@ -1,14 +1,14 @@
 <template>
   <main v-if="targetSummary">
     <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-      <ImageProxy src="/images/ui/battle.png" />
+      <ImageProxy src="/images/ui/battle2.png" />
       <div>
         <div class="section-header">War</div>
-        You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom. 
+        You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom.
+        You can send up to 10 army stacks into battle.
         <span v-if="battleType === 'siege'">
           Defenders are tougher in siege attacks.
         </span>
-
       </div>
     </div>
     <table style="min-width: 20rem">
