@@ -1,5 +1,5 @@
 <template>
-  <main class="splash" style="margin-bottom: 0.5rem">
+  <main style="margin-bottom: 0.5rem">
     <h1 style="margin-bottom: 1rem"> Archmage Reimagined </h1>
     <p style="max-width: 50rem; line-height: 1.25; margin-bottom: 1rem">
       Archmage Reimagined is a reimagination of the classica MMORPG Archmage. With new features and twists designed to be exciting for a modern audience.
@@ -20,7 +20,7 @@
     </p>
 
     <p style="margin-bottom: 1rem">
-      If you already have a mage ...
+      If you already have a mage ... welcome back.
       <Login />
     </p>
 
@@ -42,19 +42,6 @@ const mode = ref<string>('loginMode');
 </script>
 
 <style scoped>
-.splash {
-  display: block;
-  background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
-    url('@/assets/images/splash.png');
-  background-size: contain;
-  background-position: center 2rem;
-  background-repeat: no-repeat;
-  height: 90vh;
-
-  font-size: 1.0rem;
-}
-
 button {
   display: inline-block;
   padding: 0.3rem 0.6rem;

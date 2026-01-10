@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useMageStore } from './stores/mage';
 import { RouterView, useRouter, useRoute } from 'vue-router';
 import HeaderInfo from './components/header-info.vue';
@@ -68,6 +68,14 @@ const hideHeader = [
   'notFound'
 ];
 
+watch(
+  () => route.meta.background,
+  (bg) => {
+    document.body.dataset.bg = (bg as string) || 'default'
+  },
+  { immediate: true }
+)
+
 // Test to see if session already exist
 onMounted(async () => {
   loadUnitData(plainUnits);
@@ -115,4 +123,36 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/*
+:global(body) {
+  display: block;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
+    url('@/assets/images/splash.png');
+  background-size: contain;
+  background-position: center 2rem;
+  background-repeat: no-repeat;
+  height: 90vh;
+  font-size: 1.0rem;
+}
+
+
+:global(body[data-bg="default"]) {
+  background-image: none;
+  height: 0;
+}
+*/
+
+
+:global(body[data-bg="splash"]) {
+  display: block;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
+    url('@/assets/images/splash.png');
+  background-size: contain;
+  background-position: center 2rem;
+  background-repeat: no-repeat;
+  height: 90vh;
+  font-size: 1.0rem;
+}
 </style>

@@ -6,13 +6,11 @@
       <div>
         You can demolish and reclaim your buildings as wilderness acres. 
         Demolitions takes one turn.
+        <br><br>
+        You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
       </div>
     </div>
   </div>
-  <p v-if="mageStore">
-    You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
-  </p>
-
   <destroy-table @destroy="destroy($event)" />
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>

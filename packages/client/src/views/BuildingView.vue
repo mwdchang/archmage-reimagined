@@ -10,12 +10,11 @@
         <br>- Guilds: Research and item generation
         <br>- Forts: Defence bonus
         <br>- Barriers: Spell resistance
+        <br><br>
+        You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
       </div>
     </div>
   </div>
-  <p v-if="mageStore">
-    You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
-  </p>
   <build-table @build="build($event)" />
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
