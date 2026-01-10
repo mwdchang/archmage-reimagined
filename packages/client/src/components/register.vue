@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <section class="form" style="max-width: 35rem">
+  <main style="width: 100%">
+    <section class="form" style="width: 100%; max-width: 100%"> 
       <div>
         <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
           <span style="width: 5rem">Username </span> 

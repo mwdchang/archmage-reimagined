@@ -1,8 +1,6 @@
 <template>
   <main>
-    <h2>Login</h2>
-
-    <section class="form" style="width: 25rem">
+    <section class="form" style="width: 25rem; opacity: 0.8">
       <div class="row" style="align-items: baseline; gap: 20px">
         <span style="width:5rem">Username</span> 
         <input @keyup.enter="login" name="username" type="text" v-model="loginData.username">
@@ -16,7 +14,7 @@
       <ActionButton 
         :proxy-fn="login"
         :disabled="loginData.username === '' || loginData.password === ''"
-        :label="'Login'" />
+        :label="'Enter Terra'" />
 
     </section>
 
