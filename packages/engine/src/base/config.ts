@@ -4,8 +4,8 @@ import { GameTable } from "shared/types/common"
 export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
-  turnRate: 30, // *fixme: testing*
-  endTurn: 200, // *fixme: testing*
+  turnRate: 180, // *fixme: testing*
+  endTurn: 2000, // *fixme: testing*
 
   itemGenerationRate: 0.08,
 

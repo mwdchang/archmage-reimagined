@@ -72,8 +72,8 @@ export const resolveWinningBids = async (
   const losingMessageMap: Map<number, MarketBid[]> = new Map();
   const sellerMessageMap: Map<number, string[]> = new Map();
 
-  const priceUpdate: Map<string, MarketPrice> = new Map();
-
+  // id => [price1, price2, ... ]
+  const soldTable: Map<string, number[]> = new Map();
 
   // === Resolve winning bids and add auction item to winning mage ===
   for (const bid of winningBids) {
@@ -123,12 +123,35 @@ export const resolveWinningBids = async (
         });
       }
     }
-    marketPrice.price = priceIncrease(marketPrice.price, bid.bid);
-    priceUpdate.set(marketPrice.id, marketPrice);
+
+    if (soldTable.has(marketPrice.id)) {
+      soldTable.get(marketPrice.id).push(bid.bid);
+    } else {
+      soldTable.set(marketPrice.id, [bid.bid]);
+    }
+
+    // Remove entry here so we can calculate adjustments below
+    itemMap.delete(bid.marketId)
   }
   logger(`${winningBids.length} winning bids`);
 
-  // === Send geld to sellers, if applicable ===
+
+  let expiredCounter = 0;
+  for (const [_, marketItem] of itemMap.entries()) {
+    if (marketItem.expiration <= currentTurn) {
+      if (soldTable.has(marketItem.id)) {
+        soldTable.get(marketItem.priceId).push(marketItem.basePrice);
+      } else {
+        soldTable.set(marketItem.priceId, [marketItem.basePrice]);
+      }
+      expiredCounter ++;
+    }
+  }
+  logger(`${expiredCounter} expired items without bids`);
+
+
+
+  // === Send geld to human sellers, if applicable ===
   // Note: This only applies for items, you cannot sell units or spells
   let itemsSold = 0;
   for (const [_, marketItem] of itemMap.entries()) {
@@ -176,10 +199,20 @@ export const resolveWinningBids = async (
   await adapter.cleanupMarket(currentTurn);
 
   // update item prices and mage status
-  for (const p of priceUpdate.values()) {
-    await adapter.updateMarketPrice(p.id, p.price);
-  }
+  for (const key of soldTable.keys()) {
+    const num = soldTable.get(key).length;
+    const avgSellPrice = soldTable.get(key).reduce((acc, p) => acc + p, 0) / num;
+    const currentPrice = priceMap.get(key).price;
 
+    let newPrice = avgSellPrice > currentPrice ? 
+      currentPrice + Math.abs((avgSellPrice - currentPrice) * 0.33) :
+      currentPrice * 0.95;
+    newPrice = Math.ceil(newPrice);
+
+    logger(`${key} ${currentPrice} => ${newPrice}`);
+    await adapter.updateMarketPrice(key, newPrice);
+  }
+  
   // Update mage
   for (const m of mageMap.values()) {
     await adapter.updateMage(m);

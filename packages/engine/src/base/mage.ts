@@ -53,7 +53,8 @@ export const createMage = (id: number, name: string, magic: string, override?:Pa
     army: [],
     recruitments: [],
     items: {
-      'treasureChest': 10
+      'treasureChest': 10,
+      'magicCompass': 10
     },
     heroes: [],
     enchantments: [],
