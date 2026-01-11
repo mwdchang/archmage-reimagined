@@ -6,14 +6,12 @@
         <div class="section-header">Research</div>
         <div>
           You guilds are generating {{ rp }} research points per turn. Your item generation rate is {{ itemRate }}%.
+          <br/>
+          Your current spell level is {{ currentSpellLevel(mageStore.mage) }}, your maximum spell level is {{ maxSpellLevel(mageStore.mage) }}
         </div>
       </div>
     </div>
-    <p> 
-      Current spell level: {{ currentSpellLevel(mageStore.mage) }} 
-      (Max = {{ maxSpellLevel(mageStore.mage) }})
-    </p>
-    <table v-if="currentResearch" style="margin-top: 10px">
+    <table v-if="currentResearch"> 
       <tbody>
         <tr>
           <td colspan="2">&nbsp;</td>
