@@ -22,7 +22,8 @@ const whitelist = [
   '/api/register',
   '/api/login',
   '/api/logout',
-  '/api/server-clock'
+  '/api/server-clock',
+  '/api/game-table'
 ];
 
 // See http://expressjs.com/en/guide/using-middleware.html

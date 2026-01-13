@@ -1,11 +1,11 @@
 <template>
   <main style="margin-bottom: 0.5rem">
-    <h1 style="margin-bottom: 1rem"> Archmage Reimagined </h1>
+    <h1 style="margin-bottom: 1rem"> Archmage Reimagined <small>alpha</small></h1>
     <p style="max-width: 50rem; line-height: 1.25; margin-bottom: 1rem">
       Archmage Reimagined is a reimagination of the classica MMORPG Archmage. With new features and twists designed to be exciting for a modern audience.
     </p>
 
-    <p style="max-width: 50rem; line-height: 1.25; margin-bottom: 1rem">
+    <p style="max-width: 50rem; margin-bottom: 1rem">
       You play as a mage from one of the Five schools of magic:
       <span style="color: #eeeeee">Ascendant</span>, 
       <span style="color: #00ffbb">Verdant</span>, 
@@ -15,6 +15,14 @@
       Through trials and tribulations, you ultimate goal is the total domination of Terra.
     </p>
 
+    <div v-if="clock && gameTable" style="margin-bottom: 2rem"> 
+      Current reset
+      <ul>
+        <li> Starts: {{ readableDate(clock.startTime) }} </li>
+        <li> Ends: {{ readableDate(approxEndTime) }} </li>
+      </ul>
+    </div>
+
     <p style="margin-bottom: 2rem"> 
       <button @click="mode = 'registerMode'">Reincarnate Here</button> if you do not have a mage.
     </p>
@@ -23,7 +31,6 @@
       If you already have a mage ... welcome back.
       <Login />
     </p>
-
   </main>
   <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
     <div class="modal">
@@ -33,11 +40,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { GameTable, ServerClock } from 'shared/types/common';
 import Register from '@/components/register.vue';
 import Login from '@/components/login.vue';
+import { API } from '@/api/api';
+import { readableDate } from '@/util/util';
 
 const mode = ref<string>('loginMode');
+const clock = ref<ServerClock>();
+const gameTable = ref<GameTable| null>(null);
+
+const approxEndTime = computed(() => {
+  if (!clock.value || !gameTable.value) return 0;
+
+  const currentTime = clock.value.currentTurnTime;
+  const rate = gameTable.value.turnRate;
+  const remainingTurns = clock.value.endTurn - clock.value.currentTurn;
+
+  const finalTime = currentTime + (rate * remainingTurns * 1000);
+  return finalTime;
+});
+
+
+onMounted(async () => {
+  clock.value = (await API.get<ServerClock>('server-clock')).data;
+  gameTable.value = (await API.get<GameTable>('/game-table')).data;
+});
 
 </script>
 
