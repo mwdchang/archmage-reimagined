@@ -1,7 +1,7 @@
 <template>
   <section class="form" style="min-width: 35rem">
     <div class="row" style="gap: 2rem">
-      <select v-model="selectedMagic" style="max-width:175px"> 
+      <select v-model="selectedMagic" style="max-width:175px" :disabled="tabView === 'buffs'"> 
         <option value="ascendant">Ascendant</option>
         <option value="verdant">Verdant</option>
         <option value="eradication">Eradication</option>
@@ -14,6 +14,7 @@
         <!-- Force rerender with :key -->
         <input type="range" 
           v-model="selectedSpellLevel"
+          :disabled="tabView === 'buffs'"
           :key="maxSpellLevels[selectedMagic]"
           :min="1" 
           :max="maxSpellLevels[selectedMagic]" />
@@ -24,6 +25,7 @@
       <div class="tab" :class="{ active: tabView === 'summon' }" @click="changeView('summon')">Summon</div>
       <div class="tab" :class="{ active: tabView === 'dispel' }" @click="changeView('dispel')">Dispel</div>
       <div class="tab" :class="{ active: tabView === 'casting' }" @click="changeView('casting')">Casting</div>
+      <div class="tab" :class="{ active: tabView === 'buffs' }" @click="changeView('buffs')">Buffs</div>
     </div>
 
 
@@ -130,6 +132,73 @@
       </div>
     </main>
 
+    <!-- buffs -->
+    <main v-if="tabView === 'buffs'">
+      <h3>Healing</h3>
+      <p>Healing buffs stack multiplicatively</p>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          v-model="healBuffs1"
+          :min="0" 
+          :max="20" 
+          :step="1" />
+        <div>{{healBuffs1}}%</div>
+      </div>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          v-model="healBuffs2"
+          :min="0" 
+          :max="20" 
+          :step="1" />
+        <div>{{healBuffs2}}%</div>
+      </div>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          key="healBuffs3"
+          :min="0" 
+          :max="20" 
+          :step="1" />
+        <div>{{healBuffs3}}%</div>
+      </div>
+      <div style="margin-bottom: 2rem">
+        Starting with {{ healStartingUnits }} units, {{ healingBuffData }} units will be revived. 
+      </div>
+
+
+      <h3>Accuracy</h3>
+      <p>Accuracy buffs are added on a power scale</p>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          v-model="accuracyBuffs1"
+          :min="-15" 
+          :max="15" 
+          :step="1" />
+        <div>{{ accuracyBuffs1 }}</div>
+      </div>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          v-model="accuracyBuffs2"
+          :min="-15" 
+          :max="15" 
+          :step="1" />
+        <div>{{ accuracyBuffs2 }}</div>
+      </div>
+      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+        <input type="range" 
+          v-model="accuracyBuffs3"
+          :min="-15" 
+          :max="15" 
+          :step="1" />
+        <div>{{ accuracyBuffs3 }}</div>
+      </div>
+      <div style="margin-bottom: 2rem">
+        Starting with {{ accuracyStart }} accuracy, resulting accuracy is {{ accuracyBuffData }}
+      </div>
+
+
+    </main>
+
+
   </section>
 </template>
 
@@ -137,12 +206,16 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import Magic from '@/components/magic.vue';
 import { getAllSpells, getMaxSpellLevels, getSpellById, getUnitById } from 'engine/src/base/references';
+import { calcHealing } from 'engine/src/battle/calc-stack-healing';
+import { applyAccuracyBuff } from 'engine/src/battle/calc-accuracy-modifier';
 import { AllowedMagic } from 'shared/types/common';
+import { StackType } from 'shared/src/common';
 import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import { dispelEnchantment, successCastingRate, summonUnit } from 'engine/src/magic';
 import { readableNumber, readableStr } from '@/util/util';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { magicAlignmentTable } from 'engine/src/base/config';
+import type { BattleStack } from "shared/types/battle";
 
 const maxSpellLevels = getMaxSpellLevels();
 const tabView = ref('summon');
@@ -150,6 +223,17 @@ const tabView = ref('summon');
 const selectedMagic = ref<AllowedMagic>('ascendant');
 const selectedSpellLevel = ref(1);
 const concentrationLevel = ref(1);
+
+const healStartingUnits = ref(1000);
+const healBuffs1 = ref(0);
+const healBuffs2 = ref(0);
+const healBuffs3 = ref(0);
+
+const accuracyStart = ref(30);
+const accuracyBuffs1 = ref(0);
+const accuracyBuffs2 = ref(0);
+const accuracyBuffs3 = ref(0);
+
 
 
 const casterSpellLevel = ref(400);
@@ -323,6 +407,40 @@ const castingData = computed(() => {
     complex,
     ultimate
   };
+});
+
+const healingBuffData = computed(() => {
+  const test: BattleStack = {
+    unit: getUnitById('militia'),
+    size: 2 * healStartingUnits.value,
+    stackType: StackType.NORMAL,
+    role: 'attacker',
+    isTemporary: false,
+    isTarget: false,
+    targetIdx: -1,
+    accuracy: 30,
+    efficiency: 100,
+    sustainedDamage: 0,
+    loss: healStartingUnits.value,
+    healingPoints: 0,
+    healingUnits: 0,
+    healingBuffer: [healBuffs1.value, healBuffs2.value, healBuffs3.value],
+    addedAbilities: [],
+    removedAbilities: [],
+    netPower: 0,
+    appliedEffects: []
+  };
+  const result = calcHealing(test);
+  return result;
+});
+
+
+const accuracyBuffData = computed(() => {
+  let start = accuracyStart.value;
+  start = applyAccuracyBuff(start, accuracyBuffs1.value);
+  start = applyAccuracyBuff(start, accuracyBuffs2.value);
+  start = applyAccuracyBuff(start, accuracyBuffs3.value);
+  return start;
 });
 
 watch(

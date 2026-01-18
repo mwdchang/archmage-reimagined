@@ -36,6 +36,12 @@ export const enum allowedEffect {
   UnitSummonEffect = 'UnitSummonEffect'
 } 
 
+export enum StackType {
+  NORMAL,
+  REINFORCEMENT,
+  TEMPORARY
+}
+
 
 export const BlackMarketId = -2;
 export const KingdomAdvisorId = -3;
