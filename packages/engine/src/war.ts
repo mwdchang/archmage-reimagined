@@ -30,7 +30,7 @@ import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'share
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
-import { calcAccuracyModifier } from './battle/calc-accuracy-modifier';
+import { applyAccuracyBuff, calcAttackAccuracy } from './battle/calc-accuracy-modifier';
 import { calcResistance } from './battle/calc-resistance';
 import { calcDamageMultiplier } from './battle/calc-damage-multiplier';
 import { calcPairings } from './battle/calc-pairings';
@@ -162,7 +162,8 @@ const applyUnitEffect = (
         } else if (field === 'secondaryAttackType') {
           unit.secondaryAttackType.push(finalValue);
         } else if (field === 'accuracy') {
-          stack.accuracy += finalValue;
+          // stack.accuracy += finalValue;
+          stack.accuracy = applyAccuracyBuff(stack.accuracy, finalValue);
         } else if (field === 'efficiency') {
           stack.efficiency += finalValue;
         } else if (field === 'attackResistances') {
@@ -1173,7 +1174,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       } // end burst
 
 
-      let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
+      let accuracy = calcAttackAccuracy(attackType, attackingStack.accuracy, aUnit, dUnit);
+      // let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
       let resistance = calcResistance(dUnit, aUnit.primaryAttackType);
       let efficiency = attackingStack.efficiency;
       let damageMultiplier = calcDamageMultiplier(aUnit, dUnit, aUnit.primaryAttackType);
@@ -1300,7 +1302,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         if (battleType === 'pillage' && side === 'defender') continue;
 
         // Execute counter
-        let accuracy = defendingStack.accuracy + calcAccuracyModifier(dUnit, aUnit);
+        // let accuracy = defendingStack.accuracy + calcAccuracyModifier(dUnit, aUnit);
+        let accuracy = calcAttackAccuracy(attackType, defendingStack.accuracy, dUnit, aUnit);
         let resistance = calcResistance(aUnit, dUnit.primaryAttackType);
         let efficiency = defendingStack.efficiency;
         let damageMultiplier = calcDamageMultiplier(dUnit, aUnit, dUnit.primaryAttackType);
@@ -1375,7 +1378,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attackType === 'secondary') {
       if (attackingStack.unit.secondaryAttackInit < 1 || attackingStack.size <= 0) continue;
 
-      let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
+      let accuracy = calcAttackAccuracy(attackType, attackingStack.accuracy, aUnit, dUnit);
+      // let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);
       let resistance = calcResistance(dUnit, aUnit.secondaryAttackType);
       let damageVariance = calcDamageVariance(aUnit.secondaryAttackType);
       let damageMultiplier = calcDamageMultiplier(aUnit, dUnit, aUnit.secondaryAttackType);

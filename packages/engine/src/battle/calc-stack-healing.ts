@@ -1,6 +1,5 @@
 import type { BattleStack } from "shared/types/battle";
 import { hasHealing, hasRegeneration } from "../base/unit";
-import { MAX } from "uuid";
 
 export const calcHealing = (stack: BattleStack) => {
   if (stack.size <= 0) return 0;
@@ -25,6 +24,7 @@ export const calcHealing = (stack: BattleStack) => {
   }
   if (stack.healingBuffer.length > 0 && stack.loss > 0) {
     let heal = 1.0;
+    // multiplicative stacking
     stack.healingBuffer.forEach(hValue => {
       heal = heal * (100 - hValue) / 100;
     });

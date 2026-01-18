@@ -1,11 +1,14 @@
 import { ArmyUnit } from "./mage.js";
 import type { Unit, UnitAbility } from "./unit.d.ts";
+import { StackType } from "../src/common.ts";
 
+/*
 export enum StackType {
   NORMAL,
   REINFORCEMENT,
   TEMPORARY
 }
+*/
 
 export interface BattleStack {
   unit: Unit,
