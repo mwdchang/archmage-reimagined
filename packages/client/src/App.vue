@@ -23,7 +23,8 @@ import {
   loadUnitData,
   loadSpellData, 
   loadItemData,
-  initializeResearchTree 
+  initializeResearchTree, 
+  loadSkillGroup
 } from 'engine/src/base/references';
 import { ServerClock } from 'shared/types/common';
 
@@ -40,6 +41,13 @@ import verdantSpells from 'data/src/spells/verdant-spells.json';
 import eradicationSpells from 'data/src/spells/eradication-spells.json';
 import netherSpells from 'data/src/spells/nether-spells.json';
 import phantasmSpells from 'data/src/spells/phantasm-spells.json';
+
+import ascendantSkills from 'data/src/skills/ascendant-graph.json';
+import verdantSkills from 'data/src/skills/verdant-graph.json';
+import eradicationSkills from 'data/src/skills/eradication-graph.json';
+import netherSkills from 'data/src/skills/nether-graph.json';
+import phantasmSkills from 'data/src/skills/phantasm-graph.json';
+
 
 import lesserItems from 'data/src/items/lesser.json';
 import uniqueItems from 'data/src/items/unique.json';
@@ -94,6 +102,13 @@ onMounted(async () => {
 
   loadItemData(lesserItems);
   loadItemData(uniqueItems);
+
+  loadSkillGroup(ascendantSkills);
+  loadSkillGroup(verdantSkills);
+  loadSkillGroup(eradicationSkills);
+  loadSkillGroup(netherSkills);
+  loadSkillGroup(phantasmSkills);
+
 
   const clock = (await API.get<ServerClock>('server-clock')).data;
   if (clock.currentTurn >= clock.endTurn) {

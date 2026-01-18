@@ -12,6 +12,7 @@ import {
   getAllLesserItems,
   getRandomItem,
   getAllUniqueItems,
+  loadSkillGroup,
 } from './base/references';
 import {
   createMage,
@@ -81,6 +82,12 @@ import phantasmSpells from 'data/src/spells/phantasm-spells.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 import uniqueItems from 'data/src/items/unique.json';
+
+import ascendantSkills from 'data/src/skills/ascendant-graph.json';
+import verdantSkills from 'data/src/skills/verdant-graph.json';
+import eradicationSkills from 'data/src/skills/eradication-graph.json';
+import netherSkills from 'data/src/skills/nether-graph.json';
+import phantasmSkills from 'data/src/skills/phantasm-graph.json';
 
 import { prepareBattleStack } from './battle/prepare-battle-stack';
 import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
@@ -160,6 +167,12 @@ class Engine {
 
     loadItemData(lesserItems);
     loadItemData(uniqueItems);
+
+    loadSkillGroup(ascendantSkills);
+    loadSkillGroup(verdantSkills);
+    loadSkillGroup(eradicationSkills);
+    loadSkillGroup(netherSkills);
+    loadSkillGroup(phantasmSkills);
 
 
     // Reset server data and defaults

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Unit } from 'shared/types/unit';
 import { Spell, Item } from 'shared/types/magic';
+import { Skill, SkillGraph } from 'shared/types/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
@@ -13,9 +14,18 @@ export const unitMap = new Map<string, Unit>();
 export const spellMap = new Map<string, Spell>();
 export const researchTree = new Map<string, Map<string, string[]>>;
 export const itemMap = new Map<string, Item>();
+export const skillMap = new Map<string, Skill>();
 
 const spellList: Spell[] = [];
 const itemList: Item[] = [];
+const skillGraphList: SkillGraph[] = [];
+
+export const loadSkillGroup = (group: SkillGraph) => {
+  for (const s of group.nodes) {
+    skillMap.set(s.id, s);
+  }
+  skillGraphList.push(group);
+}
 
 const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
   allowedMagicList.map(type => [type, 0])
