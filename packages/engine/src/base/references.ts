@@ -27,6 +27,14 @@ export const loadSkillGroup = (group: SkillGraph) => {
   skillGraphList.push(group);
 }
 
+export const getAllSkilGraphs = () => {
+  return _.cloneDeep(skillGraphList);
+}
+
+export const getSkillById = (id: string) => {
+  return skillMap.get(id);
+}
+
 const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
   allowedMagicList.map(type => [type, 0])
 ) as Record<AllowedMagic, number>;

@@ -1,4 +1,15 @@
 {
   "id": "ascendantSkillGroup",
-  "nodes": []
+  "name": "Ascendant",
+  "nodes": [
+    {
+      "id": "firstAid",
+      "name": "First Aid",
+      "description": "First aid",
+      "maxLevel": 10,
+      "prereqs": [],
+      "effects": [
+      ]
+    }
+  ]
 }

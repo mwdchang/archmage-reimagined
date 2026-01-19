@@ -1,4 +1,5 @@
 import { AllowedMagic } from "./common.js";
+import type { Effect } from "../types/effects.d.ts";
 
 interface Prereq {
   id: string;
@@ -8,12 +9,14 @@ interface Prereq {
 export interface Skill {
   id: string;
   name: string;
-  maxLevel: number;
   description: string;
-  prereq: Prereq[];
+  maxLevel: number;
+  prereqs: Prereq[];
+  effects: Effect<any>[];
 }
 
 export interface SkillGraph {
   id: string;
+  name: string;
   nodes: Skill[];
 }

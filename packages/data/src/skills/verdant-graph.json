@@ -1,4 +1,15 @@
 {
   "id": "verdantSkillGroup",
-  "nodes": []
+  "name": "Verdant",
+  "nodes": [
+    {
+      "id": "forestWatch",
+      "name": "Forest Watch",
+      "description": "Foreward outpost",
+      "maxLevel": 10,
+      "prereqs": [],
+      "effects": [
+      ]
+    }
+  ]
 }
