@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import _ from 'lodash';
 import magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { API, APIWrapper } from '@/api/api';
@@ -101,10 +102,23 @@ interface ResearchResult {
   [key: string]: string[]
 }
 
+const activeResearch = computed(() => {
+  if (_.isEmpty(currentResearch)) return null;
+
+  const r = Object.values(currentResearch.value).find(d => d?.active === true);
+  if (!r) return null;
+  return r;
+});
+
 const researchResult = ref<ResearchResult|null>(null);
 const researchResultStr = computed(() => {
   const newSpells: string[] = [];
   if (researchResult.value === null) return '';
+
+  if (activeResearch.value) {
+    return `You spent ${turns.value} turn researching ${readableStr(activeResearch.value?.id)}`;
+  }
+
   Object.keys(researchResult.value).forEach(key => {
     researchResult.value![key].forEach(spellId => {
       newSpells.push(readableStr(spellId));
@@ -137,6 +151,7 @@ const submitResearch = async () => {
 
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
+    researchResult.value = null;
     return API.post('research', {
       magic,
       focus: focusResearch.value,
