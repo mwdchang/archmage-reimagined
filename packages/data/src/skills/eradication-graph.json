@@ -7,7 +7,7 @@
       "name": "Hearth",
       "description": "Increase mana production by 200 per level",
       "maxLevel": 10,
-      "prereqs": [],
+      "prereqs": {},
       "effects": [
       ]
     },
@@ -16,7 +16,9 @@
       "name": "Fire Mastery",
       "description": "Increase fire-based attack",
       "maxLevel": 10,
-      "prereqs": [ "hearth" ],
+      "prereqs": {
+        "hearth": 1
+      }, 
       "effects": [
       ]
     },
@@ -25,7 +27,9 @@
       "name": "Lightning Mastery",
       "description": "Increase lightning-based attack",
       "maxLevel": 10,
-      "prereqs": [ "fireMastery" ],
+      "prereqs": {
+        "hearth": 1
+      },
       "effects": [
       ]
     }

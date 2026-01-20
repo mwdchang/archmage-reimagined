@@ -7,7 +7,7 @@
       "name": "Forest Watch",
       "description": "Foreward outpost",
       "maxLevel": 10,
-      "prereqs": [],
+      "prereqs": {},
       "effects": [
       ]
     }
