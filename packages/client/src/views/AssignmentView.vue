@@ -13,7 +13,7 @@
     <div class="row" style="align-items: baseline">
       <label style="width: 12rem"> Spell </label>
       <select v-model="selectedSpellId" @change="setAssignment()">
-        <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} </option>
+        <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ maxCast(spell) }}) </option>
       </select>
     </div>
 
@@ -45,10 +45,11 @@ import { ref, computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia'
 import { getItemById } from 'engine/src/base/references';
-import { MageItem, getSpells, conditionString } from '@/util/util';
+import { MageItem, getSpells, conditionString, spellDisplay } from '@/util/util';
 import { Mage } from '../../../shared/types/mage';
 import { API } from '@/api/api';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { Spell } from 'shared/types/magic';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
@@ -114,6 +115,13 @@ const usableSpells = computed(() => {
 
   return result;
 });
+
+const maxCast = (spell: Spell) => {
+  const meta = spellDisplay(spell, mage.value!.magic);
+  if (!meta.castingCost) return 0;
+
+  return Math.floor(mage.value!.currentMana / meta.castingCost);
+}
 
 const setAssignment = async () => {
   const res = await API.post('/defence-assignment', {

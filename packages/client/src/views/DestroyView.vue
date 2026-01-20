@@ -12,6 +12,7 @@
     </div>
   </div>
   <destroy-table @destroy="destroy($event)" />
+  <div v-if="destroyStr">{{ destroyStr }}</div>
   <div v-if="errorStr" class="error">{{ errorStr }}</div>
 </template>
 
@@ -21,16 +22,18 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { Mage } from 'shared/types/mage';
 import DestroyTable from '@/components/destroy-table.vue';
-import { readableNumber } from '@/util/util';
+import { readableNumber, readableStr } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
 
 const mageStore = useMageStore();
 const errorStr = ref('');
+const destroyStr = ref('');
 
-const destroy = async (payload: any) => {
+const destroy = async (payload: {[key: string]: number}) => {
 
   const { data, error } = await APIWrapper(() => {
     errorStr.value = '';
+    destroyStr.value = '';
     return API.post('destroy', payload);
   });
 
@@ -40,6 +43,11 @@ const destroy = async (payload: any) => {
   }
   
   if (data) {
+    const summary = Object.entries(payload)
+      .filter(([_, v]) => v > 0)
+      .map(([k, v]) => `${readableNumber(v)} ${readableStr(k)}`);
+    destroyStr.value = `You destroyed ${summary.join(', ')} and reclaimed them as wilderness`;
+
     mageStore.setMage(data.mage as Mage);
   }
 };
