@@ -4,15 +4,15 @@ import { GameTable } from "shared/types/common"
 export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
-  turnRate: 180, // *fixme: testing*
-  endTurn: 2000, // *fixme: testing*
+  turnRate: 120, // *fixme: testing*
+  endTurn: 4000, // *fixme: testing*
 
   itemGenerationRate: 0.08,
 
   war: {
     obfuscateReport: true,
     damagedPercentage: 0.3,
-    range: { min: 0.01, max: 99.99 }
+    range: { min: 0.25, max: 99.99 }
   },
 
   blackmarket: {

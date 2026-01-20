@@ -1961,6 +1961,14 @@ class Engine {
 
     // 2. return mage
     const newId = await this.adapter.nextMageId();
+
+    // bake in starting turn
+    if (!override) {
+      override = {};
+    }
+    const currentServerTurn = this.currentTurn;
+    override.currentTurn = Math.min(gameTable.maxTurns, 100 + currentServerTurn);
+
     let mage = createMage(newId, username, magic, override);
 
     // 3. Write to data store

@@ -99,9 +99,15 @@ const mageStore = useMageStore();
 const errorStr = ref('');
 
 const register = async () => {
+  errorStr.value = '';
+
+  if (!registerData.value.username || registerData.value.username.length < 2) {
+    errorStr.value = 'Name needs to be at least 3 characters';
+    return;
+  }
+
   try {
     const r = await API.post('/register', registerData.value);
-    console.log('register response', r.data);
     if (r) {
       mageStore.setLoginStatus(1);
       mageStore.setMage(r.data);
