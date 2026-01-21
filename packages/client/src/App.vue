@@ -86,6 +86,21 @@ watch(
 
 // Test to see if session already exist
 onMounted(async () => {
+
+  document.addEventListener("focusin", (e) => {
+    const el = e.target;
+    
+    // Ensure el is an HTMLInputElement
+    if (el instanceof HTMLInputElement && el.type === "number") {
+      // Place cursor at the end after browser default
+      setTimeout(() => {
+        el.select();
+        // cursor at the end
+        // el.selectionStart = el.selectionEnd = el.value.length;
+      }, 0);
+    }
+  });
+
   loadUnitData(plainUnits);
   loadUnitData(ascendantUnits);
   loadUnitData(verdantUnits);

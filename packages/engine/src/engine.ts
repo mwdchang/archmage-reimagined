@@ -874,6 +874,9 @@ class Engine {
     if (turns <= 0) {
       throw new Error('Turn usage must be positive');
     }
+    if (turns > mage.currentTurn) {
+      throw new Error('You do not have sufficient turns to perform this action');
+    }
 
     allowedMagicList.forEach(m => {
       if (mage.currentResearch[m]) {
@@ -920,6 +923,14 @@ class Engine {
     if (target) {
       const targetMage = await this.getMage(target);
       for (let i = 0; i < num; i++) {
+        if (mage.currentTurn <= 0) {
+          logs.push({
+            type: 'error',
+            message: `You do not have enough turns left to perform this action'`
+          });
+          continue;
+        }
+
         if (!mage.items[itemId] || mage.items[itemId] <= 0) {
           logs.push({
             type: 'error',
@@ -1974,6 +1985,14 @@ class Engine {
 
     // 2. return mage
     const newId = await this.adapter.nextMageId();
+
+    // bake in starting turn
+    if (!override) {
+      override = {};
+    }
+    const currentServerTurn = this.currentTurn;
+    override.currentTurn = Math.min(gameTable.maxTurns, 100 + currentServerTurn);
+
     let mage = createMage(newId, username, magic, override);
 
     // 3. Write to data store
