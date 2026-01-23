@@ -84,11 +84,14 @@
 <script setup lang="ts">
 import { API } from '@/api/api';
 import ActionButton from '@/components/action-button.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMageStore } from '@/stores/mage';
 import { getItems } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const selected = ref('');
 const turns = ref<number>(1);
@@ -145,6 +148,15 @@ const useItem = async () => {
     mageStore.setMage(res.mage);
   }
 };
+
+onMounted(() => {
+  const targetId = route.query.targetId;
+  if (targetId && +targetId > 0) {
+    changeView('instant');
+    target.value = '' + targetId;
+  }
+});
+
 </script>
 
 <style scoped>

@@ -22,3 +22,10 @@ export const readableStr = (str: string) => {
     .replace(/^./, char => char.toUpperCase()); // capitalize first letter
 }
 
+export const readableNumber = (
+  v: number,
+  options?: Intl.NumberFormatOptions
+) => {
+  return new Intl.NumberFormat('en-US', options).format(v);
+}
+

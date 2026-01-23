@@ -89,7 +89,8 @@ export interface BattleEffect extends Effect<E.BattleEffect> {
 
 export interface PostbattleEffect extends Effect<E.PostbattleEffect> {
   target: 'self' | 'opponent',
-  condition: 'win' | 'all';
+  condition: 'win' | 'lose' | 'all';
+  activation?: 'attack' | 'defence';
   effects: (KingdomResourcesEffect | StealEffect)[]
 }
 
