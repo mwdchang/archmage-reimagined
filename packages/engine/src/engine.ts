@@ -87,7 +87,7 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
-import { mageName, readableStr } from './util';
+import { mageName, readableStr, readableNumber } from './util';
 import { 
   fromKingdomArmyEffectResult,
   fromKingdomBuildingsEffectResult,
@@ -745,7 +745,7 @@ class Engine {
     }
     turnLogs.push({
       type: 'log',
-      message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
+      message: `You gained ${readableNumber(deltaGeld)} geld, ${readableNumber(deltaMana)} mana, and ${readableNumber(deltaPopulation)} population`
     });
 
     // Unique item effects
