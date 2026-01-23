@@ -509,6 +509,7 @@
         "effectType": "PostbattleEffect",
         "target": "opponent",
         "condition": "win",
+        "activation": "attack",
         "effects": [
           {
             "effectType": "StealEffect",

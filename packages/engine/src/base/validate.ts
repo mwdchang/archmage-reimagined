@@ -67,8 +67,13 @@ export const validateSpellOrItem = (s: Spell | Item) => {
       if (!['self', 'opponent'].includes(effect.target)) {
         throw new Error(`${s.id}: effect target ${effect.target} not valid`);
       }
-      if (!['win', 'all'].includes(effect.condition)) {
+      if (!['win', 'lose', 'all'].includes(effect.condition)) {
         throw new Error(`${s.id}: effect condition ${effect.condition} not valid`);
+      }
+      if (effect.activation) {
+        if (!['attack', 'defence'].includes(effect.activation)) {
+          throw new Error(`${s.id}: effect activation ${effect.activation} not valid`);
+        }
       }
       effect.effects.forEach(d => { validateEffect(d, s.id); });
     } else {
