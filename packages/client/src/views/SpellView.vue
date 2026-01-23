@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
 import { API } from '@/api/api';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { getSpells, spellDisplay } from '@/util/util';
 import Magic from '@/components/magic.vue';
@@ -93,6 +93,9 @@ import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
 import { Spell } from 'shared/types/magic';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const mageStore = useMageStore();
 
@@ -154,6 +157,14 @@ const castSpell = async () => {
     mageStore.setMage(res.mage);
   }
 }
+
+onMounted(() => {
+  const targetId = route.query.targetId;
+  if (targetId && +targetId > 0) {
+    changeView('spell');
+    target.value = '' + targetId;
+  }
+});
 
 </script>
 

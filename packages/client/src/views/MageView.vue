@@ -52,6 +52,21 @@
         </td>
       </tr>
       <tr v-if="mageStore.mage!.id !== mageId"> 
+        <td>Action</td>
+        <td>
+          <div class="row" style="padding: 0 1rem; gap: 1.0rem">
+            <router-link 
+              :to="{ name: 'spell', query: { targetId: mageSummary.id }}">
+              Magic 
+            </router-link>
+            <router-link 
+              :to="{ name: 'item', query: { targetId: mageSummary.id }}">
+              Item
+            </router-link>
+          </div>
+        </td>
+      </tr>
+      <tr v-if="mageStore.mage!.id !== mageId"> 
         <td>Attack</td>
         <td> 
           <div class="row" style="padding: 0 1rem; justify-content: space-between; gap: 1.0rem">
