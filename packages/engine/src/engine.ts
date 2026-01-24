@@ -1420,12 +1420,19 @@ class Engine {
     let landUsed = 0;
     let turnsUsed = 0;
 
+    // validate
+    for (const key of Object.keys(payload)) {
+      if (typeof payload[key] !== 'number') {
+        throw new Error(`Bad input ${key} = ${payload[key]}`);
+      }
+    }
+
     buildingTypes.forEach(b => {
       if (payload[b.id] < 0) {
         throw new Error(`Building ${b.id} amount cannot be negative`);
       }
-      landUsed += payload[b.id];
-      turnsUsed += payload[b.id] /  buildingRate(mage, b.id);
+      landUsed += (+payload[b.id]);
+      turnsUsed += (+payload[b.id]) /  buildingRate(mage, b.id);
     });
     turnsUsed = Math.ceil(turnsUsed);
     landUsed = Math.ceil(landUsed);
