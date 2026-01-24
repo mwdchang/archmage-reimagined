@@ -1,21 +1,22 @@
 <template>
-  <section class="row">
-    <img src="@/assets/images/ascendant-new.png" style="width: 64px"/>
-    <img src="@/assets/images/verdant-new.png" style="width: 64px"/>
-    <img src="@/assets/images/eradication-new.png" style="width: 64px"/>
-    <img src="@/assets/images/nether-new.png" style="width: 64px"/>
-    <img src="@/assets/images/phantasm-new.png" style="width: 64px"/>
-    <img src="@/assets/images/exiled-new.png" style="width: 64px"/>
-  </section>
+  <main class="column" style="align-items: center">
+    <section class="row">
+      <img src="@/assets/images/ascendant-new.png" style="width: 64px"/>
+      <img src="@/assets/images/verdant-new.png" style="width: 64px"/>
+      <img src="@/assets/images/eradication-new.png" style="width: 64px"/>
+      <img src="@/assets/images/nether-new.png" style="width: 64px"/>
+      <img src="@/assets/images/phantasm-new.png" style="width: 64px"/>
+      <img src="@/assets/images/exiled-new.png" style="width: 64px"/>
+    </section>
 
-  <section class="row" style="align-items: baseline; width: 50rem">
-    <div style="width: 8rem">
-      <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
-      <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
-    </div>
-    <div class="markdown-body" style="margin-left: 1rem; flex: 1; min-height: 10rem" v-html="guide" />
-  </section>
-
+    <section class="row" style="align-items: baseline; width: 50rem">
+      <div style="width: 8rem">
+        <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
+        <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
+      </div>
+      <div class="markdown-body" style="margin-left: 1rem; flex: 1; min-height: 10rem" v-html="guide" />
+    </section>
+  </main>
 </template>
 
 <script lang="ts" setup>

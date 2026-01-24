@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="column" style="align-items: center">
     <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
       <ImageProxy src="/images/ui/battle.png" />
       <div>
@@ -9,6 +9,8 @@
           <br>- Regular destroys 5% land
           <br>- Siege destroys 10% land
           <br>- Pillage steals geld
+          <br>
+          Counters last for 24 hours.
         </div>
       </div>
     </div>
