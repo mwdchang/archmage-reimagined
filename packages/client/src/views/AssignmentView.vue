@@ -1,43 +1,45 @@
 <template>
-  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-    <ImageProxy src="/images/ui/assignment.png" />
-    <div>
-      <div class="section-header">Assignment</div>
+  <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/assignment.png" />
       <div>
-        Assign the spell and item you want to deploy for defense. Conditions depend on the relative strengths of the opposing armies.
+        <div class="section-header">Assignment</div>
+        <div>
+          Assign the spell and item you want to deploy for defense. Conditions depend on the relative strengths of the opposing armies.
+        </div>
       </div>
     </div>
-  </div>
 
-  <section class="form">
-    <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Spell </label>
-      <select v-model="selectedSpellId" @change="setAssignment()">
-        <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ maxCast(spell) }}) </option>
-      </select>
-    </div>
+    <section class="form">
+      <div class="row" style="align-items: baseline">
+        <label style="width: 12rem"> Spell </label>
+        <select v-model="selectedSpellId" @change="setAssignment()">
+          <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ maxCast(spell) }}) </option>
+        </select>
+      </div>
 
-    <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Spell condition</label>
-      <select v-model="selectedSpellCondition" @change="setAssignment()">
-        <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
-      </select>
-    </div>
+      <div class="row" style="align-items: baseline">
+        <label style="width: 12rem"> Spell condition</label>
+        <select v-model="selectedSpellCondition" @change="setAssignment()">
+          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
+        </select>
+      </div>
 
-    <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Item </label>
-      <select v-model="selectedItemId" @change="setAssignment()">
-        <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
-      </select>
-    </div>
+      <div class="row" style="align-items: baseline">
+        <label style="width: 12rem"> Item </label>
+        <select v-model="selectedItemId" @change="setAssignment()">
+          <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
+        </select>
+      </div>
 
-    <div class="row" style="align-items: baseline">
-      <label style="width: 12rem"> Item condition </label>
-      <select v-model="selectedItemCondition" @change="setAssignment()" style="margin-bottom: 0">
-        <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
-      </select>
-    </div>
-  </section>
+      <div class="row" style="align-items: baseline">
+        <label style="width: 12rem"> Item condition </label>
+        <select v-model="selectedItemCondition" @change="setAssignment()" style="margin-bottom: 0">
+          <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
+        </select>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">

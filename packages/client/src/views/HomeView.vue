@@ -31,12 +31,13 @@
       If you already have a mage ... welcome back.
       <Login />
     </p>
-  </main>
-  <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
-    <div class="modal">
-      <Register />
+
+    <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
+      <div class="modal">
+        <Register />
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">

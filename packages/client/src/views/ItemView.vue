@@ -1,94 +1,96 @@
 <template>
-  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-    <ImageProxy src="/images/ui/item.png" />
-    <div>
-      <div class="section-header">Item inventory</div>
+  <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/item.png" />
       <div>
-        You have {{ numItems }} items in your inventory storage.
+        <div class="section-header">Item inventory</div>
+        <div>
+          You have {{ numItems }} items in your inventory storage.
+        </div>
       </div>
     </div>
-  </div>
 
-  <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
-    <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table v-if="itemList.length > 0 && layout === 'table'" style="min-width: 15rem">
-        <thead style="position: sticky; top: 0; z-index: 10">
-          <tr>
-            <th>Name</th>
-            <!--<th>Attributes</th>-->
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, _idx) of usableItems" :key="item.id">
-            <td>
-              <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
-            </td>
-            <!--<td>{{ item.attributes.join(', ') }}</td>-->
-            <td class="text-right">{{ item.amount }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-if="itemList.length > 0 && layout === 'cards'" style="min-width: 10rem">
-        <div v-for="(item, _idx) of usableItems" :key="item.id" class="card">
-          <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
-          <div class="card-grid-2">
-            <div>Amount</div>
-            <div>{{ item.amount }}</div>
+    <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
+      <div style="max-height: 400px; overflow-y: scroll; padding: 0">
+        <table v-if="itemList.length > 0 && layout === 'table'" style="min-width: 15rem">
+          <thead style="position: sticky; top: 0; z-index: 10">
+            <tr>
+              <th>Name</th>
+              <!--<th>Attributes</th>-->
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, _idx) of usableItems" :key="item.id">
+              <td>
+                <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
+              </td>
+              <!--<td>{{ item.attributes.join(', ') }}</td>-->
+              <td class="text-right">{{ item.amount }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="itemList.length > 0 && layout === 'cards'" style="min-width: 10rem">
+          <div v-for="(item, _idx) of usableItems" :key="item.id" class="card">
+            <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
+            <div class="card-grid-2">
+              <div>Amount</div>
+              <div>{{ item.amount }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="itemList.length === 0" style="width: 250px">
+          You do not have any items in your inventory.
+        </div>
+      </div>
+      <div> 
+        <section class="form" style="max-width: 20rem">
+          <div class="form-tabs">
+            <div class="tab" :class="{ active: tabView === 'instant' }" @click="changeView('instant')">Instant</div>
+            <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
+            <div class="tab" :class="{ active: tabView === 'special' }" @click="changeView('special')">Special</div>
+          </div>
+
+          <div v-if="tabView === 'instant'">
+            <label>Use item</label>
+            <select v-model="selected" v-if="usableItems.length > 0">
+              <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
+            </select>
+
+            <label>Target</label>
+            <input type="text" v-model="target" />
+
+            <label># of times</label>
+            <input type="number" v-model="turns" />
+
+            <ActionButton 
+              :disabled="selected === ''"
+              :proxy-fn="useItem"
+              :label="'Use Item'" />
+          </div>
+          <div v-if="tabView === 'battle'">
+            <p>
+              You can configure your defensive battle items under
+              <router-link :to="{ name: 'assignment' }">
+                Assignment
+              </router-link>
+            </p>
+          </div>
+          <div v-if="tabView === 'special'">
+            <p> Special and passive items</p>
+          </div>
+        </section>
+
+        <div v-if="itemResult.length">
+          <div v-for="(d, idx) of itemResult" :key="idx">
+            {{ d.message }}
           </div>
         </div>
       </div>
 
-      <div v-if="itemList.length === 0" style="width: 250px">
-        You do not have any items in your inventory.
-      </div>
-    </div>
-    <div> 
-      <section class="form" style="max-width: 20rem">
-        <div class="form-tabs">
-          <div class="tab" :class="{ active: tabView === 'instant' }" @click="changeView('instant')">Instant</div>
-          <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
-          <div class="tab" :class="{ active: tabView === 'special' }" @click="changeView('special')">Special</div>
-        </div>
-
-        <div v-if="tabView === 'instant'">
-          <label>Use item</label>
-          <select v-model="selected" v-if="usableItems.length > 0">
-            <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
-          </select>
-
-          <label>Target</label>
-          <input type="text" v-model="target" />
-
-          <label># of times</label>
-          <input type="number" v-model="turns" />
-
-          <ActionButton 
-            :disabled="selected === ''"
-            :proxy-fn="useItem"
-            :label="'Use Item'" />
-        </div>
-        <div v-if="tabView === 'battle'">
-          <p>
-            You can configure your defensive battle items under
-            <router-link :to="{ name: 'assignment' }">
-              Assignment
-            </router-link>
-          </p>
-        </div>
-        <div v-if="tabView === 'special'">
-          <p> Special and passive items</p>
-        </div>
-      </section>
-
-      <div v-if="itemResult.length">
-        <div v-for="(d, idx) of itemResult" :key="idx">
-          {{ d.message }}
-        </div>
-      </div>
-    </div>
-
-  </section>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
