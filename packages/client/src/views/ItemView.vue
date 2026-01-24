@@ -11,7 +11,7 @@
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table v-if="itemList.length > 0" style="min-width: 15rem">
+      <table v-if="itemList.length > 0 && layout === 'table'" style="min-width: 15rem">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
             <th>Name</th>
@@ -29,7 +29,17 @@
           </tr>
         </tbody>
       </table>
-      <div v-else style="width: 250px">
+      <div v-if="itemList.length > 0 && layout === 'cards'" style="min-width: 10rem">
+        <div v-for="(item, _idx) of usableItems" :key="item.id" class="card">
+          <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
+          <div class="card-grid-2">
+            <div>Amount</div>
+            <div>{{ item.amount }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="itemList.length === 0" style="width: 250px">
         You do not have any items in your inventory.
       </div>
     </div>
@@ -90,6 +100,7 @@ import { useMageStore } from '@/stores/mage';
 import { getItems } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { useRoute } from 'vue-router';
+import { useLayout } from '@/composables/useLayout';
 
 const route = useRoute();
 
@@ -106,6 +117,8 @@ const changeView = (v: string) => {
 };
 
 const mageStore = useMageStore();
+const { layout } = useLayout();
+
 const { mage } = storeToRefs(mageStore);
 
 const itemList = computed(() => {
