@@ -52,7 +52,7 @@ const charge = async () => {
 
   if (data) {
     mageStore.setMage(data.mage);
-    manaMsg.value = `You used ${turnsToCharge.value} turn and charged ${data.manaGained} mana.`
+    manaMsg.value = `You used ${turnsToCharge.value} turn and charged ${readableNumber(data.manaGained)} mana.`
   }
 };
 

@@ -94,7 +94,7 @@ import { applyKingdomArmyEffect } from './effects/apply-kingdom-army-effect';
 import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
-import { mageName, readableStr } from './util';
+import { mageName, readableStr, readableNumber } from './util';
 import { 
   fromKingdomArmyEffectResult,
   fromKingdomBuildingsEffectResult,
@@ -758,7 +758,7 @@ class Engine {
     }
     turnLogs.push({
       type: 'log',
-      message: `You gained ${deltaGeld} geld, ${deltaMana} mana, and ${deltaPopulation} population`
+      message: `You gained ${readableNumber(deltaGeld)} geld, ${readableNumber(deltaMana)} mana, and ${readableNumber(deltaPopulation)} population`
     });
 
     // Unique item effects
@@ -1433,12 +1433,19 @@ class Engine {
     let landUsed = 0;
     let turnsUsed = 0;
 
+    // validate
+    for (const key of Object.keys(payload)) {
+      if (typeof payload[key] !== 'number') {
+        throw new Error(`Bad input ${key} = ${payload[key]}`);
+      }
+    }
+
     buildingTypes.forEach(b => {
       if (payload[b.id] < 0) {
         throw new Error(`Building ${b.id} amount cannot be negative`);
       }
-      landUsed += payload[b.id];
-      turnsUsed += payload[b.id] /  buildingRate(mage, b.id);
+      landUsed += (+payload[b.id]);
+      turnsUsed += (+payload[b.id]) /  buildingRate(mage, b.id);
     });
     turnsUsed = Math.ceil(turnsUsed);
     landUsed = Math.ceil(landUsed);

@@ -107,12 +107,13 @@
       <router-link class="grid-item g-c4 g-r5" to="/disband" style="color: #d80">Disband</router-link>
     </section>
 
-    <section class="row" style="gap: 30px; margin-top: 20px; background: #181818; border-radius: 3px">
+    <section class="row" style="gap: 30px; margin-top: 20px; margin-bottom: 1rem; background: #181818; border-radius: 3px">
       <router-link to="/encyclopedia/spell">Encyclopedia</router-link>
       <router-link to="/guide">Guide</router-link>
       <router-link to="/analysis">Analysis</router-link>
     </section>
 
+    <div>Trail of Deeds</div>
     <div class="chronicles" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
         <div class="row" style="gap: 0.5rem"> 

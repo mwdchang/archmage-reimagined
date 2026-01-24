@@ -1,19 +1,21 @@
 <template>
-  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-    <ImageProxy src="/images/ui/destroy.png" />
-    <div>
-      <div class="section-header">Destroy Buildings</div>
+  <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/destroy.png" />
       <div>
-        You can demolish and reclaim your buildings as wilderness acres. 
-        Demolitions takes one turn.
-        <br><br>
-        You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+        <div class="section-header">Destroy Buildings</div>
+        <div>
+          You can demolish and reclaim your buildings as wilderness acres. 
+          Demolitions takes one turn.
+          <br><br>
+          You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+        </div>
       </div>
     </div>
-  </div>
-  <destroy-table @destroy="destroy($event)" />
-  <div v-if="destroyStr">{{ destroyStr }}</div>
-  <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <destroy-table @destroy="destroy($event)" />
+    <div v-if="destroyStr">{{ destroyStr }}</div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+  </main>
 </template>
 
 <script setup lang="ts">

@@ -1541,6 +1541,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     for (const postbattleEffect of postbattleEffects) {
       // Win condition trigger check for a successful attack
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
+      if (postbattleEffect.condition === 'lose' && battleReport.isSuccessful === true) continue;
+
+      // defence effect does not trigger on attack
+      if (postbattleEffect.activation && postbattleEffect.activation === 'defence') continue;
 
       for (const effect of postbattleEffect.effects) {
         if (effect.effectType === E.KingdomResourcesEffect) {
@@ -1565,6 +1569,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     for (const postbattleEffect of postbattleEffects) {
       // Win condition trigger check for a successful defend
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === true) continue;
+      if (postbattleEffect.condition === 'lose' && battleReport.isSuccessful === false) continue;
+
+      // attack effect does not trigger on defence
+      if (postbattleEffect.activation && postbattleEffect.activation === 'attack') continue;
 
       for (const effect of postbattleEffect.effects) {
         if (effect.effectType === E.KingdomResourcesEffect) {

@@ -1,23 +1,25 @@
 <template>
-  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-    <ImageProxy src="/images/ui/build.png" />
-    <div>
-      <div class="section-header">Build</div>
+  <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/build.png" />
       <div>
-        - Towns/Farms: Population and unit space
-        <br>- Barracks: Recruitment rate
-        <br>- Nodes: Mana production and capacity
-        <br>- Guilds: Research and item generation
-        <br>- Forts: Defence bonus
-        <br>- Barriers: Spell resistance
-        <br><br>
-        You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+        <div class="section-header">Build</div>
+        <div>
+          - Towns/Farms: Population and unit space
+          <br>- Barracks: Recruitment rate
+          <br>- Nodes: Mana production and capacity
+          <br>- Guilds: Research and item generation
+          <br>- Forts: Defence bonus
+          <br>- Barriers: Spell resistance
+          <br><br>
+          You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
+        </div>
       </div>
     </div>
-  </div>
-  <build-table @build="build($event)" />
-  <div v-if="buildStr">{{ buildStr }}</div>
-  <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <build-table @build="build($event)" />
+    <div v-if="buildStr">{{ buildStr }}</div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+  </main>
 </template>
 
 <script setup lang="ts">

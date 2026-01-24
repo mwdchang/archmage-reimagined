@@ -1,56 +1,58 @@
 <template>
-  <h2 v-if="spell" class="row">
-    <magic :magic="spell.magic" />{{spell.name}}
-  </h2>
-  <main v-if="spell">
-    <p style="margin: 1rem 1rem">{{ spell.description }} </p>
-    <table style="margin-bottom: 25px">
-      <tbody>
-        <tr>
-          <td> Rank </td>
-          <td> {{ spell.rank }}</td>
-        </tr>
-        <tr>
-          <td> Casting cost </td>
-          <td> {{ spell.castingCost }} </td>
-        </tr>
-        <tr>
-          <td> Casting turn </td>
-          <td> {{ spell.castingTurn }} </td>
-        </tr>
-        <tr>
-          <td> Research cost </td>
-          <td> {{ spell.researchCost }} </td>
-        </tr>
-        <tr>
-          <td> Atrributes </td>
-          <td> {{ spell.attributes.join(",&nbsp;") }} </td>
-        </tr>
-        <tr v-if="spell.upkeep">
-          <td> Upkeep </td>
-          <td>
-            <div> {{ spell.upkeep.geld }} geld </div>
-            <div> {{ spell.upkeep.mana }} mana</div>
-            <div> {{ spell.upkeep.population }} population</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <main>
+    <h2 v-if="spell" class="row">
+      <magic :magic="spell.magic" />{{spell.name}}
+    </h2>
+    <section v-if="spell">
+      <p style="margin: 1rem 1rem">{{ spell.description }} </p>
+      <table style="margin-bottom: 25px">
+        <tbody>
+          <tr>
+            <td> Rank </td>
+            <td> {{ spell.rank }}</td>
+          </tr>
+          <tr>
+            <td> Casting cost </td>
+            <td> {{ spell.castingCost }} </td>
+          </tr>
+          <tr>
+            <td> Casting turn </td>
+            <td> {{ spell.castingTurn }} </td>
+          </tr>
+          <tr>
+            <td> Research cost </td>
+            <td> {{ spell.researchCost }} </td>
+          </tr>
+          <tr>
+            <td> Atrributes </td>
+            <td> {{ spell.attributes.join(",&nbsp;") }} </td>
+          </tr>
+          <tr v-if="spell.upkeep">
+            <td> Upkeep </td>
+            <td>
+              <div> {{ spell.upkeep.geld }} geld </div>
+              <div> {{ spell.upkeep.mana }} mana</div>
+              <div> {{ spell.upkeep.population }} population</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <div v-for="(effect, idx) in spell.effects" :key="idx" style="margin-bottom: 10px">
-      <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
-      <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />
-      <BattleEffect v-if="effect.effectType === 'PrebattleEffect'" :effect="effect as any" />
+      <div v-for="(effect, idx) in spell.effects" :key="idx" style="margin-bottom: 10px">
+        <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
+        <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />
+        <BattleEffect v-if="effect.effectType === 'PrebattleEffect'" :effect="effect as any" />
 
-      <KingdomResourcesEffect v-if="effect.effectType === 'KingdomResourcesEffect'" :effect="effect as any" />
-      <KingdomResistanceEffect v-if="effect.effectType === 'KingdomResistanceEffect'" :effect="effect as any" />
-      <KingdomBuildingsEffect v-if="effect.effectType === 'KingdomBuildingsEffect'" :effect="effect as any" />
-      <KingdomArmyEffect v-if="effect.effectType === 'KingdomArmyEffect'" :effect="effect as any" />
-      <ArmyUpkeepEffect v-if="effect.effectType === 'ArmyUpkeepEffect'" :effect="effect as any" />
-      <ProductionEffect v-if="effect.effectType === 'ProductionEffect'" :effect="effect as any" />
-      <WishEffect v-if="effect.effectType === 'WishEffect'" :effect="effect as any" />
-      <StealEffect v-if="effect.effectType === 'StealEffect'" :effect="effect as any" />
-    </div>
+        <KingdomResourcesEffect v-if="effect.effectType === 'KingdomResourcesEffect'" :effect="effect as any" />
+        <KingdomResistanceEffect v-if="effect.effectType === 'KingdomResistanceEffect'" :effect="effect as any" />
+        <KingdomBuildingsEffect v-if="effect.effectType === 'KingdomBuildingsEffect'" :effect="effect as any" />
+        <KingdomArmyEffect v-if="effect.effectType === 'KingdomArmyEffect'" :effect="effect as any" />
+        <ArmyUpkeepEffect v-if="effect.effectType === 'ArmyUpkeepEffect'" :effect="effect as any" />
+        <ProductionEffect v-if="effect.effectType === 'ProductionEffect'" :effect="effect as any" />
+        <WishEffect v-if="effect.effectType === 'WishEffect'" :effect="effect as any" />
+        <StealEffect v-if="effect.effectType === 'StealEffect'" :effect="effect as any" />
+      </div>
+    </section>
   </main>
 </template>
 

@@ -1,78 +1,79 @@
 <template>
-  <main v-if="targetSummary">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-      <ImageProxy src="/images/ui/battle2.png" />
-      <div>
-        <div class="section-header">War</div>
-        You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom.
-        You can send up to 10 army stacks into battle.
-        <span v-if="battleType === 'siege'">
-          Defenders are tougher in siege attacks.
-        </span>
+  <main>
+    <section v-if="targetSummary">
+      <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+        <ImageProxy src="/images/ui/battle2.png" />
+        <div>
+          <div class="section-header">War</div>
+          You are {{ battleTypeStr }} {{ targetSummary.name }} (#{{targetSummary.id}}) kingdom.
+          You can send up to 10 army stacks into battle.
+          <span v-if="battleType === 'siege'">
+            Defenders are tougher in siege attacks.
+          </span>
+        </div>
       </div>
-    </div>
-    <table style="min-width: 20rem">
-      <tbody>
-        <tr>
-          <td>Unit</td> 
-          <td>Size</td>
-          <!--<td>Power</td>-->
-          <td>Power %</td>
-          <td> 
-            <input type="checkbox" v-model="useAllStacks" v-if="battleType !== 'pillage'"> 
-          </td>
-        </tr>
-        <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
-          @click="stack.active = !stack.active">
-          <td> 
-            <router-link :to="{ name: 'viewUnit', params: { id: stack.id }}"> {{ stack.name }} </router-link>
-          </td>
-          <td class="text-right"> {{ readableNumber(stack.size) }} </td>
-          <!--
-          <td class="text-right"> {{ readableNumber(stack.power) }} </td>
-          -->
-          <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
-          <td>
-              <input type="checkbox" v-model="stack.active" v-if="battleType !== 'pillage'">
-              <input type="radio" :value="stack.id" v-model="pillageStackId" v-if="battleType === 'pillage'">
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table style="min-width: 20rem">
+        <tbody>
+          <tr>
+            <td>Unit</td> 
+            <td>Size</td>
+            <!--<td>Power</td>-->
+            <td>Power %</td>
+            <td> 
+              <input type="checkbox" v-model="useAllStacks" v-if="battleType !== 'pillage'"> 
+            </td>
+          </tr>
+          <tr v-for="(stack, _idx) of armySelection" :key="stack.id"
+            @click="stack.active = !stack.active">
+            <td> 
+              <router-link :to="{ name: 'viewUnit', params: { id: stack.id }}"> {{ stack.name }} </router-link>
+            </td>
+            <td class="text-right"> {{ readableNumber(stack.size) }} </td>
+            <!--
+            <td class="text-right"> {{ readableNumber(stack.power) }} </td>
+            -->
+            <td class="text-right"> {{ (100 * stack.powerPercentage).toFixed(2) }}% </td>
+            <td>
+                <input type="checkbox" v-model="stack.active" v-if="battleType !== 'pillage'">
+                <input type="radio" :value="stack.id" v-model="pillageStackId" v-if="battleType === 'pillage'">
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <br>
+      <br>
 
-    <section class="form">
-      <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
-        <label style="width:6rem">Spell</label>
-        <select v-model="battleSpell">
-          <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
-        </select>
-      </div>
-      <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
-        <label style="width:6rem">Item</label>
-        <select v-model="battleItem">
-          <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
-        </select>
-      </div>
+      <section class="form" style="width: 25rem">
+        <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
+          <label style="width:6rem">Spell</label>
+          <select v-model="battleSpell">
+            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+          </select>
+        </div>
+        <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
+          <label style="width:6rem">Item</label>
+          <select v-model="battleItem">
+            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+          </select>
+        </div>
 
-      <ActionButton 
-        v-if="battleType !== 'pillage'"
-        :proxy-fn="doBattle"
-        :disabled="armySelection.filter(d => d.active).length === 0"
-        :label="readableStr(battleType)" />
-      <ActionButton 
-        v-if="battleType === 'pillage'"
-        :proxy-fn="doBattle"
-        :disabled="pillageStackId === null"
-        :label="readableStr(battleType)" />
+        <ActionButton 
+          v-if="battleType !== 'pillage'"
+          :proxy-fn="doBattle"
+          :disabled="armySelection.filter(d => d.active).length === 0"
+          :label="readableStr(battleType)" />
+        <ActionButton 
+          v-if="battleType === 'pillage'"
+          :proxy-fn="doBattle"
+          :disabled="pillageStackId === null"
+          :label="readableStr(battleType)" />
 
+      </section>
     </section>
+    <div v-for="error of errorStrs" class="error">
+      {{ error }}
+    </div>
   </main>
-  <div v-for="error of errorStrs" class="error">
-    {{ error }}
-  </div>
-
 </template>
 
 <script setup lang="ts">

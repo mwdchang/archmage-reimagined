@@ -3,8 +3,20 @@
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
 
+    <!--
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
     <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
+    -->
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade" mode="out-in">
+        <component
+          v-if="publicRoutes.includes(route.name as string)
+            || mageStore.mage"
+          :is="Component"
+          :key="route.fullPath"
+        />
+      </Transition>
+    </RouterView>
 
     <Footer />
   </main>
@@ -184,5 +196,16 @@ onMounted(async () => {
   background-repeat: no-repeat;
   height: 90vh;
   font-size: 1.0rem;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

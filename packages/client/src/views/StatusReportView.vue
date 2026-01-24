@@ -122,39 +122,39 @@
           </tr>
           <tr>
             <td> Income </td>
-            <td class="text-right"> {{ readableNumber(productionStatus.geld) }} </td>
-            <td class="text-right"> {{ readableNumber(productionStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(productionStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(productionStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(productionStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(productionStatus.population)) }} </td>
           </tr>
           <tr>
             <td> Unit upkeep </td>
-            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(armyUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(armyUpkeepStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(armyUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(armyUpkeepStatus.population)) }} </td>
           </tr>
           <tr>
             <td> Buiding upkeep </td>
-            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(buildingUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(buildingUpkeepStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(buildingUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(buildingUpkeepStatus.population)) }} </td>
           </tr>
           <tr>
             <td> Spell upkeep </td>
-            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(enchantmentUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(enchantmentUpkeepStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(enchantmentUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(enchantmentUpkeepStatus.population)) }} </td>
           </tr>
           <tr>
             <td> Recruit cost </td>
-            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.geld) }}</td>
-            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(recruitUpkeepStatus.population) }}</td>
+            <td class="text-right"> {{ readableNumber(Math.floor(recruitUpkeepStatus.geld)) }}</td>
+            <td class="text-right"> {{ readableNumber(Math.floor(recruitUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(recruitUpkeepStatus.population)) }}</td>
           </tr>
           <tr>
             <td> Net income </td>
-            <td class="text-right"> {{ readableNumber(netUpkeepStatus.geld) }} </td>
-            <td class="text-right"> {{ readableNumber(netUpkeepStatus.mana) }} </td>
-            <td class="text-right"> {{ readableNumber(netUpkeepStatus.population) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.population)) }} </td>
           </tr>
         </tbody>
       </table>
