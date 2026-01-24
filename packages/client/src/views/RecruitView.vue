@@ -12,7 +12,7 @@
 
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <!-- left -->
-    <table v-if="mageStore.mage">
+    <table v-if="mageStore.mage && layout === 'table'">
       <tbody>
         <tr>
           <td> Name </td>
@@ -32,6 +32,18 @@
         </tr>
       </tbody>
     </table>
+    <div v-if="mageStore.mage && layout === 'cards'">
+      <div class="card" v-for="(unit) of recruitableUnits">
+        <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> {{ unit.name }} </router-link>
+        <div class="card-grid-2">
+          <div>Upkeep</div>
+          <div>{{ resourceDisplay(unit.upkeepCost) }} </div>
+          <div>Max/Turn</div>
+          <div>{{ readableNumber(recruitmentAmount(mageStore.mage, unit.id)) }} </div>
+        </div>
+      </div>
+    </div>
+      
 
     <!-- right -->
     <div>
@@ -89,8 +101,10 @@ import { ArmyUnit } from 'shared/types/mage';
 import { readableStr, readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { useLayout } from '@/composables/useLayout';
 
 const mageStore = useMageStore();
+const { layout } = useLayout();
 
 const rselect = ref(''); // Selected unit
 const rsize = ref(0);    // Recruitment size

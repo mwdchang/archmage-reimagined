@@ -10,7 +10,7 @@
   </div>
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
     <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-      <table v-if="spells.length > 0">
+      <table v-if="spells.length > 0 && layout === 'table'">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
             <th>Name</th>
@@ -30,6 +30,21 @@
           </tr>
         </tbody>
       </table>
+      <div v-if="spells.length > 0 && layout === 'cards'">
+        <div class="card" v-for="spell of castingSpells" :key="spell.id">
+          <div class="row">
+            <magic :magic="spell.magic" small />
+            <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
+          </div>
+          <div class="card-grid-2">
+            <div>Turns</div>
+            <div class="text-right">{{ spell.castingTurn }}</div>
+            <div>Mana cost</div>
+            <div class="text-right">{{ readableNumber(spell.castingCost) }}</div>
+          </div>
+        </div>
+      </div>
+
       <div v-else style="max-width: 250px">
         You do not have any spells in your spellbook.
         Use <router-link :to="{ name: 'research' }">research</router-link> to learn new spells.
@@ -94,10 +109,12 @@ import { readableNumber } from '@/util/util';
 import { Spell } from 'shared/types/magic';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { useRoute } from 'vue-router';
+import { useLayout } from '@/composables/useLayout';
 
 const route = useRoute();
 
 const mageStore = useMageStore();
+const { layout } = useLayout();
 
 const selected = ref<string>('');
 const turns = ref<number>(1);

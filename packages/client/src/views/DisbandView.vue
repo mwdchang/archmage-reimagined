@@ -10,7 +10,7 @@
   </div>
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px" v-if="mageStore.mage">
     <!-- left -->
-    <table> 
+    <table v-if="layout === 'table'"> 
       <thead>
         <tr>
           <th>&nbsp;</th>
@@ -66,6 +66,30 @@
         </tr>
       </tbody>
     </table>
+
+    <div v-if="layout === 'cards'"> 
+      <div class="card" v-for="(u) of unitsStatus" :key="u.id">
+        <div class="row" style="gap: 1rem; justify-content:space-between">
+          <input 
+            :disabled="u.attributes.includes('undisbandable') === true" 
+            v-model="u.checked"
+            @change="toggleWholeStack(u)"
+            type="checkbox">
+          <div>
+            <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> 
+              {{ u.name }} 
+            </router-link>
+            &nbsp;{{ readableNumber(u.size) }}
+          </div>
+          <input
+            :disabled="u.attributes.includes('undisbandable') === true" 
+            type="text" 
+            size=9 
+            style="height: 1.6rem; right: 0"
+            v-model="disbandPayload[u.id]">
+        </div>
+      </div>
+    </div>
     
     <!-- left -->
     <section class="form">
@@ -115,6 +139,7 @@ import { unitUpkeep } from 'engine/src/interior';
 import ActionButton from '@/components/action-button.vue';
 import SvgIcon from '@/components/svg-icon.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { useLayout } from '@/composables/useLayout';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
@@ -125,6 +150,7 @@ interface DisbandArmyItem extends ArmyItem {
 
 const mageStore = useMageStore();
 const { netUpkeepStatus } = useEngine();
+const { layout } = useLayout();
 
 const confirmDisband = ref(false);
 

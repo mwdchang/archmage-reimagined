@@ -115,7 +115,9 @@ const researchResultStr = computed(() => {
   const newSpells: string[] = [];
   if (researchResult.value === null) return '';
 
-  if (activeResearch.value) {
+  const completed = Object.values(researchResult.value).some(list => list.length > 0);
+
+  if (activeResearch.value && completed === false) {
     return `You spent ${turns.value} turn researching ${readableStr(activeResearch.value?.id)}`;
   }
 
