@@ -1,67 +1,69 @@
 <template>
-  <div class="section-header" style="margin-bottom: 0.5rem">Server configurations</div>
-  <main class="column" style="max-width: 35rem">
-    <table v-if="gameTable" style="min-width: 20rem; margin-bottom: 0.5rem">
-      <tbody>
-        <tr>
-          <td>Exploration limit</td>
-          <td>{{ readableNumber(gameTable.explorationLimit) }} acres</td>
-        </tr>
-        <tr>
-          <td>Max turn storage</td>
-          <td>{{ readableNumber(gameTable.maxTurns) }} turns</td>
-        </tr>
-        <tr>
-          <td>Turn rate</td>
-          <td>{{ gameTable.turnRate }} seconds</td>
-        </tr>
-        <tr>
-          <td>Max item generation</td>
-          <td>{{ readableNumber(100 * gameTable.itemGenerationRate) }}%</td>
-        </tr>
-        <tr>
-          <td>Attack range</td>
-          <td>
-            {{ 100 * gameTable.war.range.min }}% to 
-            {{ 100 * gameTable.war.range.max }}%
-          </td>
-        </tr>
-        <tr>
-          <td>Damaged status</td>
-          <td>{{ 100 * gameTable.war.damagedPercentage }}%</td>
-        </tr>
-        <tr>
-          <td>Research point</td>
-          <td>{{ readableNumber(productionTable.research) }} /node</td>
-        </tr>
-        <tr>
-          <td>Mana storage</td>
-          <td>{{ readableNumber(productionTable.manaStorage) }} / node</td>
-        </tr>
-        <tr>
-          <td>Food production</td>
-          <td>
-            <div v-for="foodP of foodProduction">{{ foodP }} </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Space</td>
-          <td> 
-            <div v-for="spaceP of spaceProduction">{{ spaceP }} </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <main>
+    <div class="section-header" style="margin-bottom: 0.5rem">Server configurations</div>
+    <section class="column" style="max-width: 35rem">
+      <table v-if="gameTable" style="min-width: 20rem; margin-bottom: 0.5rem">
+        <tbody>
+          <tr>
+            <td>Exploration limit</td>
+            <td>{{ readableNumber(gameTable.explorationLimit) }} acres</td>
+          </tr>
+          <tr>
+            <td>Max turn storage</td>
+            <td>{{ readableNumber(gameTable.maxTurns) }} turns</td>
+          </tr>
+          <tr>
+            <td>Turn rate</td>
+            <td>{{ gameTable.turnRate }} seconds</td>
+          </tr>
+          <tr>
+            <td>Max item generation</td>
+            <td>{{ readableNumber(100 * gameTable.itemGenerationRate) }}%</td>
+          </tr>
+          <tr>
+            <td>Attack range</td>
+            <td>
+              {{ 100 * gameTable.war.range.min }}% to 
+              {{ 100 * gameTable.war.range.max }}%
+            </td>
+          </tr>
+          <tr>
+            <td>Damaged status</td>
+            <td>{{ 100 * gameTable.war.damagedPercentage }}%</td>
+          </tr>
+          <tr>
+            <td>Research point</td>
+            <td>{{ readableNumber(productionTable.research) }} /node</td>
+          </tr>
+          <tr>
+            <td>Mana storage</td>
+            <td>{{ readableNumber(productionTable.manaStorage) }} / node</td>
+          </tr>
+          <tr>
+            <td>Food production</td>
+            <td>
+              <div v-for="foodP of foodProduction">{{ foodP }} </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Space</td>
+            <td> 
+              <div v-for="spaceP of spaceProduction">{{ spaceP }} </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <section class="grid-container" v-if="clock">
-      <div class="grid-item">
-        <img src="@/assets/images/hourglass.png" style="height: 12rem" />
-      </div>
-      <div class="grid-item clock-display"> 
-        <p>Current server turn is {{ readableNumber(clock.currentTurn) }}.</p>
-        <p>Terra will be destroyed on turn {{ readableNumber(clock.endTurn) }} 
-        ({{ readableDate(approxEndTime) }}).</p>
-      </div>
+      <section class="grid-container" v-if="clock">
+        <div class="grid-item">
+          <img src="@/assets/images/hourglass.png" style="height: 12rem" />
+        </div>
+        <div class="grid-item clock-display"> 
+          <p>Current server turn is {{ readableNumber(clock.currentTurn) }}.</p>
+          <p>Terra will be destroyed on turn {{ readableNumber(clock.endTurn) }} 
+          ({{ readableDate(approxEndTime) }}).</p>
+        </div>
+      </section>
     </section>
   </main>
 </template>

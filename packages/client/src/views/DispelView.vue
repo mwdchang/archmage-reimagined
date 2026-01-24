@@ -1,78 +1,80 @@
 <template>
-  <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
-    <ImageProxy src="/images/ui/dispel.png" />
-    <div>
-      <div class="section-header">Dispel Magic</div>
+  <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/dispel.png" />
       <div>
-        You can undo enchantments that others have cast on you, or spells you have cast on yourself. Success depends on how much mana you use to undo the enchantment.
+        <div class="section-header">Dispel Magic</div>
+        <div>
+          You can undo enchantments that others have cast on you, or spells you have cast on yourself. Success depends on how much mana you use to undo the enchantment.
+        </div>
       </div>
     </div>
-  </div>
 
-  <div> Your enchantments in effect </div>
-  <table>
-    <thead>
-      <tr>
-        <th>&nbsp</th>
-        <th>Enchantment</th>
-        <th>Life</th>
-        <th>Spell level</th>
-        <th>Caster</th>
-        <th>Target</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
-        <td> <magic :magic="enchantMagic(enchant)" /></td>
-        <td>{{readableStr(enchant.spellId)}}</td>
-        <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
-        <td>{{enchant.spellLevel}}</td>
-        <td>#{{enchant.casterId}}</td>
-        <td>#{{enchant.targetId}}</td>
-        <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
-      </tr>
-    </tbody>
-  </table>
+    <div> Your enchantments in effect </div>
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp</th>
+          <th>Enchantment</th>
+          <th>Life</th>
+          <th>Spell level</th>
+          <th>Caster</th>
+          <th>Target</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(enchant) of selfEnchantments" :key="enchant.id"> 
+          <td> <magic :magic="enchantMagic(enchant)" /></td>
+          <td>{{readableStr(enchant.spellId)}}</td>
+          <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
+          <td>{{enchant.spellLevel}}</td>
+          <td>#{{enchant.casterId}}</td>
+          <td>#{{enchant.targetId}}</td>
+          <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <br/>
-  <div> Other enchantments in effect </div>
-  <table>
-    <thead>
-      <tr>
-        <th>&nbsp</th>
-        <th>Enchantment</th>
-        <th>Life</th>
-        <th>Spell level</th>
-        <th>Caster</th>
-        <th>Target</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 
-        <td> <magic :magic="enchantMagic(enchant)" /></td>
-        <td>{{readableStr(enchant.spellId)}}</td>
-        <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
-        <td>{{enchant.spellLevel}}</td>
-        <td>#{{enchant.casterId}}</td>
-        <td>#{{enchant.targetId}}</td>
-        <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
-      </tr>
-    </tbody>
-  </table>
-  <br/>
+    <br/>
+    <div> Other enchantments in effect </div>
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp</th>
+          <th>Enchantment</th>
+          <th>Life</th>
+          <th>Spell level</th>
+          <th>Caster</th>
+          <th>Target</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(enchant) of otherEnchantments" :key="enchant.id"> 
+          <td> <magic :magic="enchantMagic(enchant)" /></td>
+          <td>{{readableStr(enchant.spellId)}}</td>
+          <td>{{enchant.isPermanent ? "-" : enchant.life}}</td>
+          <td>{{enchant.spellLevel}}</td>
+          <td>#{{enchant.casterId}}</td>
+          <td>#{{enchant.targetId}}</td>
+          <td><input type="radio" name="dispel" v-model="selectedEnchant" :value="enchant.id"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
 
-  <section class="form">
-    <input type="number" v-model="dispelMana" />
-    <label>Success rate: {{ (100 * dispelProb).toFixed(2) }}%</label>
-    <ActionButton 
-      :proxy-fn="dispelEnchant"
-      :label="'Dispel'" />
+    <section class="form">
+      <input type="number" v-model="dispelMana" />
+      <label>Success rate: {{ (100 * dispelProb).toFixed(2) }}%</label>
+      <ActionButton 
+        :proxy-fn="dispelEnchant"
+        :label="'Dispel'" />
 
-  </section>
-  <div v-if="resultStr">{{ resultStr }}</div>
-  <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    </section>
+    <div v-if="resultStr">{{ resultStr }}</div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+  </main>
 </template>
 
 <script lang="ts" setup>

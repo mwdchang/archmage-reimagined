@@ -1,14 +1,15 @@
 <template>
-  <div class="form-tabs">
-    <div class="tab" :class="{ active: tabView === 'message' }" @click="changeView('message')">Messages</div>
-    <div class="tab" :class="{ active: tabView === 'option' }" @click="changeView('option')">Options</div>
-  </div>
+  <main class="column" style="align-items: center">
+    <div class="form-tabs">
+      <div class="tab" :class="{ active: tabView === 'message' }" @click="changeView('message')">Messages</div>
+      <div class="tab" :class="{ active: tabView === 'option' }" @click="changeView('option')">Options</div>
+    </div>
 
-  <Inbox v-if="tabView === 'message'" />
-  <section v-else>
-    Coming soon ...
-  </section>
-
+    <Inbox v-if="tabView === 'message'" />
+    <section v-else>
+      Coming soon ...
+    </section>
+  </main>
 </template>
 
 <script lang="ts" setup>

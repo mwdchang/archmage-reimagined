@@ -246,6 +246,21 @@ table > tr.active {
   }
 }
 
+/* Card */
+.card {
+  border-radius: 0.25rem;
+  border: 1px solid #333;
+  background: #181818;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 0.0rem 1.0rem; /* Optional spacing between columns */
+}
+
 
 /* grid shortcuts */
 .g-c1 { grid-column: 1 }

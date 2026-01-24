@@ -1,89 +1,91 @@
 <template>
-  <div class="section-header">Encyclopedia</div>
-  <section class="form" style="width: 20rem; margin-bottom: 10px">
-    <div class="row">
-      <select style="width: 10rem" v-model="currentSelection" @change="changeSelection">
-        <option value="spell">Spells</option>
-        <option value="unit">Units</option>
-        <option value="item">Items</option>
-      </select>
-      <input type="text" placeholder="search string" v-model="searchStr" /> 
-    </div>
+  <main class="column" style="align-items: center">
+    <div class="section-header">Encyclopedia</div>
+    <section class="form" style="width: 20rem; margin-bottom: 10px">
+      <div class="row">
+        <select style="width: 10rem" v-model="currentSelection" @change="changeSelection">
+          <option value="spell">Spells</option>
+          <option value="unit">Units</option>
+          <option value="item">Items</option>
+        </select>
+        <input type="text" placeholder="search string" v-model="searchStr" /> 
+      </div>
 
-    <div v-if="type ==='spell'"> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
-    <div v-if="type ==='unit'"> Showing {{ filteredUnits.length }} of {{ units.length}} units.</div>
-    <div v-if="type ==='item'"> Showing {{ filteredItems.length }} of {{ items.length}} items.</div>
-  </section>
+      <div v-if="type ==='spell'"> Showing {{ filteredSpells.length }} of {{ spells.length}} spells.</div>
+      <div v-if="type ==='unit'"> Showing {{ filteredUnits.length }} of {{ units.length}} units.</div>
+      <div v-if="type ==='item'"> Showing {{ filteredItems.length }} of {{ items.length}} items.</div>
+    </section>
 
-  <table v-if="type === 'spell'">
-    <tbody>
-      <tr v-for="spell of filteredSpells"> 
-        <td>
-          <div class="row">
-            <magic :magic="spell.magic" small />
-            <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> 
-              <div>{{ readableStr(spell.id) }}</div>
+    <table v-if="type === 'spell'">
+      <tbody>
+        <tr v-for="spell of filteredSpells"> 
+          <td>
+            <div class="row">
+              <magic :magic="spell.magic" small />
+              <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> 
+                <div>{{ readableStr(spell.id) }}</div>
+              </router-link>
+            </div>
+          </td>
+          <td>
+            <div>{{ spell.rank }} </div>
+          </td>
+          <td class="text-right">
+            <div>{{ spell.castingTurn }} </div>
+          </td>
+          <td>
+            <div>{{ spell.attributes.map(readableStr).join(', ') }} </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table v-if="type === 'unit'">
+      <tbody>
+        <tr v-for="unit of filteredUnits"> 
+          <td>
+            <div class="row">
+              <magic :magic="unit.magic" small />
+              <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> 
+                {{ unit.name }}
+              </router-link>
+            </div>
+          </td>
+          <td>
+            hp={{ readableNumber(unit.hitPoints) }},
+            np={{ readableNumber(unit.powerRank) }}
+          </td>
+          <td>
+            {{ unit.primaryAttackType.join('+') }} /
+            {{ readableNumber(unit.primaryAttackPower) }} /
+            {{ unit.primaryAttackInit }}
+          </td>
+          <td>
+            <div v-if="unit.secondaryAttackType.length">
+              {{ unit.secondaryAttackType.join('+') }} /
+              {{ readableNumber(unit.secondaryAttackPower) }} /
+              {{ unit.secondaryAttackInit }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table v-if="type === 'item'">
+      <tbody>
+        <tr v-for="item of filteredItems"> 
+          <td> 
+            <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> 
+              {{ item.name }}
             </router-link>
-          </div>
-        </td>
-        <td>
-          <div>{{ spell.rank }} </div>
-        </td>
-        <td class="text-right">
-          <div>{{ spell.castingTurn }} </div>
-        </td>
-        <td>
-          <div>{{ spell.attributes.map(readableStr).join(', ') }} </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table v-if="type === 'unit'">
-    <tbody>
-      <tr v-for="unit of filteredUnits"> 
-        <td>
-          <div class="row">
-            <magic :magic="unit.magic" small />
-            <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> 
-              {{ unit.name }}
-            </router-link>
-          </div>
-        </td>
-        <td>
-          hp={{ readableNumber(unit.hitPoints) }},
-          np={{ readableNumber(unit.powerRank) }}
-        </td>
-        <td>
-          {{ unit.primaryAttackType.join('+') }} /
-          {{ readableNumber(unit.primaryAttackPower) }} /
-          {{ unit.primaryAttackInit }}
-        </td>
-        <td>
-          <div v-if="unit.secondaryAttackType.length">
-            {{ unit.secondaryAttackType.join('+') }} /
-            {{ readableNumber(unit.secondaryAttackPower) }} /
-            {{ unit.secondaryAttackInit }}
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table v-if="type === 'item'">
-    <tbody>
-      <tr v-for="item of filteredItems"> 
-        <td> 
-          <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> 
-            {{ item.name }}
-          </router-link>
-        </td>
-        <td>
-          {{ item.attributes.map(readableStr).join(', ') }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td>
+            {{ item.attributes.map(readableStr).join(', ') }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
 </template>
 
 <script lang="ts" setup>

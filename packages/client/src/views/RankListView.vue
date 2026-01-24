@@ -1,41 +1,43 @@
 <template>
-  <div class="section-header">Rankings</div>
-  <section class="form" style="width: 25rem; margin-bottom: 10px; padding-bottom: 0">
-    <div class="row" style="align-items: baseline; gap: 10px">
-      <input type="checkbox" v-model="hideRange" style="width: 15px; height: 15px"> 
-      <label>Hide mages not in attack range</label>
-    </div>
-  </section>
-  <table v-if="mageStore.mage" style="min-width: 28rem">
-    <tbody>
-      <tr>
-        <td>Rank</td>
-        <td>Name</td>
-        <td>&nbsp;</td>
-        <td>Land</td>
-        <td>Fort</td>
-        <td>Power</td>
-        <td>Status</td>
-      </tr>
-      <tr v-for="(rank) of rankListFiltered" 
-        :class="{active: rank.id === mageStore.mage.id}"
-        :key="rank.id">
-        <td class="text-right"> 
-          {{ rank.rank }}
-        </td>
-        <td> 
-          <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> 
-            {{ rank.name }} (#{{ rank.id }})
-          </router-link>
-        </td>
-        <td> <magic :magic="rank.magic" small /> </td>
-        <td class="text-right"> {{ readableNumber(rank.land) }} </td>
-        <td class="text-right"> {{ rank.forts }} </td>
-        <td class="text-right"> {{ readableNumber(rank.netPower) }} </td>
-        <td>{{ rank.status }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <main>
+    <div class="section-header">Rankings</div>
+    <section class="form" style="width: 25rem; margin-bottom: 10px; padding-bottom: 0">
+      <div class="row" style="align-items: baseline; gap: 10px">
+        <input type="checkbox" v-model="hideRange" style="width: 15px; height: 15px"> 
+        <label>Hide mages not in attack range</label>
+      </div>
+    </section>
+    <table v-if="mageStore.mage" style="min-width: 28rem">
+      <tbody>
+        <tr>
+          <td>Rank</td>
+          <td>Name</td>
+          <td>&nbsp;</td>
+          <td>Land</td>
+          <td>Fort</td>
+          <td>Power</td>
+          <td>Status</td>
+        </tr>
+        <tr v-for="(rank) of rankListFiltered" 
+          :class="{active: rank.id === mageStore.mage.id}"
+          :key="rank.id">
+          <td class="text-right"> 
+            {{ rank.rank }}
+          </td>
+          <td> 
+            <router-link :to="{ name: 'mage', params: { mageId: rank.id }}"> 
+              {{ rank.name }} (#{{ rank.id }})
+            </router-link>
+          </td>
+          <td> <magic :magic="rank.magic" small /> </td>
+          <td class="text-right"> {{ readableNumber(rank.land) }} </td>
+          <td class="text-right"> {{ rank.forts }} </td>
+          <td class="text-right"> {{ readableNumber(rank.netPower) }} </td>
+          <td>{{ rank.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
 </template>
 
 <script setup lang="ts">
