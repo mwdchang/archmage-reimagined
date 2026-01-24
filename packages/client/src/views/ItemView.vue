@@ -54,7 +54,7 @@
         <div v-if="tabView === 'instant'">
           <label>Use item</label>
           <select v-model="selected" v-if="usableItems.length > 0">
-            <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+            <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
           </select>
 
           <label>Target</label>

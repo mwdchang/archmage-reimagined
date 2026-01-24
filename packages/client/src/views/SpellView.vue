@@ -9,7 +9,49 @@
     </div>
   </div>
   <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
-    <div style="max-height: 400px; overflow-y: scroll; padding: 0">
+
+    <div v-if="showArmy">
+      <table style="margin-bottom: 0.5rem"> 
+        <tbody>
+          <tr>
+            <td>Unit</td>
+            <td v-if="layout === 'table'" class="text-right">Upkeep</td>
+            <td class="text-right">Size</td>
+            <td class="text-right">Power</td>
+          </tr>
+          <tr v-for="(u, _idx) of unitsStatus" :key="u.id">
+            <td> 
+              <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> {{ u.name }} </router-link>
+            </td>
+            <td v-if="layout === 'table'" class="text-right"> 
+              {{ readableNumber(u.upkeep.geld) }} / {{ readableNumber(u.upkeep.mana) }} / {{ readableNumber(u.upkeep.population) }} 
+            </td>
+            <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
+            <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Net Income</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Geld</th>
+            <th>Mana</th>
+            <th>Population</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.geld)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.mana)) }} </td>
+            <td class="text-right"> {{ readableNumber(Math.floor(netUpkeepStatus.population)) }} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-if="showArmy === false" style="max-height: 400px; overflow-y: scroll; padding: 0">
       <table v-if="spells.length > 0 && layout === 'table'">
         <thead style="position: sticky; top: 0; z-index: 10">
           <tr>
@@ -102,7 +144,7 @@
 import { API } from '@/api/api';
 import { computed, onMounted, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { getSpells, spellDisplay } from '@/util/util';
+import { getArmy, getSpells, spellDisplay } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
@@ -110,17 +152,21 @@ import { Spell } from 'shared/types/magic';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/composables/useLayout';
+import { useEngine } from '@/composables/useEngine';
 
 const route = useRoute();
 
 const mageStore = useMageStore();
 const { layout } = useLayout();
+const { netUpkeepStatus } = useEngine();
+
 
 const selected = ref<string>('');
 const turns = ref<number>(1);
 const target = ref<string>('');
 
 const tabView = ref('summon');
+const showArmy = ref(false);
 
 const spellResult = ref<any[]>([]);
 
@@ -131,6 +177,8 @@ const spells = computed<Spell[]>(() => {
   const result = getSpells(mage);
   return result;
 });
+
+
 
 const castingSpells = computed(() => {
   return spells.value
@@ -145,9 +193,20 @@ const castingSpells = computed(() => {
     });
 });
 
+const unitsStatus = computed(() => {
+  if (!mageStore.mage) return []
+  let rawArmy = getArmy(mageStore.mage);
+
+  return rawArmy.sort((a, b) => b.power - a.power);
+});
+
+
 const changeView = (v: string) => {
   tabView.value = v;
   selected.value = '';
+  if (tabView.value !== 'summon') {
+    showArmy.value = false;
+  }
 };
 
 const maxCast = (spell: Spell) => {
@@ -167,6 +226,11 @@ const castSpell = async () => {
   })).data;
 
   if (res.result) {
+    if (tabView.value === 'summon') {
+      showArmy.value = true;
+    } else {
+      showArmy.value = false;
+    }
     spellResult.value = res.result;
   }
 

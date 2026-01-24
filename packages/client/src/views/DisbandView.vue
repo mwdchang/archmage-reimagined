@@ -69,17 +69,20 @@
 
     <div v-if="layout === 'cards'"> 
       <div class="card" v-for="(u) of unitsStatus" :key="u.id">
-        <div class="row" style="gap: 1rem; justify-content:space-between">
+        <div class="row" style="gap: 0.5rem; justify-content:space-between">
           <input 
             :disabled="u.attributes.includes('undisbandable') === true" 
             v-model="u.checked"
             @change="toggleWholeStack(u)"
             type="checkbox">
-          <div>
-            <router-link :to="{ name: 'viewUnit', params: { id: u.id }}"> 
+          <div class="row">
+            <router-link :to="{ name: 'viewUnit', params: { id: u.id }}" style="min-width: 7rem"> 
               {{ u.name }} 
             </router-link>
-            &nbsp;{{ readableNumber(u.size) }}
+            <div @click="disbandPayload[u.id] = u.moveDown" class="row"> 
+              {{ readableNumber(u.size) }}
+              <svg-icon name="caretDown" size="1.25rem" /> 
+            </div>
           </div>
           <input
             :disabled="u.attributes.includes('undisbandable') === true" 
