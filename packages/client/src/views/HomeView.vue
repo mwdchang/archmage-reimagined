@@ -42,15 +42,20 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { GameTable, ServerClock } from 'shared/types/common';
+import { ServerClock } from 'shared/types/common';
 import Register from '@/components/register.vue';
 import Login from '@/components/login.vue';
 import { API } from '@/api/api';
 import { readableDate } from '@/util/util';
+import { useMageStore } from '@/stores/mage';
+import { storeToRefs } from 'pinia';
+
 
 const mode = ref<string>('loginMode');
 const clock = ref<ServerClock>();
-const gameTable = ref<GameTable| null>(null);
+const mageStore = useMageStore();
+
+const { gameTable } = storeToRefs(mageStore);
 
 const approxEndTime = computed(() => {
   if (!clock.value || !gameTable.value) return 0;
@@ -66,7 +71,6 @@ const approxEndTime = computed(() => {
 
 onMounted(async () => {
   clock.value = (await API.get<ServerClock>('server-clock')).data;
-  gameTable.value = (await API.get<GameTable>('/game-table')).data;
 });
 
 </script>
