@@ -44,6 +44,7 @@ import { calcLandLoss } from './battle/calc-landloss';
 import { calcFilteredArmy } from './battle/calc-filtered-army';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
+import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -321,7 +322,8 @@ const applyTemporaryUnitEffect = (
   const spellPowerScale = spellLevel / maxSpellLevel;
 
   let value = 0;
-  const base = tempEffect.magic[magic].value; 
+  const { min, max } = tempEffect.magic[magic].value; 
+  const base = between(min, max);
 
   if (tempEffect.rule === 'spellLevelPercentageBase') {
     if (tempEffect.target === 'population') {
@@ -920,6 +922,32 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     const battleItemLogs = battleItem('defend', defender, defendingArmy, attacker, attackingArmy, E.PrebattleEffect);
     preBattle.logs.push(...battleItemLogs);
   }
+
+  // Prebattle enchantment effects
+  attacker.mage.enchantments.filter(d => d.targetId === attacker.mage.id).forEach(enchant => {
+    battleSpell(
+      'attack',
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy,
+      enchant,
+      E.PrebattleEffect);
+  });
+
+  defender.mage.enchantments.filter(d => d.targetId === defender.mage.id).forEach(enchant => {
+    battleSpell(
+      'defend',
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy,
+      enchant,
+      E.PrebattleEffect);
+  });
+
+
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // TODO:: 
@@ -1554,6 +1582,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         } else if (effect.effectType === E.StealEffect) {
           const r = applyStealEffect(attacker.mage, effect as any, origin, defender.mage);
           battleReport.postBattle.logs.push(r);
+        } else if (effect.effectType === E.KingdomBuildingsEffect) {
+          postbattleEffect.target === 'self' ?
+            applyKingdomBuildingsEffect(attacker.mage, effect as any, origin) :
+            applyKingdomBuildingsEffect(defender.mage, effect as any, origin);
         }
       }
     }
@@ -1582,6 +1614,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         } else if (effect.effectType === E.StealEffect) {
           const r = applyStealEffect(defender.mage, effect as any, origin, attacker.mage);
           battleReport.postBattle.logs.push(r);
+        } else if (effect.effectType === E.KingdomBuildingsEffect) {
+          postbattleEffect.target === 'self' ?
+            applyKingdomBuildingsEffect(defender.mage, effect as any, origin) :
+            applyKingdomBuildingsEffect(attacker.mage, effect as any, origin); 
         }
       }
     }

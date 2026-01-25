@@ -62,7 +62,10 @@ export interface TemporaryUnitEffect extends Effect<E.TemporaryUnitEffect>{
   target: 'population' | null,
   magic: {
     [key in AllowedMagic]: {
-      value: number
+      value: {
+        min: number,
+        max: number
+      }
     }
   }
 }
@@ -91,7 +94,7 @@ export interface PostbattleEffect extends Effect<E.PostbattleEffect> {
   target: 'self' | 'opponent',
   condition: 'win' | 'lose' | 'all';
   activation?: 'attack' | 'defence';
-  effects: (KingdomResourcesEffect | StealEffect)[]
+  effects: (KingdomResourcesEffect | StealEffect | KingdomBuildingsEffect)[]
 }
 
 

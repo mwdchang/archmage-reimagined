@@ -37,7 +37,7 @@ import {
   loadItemData,
   initializeResearchTree 
 } from 'engine/src/base/references';
-import { ServerClock } from 'shared/types/common';
+import { GameTable, ServerClock } from 'shared/types/common';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -126,6 +126,14 @@ onMounted(async () => {
   if (clock.currentTurn >= clock.endTurn) {
     router.push({ name: 'finals' });
     return;
+  }
+
+  console.log('Loading game config...');
+  const gameTable = (await API.get<GameTable>('/game-table')).data;
+  if (gameTable) {
+    mageStore.setGameTable(gameTable);
+  } else {
+    console.error('game config cannot be loaded');
   }
 
   try {
