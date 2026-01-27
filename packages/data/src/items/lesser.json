@@ -587,11 +587,11 @@
             "rule": "fixed", 
             "target": null,
             "magic": {
-              "ascendant": { "value": 3000 },
-              "verdant": { "value": 3000 },
-              "eradication": { "value": 3000 },
-              "nether": { "value": 3000 },
-              "phantasm": { "value": 3000 }
+              "ascendant": { "value": { "min": 3000, "max": 3000 } },
+              "verdant": { "value": { "min": 3000, "max": 3000 } },
+              "eradication": { "value": { "min": 3000, "max": 3000 } },
+              "nether": { "value": { "min": 3000, "max": 3000 } },
+              "phantasm": { "value": { "min": 3000, "max": 3000 } }
             }
           }
         ]
