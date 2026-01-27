@@ -72,6 +72,8 @@ export const resolveWinningBids = async (
   const losingMessageMap: Map<number, MarketBid[]> = new Map();
   const sellerMessageMap: Map<number, string[]> = new Map();
 
+  const marketItemWon: Set<string> = new Set();
+
   // id => [price1, price2, ... ]
   const soldTable: Map<string, number[]> = new Map();
 
@@ -129,15 +131,18 @@ export const resolveWinningBids = async (
     } else {
       soldTable.set(marketPrice.id, [bid.bid]);
     }
-
-    // Remove entry here so we can calculate adjustments below
-    itemMap.delete(bid.marketId)
+    marketItemWon.add(bid.marketId);
   }
   logger(`${winningBids.length} winning bids`);
 
 
   let expiredCounter = 0;
   for (const [_, marketItem] of itemMap.entries()) {
+    // We processed winning bids already
+    if (marketItemWon.has(marketItem.id)) {
+      continue;
+    }
+
     if (marketItem.expiration <= currentTurn) {
       if (soldTable.has(marketItem.id)) {
         soldTable.get(marketItem.priceId).push(marketItem.basePrice);

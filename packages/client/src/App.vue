@@ -1,7 +1,9 @@
 <template>
   <main style="display: flex; flex-direction: column; align-items: center">
+    <canvas id="arcane"></canvas>
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
+
 
     <!--
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
@@ -38,7 +40,7 @@ import {
   initializeResearchTree, 
   loadSkillGroup
 } from 'engine/src/base/references';
-import { ServerClock } from 'shared/types/common';
+import { GameTable, ServerClock } from 'shared/types/common';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';
@@ -63,6 +65,7 @@ import phantasmSkills from 'data/src/skills/phantasm-graph.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 import uniqueItems from 'data/src/items/unique.json';
+import { arcaneBackground } from './util/background';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -143,6 +146,14 @@ onMounted(async () => {
     return;
   }
 
+  console.log('Loading game config...');
+  const gameTable = (await API.get<GameTable>('/game-table')).data;
+  if (gameTable) {
+    mageStore.setGameTable(gameTable);
+  } else {
+    console.error('game config cannot be loaded');
+  }
+
   try {
     const r = await API.get('mage');
     mageStore.setLoginStatus(1);
@@ -160,6 +171,8 @@ onMounted(async () => {
       router.push({ name: 'home' });
     }
   }
+
+  // arcaneBackground();
 });
 
 </script>
@@ -207,5 +220,12 @@ onMounted(async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+
+#arcane {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.25;
 }
 </style>

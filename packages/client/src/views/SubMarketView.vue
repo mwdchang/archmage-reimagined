@@ -62,11 +62,13 @@ const refresh = async () => {
 };
 
 const makeBid = async () => {
+  const gameTable = mageStore.gameTable!;
+
   const badBids = bidItems.value.filter(item => {
-    return item.bid > 0 && item.bid <= item.marketItem.basePrice;
+    return item.bid > 0 && item.bid <= item.marketItem.basePrice * (1 + gameTable.blackmarket.minimum);
   });
   if (badBids.length > 0) {
-    errorStr.value = 'You cannot bid less than the base prices';
+    errorStr.value = `Bids must be ${gameTable.blackmarket.minimum * 100} % higher than base prices`;
     return;
   }
 
@@ -76,6 +78,7 @@ const makeBid = async () => {
       return { marketId: d.marketItem.id, bid: d.bid }
     });
 
+  errorStr.value = '';
   const result = (await API.post<{mage: Mage}>('/market-bids', payload)).data;
   mageStore.setMage(result.mage);
   await refresh();

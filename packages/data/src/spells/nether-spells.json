@@ -913,7 +913,7 @@
     "researchCost": 30000,
     "castingCost": 1000000,
     "castingTurn": 10,
-    "life": 10,
+    "life": 6,
     "upkeep": {
       "geld": 6666,
       "mana": 6666,
@@ -930,10 +930,10 @@
           {
             "effectType": "TemporaryUnitEffect",
             "unitId": "devil",
-            "rule": "spellLevelPercentageBase", 
-            "target": "population",
+            "rule": "fixed", 
+            "target": null,
             "magic": {
-              "nether": { "value": 0.05 }
+              "nether": { "value": { "min": 2000, "max": 10000 } }
             }
           }
         ]
@@ -966,6 +966,16 @@
             "magic": {
               "nether": { "value": { "min": -0.5, "max": -0.5 } }
             }
+          },
+          {
+            "effectType": "KingdomBuildingsEffect",
+            "rule": "landPercentageLoss",
+            "target": "all",
+            "magic": {
+              "nether": {
+                "value": { "min": 50, "max": 50 }
+              }
+            }
           }
         ]
       }
@@ -996,7 +1006,7 @@
             "rule": "spellLevelPercentageBase", 
             "target": "population",
             "magic": {
-              "nether": { "value": 0.05 }
+              "nether": { "value": { "min": 0.05, "max": 0.05 } }
             }
           }
         ]
