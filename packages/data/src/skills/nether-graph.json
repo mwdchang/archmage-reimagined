@@ -1,0 +1,67 @@
+{
+  "id": "netherSkillGroup",
+  "name": "Nether",
+  "nodes": [
+    {
+      "id": "miasma",
+      "name": "Miasma",
+      "description": "Stentch of decay fills the air, render the kingdom unlivable except for the foulest creatures",
+      "maxLevel": 10,
+      "prereqs": {},
+      "effects": [
+      ]
+    },
+    {
+      "id": "blight",
+      "name": "Blight",
+      "description": "Blight transfer from amry to amry, destroying crops and farming land",
+      "maxLevel": 10,
+      "prereqs": {
+        "miasma": 1
+      },
+      "effects": [
+      ]
+    },
+    {
+      "id": "undeadMastery",
+      "name": "Undead Mastery",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {},
+      "effects": [
+      ]
+    },
+    {
+      "id": "demonMastery",
+      "name": "Demon Mastery",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {
+        "undeadMastery": 1
+      },
+      "effects": [
+      ]
+    },
+    {
+      "id": "zombieMastery",
+      "name": "Zombie Mastery",
+      "description": "",
+      "maxLevel": 1,
+      "prereqs": {
+        "undeadMastery": 3
+      },
+      "effects": []
+    },
+    {
+      "id": "frenzy",
+      "name": "Frenzy",
+      "description": "",
+      "maxLevel": 1,
+      "prereqs": {
+        "undeadMastery": 10, 
+        "demonMastery": 10 
+      },
+      "effects": []
+    }
+  ]
+}

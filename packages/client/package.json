@@ -11,7 +11,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.1.8",
+    "@types/d3": "^7.4.3",
     "axios": "^1.13.1",
+    "d3": "^7.9.0",
     "marked": "^17.0.1",
     "pinia": "^3.0.1",
     "vite-svg-loader": "^5.1.0",

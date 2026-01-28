@@ -9,6 +9,7 @@ import {
 } from "shared/types/effects";
 import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
+import { SkillGraph, Skill } from "shared/types/skills";
 
 
 
@@ -29,6 +30,20 @@ const attrTypes = new Set([
   'accuracy', 'efficiency',
   'abilities', 'abilities2'
 ]);
+
+
+// Validate skill-tree and skills
+export const validateSkillGraph = (graph: SkillGraph) => {
+  // Validate wrapperj
+  if (!graph.id || !graph.nodes) {
+    throw new Error(`SKill graph is ill defined ${graph}`);
+  }
+
+  // Validate individual skills
+  for (const skillNode of graph.nodes) {
+    // TODO
+  }
+};
 
 
 // Validate a unit

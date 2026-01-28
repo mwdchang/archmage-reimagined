@@ -14,6 +14,7 @@ import SpellView from '@/views/SpellView.vue';
 import DispelView from '@/views/DispelView.vue';
 import TestView from '@/views/TestView.vue';
 import MageView from '@/views/MageView.vue';
+import SkillsView from '@/views/SkillsView.vue';
 import BattleView from '@/views/BattleView.vue';
 import BattlePrepView from '@/views/BattlePrepView.vue';
 import ResearchView from '@/views/ResearchView.vue';
@@ -190,6 +191,11 @@ const router = createRouter({
       path: '/chronicles',
       name: 'chronicles',
       component: ChroniclesView
+    },
+    {
+      path: '/skills',
+      name: 'skills',
+      component: SkillsView
     },
     {
       path: '/game-table',
