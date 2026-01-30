@@ -76,7 +76,7 @@ export interface BattleReportSummary {
 
 
 
-export type BattleSpellResult = 'success' | 'lostConcentration' | 'barriers' | 'reflected' | 'noMana' | 'notUsed' | 'missed' | null;
+export type BattleSpellResult = 'success' | 'lostConcentration' | 'barriers' | 'reflected' | 'noMana' | 'notUsed' | 'missed' | 'noSpell' | null;
 export type BattleItemResult = 'success' | 'barriers' | 'noItem' | 'notUsed' | 'missed' | null; 
 
 export interface BattleEffectLog {
