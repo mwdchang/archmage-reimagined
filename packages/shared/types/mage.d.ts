@@ -104,9 +104,12 @@ export interface Mage {
 
   recruitments: ArmyUnit[];
   army: ArmyUnit[];
-  items: { [key: string]: number },
+  items: { [key: string]: number };
   heroes: Hero[];
   enchantments: Enchantment[];
+
+  skillPoints: number;
+  skills: { [key: string]: number };
 }
 
 export interface Combatant {

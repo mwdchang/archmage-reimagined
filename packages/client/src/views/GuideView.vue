@@ -12,7 +12,7 @@
     <section class="row" style="align-items: baseline; width: 50rem">
       <div style="width: 8rem">
         <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
-        <div class="doc-nav" @click="openMarkdown('quickstart')">Quick Start</div>
+        <div class="doc-nav" @click="openMarkdown('battle')">Battle</div>
       </div>
       <div class="markdown-body" style="margin-left: 1rem; flex: 1; min-height: 10rem" v-html="guide" />
     </section>

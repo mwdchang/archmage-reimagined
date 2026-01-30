@@ -91,7 +91,7 @@
     "effects": [
       {
         "effectType": "BattleEffect",
-        "target": "self",
+        "target": "opponent",
         "targetType": "all",
         "filters": null,
         "effects": [

@@ -64,7 +64,10 @@ export const createMage = (id: number, name: string, magic: string, override?:Pa
       spellCondition: -1,
       itemId: '',
       itemCondition: -1,
-    }
+    },
+
+    skillPoints: 0,
+    skills: {}
   };
 
   // Set starting army
