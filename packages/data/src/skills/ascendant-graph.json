@@ -1,0 +1,68 @@
+{
+  "id": "ascendantSkillGroup",
+  "name": "Ascendant",
+  "nodes": [
+    {
+      "id": "firstAid",
+      "name": "First Aid",
+      "description": "First aid",
+      "maxLevel": 10,
+      "prereqs": {},
+      "effects": [
+      ]
+    },
+    {
+      "id": "prayer",
+      "name": "Prayer",
+      "description": "Prayer",
+      "maxLevel": 10,
+      "prereqs": {},
+      "effects": [
+      ]
+    },
+    {
+      "id": "circleOfProtection",
+      "name": "Circle Of Protection",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {
+        "firstAid": 1,
+        "prayer": 1
+      },
+      "effects": [
+      ]
+    },
+    {
+      "id": "evilWard",
+      "name": "Evil Ward",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {
+        "circleOfProtection": 1
+      },
+      "effects": [
+      ]
+    },
+    {
+      "id": "crusade",
+      "name": "Crusade",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {
+      },
+      "effects": [
+      ]
+    },
+    {
+      "id": "angelicChorus",
+      "name": "Angelic Chorus",
+      "description": "",
+      "maxLevel": 10,
+      "prereqs": {
+        "crusade": 1
+      },
+      "effects": [
+      ]
+    }
+  ]
+}

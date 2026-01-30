@@ -10,23 +10,17 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
-  AvoidEffect,
   PrebattleEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
-import { getSpellById, getItemById, getUnitById, getMaxSpellLevels, getAllUniqueItems } from './base/references';
-import {
-  calcKingdomResistance,
-  castingCost,
-  successCastingRate
-} from './magic';
+import { getSpellById, getItemById, getUnitById, getMaxSpellLevels, getAllUniqueItems, getSkillById } from './base/references';
 import { 
   currentSpellLevel,
   totalLand,
   totalNetPower,
 } from './base/mage';
-import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, EngagementLog, BattleSpellResult, BattleItemResult } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -45,6 +39,8 @@ import { calcFilteredArmy } from './battle/calc-filtered-army';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
+import { Item, Spell } from 'shared/types/magic';
+import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -353,148 +349,88 @@ const randomStackIndex = (stacks: BattleStack[], targetType: BattleEffect['targe
 }
 
 
-// Handle unique item battle effects
-const applyUniqueItems = (
-  stance: 'attack' | 'defend',
-  attacker: Combatant,
-  attackerBattleStack: BattleStack[],
-  defender: Combatant,
-  defenderBattleStack: BattleStack[],
-  effectType: E.BattleEffect | E.PrebattleEffect
-) => {
-  console.log(`Checking ${attacker.mage.name}(#${attacker.mage.id}) for unique items`);
-  const logs: BattleEffectLog[] = [];
-  const uniqueItems = getAllUniqueItems();
-
-  let effectOrigin: EffectOrigin = {
-    id: attacker.mage.id,
-    magic: attacker.mage.magic,
-    spellLevel: currentSpellLevel(attacker.mage),
-    targetId: defender.mage.id
-  };
-
-  for (const itemId of Object.keys(attacker.mage.items)) {
-    const item = uniqueItems.find(d => d.id === itemId);
-    if (!item) continue;
-
-    const battleEffects = item.effects.filter(d => d.effectType === effectType) as (PrebattleEffect | BattleEffect)[]
-    if (battleEffects.length === 0) continue;
-
-    let cnt = 0;
-    for (const battleEffect of battleEffects) {
-      const originKey = `${stance}:${item.id}:${cnt}`;
-      const targetType = battleEffect.targetType;
-      const effects = battleEffect.effects;
-      const army = battleEffect.target === 'self' ? attackerBattleStack: defenderBattleStack;
-      const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
-
-      // Matching spell filters
-      const filteredArmy = calcFilteredArmy(army, battleEffect.filters);
-
-      for (let num = 0; num < numTimes; num++) {
-        const randomIdx = randomStackIndex(filteredArmy, targetType);
-        for (const effect of effects) {
-          let affectedArmy: BattleStack[] = [];
-          if (targetType === 'random' || targetType === 'weightedRandom') {
-            affectedArmy = [filteredArmy[randomIdx]];
-          } else {
-            affectedArmy = filteredArmy;
-          }
-
-          // Early exit
-          // Check if there are specific attack or defend triggers
-          if (effect.effectType === E.UnitAttrEffect) {
-            const unitAttrEffect = effect as UnitAttrEffect;
-            if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
-              continue;
-            }
-          }
-
-          console.log(`Spell: Applying ${effect.effectType} effect to ${affectedArmy.map(d => d.unit.name)}`);
-          affectedArmy.forEach(bstack => {
-            if (bstack.appliedEffects.some(d => d.origin === originKey)) {
-              return;
-            }
-            bstack.appliedEffects.push({
-              origin: originKey,
-              id: item.id,
-              type: 'spell'
-            });
-          });
-
-          if (effect.effectType === E.UnitAttrEffect) {
-            const unitAttrEffect = effect as UnitAttrEffect;
-            applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-          } else if (effect.effectType === E.UnitDamageEffect) {
-            const damageEffect = effect as UnitDamageEffect;
-            const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
-            logs.push(...damageLogs);
-          } else if (effect.effectType === E.UnitHealEffect) {
-            const healEffect = effect as UnitHealEffect;
-            applyHealEffect(effectOrigin, healEffect, affectedArmy);
-          } else if (effect.effectType === E.TemporaryUnitEffect) {
-            const tempUnitEffect = effect as TemporaryUnitEffect;
-            const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
-            newStack.role = attackerBattleStack[0].role;
-            attackerBattleStack.push(newStack);
-            attackerBattleStack.sort((a, b) => {
-              return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
-            })
-          }
-        }
-      }
-    }
-  }
-  return logs;
+interface Skill {
+  id: string;
+  level: number;
 }
 
+interface BattleEffectConfig {
+  stance: 'attack' | 'defend';
+  type: 'item' | 'spell' | 'skill' | 'enchantment'; 
+  obj: Item | Spell | Enchantment | Skill;
+  filter: E.BattleEffect | E.PrebattleEffect;
+}
 
-/**
- * Entry point for casting battle spells. This ensures the correct caster and affected army
- * are in-place before handing off the actual calculation to helper effects functions.
- *
- * The stack attribute determines how the affected army is chosen, there are several options.
- * - random: If the spell has multiple effects, each effect targets a random stack
- *   spells that have both UnitEffect and DamageEffect and wants to target the same unit.
- * - all: All stacks get all effects
- */
-const battleSpell = (
-  stance: 'attack' | 'defend',
+const battleEffect = (
+  config: BattleEffectConfig,
   caster: Combatant,
   casterBattleStack: BattleStack[],
   defender: Combatant,
   defenderBattleStack: BattleStack[],
-  enchantment: Enchantment | null,
-  effectType: E.BattleEffect | E.PrebattleEffect
 ) => {
   const logs: BattleEffectLog[] = [];
 
-  const casterSpell = enchantment ?
-    getSpellById(enchantment.spellId) :
-    getSpellById(caster.spellId);
-
-  let effectOrigin: EffectOrigin = {
-    id: caster.mage.id,
-    magic: caster.mage.magic,
-    spellLevel: currentSpellLevel(caster.mage),
-    targetId: defender.mage.id
+  let effectObjId = '';
+  let battleEffects: (BattleEffect | PrebattleEffect)[] = [];
+  const effectOrigin: EffectOrigin = {
+    id: 0,
+    magic: '',
+    spellLevel: 0,
+    targetId: 0
   };
 
-  // Override default if calculating enchantment
-  if (enchantment) {
+  // Figure out the origin data
+  if (config.type === 'spell') {
+    effectOrigin.id = caster.mage.id;
+    effectOrigin.magic = caster.mage.magic;
+    effectOrigin.spellLevel = currentSpellLevel(caster.mage);
+    effectOrigin.id = defender.mage.id;
+  } else if (config.type === 'enchantment') {
+    const enchantment = (config.obj as Enchantment);
     effectOrigin.id = enchantment.casterId;
     effectOrigin.magic = enchantment.casterMagic;
     effectOrigin.spellLevel = enchantment.spellLevel;
+    effectOrigin.id = defender.mage.id;
+  } else if (config.type === 'item') {
+    effectOrigin.id = caster.mage.id,
+    effectOrigin.magic = caster.mage.magic;
+    effectOrigin.spellLevel = currentSpellLevel(caster.mage);
+    effectOrigin.targetId = defender.mage.id;
+  } else if (config.type === 'skill') {
+    // TODO
   }
 
-  const battleEffects = effectType === E.BattleEffect ? 
-    casterSpell.effects.filter(d => d.effectType === effectType) as BattleEffect[] :
-    casterSpell.effects.filter(d => d.effectType === effectType) as PrebattleEffect[]; 
+
+  // Figure out the effects
+  let spell: Spell | null = null;
+  let item : Item | null = null;
+
+  if (config.type === 'spell') {
+    spell = (config.obj as Spell);
+    battleEffects = config.filter === E.BattleEffect ? 
+      spell.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
+      spell.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[]; 
+    effectObjId = spell.id;
+  } else if (config.type === 'enchantment') {
+    spell = getSpellById((config.obj as Enchantment).spellId);
+    battleEffects = config.filter === E.BattleEffect ? 
+      spell.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
+      spell.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[]; 
+    effectObjId = spell.id;
+  } else if (config.type === 'item') {
+    item = (config.obj as Item);
+    battleEffects = config.filter === E.BattleEffect ?
+      item.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
+      item.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[] ;
+    effectObjId = item.id;
+  } else if (config.type === 'skill') {
+    // TODO
+  }
 
   let cnt = 0;
   for (const battleEffect of battleEffects) {
     cnt ++;
-    const originKey = `${stance}:${casterSpell.id}:${cnt}`;
+    const originKey = `${config.stance}:${effectObjId}:${cnt}`;
     const targetType = battleEffect.targetType;
     const effects = battleEffect.effects;
     const army = battleEffect.target === 'self' ? casterBattleStack: defenderBattleStack;
@@ -517,13 +453,14 @@ const battleSpell = (
           affectedArmy = filteredArmy;
         }
 
-        if (effect.checkResistance === true) {
+        // spell and enchantments may be resisted
+        if (spell && effect.checkResistance === true) {
           affectedArmy = affectedArmy.filter(stack => {
             const roll = Math.random() * 100;
-            if (roll > stack.unit.spellResistances[casterSpell.magic]) {
+            if (roll > stack.unit.spellResistances[spell.magic]) {
               return true;
             }
-            console.log(`${stack.unit.name} resisted ${stack.unit.spellResistances[casterSpell.magic]}`);
+            console.log(`${stack.unit.name} resisted ${stack.unit.spellResistances[spell.magic]}`);
             return false;
           });
         }
@@ -532,7 +469,7 @@ const battleSpell = (
         // Check if there are specific attack or defend triggers
         if (effect.effectType === E.UnitAttrEffect) {
           const unitAttrEffect = effect as UnitAttrEffect;
-          if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
+          if (unitAttrEffect.activation && unitAttrEffect.activation !== config.stance) {
             continue;
           }
         }
@@ -544,7 +481,7 @@ const battleSpell = (
           }
           bstack.appliedEffects.push({
             origin: originKey,
-            id: casterSpell.id,
+            id: spell?.id || item?.id,
             type: 'spell'
           });
         });
@@ -568,131 +505,24 @@ const battleSpell = (
             return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
           })
         }
-      }
+
+
+      } // end effects
     } // end numTimes
   }
+
   return logs;
 }
 
-/**
- * Use a battle item. The process is similar to battleSpell, however items cannot be resisted or
- * reflected by opposing forces at the mage level. Item effects also cannot be resisted at the
- * unit level.
- */
-const battleItem = (
-  stance: 'attack' | 'defend',
-  caster: Combatant,
-  casterBattleStack: BattleStack[],
-  defender: Combatant,
-  defenderBattleStack: BattleStack[],
-  effectType: E.BattleEffect | E.PrebattleEffect 
-) => {
-
-  const logs: BattleEffectLog[] = []
-  const casterItem = getItemById(caster.itemId);
-
-  const effectOrigin: EffectOrigin = {
-    id: caster.mage.id,
-    magic: caster.mage.magic,
-    spellLevel: currentSpellLevel(caster.mage),
-    targetId: defender.mage.id
-  };
-
-  const battleEffects = effectType === E.BattleEffect ?
-    casterItem.effects.filter(d => d.effectType === effectType) as BattleEffect[] :
-    casterItem.effects.filter(d => d.effectType === effectType) as PrebattleEffect[] ;
-
-
-  let cnt = 0;
-  for (const battleEffect of battleEffects) {
-    cnt ++;
-    const originKey = `${stance}:${casterItem.id}:${cnt}`;
-    const army = battleEffect.target === 'self' ? casterBattleStack : defenderBattleStack;
-    const numTimes = battleEffect.trigger ? betweenInt(battleEffect.trigger.min, battleEffect.trigger.max) : 1;
-
-    const filteredArmy = calcFilteredArmy(army, battleEffect.filters);
-    const targetType = battleEffect.targetType;
-
-    // Nothing to do
-    if (filteredArmy.length === 0) continue;
-
-    for (let num = 0; num < numTimes; num++) {
-      let randomIdx = -1;
-      if (targetType === 'random') {
-        randomIdx = randomInt(filteredArmy.length);
-      } else if (targetType === 'weightedRandom') {
-        randomIdx = Math.min(randomWeighted(), filteredArmy.length -1);
-      }
-
-      for (const effect of battleEffect.effects) {
-        let affectedArmy: BattleStack[] = [];
-        if (targetType === 'random' || targetType === 'weightedRandom') {
-          affectedArmy = [filteredArmy[randomIdx]];
-        } else {
-          affectedArmy = filteredArmy;
-        }
-
-        // Early exit
-        // Check if there are specific attack or defend triggers
-        if (effect.effectType === E.UnitAttrEffect) {
-          const unitAttrEffect = effect as UnitAttrEffect;
-          if (unitAttrEffect.activation && unitAttrEffect.activation !== stance) {
-            continue;
-          }
-        }
-
-        console.log(`Item: Applying effect (${effect.effectType}) to ${affectedArmy.map(d => d.unit.name)}`);
-        affectedArmy.forEach(bstack => {
-          if (bstack.appliedEffects.some(d => d.origin === originKey)) {
-            return;
-          }
-          bstack.appliedEffects.push({
-            origin: originKey,
-            id: casterItem.id,
-            type: 'item'
-          });
-        });
-
-        if (effect.effectType === E.UnitAttrEffect) {
-          const unitAttrEffect = effect as UnitAttrEffect;
-          applyUnitEffect(effectOrigin, unitAttrEffect, affectedArmy);
-        } else if (effect.effectType === E.UnitDamageEffect) {
-          const damageEffect = effect as UnitDamageEffect;
-          const damageLogs = applyDamageEffect(effectOrigin, damageEffect, affectedArmy);
-          logs.push(...damageLogs);
-        } else if (effect.effectType === E.UnitHealEffect) {
-          const healEffect = effect as UnitHealEffect;
-          applyHealEffect(effectOrigin, healEffect, affectedArmy);
-        } else if (effect.effectType === E.TemporaryUnitEffect) {
-          const tempUnitEffect = effect as TemporaryUnitEffect;
-          const newStack = applyTemporaryUnitEffect(effectOrigin, tempUnitEffect, caster.mage);
-          newStack.role = casterBattleStack[0].role;
-          casterBattleStack.push(newStack);
-          casterBattleStack.sort((a, b) => {
-            return b.netPower * getPowerModifier(b.unit) - a.netPower * getPowerModifier(a.unit);
-          })
-        }
-      }
-    }
-  }
-  return logs;
-}
 
 // For debugging different scenarios
 export interface BattleOptions {
   useFortBonus: boolean,
-  useEnchantments: boolean,
-  useUnlimitedResources: boolean,
-  useBarriers: boolean
 }
 
 const battleOptions: BattleOptions = {
   useFortBonus: true,
-  useEnchantments: true,
-  useUnlimitedResources: false,
-  useBarriers: true
 };
-
 
 export const successPillage = (attacker: Combatant, defender: Combatant) => {
   const battleReport = newBattleReport(attacker, defender, 'pillage');
@@ -759,94 +589,28 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   let hasAttackerItem = false;
   let hasDefenderSpell = false;
   let hasDefenderItem = false;
-  const kingdomResistances = calcKingdomResistance(defender.mage);
 
   const defenderHasArmy = defender.army.length > 0;
 
 
-  // FIXME: Check that we can actually cast said spell!!!
-  /**
-   * Check if spell and item pass barriers
-   * - spell goes throw two stages: barrier resist and magic resist.
-   * - item goes through only barrier resist
-  **/
   if (attacker.spellId) { 
-    if (defenderHasArmy)  {
-      const cost = castingCost(attacker.mage, attacker.spellId);
-      if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
-        const spell = getSpellById(attacker.spellId);
-        attacker.mage.currentMana -= cost;
-
-        const castingRate = successCastingRate(attacker.mage, attacker.spellId);
-        const roll1 = Math.random() * 100;
-        const roll2 = Math.random() * 100;
-
-        if (Math.random() * 100 > castingRate) {
-          preBattle.attacker.spellResult = 'lostConcentration';
-        } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-          preBattle.attacker.spellResult = 'barriers';
-        } else {
-          if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
-            preBattle.attacker.spellResult = 'barriers';
-          } else {
-
-            // Check if spell missed
-            // TODO: reflect spells
-            let avoidSpell = false;
-            for (const enchantment of defender.mage.enchantments) {
-              const spell = getSpellById(enchantment.spellId);
-              const battleAvoidances = spell.effects.filter(eff => {
-                return eff.effectType === E.AvoidEffect;
-              }) as AvoidEffect[];
-
-              for (const eff of battleAvoidances.filter(e => e.target === 'spell')) {
-                if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
-                  avoidSpell = true;
-                }
-              }
-            }
-
-            if (avoidSpell === true) {
-              preBattle.attacker.spellResult = 'missed';
-            } else {
-              preBattle.attacker.spellResult = 'success';
-              hasAttackerSpell = true;
-            }
-          }
-        }
-      } else {
-        preBattle.attacker.spellResult = 'noMana';
-      }
-    } else {
-      preBattle.attacker.spellResult = 'notUsed';
+    const result = attackerSpellResult(attacker, defender);
+    if (result === 'success') {
+      hasAttackerSpell = true;
     }
+    preBattle.attacker.spellResult = result;
   }
 
   if (attacker.itemId) {
-    if (defenderHasArmy) {
-      if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
-        attacker.mage.items[attacker.itemId] --;
-        if (attacker.mage.items[attacker.itemId] <= 0) {
-          delete attacker.mage.items[attacker.itemId];
-        }
-
-        const roll = Math.random() * 100;
-        if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-          preBattle.attacker.itemResult = 'barriers';
-        } else {
-          preBattle.attacker.itemResult = 'success';
-          hasAttackerItem = true
-        }
-      } else {
-        preBattle.attacker.itemResult = 'noItem';
-      }
-    } else {
-      preBattle.attacker.itemResult = 'notUsed';
+    const result = attackerItemResult(attacker, defender);
+    if (result === 'success') {
+      hasAttackerItem = true;
     }
+    preBattle.attacker.itemResult = result;
   }
 
   if (defender.mage.type === 'bot') {
-    if (defenderHasArmy) {
+    if (defender.army.length > 0) {
       preBattle.defender.spellResult = 'success';
       hasDefenderSpell = true;
       preBattle.defender.itemResult = 'success';
@@ -859,41 +623,19 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     }
   } else {
     if (defender.spellId) { 
-      if (defenderHasArmy) {
-        const cost = castingCost(defender.mage, defender.spellId);
-        if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-          defender.mage.currentMana -= cost;
-
-          const castingRate = successCastingRate(defender.mage, defender.spellId);
-          if (Math.random() * 100 > castingRate) {
-            preBattle.defender.spellResult = 'lostConcentration';
-          }
-          preBattle.defender.spellResult = 'success';
-          hasDefenderSpell = true;
-        } else {
-          preBattle.defender.spellResult = 'noMana';
-        }
-      } else {
-        preBattle.defender.spellResult = 'notUsed';
+      const result = defenderSpellResult(attacker, defender);
+      if (result === 'success') {
+        hasDefenderSpell = true;
       }
+      preBattle.defender.spellResult = result;
     }
 
     if (defender.itemId) { 
-      if (defenderHasArmy) {
-        if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-          defender.mage.items[defender.itemId] --;
-          if (defender.mage.items[defender.itemId] <= 0) {
-            delete defender.mage.items[defender.itemId];
-          }
-          
-          preBattle.defender.itemResult = 'success';
-          hasDefenderItem = true;
-        } else {
-          preBattle.defender.itemResult = 'noItem';
-        }
-      } else {
-        preBattle.defender.itemResult = 'notUsed';
+      const result = defenderItemResult(attacker, defender);
+      if (result === 'success') {
+        hasDefenderItem = true;
       }
+      preBattle.defender.itemResult = result;
     }
   }
 
@@ -902,50 +644,112 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   const attackingArmy =  prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy =  prepareBattleStack(defender.army, 'defender');
 
+  // Apply fort bonus to defender
+  if (battleOptions.useFortBonus === true) {
+    const base = calcFortBonus(defender.mage, battleType);
+    defendingArmy.forEach(stack => {
+      stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
+    });
+  }
+
+  const uniqueItems = getAllUniqueItems();
 
   // Prebattle spell effects
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, E.PrebattleEffect);
+    const battleSpellLogs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'spell',
+        obj: getSpellById(attacker.spellId),
+        filter: E.PrebattleEffect
+      },
+      attacker, 
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
     preBattle.logs.push(...battleSpellLogs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, E.PrebattleEffect);
+    const battleSpellLogs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'spell',
+        obj: getSpellById(defender.spellId),
+        filter: E.PrebattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
     preBattle.logs.push(...battleSpellLogs);
   }
 
   // Prebattle item effects
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem('attack', attacker, attackingArmy, defender, defendingArmy, E.PrebattleEffect);
+    const battleItemLogs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'item', 
+        obj: getItemById(attacker.itemId),
+        filter: E.PrebattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
     preBattle.logs.push(...battleItemLogs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem('defend', defender, defendingArmy, attacker, attackingArmy, E.PrebattleEffect);
+    const battleItemLogs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'item',
+        obj: getItemById(defender.itemId),
+        filter: E.PrebattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
     preBattle.logs.push(...battleItemLogs);
   }
 
   // Prebattle enchantment effects
   attacker.mage.enchantments.filter(d => d.targetId === attacker.mage.id).forEach(enchant => {
-    battleSpell(
-      'attack',
+    const logs = battleEffect(
+      {
+        stance: 'attack', 
+        type: 'enchantment',
+        obj: enchant,
+        filter: E.PrebattleEffect
+      },
       attacker,
       attackingArmy,
       defender,
-      defendingArmy,
-      enchant,
-      E.PrebattleEffect);
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   });
 
   defender.mage.enchantments.filter(d => d.targetId === defender.mage.id).forEach(enchant => {
-    battleSpell(
-      'defend',
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'enchantment',
+        obj: enchant,
+        filter: E.PrebattleEffect
+      },
       defender,
       defendingArmy,
       attacker,
-      attackingArmy,
-      enchant,
-      E.PrebattleEffect);
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   });
-
 
 
 
@@ -960,58 +764,150 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   // current spell level
   console.log('>> apply attacker enchantments')
   attacker.mage.enchantments.filter(d => d.targetId === attacker.mage.id).forEach(enchant => {
-    battleSpell(
-      'attack',
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'enchantment',
+        obj: enchant,
+        filter: E.BattleEffect
+      },
       attacker,
       attackingArmy,
       defender,
-      defendingArmy,
-      enchant,
-      E.BattleEffect);
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   });
 
   console.log('>> apply defender enchantments')
   defender.mage.enchantments.filter(d => d.targetId === defender.mage.id).forEach(enchant => {
-    battleSpell(
-      'defend',
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'enchantment',
+        obj: enchant,
+        filter: E.BattleEffect
+      },
       defender,
       defendingArmy,
       attacker,
-      attackingArmy,
-      enchant,
-      E.BattleEffect);
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   });
 
 
   // Unique item battle effects
-  applyUniqueItems('attack', attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
-  applyUniqueItems('defend', defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
-
-
-  // Apply fort bonus to defender
-  if (battleOptions.useFortBonus === true) {
-    const base = calcFortBonus(defender.mage, battleType);
-    defendingArmy.forEach(stack => {
-      stack.unit.hitPoints += Math.floor((base / 100) * stack.unit.hitPoints);
-    });
+  for (const itemId of Object.keys(attacker.mage.items)) {
+    const item = uniqueItems.find(d => d.id === itemId);
+    if (!item) continue;
+    
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'item',
+        obj: item,
+        filter: E.BattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   }
+
+  for (const itemId of Object.keys(defender.mage.items)) {
+    const item = uniqueItems.find(d => d.id === itemId);
+    if (!item) continue;
+
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'item',
+        obj: item,
+        filter: E.BattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
+  }
+
+
+  console.log('>> apply attacker skills')
+  for (const [skillId, level] of Object.entries(attacker.mage.skills)) {
+    const skill = getSkillById(skillId);
+  }
+
+  console.log('>> apply defender skills')
+  for (const [skillId, level] of Object.entries(defender.mage.skills)) {
+    const skill = getSkillById(skillId);
+  }
+
 
   // Run through spells and items
   if (hasAttackerSpell) {
-    const battleSpellLogs = battleSpell('attack', attacker, attackingArmy, defender, defendingArmy, null, E.BattleEffect);
-    preBattle.logs.push(...battleSpellLogs);
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'spell',
+        obj: getSpellById(attacker.spellId),
+        filter: E.BattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   }
   if (hasAttackerItem) {
-    const battleItemLogs = battleItem('attack', attacker, attackingArmy, defender, defendingArmy, E.BattleEffect);
-    preBattle.logs.push(...battleItemLogs);
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'item',
+        obj: getItemById(attacker.itemId),
+        filter: E.BattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   }
   if (hasDefenderSpell) {
-    const battleSpellLogs = battleSpell('defend', defender, defendingArmy, attacker, attackingArmy, null, E.BattleEffect);
-    preBattle.logs.push(...battleSpellLogs);
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'spell',
+        obj: getSpellById(defender.spellId),
+        filter: E.BattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   }
   if (hasDefenderItem) {
-    const battleItemLogs = battleItem('defend', defender, defendingArmy, attacker, attackingArmy, E.BattleEffect);
-    preBattle.logs.push(...battleItemLogs);
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'item',
+        obj: getItemById(defender.itemId),
+        filter: E.BattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   }
 
 
@@ -1451,9 +1347,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       defendingStack.loss += defenderUnitLoss;
     }
   } // end battleOrders
-
-
-  // FIXME: Resolve temporary units
 
 
   // Post battle, healing calculation

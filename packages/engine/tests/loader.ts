@@ -14,11 +14,19 @@ import phantasmUnits from 'data/src/units/phantasm-units.json';
 import lesserItems from 'data/src/items/lesser.json';
 import uniqueItems from 'data/src/items/unique.json';
 
+import ascendantSkills from 'data/src/skills/ascendant-graph.json';
+import verdantSkills from 'data/src/skills/verdant-graph.json';
+import eradicationSkills from 'data/src/skills/eradication-graph.json';
+import netherSkills from 'data/src/skills/nether-graph.json';
+import phantasmSkills from 'data/src/skills/phantasm-graph.json';
+
+
 import { 
   loadSpellData,
   loadItemData,
   loadUnitData,
-  initializeResearchTree
+  initializeResearchTree,
+  loadSkillGroup
 } from '../src/base/references';
 
 export const loadUnitsAndSpells = () => {
@@ -38,4 +46,10 @@ export const loadUnitsAndSpells = () => {
 
   loadItemData(lesserItems);
   loadItemData(uniqueItems);
+
+  loadSkillGroup(ascendantSkills);
+  loadSkillGroup(verdantSkills);
+  loadSkillGroup(eradicationSkills);
+  loadSkillGroup(netherSkills);
+  loadSkillGroup(phantasmSkills);
 }
