@@ -82,6 +82,9 @@ export const prettyPrintBR = (br: BattleReport) => {
   if (br.preBattle.attacker.spellResult == 'missed') {
     console.log('The spell missed');
   }
+  if (br.preBattle.attacker.spellResult == 'noSpell') {
+    console.log('No spell');
+  }
 
   console.log(`${attackerStr} uses ${br.attacker.itemId}`);
   if (br.preBattle.attacker.itemResult == 'barriers') {
@@ -89,6 +92,9 @@ export const prettyPrintBR = (br: BattleReport) => {
   }
   if (br.preBattle.attacker.itemResult == 'missed') {
     console.log('The item missed');
+  }
+  if (br.preBattle.attacker.itemResult === 'noItem') {
+    console.log('No item left');
   }
 
 
@@ -100,7 +106,17 @@ export const prettyPrintBR = (br: BattleReport) => {
   if (br.preBattle.defender.spellResult === 'lostConcentration') {
     console.log('Lost concentration');
   }
+  if (br.preBattle.defender.spellResult === 'noSpell') {
+    console.log('No spell');
+  }
+
+
   console.log(`${defenderStr} uses ${br.defender.itemId}`);
+  if (br.preBattle.defender.itemResult === 'noItem') {
+    console.log('No item left');
+  }
+
+
 
   console.log('');
   for (const log of br.preBattle.logs) {

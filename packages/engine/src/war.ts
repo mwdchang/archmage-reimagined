@@ -10,23 +10,17 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
-  AvoidEffect,
   PrebattleEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
 import { getSpellById, getItemById, getUnitById, getMaxSpellLevels, getAllUniqueItems, getSkillById } from './base/references';
-import {
-  calcKingdomResistance,
-  castingCost,
-  successCastingRate
-} from './magic';
 import { 
   currentSpellLevel,
   totalLand,
   totalNetPower,
 } from './base/mage';
-import { BattleReport, BattleStack, BattleEffectLog, EngagementLog } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, EngagementLog, BattleSpellResult, BattleItemResult } from 'shared/types/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';
@@ -46,6 +40,7 @@ import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { Item, Spell } from 'shared/types/magic';
+import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -465,7 +460,7 @@ const battleEffect = (
             if (roll > stack.unit.spellResistances[spell.magic]) {
               return true;
             }
-            console.log(`${stack.unit.name} resisted ${stack.unit.spellResistances[casterSpell.magic]}`);
+            console.log(`${stack.unit.name} resisted ${stack.unit.spellResistances[spell.magic]}`);
             return false;
           });
         }
@@ -523,18 +518,11 @@ const battleEffect = (
 // For debugging different scenarios
 export interface BattleOptions {
   useFortBonus: boolean,
-  useEnchantments: boolean,
-  useUnlimitedResources: boolean,
-  useBarriers: boolean
 }
 
 const battleOptions: BattleOptions = {
   useFortBonus: true,
-  useEnchantments: true,
-  useUnlimitedResources: false,
-  useBarriers: true
 };
-
 
 export const successPillage = (attacker: Combatant, defender: Combatant) => {
   const battleReport = newBattleReport(attacker, defender, 'pillage');
@@ -601,94 +589,28 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   let hasAttackerItem = false;
   let hasDefenderSpell = false;
   let hasDefenderItem = false;
-  const kingdomResistances = calcKingdomResistance(defender.mage);
 
   const defenderHasArmy = defender.army.length > 0;
 
 
-  // FIXME: Check that we can actually cast said spell!!!
-  /**
-   * Check if spell and item pass barriers
-   * - spell goes throw two stages: barrier resist and magic resist.
-   * - item goes through only barrier resist
-  **/
   if (attacker.spellId) { 
-    if (defenderHasArmy)  {
-      const cost = castingCost(attacker.mage, attacker.spellId);
-      if (cost < attacker.mage.currentMana || battleOptions.useUnlimitedResources) {
-        const spell = getSpellById(attacker.spellId);
-        attacker.mage.currentMana -= cost;
-
-        const castingRate = successCastingRate(attacker.mage, attacker.spellId);
-        const roll1 = Math.random() * 100;
-        const roll2 = Math.random() * 100;
-
-        if (Math.random() * 100 > castingRate) {
-          preBattle.attacker.spellResult = 'lostConcentration';
-        } else if (roll1 <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-          preBattle.attacker.spellResult = 'barriers';
-        } else {
-          if (roll2 <= kingdomResistances[spell.magic] && battleOptions.useBarriers) {
-            preBattle.attacker.spellResult = 'barriers';
-          } else {
-
-            // Check if spell missed
-            // TODO: reflect spells
-            let avoidSpell = false;
-            for (const enchantment of defender.mage.enchantments) {
-              const spell = getSpellById(enchantment.spellId);
-              const battleAvoidances = spell.effects.filter(eff => {
-                return eff.effectType === E.AvoidEffect;
-              }) as AvoidEffect[];
-
-              for (const eff of battleAvoidances.filter(e => e.target === 'spell')) {
-                if (Math.random() * 100 <= eff.magic[enchantment.casterMagic].value) {
-                  avoidSpell = true;
-                }
-              }
-            }
-
-            if (avoidSpell === true) {
-              preBattle.attacker.spellResult = 'missed';
-            } else {
-              preBattle.attacker.spellResult = 'success';
-              hasAttackerSpell = true;
-            }
-          }
-        }
-      } else {
-        preBattle.attacker.spellResult = 'noMana';
-      }
-    } else {
-      preBattle.attacker.spellResult = 'notUsed';
+    const result = attackerSpellResult(attacker, defender);
+    if (result === 'success') {
+      hasAttackerSpell = true;
     }
+    preBattle.attacker.spellResult = result;
   }
 
   if (attacker.itemId) {
-    if (defenderHasArmy) {
-      if (attacker.mage.items[attacker.itemId] > 0 || battleOptions.useUnlimitedResources) {
-        attacker.mage.items[attacker.itemId] --;
-        if (attacker.mage.items[attacker.itemId] <= 0) {
-          delete attacker.mage.items[attacker.itemId];
-        }
-
-        const roll = Math.random() * 100;
-        if (roll <= kingdomResistances['barriers'] && battleOptions.useBarriers) {
-          preBattle.attacker.itemResult = 'barriers';
-        } else {
-          preBattle.attacker.itemResult = 'success';
-          hasAttackerItem = true
-        }
-      } else {
-        preBattle.attacker.itemResult = 'noItem';
-      }
-    } else {
-      preBattle.attacker.itemResult = 'notUsed';
+    const result = attackerItemResult(attacker, defender);
+    if (result === 'success') {
+      hasAttackerItem = true;
     }
+    preBattle.attacker.itemResult = result;
   }
 
   if (defender.mage.type === 'bot') {
-    if (defenderHasArmy) {
+    if (defender.army.length > 0) {
       preBattle.defender.spellResult = 'success';
       hasDefenderSpell = true;
       preBattle.defender.itemResult = 'success';
@@ -701,41 +623,19 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     }
   } else {
     if (defender.spellId) { 
-      if (defenderHasArmy) {
-        const cost = castingCost(defender.mage, defender.spellId);
-        if (cost < defender.mage.currentMana || battleOptions.useUnlimitedResources) {
-          defender.mage.currentMana -= cost;
-
-          const castingRate = successCastingRate(defender.mage, defender.spellId);
-          if (Math.random() * 100 > castingRate) {
-            preBattle.defender.spellResult = 'lostConcentration';
-          }
-          preBattle.defender.spellResult = 'success';
-          hasDefenderSpell = true;
-        } else {
-          preBattle.defender.spellResult = 'noMana';
-        }
-      } else {
-        preBattle.defender.spellResult = 'notUsed';
+      const result = defenderSpellResult(attacker, defender);
+      if (result === 'success') {
+        hasDefenderSpell = true;
       }
+      preBattle.defender.spellResult = result;
     }
 
     if (defender.itemId) { 
-      if (defenderHasArmy) {
-        if (defender.mage.items[defender.itemId] > 0 || battleOptions.useUnlimitedResources) {
-          defender.mage.items[defender.itemId] --;
-          if (defender.mage.items[defender.itemId] <= 0) {
-            delete defender.mage.items[defender.itemId];
-          }
-          
-          preBattle.defender.itemResult = 'success';
-          hasDefenderItem = true;
-        } else {
-          preBattle.defender.itemResult = 'noItem';
-        }
-      } else {
-        preBattle.defender.itemResult = 'notUsed';
+      const result = defenderItemResult(attacker, defender);
+      if (result === 'success') {
+        hasDefenderItem = true;
       }
+      preBattle.defender.itemResult = result;
     }
   }
 
@@ -1447,9 +1347,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       defendingStack.loss += defenderUnitLoss;
     }
   } // end battleOrders
-
-
-  // FIXME: Resolve temporary units
 
 
   // Post battle, healing calculation
