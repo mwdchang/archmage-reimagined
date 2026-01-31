@@ -9,6 +9,28 @@
       "maxLevel": 10,
       "prereqs": {},
       "effects": [
+        {
+          "effectType": "BattleEffect",
+          "target": "self",
+          "targetType": "all",
+          "filters": null,
+          "trigger": null,
+          "effects": [
+            {
+              "effectType": "UnitHealEffect",
+              "checkResistance": false,
+              "healType": "points",
+              "rule": "none",
+              "magic": {
+                "ascendant": { "value": 0.5 },
+                "verdant": { "value": 0.5 },
+                "eradication": { "value": 0.5 },
+                "nether": { "value": 0.5 },
+                "phantasm": { "value": 0.5 }
+              }
+            }
+          ]
+        }
       ]
     },
     {

@@ -42,6 +42,7 @@ import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { Item, Spell } from 'shared/types/magic';
 import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
 import { Skill } from 'shared/types/skills';
+import { skipPartiallyEmittedExpressions } from 'typescript';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -410,6 +411,7 @@ const battleEffect = (
   let item : Item | null = null;
   let skill: Skill | null = null;
 
+
   if (config.type === 'spell') {
     spell = (config.obj as Spell);
     battleEffects = config.filter === E.BattleEffect ? 
@@ -427,12 +429,47 @@ const battleEffect = (
     item = (config.obj as Item);
     battleEffects = config.filter === E.BattleEffect ?
       item.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
-      item.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[] ;
+      item.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[];
     effectObjId = item.id;
   } else if (config.type === 'skill') {
-    // TODO
     // Skills has multipliers
-    skill = getSkillById((config.obj as SkillInstance).id);
+    const skillInstance = config.obj as SkillInstance;
+    skill = getSkillById(skillInstance.id);
+    battleEffects = config.filter === E.BattleEffect ?
+      skill.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
+      skill.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[];
+
+    // apply level multipliers
+    battleEffects.forEach(b => {
+      b.effects.forEach(eff => {
+        const type = eff.effectType;
+        if (type === E.UnitAttrEffect) {
+          const effect = eff as UnitAttrEffect;
+          const attrValues = Object.values(effect.attributes);
+          attrValues.forEach(attrValue => {
+            for (const magic of Object.keys(attrValue.magic)) {
+              // non numerics (eg. abilities) cannot be multiplied
+              if (typeof attrValue.magic[magic].value === 'number') {
+                attrValue.magic[magic].value *= skillInstance.level;
+              }
+            }
+          })
+        } else if (type === E.UnitHealEffect) {
+          const effect = eff as UnitHealEffect;
+          for (const magic of Object.keys(effect.magic)) {
+            if (typeof effect.magic[magic].value === 'number') {
+              effect.magic[magic].value *= skillInstance.level;
+            }
+          }
+        } else if (type === E.UnitDamageEffect) {
+          // TODO
+        } else if (type === E.TemporaryUnitEffect) {
+          // TODO
+        } else {
+          throw new Error(`Cannot handle ${type}`);
+        }
+      });
+    });
   }
 
   let cnt = 0;
@@ -847,12 +884,38 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   console.log('>> apply attacker skills')
   for (const [skillId, level] of Object.entries(attacker.mage.skills)) {
-    const skill = getSkillById(skillId);
+    // const skill = getSkillById(skillId);
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'skill',
+        obj: { id: skillId, level },
+        filter: E.BattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   }
 
   console.log('>> apply defender skills')
   for (const [skillId, level] of Object.entries(defender.mage.skills)) {
-    const skill = getSkillById(skillId);
+    // const skill = getSkillById(skillId);
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'skill',
+        obj: { id: skillId, level },
+        filter: E.BattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   }
 
 
