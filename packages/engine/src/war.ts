@@ -41,6 +41,7 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { Item, Spell } from 'shared/types/magic';
 import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
+import { Skill } from 'shared/types/skills';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -349,7 +350,7 @@ const randomStackIndex = (stacks: BattleStack[], targetType: BattleEffect['targe
 }
 
 
-interface Skill {
+interface SkillInstance {
   id: string;
   level: number;
 }
@@ -357,7 +358,7 @@ interface Skill {
 interface BattleEffectConfig {
   stance: 'attack' | 'defend';
   type: 'item' | 'spell' | 'skill' | 'enchantment'; 
-  obj: Item | Spell | Enchantment | Skill;
+  obj: Item | Spell | Enchantment | SkillInstance;
   filter: E.BattleEffect | E.PrebattleEffect;
 }
 
@@ -384,26 +385,30 @@ const battleEffect = (
     effectOrigin.id = caster.mage.id;
     effectOrigin.magic = caster.mage.magic;
     effectOrigin.spellLevel = currentSpellLevel(caster.mage);
-    effectOrigin.id = defender.mage.id;
+    effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'enchantment') {
     const enchantment = (config.obj as Enchantment);
     effectOrigin.id = enchantment.casterId;
     effectOrigin.magic = enchantment.casterMagic;
     effectOrigin.spellLevel = enchantment.spellLevel;
-    effectOrigin.id = defender.mage.id;
+    effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'item') {
     effectOrigin.id = caster.mage.id,
     effectOrigin.magic = caster.mage.magic;
     effectOrigin.spellLevel = currentSpellLevel(caster.mage);
     effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'skill') {
-    // TODO
+    effectOrigin.id = caster.mage.id;
+    effectOrigin.magic = caster.mage.magic;
+    effectOrigin.spellLevel = currentSpellLevel(caster.mage);
+    effectOrigin.targetId = defender.mage.id;
   }
 
 
   // Figure out the effects
   let spell: Spell | null = null;
   let item : Item | null = null;
+  let skill: Skill | null = null;
 
   if (config.type === 'spell') {
     spell = (config.obj as Spell);
@@ -412,6 +417,7 @@ const battleEffect = (
       spell.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[]; 
     effectObjId = spell.id;
   } else if (config.type === 'enchantment') {
+    // Enchantment has a root spell
     spell = getSpellById((config.obj as Enchantment).spellId);
     battleEffects = config.filter === E.BattleEffect ? 
       spell.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
@@ -425,6 +431,8 @@ const battleEffect = (
     effectObjId = item.id;
   } else if (config.type === 'skill') {
     // TODO
+    // Skills has multipliers
+    skill = getSkillById((config.obj as SkillInstance).id);
   }
 
   let cnt = 0;

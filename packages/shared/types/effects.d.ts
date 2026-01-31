@@ -128,7 +128,7 @@ export interface UnitAttrEffect extends Effect<E.UnitAttrEffect> {
  * spellLevelUnitLoss: unitloss = spellLevel * value
  * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
-type DamageValue = number | { min: number, max: number };
+type DamageValue = { min: number, max: number };
 export interface UnitDamageEffect extends Effect<E.UnitDamageEffect> {
   checkResistance: boolean;
   damageType: string[],
@@ -146,7 +146,7 @@ export interface UnitHealEffect extends Effect<E.UnitHealEffect> {
   rule: 'none' | 'spellLevel',
   magic: {
     [key in AllowedMagic]: {
-      value: any
+      value: number
     }
   }
 }

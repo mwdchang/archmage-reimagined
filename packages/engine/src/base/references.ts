@@ -32,7 +32,7 @@ export const getAllSkilGraphs = () => {
 }
 
 export const getSkillById = (id: string) => {
-  return skillMap.get(id);
+  return _.cloneDeep(skillMap.get(id));
 }
 
 const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
