@@ -1,15 +1,47 @@
-{
-  "id": "verdantSkillGroup",
-  "name": "Verdant",
-  "nodes": [
-    {
-      "id": "forestWatch",
-      "name": "Forest Watch",
-      "description": "Foreward outpost",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "forestWatch",
+    "name": "Forest Watch",
+    "magic": "verdant",
+    "description": "Foreward outpost",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": {
+          "min": 2,
+          "max": 5
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": [ "poison", "ranged" ],
+            "rule": "direct",
+            "magic": {
+              "ascendant": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "verdant": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "eradication": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "nether": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "phantasm": {
+                "value": { "min": 4000, "max": 4000 }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

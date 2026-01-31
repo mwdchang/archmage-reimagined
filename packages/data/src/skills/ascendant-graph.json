@@ -1,90 +1,34 @@
-{
-  "id": "ascendantSkillGroup",
-  "name": "Ascendant",
-  "nodes": [
-    {
-      "id": "firstAid",
-      "name": "First Aid",
-      "description": "First aid",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-        {
-          "effectType": "BattleEffect",
-          "target": "self",
-          "targetType": "all",
-          "filters": null,
-          "trigger": null,
-          "effects": [
-            {
-              "effectType": "UnitHealEffect",
-              "checkResistance": false,
-              "healType": "points",
-              "rule": "none",
-              "magic": {
-                "ascendant": { "value": 0.5 },
-                "verdant": { "value": 0.5 },
-                "eradication": { "value": 0.5 },
-                "nether": { "value": 0.5 },
-                "phantasm": { "value": 0.5 }
-              }
+[
+  {
+    "id": "firstAid",
+    "name": "First Aid",
+    "magic": "ascendant",
+    "description": "First aid",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 0.5 },
+              "verdant": { "value": 0.5 },
+              "eradication": { "value": 0.5 },
+              "nether": { "value": 0.5 },
+              "phantasm": { "value": 0.5 }
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "prayer",
-      "name": "Prayer",
-      "description": "Prayer",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
-    },
-    {
-      "id": "circleOfProtection",
-      "name": "Circle Of Protection",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "firstAid": 1,
-        "prayer": 1
-      },
-      "effects": [
-      ]
-    },
-    {
-      "id": "evilWard",
-      "name": "Evil Ward",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "circleOfProtection": 1
-      },
-      "effects": [
-      ]
-    },
-    {
-      "id": "crusade",
-      "name": "Crusade",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-      },
-      "effects": [
-      ]
-    },
-    {
-      "id": "angelicChorus",
-      "name": "Angelic Chorus",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "crusade": 1
-      },
-      "effects": [
-      ]
-    }
-  ]
-}
+          }
+        ]
+      }
+    ]
+  }
+]

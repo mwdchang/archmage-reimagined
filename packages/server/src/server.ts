@@ -369,6 +369,20 @@ router.post('/api/sell-item', async (req: any, res) => {
 });
 
 
+router.post('/api/skill', async (req: any, res) => {
+  const { skillId } = req.body;
+  let mage = await engine.getMageByUser(req.user.username);
+
+  try {
+    mage = await engine.addSkill(mage, skillId);
+    res.status(200).json({ mage });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
 router.post('/api/mails', async (req: any, res) => {
   const mail = req.body.mail;
   let mage = await engine.getMageByUser(req.user.username);
@@ -406,6 +420,7 @@ router.post('/api/delete-mails', async (req: any, res) => {
 //   console.log('cookies!!! ', req.user);
 //   res.status(200).json({ user: req.user });
 // });
+//
 
 app.use(router);
 

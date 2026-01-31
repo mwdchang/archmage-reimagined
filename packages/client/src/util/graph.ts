@@ -8,7 +8,9 @@ const nodeH = 60;
 export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
-    ranksep: 100
+    ranksep: 100,
+    marginx: 20,
+    marginy: 30
   });
   g.setDefaultEdgeLabel(function() { return {}; });
 

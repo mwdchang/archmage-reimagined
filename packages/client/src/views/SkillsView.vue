@@ -18,14 +18,14 @@
       :skills="[]"
     />
   </main>
-
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { getAllSkilGraphs } from 'engine/src/base/references';
-import { SkillGraph } from 'shared/types/skills';
 import SkillGraphDisplay from '@/components/SkillGraphDisplay.vue';
+import { Skill, SkillGraph } from 'shared/types/skills';
+import { allowedMagicList } from 'shared/src/common';
+import { getAllSkills } from 'engine/src/base/references';
 
 const tabView = ref('');
 const changeView = (v: string) => tabView.value = v;
@@ -44,12 +44,18 @@ watch(
     if (tabView.value === '') {
       return;
     }
-    const skillGraph = skillGraphs.value.find(d => d.id === tabView.value)!;
   }
 );
 
 onMounted(() => {
-  skillGraphs.value = getAllSkilGraphs();
+  const allSkills = getAllSkills();
+  for (const m of allowedMagicList) {
+    skillGraphs.value.push({
+      id: m,
+      name: m,
+      nodes: allSkills.filter(s => s.magic === m)
+    });
+  }
   tabView.value = skillGraphs.value[0].id;
 })
 

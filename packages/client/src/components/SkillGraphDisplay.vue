@@ -18,7 +18,6 @@ const props = defineProps<{
 
 const container = ref(null);
 
-
 type Point = {
   x: number;
   y: number;
@@ -28,6 +27,11 @@ const line = d3.line<Point>()
   .y(d => d.y)
   .curve(d3.curveBasis);
 
+const NODE_BORDER = '#838383';
+const NODE_BACKGROUND = '#232323';
+const NODE_TEXT = '#eeeeee';
+const EDGE_BACKGROUND = '#3355BA';
+
 const refresh = () => {
   const layout = layoutSkillGraph(props.graph);
 
@@ -36,7 +40,7 @@ const refresh = () => {
     .append('svg')
     .attr('width', '100%')
     .attr('height', '100%')
-    .attr('viewBox', '-25 -25 650 900')
+    .attr('viewBox', '0 0 650 900')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
   for (const node of layout.nodes()) {
@@ -48,14 +52,16 @@ const refresh = () => {
       .attr('ry', 8)
       .attr('width', n.width)
       .attr('height', n.height)
-      .style('fill', '#eeeeee');
+      .style('stroke', NODE_BORDER)
+      .style('stroke-width', 2)
+      .style('fill', NODE_BACKGROUND);
 
     svg.append('text')
       .attr('x', n.x - 0.5 * n.width + 0.05 * n.width)
-      .attr('y', n.y - 0.5 * n.height + 0.33 * n.height)
+      .attr('y', n.y - 0.5 * n.height + 0.38 * n.height)
       .style('font-size', '1.3rem')
       .style('stroke', 'none')
-      .style('fill', '#000')
+      .style('fill', NODE_TEXT)
       .text(n.label || '???');
   }
 
@@ -65,7 +71,7 @@ const refresh = () => {
       .datum(points)
       .attr('d', line)
       .attr('fill', 'none')
-      .attr('stroke', '#8eb')
+      .attr('stroke', EDGE_BACKGROUND)
       .attr('stroke-width', 5);
   }
 }
@@ -88,8 +94,9 @@ onMounted(() => {
 
 <style scoped>
 .graph-container {
-  width: 35rem;
-  height: 40rem;
+  width: 38rem;
+  height: 45rem;
   border: 1px solid #555555;
+  border-radius: 1rem;
 }
 </style>
