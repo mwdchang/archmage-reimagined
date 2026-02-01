@@ -6,7 +6,40 @@
     "description": "Stentch of decay fills the air, render the kingdom unlivable except for the foulest creatures",
     "maxLevel": 10,
     "prereqs": {},
-    "effects": []
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": [ "poison", "paralyse" ],
+            "rule": "direct",
+            "magic": {
+              "ascendant": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "verdant": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "eradication": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "nether": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "phantasm": {
+                "value": { "min": 3000, "max": 4000 }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "blight",
@@ -16,6 +49,27 @@
     "maxLevel": 10,
     "prereqs": {
       "miasma": 3
+    },
+    "effects": []
+  },
+  {
+    "id": "undeadMaster",
+    "name": "Undead Mastery",
+    "magic": "nether",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+    },
+    "effects": []
+  },
+  {
+    "id": "darkeningSky",
+    "name": "Darkening Sky",
+    "magic": "nether",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "undeadMaster": 5
     },
     "effects": []
   }

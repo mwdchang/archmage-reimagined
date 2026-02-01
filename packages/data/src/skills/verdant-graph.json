@@ -43,5 +43,56 @@
         ]
       }
     ]
+  },
+  {
+    "id": "animalMastery",
+    "name": "Animal Mastery",
+    "magic": "verdant",
+    "description": "",
+    "maxLevel": 12,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.01 },
+                  "verdant": { "value": 0.01 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.01 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "naturesFury",
+    "name": "Nature's Fury",
+    "magic": "verdant",
+    "description": "",
+    "maxLevel": 1,
+    "prereqs": {
+      "animalMastery": 5
+    },
+    "effects": [
+    ]
   }
 ]

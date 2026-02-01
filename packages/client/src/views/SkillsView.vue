@@ -1,22 +1,27 @@
 <template>
-  <div>Skills view</div>
-
-  <div class="form-tabs">
-    <div 
-      v-for="graph of skillGraphs"
-      @click="changeView(graph.id)"
-      :class="{ active: tabView === graph.id }"
-      class="tab">
-      {{ graph.name }}
+  <main>
+    <div style="margin-bottom: 0.5rem">
+      You have {{ mageStore.mage!.skillPoints }} skill points.
     </div>
-  </div>
+    <div class="form-tabs">
+      <div 
+        v-for="graph of skillGraphs"
+        @click="changeView(graph.id)"
+        :class="{ active: tabView === graph.id }"
+        class="tab">
+        {{ readableStr(graph.name) }}
+      </div>
+    </div>
 
-  <!-- Tech tree/graph -->
-  <main v-if="selectedGraph">
-    <SkillGraphDisplay 
-      :graph="selectedGraph" 
-      :skills="[]"
-    />
+    <!-- Tech tree/graph -->
+    <section v-if="selectedGraph">
+      <div v-if="errorStr" class="error" style="position: absolute">{{ errorStr }}</div>
+      <SkillGraphDisplay 
+        :graph="selectedGraph" 
+        :mage="mageStore.mage!"
+        @add-skill="onAddSkill($event)"
+      />
+    </section>
   </main>
 </template>
 
@@ -26,6 +31,13 @@ import SkillGraphDisplay from '@/components/SkillGraphDisplay.vue';
 import { Skill, SkillGraph } from 'shared/types/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { getAllSkills } from 'engine/src/base/references';
+import { useMageStore } from '@/stores/mage';
+import { API, APIWrapper } from '@/api/api';
+import { readableStr } from '@/util/util';
+
+
+const mageStore = useMageStore();
+const errorStr = ref('');
 
 const tabView = ref('');
 const changeView = (v: string) => tabView.value = v;
@@ -37,6 +49,25 @@ const selectedGraph = computed(() => {
 
   return skillGraph ? skillGraph : null;
 });
+
+const onAddSkill = async (skillId: string) => {
+  console.log('adding', skillId);
+
+  const { data, error } = await APIWrapper(() => {
+    errorStr.value = '';
+    return API.post(`/skill`, { skillId })
+  });
+
+  if (error) {
+    console.log('error', error);
+    errorStr.value = error;
+    return
+  }
+
+  if (data) {
+    mageStore.setMage(data.mage);
+  }
+};
 
 watch(
   () => tabView.value,

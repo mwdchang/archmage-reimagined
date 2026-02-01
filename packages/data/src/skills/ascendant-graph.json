@@ -30,5 +30,161 @@
         ]
       }
     ]
+  },
+  {
+    "id": "consecratedGround",
+    "name": "Consecrated Ground",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "firstAid": 5
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "magic": ["ascendant"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.01 },
+                  "verdant": { "value": 0.01 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.01 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prayer",
+    "name": "Prayer",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "firstAid": 5
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.paralyse,attackResistances.poison": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value": 1 },
+                  "nether": { "value": 1 },
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "angelicChorus",
+    "name": "Angelic Chorus",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "prayer": 2
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "angel"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "crusade",
+    "name": "Crusade",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 5,
+    "prereqs": {
+      "angelicChorus": 2,
+      "consecratedGround": 2
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
+
 ]
