@@ -41,6 +41,8 @@ import { applyStealEffect } from './effects/apply-steal-effect';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { Item, Spell } from 'shared/types/magic';
 import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
+import { Skill } from 'shared/types/skills';
+import { skipPartiallyEmittedExpressions } from 'typescript';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -349,7 +351,7 @@ const randomStackIndex = (stacks: BattleStack[], targetType: BattleEffect['targe
 }
 
 
-interface Skill {
+interface SkillInstance {
   id: string;
   level: number;
 }
@@ -357,7 +359,7 @@ interface Skill {
 interface BattleEffectConfig {
   stance: 'attack' | 'defend';
   type: 'item' | 'spell' | 'skill' | 'enchantment'; 
-  obj: Item | Spell | Enchantment | Skill;
+  obj: Item | Spell | Enchantment | SkillInstance;
   filter: E.BattleEffect | E.PrebattleEffect;
 }
 
@@ -384,26 +386,31 @@ const battleEffect = (
     effectOrigin.id = caster.mage.id;
     effectOrigin.magic = caster.mage.magic;
     effectOrigin.spellLevel = currentSpellLevel(caster.mage);
-    effectOrigin.id = defender.mage.id;
+    effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'enchantment') {
     const enchantment = (config.obj as Enchantment);
     effectOrigin.id = enchantment.casterId;
     effectOrigin.magic = enchantment.casterMagic;
     effectOrigin.spellLevel = enchantment.spellLevel;
-    effectOrigin.id = defender.mage.id;
+    effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'item') {
     effectOrigin.id = caster.mage.id,
     effectOrigin.magic = caster.mage.magic;
     effectOrigin.spellLevel = currentSpellLevel(caster.mage);
     effectOrigin.targetId = defender.mage.id;
   } else if (config.type === 'skill') {
-    // TODO
+    effectOrigin.id = caster.mage.id;
+    effectOrigin.magic = caster.mage.magic;
+    effectOrigin.spellLevel = currentSpellLevel(caster.mage);
+    effectOrigin.targetId = defender.mage.id;
   }
 
 
   // Figure out the effects
   let spell: Spell | null = null;
   let item : Item | null = null;
+  let skill: Skill | null = null;
+
 
   if (config.type === 'spell') {
     spell = (config.obj as Spell);
@@ -412,6 +419,7 @@ const battleEffect = (
       spell.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[]; 
     effectObjId = spell.id;
   } else if (config.type === 'enchantment') {
+    // Enchantment has a root spell
     spell = getSpellById((config.obj as Enchantment).spellId);
     battleEffects = config.filter === E.BattleEffect ? 
       spell.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
@@ -421,10 +429,47 @@ const battleEffect = (
     item = (config.obj as Item);
     battleEffects = config.filter === E.BattleEffect ?
       item.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
-      item.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[] ;
+      item.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[];
     effectObjId = item.id;
   } else if (config.type === 'skill') {
-    // TODO
+    // Skills has multipliers
+    const skillInstance = config.obj as SkillInstance;
+    skill = getSkillById(skillInstance.id);
+    battleEffects = config.filter === E.BattleEffect ?
+      skill.effects.filter(d => d.effectType === config.filter) as BattleEffect[] :
+      skill.effects.filter(d => d.effectType === config.filter) as PrebattleEffect[];
+
+    // apply level multipliers
+    battleEffects.forEach(b => {
+      b.effects.forEach(eff => {
+        const type = eff.effectType;
+        if (type === E.UnitAttrEffect) {
+          const effect = eff as UnitAttrEffect;
+          const attrValues = Object.values(effect.attributes);
+          attrValues.forEach(attrValue => {
+            for (const magic of Object.keys(attrValue.magic)) {
+              // non numerics (eg. abilities) cannot be multiplied
+              if (typeof attrValue.magic[magic].value === 'number') {
+                attrValue.magic[magic].value *= skillInstance.level;
+              }
+            }
+          })
+        } else if (type === E.UnitHealEffect) {
+          const effect = eff as UnitHealEffect;
+          for (const magic of Object.keys(effect.magic)) {
+            if (typeof effect.magic[magic].value === 'number') {
+              effect.magic[magic].value *= skillInstance.level;
+            }
+          }
+        } else if (type === E.UnitDamageEffect) {
+          // TODO
+        } else if (type === E.TemporaryUnitEffect) {
+          // TODO
+        } else {
+          throw new Error(`Cannot handle ${type}`);
+        }
+      });
+    });
   }
 
   let cnt = 0;
@@ -839,12 +884,38 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   console.log('>> apply attacker skills')
   for (const [skillId, level] of Object.entries(attacker.mage.skills)) {
-    const skill = getSkillById(skillId);
+    // const skill = getSkillById(skillId);
+    const logs = battleEffect(
+      {
+        stance: 'attack',
+        type: 'skill',
+        obj: { id: skillId, level },
+        filter: E.BattleEffect
+      },
+      attacker,
+      attackingArmy,
+      defender,
+      defendingArmy
+    );
+    preBattle.logs.push(...logs);
   }
 
   console.log('>> apply defender skills')
   for (const [skillId, level] of Object.entries(defender.mage.skills)) {
-    const skill = getSkillById(skillId);
+    // const skill = getSkillById(skillId);
+    const logs = battleEffect(
+      {
+        stance: 'defend',
+        type: 'skill',
+        obj: { id: skillId, level },
+        filter: E.BattleEffect
+      },
+      defender,
+      defendingArmy,
+      attacker,
+      attackingArmy
+    );
+    preBattle.logs.push(...logs);
   }
 
 

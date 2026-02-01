@@ -24,11 +24,11 @@
             "damageType": ["fire"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 100 },
-              "verdant": { "value": 180 },
-              "eradication": { "value": 250 },
-              "nether": { "value": 180 },
-              "phantasm": { "value": 100 }
+              "ascendant": { "value": { "min": 100, "max": 100 } },
+              "verdant": { "value": { "min": 180, "max": 180 } },
+              "eradication": { "value": { "min": 250, "max": 250 } },
+              "nether": { "value": { "min": 180, "max": 180 } },
+              "phantasm": { "value": { "min": 100, "max": 100 } }
             }
           }
         ]
@@ -187,11 +187,11 @@
             "damageType": ["lightning"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 80 },
-              "verdant": { "value": 150 },
-              "eradication": { "value": 200 },
-              "nether": { "value": 150 },
-              "phantasm": { "value": 80 }
+              "ascendant": { "value": { "min": 80, "max": 80 } },
+              "verdant": { "value": { "min": 150, "max": 150 } },
+              "eradication": { "value": { "min": 200, "max": 200 } },
+              "nether": { "value": { "min": 150, "max": 150 } },
+              "phantasm": { "value": { "min": 80, "max": 80 } }
             }
           },
           {
@@ -239,11 +239,11 @@
             "damageType": ["lightning"],
             "rule": "spellLevelUnitDamage",
             "magic": {
-              "ascendant": { "value": 0.04  },
-              "verdant": { "value": 0.11  },
-              "eradication": { "value": 0.19  },
-              "nether": { "value": 0.11  },
-              "phantasm": { "value": 0.04  }
+              "ascendant": { "value": { "min": 0.04, "max": 0.04 } },
+              "verdant": { "value": { "min": 0.11, "max": 0.11 } },
+              "eradication": { "value": { "min": 0.19, "max": 0.19 } },
+              "nether": { "value": { "min": 0.11, "max": 0.11 } },
+              "phantasm": { "value": { "min": 0.04, "max": 0.04 } }
             }
           }
         ]
@@ -359,11 +359,11 @@
             "damageType": ["fire"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 800 },
-              "verdant": { "value": 1000 },
-              "eradication": { "value": 1700 },
-              "nether": { "value": 1000},
-              "phantasm": { "value": 800 }
+              "ascendant": { "value": { "min": 800, "max": 800 } },
+              "verdant": { "value": { "min": 1000, "max": 1000 } },
+              "eradication": { "value": { "min": 1700, "max": 1700 } },
+              "nether": { "value": { "min": 1000, "max": 1000 } },
+              "phantasm": { "value": { "min": 800, "max": 800 } }
             }
           }
         ]
@@ -437,11 +437,11 @@
             "damageType": ["lightning"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 1000 },
-              "verdant": { "value": 2000 },
-              "eradication": { "value": 5000 },
-              "nether": { "value": 2000},
-              "phantasm": { "value": 1000 }
+              "ascendant": { "value": { "min": 1000, "max": 1000 } },
+              "verdant": { "value": { "min": 2000, "max": 2000 } },
+              "eradication": { "value": { "min": 5000, "max": 5000 } },
+              "nether": { "value": { "min": 2000, "max": 2000 } },
+              "phantasm": { "value": { "min": 1000, "max": 1000 } }
             }
           }
         ]
@@ -603,11 +603,11 @@
             "damageType": ["fire"],
             "rule": "spellLevelUnitLoss",
             "magic": {
-              "ascendant": { "value": 0.019 },
-              "verdant": { "value": 0.035 },
-              "eradication": { "value": 0.060 },
-              "nether": { "value": 0.035 },
-              "phantasm": { "value": 0.019 }
+              "ascendant": { "value": { "min": 0.019, "max": 0.019 } },
+              "verdant": { "value": { "min": 0.035, "max": 0.035 } },
+              "eradication": { "value": { "min": 0.060, "max": 0.060 } },
+              "nether": { "value": { "min": 0.035, "max": 0.035 } },
+              "phantasm": { "value": { "min": 0.019, "max": 0.019 } }
             }
           }
         ]
@@ -1095,7 +1095,7 @@
             "damageType": ["fire"],
             "rule": "spellLevelUnitDamage",
             "magic": {
-              "eradication": { "value": 0.33 }
+              "eradication": { "value": { "min": 0.33, "max": 0.33 } }
             }
           }
         ]

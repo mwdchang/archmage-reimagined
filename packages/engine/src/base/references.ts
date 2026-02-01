@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Unit } from 'shared/types/unit';
 import { Spell, Item } from 'shared/types/magic';
-import { Skill, SkillGraph } from 'shared/types/skills';
+import { Skill } from 'shared/types/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/types/common';
 import { magicAlignmentTable, spellRankTable } from './config';
@@ -18,21 +18,19 @@ export const skillMap = new Map<string, Skill>();
 
 const spellList: Spell[] = [];
 const itemList: Item[] = [];
-const skillGraphList: SkillGraph[] = [];
 
-export const loadSkillGroup = (group: SkillGraph) => {
-  for (const s of group.nodes) {
+export const loadSkillGroup = (skills: Skill[]) => {
+  for (const s of skills) {
     skillMap.set(s.id, s);
   }
-  skillGraphList.push(group);
 }
 
-export const getAllSkilGraphs = () => {
-  return _.cloneDeep(skillGraphList);
+export const getAllSkills = () => {
+  return _.cloneDeep([...skillMap.values()]);
 }
 
 export const getSkillById = (id: string) => {
-  return skillMap.get(id);
+  return _.cloneDeep(skillMap.get(id));
 }
 
 const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(

@@ -13,6 +13,7 @@ import {
   getRandomItem,
   getAllUniqueItems,
   loadSkillGroup,
+  getSkillById,
 } from './base/references';
 import {
   createMage,
@@ -2238,6 +2239,43 @@ class Engine {
     await this.adapter.updateMage(mage);
     return mage;
   }
+
+  // ==============================
+  async addSkill(mage: Mage, skillId: string) {
+    const skill = getSkillById(skillId);
+    if (!skill) {
+      throw new Error(`Skill ${skillId} not found`);
+    }
+
+    // Check if prerequisites are satisfied
+    const prereqs = skill.prereqs;
+    for (const [k, v] of Object.entries(prereqs)) {
+      if (!mage.skills[k] || mage.skills[k] < v) {
+        throw new Error(`Preprequiste not met ${k}:${v} for ${skillId}`);
+      }
+    }
+
+    // Check if we have enough points
+    if (mage.skillPoints <= 0) {
+      throw new Error(`Insufficient skill points`);
+    }
+
+    // Check if we hit max
+    if (mage.skills[skillId] && mage.skills[skillId] >= skill.maxLevel) {
+      throw new Error(`Cannot exceed max level ${skill.maxLevel}`);
+    }
+
+    mage.skillPoints--;
+    if (mage.skills[skillId]) {
+      mage.skills[skillId] ++;
+    } else {
+      mage.skills[skillId] = 1;
+    }
+    await this.adapter.updateMage(mage);
+    return mage;
+  }
+
+
 
 
   // ==============================

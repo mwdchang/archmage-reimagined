@@ -346,11 +346,11 @@
             "damageType": ["holy"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 550 },
-              "verdant": { "value": 250 },
-              "eradication": { "value": 100 },
-              "nether": { "value": 100 },
-              "phantasm": { "value": 250 }
+              "ascendant": { "value": { "min": 550, "max": 550 } },
+              "verdant": { "value": { "min": 250, "max": 250 } },
+              "eradication": { "value": { "min": 100, "max": 100 } },
+              "nether": { "value": { "min": 100, "max": 100 } },
+              "phantasm": { "value": { "min": 250, "max": 250 } }
             }
           }
         ]
