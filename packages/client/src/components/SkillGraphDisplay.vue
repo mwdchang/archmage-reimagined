@@ -73,6 +73,19 @@ const refresh = () => {
     .attr('viewBox', '0 0 650 900')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
+  const defs = svg.append('defs');
+  const grad = defs.append('radialGradient')
+    .attr('id', 'grad')
+    .attr('cx', '70%')
+    .attr('cy', '70%')
+    .attr('4', '50%')
+  grad.append('stop')
+    .attr('offset', '0%')
+    .attr('stop-color', '#333')
+  grad.append('stop')
+    .attr('offset', '100%')
+    .attr('stop-color', '#222');
+
   for (const node of layout.nodes()) {
     const hasSkill = props.mage.skills[node] ? true : false;
     const n = layout.node(node);
@@ -91,7 +104,8 @@ const refresh = () => {
         }
         return '6 6';
       })
-      .style('fill', NODE_BACKGROUND)
+      // .style('fill', NODE_BACKGROUND)
+      .style('fill', 'url(#grad)')
       .on('click', () => {
         emit('addSkill', node);
       });
