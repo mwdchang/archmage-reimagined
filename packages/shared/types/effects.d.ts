@@ -294,12 +294,12 @@ export interface AvoidEffect extends Effect<E.AvoidEffect> {
 
 
 // Reduce casting cost of spells
-export interface CastingCostEffect {
+export interface CastingCostEffect extends Effect<E.CastingCostEffect> {
   rule: 'addPercentageBase'
   magic: {
     [key in AllowedMagic]: {
       value: {
-        self: number;
+        innate: number;
         adjacent: number;
         opposite: number;
       }

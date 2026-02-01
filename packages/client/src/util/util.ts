@@ -11,6 +11,7 @@ import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/types/magic';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
+import { castingCost } from 'engine/src/magic';
 
 
 export interface MageItem {
@@ -20,12 +21,12 @@ export interface MageItem {
   amount: number
 }
 
-export const spellDisplay = (spell: Spell, magic: string) => {
+export const spellDisplay = (mage: Mage, spell: Spell) => {
   return {
     id: spell.id,
     magic: spell.magic,
     name: spell.name,
-    castingCost: spell.castingCost * magicAlignmentTable[magic].costModifier[spell.magic],
+    castingCost: castingCost(mage, spell.id),
     castingTurn: spell.castingTurn,
     attributes: spell.attributes
   };
@@ -38,7 +39,7 @@ export const getSpells = (mage: Mage) => {
   for (const magic of allowedMagicList) {
     mage.spellbook[magic].forEach(spellId => {
       const spell = getSpellById(spellId);
-      result.push(spellDisplay(spell, mage.magic));
+      result.push(spellDisplay(mage, spell));
     });
   }
   return result;

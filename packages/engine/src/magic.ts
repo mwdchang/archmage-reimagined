@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
+import { CastingCostEffect, EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import {
   gameTable, magicAlignmentTable, productionTable
 } from './base/config';
@@ -19,7 +19,9 @@ import {
   KingdomResistanceEffect,
   CastingEffect
 } from 'shared/types/effects';
-import { allowedMagicList } from 'shared/src/common';
+import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
+import { getActiveEffects } from './effects';
+import { AllowedMagic } from 'shared/types/common';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {
@@ -335,13 +337,29 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
 
 export const castingCost = (mage: Mage, spellId: string) => {
   const spell = getSpellById(spellId);
-  const mageMagic = mage.magic;
+  const mageMagic = mage.magic as AllowedMagic;
   const spellMagic = spell.magic;
 
   let castingCost = spell.castingCost;
   const costModifier = magicAlignmentTable[mageMagic].costModifier[spellMagic];
   castingCost *= costModifier;
 
+  const base = castingCost;
+  const activeEffects = getActiveEffects(mage, E.CastingCostEffect)
+
+  for (const activeEffect of activeEffects) { 
+    for (const castingCostEffect of activeEffect.effects as CastingCostEffect[]) {
+      if (magicAlignmentTable[mageMagic].innate.includes(spellMagic)) {
+        castingCost += base * castingCostEffect.magic[mageMagic].value.innate;
+      }
+      if (magicAlignmentTable[mageMagic].adjacent.includes(spellMagic)) {
+        castingCost += base * castingCostEffect.magic[mageMagic].value.adjacent;
+      }
+      if (magicAlignmentTable[mageMagic].opposite.includes(spellMagic)) {
+        castingCost += base * castingCostEffect.magic[mageMagic].value.opposite;
+      }
+    }
+  }
   return castingCost;
 }
 

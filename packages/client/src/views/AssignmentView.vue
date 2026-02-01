@@ -119,7 +119,7 @@ const usableSpells = computed(() => {
 });
 
 const maxCast = (spell: Spell) => {
-  const meta = spellDisplay(spell, mage.value!.magic);
+  const meta = spellDisplay(mage.value!, spell);
   if (!meta.castingCost) return 0;
 
   return Math.floor(mage.value!.currentMana / meta.castingCost);

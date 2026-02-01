@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
 import type { Mage } from 'shared/types/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
-import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect } from "shared/types/effects";
+import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect } from "shared/types/effects";
 import { currentSpellLevel } from "./base/mage";
 import { AllowedMagic } from 'shared/types/common';
 
@@ -139,6 +139,9 @@ const applySkillLevelToEffect = (effect: Effect<any>, level: number) => {
   if (effectClone.effectType === E.BattleEffect || effectClone.effectType === E.PrebattleEffect) {
     return applySkillLevelToBattleEffect(effectClone as any, level);
   } 
+  if (effectClone.effectType === E.CastingCostEffect) {
+    return applySkillLevelToCastingCostEffect(effectClone as any, level);
+  }
   throw new Error(`Skill boosting for : ${effect.effectType} not implemented`);
 };
 
@@ -181,4 +184,14 @@ const applySkillLevelToBattleEffect = (battleEffect: BattleEffect | PrebattleEff
     }
   });
   return battleEffect;
+}
+
+
+const applySkillLevelToCastingCostEffect = (effect: CastingCostEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.innate *= level;
+    effect.magic[magic].value.adjacent *= level;
+    effect.magic[magic].value.opposite *= level;
+  }
+  return effect;
 }
