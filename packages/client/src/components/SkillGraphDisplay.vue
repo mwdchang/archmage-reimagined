@@ -11,6 +11,7 @@ import { onMounted, ref, watch } from 'vue';
 import { layoutSkillGraph } from '@/util/graph';
 import { Mage } from 'shared/types/mage';
 import { getSkillById } from 'engine/src/base/references';
+import { readableStr } from '@/util/util';
 
 const props = defineProps<{
   graph: SkillGraph,
@@ -35,6 +36,7 @@ const line = d3.line<Point>()
 const NODE_BORDER = '#838383';
 const NODE_BACKGROUND = '#232323';
 const NODE_TEXT = '#eeeeee';
+const NODE_TEXT_DARK = '#CCCCCC';
 const EDGE_BACKGROUND = '#3355BA';
 
 
@@ -86,6 +88,47 @@ const refresh = () => {
     .attr('offset', '100%')
     .attr('stop-color', '#222');
 
+
+  for (const edge of layout.edges()) {
+    const points = layout.edge(edge).points;
+    const hasSkill = props.mage.skills[edge.v] ? true : false;
+
+    const targetSkill = getSkillById(edge.w);
+    const targetRerequiredLevel = targetSkill?.prereqs[edge.v] || 0;
+
+    let unlocked = false;
+    if (props.mage.skills[edge.v] && props.mage.skills[edge.v] >= targetRerequiredLevel) {
+      unlocked = true;
+    }
+
+    const path = svg.append('path')
+      .datum(points)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', EDGE_BACKGROUND)
+      .attr('stroke-width', 7)
+      .style('stroke-dasharray', () => {
+        if (unlocked === true) {
+          return 'none';
+        }
+        return '6 6';
+      })
+      .style('pointer-events', 'none');
+
+    if (unlocked === false) {
+      const len = path.node()?.getTotalLength() || 0;
+      const midpoint = path.node()?.getPointAtLength(len / 2);
+      svg.append('text')
+        .attr('x', midpoint!.x)
+        .attr('y', midpoint!.y)
+        .style('stroke', 'none')
+        .style('fill', NODE_TEXT_DARK)
+        .style('text-anchor', 'middle')
+        .style('font-size', '1.25rem')
+        .text(`${targetRerequiredLevel} ${readableStr(edge.v)} to unlock`);
+    }
+  }
+
   for (const node of layout.nodes()) {
     const hasSkill = props.mage.skills[node] ? true : false;
     const n = layout.node(node);
@@ -97,7 +140,7 @@ const refresh = () => {
       .attr('width', n.width)
       .attr('height', n.height)
       .style('stroke', NODE_BORDER)
-      .style('stroke-width', 3)
+      .style('stroke-width', 4)
       .style('stroke-dasharray', () => {
         if (hasSkill) {
           return 'none';
@@ -135,24 +178,6 @@ const refresh = () => {
       .style('pointer-events', 'none');
   }
 
-  for (const edge of layout.edges()) {
-    const points = layout.edge(edge).points;
-    const hasSkill = props.mage.skills[edge.v] ? true : false;
-
-    svg.append('path')
-      .datum(points)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', EDGE_BACKGROUND)
-      .attr('stroke-width', 5)
-      .style('stroke-dasharray', () => {
-        if (hasSkill) {
-          return 'none';
-        }
-        return '6 6';
-      })
-      .style('pointer-events', 'none');
-  }
 }
 
 watch(

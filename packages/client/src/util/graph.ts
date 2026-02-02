@@ -8,7 +8,7 @@ const nodeH = 80;
 export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
-    ranksep: 80,
+    ranksep: 100,
     marginx: 20,
     marginy: 40
   });
