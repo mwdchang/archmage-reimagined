@@ -1,15 +1,98 @@
-{
-  "id": "verdantSkillGroup",
-  "name": "Verdant",
-  "nodes": [
-    {
-      "id": "forestWatch",
-      "name": "Forest Watch",
-      "description": "Foreward outpost",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "forestWatch",
+    "name": "Forest Watch",
+    "magic": "verdant",
+    "description": "Foreward outpost",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": {
+          "min": 2,
+          "max": 5
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": [ "poison", "ranged" ],
+            "rule": "direct",
+            "magic": {
+              "ascendant": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "verdant": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "eradication": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "nether": {
+                "value": { "min": 4000, "max": 4000 }
+              },
+              "phantasm": {
+                "value": { "min": 4000, "max": 4000 }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "animalMastery",
+    "name": "Animal Mastery",
+    "magic": "verdant",
+    "description": "",
+    "maxLevel": 12,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.01 },
+                  "verdant": { "value": 0.01 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.01 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "naturesFury",
+    "name": "Nature's Fury",
+    "magic": "verdant",
+    "description": "",
+    "maxLevel": 1,
+    "prereqs": {
+      "animalMastery": 5
+    },
+    "effects": [
+    ]
+  }
+]

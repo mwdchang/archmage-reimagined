@@ -1,5 +1,33 @@
-{
-  "id": "phantasmSkillGroup",
-  "name": "Phantasm",
-  "nodes": []
-}
+[
+  {
+    "id": "spellMastery",
+    "name": "Spell Mastery",
+    "magic": "phantasm",
+    "description": "Reduce spell casting cost",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "CastingCostEffect",
+        "rule": "addPercentageBase",
+        "magic": {
+          "ascendant": { 
+            "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
+          },
+          "verdant": { 
+            "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
+          },
+          "eradication": { 
+            "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
+          },
+          "nether": { 
+            "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
+          },
+          "phantasm": { 
+            "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
+          }
+        }
+      }
+    ]
+  }
+]

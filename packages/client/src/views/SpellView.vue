@@ -212,7 +212,7 @@ const changeView = (v: string) => {
 };
 
 const maxCast = (spell: Spell) => {
-  const meta = spellDisplay(spell, mageStore.mage!.magic);
+  const meta = spellDisplay(mageStore.mage!, spell);
   if (!meta.castingCost) return 0;
   return Math.floor(mageStore.mage!.currentMana / meta.castingCost);
 }

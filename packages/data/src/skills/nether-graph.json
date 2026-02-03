@@ -1,67 +1,93 @@
-{
-  "id": "netherSkillGroup",
-  "name": "Nether",
-  "nodes": [
-    {
-      "id": "miasma",
-      "name": "Miasma",
-      "description": "Stentch of decay fills the air, render the kingdom unlivable except for the foulest creatures",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
+[
+  {
+    "id": "miasma",
+    "name": "Miasma",
+    "magic": "nether",
+    "description": "Stentch of decay fills the air, render the kingdom unlivable except for the foulest creatures",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": true,
+            "damageType": [ "poison", "paralyse" ],
+            "rule": "direct",
+            "magic": {
+              "ascendant": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "verdant": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "eradication": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "nether": {
+                "value": { "min": 3000, "max": 4000 }
+              },
+              "phantasm": {
+                "value": { "min": 3000, "max": 4000 }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blight",
+    "name": "Blight",
+    "magic": "nether",
+    "description": "Blight transfer from amry to amry, destroying crops and farming land",
+    "maxLevel": 10,
+    "prereqs": {
+      "miasma": 3
     },
-    {
-      "id": "blight",
-      "name": "Blight",
-      "description": "Blight transfer from amry to amry, destroying crops and farming land",
-      "maxLevel": 10,
-      "prereqs": {
-        "miasma": 1
-      },
-      "effects": [
-      ]
+    "effects": []
+  },
+  {
+    "id": "undeadMaster",
+    "name": "Undead Mastery",
+    "magic": "nether",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
     },
-    {
-      "id": "undeadMastery",
-      "name": "Undead Mastery",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
-    },
-    {
-      "id": "demonMastery",
-      "name": "Demon Mastery",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "undeadMastery": 1
-      },
-      "effects": [
-      ]
-    },
-    {
-      "id": "zombieMastery",
-      "name": "Zombie Mastery",
-      "description": "",
-      "maxLevel": 1,
-      "prereqs": {
-        "undeadMastery": 3
-      },
-      "effects": []
-    },
-    {
-      "id": "frenzy",
-      "name": "Frenzy",
-      "description": "",
-      "maxLevel": 1,
-      "prereqs": {
-        "undeadMastery": 10, 
-        "demonMastery": 10 
-      },
-      "effects": []
-    }
-  ]
-}
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "undead"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower,hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

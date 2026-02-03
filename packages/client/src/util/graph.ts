@@ -2,13 +2,15 @@ import _ from 'lodash';
 import dagre from "@dagrejs/dagre"
 import { SkillGraph } from "shared/types/skills"
 
-const nodeW = 170;
-const nodeH = 60;
+const nodeW = 250;
+const nodeH = 80;
 
 export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
-    ranksep: 100
+    ranksep: 100,
+    marginx: 20,
+    marginy: 40
   });
   g.setDefaultEdgeLabel(function() { return {}; });
 

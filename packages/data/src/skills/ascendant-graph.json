@@ -1,68 +1,190 @@
-{
-  "id": "ascendantSkillGroup",
-  "name": "Ascendant",
-  "nodes": [
-    {
-      "id": "firstAid",
-      "name": "First Aid",
-      "description": "First aid",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
+[
+  {
+    "id": "firstAid",
+    "name": "First Aid",
+    "magic": "ascendant",
+    "description": "First aid",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitHealEffect",
+            "checkResistance": false,
+            "healType": "points",
+            "rule": "none",
+            "magic": {
+              "ascendant": { "value": 0.5 },
+              "verdant": { "value": 0.5 },
+              "eradication": { "value": 0.5 },
+              "nether": { "value": 0.5 },
+              "phantasm": { "value": 0.5 }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "consecratedGround",
+    "name": "Consecrated Ground",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "firstAid": 5
     },
-    {
-      "id": "prayer",
-      "name": "Prayer",
-      "description": "Prayer",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "magic": ["ascendant"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 0.01 },
+                  "verdant": { "value": 0.01 },
+                  "eradication": { "value": 0.01 },
+                  "nether": { "value": 0.01 },
+                  "phantasm": { "value": 0.01 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prayer",
+    "name": "Prayer",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "firstAid": 5
     },
-    {
-      "id": "circleOfProtection",
-      "name": "Circle Of Protection",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "firstAid": 1,
-        "prayer": 1
-      },
-      "effects": [
-      ]
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "attackResistances.paralyse,attackResistances.poison": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value": 1 },
+                  "nether": { "value": 1 },
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "angelicChorus",
+    "name": "Angelic Chorus",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "prayer": 2
     },
-    {
-      "id": "evilWard",
-      "name": "Evil Ward",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "circleOfProtection": 1
-      },
-      "effects": [
-      ]
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "angel"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "crusade",
+    "name": "Crusade",
+    "magic": "ascendant",
+    "description": "",
+    "maxLevel": 5,
+    "prereqs": {
+      "angelicChorus": 2,
+      "consecratedGround": 2
     },
-    {
-      "id": "crusade",
-      "name": "Crusade",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-      },
-      "effects": [
-      ]
-    },
-    {
-      "id": "angelicChorus",
-      "name": "Angelic Chorus",
-      "description": "",
-      "maxLevel": 10,
-      "prereqs": {
-        "crusade": 1
-      },
-      "effects": [
-      ]
-    }
-  ]
-}
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": null,
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+]

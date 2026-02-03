@@ -1,37 +1,33 @@
-{
-  "id": "eradicationSkillGroup",
-  "name": "Eradication",
-  "nodes": [
-    {
-      "id": "hearth",
-      "name": "Hearth",
-      "description": "Increase mana production by 200 per level",
-      "maxLevel": 10,
-      "prereqs": {},
-      "effects": [
-      ]
+[
+  {
+    "id": "hearth",
+    "name": "Hearth",
+    "magic": "eradication",
+    "description": "Increase mana production by 200 per level",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": []
+  },
+  {
+    "id": "fireMastery",
+    "name": "Fire Mastery",
+    "magic": "eradication",
+    "description": "Increase fire-based attack",
+    "maxLevel": 10,
+    "prereqs": {
+      "hearth": 1
     },
-    {
-      "id": "fireMastery",
-      "name": "Fire Mastery",
-      "description": "Increase fire-based attack",
-      "maxLevel": 10,
-      "prereqs": {
-        "hearth": 1
-      }, 
-      "effects": [
-      ]
+    "effects": []
+  },
+  {
+    "id": "lightningMastery",
+    "name": "Lightning Mastery",
+    "magic": "eradication",
+    "description": "Increase lightning-based attack",
+    "maxLevel": 10,
+    "prereqs": {
+      "hearth": 1
     },
-    {
-      "id": "lightningMastery",
-      "name": "Lightning Mastery",
-      "description": "Increase lightning-based attack",
-      "maxLevel": 10,
-      "prereqs": {
-        "hearth": 1
-      },
-      "effects": [
-      ]
-    }
-  ]
-}
+    "effects": []
+  }
+]

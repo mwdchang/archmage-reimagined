@@ -24,11 +24,11 @@
             "damageType": ["psychic"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 140 },
-              "verdant": { "value": 90 },
-              "eradication": { "value": 90 },
-              "nether": { "value": 140 },
-              "phantasm": { "value": 230 }
+              "ascendant": { "value": { "min": 140, "max": 140 } },
+              "verdant": { "value": { "min": 90, "max": 90 } },
+              "eradication": { "value": { "min": 90, "max": 90 } },
+              "nether": { "value": { "min": 140, "max": 140 } },
+              "phantasm": { "value": { "min": 230, "max": 230 } }
             }
           }
         ]
@@ -335,11 +335,11 @@
             "damageType": ["psychic"],
             "rule": "spellLevel",
             "magic": {
-              "ascendant": { "value": 1000 },
-              "verdant": { "value": 700 },
-              "eradication": { "value": 700 },
-              "nether": { "value": 1000 },
-              "phantasm": { "value": 1600 }
+              "ascendant": { "value": { "min": 1000, "max": 1000 } },
+              "verdant": { "value": { "min": 700, "max": 700 } },
+              "eradication": { "value": { "min": 700, "max": 700 } },
+              "nether": { "value": { "min": 1000, "max": 1000 } },
+              "phantasm": { "value": { "min": 1600, "max": 1600 } }
             }
           }
         ]

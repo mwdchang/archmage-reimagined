@@ -709,11 +709,11 @@
             "damageType": ["holy"],
             "rule": "direct",
             "magic": {
-              "ascendant": { "value": 150000 },
-              "verdant": { "value": 1500000 },
-              "eradication": { "value": 150000 },
-              "nether": { "value": 150000 },
-              "phantasm": { "value": 150000 }
+              "ascendant": { "value": { "min": 150000, "max": 150000 } },
+              "verdant": { "value": { "min": 1500000, "max": 150000 } },
+              "eradication": { "value": { "min": 150000, "max": 150000 } },
+              "nether": { "value": { "min": 150000, "max": 150000 } },
+              "phantasm": { "value": { "min": 150000, "max": 150000 } }
             }
           }
         ]
@@ -745,11 +745,11 @@
             "damageType": ["magic"],
             "rule": "direct",
             "magic": {
-              "ascendant": { "value": 120000 },
-              "verdant": { "value": 1200000 },
-              "eradication": { "value": 120000 },
-              "nether": { "value": 120000 },
-              "phantasm": { "value": 120000 }
+              "ascendant": { "value": { "min": 120000, "max": 120000 } },
+              "verdant": { "value": { "min": 1200000, "max": 120000 } },
+              "eradication": { "value": { "min": 120000, "max": 120000 } },
+              "nether": { "value": { "min": 120000, "max": 120000 } },
+              "phantasm": { "value": { "min": 120000, "max": 120000 } }
             }
           },
           {
@@ -758,11 +758,11 @@
             "damageType": ["psychic"],
             "rule": "direct",
             "magic": {
-              "ascendant": { "value": 120000 },
-              "verdant": { "value": 1200000 },
-              "eradication": { "value": 120000 },
-              "nether": { "value": 120000 },
-              "phantasm": { "value": 120000 }
+              "ascendant": { "value": { "min": 120000, "max": 120000 } },
+              "verdant": { "value": { "min": 1200000, "max": 120000 } },
+              "eradication": { "value": { "min": 120000, "max": 120000 } },
+              "nether": { "value": { "min": 120000, "max": 120000 } },
+              "phantasm": { "value": { "min": 120000, "max": 120000 } }
             }
           }
         ]
