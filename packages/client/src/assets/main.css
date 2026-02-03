@@ -268,10 +268,12 @@ table > tr.active {
 .g-c3 { grid-column: 3 }
 .g-c4 { grid-column: 4 }
 .g-c5 { grid-column: 5 }
+.g-c6 { grid-column: 6 }
 
 .g-r1 { grid-row: 1 }
 .g-r2 { grid-row: 2 }
 .g-r3 { grid-row: 3 }
 .g-r4 { grid-row: 4 }
 .g-r5 { grid-row: 5 }
+.g-r6 { grid-row: 6 }
 

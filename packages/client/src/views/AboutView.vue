@@ -105,6 +105,10 @@
       <router-link class="grid-item g-c4 g-r3" to="/chronicles">Chronicles</router-link>
       <router-link class="grid-item g-c4 g-r4" to="/recruit">Recruit</router-link>
       <router-link class="grid-item g-c4 g-r5" to="/disband" style="color: #d80">Disband</router-link>
+
+
+      <!-- col 5-->
+      <router-link class="grid-item g-c5 g-r1" to="/skills">Skills</router-link>
     </section>
 
     <section class="row" style="gap: 30px; margin-top: 20px; margin-bottom: 1rem; background: #181818; border-radius: 3px">
@@ -225,7 +229,7 @@ onMounted(async () => {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
   gap: 0.6rem 1.25rem; /* Optional spacing between columns */
 }
 
