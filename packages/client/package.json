@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^2.0.3",
+    "@dagrejs/dagre": "^1.1.8",
     "@types/d3": "^7.4.3",
     "axios": "^1.13.1",
     "d3": "^7.9.0",

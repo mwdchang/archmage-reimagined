@@ -1,4 +1,6 @@
 import _ from 'lodash';
+// check https://juejin.cn/post/7579179625461334058
+// check https://github.com/dagrejs/dagre/issues/492
 import dagre from "@dagrejs/dagre"
 import { SkillGraph } from "shared/types/skills"
 
