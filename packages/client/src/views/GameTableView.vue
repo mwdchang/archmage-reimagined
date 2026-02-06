@@ -17,6 +17,10 @@
             <td>{{ gameTable.turnRate }} seconds</td>
           </tr>
           <tr>
+            <td>Appretience duration</td>
+            <td>{{ gameTable.apprenticeTurn }} turns</td>
+          </tr>
+          <tr>
             <td>Max item generation</td>
             <td>{{ readableNumber(100 * gameTable.itemGenerationRate) }}%</td>
           </tr>

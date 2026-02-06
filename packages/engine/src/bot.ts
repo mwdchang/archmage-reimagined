@@ -10,6 +10,7 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
   const botMage = createMage(id, name, magic, {
     type: 'bot',
     testingSpellLevel: getMaxSpellLevels()[magic],
+    turnsUsed: 1000,
     farms: 1500,
     towns: 800,
     nodes: 800,

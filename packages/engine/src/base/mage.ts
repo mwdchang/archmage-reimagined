@@ -66,7 +66,7 @@ export const createMage = (id: number, name: string, magic: string, override?:Pa
       itemCondition: -1,
     },
 
-    skillPoints: 0,
+    skillPoints: 50,
     skills: {}
   };
 
@@ -179,4 +179,6 @@ export const currentSpellLevel = (mage: Mage) => {
   }
   return result;
 }
+
+
 

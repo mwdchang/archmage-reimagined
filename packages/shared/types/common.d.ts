@@ -17,6 +17,7 @@ export interface MageRank {
   name: string;
   magic: string;
   forts: number;
+  turns: number;
   land: number;
   status: string;
   netPower: number;
@@ -29,6 +30,8 @@ export interface GameTable {
   maxTurns: number;
   turnRate: number;
   endTurn: number;
+  apprenticeTurn: number;
+
   itemGenerationRate: number;
 
   war: {
