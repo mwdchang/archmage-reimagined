@@ -179,7 +179,7 @@ export interface KingdomResistanceEffect extends Effect<E.KingdomResistanceEffec
 }
 
 export interface KingdomBuildingsEffect extends Effect<E.KingdomBuildingsEffect> {
-  rule: 'landPercentageLoss' | 'netPowerRanged',
+  rule: 'landPercentageLoss' | 'netPowerRanged' | 'direct',
   target: string,
   magic: {
     [key in AllowedMagic]: {

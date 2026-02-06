@@ -50,7 +50,23 @@
     "prereqs": {
       "miasma": 3
     },
-    "effects": []
+    "effects": [
+      {
+        "effectType": "PostbattleEffect",
+        "target": "self",
+        "condition": "all",
+        "effects": [
+           {
+            "effectType": "KingdomBuildingsEffect",
+            "rule": "direct",
+            "target": "farms",
+            "magic": {
+              "nether": { "value": { "min": -10, "max": -20 } }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "undeadMaster",

@@ -197,7 +197,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.KingdomBuildingsEffect) {
     const effect = eff as KingdomBuildingsEffect;
 
-    if (!['landPercentageLoss', 'netPowerRanged'].includes(effect.rule)) {
+    if (!['landPercentageLoss', 'netPowerRanged', 'direct'].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
