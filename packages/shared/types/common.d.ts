@@ -30,6 +30,8 @@ export interface GameTable {
   maxTurns: number;
   turnRate: number;
   endTurn: number;
+  apprenticeTurn: number;
+
   itemGenerationRate: number;
 
   war: {

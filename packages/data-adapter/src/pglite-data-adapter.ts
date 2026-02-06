@@ -201,7 +201,7 @@ const DB_INIT = (gameTable: GameTable) => `
       COALESCE(
         CASE
           WHEN r.forts <= 0 THEN 'defeated'
-          WHEN r.turns <= 120 THEN 'apprentice'
+          WHEN r.turns <= ${gameTable.apprenticeTurn} THEN 'apprentice'
           WHEN rb.total_loss_pct > ${gameTable.war.damagedPercentage} THEN 'damaged'
           ELSE 'normal'
         END,
