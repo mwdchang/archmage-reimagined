@@ -29,6 +29,7 @@ import DisbandView from '@/views/DisbandView.vue';
 import DisplayUnitView from '@/views/DisplayUnitView.vue';
 import DisplaySpellView from '@/views/DisplaySpellView.vue';
 import DisplayItemView from '@/views/DisplayItemView.vue';
+import DisplaySkillView from '@/views/DisplaySkillView.vue';
 import DefeatedView from '@/views/DefeatedView.vue';
 import EncyclopediaView from '@/views/EncyclopediaView.vue';
 import GuideView from '@/views/GuideView.vue';
@@ -240,6 +241,12 @@ const router = createRouter({
       path: '/view-item/:id',
       name: 'viewItem',
       component: DisplayItemView,
+      props: true
+    },
+    {
+      path: '/view-skill/:id',
+      name: 'viewSkill',
+      component: DisplaySkillView,
       props: true
     },
     {
