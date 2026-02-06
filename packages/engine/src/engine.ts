@@ -219,6 +219,7 @@ class Engine {
           name: bot.name,
           magic: bot.magic,
           forts: bot.forts,
+          turns: bot.turnsUsed,
           land: totalLand(bot),
           status: '',
           netPower: totalNetPower(bot)
@@ -795,6 +796,7 @@ class Engine {
       name: mage.name,
       magic: mage.magic,
       forts: mage.forts,
+      turns: mage.turnsUsed,
       land: totalLand(mage),
       status: '',
       netPower: totalNetPower(mage)
@@ -1615,6 +1617,10 @@ class Engine {
       errors.push('Target mage is in damaged status');
     }
 
+    if (defenderMage.status === 'apprentice') {
+      errors.push('Target mage is in apprentice status');
+    }
+
     // Check if opponent is in allowable range
     const attackerNP = totalNetPower(mage);
     const defenderNP = totalNetPower(defenderMage);
@@ -1859,6 +1865,7 @@ class Engine {
       name: defenderMage.name,
       magic: defenderMage.magic,
       forts: defenderMage.forts,
+      turns: defenderMage.turnsUsed,
       land: totalLand(defenderMage),
       status: '',
       netPower: totalNetPower(defenderMage)
@@ -1999,7 +2006,7 @@ class Engine {
       override = {};
     }
     const currentServerTurn = this.currentTurn;
-    override.currentTurn = Math.min(gameTable.maxTurns, 100 + currentServerTurn);
+    override.currentTurn = Math.min(gameTable.maxTurns, 1000 + currentServerTurn);
 
     let mage = createMage(newId, username, magic, override);
 
@@ -2011,6 +2018,7 @@ class Engine {
       name: mage.name,
       magic: mage.magic,
       forts: mage.forts,
+      turns: mage.turnsUsed,
       land: totalLand(mage),
       status: '',
       netPower: totalNetPower(mage)

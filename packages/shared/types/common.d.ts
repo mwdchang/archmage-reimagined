@@ -17,6 +17,7 @@ export interface MageRank {
   name: string;
   magic: string;
   forts: number;
+  turns: number;
   land: number;
   status: string;
   netPower: number;

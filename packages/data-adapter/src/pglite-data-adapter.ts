@@ -169,6 +169,7 @@ const DB_INIT = (gameTable: GameTable) => `
     name varchar(64),
     magic varchar(32),
     forts integer,
+    turns integer,
     land integer,
     status varchar(32),
     net_power bigint
@@ -200,6 +201,7 @@ const DB_INIT = (gameTable: GameTable) => `
       COALESCE(
         CASE
           WHEN r.forts <= 0 THEN 'defeated'
+          WHEN r.turns <= 120 THEN 'apprentice'
           WHEN rb.total_loss_pct > ${gameTable.war.damagedPercentage} THEN 'damaged'
           ELSE 'normal'
         END,
@@ -510,6 +512,7 @@ WHERE username = '${user.username}'
         ${Q(mr.name)},
         ${Q(mr.magic)},
         ${mr.forts},
+        ${mr.turns},
         ${mr.land},
         ${Q(mr.status)},
         ${mr.netPower}
@@ -524,6 +527,7 @@ WHERE username = '${user.username}'
       UPDATE rank 
       SET forts = ${mr.forts}
       ,   land=${mr.land}
+      ,   turns=${mr.turns}
       ,   net_power=${mr.netPower}
       WHERE id = ${mr.id}
     `);
