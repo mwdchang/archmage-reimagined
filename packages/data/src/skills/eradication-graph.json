@@ -6,7 +6,20 @@
     "description": "Increase mana production by 200 per level",
     "maxLevel": 10,
     "prereqs": {},
-    "effects": []
+    "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "add",
+        "production": "mana",
+        "magic": {
+          "ascendant": { "value": 200 },
+          "verdant": { "value": 200 },
+          "eradication": { "value": 200 },
+          "nether": { "value": 200 },
+          "phantasm": { "value": 200 }
+        }
+      }
+    ]
   },
   {
     "id": "fireMastery",
@@ -15,19 +28,102 @@
     "description": "Increase fire-based attack",
     "maxLevel": 10,
     "prereqs": {
-      "hearth": 1
+      "hearth": 3
     },
     "effects": []
   },
   {
-    "id": "lightningMastery",
-    "name": "Lightning Mastery",
+    "id": "resilence",
+    "name": "Resilence",
     "magic": "eradication",
-    "description": "Increase lightning-based attack",
+    "description": "Increase the abilities of your dwarven troops",
     "maxLevel": 10,
     "prereqs": {
-      "hearth": 1
+      "hearth": 3
     },
-    "effects": []
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "dwarf"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 3 },
+                  "verdant": { "value": 3 },
+                  "eradication": { "value": 3 },
+                  "nether": { "value": 3 },
+                  "phantasm": { "value": 3 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "songOfMight",
+    "name": "Song of Might",
+    "magic": "eradication",
+    "description": "Increase the abilities of your giants",
+    "maxLevel": 10,
+    "prereqs": {
+      "resilence": 3
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "giant"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hitPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value": 1 },
+                  "nether": { "value": 1 },
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 3 },
+                  "verdant": { "value": 3 },
+                  "eradication": { "value": 3 },
+                  "nether": { "value": 3 },
+                  "phantasm": { "value": 3 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

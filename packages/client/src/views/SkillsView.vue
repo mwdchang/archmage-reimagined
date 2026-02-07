@@ -1,8 +1,5 @@
 <template>
   <main>
-    <div style="margin-bottom: 0.5rem">
-      You have {{ mageStore.mage!.skillPoints }} skill points.
-    </div>
     <div class="form-tabs">
       <div 
         v-for="graph of skillGraphs"
@@ -13,6 +10,11 @@
       </div>
     </div>
 
+    <div style="margin-bottom: 0.5rem">
+      You have {{ mageStore.mage!.skillPoints }} skill points.
+    </div>
+
+
     <!-- Tech tree/graph -->
     <section v-if="selectedGraph">
       <div v-if="errorStr" class="error" style="position: absolute">{{ errorStr }}</div>
@@ -20,6 +22,7 @@
         :graph="selectedGraph" 
         :mage="mageStore.mage!"
         @add-skill="onAddSkill($event)"
+        @view-skill="onViewSkill($event)"
       />
     </section>
   </main>
@@ -34,9 +37,11 @@ import { getAllSkills } from 'engine/src/base/references';
 import { useMageStore } from '@/stores/mage';
 import { API, APIWrapper } from '@/api/api';
 import { readableStr } from '@/util/util';
+import { useRouter } from 'vue-router';
 
 
 const mageStore = useMageStore();
+const router = useRouter();
 const errorStr = ref('');
 
 const tabView = ref('');
@@ -49,6 +54,11 @@ const selectedGraph = computed(() => {
 
   return skillGraph ? skillGraph : null;
 });
+
+
+const onViewSkill = (skillId: string) => {
+  router.push({ name: 'viewSkill', params: { id: skillId } });
+};
 
 const onAddSkill = async (skillId: string) => {
   console.log('adding', skillId);

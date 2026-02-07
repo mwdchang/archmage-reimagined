@@ -19,7 +19,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'addSkill', skilId: string): void
+  (e: 'addSkill', skilId: string): void;
+  (e: 'viewSkill', skilId: string): void;
 }>()
 
 const container = ref(null);
@@ -33,12 +34,13 @@ const line = d3.line<Point>()
   .y(d => d.y)
   .curve(d3.curveBasis);
 
-const NODE_BORDER = '#838383';
+const NODE_BORDER = '#B3B3B3';
 const NODE_BACKGROUND = '#232323';
 const NODE_TEXT = '#eeeeee';
 const NODE_TEXT_DARK = '#CCCCCC';
-const EDGE_BACKGROUND = '#3355BA';
-
+// const EDGE_BACKGROUND = '#3355BA';
+const EDGE_BACKGROUND = NODE_BORDER;
+const DASH = '6 8';
 
 const getTextList = (label: string | undefined) => {
   const textList: string[] = [];
@@ -106,7 +108,7 @@ const refresh = () => {
       .attr('d', line)
       .attr('fill', 'none')
       .attr('stroke', EDGE_BACKGROUND)
-      .attr('stroke-width', 7)
+      .attr('stroke-width', 5)
       .style('stroke-dasharray', () => {
         if (unlocked === true) {
           return 'none';
@@ -125,14 +127,18 @@ const refresh = () => {
         .style('fill', NODE_TEXT_DARK)
         .style('text-anchor', 'middle')
         .style('font-size', '1.25rem')
-        .text(`${targetRerequiredLevel} ${readableStr(edge.v)} to unlock`);
+        // .text(`${targetRerequiredLevel} ${readableStr(edge.v)} to unlock`);
+        .text(`${targetRerequiredLevel} to unlock`);
     }
   }
 
+  const mage = props.mage!;
   for (const node of layout.nodes()) {
     const hasSkill = props.mage.skills[node] ? true : false;
     const n = layout.node(node);
-    svg.append('rect')
+    const group = svg.append('g');
+
+    group.append('rect')
       .attr('x', n.x - 0.5 * n.width)
       .attr('y', n.y - 0.5 * n.height)
       .attr('rx', 8)
@@ -140,42 +146,108 @@ const refresh = () => {
       .attr('width', n.width)
       .attr('height', n.height)
       .style('stroke', NODE_BORDER)
-      .style('stroke-width', 4)
+      .style('stroke-width', 3)
       .style('stroke-dasharray', () => {
         if (hasSkill) {
           return 'none';
         }
-        return '6 6';
+        return '6 8';
       })
-      // .style('fill', NODE_BACKGROUND)
-      .style('fill', 'url(#grad)')
-      .on('click', () => {
-        emit('addSkill', node);
-      });
+      .style('fill', NODE_BACKGROUND);
 
     // Name
     const textList = getTextList(n.label)
+    const anchorRect = group.append('rect')
+      .attr('x', n.x - 0.5 * n.width + 0.05 * n.width)
+      .attr('y', n.y - 0.5 * n.height)
+      .attr('width', 100)
+      .attr('height', 60)
+      .attr('fill', 'transparent');
+
+    anchorRect.on('mouseenter', () => {
+      group.selectAll('.anchor-text').style('fill', '#2be');
+    });
+    anchorRect.on('mouseout', () => {
+      group.selectAll('.anchor-text').style('fill', NODE_TEXT);
+    });
+    anchorRect.on('click', () => {
+      emit('viewSkill', node);
+    })
+
     textList.forEach((text, idx) => {
-      svg.append('text')
+      group.append('text')
+        .classed('anchor-text', true)
         .attr('x', n.x - 0.5 * n.width + 0.05 * n.width)
         .attr('y', n.y - 0.5 * n.height + (idx + 1) * 0.33 * n.height)
-        .style('font-size', '1.3rem')
+        .style('font-size', '1.4rem')
         .style('stroke', 'none')
         .style('fill', NODE_TEXT)
         .text(text)
         .style('pointer-events', 'none');
     });
 
+
+    group.append('rect')
+      .attr('x', n.x + 0.15 * n.width)
+      .attr('y', n.y - 0.5 * n.height + 2) 
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('width', 84)
+      .attr('height', n.height - 4)
+      .attr('fill', '#258')
+      .on('mouseenter', function() {
+        d3.select(this).attr('fill', '#28B')
+      })
+      .on('mouseleave', function() {
+        d3.select(this).attr('fill', '#258')
+      })
+      .on('click', () => {
+        emit('addSkill', node);
+      });
+
+
+
+    group.append('line')
+      .attr('x1', n.x + 0.15 * n.width)
+      .attr('y1', n.y - 0.5 * n.height) 
+      .attr('x2', n.x + 0.15 * n.width)
+      .attr('y2', n.y + 0.5 * n.height)
+      .attr('stroke', NODE_BORDER)
+      .style('stroke-width', 3)
+      .style('stroke-dasharray', () => {
+        if (hasSkill) {
+          return 'none';
+        }
+        return '6 8';
+      });
+
+
     // Level
     const skill = getSkillById(node);
-    svg.append('text')
-      .attr('x', n.x - 0.5 * n.width + 0.70 * n.width)
-      .attr('y', n.y + 0.25 * n.height) 
-      .style('font-size', '1.75rem')
+    if (!mage.skills[skill!.id]) {
+      group.append('text')
+        .attr('x', n.x + 80)
+        .attr('y', n.y + 20) 
+        .style('font-size', '5.25rem')
+        .style('stroke', 'none')
+        .style('fill', NODE_TEXT)
+        .style('text-anchor', 'middle')
+        .style('pointer-events', 'none')
+        .text('+');
+
+      continue;
+    }
+
+    group.append('text')
+      .attr('x', n.x + 80)
+      .attr('y', n.y + 0.10 * n.height) 
+      .style('font-size', '2.0rem')
       .style('stroke', 'none')
       .style('fill', NODE_TEXT)
-      .text(`${(props.mage.skills[skill!.id] ? props.mage.skills[skill!.id] : 0) }/${skill?.maxLevel}`)
+      .style('text-anchor', 'middle')
+      .text(`${(mage.skills[skill!.id] ? mage.skills[skill!.id] : 0) }/${skill?.maxLevel}`)
       .style('pointer-events', 'none');
+
   }
 
 }
