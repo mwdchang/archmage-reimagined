@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
 import type { Mage } from 'shared/types/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
-import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect } from "shared/types/effects";
+import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect } from "shared/types/effects";
 import { currentSpellLevel } from "./base/mage";
 import { AllowedMagic } from 'shared/types/common';
 
@@ -145,6 +145,16 @@ const applySkillLevelToEffect = (effect: Effect<any>, level: number) => {
   if (effectClone.effectType === E.ProductionEffect) {
     return applySkillLevelToProductionEffect(effectClone as any, level);
   }
+  if (effectClone.effectType === E.ArmyUpkeepEffect) {
+    return applySkillLevelToArmyUpkeepEffect(effectClone as any, level);
+  }
+  if (effectClone.effectType === E.KingdomResistanceEffect) {
+    return applySkillLevelToKingdomResistanceEffect(effectClone as any, level);
+  }
+  if (effectClone.effectType === E.CastingEffect) {
+    return applySkillLevelToCastingEffect(effectClone as any, level);
+  }
+
   throw new Error(`Skill boosting for : ${effect.effectType} not implemented`);
 };
 
@@ -205,3 +215,25 @@ const applySkillLevelToProductionEffect = (effect: ProductionEffect, level: numb
   }
   return effect;
 };
+
+const applySkillLevelToArmyUpkeepEffect = (effect: ArmyUpkeepEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.geld *= level;
+    effect.magic[magic].value.mana *= level;
+    effect.magic[magic].value.population *= level;
+  }
+  return effect;
+}
+
+const applySkillLevelToKingdomResistanceEffect = (effect: KingdomResistanceEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value *= level;
+  }
+  return effect;
+}
+
+const applySkillLevelToCastingEffect = (effect: CastingEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value *= level;
+  }
+}

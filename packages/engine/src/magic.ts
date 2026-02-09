@@ -274,30 +274,22 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   let successRate = 0.1 * current + rankModifier;
   const baseRate = successRate;
 
-  // Enchantments
-  const enchantments = mage.enchantments;
   let modifier = 0;
-  enchantments.forEach(enchant => {
-    if (enchant.targetId !== mage.id) return;
-
-    const spell = getSpellById(enchant.spellId);
-    const spellLevel = enchant.spellLevel;
-
-    spell.effects.forEach(effect => {
-      if (effect.effectType !== 'CastingEffect') return;
-
-      const castingEffect = effect as CastingEffect;
-      if (castingEffect.type !== 'castingSuccess') return;
-
-      const value = castingEffect.magic[enchant.casterMagic].value;
-
-      if (value > 0) {
-        modifier += (value * spellLevel);
-      } else {
-        modifier += (1.50 * value * spellLevel);
+  const activeEffects = getActiveEffects(mage, E.CastingEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as CastingEffect[]) {
+      if (effect.type !== 'castingSuccess') {
+        continue;
       }
-    });
-  });
+
+      const value = effect.magic[activeEffect.origin.magic].value;
+      if (value > 0) {
+        modifier += (value * activeEffect.origin.spellLevel);
+      } else {
+        modifier += (1.50 * value * activeEffect.origin.spellLevel);
+      }
+    }
+  }
   successRate += modifier;
 
   // Adjacent and opposiite casting
@@ -350,24 +342,19 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
   // const rawProb = (mana * (1 + currentSpellLevel(mage) / enchantment.spellLevel)) / (2.25 * castingCost);
   const rawProb = (mana / (2.75 * castingCost)) * ((1 + currentSpellLevel(mage)) / enchantment.spellLevel);
 
-  const enchantments = mage.enchantments;
+
   let modifier = 0;
-  enchantments.forEach(enchant => {
-    if (enchant.targetId !== mage.id) return;
+  const activeEffects = getActiveEffects(mage, E.CastingEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as CastingEffect[]) {
+      if (effect.type !== 'castingSuccess') {
+        continue;
+      }
 
-    const spell = getSpellById(enchant.spellId);
-    const spellLevel = enchant.spellLevel;
-
-    spell.effects.forEach(effect => {
-      if (effect.effectType !== 'CastingEffect') return;
-
-      const castingEffect = effect as CastingEffect;
-      if (castingEffect.type !== 'castingSuccess') return;
-
-      const value = castingEffect.magic[enchant.casterMagic].value;
-      modifier += (0.01 * value * spellLevel);
-    });
-  });
+      const value = effect.magic[activeEffect.origin.magic].value;
+      modifier += (0.01 * value * activeEffect.origin.spellLevel);
+    }
+  }
 
 
   const adjustedProb = Math.max(MIN_DISPEL_PROB, Math.min(MAX_DISPEL_PROB, rawProb + modifier));
@@ -396,19 +383,16 @@ export const calcKingdomResistance = (mage: Mage) => {
     phantasm: 0
   };
 
-  mage.enchantments.forEach(enchantment => {
-    const spell = getSpellById(enchantment.spellId);
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'KingdomResistanceEffect') return;
-
-      const resistEffect = effect as KingdomResistanceEffect;
-      if (resistEffect.rule === 'spellLevel') {
-        resistance[resistEffect.resistance] += enchantment.spellLevel * resistEffect.magic[mage.magic].value;
+  const activeEffects = getActiveEffects(mage, E.KingdomResistanceEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as KingdomResistanceEffect[]) {
+      if (effect.rule === 'spellLevel') {
+        resistance[effect.resistance] += activeEffect.origin.spellLevel * effect.magic[activeEffect.origin.magic].value;
+      } else {
+        throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
       }
-    });
-  });
+    }
+  }
 
 
   // Max barrier is 2.5% of the land, max normal barrier is 75

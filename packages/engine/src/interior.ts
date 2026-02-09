@@ -327,19 +327,10 @@ export const unitUpkeep = (mage: Mage, unitId: string) => {
   const u = getUnitById(unitId);
   const upkeep = _.cloneDeep(u.upkeepCost);
 
-  // Enchantment modifiers. The effecacy is calculated by level of the enchantment, not the
-  // current level of the mage
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const enchantMaxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
-
-    const armyUpkeepEffects = spell.effects.filter(d => d.effectType === 'ArmyUpkeepEffect') as ArmyUpkeepEffect[];
-    if (armyUpkeepEffects.length === 0) continue;
-
-    for (const effect of armyUpkeepEffects) {
+  const activeEffects = getActiveEffects(mage, E.ArmyUpkeepEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ArmyUpkeepEffect[]) {
       const filters = effect.filters;
-
-      // Check if effect matches unit
       let isMatch = filters === null ? true : false;
       if (isMatch === false) {
         for (const filter of filters) {
@@ -350,32 +341,35 @@ export const unitUpkeep = (mage: Mage, unitId: string) => {
         }
       }
 
-      // Finally apply the effect
-      if (isMatch === true) {
-        const base = effect.magic[enchantment.casterMagic];
+      if (isMatch === false) {
+        continue;
+      }
 
-        if (effect.rule === 'addSpellLevelPercentageBase') {
-          const percentage = (enchantment.spellLevel / enchantMaxSpellLevel);
-          if (base.value.geld) {
-            upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
-          }
-          if (base.value.mana) {
-            upkeep.mana += percentage * u.upkeepCost.mana * base.value.mana;
-          }
-          if (base.value.population) {
-            upkeep.population += percentage * u.upkeepCost.population * base.value.population;
-          }
-        } else if (effect.rule === 'addPercentageBase') {
-          if (base.value.geld) {
-            upkeep.geld += u.upkeepCost.geld * base.value.geld;
-          }
-          if (base.value.mana) {
-            upkeep.mana += u.upkeepCost.mana * base.value.mana;
-          }
-          if (base.value.population) {
-            upkeep.population += u.upkeepCost.population * base.value.population;
-          }
+      const base = effect.magic[activeEffect.origin.magic];
+
+      if (effect.rule === 'addSpellLevelPercentageBase') {
+        const percentage = (activeEffect.origin.spellLevel / getMaxSpellLevels()[activeEffect.origin.magic]);
+        if (base.value.geld) {
+          upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
         }
+        if (base.value.mana) {
+          upkeep.mana += percentage * u.upkeepCost.mana * base.value.mana;
+        }
+        if (base.value.population) {
+          upkeep.population += percentage * u.upkeepCost.population * base.value.population;
+        }
+      } else if (effect.rule === 'addPercentageBase') {
+        if (base.value.geld) {
+          upkeep.geld += u.upkeepCost.geld * base.value.geld;
+        }
+        if (base.value.mana) {
+          upkeep.mana += u.upkeepCost.mana * base.value.mana;
+        }
+        if (base.value.population) {
+          upkeep.population += u.upkeepCost.population * base.value.population;
+        }
+      } else {
+        throw new Error(`Unimplemented rule ${effect.rule} for ${activeEffect.objId}`);
       }
     }
   }
