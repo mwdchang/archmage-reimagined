@@ -195,24 +195,23 @@ export const manaStorage = (mage: Mage) => {
 export const researchPoints = (mage: Mage) => {
   let modifier = 0.0;
 
-  mage.enchantments.forEach(enchantment => {
-    const spell = getSpellById(enchantment.spellId);
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'ProductionEffect') return;
-      const productionEffect = effect as ProductionEffect;
-      if (productionEffect.production !== 'guilds') return;
-
-      if (productionEffect.rule === 'spellLevel') {
-        modifier += currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'guilds') {
+        continue;
       }
-    });
-  });
-  let rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
 
-  // return 10 + Math.floor(rawPoints);
-  return Math.floor(rawPoints); // FIXME just testing
+      if (effect.rule === 'spellLevel') {
+        modifier += activeEffect.origin.spellLevel * effect.magic[mage.magic].value;
+      } else {
+        throw new Error(`${effect.rule} not implemented for ${effect.production}`);
+      }
+    }
+  }
+
+  const rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
+  return Math.floor(rawPoints);
 }
 
 export const manaIncome = (mage: Mage) => {

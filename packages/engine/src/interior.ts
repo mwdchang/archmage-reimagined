@@ -8,9 +8,11 @@ import { getMaxSpellLevels } from './base/references';
 import {
   getSpellById,
 } from './base/references';
+import { allowedEffect as E } from 'shared/src/common';
 
 import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
 import { matchesFilter } from './base/unit';
+import { getActiveEffects } from './effects';
 
 export interface Building {
   id: string,
@@ -115,22 +117,18 @@ export const explorationRate = (mage: Mage) => {
   }
 
   let extra = 0;
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'land' || !effect.magic[activeEffect.origin.magic]) {
+        continue;
+      }
 
-    for (const effect of productionEffects) {
-      if (effect.production === 'land') {
-        if (effect.rule === 'addPercentageBase') {
-          extra += rate * effect.magic[enchantment.casterMagic].value;
-        }
-        // Always add 1
-        extra += 1;
+      if (effect.rule === 'addPercentageBase') {
+        extra += Math.max(1, rate * effect.magic[activeEffect.origin.magic].value);
       }
     }
   }
-
   return (rate + extra);
 }
 
@@ -174,23 +172,20 @@ export const maxFood = (mage: Mage) => {
     food += mage[key] * productionTable.food[key];
   });
 
-  mage.enchantments.forEach(enchantment => {
-    const spell = getSpellById(enchantment.spellId);
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'ProductionEffect') return;
-
-      const productionEffect = effect as ProductionEffect;
-      if (productionEffect.production !== 'farms') return;
-
-      if (productionEffect.rule === 'spellLevel') {
-        food += mage.farms * enchantment.spellLevel * productionEffect.magic[enchantment.casterMagic].value;
-      } else {
-        throw new Error(`unspported production rule ${productionEffect.rule} for ${spell.id}`);
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'farms' || !effect.magic[activeEffect.origin.magic]) {
+        continue;
       }
-    });
-  })
+
+      if (effect.rule === 'spellLevel') {
+        food += mage.farms * activeEffect.origin.spellLevel * effect.magic[activeEffect.origin.magic].value;
+      } else {
+        throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
+      }
+    }
+  }
 
   return food;
 }
@@ -201,31 +196,28 @@ export const recruitGeldCapacity = (mage: Mage) => {
   const base = 100;
   let buffer = 0.0;
 
-  for (const enchant of mage.enchantments) {
-    const spell = getSpellById(enchant.spellId);
-    const spellLevel = enchant.spellLevel;
-    const magic = enchant.casterMagic;
+
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    const magic = activeEffect.origin.magic;
     const maxSpellLevel = getMaxSpellLevels()[magic];
-    const spellPowerScale = spellLevel / maxSpellLevel;
+    const spellPowerScale = activeEffect.origin.spellLevel / maxSpellLevel;
 
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'ProductionEffect') return;
-
-      const productionEffect = effect as ProductionEffect;
-      if (productionEffect.production !== 'barrack') return;
-
-      if (productionEffect.rule === 'spellLevel') {
-        buffer += enchant.spellLevel * productionEffect.magic[magic].value;
-      } else if (productionEffect.rule === 'addPercentageBase') {
-        buffer += base * productionEffect.magic[magic].value;
-      } else if (productionEffect.rule === 'addSpellLevelPercentageBase') {
-        buffer += base * productionEffect.magic[magic].value * spellPowerScale;
-      } else {
-        throw new Error(`unspported production rule ${productionEffect.rule} for ${spell.id}`);
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'barrack' || !effect.magic[activeEffect.origin.magic]) {
+        continue;
       }
-    });
+
+      if (effect.rule === 'spellLevel') {
+        buffer += activeEffect.origin.spellLevel * effect.magic[magic].value;
+      } else if (effect.rule === 'addPercentageBase') {
+        buffer += base * effect.magic[magic].value;
+      } else if (effect.rule === 'addSpellLevelPercentageBase') {
+        buffer += base * effect.magic[magic].value * spellPowerScale;
+      } else {
+        throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
+      }
+    }
   }
 
   return (base + buffer) * mage.barracks * speed;
@@ -250,94 +242,56 @@ export const populationIncome = (mage: Mage) => {
   const baseIncome = Math.floor(mage.currentPopulation * 0.015 + 50);
   let delta = 0;
 
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
-
-    for (const effect of productionEffects) {
-      if (effect.production !== 'population' || !effect.magic[enchantment.casterMagic]) continue;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'population' || !effect.magic[activeEffect.origin.magic]) {
+        continue;
+      }
 
       if (effect.rule === 'spellLevel') {
-        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
+        delta += effect.magic[activeEffect.origin.magic].value * activeEffect.origin.spellLevel;
       } else if (effect.rule === 'addPercentageBase') {
-        delta += effect.magic[enchantment.casterMagic].value * baseIncome;
-      }
-    }
-  }
-
-  // Unique item effects
-  const uniqueItems = getAllUniqueItems()
-  let itemDelta = 0;
-  for (const itemId of Object.keys(mage.items)) {
-    const uitem = uniqueItems.find(d => d.id === itemId);
-    if (!uitem) continue;
-
-    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
-    
-    for (const effect of productionEffects) {
-      if (effect.production !== 'population') continue; 
-
-      if (effect.rule === 'addPercentageBase') {
-        itemDelta += effect.magic[mage.magic].value * baseIncome;
+        delta += effect.magic[activeEffect.origin.magic].value * baseIncome;
       } else if (effect.rule === 'add') {
-        itemDelta += effect.magic[mage.magic].value;
+        delta += effect.magic[mage.magic].value;
+      } else {
+        throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
       }
     }
   }
-  return baseIncome + delta + itemDelta;
+
+  return baseIncome + delta; 
 }
 
 export const geldIncome = (mage: Mage) => {
   const baseIncome = mage.currentPopulation + 1000;
   let delta = 0
 
-  // Enchantment effects
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    const magic = activeEffect.origin.magic;
 
-    for (const effect of productionEffects) {
-      if (effect.production !== 'geld' || !effect.magic[enchantment.casterMagic]) continue;
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'geld' || !effect.magic[activeEffect.origin.magic]) {
+        return;
+      }
 
       if (effect.rule === 'spellLevel') {
-        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel;
+        delta += effect.magic[magic].value * activeEffect.origin.spellLevel;
       } else if (effect.rule === 'addPercentageBase') {
-        delta += effect.magic[enchantment.casterMagic].value * baseIncome;
+        delta += effect.magic[magic].value * baseIncome;
       } else if (effect.rule === 'addSpellLevelPercentageBase') {
-        const maxSpellLevel = getMaxSpellLevels()[enchantment.casterMagic];
-        delta += effect.magic[enchantment.casterMagic].value * enchantment.spellLevel / maxSpellLevel * baseIncome;
+        const maxSpellLevel = getMaxSpellLevels()[activeEffect.origin.magic];
+        delta += effect.magic[magic].value * activeEffect.origin.spellLevel / maxSpellLevel * baseIncome;
       } else if (effect.rule === 'add') {
-        delta += effect.magic[enchantment.casterMagic].value;
+        delta += effect.magic[magic].value;
       } else {
-        throw new Error(`Unknown rule ${effect.rule}`);
+        throw new Error(`Unimplemented rule ${effect.rule} for ${activeEffect.objId}`);
       }
     }
   }
-
-  // Unique item effects
-  const uniqueItems = getAllUniqueItems()
-  let itemDelta = 0;
-  for (const itemId of Object.keys(mage.items)) {
-    const uitem = uniqueItems.find(d => d.id === itemId);
-    if (!uitem) continue;
-
-    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
-    
-    for (const effect of productionEffects) {
-      if (effect.production !== 'geld') continue; 
-
-      if (effect.rule === 'addPercentageBase') {
-        itemDelta += effect.magic[mage.magic].value * baseIncome;
-      } else if (effect.rule === 'add') {
-        itemDelta += effect.magic[mage.magic].value;
-      }
-    }
-  }
-  return baseIncome + delta + itemDelta;
+  return baseIncome + delta; 
 }
 
 
