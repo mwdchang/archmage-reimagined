@@ -29,5 +29,17 @@
         }
       }
     ]
+  },
+  {
+    "id": "blizzard",
+    "name": "Blizzard",
+    "magic": "phantasm",
+    "description": "Reduce spell casting cost",
+    "maxLevel": 10,
+    "prereqs": {
+      "spellMastery": 4
+    },
+    "effects": [
+    ]
   }
 ]

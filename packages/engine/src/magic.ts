@@ -223,55 +223,35 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = x * land * (110 - x) / 1000;
   // const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
 
-  let enchantDelta = 0;
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
 
-    for (const effect of productionEffects) {
-      if (effect.production !== 'mana') continue;
-
-      const base = effect.magic[enchantment.casterMagic];
-      if (!base) continue;
-
-      const rule = effect.rule;
+  let delta = 0;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const productionEffect of activeEffect.effects as ProductionEffect[]) {
+      if (productionEffect.production !== 'mana') {
+        continue;
+      }
+      const origin = activeEffect.origin;
+      const base = productionEffect.magic[origin.magic];
+      if (!base) {
+        continue;
+      }
+      const rule = productionEffect.rule;
       if (rule === 'spellLevel') {
-        enchantDelta += base.value * enchantment.spellLevel;
+        delta += base.value * origin.spellLevel;
       } else if (rule === 'addPercentageBase') {
-        enchantDelta += manaYield * base.value;
+        delta += manaYield * base.value;
       } else if (rule === 'add') {
-        enchantDelta += base.value;
+        delta += base.value;
+      } else if (rule === 'addSpellLevelPercentageBase') {
+        delta += manaYield * base.value * origin.spellLevel / getMaxSpellLevels()[origin.magic];
       } else {
-        throw new Error(`Unknown rule ${effect.rule}`);
+        throw new Error(`Unknown rule ${rule}`);
       }
     }
   }
 
-  // Unique item effects
-  const uniqueItems = getAllUniqueItems()
-  let itemDelta = 0;
-  for (const itemId of Object.keys(mage.items)) {
-    const uitem = uniqueItems.find(d => d.id === itemId);
-    if (!uitem) continue;
-
-    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
-
-    for (const effect of productionEffects) {
-      if (effect.production !== 'mana') continue; 
-
-      const rule = effect.rule;
-      if (rule === 'addPercentageBase') {
-        itemDelta += manaYield * effect.magic[mage.magic].value;
-      } else if (rule === 'add') {
-        itemDelta += effect.magic[mage.magic].value;
-      } else {
-        throw new Error(`Unknown rule ${effect.rule}`);
-      }
-    }
-  }
-  return Math.floor(manaYield + enchantDelta + itemDelta);
+  return Math.floor(manaYield + delta);
 }
 
 /**

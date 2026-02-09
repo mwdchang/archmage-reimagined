@@ -7,6 +7,18 @@
     "maxLevel": 10,
     "prereqs": {},
     "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "add",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": 5000 },
+          "verdant": { "value": 5000 },
+          "eradication": { "value": 5000 },
+          "nether": { "value": 5000 },
+          "phantasm": { "value": 5000 }
+        }
+      }
     ]
   },
   {

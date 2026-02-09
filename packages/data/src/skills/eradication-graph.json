@@ -30,7 +30,53 @@
     "prereqs": {
       "hearth": 3
     },
-    "effects": []
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "allAttackType": [ "fire"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "ArmyUpkeepEffect",
+        "filters": [
+          {
+            "allAttackType": ["fire"]
+          }
+        ],
+        "rule": "addPercentageBase",
+        "magic": {
+          "verdant": {
+            "value": {
+              "geld": -0.02,
+              "mana": -0.02,
+              "population": 0
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "id": "resilence",

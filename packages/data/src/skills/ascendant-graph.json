@@ -143,6 +143,22 @@
                 }
               }
             }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "hiptPoints": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 1 },
+                  "verdant": { "value": 1 },
+                  "eradication": { "value": 1 },
+                  "nether": { "value": 1 },
+                  "phantasm": { "value": 1 }
+                }
+              }
+            }
           }
         ]
       }
