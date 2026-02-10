@@ -12,6 +12,8 @@ import { Spell } from 'shared/types/magic';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
 import { castingCost } from 'engine/src/magic';
+import { getActiveEffects } from 'engine/src/effects';
+import { allowedEffect as E } from 'shared/src/common';
 
 
 export interface MageItem {
@@ -77,11 +79,13 @@ export const getArmy = (mage: Mage) => {
   let result: ArmyItem[] = [];
   let totalArmyPower = 0;
 
+  const activeEffects = getActiveEffects(mage, E.ArmyUpkeepEffect);
+
   mage.army.forEach(stack => {
     const unit = getUnitById(stack.id);
     const multiplier = npMultiplier(unit);
 
-    const modUpkeep = unitUpkeep(mage, stack.id);
+    const modUpkeep = unitUpkeep(stack.id, activeEffects);
 
     const upkeep = {
       geld: Math.ceil(stack.size * modUpkeep.geld),
