@@ -61,7 +61,11 @@
             "rule": "direct",
             "target": "farms",
             "magic": {
-              "nether": { "value": { "min": -10, "max": -20 } }
+              "ascendant": { "value": { "min": -10, "max": -20 } },
+              "verdant": { "value": { "min": -10, "max": -20 } },
+              "eradication": { "value": { "min": -10, "max": -20 } },
+              "nether": { "value": { "min": -10, "max": -20 } },
+              "phantasm": { "value": { "min": -10, "max": -20 } }
             }
           }
         ]

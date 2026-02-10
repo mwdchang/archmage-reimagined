@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Enchantment, Mage, Combatant } from "shared/types/mage";
+import { Mage, Combatant } from "shared/types/mage";
 import { allowedEffect as E } from "shared/src/common";
 import { 
   UnitAttrEffect,
@@ -573,9 +573,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     });
   }
 
-  const uniqueItems = getAllUniqueItems();
-
-
   // === Prebattle effects === 
   const attackerPrebattleEffects = getActiveEffectsForBattle(
     attacker.mage, 
@@ -750,6 +747,27 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attackType === 'primary') {
       if (attackingStack.unit.primaryAttackInit < 1 || attackingStack.size <= 0) continue;
       if (defendingStack.size <= 0) continue;
+
+      // Evade primary attack
+      if (hasAbility(dUnit, 'evade')) {
+        const evadeAttr = dUnit.abilities.find(ability => ability.name === 'evade');
+        if (Math.random() < evadeAttr.extra) {
+          battleReport.engagement.logs.push({
+            type: `evade`,
+            attacker: {
+              id: attackingMage.id,
+              unitId: attackingStack.unit.id,
+              unitsLoss: 0
+            },
+            defender: {
+              id: defendingMage.id,
+              unitId: defendingStack.unit.id,
+              unitsLoss: 0
+            }
+          });
+          continue;
+        }
+      }
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';

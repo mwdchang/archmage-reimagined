@@ -192,6 +192,15 @@
           {{ nameById(log.defender.id) }} {{ log.defender.unitsLoss }} {{ unitName(log.defender.unitId) }}
         </p>
       </div>
+      <div v-if="log.type === 'evade'">
+        <p>
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} attacks
+          {{ nameById(log.defender.id) }}'s {{ unitName(log.defender.unitId) }}
+        </p>
+        <p>
+          {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} missed
+        </p>
+      </div>
       <div v-if="checkGap(report.engagement.logs[idx], report.engagement.logs[idx+1])" style="margin-bottom: 0.5rem" />
     </div>
     <br>
