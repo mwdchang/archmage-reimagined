@@ -1,13 +1,10 @@
 import _ from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/types/mage";
-import { getAllUniqueItems, getUnitById } from "./base/references";
+import { getUnitById } from "./base/references";
 import { productionTable, gameTable } from "./base/config";
 import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
-import {
-  getSpellById,
-} from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
 
 import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
