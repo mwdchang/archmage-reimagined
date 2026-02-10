@@ -12,7 +12,7 @@ import { allowedEffect as E } from 'shared/src/common';
 
 import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
 import { matchesFilter } from './base/unit';
-import { getActiveEffects } from './effects';
+import { ActiveEffect, getActiveEffects } from './effects';
 
 export interface Building {
   id: string,
@@ -323,11 +323,10 @@ export const recruitUpkeep = (mage: Mage) => {
 }
 
 
-export const unitUpkeep = (mage: Mage, unitId: string) => {
+export const unitUpkeep = (unitId: string, activeEffects: ActiveEffect[]) => {
   const u = getUnitById(unitId);
   const upkeep = _.cloneDeep(u.upkeepCost);
 
-  const activeEffects = getActiveEffects(mage, E.ArmyUpkeepEffect);
   for (const activeEffect of activeEffects) {
     for (const effect of activeEffect.effects as ArmyUpkeepEffect[]) {
       const filters = effect.filters;
@@ -388,8 +387,9 @@ export const armyUpkeep = (mage: Mage) => {
   let geld = 0;
   let pop = 0;
 
+  const activeEffects = getActiveEffects(mage, E.ArmyUpkeepEffect);
   mage.army.forEach(stack => {
-    const upkeep = unitUpkeep(mage, stack.id);
+    const upkeep = unitUpkeep(stack.id, activeEffects);
 
     mana += Math.ceil(upkeep.mana * stack.size);
     pop += Math.ceil(upkeep.population * stack.size);
