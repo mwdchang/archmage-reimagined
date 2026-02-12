@@ -9,8 +9,7 @@ import {
   getSpellById,
   getMaxSpellLevels,
   getResearchTree,
-  getRandomItem,
-  getAllUniqueItems,
+  getRandomItem
 } from './base/references';
 import { totalLand, currentSpellLevel } from './base/mage';
 import { randomBM, randomInt } from './random';
@@ -190,6 +189,11 @@ export const maxMana = (mage: Mage) => {
 
 export const manaStorage = (mage: Mage) => {
   return mage.nodes * productionTable.manaStorage;
+}
+
+export const skillPoints = (mage: Mage) => {
+  const rawPoints = Math.sqrt(mage.guilds) * (productionTable.skill);
+  return Math.min(0.1, rawPoints);
 }
 
 export const researchPoints = (mage: Mage) => {

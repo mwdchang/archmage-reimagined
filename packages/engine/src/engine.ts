@@ -52,6 +52,7 @@ import {
   enchantmentUpkeep,
   dispelEnchantment,
   calcKingdomResistance,
+  skillPoints,
 } from './magic';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
@@ -477,8 +478,10 @@ class Engine {
       mage.currentMana = manaStorage(mage);
     }
 
-    // 3. calculate research, if applicable
+    // 3. calculate research and skills, if applicable
     doResearch(mage, researchPoints(mage));
+    mage.skillPoints += skillPoints(mage);
+
     doItemGeneration(mage);
 
 

@@ -267,7 +267,7 @@ import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { readableStr, readableNumber, pluralize } from '@/util/util';
 import type { EngagementLog, BattleReport } from 'shared/types/battle';
-import { getSpellById } from 'engine/src/base/references';
+import { getSkillById, getSpellById } from 'engine/src/base/references';
 
 const props = defineProps<{ id: string }>();
 const report = ref<BattleReport|null>(null);
@@ -300,11 +300,14 @@ const unitName = (name: string) => {
 
 interface Eff {
   id: string,
-  type: 'item' | 'spell'
+  type: 'item' | 'spell' | 'enchantment' | 'skill'
 }
 const getEffectMagic = (eff: Eff) => {
   if (eff.type === 'item') return 'plain';
-  return getSpellById(eff.id).magic;
+  if (eff.type === 'enchantment' || eff.type === 'spell') {
+    return getSpellById(eff.id).magic;
+  }
+  return getSkillById(eff.id);
 };
 const effectsToString = (effs: Eff[]) => {
   return effs.map(e => e.id).map(readableStr).join(', ');
