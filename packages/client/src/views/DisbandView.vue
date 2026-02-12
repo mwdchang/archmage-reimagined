@@ -144,6 +144,8 @@ import ActionButton from '@/components/action-button.vue';
 import SvgIcon from '@/components/svg-icon.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { useLayout } from '@/composables/useLayout';
+import { allowedEffect as E } from 'shared/src/common';
+import { getActiveEffects } from 'engine/src/effects';
 
 interface DisbandArmyItem extends ArmyItem {
   moveUp: number;
@@ -203,8 +205,9 @@ const estimatedIncome = computed(() => {
   let { geld, mana, population } = netUpkeepStatus.value;
   const keys = Object.keys(disbandPayload.value);
 
+  const activeEffects = getActiveEffects(mageStore.mage!, E.ArmyUpkeepEffect);
   for (const key of keys) {
-    const upkeep = unitUpkeep(mageStore.mage!, key);
+    const upkeep = unitUpkeep(key, activeEffects);
     const amount = disbandPayload.value[key];
 
     geld += amount * upkeep.geld;

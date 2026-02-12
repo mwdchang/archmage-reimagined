@@ -150,6 +150,9 @@ export const prettyPrintBR = (br: BattleReport) => {
     } else if (entry.type.startsWith('burst')) {
       console.log(`burst from ${mageMap[dId]}'s ${entry.defender.unitId} slew ${mageMap[aId]}'s ${entry.attacker.unitsLoss} ${entry.attacker.unitId}`);
       console.log(`burst from ${mageMap[dId]}'s ${entry.defender.unitId} slew ${mageMap[dId]}'s ${entry.defender.unitsLoss} ${entry.defender.unitId}`);
+    } else if (entry.type.startsWith('evade')) {
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} attacks ${mageMap[dId]}'s ${entry.defender.unitId}`);
+      console.log(`${mageMap[aId]}'s ${entry.attacker.unitId} missed`);
     }
     console.log('');
   })

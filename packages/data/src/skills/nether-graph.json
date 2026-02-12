@@ -50,10 +50,30 @@
     "prereqs": {
       "miasma": 3
     },
-    "effects": []
+    "effects": [
+      {
+        "effectType": "PostbattleEffect",
+        "target": "self",
+        "condition": "all",
+        "effects": [
+           {
+            "effectType": "KingdomBuildingsEffect",
+            "rule": "direct",
+            "target": "farms",
+            "magic": {
+              "ascendant": { "value": { "min": -10, "max": -20 } },
+              "verdant": { "value": { "min": -10, "max": -20 } },
+              "eradication": { "value": { "min": -10, "max": -20 } },
+              "nether": { "value": { "min": -10, "max": -20 } },
+              "phantasm": { "value": { "min": -10, "max": -20 } }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
-    "id": "undeadMaster",
+    "id": "undeadMastery",
     "name": "Undead Mastery",
     "magic": "nether",
     "description": "",
@@ -82,6 +102,61 @@
                   "eradication": { "value": 2 },
                   "nether": { "value": 2 },
                   "phantasm": { "value": 2 }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "demonMastery",
+    "name": "Demon Mastery",
+    "magic": "nether",
+    "description": "",
+    "maxLevel": 10,
+    "prereqs": {
+      "undeadMastery": 4
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { "race": [ "demon"] }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
+                "rule": "addPercentageBase",
+                "magic": {
+                  "ascendant": { "value": 2 },
+                  "verdant": { "value": 2 },
+                  "eradication": { "value": 2 },
+                  "nether": { "value": 2 },
+                  "phantasm": { "value": 2 }
+                }
+              }
+            }
+          },
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 0.5 },
+                  "verdant": { "value": 0.5 },
+                  "eradication": { "value": 0.5 },
+                  "nether": { "value": 0.5 },
+                  "phantasm": { "value": 0.5 }
                 }
               }
             }

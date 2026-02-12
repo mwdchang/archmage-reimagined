@@ -1,11 +1,35 @@
 [
   {
+    "id": "bountifulHarvest",
+    "name": "Bountiful Harvest",
+    "magic": "verdant",
+    "description": "Foreward outpost",
+    "maxLevel": 10,
+    "prereqs": {},
+    "effects": [
+      {
+        "effectType": "ProductionEffect",
+        "rule": "add",
+        "production": "geld",
+        "magic": {
+          "ascendant": { "value": 5000 },
+          "verdant": { "value": 5000 },
+          "eradication": { "value": 5000 },
+          "nether": { "value": 5000 },
+          "phantasm": { "value": 5000 }
+        }
+      }
+    ]
+  },
+  {
     "id": "forestWatch",
     "name": "Forest Watch",
     "magic": "verdant",
     "description": "Foreward outpost",
     "maxLevel": 10,
-    "prereqs": {},
+    "prereqs": {
+      "bountifulHarvest": 2
+    },
     "effects": [
       {
         "effectType": "BattleEffect",
@@ -49,8 +73,10 @@
     "name": "Animal Mastery",
     "magic": "verdant",
     "description": "",
-    "maxLevel": 12,
-    "prereqs": {},
+    "maxLevel": 20,
+    "prereqs": {
+      "bountifulHarvest": 4
+    },
     "effects": [
       {
         "effectType": "BattleEffect",
@@ -88,11 +114,113 @@
     "name": "Nature's Fury",
     "magic": "verdant",
     "description": "",
-    "maxLevel": 1,
+    "maxLevel": 3,
     "prereqs": {
-      "animalMastery": 5
+      "animalMastery": 10
     },
     "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "race": ["animal"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "accuracy": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": 0.5 },
+                  "verdant": { "value": 0.5 },
+                  "eradication": { "value": 0.5 },
+                  "nether": { "value": 0.5 },
+                  "phantasm": { "value": 0.5 }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "race": ["animal"]
+          }
+        ],
+        "trigger": {
+          "min": 1,
+          "max": 2
+        },
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "piercing", "extra": null } },
+                  "verdant": { "value": { "name": "piercing", "extra": null } },
+                  "eradication": { "value": { "name": "piercing", "extra": null } },
+                  "nether": { "value": { "name": "piercing", "extra": null } },
+                  "phantasm": { "value": { "name": "piercing", "extra": null } }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sylvanVeil",
+    "name": "Sylvan Veil",
+    "magic": "verdant",
+    "description": "",
+    "maxLevel": 5,
+    "prereqs": {
+      "forestWatch": 5
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          { 
+            "magic": ["verdant"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "abilities": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": { "name": "evade", "extra": 0.01 } },
+                  "verdant": { "value": { "name": "evade", "extra": 0.01 } },
+                  "eradication": { "value": { "name": "evade", "extra": 0.01 } },
+                  "nether": { "value": { "name": "evade", "extra": 0.01 } },
+                  "phantasm": { "value": { "name": "evade", "extra": 0.01 } }
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   }
 ]

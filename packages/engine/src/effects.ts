@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
 import type { Mage } from 'shared/types/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
-import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect } from "shared/types/effects";
+import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect, PostbattleEffect, KingdomResourcesEffect, StealEffect, KingdomBuildingsEffect } from "shared/types/effects";
 import { currentSpellLevel } from "./base/mage";
 import { AllowedMagic } from 'shared/types/common';
 
@@ -139,9 +139,26 @@ const applySkillLevelToEffect = (effect: Effect<any>, level: number) => {
   if (effectClone.effectType === E.BattleEffect || effectClone.effectType === E.PrebattleEffect) {
     return applySkillLevelToBattleEffect(effectClone as any, level);
   } 
+  if (effectClone.effectType === E.PostbattleEffect) {
+    return applySkillLevelToPostbattleEffect(effectClone as any, level);
+  }
+
   if (effectClone.effectType === E.CastingCostEffect) {
     return applySkillLevelToCastingCostEffect(effectClone as any, level);
   }
+  if (effectClone.effectType === E.ProductionEffect) {
+    return applySkillLevelToProductionEffect(effectClone as any, level);
+  }
+  if (effectClone.effectType === E.ArmyUpkeepEffect) {
+    return applySkillLevelToArmyUpkeepEffect(effectClone as any, level);
+  }
+  if (effectClone.effectType === E.KingdomResistanceEffect) {
+    return applySkillLevelToKingdomResistanceEffect(effectClone as any, level);
+  }
+  if (effectClone.effectType === E.CastingEffect) {
+    return applySkillLevelToCastingEffect(effectClone as any, level);
+  }
+
   throw new Error(`Skill boosting for : ${effect.effectType} not implemented`);
 };
 
@@ -187,6 +204,24 @@ const applySkillLevelToBattleEffect = (battleEffect: BattleEffect | PrebattleEff
 }
 
 
+const applySkillLevelToPostbattleEffect = (postBattleEffect: PostbattleEffect, level: number) => {
+  for (let i = 0; i < postBattleEffect.effects.length; i++) {
+    const effect = postBattleEffect.effects[i];
+    const type = effect.effectType;
+
+    if (type === E.KingdomResourcesEffect) {
+      postBattleEffect.effects[i] = applySkillLevelToKingdomResourcesEffect(effect, level);
+    } else if (type === E.StealEffect) {
+      postBattleEffect.effects[i] = applySkillLevelToStealEffect(effect, level);
+    } else if (type === E.KingdomBuildingsEffect) {
+      postBattleEffect.effects[i] = applySkillLevelToKingdomBuildingsEffect(effect, level);
+    } else {
+      throw new Error(`Skill boosting for : ${type} not implemented`);
+    }
+  }
+  return postBattleEffect;
+}
+
 const applySkillLevelToCastingCostEffect = (effect: CastingCostEffect, level: number) => {
   for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
     effect.magic[magic].value.innate *= level;
@@ -195,3 +230,61 @@ const applySkillLevelToCastingCostEffect = (effect: CastingCostEffect, level: nu
   }
   return effect;
 }
+
+const applySkillLevelToProductionEffect = (effect: ProductionEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value *= level;
+  }
+  return effect;
+};
+
+const applySkillLevelToArmyUpkeepEffect = (effect: ArmyUpkeepEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.geld *= level;
+    effect.magic[magic].value.mana *= level;
+    effect.magic[magic].value.population *= level;
+  }
+  return effect;
+}
+
+const applySkillLevelToKingdomResistanceEffect = (effect: KingdomResistanceEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value *= level;
+  }
+  return effect;
+}
+
+const applySkillLevelToCastingEffect = (effect: CastingEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value *= level;
+  }
+  return effect;
+}
+
+
+const applySkillLevelToKingdomResourcesEffect = (effect: KingdomResourcesEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.min *= level;
+    effect.magic[magic].value.max *= level;
+  }
+  return effect;
+}
+
+
+const applySkillLevelToStealEffect = (effect: StealEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.min *= level;
+    effect.magic[magic].value.max *= level;
+  }
+  return effect;
+}
+
+const applySkillLevelToKingdomBuildingsEffect = (effect: KingdomBuildingsEffect, level: number) => {
+  for (const magic of Object.keys(effect.magic) as AllowedMagic[]) {
+    effect.magic[magic].value.min *= level;
+    effect.magic[magic].value.max *= level;
+  }
+  return effect;
+}
+
+

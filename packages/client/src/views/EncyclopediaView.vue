@@ -7,6 +7,7 @@
           <option value="spell">Spells</option>
           <option value="unit">Units</option>
           <option value="item">Items</option>
+          <option value="skill">Skills</option>
         </select>
         <input type="text" placeholder="search string" v-model="searchStr" /> 
       </div>
@@ -85,6 +86,24 @@
         </tr>
       </tbody>
     </table>
+
+    <table v-if="type === 'skill'">
+      <tbody>
+        <tr v-for="skill of filteredSkills">
+          <td>
+            <div class="row">
+              <magic :magic="skill.magic" small />
+              <router-link :to="{ name: 'viewSkill', params: { id: skill.id }}"> 
+                {{ skill.name }}
+              </router-link>
+            </div>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </main>
 </template>
 
@@ -92,10 +111,11 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Magic from '@/components/magic.vue';
-import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits } from 'engine/src/base/references';
+import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits, getAllSkills } from 'engine/src/base/references';
 import { Item, Spell } from 'shared/types/magic';
 import { readableStr, readableNumber } from '@/util/util';
 import { Unit } from 'shared/types/unit';
+import { Skill } from 'shared/types/skills';
 
 
 const props = defineProps<{ type: string }>(); 
@@ -108,6 +128,7 @@ const router = useRouter();
 const spells = ref<Spell[]>([]);
 const units = ref<Unit[]>([]);
 const items = ref<Item[]>([]);
+const skills = ref<Skill[]>([]);
 
 const filteredSpells = computed(() => {
   const f = searchStr.value ? searchStr.value.toLowerCase() : '';
@@ -118,7 +139,7 @@ const filteredSpells = computed(() => {
 
 const filteredUnits = computed(() => {
   const f = searchStr.value ? searchStr.value.toLowerCase() : '';
-   return units.value.filter(d => {
+  return units.value.filter(d => {
     return d.name.toLowerCase().includes(f) || 
       d.primaryAttackType.join('.').toLocaleLowerCase().includes(f);
   });
@@ -126,7 +147,14 @@ const filteredUnits = computed(() => {
 
 const filteredItems = computed(() => {
   const f = searchStr.value ? searchStr.value.toLowerCase() : '';
-   return items.value.filter(d => {
+  return items.value.filter(d => {
+    return d.name.toLowerCase().includes(f); 
+  });
+});
+
+const filteredSkills = computed(() => {
+  const f = searchStr.value ? searchStr.value.toLowerCase() : '';
+  return skills.value.filter(d => {
     return d.name.toLowerCase().includes(f); 
   });
 });
@@ -140,6 +168,7 @@ onMounted(() => {
   spells.value = getAllSpells();
   units.value = getAllUnits();
   items.value = [...getAllLesserItems(), ...getAllUniqueItems()].sort((a, b) => a.id.localeCompare(b.id));
+  skills.value = getAllSkills();
 });
 
 watch(

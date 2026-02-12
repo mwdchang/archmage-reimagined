@@ -195,24 +195,23 @@ export const manaStorage = (mage: Mage) => {
 export const researchPoints = (mage: Mage) => {
   let modifier = 0.0;
 
-  mage.enchantments.forEach(enchantment => {
-    const spell = getSpellById(enchantment.spellId);
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'ProductionEffect') return;
-      const productionEffect = effect as ProductionEffect;
-      if (productionEffect.production !== 'guilds') return;
-
-      if (productionEffect.rule === 'spellLevel') {
-        modifier += currentSpellLevel(mage) * productionEffect.magic[mage.magic].value;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as ProductionEffect[]) {
+      if (effect.production !== 'guilds') {
+        continue;
       }
-    });
-  });
-  let rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
 
-  // return 10 + Math.floor(rawPoints);
-  return Math.floor(rawPoints); // FIXME just testing
+      if (effect.rule === 'spellLevel') {
+        modifier += activeEffect.origin.spellLevel * effect.magic[mage.magic].value;
+      } else {
+        throw new Error(`${effect.rule} not implemented for ${effect.production}`);
+      }
+    }
+  }
+
+  const rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
+  return Math.floor(rawPoints);
 }
 
 export const manaIncome = (mage: Mage) => {
@@ -223,55 +222,35 @@ export const manaIncome = (mage: Mage) => {
   const manaYield = x * land * (110 - x) / 1000;
   // const manaYield = 0.001 * (x * land) + 0.1 * nodes * (100 - x);
 
-  let enchantDelta = 0;
-  for (const enchantment of mage.enchantments) {
-    const spell = getSpellById(enchantment.spellId);
-    const productionEffects = spell.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
 
-    for (const effect of productionEffects) {
-      if (effect.production !== 'mana') continue;
-
-      const base = effect.magic[enchantment.casterMagic];
-      if (!base) continue;
-
-      const rule = effect.rule;
+  let delta = 0;
+  const activeEffects = getActiveEffects(mage, E.ProductionEffect);
+  for (const activeEffect of activeEffects) {
+    for (const productionEffect of activeEffect.effects as ProductionEffect[]) {
+      if (productionEffect.production !== 'mana') {
+        continue;
+      }
+      const origin = activeEffect.origin;
+      const base = productionEffect.magic[origin.magic];
+      if (!base) {
+        continue;
+      }
+      const rule = productionEffect.rule;
       if (rule === 'spellLevel') {
-        enchantDelta += base.value * enchantment.spellLevel;
+        delta += base.value * origin.spellLevel;
       } else if (rule === 'addPercentageBase') {
-        enchantDelta += manaYield * base.value;
+        delta += manaYield * base.value;
       } else if (rule === 'add') {
-        enchantDelta += base.value;
+        delta += base.value;
+      } else if (rule === 'addSpellLevelPercentageBase') {
+        delta += manaYield * base.value * origin.spellLevel / getMaxSpellLevels()[origin.magic];
       } else {
-        throw new Error(`Unknown rule ${effect.rule}`);
+        throw new Error(`Unknown rule ${rule}`);
       }
     }
   }
 
-  // Unique item effects
-  const uniqueItems = getAllUniqueItems()
-  let itemDelta = 0;
-  for (const itemId of Object.keys(mage.items)) {
-    const uitem = uniqueItems.find(d => d.id === itemId);
-    if (!uitem) continue;
-
-    const productionEffects = uitem.effects.filter(d => d.effectType === 'ProductionEffect') as ProductionEffect[];
-    if (productionEffects.length === 0) continue;
-
-    for (const effect of productionEffects) {
-      if (effect.production !== 'mana') continue; 
-
-      const rule = effect.rule;
-      if (rule === 'addPercentageBase') {
-        itemDelta += manaYield * effect.magic[mage.magic].value;
-      } else if (rule === 'add') {
-        itemDelta += effect.magic[mage.magic].value;
-      } else {
-        throw new Error(`Unknown rule ${effect.rule}`);
-      }
-    }
-  }
-  return Math.floor(manaYield + enchantDelta + itemDelta);
+  return Math.floor(manaYield + delta);
 }
 
 /**
@@ -295,30 +274,22 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
   let successRate = 0.1 * current + rankModifier;
   const baseRate = successRate;
 
-  // Enchantments
-  const enchantments = mage.enchantments;
   let modifier = 0;
-  enchantments.forEach(enchant => {
-    if (enchant.targetId !== mage.id) return;
-
-    const spell = getSpellById(enchant.spellId);
-    const spellLevel = enchant.spellLevel;
-
-    spell.effects.forEach(effect => {
-      if (effect.effectType !== 'CastingEffect') return;
-
-      const castingEffect = effect as CastingEffect;
-      if (castingEffect.type !== 'castingSuccess') return;
-
-      const value = castingEffect.magic[enchant.casterMagic].value;
-
-      if (value > 0) {
-        modifier += (value * spellLevel);
-      } else {
-        modifier += (1.50 * value * spellLevel);
+  const activeEffects = getActiveEffects(mage, E.CastingEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as CastingEffect[]) {
+      if (effect.type !== 'castingSuccess') {
+        continue;
       }
-    });
-  });
+
+      const value = effect.magic[activeEffect.origin.magic].value;
+      if (value > 0) {
+        modifier += (value * activeEffect.origin.spellLevel);
+      } else {
+        modifier += (1.50 * value * activeEffect.origin.spellLevel);
+      }
+    }
+  }
   successRate += modifier;
 
   // Adjacent and opposiite casting
@@ -371,24 +342,19 @@ export const dispelEnchantment = (mage: Mage, enchantment: Enchantment, mana: nu
   // const rawProb = (mana * (1 + currentSpellLevel(mage) / enchantment.spellLevel)) / (2.25 * castingCost);
   const rawProb = (mana / (2.75 * castingCost)) * ((1 + currentSpellLevel(mage)) / enchantment.spellLevel);
 
-  const enchantments = mage.enchantments;
+
   let modifier = 0;
-  enchantments.forEach(enchant => {
-    if (enchant.targetId !== mage.id) return;
+  const activeEffects = getActiveEffects(mage, E.CastingEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as CastingEffect[]) {
+      if (effect.type !== 'castingSuccess') {
+        continue;
+      }
 
-    const spell = getSpellById(enchant.spellId);
-    const spellLevel = enchant.spellLevel;
-
-    spell.effects.forEach(effect => {
-      if (effect.effectType !== 'CastingEffect') return;
-
-      const castingEffect = effect as CastingEffect;
-      if (castingEffect.type !== 'castingSuccess') return;
-
-      const value = castingEffect.magic[enchant.casterMagic].value;
-      modifier += (0.01 * value * spellLevel);
-    });
-  });
+      const value = effect.magic[activeEffect.origin.magic].value;
+      modifier += (0.01 * value * activeEffect.origin.spellLevel);
+    }
+  }
 
 
   const adjustedProb = Math.max(MIN_DISPEL_PROB, Math.min(MAX_DISPEL_PROB, rawProb + modifier));
@@ -417,19 +383,16 @@ export const calcKingdomResistance = (mage: Mage) => {
     phantasm: 0
   };
 
-  mage.enchantments.forEach(enchantment => {
-    const spell = getSpellById(enchantment.spellId);
-    const effects = spell.effects;
-
-    effects.forEach(effect => {
-      if (effect.effectType !== 'KingdomResistanceEffect') return;
-
-      const resistEffect = effect as KingdomResistanceEffect;
-      if (resistEffect.rule === 'spellLevel') {
-        resistance[resistEffect.resistance] += enchantment.spellLevel * resistEffect.magic[mage.magic].value;
+  const activeEffects = getActiveEffects(mage, E.KingdomResistanceEffect);
+  for (const activeEffect of activeEffects) {
+    for (const effect of activeEffect.effects as KingdomResistanceEffect[]) {
+      if (effect.rule === 'spellLevel') {
+        resistance[effect.resistance] += activeEffect.origin.spellLevel * effect.magic[activeEffect.origin.magic].value;
+      } else {
+        throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
       }
-    });
-  });
+    }
+  }
 
 
   // Max barrier is 2.5% of the land, max normal barrier is 75

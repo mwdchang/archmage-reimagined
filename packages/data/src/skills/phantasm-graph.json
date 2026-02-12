@@ -4,7 +4,7 @@
     "name": "Spell Mastery",
     "magic": "phantasm",
     "description": "Reduce spell casting cost",
-    "maxLevel": 10,
+    "maxLevel": 15,
     "prereqs": {},
     "effects": [
       {
@@ -27,6 +27,53 @@
             "value": { "innate": -0.01, "adjacent": -0.02, "opposite": -0.03 }
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "blizzard",
+    "name": "Blizzard",
+    "magic": "phantasm",
+    "description": "Reduce spell casting cost",
+    "maxLevel": 5,
+    "prereqs": {
+      "spellMastery": 6
+    },
+    "effects": [
+      {
+        "effectType": "BattleEffect",
+        "target": "opponent",
+        "targetType": "random",
+        "filters": null,
+        "trigger": {
+          "min": 2,
+          "max": 5
+        },
+        "effects": [
+          {
+            "effectType": "UnitDamageEffect",
+            "checkResistance": false,
+            "damageType": [ "cold" ],
+            "rule": "direct",
+            "magic": {
+              "ascendant": {
+                "value": { "min": 4000, "max": 6000 }
+              },
+              "verdant": {
+                "value": { "min": 4000, "max": 6000 }
+              },
+              "eradication": {
+                "value": { "min": 4000, "max": 6000 }
+              },
+              "nether": {
+                "value": { "min": 4000, "max": 6000 }
+              },
+              "phantasm": {
+                "value": { "min": 4000, "max": 6000 }
+              }
+            }
+          }
+        ]
       }
     ]
   }

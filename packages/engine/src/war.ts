@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Enchantment, Mage, Combatant } from "shared/types/mage";
+import { Mage, Combatant } from "shared/types/mage";
 import { allowedEffect as E } from "shared/src/common";
 import { 
   UnitAttrEffect,
@@ -10,7 +10,6 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
-  PrebattleEffect,
 } from 'shared/types/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -39,11 +38,8 @@ import { calcFilteredArmy } from './battle/calc-filtered-army';
 import { applyKingdomResourcesEffect } from './effects/apply-kingdom-resources';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { applyKingdomBuildingsEffect } from './effects/apply-kingdom-buildings';
-import { Item, Spell } from 'shared/types/magic';
 import { attackerItemResult, attackerSpellResult, defenderItemResult, defenderSpellResult } from './battle/battle-spell-item';
-import { Skill } from 'shared/types/skills';
-import { skipPartiallyEmittedExpressions } from 'typescript';
-import { ActiveEffect, getActiveEffectsForBattle } from './effects';
+import { ActiveEffect, getActiveEffects, getActiveEffectsForBattle } from './effects';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,16 +49,6 @@ const calcDamageVariance = (attackType: String[]) => {
     randomModifier = 0.5;
   }
   return randomModifier;
-}
-
-const enchant2origin = (enchant: Enchantment) => {
-  const origin: EffectOrigin = {
-    id: enchant.casterId,
-    magic: enchant.casterMagic,
-    spellLevel: enchant.spellLevel,
-    targetId: enchant.targetId
-  };
-  return origin;
 }
 
 /**
@@ -587,9 +573,6 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     });
   }
 
-  const uniqueItems = getAllUniqueItems();
-
-
   // === Prebattle effects === 
   const attackerPrebattleEffects = getActiveEffectsForBattle(
     attacker.mage, 
@@ -764,6 +747,27 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     if (attackType === 'primary') {
       if (attackingStack.unit.primaryAttackInit < 1 || attackingStack.size <= 0) continue;
       if (defendingStack.size <= 0) continue;
+
+      // Evade primary attack
+      if (hasAbility(dUnit, 'evade')) {
+        const evadeAttr = dUnit.abilities.find(ability => ability.name === 'evade');
+        if (Math.random() < evadeAttr.extra) {
+          battleReport.engagement.logs.push({
+            type: `evade`,
+            attacker: {
+              id: attackingMage.id,
+              unitId: attackingStack.unit.id,
+              unitsLoss: 0
+            },
+            defender: {
+              id: defendingMage.id,
+              unitId: defendingStack.unit.id,
+              unitsLoss: 0
+            }
+          });
+          continue;
+        }
+      }
 
       // Resolve burst
       const isPillage = side === 'defender' && battleType === 'pillage';
@@ -1210,14 +1214,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
 
   // Calculate any post battle effects from enchantments or spells/items
-  for (const enchant of attacker.mage.enchantments) {
-    const spell = getSpellById(enchant.spellId);
-    const postbattleEffects = spell.effects.filter(d => d.effectType === E.PostbattleEffect) as PostbattleEffect[];
-    if (postbattleEffects.length === 0) continue;
-
-    const origin = enchant2origin(enchant);
-
-    for (const postbattleEffect of postbattleEffects) {
+  let activeEffects = getActiveEffects(attacker.mage, E.PostbattleEffect);
+  for (const activeEffect of activeEffects) {
+    const origin = activeEffect.origin;
+    for (const postbattleEffect of activeEffect.effects as PostbattleEffect[]) {
       // Win condition trigger check for a successful attack
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === false) continue;
       if (postbattleEffect.condition === 'lose' && battleReport.isSuccessful === true) continue;
@@ -1242,14 +1242,10 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     }
   }
 
-  for (const enchant of defender.mage.enchantments) {
-    const spell = getSpellById(enchant.spellId);
-    const postbattleEffects = spell.effects.filter(d => d.effectType === E.PostbattleEffect) as PostbattleEffect[];
-    if (postbattleEffects.length === 0) continue;
-
-    const origin = enchant2origin(enchant);
-
-    for (const postbattleEffect of postbattleEffects) {
+  activeEffects = getActiveEffects(attacker.mage, E.PostbattleEffect);
+  for (const activeEffect of activeEffects) {
+    const origin = activeEffect.origin;
+    for (const postbattleEffect of activeEffect.effects as PostbattleEffect[]) {
       // Win condition trigger check for a successful defend
       if (postbattleEffect.condition === 'win' && battleReport.isSuccessful === true) continue;
       if (postbattleEffect.condition === 'lose' && battleReport.isSuccessful === false) continue;
