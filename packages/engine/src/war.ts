@@ -403,7 +403,7 @@ const battleEffect = (
             bstack.appliedEffects.push({
               origin: originKey,
               id: activeEffect.objId,
-              type: 'spell'
+              type: activeEffect.objType as any
             });
           });
 

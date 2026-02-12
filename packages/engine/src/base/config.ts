@@ -79,6 +79,7 @@ export const productionTable = {
     wilderness: 10
   },
   research: 20,
+  skill: 0.00042,
   manaStorage: 1000
 }
 

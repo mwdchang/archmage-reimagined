@@ -44,7 +44,7 @@ export interface BattleStack {
   appliedEffects: {
     origin: string; // For tracking only
     id: string;
-    type: 'item' | 'spell'; // FIXME : not used???
+    type: 'item' | 'spell' | 'enchantment' | 'skill'; 
   }[]
 }
 

@@ -11,7 +11,7 @@
     </div>
 
     <div style="margin-bottom: 0.5rem">
-      You have {{ mageStore.mage!.skillPoints }} skill points.
+      You have {{ Math.floor(mageStore.mage!.skillPoints) }} skill points. You get a skill point every {{ skillRate }} turns.
     </div>
 
 
@@ -38,6 +38,7 @@ import { useMageStore } from '@/stores/mage';
 import { API, APIWrapper } from '@/api/api';
 import { readableStr } from '@/util/util';
 import { useRouter } from 'vue-router';
+import { skillPoints } from 'engine/src/magic';
 
 
 const mageStore = useMageStore();
@@ -53,6 +54,11 @@ const selectedGraph = computed(() => {
   const skillGraph = skillGraphs.value.find(d => d.id === tabView.value)!;
 
   return skillGraph ? skillGraph : null;
+});
+
+const skillRate = computed(() => {
+  const rate = skillPoints(mageStore.mage!);
+  return Math.ceil(1 / rate);
 });
 
 
