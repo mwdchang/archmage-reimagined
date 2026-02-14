@@ -6,6 +6,10 @@
     <section v-if="skill">
       <p style="margin: 1rem 1rem">{{ skill.description }} </p>
 
+      <p style="margin-bottom: 1rem">
+        Effect values are multipled by skill level
+      </p>
+
       <div v-for="(effect, idx) in skill.effects" :key="idx" style="margin-bottom: 10px">
         <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
         <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />

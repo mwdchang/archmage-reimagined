@@ -47,9 +47,9 @@ const getTextList = (label: string | undefined) => {
   if (label) { 
     const tokens = label.split(' ');
 
-    let str = tokens[0];
-    for (let i = 1; i < tokens.length; i++) {
-      if (str.length > 10) {
+    let str = '';
+    for (let i = 0; i < tokens.length; i++) {
+      if (str.length + tokens[i].length > 10 && str !== '') {
         textList.push(str);
         str = tokens[i];
       } else {
@@ -74,7 +74,7 @@ const refresh = () => {
     .append('svg')
     .attr('width', '100%')
     .attr('height', '100%')
-    .attr('viewBox', '0 0 650 900')
+    .attr('viewBox', '0 0 650 750')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
   const defs = svg.append('defs');
@@ -146,7 +146,7 @@ const refresh = () => {
       .attr('width', n.width)
       .attr('height', n.height)
       .style('stroke', NODE_BORDER)
-      .style('stroke-width', 3)
+      .style('stroke-width', 2)
       .style('stroke-dasharray', () => {
         if (hasSkill) {
           return 'none';
@@ -178,8 +178,8 @@ const refresh = () => {
       group.append('text')
         .classed('anchor-text', true)
         .attr('x', n.x - 0.5 * n.width + 0.05 * n.width)
-        .attr('y', n.y - 0.5 * n.height + (idx + 1) * 0.33 * n.height)
-        .style('font-size', '1.4rem')
+        .attr('y', n.y - 0.5 * n.height + (idx + 1) * 0.38 * n.height)
+        .style('font-size', '1.75rem')
         .style('stroke', 'none')
         .style('fill', NODE_TEXT)
         .text(text)

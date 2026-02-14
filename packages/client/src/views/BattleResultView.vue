@@ -208,10 +208,10 @@
     <h3 class="section-header">Assault Result</h3>
     <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx">
       <p v-if="log.unitsLoss > 0">
-        {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ unitName(log.unitId) }} were slain in battle
+        {{ nameById(log.id) }}'s {{ readableNumber(log.unitsLoss) }} {{ unitName(log.unitId) }} were slain in battle
       </p>
       <p v-if="log.unitsLoss > 0 && log.unitsHealed > 0">
-        {{ nameById(log.id) }}'s {{ log.unitsHealed }} {{ unitName(log.unitId) }} resurrected
+        {{ nameById(log.id) }}'s {{ readableNumber(log.unitsHealed) }} {{ unitName(log.unitId) }} resurrected
       </p>
     </div>
     <br>
