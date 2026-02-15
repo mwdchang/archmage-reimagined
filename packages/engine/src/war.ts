@@ -1063,6 +1063,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
     /////////// Secondary //////////
     if (attackType === 'secondary') {
       if (attackingStack.unit.secondaryAttackInit < 1 || attackingStack.size <= 0) continue;
+      if (defendingStack.size <= 0) continue;
 
       let accuracy = calcAttackAccuracy(attackType, attackingStack.accuracy, aUnit, dUnit);
       // let accuracy = attackingStack.accuracy + calcAccuracyModifier(aUnit, dUnit);

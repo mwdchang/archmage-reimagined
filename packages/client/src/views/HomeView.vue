@@ -15,22 +15,26 @@
       Through trials and tribulations, you ultimate goal is the total domination of Terra.
     </p>
 
-    <div v-if="clock && gameTable" style="margin-bottom: 2rem"> 
-      Current reset
+
+
+    <!--
+    <p style="margin-bottom: 2rem"> 
+      <button @click="mode = 'registerMode'">Reincarnate Here</button> if you do not have a mage.
+    </p>
+    -->
+
+    <p style="margin-bottom: 1rem">
+      <Login @register="mode = 'registerMode'"/>
+    </p>
+
+    <div v-if="clock && gameTable" class="form" style="margin-bottom: 2rem; margin-left: 3rem; width: 28rem"> 
+      <p> Current reset </p>
       <ul>
         <li> Starts: {{ readableDate(clock.startTime) }} </li>
         <li> Ends: {{ readableDate(approxEndTime) }} </li>
       </ul>
     </div>
 
-    <p style="margin-bottom: 2rem"> 
-      <button @click="mode = 'registerMode'">Reincarnate Here</button> if you do not have a mage.
-    </p>
-
-    <p style="margin-bottom: 1rem">
-      If you already have a mage ... welcome back.
-      <Login />
-    </p>
 
     <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
       <div class="modal">

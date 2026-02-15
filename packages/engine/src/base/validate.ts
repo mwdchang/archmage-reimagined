@@ -9,7 +9,7 @@ import {
 } from "shared/types/effects";
 import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/types/unit";
-import { SkillGraph, Skill } from "shared/types/skills";
+import { SkillGraph } from "shared/types/skills";
 
 
 

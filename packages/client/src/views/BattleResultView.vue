@@ -21,7 +21,7 @@
             </router-link>
           </td>
           <td><magic :magic="stack.unit.magic" tiny/></td>
-          <td class="text-right">{{ stack.size ? readableNumber(stack.size) : '???' }}</td>
+          <td class="text-right">{{ stack.size !== null ? readableNumber(stack.size) : '???' }}</td>
           <td class="text-right">{{ readableNumber(stack.unit.primaryAttackPower) }}</td>
           <td class="text-right">{{ readableNumber(stack.unit.secondaryAttackPower) }}</td>
           <td class="text-right">{{ readableNumber(stack.unit.counterAttackPower) }}</td>
@@ -207,11 +207,11 @@
 
     <h3 class="section-header">Assault Result</h3>
     <div v-for="(log, idx) of report.postBattle.unitSummary" :key="idx">
-      <p>
-        {{ nameById(log.id) }}'s {{ log.unitsLoss }} {{ unitName(log.unitId) }} were slain in battle
+      <p v-if="log.unitsLoss > 0">
+        {{ nameById(log.id) }}'s {{ readableNumber(log.unitsLoss) }} {{ unitName(log.unitId) }} were slain in battle
       </p>
-      <p>
-        {{ nameById(log.id) }}'s {{ log.unitsHealed }} {{ unitName(log.unitId) }} resurrected
+      <p v-if="log.unitsLoss > 0 && log.unitsHealed > 0">
+        {{ nameById(log.id) }}'s {{ readableNumber(log.unitsHealed) }} {{ unitName(log.unitId) }} resurrected
       </p>
     </div>
     <br>
@@ -307,7 +307,7 @@ const getEffectMagic = (eff: Eff) => {
   if (eff.type === 'enchantment' || eff.type === 'spell') {
     return getSpellById(eff.id).magic;
   }
-  return getSkillById(eff.id);
+  return getSkillById(eff.id)!.magic;
 };
 const effectsToString = (effs: Eff[]) => {
   return effs.map(e => e.id).map(readableStr).join(', ');
