@@ -37,7 +37,7 @@ import { PGliteDataAdapter } from 'data-adapter/src/pglite-data-adapter';
 import { Engine } from 'engine/src/engine';
 import { MAX_AGE, verifyAccessToken } from 'shared/src/auth';
 import { NameError } from 'shared/src/errors';
-import { Mail } from 'shared/types/common';
+
 
 const PORT = 3000;
 const app = express();
