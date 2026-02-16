@@ -74,22 +74,8 @@ const refresh = () => {
     .append('svg')
     .attr('width', '100%')
     .attr('height', '100%')
-    .attr('viewBox', '0 0 650 750')
+    .attr('viewBox', `0 0 ${38 * 20} ${40 * 20}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
-
-  const defs = svg.append('defs');
-  const grad = defs.append('radialGradient')
-    .attr('id', 'grad')
-    .attr('cx', '70%')
-    .attr('cy', '70%')
-    .attr('4', '50%')
-  grad.append('stop')
-    .attr('offset', '0%')
-    .attr('stop-color', '#333')
-  grad.append('stop')
-    .attr('offset', '100%')
-    .attr('stop-color', '#222');
-
 
   for (const edge of layout.edges()) {
     const points = layout.edge(edge).points;
@@ -113,7 +99,7 @@ const refresh = () => {
         if (unlocked === true) {
           return 'none';
         }
-        return '6 6';
+        return '4 4';
       })
       .style('pointer-events', 'none');
 
@@ -151,7 +137,7 @@ const refresh = () => {
         if (hasSkill) {
           return 'none';
         }
-        return '6 8';
+        return '4 4';
       })
       .style('fill', NODE_BACKGROUND);
 
@@ -179,7 +165,7 @@ const refresh = () => {
         .classed('anchor-text', true)
         .attr('x', n.x - 0.5 * n.width + 0.05 * n.width)
         .attr('y', n.y - 0.5 * n.height + (idx + 1) * 0.38 * n.height)
-        .style('font-size', '1.75rem')
+        .style('font-size', '1.50rem')
         .style('stroke', 'none')
         .style('fill', NODE_TEXT)
         .text(text)
@@ -188,11 +174,11 @@ const refresh = () => {
 
 
     group.append('rect')
-      .attr('x', n.x + 0.15 * n.width)
+      .attr('x', n.x + 0.18 * n.width)
       .attr('y', n.y - 0.5 * n.height + 2) 
       .attr('rx', 3)
       .attr('ry', 3)
-      .attr('width', 84)
+      .attr('width', 75)
       .attr('height', n.height - 4)
       .attr('fill', '#258')
       .on('mouseenter', function() {
@@ -205,12 +191,10 @@ const refresh = () => {
         emit('addSkill', node);
       });
 
-
-
     group.append('line')
-      .attr('x1', n.x + 0.15 * n.width)
+      .attr('x1', n.x + 0.18 * n.width)
       .attr('y1', n.y - 0.5 * n.height) 
-      .attr('x2', n.x + 0.15 * n.width)
+      .attr('x2', n.x + 0.18 * n.width)
       .attr('y2', n.y + 0.5 * n.height)
       .attr('stroke', NODE_BORDER)
       .style('stroke-width', 3)
@@ -218,7 +202,7 @@ const refresh = () => {
         if (hasSkill) {
           return 'none';
         }
-        return '6 8';
+        return '4 4';
       });
 
 
@@ -249,13 +233,11 @@ const refresh = () => {
       .style('pointer-events', 'none');
 
   }
-
 }
 
 watch(
   () => [props.graph, props.mage],
   () => {
-    // console.log('hi', props.graph.nodes);
     refresh();
   }
 )
@@ -271,6 +253,6 @@ onMounted(() => {
 <style scoped>
 .graph-container {
   width: 38rem;
-  height: 45rem;
+  height: 40rem;
 }
 </style>

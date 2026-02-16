@@ -8,7 +8,7 @@ export interface Skill {
   maxLevel: number;
   prereqs: {
     [k: string]: number
-  },
+  } | {},
   effects: Effect<any>[];
 }
 

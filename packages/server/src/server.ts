@@ -257,15 +257,16 @@ router.get('/api/chronicles', async (req: any, res) => {
 
 
 router.post('/api/register', async (req, res) => {
-  const { username, password, magic } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const { user, mage } = await engine.register(username, password, magic);
+    const { user } = await engine.register(username, password);
     res.cookie('amr-jwt', user.token, {
       httpOnly: true,
       maxAge: MAX_AGE * 1000
     });
-    res.status(200).json(mage);
+    console.log('register', user.username);
+    res.status(200).json({ username: user.username });
   } catch (err) {
     if (err instanceof NameError) {
       res.status(409).json({ error: err.message });
@@ -275,9 +276,9 @@ router.post('/api/register', async (req, res) => {
 
 router.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const { user, mage } = await engine.login(username, password);
+  const { user } = await engine.login(username, password);
 
-  if (!user || !mage) {
+  if (!user) {
     return res.status(200).json(null);
   }
 
@@ -285,7 +286,7 @@ router.post('/api/login', async (req, res) => {
     httpOnly: true,
     maxAge: MAX_AGE * 1000
   });
-  res.status(200).json(mage);
+  res.status(200).json({ username: user.username });
 });
 
 router.post('/api/logout', async (req, res) => {
@@ -293,6 +294,23 @@ router.post('/api/logout', async (req, res) => {
   res.status(200).json({})
 });
 
+router.get('/api/login-check', async (req: any, res) => {
+  if (req.user && req.user.username) {
+    res.status(200).json({ username: req.user.username });
+  } else {
+    res.status(400).json({ message: 'something weird happened' });
+  }
+});
+
+
+router.post('/api/mage', async (req: any, res) => {
+  const username = req.user.username;
+  const { mageName, magic } = req.body;
+  if (username && magic) {
+    const mage = await engine.createNewMage(username, mageName, magic);
+    res.status(200).json({ mage });
+  }
+});
 
 router.get('/api/mage', async (req: any, res) => {
   // console.log('cookies!!! ', req.user.username);

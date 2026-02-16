@@ -4,8 +4,8 @@ import _ from 'lodash';
 import dagre from "@dagrejs/dagre"
 import { SkillGraph } from "shared/types/skills"
 
-const nodeW = 250;
-const nodeH = 75;
+const nodeW = 240;
+const nodeH = 70;
 
 export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   const g = new dagre.graphlib.Graph();

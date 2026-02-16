@@ -2,18 +2,13 @@
   <main style="width: 100%">
     <section class="form" style="width: 100%; max-width: 100%"> 
       <div>
-        <h2 style="margin-bottom: 1rem">Create new account</h2>
+        <h2 style="margin-bottom: 1rem">Create mage</h2>
         <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
-          <span style="width: 5rem">Username </span> 
+          <span style="width: 5rem">Name</span> 
           <input @keyup.enter="register" name="username" type="text"
-            v-model="registerData.username">
+            v-model="registerData.mageName">
         </div>
-        <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
-          <span style="width: 5rem">Password </span> 
-          <input @keyup.enter="register" name="password" type="password"
-            v-model="registerData.password">
-        </div>
-        <!--
+
         <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
           <span style="width: 5rem">Magic 
           </span>
@@ -25,15 +20,12 @@
             <option value="phantasm">Phantasm</option>
           </select>
         </div>
-        -->
       </div>
 
-      <!--
+
       <h2 class="row">
         <magic :magic="registerData.magic" />  {{ readableStr(registerData.magic) }}
       </h2>
-      -->
-      <!--
       <div class="row" style="gap: 20px">
         <section style="margin-left: 1rem">
           <img v-show="registerData.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
@@ -78,11 +70,10 @@
           </p>
         </section>
       </div>
-      -->
 
       <ActionButton 
         :proxy-fn="register"
-        :disabled="registerData.username === '' || registerData.password === ''"
+        :disabled="registerData.mageName === ''"
         :label="'Create'" />
     </section>
 
@@ -101,11 +92,7 @@ import magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { readableStr } from '@/util/util';
 
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
-
-const registerData = ref({ username: '', password: '', magic: 'ascendant' });
+const registerData = ref({ mageName: '', magic: 'ascendant' });
 const router = useRouter();
 const mageStore = useMageStore();
 const errorStr = ref('');
@@ -114,23 +101,21 @@ const errorStr = ref('');
 const register = async () => {
   errorStr.value = '';
 
-  if (!registerData.value.username || registerData.value.username.length < 2) {
-    errorStr.value = 'Name needs to be at least 3 characters';
+  if (!registerData.value.mageName || registerData.value.mageName.length < 2) {
+    errorStr.value = 'Mage name needs to be at least 3 characters';
     return;
   }
 
   try {
-    const r = await API.post('/register', registerData.value);
-    if (r) {
-      mageStore.setLoginUser(r.data.username);
-      setTimeout(() => {
-        emit('close');
-      }, 400);
+    const r = await API.post('/mage', registerData.value);
+    if (r.data) {
+      console.log('!!!!!!!!!', r);
+      mageStore.setMage(r.data.mage);
 
-      // mageStore.setMage(r.data);
-      // setTimeout(() => {
-      //   router.push({ name: 'about' });
-      // }, 400);
+      setTimeout(() => {
+        console.log('redirecting...');
+        router.push({ name: 'about' });
+      }, 400);
     }
   } catch (err: any) {
     if (err.response?.status === 409) {
@@ -142,13 +127,6 @@ const register = async () => {
 </script>
 
 <style scoped>
-.row {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  justify-items: flex-end;
-  display: flex;
-}
-
 img {
   height: 150px;
 }
