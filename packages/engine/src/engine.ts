@@ -1998,53 +1998,17 @@ class Engine {
   }
 
   async register(username: string, password: string) {
-    // 1. register player
     const res = await this.adapter.register(username, password);
     return { user: res.user };
-
-    // // 2. return mage
-    // const newId = await this.adapter.nextMageId();
-
-    // // bake in starting turn
-    // if (!override) {
-    //   override = {};
-    // }
-    // const currentServerTurn = this.currentTurn;
-    // override.currentTurn = Math.min(gameTable.maxTurns, 1000 + currentServerTurn);
-
-    // let mage = createMage(newId, username, magic, override);
-
-    // // 3. Write to data store
-    // mage = await this.adapter.createMage(username, mage);
-    // 
-    // await this.adapter.createRank({
-    //   id: mage.id,
-    //   name: mage.name,
-    //   magic: mage.magic,
-    //   forts: mage.forts,
-    //   turns: mage.turnsUsed,
-    //   land: totalLand(mage),
-    //   status: '',
-    //   netPower: totalNetPower(mage)
-    // });
-    // return { user: res.user, mage };
   }
 
   async login(username: string, password: string) {
-    // 1. check login
     const res = await this.adapter.login(username, password);
     if (!res) {
-      return { user: null, mage: null }
+      return { user: null }
     }
-
-    // 2. return mage
-    // const mage = await this.adapter.getMageByUser(username);
-    // if (!mage) {
-    //   return { user: res.user, mage: null }
-    // }
     return { user: res.user };
   }
-
 
   async createNewMage(userName: string, mageName: string, magic: string, override?: Partial<Mage>) {
     // 1. return mage

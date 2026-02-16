@@ -30,7 +30,6 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
 import ActionButton from '@/components/action-button.vue';
@@ -39,7 +38,6 @@ import ActionButton from '@/components/action-button.vue';
 const emit = defineEmits(['register']);
 
 const loginData = ref({ username: '', password: '', magic: 'ascendant' });
-const router = useRouter();
 const mageStore = useMageStore();
 const error = ref('');
 

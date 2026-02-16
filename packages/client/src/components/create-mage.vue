@@ -22,7 +22,6 @@
         </div>
       </div>
 
-
       <h2 class="row">
         <magic :magic="registerData.magic" />  {{ readableStr(registerData.magic) }}
       </h2>
@@ -109,7 +108,6 @@ const register = async () => {
   try {
     const r = await API.post('/mage', registerData.value);
     if (r.data) {
-      console.log('!!!!!!!!!', r);
       mageStore.setMage(r.data.mage);
 
       setTimeout(() => {
