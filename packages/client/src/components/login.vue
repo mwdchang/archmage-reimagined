@@ -19,7 +19,7 @@
         <button @click="emit('register')" style="background: #460"> Create new mage</button>
         <ActionButton 
           :proxy-fn="login"
-          :label="'Login'" />
+          :label="'Sign in'" />
       </div>
 
       <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
@@ -42,6 +42,7 @@ const mageStore = useMageStore();
 const error = ref('');
 
 const login = async () => {
+  error.value = '';
   const r = await API.post('/login', { 
     username: loginData.value.username,
     password: loginData.value.password

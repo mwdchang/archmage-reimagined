@@ -30,10 +30,11 @@
 
     <div v-if="clock && gameTable && loginUser" class="form" style="margin-bottom: 2rem; margin-left: 3rem; width: 28rem"> 
       <h3 class="section-header"> Testing Server </h3>
-      <ul style="margin-bottom: 2rem">
-        <li> Starts: {{ readableDate(clock.startTime) }} </li>
-        <li> Ends: {{ readableDate(approxEndTime) }} </li>
-      </ul>
+      <p style="margin-bottom: 1rem">
+        The reset started on <span class="special-text">{{ readableDate(clock.startTime) }} </span> 
+        and will end on <span class="special-text">{{ readableDate(approxEndTime) }} </span>.
+      </p>
+
 
       <section v-if="mageStore.mage">
         <table style="margin-bottom: 1rem">
@@ -66,12 +67,14 @@
         <button @click="enterTerra">Enter Terra</button>
       </section>
       <section v-else>
-        You do not have a mage on htis server<br> <button @click="creatingMage = true">Create mage</button>
+        You do not have a mage on this server<br> <button @click="creatingMage = true">Create mage</button>
       </section>
     </div>
 
-    <section>
-      <div @click="logout">Logout</div>
+    <section v-if="loginUser">
+      <div @click="logout" class="logout">
+        Sign out
+      </div>
     </section>
 
     <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
@@ -167,6 +170,16 @@ button:hover {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+.logout {
+  max-width: 4rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: #e40;
 }
 
 /* Modal box */
