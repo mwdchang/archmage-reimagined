@@ -260,7 +260,9 @@ const simulateCasting = (spellId: string) => {
     name: 'test',
     magic: selectedMagic.value,
     testingSpellLevel: selectedSpellLevel.value,
-    enchantments: []
+    enchantments: [],
+    items: {},
+    skills: {}
   };
   if (concentrationLevel.value > 1) {
     dummyMage.enchantments!.push({
@@ -287,7 +289,9 @@ const simulateDispel = (spellId: string) => {
     name: 'test',
     magic: selectedMagic.value,
     testingSpellLevel: selectedSpellLevel.value,
-    enchantments: []
+    enchantments: [],
+    items: {},
+    skills: {}
   };
 
   const dummyEnchantment: Enchantment = {

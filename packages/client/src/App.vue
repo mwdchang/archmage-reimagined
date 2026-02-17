@@ -4,7 +4,6 @@
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
 
-
     <!--
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
     <RouterView v-if="!publicRoutes.includes(route.name as string) && mageStore.mage" /> 
@@ -65,7 +64,7 @@ import phantasmSkills from 'data/src/skills/phantasm-graph.json';
 
 import lesserItems from 'data/src/items/lesser.json';
 import uniqueItems from 'data/src/items/unique.json';
-import { arcaneBackground } from './util/background';
+// import { arcaneBackground } from './util/background';
 
 const mageStore = useMageStore();
 const router = useRouter();
@@ -79,6 +78,7 @@ const publicRoutes = [
   'analysis'
 ];
 const hideHeader = [
+  'home',
   'status',
   'test',
   'about',
@@ -155,6 +155,22 @@ onMounted(async () => {
   }
 
   try {
+    const r = await API.get('login-check');
+    mageStore.setLoginUser(r.data.username);
+
+    const r2 = await API.get('mage');
+    mageStore.setMage(r2.data.mage);
+  } catch (e: any) {
+    mageStore.setLoginUser('');
+    mageStore.setMage(null);
+    console.warn('need to login or register');
+    if (e.response.status === 403 || e.response.status === 401) {
+      router.push({ name: 'home' });
+    }
+  }
+
+  /*
+  try {
     const r = await API.get('mage');
     mageStore.setLoginStatus(1);
     mageStore.setMage(r.data.mage);
@@ -171,6 +187,7 @@ onMounted(async () => {
       router.push({ name: 'home' });
     }
   }
+  */
 
   // arcaneBackground();
 });

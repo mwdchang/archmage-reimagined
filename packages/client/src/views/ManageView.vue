@@ -6,15 +6,14 @@
     </div>
 
     <Inbox v-if="tabView === 'message'" />
-    <section v-else>
-      Coming soon ...
-    </section>
+    <Options v-else />
   </main>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import Inbox from '@/components/inbox.vue';
+import Options from '@/components/options.vue';
 
 const tabView = ref('message');
 

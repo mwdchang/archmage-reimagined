@@ -4,13 +4,13 @@ import type { Mage } from 'shared/types/mage';
 
 export const useMageStore = defineStore('mage', {
   state: () => ({
-    loginstatus: 0,
+    _loginUser: '',
     _mage: null as Mage | null,
     _gameTable: null as GameTable | null
   }),
   getters: {
-    loginStatus(state) {
-      return state.loginstatus;
+    loginUser(state) {
+      return state._loginUser;
     },
     mage(state) {
       return state._mage;
@@ -20,10 +20,10 @@ export const useMageStore = defineStore('mage', {
     }
   },
   actions: {
-    setLoginStatus(v: number) {
-      this.$state.loginstatus = v;
+    setLoginUser(v: string) {
+      this.$state._loginUser= v;
     },
-    setMage(v: Mage) {
+    setMage(v: Mage | null) {
       this.$state._mage = v;
     },
     setGameTable(t: GameTable) {

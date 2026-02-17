@@ -195,6 +195,23 @@
       </tbody>
     </table>
 
+    <div class="section-header">Skills</div>
+    <table v-if="mage">
+      <tbody>
+        <tr v-for="entry of Object.entries(mage.skills)" :key="entry[0]">
+          <td>
+            <div class="row">
+              <magic :magic="getSkillById(entry[0])!.magic" />
+              <router-link :to="{ name: 'viewSkill', params: { id: entry[0] }}"> 
+                {{ readableStr(entry[0]) }} 
+              </router-link>
+            </div>
+          </td>
+          <td class="text-right">{{ readableNumber(entry[1] as number) }} </td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="section-header">Enchantments</div>
     <table v-if="mage">
       <tbody>
@@ -326,7 +343,7 @@ import {
 import Magic from '@/components/magic.vue';
 import { readableNumber, readableStr } from '@/util/util';  
 import { allowedMagicList } from 'shared/src/common';
-import { getAllUniqueItems, getUnitById } from 'engine/src/base/references';
+import { getAllUniqueItems, getSkillById, getUnitById } from 'engine/src/base/references';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);

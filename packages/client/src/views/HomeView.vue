@@ -15,26 +15,77 @@
       Through trials and tribulations, you ultimate goal is the total domination of Terra.
     </p>
 
-    <div v-if="clock && gameTable" style="margin-bottom: 2rem"> 
-      Current reset
-      <ul>
-        <li> Starts: {{ readableDate(clock.startTime) }} </li>
-        <li> Ends: {{ readableDate(approxEndTime) }} </li>
-      </ul>
+    <p style="max-width: 50rem; margin-bottom: 1rem">
+      To get started see the <a href="/guide">starter's guide</a> here.
+    </p>
+
+    <section style="margin-bottom: 1rem">
+      <p v-if="!loginUser">
+        <Login @register="mode = 'registerMode'"/>
+      </p>
+      <p v-else style="font-size: 1.25rem">
+        Welcome back {{ loginUser }}
+      </p>
+    </section>
+
+    <div v-if="clock && gameTable && loginUser" class="form" style="margin-bottom: 2rem; margin-left: 3rem; width: 28rem"> 
+      <h3 class="section-header"> Testing Server </h3>
+      <p style="margin-bottom: 1rem">
+        The reset started on <span class="special-text">{{ readableDate(clock.startTime) }} </span> 
+        and will end on <span class="special-text">{{ readableDate(approxEndTime) }} </span>.
+      </p>
+
+
+      <section v-if="mageStore.mage">
+        <table style="margin-bottom: 1rem">
+          <tbody>
+            <tr>
+              <td>Mage</td>
+              <td>Forts</td>
+              <td>Land</td>
+              <td>Power</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row">
+                  <Magic :magic="mageStore.mage.magic" small />
+                  <div>{{ mageStore.mage.name }} (#{{mageStore.mage.id}})</div>
+                </div>
+              </td>
+              <td>
+                <div>{{ mageStore.mage.forts }} </div>
+              </td>
+              <td>
+                <div>{{ totalLand(mageStore.mage) }} </div>
+              </td>
+              <td>
+                <div>{{ totalNetPower(mageStore.mage) }} </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button @click="enterTerra">Enter Terra</button>
+      </section>
+      <section v-else>
+        You do not have a mage on this server<br> <button @click="creatingMage = true">Create mage</button>
+      </section>
     </div>
 
-    <p style="margin-bottom: 2rem"> 
-      <button @click="mode = 'registerMode'">Reincarnate Here</button> if you do not have a mage.
-    </p>
-
-    <p style="margin-bottom: 1rem">
-      If you already have a mage ... welcome back.
-      <Login />
-    </p>
+    <section v-if="loginUser">
+      <div @click="logout" class="logout">
+        Sign out
+      </div>
+    </section>
 
     <div v-if="mode === 'registerMode'" class="modal-overlay" @click.self="mode = 'loginMode'">
       <div class="modal">
-        <Register />
+        <Register @close="mode = 'loginMode'" />
+      </div>
+    </div>
+
+    <div v-if="creatingMage === true" class="modal-overlay" @click.self="creatingMage = false">
+      <div class="modal">
+        <CreateMage />
       </div>
     </div>
   </main>
@@ -45,17 +96,24 @@ import { computed, onMounted, ref } from 'vue';
 import { ServerClock } from 'shared/types/common';
 import Register from '@/components/register.vue';
 import Login from '@/components/login.vue';
+import CreateMage from '@/components/create-mage.vue';
+import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { readableDate } from '@/util/util';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia';
+import { totalLand, totalNetPower } from 'engine/src/base/mage';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 
 const mode = ref<string>('loginMode');
+const creatingMage = ref(false);
 const clock = ref<ServerClock>();
 const mageStore = useMageStore();
 
-const { gameTable } = storeToRefs(mageStore);
+
+const { gameTable, loginUser } = storeToRefs(mageStore);
 
 const approxEndTime = computed(() => {
   if (!clock.value || !gameTable.value) return 0;
@@ -68,6 +126,17 @@ const approxEndTime = computed(() => {
   return finalTime;
 });
 
+const logout = async () => {
+  await API.post('/logout');
+  mageStore.setLoginUser('');
+  mageStore.setMage(null)
+};
+
+const enterTerra = () => {
+  setTimeout(() => {
+    router.push({ name: 'about' });
+  }, 400);
+};
 
 onMounted(async () => {
   clock.value = (await API.get<ServerClock>('server-clock')).data;
@@ -101,6 +170,16 @@ button:hover {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+.logout {
+  max-width: 4rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: #e40;
 }
 
 /* Modal box */

@@ -51,7 +51,7 @@ const logout = async () => {
   console.log('log out...')
   await API.post('/logout');
 
-  mageStore.setMage(null as any)
+  mageStore.setMage(null)
   router.push({ name: 'home' });
 };
 
