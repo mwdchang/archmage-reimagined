@@ -55,6 +55,14 @@ const login = async () => {
   if (r && r.data) {
     error.value = '';
     mageStore.setLoginUser(r.data.username);
+
+    // See if we have a mage
+    try {
+      const r2 = await API.get('mage');
+      mageStore.setMage(r2.data.mage);
+    } catch (err) {
+      mageStore.setMage(null);
+    }
   }
 };
 </script>

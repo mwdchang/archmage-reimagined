@@ -1,5 +1,16 @@
 <template>
   <main>
+    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <ImageProxy src="/images/ui/skill.png" />
+      <div>
+        <div class="section-header">Skills</div>
+        <p>
+          You have {{ Math.floor(mageStore.mage!.skillPoints) }} skill points. 
+          You get a skill point every {{ skillRate }} turns. Build more guilds
+          to generate faster.
+        </p>
+      </div>
+    </div>
     <div class="form-tabs">
       <div 
         v-for="graph of skillGraphs"
@@ -11,7 +22,6 @@
     </div>
 
     <div style="margin-bottom: 0.5rem">
-      You have {{ Math.floor(mageStore.mage!.skillPoints) }} skill points. You get a skill point every {{ skillRate }} turns.
     </div>
 
 
@@ -31,6 +41,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import SkillGraphDisplay from '@/components/SkillGraphDisplay.vue';
+import ImageProxy from '@/components/ImageProxy.vue';
 import { Skill, SkillGraph } from 'shared/types/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { getAllSkills } from 'engine/src/base/references';

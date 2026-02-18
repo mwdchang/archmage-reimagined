@@ -66,6 +66,50 @@ const getTextList = (label: string | undefined) => {
   return textList;
 }
 
+
+function applyGlowFilter(svg: d3.Selection<SVGSVGElement, any, any, any>, id: string, color: string) {
+  // ensure <defs> exists
+  let defs = svg.select<SVGDefsElement>("defs");
+  if (defs.empty()) {
+    defs = svg.append("defs");
+  }
+
+  // avoid duplicate filter
+  if (!defs.select(`#${id}`).empty()) {
+    return id;
+  }
+
+  const filter = defs.append("filter")
+    .attr("id", id)
+    .attr("filterUnits", "userSpaceOnUse")
+    .attr("x", "-50%")
+    .attr("y", "-50%")
+    .attr("width", "200%")
+    .attr("height", "200%");
+
+  filter.append("feGaussianBlur")
+    .attr("in", "SourceGraphic")
+    .attr("stdDeviation", 9)
+    .attr("result", "blur");
+
+  filter.append("feFlood")
+    .attr("flood-color", color)
+    .attr("flood-opacity", 1)
+    .attr("result", "color");
+
+  filter.append("feComposite")
+    .attr("in", "color")
+    .attr("in2", "blur")
+    .attr("operator", "in")
+    .attr("result", "glow");
+
+  const merge = filter.append("feMerge");
+  merge.append("feMergeNode").attr("in", "glow");
+  merge.append("feMergeNode").attr("in", "SourceGraphic");
+
+  return id;
+}
+
 const refresh = () => {
   const layout = layoutSkillGraph(props.graph);
 
@@ -74,8 +118,23 @@ const refresh = () => {
     .append('svg')
     .attr('width', '100%')
     .attr('height', '100%')
-    .attr('viewBox', `0 0 ${38 * 20} ${40 * 20}`)
+    .attr('viewBox', `0 0 ${36 * 20} ${38 * 20}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
+
+
+  const colourRef = Object.freeze({
+    ascendant: '#dddddd',
+    verdant: '#22ee22',
+    eradication: '#ee2222',
+    nether: '#888888',
+    phantasm: '#22aaee'
+  });
+
+  applyGlowFilter(svg, 'ascendant', colourRef.ascendant);
+  applyGlowFilter(svg, 'verdant', colourRef.verdant);
+  applyGlowFilter(svg, 'eradication', colourRef.eradication);
+  applyGlowFilter(svg, 'nether', colourRef.nether);
+  applyGlowFilter(svg, 'phantasm', colourRef.phantasm);
 
   for (const edge of layout.edges()) {
     const points = layout.edge(edge).points;
@@ -93,7 +152,10 @@ const refresh = () => {
       .datum(points)
       .attr('d', line)
       .attr('fill', 'none')
-      .attr('stroke', EDGE_BACKGROUND)
+      // .attr('stroke', EDGE_BACKGROUND)
+      .attr('stroke', () => {
+        return colourRef[props.graph.id]
+      })
       .attr('stroke-width', 5)
       .style('stroke-dasharray', () => {
         if (unlocked === true) {
@@ -101,7 +163,14 @@ const refresh = () => {
         }
         return '4 4';
       })
-      .style('pointer-events', 'none');
+      //.style('pointer-events', 'none');
+      .style('filter', () => {
+        if (hasSkill) {
+          return `url(#${props.graph.id})`
+        }
+        return null;
+      });
+
 
     if (unlocked === false) {
       const len = path.node()?.getTotalLength() || 0;
@@ -131,7 +200,7 @@ const refresh = () => {
       .attr('ry', 8)
       .attr('width', n.width)
       .attr('height', n.height)
-      .style('stroke', NODE_BORDER)
+      .style('stroke', colourRef[props.graph.id])
       .style('stroke-width', 2)
       .style('stroke-dasharray', () => {
         if (hasSkill) {
@@ -139,7 +208,13 @@ const refresh = () => {
         }
         return '4 4';
       })
-      .style('fill', NODE_BACKGROUND);
+      .style('fill', NODE_BACKGROUND)
+      .style('filter', () => {
+        if (hasSkill) {
+          return `url(#${props.graph.id})`
+        }
+        return null;
+      });
 
     // Name
     const textList = getTextList(n.label)
@@ -252,7 +327,7 @@ onMounted(() => {
 
 <style scoped>
 .graph-container {
-  width: 38rem;
-  height: 40rem;
+  width: 36rem;
+  height: 38rem;
 }
 </style>
