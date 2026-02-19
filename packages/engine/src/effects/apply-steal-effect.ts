@@ -67,7 +67,7 @@ export const applyStealEffect = (
       lossValue = base
     }
   } else {
-    throw new Error(`Unable to process ${effect.rule} for ${origin.spellId}`);
+    throw new Error(`Unable to process ${effect.rule}`);
   }
 
   // Figure out the amount to keep
