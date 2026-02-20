@@ -329,5 +329,7 @@ onMounted(() => {
 .graph-container {
   width: 36rem;
   height: 38rem;
+  background: radial-gradient(circle at 50% 70%, #0b3d91 0%, #061a40 70%, #000000 100%);
+  border: 1px solid #333;
 }
 </style>
