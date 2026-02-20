@@ -271,8 +271,9 @@ export const geldIncome = (mage: Mage) => {
 
     for (const effect of activeEffect.effects as ProductionEffect[]) {
       if (effect.production !== 'geld' || !effect.magic[activeEffect.origin.magic]) {
-        return;
+        continue;
       }
+
 
       if (effect.rule === 'spellLevel') {
         delta += effect.magic[magic].value * activeEffect.origin.spellLevel;
