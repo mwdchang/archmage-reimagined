@@ -15,7 +15,6 @@ export interface EffectOrigin {
 
   spellLevel: number,
   targetId: number,
-  spellId?: string,
 }
 
 

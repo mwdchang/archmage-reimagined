@@ -1,6 +1,12 @@
 <template>
   <main>
-    <h3>Status Report</h3>
+    <h3 class="section-header">Status Report</h3>
+    <p v-if="damagedUntil" style="max-width: 25rem; text-align: center">
+      Your kingdom is heavily damaged, clogging traffic until {{readableDate(damagedUntil)}}
+    </p>
+    <p v-else style="max-width: 25rem; text-align: center">
+      Today is just another normal day in your kingdom.
+    </p>
     <div class="section-header">General Info</div>
     <table v-if="mage">
       <tbody>
@@ -315,7 +321,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { useEngine } from '@/composables/useEngine';
 import { storeToRefs } from 'pinia'
@@ -341,9 +347,12 @@ import {
   getArmy, conditionString
 } from '@/util/util';
 import Magic from '@/components/magic.vue';
-import { readableNumber, readableStr } from '@/util/util';  
+import { readableNumber, readableStr, readableDate } from '@/util/util';  
 import { allowedMagicList } from 'shared/src/common';
 import { getAllUniqueItems, getSkillById, getUnitById } from 'engine/src/base/references';
+import { API } from '@/api/api';
+import { MageRank } from 'shared/types/common';
+import { BattleReportSummary } from 'shared/types/battle';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);
@@ -389,6 +398,40 @@ const uniqueItemEnchantments = computed(() => {
   const uniques = getAllUniqueItems().map(d => d.id);;
 
   return Object.keys(mageStore.mage!.items).filter(d => uniques.includes(d));
+});
+
+const mageSummary = ref<MageRank|null>(null);
+const damagedUntil = ref(0);
+const gameTable = mageStore.gameTable;
+
+onMounted(async () => {
+  if (!mageStore.mage) return;
+  const mageId = mageStore.mage.id;
+
+  const m = (await API.get(`mage/${mageId}`)).data;
+  mageSummary.value = m.mageSummary;
+  if (!mageSummary.value) return;
+
+  if (mageSummary.value.status === 'damaged') {
+    const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles', {
+      params: {
+        targetId: mageId,
+        window: 24
+      }
+    })).data;
+    const defends = result.battles.filter(d => d.defenderId === mageId).reverse();
+    while (defends.length) {
+      const popped = defends.shift()!;
+      const remainPercentage = defends.reduce((acc, br) => br.defenderPowerLossPercentage + acc, 0);
+
+      if (remainPercentage < gameTable!.war.damagedPercentage) {
+        // Add 24 hour
+        damagedUntil.value = popped?.timestamp + 24 * 60 * 60 * 1000; 
+        break;
+      }
+    }
+  }
+
 });
 
 </script>

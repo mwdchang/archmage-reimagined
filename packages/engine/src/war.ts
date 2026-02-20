@@ -184,7 +184,8 @@ const applyUnitEffect = (
 const applyDamageEffect = (
   origin: EffectOrigin,
   damageEffect: UnitDamageEffect,
-  affectedArmy: BattleStack[]
+  affectedArmy: BattleStack[],
+  objId: string
 ) => {
   const logs: BattleEffectLog[] = [];
   const casterMagic = origin.magic;
@@ -234,7 +235,8 @@ const applyDamageEffect = (
         id: origin.targetId,
         unitId: stack.unit.id,
         effectType: 'slain',
-        value: unitsLoss
+        value: unitsLoss,
+        objId: objId
       });
       console.log(`dealing unitDamage units=${unitsLoss}`);
       return;
@@ -413,7 +415,7 @@ const battleEffect = (
             applyUnitEffect(origin, unitAttrEffect, affectedArmy);
           } else if (effect.effectType === E.UnitDamageEffect) {
             const damageEffect = effect as UnitDamageEffect;
-            const damageLogs = applyDamageEffect(origin, damageEffect, affectedArmy);
+            const damageLogs = applyDamageEffect(origin, damageEffect, affectedArmy, activeEffect.objId);
             logs.push(...damageLogs);
           } else if (effect.effectType === E.UnitHealEffect) {
             const healEffect = effect as UnitHealEffect;
