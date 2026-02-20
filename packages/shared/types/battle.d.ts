@@ -83,7 +83,8 @@ export interface BattleEffectLog {
   id: number,
   unitId: string,
   effectType: string,
-  value: any
+  value: any,
+  objId?: string
 }
 
 export interface EngagementLog {
