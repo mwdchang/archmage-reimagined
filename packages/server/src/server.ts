@@ -320,10 +320,15 @@ router.get('/api/mage', async (req: any, res) => {
 
 router.delete('/api/mage', async (req: any, res) => {
   const mage = await engine.getMageByUser(req.user.username);
-  if (mage) {
-    await engine.removeMage(mage.id);
+
+  try {
+    if (mage) {
+      await engine.removeMage(mage);
+    }
+    res.status(200).json({});
+  } catch(err) {
+    res.status(400).json({ message: err.message });
   }
-  res.status(200).json({});
 });
 
 router.get('/api/mage/:id', async (req: any, res) => {
