@@ -40,12 +40,16 @@
         <table style="margin-bottom: 1rem">
           <tbody>
             <tr>
+              <td>Rank</td>
               <td>Mage</td>
               <td>Forts</td>
               <td>Land</td>
               <td>Power</td>
             </tr>
             <tr>
+              <td>
+                {{ mageStore.mage.rank }}
+              </td>
               <td>
                 <div class="row">
                   <Magic :magic="mageStore.mage.magic" small />
@@ -56,10 +60,10 @@
                 <div>{{ mageStore.mage.forts }} </div>
               </td>
               <td>
-                <div>{{ totalLand(mageStore.mage) }} </div>
+                <div>{{ readableNumber(totalLand(mageStore.mage)) }} </div>
               </td>
               <td>
-                <div>{{ totalNetPower(mageStore.mage) }} </div>
+                <div>{{ readableNumber(totalNetPower(mageStore.mage)) }} </div>
               </td>
             </tr>
           </tbody>
@@ -99,7 +103,7 @@ import Login from '@/components/login.vue';
 import CreateMage from '@/components/create-mage.vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
-import { readableDate } from '@/util/util';
+import { readableDate, readableNumber } from '@/util/util';
 import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia';
 import { totalLand, totalNetPower } from 'engine/src/base/mage';

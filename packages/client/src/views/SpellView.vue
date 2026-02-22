@@ -105,7 +105,7 @@
           <div v-if="tabView !== 'battle'">
             <label>Select spell</label>
             <select v-model="selected" v-if="spells.length > 0" style="max-width:175px" tabindex=1>
-              <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ maxCast(spell) }})</option>
+              <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})</option>
             </select>
 
             <div v-if="tabView === 'spell'">
@@ -146,7 +146,7 @@
 import { API } from '@/api/api';
 import { computed, onMounted, ref } from 'vue';
 import { useMageStore } from '@/stores/mage';
-import { getArmy, getSpells, spellDisplay } from '@/util/util';
+import { getArmy, getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
@@ -181,7 +181,6 @@ const spells = computed<Spell[]>(() => {
 });
 
 
-
 const castingSpells = computed(() => {
   return spells.value
     .filter(spell => {
@@ -210,13 +209,6 @@ const changeView = (v: string) => {
     showArmy.value = false;
   }
 };
-
-const maxCast = (spell: Spell) => {
-  const meta = spellDisplay(mageStore.mage!, spell);
-  if (!meta.castingCost) return 0;
-  return Math.floor(mageStore.mage!.currentMana / meta.castingCost);
-}
-
 
 const castSpell = async () => {
   if (!selected.value) return;

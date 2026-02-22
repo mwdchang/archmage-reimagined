@@ -47,7 +47,7 @@
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
           <label style="width:6rem">Spell</label>
           <select v-model="battleSpell">
-            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ maxCast(spell) }})  </option>
+            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})  </option>
           </select>
         </div>
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
@@ -84,8 +84,7 @@ import ActionButton from '@/components/action-button.vue';
 import { useMageStore } from '@/stores/mage';
 import { 
   getSpells, getItems, getBattleArmy, readableNumber,
-  BattleArmyItem, readableStr,
-  spellDisplay
+  BattleArmyItem, readableStr
 } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { Spell } from 'shared/types/magic';
@@ -131,15 +130,6 @@ const battleSpells = computed(() => {
 
   return result;
 });
-
-const maxCast = (spell: Spell) => {
-  if (spell.id === '') return 0;
-  const meta = spellDisplay(mageStore.mage!, spell);
-  if (!meta.castingCost) return 0;
-
-  return Math.floor(mageStore.mage!.currentMana / meta.castingCost);
-}
-
 
 const battleItems = computed(() => {
   const mage = mageStore.mage; 

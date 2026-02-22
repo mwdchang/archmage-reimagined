@@ -19,7 +19,7 @@ import {
   CastingEffect
 } from 'shared/types/effects';
 import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
-import { getActiveEffects } from './effects';
+import { ActiveEffect, getActiveEffects } from './effects';
 import { AllowedMagic } from 'shared/types/common';
 
 // Get normal max spell level, given the research tech tree
@@ -310,7 +310,7 @@ export const successCastingRate = (mage:Mage, spellId: string) => {
 }
 
 
-export const castingCost = (mage: Mage, spellId: string) => {
+export const castingCost = (mage: Mage, spellId: string, cachedActiveEffects?: ActiveEffect[]) => {
   const spell = getSpellById(spellId);
   const mageMagic = mage.magic as AllowedMagic;
   const spellMagic = spell.magic;
@@ -320,7 +320,9 @@ export const castingCost = (mage: Mage, spellId: string) => {
   castingCost *= costModifier;
 
   const base = castingCost;
-  const activeEffects = getActiveEffects(mage, E.CastingCostEffect)
+  const activeEffects = cachedActiveEffects ? 
+    cachedActiveEffects :
+    getActiveEffects(mage, E.CastingCostEffect);
 
   for (const activeEffect of activeEffects) { 
     for (const castingCostEffect of activeEffect.effects as CastingCostEffect[]) {
