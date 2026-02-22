@@ -428,6 +428,17 @@ WHERE username = '${user.username}'
     return mage;
   }
 
+  async removeMage(id: number): Promise<void> {
+    // TODO: Transfer mage to graveyard
+    await this.db.query(`
+      DELETE from rank where id = ${id}
+    `);
+    await this.db.query(`
+      DELETE from mage where id = ${id}
+    `);
+    return;
+  }
+
   async getMageByUser(username: string) {
     const result = await this.db.query<MageTable>(`
       SELECT mage from mage where username = '${username}'

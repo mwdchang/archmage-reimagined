@@ -47,6 +47,7 @@ export abstract class DataAdapter {
   abstract getAllMages(): Promise<Mage[]>;
   abstract updateMage(mage: Mage): Promise<void>
   abstract getMage(id: number): Promise<Mage>
+  abstract removeMage(id: number): Promise<void>
 
   // Enchants
   abstract setEnchantments(enchantments: Enchantment[]): Promise<void>

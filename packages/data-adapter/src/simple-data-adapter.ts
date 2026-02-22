@@ -140,6 +140,12 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.mageTable[index];
   }
 
+  async removeMage(id: number) {
+    this.rankTable = this.rankTable.filter(d => d.id !== id);
+    this.mageTable = this.mageTable.filter(d => d.id !== id);
+    return;
+  }
+
   async getMageByUser(username: string) {
     const mage = this.mageTable.find(d => d.name === username);
     return mage;

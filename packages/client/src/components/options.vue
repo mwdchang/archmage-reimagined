@@ -25,9 +25,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ActionButton from './action-button.vue';
+import { BattleReportSummary } from 'shared/types/battle';
+import { API } from '@/api/api';
+import { useMageStore } from '@/stores/mage';
+import { useRouter } from 'vue-router';
 
 const confirmDelete = ref(false);
+const mageStore = useMageStore();
+const router = useRouter();
 
 const deleteMage = async () => {
+  if (!mageStore.mage) return;
+
+  const result = (await API.get<{ battles: BattleReportSummary[] }>('/mage-battles', {
+    params: {
+      targetId: mageStore.mage.id,
+      window: 24
+    }
+  })).data;
+
+  const hasBloodOnHand = result.battles.some(d => d.attackerId === mageStore.mage!.id);
+  if (hasBloodOnHand) {
+    return;
+  }
+
+  const res = await API.delete('/mage');
+  mageStore.setMage(null);
+  router.push({ name: 'home' });
 }
 </script>

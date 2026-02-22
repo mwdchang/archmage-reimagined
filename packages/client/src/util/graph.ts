@@ -11,8 +11,8 @@ export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
     ranksep: 95,
-    marginx: 20,
-    marginy: 40
+    marginx: 0,
+    marginy: 0
   });
   g.setDefaultEdgeLabel(function() { return {}; });
 
@@ -41,4 +41,31 @@ export const layoutSkillGraph = (skillGraph: SkillGraph) => {
   // Run algorithm
   dagre.layout(g);
   return g;
+}
+
+export const dagreBoundingBox = (g: dagre.graphlib.Graph) => {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  g.nodes().forEach(nodeId => {
+    const node = g.node(nodeId);
+    const left = node.x - node.width / 2;
+    const right = node.x + node.width / 2;
+    const top = node.y - node.height / 2;
+    const bottom = node.y + node.height / 2;
+
+    if (left < minX) minX = left;
+    if (top < minY) minY = top;
+    if (right > maxX) maxX = right;
+    if (bottom > maxY) maxY = bottom;
+  });
+  
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY
+  };
 }
