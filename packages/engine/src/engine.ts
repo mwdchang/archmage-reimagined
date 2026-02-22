@@ -2043,6 +2043,10 @@ class Engine {
     return this.adapter.getMage(id);
   }
 
+  async removeMage(id: number) {
+    return this.adapter.removeMage(id);
+  }
+
   async getMageSummary(id: number) {
     const m = await this.getMage(id);
     return {

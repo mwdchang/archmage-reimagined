@@ -318,6 +318,14 @@ router.get('/api/mage', async (req: any, res) => {
   res.status(200).json({ mage });
 });
 
+router.delete('/api/mage', async (req: any, res) => {
+  const mage = await engine.getMageByUser(req.user.username);
+  if (mage) {
+    await engine.removeMage(mage.id);
+  }
+  res.status(200).json({});
+});
+
 router.get('/api/mage/:id', async (req: any, res) => {
   const id = +(req.params.id);
   const mage = await engine.getMageSummary(id);

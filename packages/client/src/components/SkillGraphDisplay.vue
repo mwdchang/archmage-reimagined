@@ -8,7 +8,7 @@
 import * as d3 from 'd3';
 import { SkillGraph } from 'shared/types/skills';
 import { onMounted, ref, watch } from 'vue';
-import { layoutSkillGraph } from '@/util/graph';
+import { layoutSkillGraph, dagreBoundingBox } from '@/util/graph';
 import { Mage } from 'shared/types/mage';
 import { getSkillById } from 'engine/src/base/references';
 import { readableStr } from '@/util/util';
@@ -112,13 +112,52 @@ function applyGlowFilter(svg: d3.Selection<SVGSVGElement, any, any, any>, id: st
 
 const refresh = () => {
   const layout = layoutSkillGraph(props.graph);
+  const bbox = dagreBoundingBox(layout);
+
+  // add some paddings
+  // bbox.x -= 10;
+  // bbox.y -= 10;
+  // bbox.width += 10;
+  // bbox.height += 10;
+
+  const WW = 36 * 20;
+  const HH = 38 * 20;
+
+  if (bbox.width < WW) {
+    const offset = 0.5 * (WW - bbox.width);
+    layout.nodes().forEach(nodeId => {
+      const node = layout.node(nodeId);
+      node.x += offset;
+    });
+    layout.edges().forEach(edgeId => {
+      const edge = layout.edge(edgeId);
+      edge.points.forEach(p => {
+        p.x += offset;
+      });
+    });
+  }
+
+  if (bbox.height < HH) {
+    const offset = 0.5 * (HH - bbox.width);
+    layout.nodes().forEach(nodeId => {
+      const node = layout.node(nodeId);
+      node.y += offset;
+    });
+    layout.edges().forEach(edgeId => {
+      const edge = layout.edge(edgeId);
+      edge.points.forEach(p => {
+        p.y += offset;
+      });
+    });
+  }
+
 
   d3.select(container.value).selectAll('*').remove();
   const svg = d3.select(container.value)
     .append('svg')
     .attr('width', '100%')
     .attr('height', '100%')
-    .attr('viewBox', `0 0 ${36 * 20} ${38 * 20}`)
+    .attr('viewBox', `0 0 ${WW} ${HH}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
 
