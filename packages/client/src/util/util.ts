@@ -12,9 +12,12 @@ import { Spell } from 'shared/types/magic';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
 import { castingCost } from 'engine/src/magic';
-import { getActiveEffects } from 'engine/src/effects';
+import { ActiveEffect, getActiveEffects } from 'engine/src/effects';
 import { allowedEffect as E } from 'shared/src/common';
 
+
+
+let activEffects: ActiveEffect[] = [];
 
 export interface MageItem {
   id: string,
@@ -23,12 +26,12 @@ export interface MageItem {
   amount: number
 }
 
-export const spellDisplay = (mage: Mage, spell: Spell) => {
+const spellDisplay = (mage: Mage, spell: Spell) => {
   return {
     id: spell.id,
     magic: spell.magic,
     name: spell.name,
-    castingCost: castingCost(mage, spell.id),
+    castingCost: castingCost(mage, spell.id, activEffects),
     castingTurn: spell.castingTurn,
     attributes: spell.attributes
   };
@@ -37,6 +40,8 @@ export const spellDisplay = (mage: Mage, spell: Spell) => {
 export const getSpells = (mage: Mage) => {
   if (!mage) return [];
   const result: any = [];
+
+  activEffects = getActiveEffects(mage, E.CastingCostEffect);
 
   for (const magic of allowedMagicList) {
     mage.spellbook[magic].forEach(spellId => {

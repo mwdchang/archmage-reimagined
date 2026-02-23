@@ -37,7 +37,7 @@
     "description": "Reduce spell casting cost",
     "maxLevel": 5,
     "prereqs": {
-      "spellMastery": 6
+      "spellMastery": 3
     },
     "effects": [
       {
@@ -47,7 +47,7 @@
         "filters": null,
         "trigger": {
           "min": 2,
-          "max": 5
+          "max": 4
         },
         "effects": [
           {
@@ -57,19 +57,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 4000, "max": 6000 }
+                "value": { "min": 20000, "max": 30000 }
               },
               "verdant": {
-                "value": { "min": 4000, "max": 6000 }
+                "value": { "min": 20000, "max": 30000 }
               },
               "eradication": {
-                "value": { "min": 4000, "max": 6000 }
+                "value": { "min": 20000, "max": 30000 }
               },
               "nether": {
-                "value": { "min": 4000, "max": 6000 }
+                "value": { "min": 20000, "max": 30000 }
               },
               "phantasm": {
-                "value": { "min": 4000, "max": 6000 }
+                "value": { "min": 20000, "max": 30000 }
               }
             }
           }

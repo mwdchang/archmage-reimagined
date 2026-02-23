@@ -2043,6 +2043,17 @@ class Engine {
     return this.adapter.getMage(id);
   }
 
+  async removeMage(mage: Mage) {
+    const res = await this.getMageBattles(mage, { 
+      targetId: mage.id,
+      window: 24 
+    })
+    if (res.some(d => d.attackerId === mage.id)) {
+      throw new Error('Cannot leave Terra with blood on hands');
+    }
+    return this.adapter.removeMage(mage.id);
+  }
+
   async getMageSummary(id: number) {
     const m = await this.getMage(id);
     return {

@@ -37,8 +37,8 @@
         "targetType": "random",
         "filters": null,
         "trigger": {
-          "min": 2,
-          "max": 5
+          "min": 3,
+          "max": 7
         },
         "effects": [
           {
@@ -48,19 +48,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 4000, "max": 4000 }
+                "value": { "min": 9000, "max": 11000 }
               },
               "verdant": {
-                "value": { "min": 4000, "max": 4000 }
+                "value": { "min": 9000, "max": 11000 }
               },
               "eradication": {
-                "value": { "min": 4000, "max": 4000 }
+                "value": { "min": 9000, "max": 11000 }
               },
               "nether": {
-                "value": { "min": 4000, "max": 4000 }
+                "value": { "min": 9000, "max": 11000 }
               },
               "phantasm": {
-                "value": { "min": 4000, "max": 4000 }
+                "value": { "min": 9000, "max": 11000 }
               }
             }
           }

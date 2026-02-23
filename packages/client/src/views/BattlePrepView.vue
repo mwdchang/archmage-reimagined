@@ -47,13 +47,13 @@
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
           <label style="width:6rem">Spell</label>
           <select v-model="battleSpell">
-            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }}</option>
+            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})  </option>
           </select>
         </div>
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
           <label style="width:6rem">Item</label>
           <select v-model="battleItem">
-            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
           </select>
         </div>
 
@@ -87,6 +87,7 @@ import {
   BattleArmyItem, readableStr
 } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
+import { Spell } from 'shared/types/magic';
 
 const mageStore = useMageStore();
 const router = useRouter();

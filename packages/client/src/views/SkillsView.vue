@@ -21,10 +21,6 @@
       </div>
     </div>
 
-    <div style="margin-bottom: 0.5rem">
-    </div>
-
-
     <!-- Tech tree/graph -->
     <section v-if="selectedGraph">
       <div v-if="errorStr" class="error" style="position: absolute">{{ errorStr }}</div>
