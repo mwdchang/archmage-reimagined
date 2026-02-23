@@ -21,19 +21,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 3000, "max": 4000 }
+                "value": { "min": 10000, "max": 20000 }
               },
               "verdant": {
-                "value": { "min": 3000, "max": 4000 }
+                "value": { "min": 10000, "max": 20000 }
               },
               "eradication": {
-                "value": { "min": 3000, "max": 4000 }
+                "value": { "min": 10000, "max": 20000 }
               },
               "nether": {
-                "value": { "min": 3000, "max": 4000 }
+                "value": { "min": 10000, "max": 20000 }
               },
               "phantasm": {
-                "value": { "min": 3000, "max": 4000 }
+                "value": { "min": 10000, "max": 20000 }
               }
             }
           }
