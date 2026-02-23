@@ -11,7 +11,8 @@
         </div>
       </div>
     </div>
-    <table v-if="currentResearch"> 
+
+    <table v-if="currentResearch && hasResearchRemaining"> 
       <tbody>
         <tr>
           <td colspan="2">&nbsp;</td>
@@ -41,8 +42,11 @@
         </tr>
       </tbody>
     </table>
+    <section v-else>
+      <p>You have completed researching all spells in your school of magic</p>
+    </section>
 
-    <section class="form" style="margin-top: 1rem">
+    <section v-if="hasResearchRemaining" class="form" style="margin-top: 1rem">
       <label>Spend turns to research faster</label>
       <input type="number" v-model="turns" style="width: 6rem" />
       <div class="row" style="align-items: baseline">
@@ -88,6 +92,11 @@ const itemRate = computed(() => {
 });
 
 const currentResearch = ref(mageStore.mage!.currentResearch);
+const hasResearchRemaining = computed(() => {
+  return Object.keys(currentResearch.value).reduce((acc, key) => {
+    return acc + currentResearch.value[key] ? 1 : 0;
+  }, 0);
+});
 
 const focusResearch = ref(mageStore.mage!.focusResearch? true : false);
 const turns = ref(0);
