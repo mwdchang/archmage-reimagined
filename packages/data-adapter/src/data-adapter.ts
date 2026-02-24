@@ -48,6 +48,7 @@ export abstract class DataAdapter {
   abstract updateMage(mage: Mage): Promise<void>
   abstract getMage(id: number): Promise<Mage>
   abstract removeMage(id: number): Promise<void>
+  abstract findMages(searchStr: string): Promise<MageRank[]>
 
   // Enchants
   abstract setEnchantments(enchantments: Enchantment[]): Promise<void>

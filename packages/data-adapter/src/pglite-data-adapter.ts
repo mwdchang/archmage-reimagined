@@ -439,6 +439,15 @@ WHERE username = '${user.username}'
     return;
   }
 
+  async findMages(searchStr: string): Promise<MageRank[]> {
+    const result = await this.db.query<MageRank>(`
+      SELECT * from rank 
+      WHERE CAST(id AS TEXT) LIKE '%${searchStr}%'
+      OR LOWER(name) LIKE '%${searchStr}%'
+    `);
+    return result.rows.map(toCamelCase<MageRank>);
+  }
+
   async getMageByUser(username: string) {
     const result = await this.db.query<MageTable>(`
       SELECT mage from mage where username = '${username}'

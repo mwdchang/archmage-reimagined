@@ -146,6 +146,12 @@ export class SimpleDataAdapter extends DataAdapter {
     return;
   }
 
+  async findMages(searchStr: string): Promise<MageRank[]> {
+    return this.rankTable.filter(mage => {
+      return mage.id.toString().includes(searchStr) || mage.name.includes(searchStr);
+    });
+  }
+
   async getMageByUser(username: string) {
     const mage = this.mageTable.find(d => d.name === username);
     return mage;
