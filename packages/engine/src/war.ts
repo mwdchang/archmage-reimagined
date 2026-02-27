@@ -262,7 +262,8 @@ const applyDamageEffect = (
       id: origin.targetId,
       unitId: stack.unit.id,
       effectType: 'slain',
-      value: unitsLoss
+      value: unitsLoss,
+      objId: objId
     })
     console.log(`dealing rawDamage=${damage.toFixed(0)} actualDamage=${totalDamage.toFixed(0)} units=${unitsLoss}`);
   });
@@ -1314,9 +1315,11 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   // Resolve land losses
   ////////////////////////////////////////////////////////////////////////////////
   let unitsRemaining = 0;
-  battleReport.attacker.army.forEach(stack => {
-    if (stack.size > 0) unitsRemaining += stack.size;
-  });
+  unitsRemaining = battleReport.result.attacker.startingUnits - battleReport.result.attacker.unitsLoss;
+
+  // battleReport.attacker.army.forEach(stack => {
+  //   if (stack.size > 0) unitsRemaining += stack.size;
+  // });
   const landResult = calcLandLoss(defender, battleReport.attackType, unitsRemaining);
 
   Object.keys(landResult.landLoss).forEach(key => {

@@ -9,7 +9,7 @@
       @keydown.down.prevent="highlightNext"
       @keydown.up.prevent="highlightPrev"
       @keydown.enter.prevent="selectHighlighted"
-      placeholder="search target..."
+      placeholder="search..."
     />
 
     <ul v-if="showDropdown && filteredOptions.length" class="dropdown">
@@ -46,6 +46,7 @@ const props = defineProps<Props>();
 const searchStr = ref('')
 const showDropdown = ref(false)
 // const options = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape']
+// const options = ref<AutocompleteCandidate[]>([]);
 const filteredOptions = ref<AutocompleteCandidate[]>([])
 const highlightedIndex = ref(-1)
 
