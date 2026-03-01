@@ -32,7 +32,7 @@
             {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
-            <input type="number" v-model="item.bid" style="height: 1.6rem" /> 
+            <input type="number" v-model="item.bid" style="height: 1.6rem" @keyup.enter="emit('confirm')" /> 
           </div>
         </td>
       </tr>
@@ -54,6 +54,9 @@ const props = defineProps<{
   itemType: string, 
   showName: boolean
 }>()
+
+
+const emit = defineEmits(['confirm']);
 
 const mageStore = useMageStore();
 const mage = mageStore.mage!;

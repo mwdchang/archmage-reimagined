@@ -69,7 +69,7 @@
               :options-fn="searchMageRank" 
             />
             <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
-              <div style="font-weight: 600">{{ target.label }} (#{{ target.id}})</div>
+              <div>{{ target.label }} (#{{ target.id}})</div>
               <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
             </div>
 
