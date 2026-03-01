@@ -2054,6 +2054,11 @@ class Engine {
     return this.adapter.removeMage(mage.id);
   }
 
+  async findMages(searchStr: string) {
+    const results = await this.adapter.findMages(searchStr);
+    return results;
+  }
+
   async getMageSummary(id: number) {
     const m = await this.getMage(id);
     return {

@@ -10,7 +10,7 @@
     </div>
     <section> 
       <section class="form" style="width: 25rem">
-        <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld">
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld" @keyup.enter="geld">
         <ActionButton 
           :proxy-fn="geld"
           :label="'Geld'" />
@@ -38,6 +38,7 @@ const mageStore = useMageStore();
 
 const geldMsg = ref('');
 const errorStr = ref('');
+
 
 const geld = async () => {
   const { data, error } = await APIWrapper(() => {

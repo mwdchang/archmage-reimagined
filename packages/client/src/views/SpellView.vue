@@ -110,7 +110,19 @@
 
             <div v-if="tabView === 'spell'">
               <label>Target</label>
+              <!--
               <input type="text" v-model="target" tabindex=2 />
+              -->
+              <Autocomplete 
+                v-if="!target"
+                @selected-value="setAutoComplete"
+                :options-fn="searchMageRank" 
+              />
+              <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+                <div>{{ target.label }} (#{{ target.id}})</div>
+                <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
+              </div>
+
             </div>
 
             <label># of times</label>
@@ -155,6 +167,11 @@ import ImageProxy from '@/components/ImageProxy.vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/composables/useLayout';
 import { useEngine } from '@/composables/useEngine';
+import { MageRank } from 'shared/types/common';
+import { AutocompleteCandidate } from 'shared/src/common';
+import SvgIcon from '@/components/svg-icon.vue';
+import Autocomplete from '@/components/autocomplete.vue';
+
 
 const route = useRoute();
 
@@ -165,7 +182,7 @@ const { netUpkeepStatus } = useEngine();
 
 const selected = ref<string>('');
 const turns = ref<number>(1);
-const target = ref<string>('');
+const target = ref<AutocompleteCandidate | null>(null);
 
 const tabView = ref('summon');
 const showArmy = ref(false);
@@ -210,6 +227,20 @@ const changeView = (v: string) => {
   }
 };
 
+
+const searchMageRank = async (val: string) => {
+  const results = await API.get<MageRank[]>(`/search-mage?searchStr=${val}`);
+  return results.data.map(d => {
+    return { 
+      label: d.name, id: d.id.toString() 
+    };
+  });
+}
+
+const setAutoComplete = (val: any) => {
+  target.value = val;
+}
+
 const castSpell = async () => {
   if (!selected.value) return;
 
@@ -233,11 +264,19 @@ const castSpell = async () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   const targetId = route.query.targetId;
   if (targetId && +targetId > 0) {
     changeView('spell');
-    target.value = '' + targetId;
+    try {
+      const m = (await API.get<MageRank>(`mage/${targetId}`)).data;
+      target.value = {
+        id: '' + m.id,
+        label: m.name
+      };
+    } catch (err) {
+      target.value = null;
+    }
   }
 });
 
