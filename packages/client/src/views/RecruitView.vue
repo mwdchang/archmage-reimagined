@@ -55,7 +55,7 @@
             <select v-model="rselect">
               <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
             </select>
-            <input type="number" v-model="rsize" size="8">
+            <input type="number" v-model="rsize" size="8" @keyup.enter="addOrder" >
           </div>
 
           <button @click="addOrder">Add</button>
@@ -81,11 +81,9 @@
                   <svg-icon class="sicon" name="doubleCaretDown" size="1.25rem" @click="moveBottom(idx)" />
                 </div>
               </td>
-
             </tr>
           </table>
         </section>
-
       </div>
     </section>
   </main>

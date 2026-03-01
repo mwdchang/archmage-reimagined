@@ -48,7 +48,7 @@
 
     <section v-if="hasResearchRemaining" class="form" style="margin-top: 1rem">
       <label>Spend turns to research faster</label>
-      <input type="number" v-model="turns" style="width: 6rem" />
+      <input type="number" v-model="turns" style="width: 6rem" @keyup.enter="submitResearch" />
       <div class="row" style="align-items: baseline">
         <input type="checkbox" v-model="focusResearch" style="width:15px; height: 15px" />
         <label>&nbsp;Research all spells of this magic</label>
