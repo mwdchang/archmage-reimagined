@@ -26,16 +26,14 @@
 </template>
 
 <script setup lang="ts">
+import { AutocompleteCandidate } from 'shared/src/common';
 import { ref } from 'vue'
 
+
 const emit = defineEmits<{
-  (e: 'selected-value', value: string): void;
+  (e: 'selected-value', value: AutocompleteCandidate): void;
 }>()
 
-interface AutocompleteCandidate {
-  id: string;
-  label: string;
-}
 
 interface Props {
   optionsFn: (d: string) => Promise<AutocompleteCandidate[]>;
@@ -45,8 +43,6 @@ const props = defineProps<Props>();
 
 const searchStr = ref('')
 const showDropdown = ref(false)
-// const options = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape']
-// const options = ref<AutocompleteCandidate[]>([]);
 const filteredOptions = ref<AutocompleteCandidate[]>([])
 const highlightedIndex = ref(-1)
 
@@ -64,6 +60,7 @@ const filterOptions = async () => {
 const selectOption = (option: AutocompleteCandidate) => {
   searchStr.value = option.label;
   showDropdown.value = false;
+  emit('selected-value', option);
 }
 
 const hideDropdown = () => {
@@ -84,10 +81,10 @@ const highlightPrev = () => {
 const selectHighlighted = () => {
   if (filteredOptions.value.length === 1) {
     selectOption(filteredOptions.value[0]);
-    emit('selected-value', filteredOptions.value[0].id);
+    emit('selected-value', filteredOptions.value[0]);
   } else if (highlightedIndex.value >= 0) {
     selectOption(filteredOptions.value[highlightedIndex.value]);
-    emit('selected-value', filteredOptions.value[highlightedIndex.value].id);
+    emit('selected-value', filteredOptions.value[highlightedIndex.value]);
   }
 }
 </script>
