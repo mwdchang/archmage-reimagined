@@ -47,3 +47,9 @@ export enum StackType {
 export const BlackMarketId = -2;
 export const KingdomAdvisorId = -3;
 
+
+export interface AutocompleteCandidate {
+  id: string;
+  label: string;
+}
+

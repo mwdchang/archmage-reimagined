@@ -21,7 +21,7 @@
 
 
     <section v-if="bidItems.length > 0 && currentSelection !== 'item'">
-      <market-table v-model="bidItems" :item-type="type" :show-name="true" />
+      <market-table v-model="bidItems" :item-type="type" :show-name="true" @confirm="makeBid" />
       <div class="form">
         <ActionButton 
           :proxy-fn="makeBid"
@@ -51,7 +51,7 @@
             <td class="text-right">{{ readableNumber(item.price) }}</td>
             <td class="text-right">{{ item.size }}</td>
             <td>
-              <input type="number" v-model="item.sellAmt" style="height: 1.6rem; width: 5rem" /> 
+              <input type="number" v-model="item.sellAmt" style="height: 1.6rem; width: 5rem" @keyup.enter="sellItems" /> 
             </td>
           </tr>
         </tbody>
@@ -182,7 +182,7 @@ const refresh = async () => {
   }
 
   const temp = Object.entries(mageStore.mage!.items).map(entry => {
-    console.log(priceMap[entry[0]]);
+    // console.log(priceMap[entry[0]]);
     return {
       itemId: entry[0],
       size: entry[1] ,
@@ -227,6 +227,7 @@ const sellItems = async () => {
 }
 
 const makeBid = async () => {
+  console.log('>> !!');
   const gameTable = mageStore.gameTable!;
   const badBids = bidItems.value.filter(item => {
     return item.bid > 0 && item.bid <= item.marketItem.basePrice * (1 + gameTable.blackmarket.minimum);

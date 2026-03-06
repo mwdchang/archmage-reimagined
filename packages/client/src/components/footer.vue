@@ -39,6 +39,7 @@ const link = `https://github.com/mwdchang/archmage-reimagined/commit/${commitHas
   display: flex;
   justify-content: center;
   align-items: center;
+  border-top: 1px solid #333;
 }
 </style>
 

@@ -8,6 +8,7 @@ import { Mage } from 'shared/types/mage';
 import { nextResearch } from './magic';
 import { BlackMarketId } from 'shared/src/common';
 import { createLogger } from './logger';
+import { readableStr, readableNumber } from './util';
 
 export const priceIncrease = (base: number, winningBid: number) => {
   return base + gameTable.blackmarket.priceIncreaseFactor * (winningBid - base);
@@ -88,7 +89,7 @@ export const resolveWinningBids = async (
       winningMessageMap.set(bid.mageId, []);
     }
     const mage = mageMap.get(bid.mageId);
-    winningMessageMap.get(mage.id).push(`You won ${marketPrice.id} for ${bid.bid}`);
+    winningMessageMap.get(mage.id).push(`You won ${readableStr(marketPrice.id)} for ${readableNumber(bid.bid)}`);
 
     // Resolve item
     if (marketPrice.type === 'item') {

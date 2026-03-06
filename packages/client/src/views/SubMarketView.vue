@@ -17,6 +17,7 @@
       v-model="bidItems" 
       item-type="item"
       :show-name="false"
+      @confirm="makeBid"
     />
 
     <section class="form">

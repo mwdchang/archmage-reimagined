@@ -133,7 +133,7 @@
     <section>
       <div v-for="(log, idx) of preBattle.logs" :key="idx">
         <p v-if="log.effectType === 'slain'">
-          {{ nameById(log.id) }}'s {{ log.value }} {{ unitName(log.unitId) }} are slain
+          <span v-if="log.objId">({{log.objId}}) </span> {{ nameById(log.id) }}'s {{ log.value }} {{ unitName(log.unitId) }} are slain
         </p>
       </div>
     </section>

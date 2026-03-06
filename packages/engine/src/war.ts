@@ -262,7 +262,8 @@ const applyDamageEffect = (
       id: origin.targetId,
       unitId: stack.unit.id,
       effectType: 'slain',
-      value: unitsLoss
+      value: unitsLoss,
+      objId: objId
     })
     console.log(`dealing rawDamage=${damage.toFixed(0)} actualDamage=${totalDamage.toFixed(0)} units=${unitsLoss}`);
   });
@@ -515,6 +516,15 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
 
   const defenderHasArmy = defender.army.length > 0;
 
+  // Calculate for batte report
+  const attackerStartingUnits = attacker.army.reduce((v, stack) => {
+    return v + stack.size;
+  }, 0);
+
+  const defenderStartingUnits = defender.army.reduce((v, stack) => {
+    return v + stack.size;
+  }, 0);
+
 
   if (attacker.spellId) { 
     const result = attackerSpellResult(attacker, defender);
@@ -717,6 +727,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   // Sort out attacking order
   const battleOrders = calcBattleOrders(attackingArmy, defendingArmy);
 
+  // FIXME: early damage already calculated so size not accurate
   battleReport.attacker.army = _.cloneDeep(attackingArmy);
   battleReport.defender.army = _.cloneDeep(defendingArmy);
 
@@ -1177,17 +1188,13 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   const brD = battleReport.result.defender;
 
   // Starting army size
-  brA.startingUnits = battleReport.attacker.army.reduce((v, stack) => {
-    return v + stack.size;
-  }, 0);
+  brA.startingUnits = attackerStartingUnits;
   brA.armyNetPower = battleSummary.attacker.netPower;
   brA.armyNetPowerLoss = battleSummary.attacker.netPowerLoss;
   brA.unitsLoss = battleSummary.attacker.unitsLoss;
   brA.armyLoss = attackingArmy.map(d => ({id: d.unit.id, size: d.loss}));
 
-  brD.startingUnits = battleReport.defender.army.reduce((v, stack) => {
-    return v + stack.size;
-  }, 0);
+  brD.startingUnits = defenderStartingUnits;
   brD.armyNetPower = battleSummary.defender.netPower;
   brD.armyNetPowerLoss = battleSummary.defender.netPowerLoss;
   brD.unitsLoss = battleSummary.defender.unitsLoss;
@@ -1314,9 +1321,11 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   // Resolve land losses
   ////////////////////////////////////////////////////////////////////////////////
   let unitsRemaining = 0;
-  battleReport.attacker.army.forEach(stack => {
-    if (stack.size > 0) unitsRemaining += stack.size;
-  });
+  unitsRemaining = battleReport.result.attacker.startingUnits - battleReport.result.attacker.unitsLoss;
+
+  // battleReport.attacker.army.forEach(stack => {
+  //   if (stack.size > 0) unitsRemaining += stack.size;
+  // });
   const landResult = calcLandLoss(defender, battleReport.attackType, unitsRemaining);
 
   Object.keys(landResult.landLoss).forEach(key => {

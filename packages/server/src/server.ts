@@ -331,6 +331,19 @@ router.delete('/api/mage', async (req: any, res) => {
   }
 });
 
+
+router.get('/api/search-mage', async (req: any, res) => {
+  const mage = await engine.getMageByUser(req.user.username);
+  if (!mage) {
+    res.status(401).json({ message: 'Must login to access search capabilities' });
+  }
+
+  const searchStr = req.query.searchStr;
+  const results = await engine.findMages(searchStr);
+  res.status(200).json(results);
+});
+
+
 router.get('/api/mage/:id', async (req: any, res) => {
   const id = +(req.params.id);
   const mage = await engine.getMageSummary(id);

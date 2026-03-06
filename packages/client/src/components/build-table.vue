@@ -18,7 +18,9 @@
         <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
         <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
         <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
-        <td> <input type="number" v-model="userInput[bType.id]" style="height: 1.6rem"> </td>
+        <td> 
+          <input type="number" v-model="userInput[bType.id]" style="height: 1.6rem" @keyup.enter="build">
+        </td>
       </tr>
     </tbody>
   </table>

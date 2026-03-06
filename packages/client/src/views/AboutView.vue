@@ -230,7 +230,7 @@ onMounted(async () => {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
-  gap: 0.6rem 1.25rem; /* Optional spacing between columns */
+  gap: 0.6rem 1.0rem; /* Optional spacing between columns */
 }
 
 .grid-item {

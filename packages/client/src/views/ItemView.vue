@@ -59,7 +59,19 @@
             </select>
 
             <label>Target</label>
+            <!--
             <input type="text" v-model="target" />
+            -->
+
+            <Autocomplete 
+              v-if="!target"
+              @selected-value="setAutoComplete"
+              :options-fn="searchMageRank" 
+            />
+            <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+              <div>{{ target.label }} (#{{ target.id}})</div>
+              <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
+            </div>
 
             <label># of times</label>
             <input type="number" v-model="turns" />
@@ -101,14 +113,18 @@ import { storeToRefs } from 'pinia';
 import { useMageStore } from '@/stores/mage';
 import { getItems } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
+import Autocomplete from '@/components/autocomplete.vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/composables/useLayout';
+import { MageRank } from 'shared/types/common';
+import { AutocompleteCandidate } from 'shared/src/common';
+import SvgIcon from '@/components/svg-icon.vue';
 
 const route = useRoute();
 
 const selected = ref('');
 const turns = ref<number>(1);
-const target = ref<string>('');
+const target = ref<AutocompleteCandidate | null>(null);
 const itemResult = ref<any[]>([]);
 
 const tabView = ref('instant');
@@ -148,6 +164,20 @@ const usableItems = computed(() => {
   });
 });
 
+
+const searchMageRank = async (val: string) => {
+  const results = await API.get<MageRank[]>(`/search-mage?searchStr=${val}`);
+  return results.data.map(d => {
+    return { 
+      label: d.name, id: d.id.toString() 
+    };
+  });
+}
+
+const setAutoComplete = (val: any) => {
+  target.value = val;
+}
+
 const useItem = async () => {
   const res = (await API.post('item', { 
     itemId: selected.value, 
@@ -164,11 +194,20 @@ const useItem = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   const targetId = route.query.targetId;
   if (targetId && +targetId > 0) {
     changeView('instant');
-    target.value = '' + targetId;
+
+    try {
+      const m = (await API.get<MageRank>(`mage/${targetId}`)).data;
+      target.value = {
+        id: '' + m.id,
+        label: m.name
+      };
+    } catch (err) {
+      target.value = null;
+    }
   }
 });
 

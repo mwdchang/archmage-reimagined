@@ -11,7 +11,7 @@
     </div>
     <section> 
       <div class="form">
-        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge">
+        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge" @keyup.enter="charge">
         <ActionButton 
           :proxy-fn="charge"
           :label="'Charge'" />

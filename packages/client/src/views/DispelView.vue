@@ -65,7 +65,7 @@
     <br/>
 
     <section class="form">
-      <input type="number" v-model="dispelMana" />
+      <input type="number" v-model="dispelMana" @keyup.enter="dispelEnchant" />
       <label>Success rate: {{ (100 * dispelProb).toFixed(2) }}%</label>
       <ActionButton 
         :proxy-fn="dispelEnchant"

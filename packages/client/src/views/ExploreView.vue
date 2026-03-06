@@ -12,8 +12,7 @@
     </div>
     <section> 
       <div class="form">
-        <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
-
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore" @keyup.enter="exploreLand">
         <ActionButton 
           :proxy-fn="exploreLand"
           :label="'Explore'" />
