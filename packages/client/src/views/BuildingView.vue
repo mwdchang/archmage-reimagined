@@ -5,13 +5,6 @@
       <div>
         <div class="section-header">Build</div>
         <div>
-          - Towns/Farms: Population and unit space
-          <br>- Barracks: Recruitment rate
-          <br>- Nodes: Mana production and capacity
-          <br>- Guilds: Research and item generation
-          <br>- Forts: Defence bonus
-          <br>- Barriers: Spell resistance
-          <br><br>
           You have {{ readableNumber(mageStore.mage!.wilderness) }} acres of wilderness.
         </div>
       </div>
