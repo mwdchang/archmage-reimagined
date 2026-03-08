@@ -6,6 +6,10 @@
         <div class="section-header">Item inventory</div>
         <div>
           You have {{ numItems }} items in your inventory storage.
+          <br>
+          <br>
+          You can sell your surplus items in 
+          <router-link :to="{ name: 'market', params: { type: 'sell' }}"> Peddler's Lane </router-link>
         </div>
       </div>
     </div>

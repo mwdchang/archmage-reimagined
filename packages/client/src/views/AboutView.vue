@@ -230,20 +230,18 @@ onMounted(async () => {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
-  gap: 0.6rem 1.0rem; /* Optional spacing between columns */
+  gap: 0.5rem 0.5rem; /* Optional spacing between columns */
 }
 
 .grid-item {
   /* background-color: #8bc34a; */
   background-color: #212120;
-  padding: 0.45rem 1rem;
-  /* color: white; */
+  padding: 0.5rem 0.75rem;
   text-align: center;
   border-radius: 0.25rem;
   /* transition: background-color 0.3s ease;  */
   transition: filter 0.4s ease;
 }
-
 
 .grid-item:hover {
   filter: brightness(1.2);
@@ -259,15 +257,4 @@ onMounted(async () => {
   100% {  opacity: 1; }
 }
 
-/*
-.unread-badge {
-  box-shadow: 0 0 0px red;
-  animation: glow 1.5s infinite;
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 0px red; }
-  50% { box-shadow: 0 0 8px red; }
-}
-*/
 </style>
