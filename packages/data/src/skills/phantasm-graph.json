@@ -34,7 +34,7 @@
     "id": "blizzard",
     "name": "Blizzard",
     "magic": "phantasm",
-    "description": "Reduce spell casting cost",
+    "description": "Conjure ice shards to strike your opponents from above",
     "maxLevel": 5,
     "prereqs": {
       "spellMastery": 3
@@ -57,19 +57,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 20000, "max": 30000 }
+                "value": { "min": 40000, "max": 60000 }
               },
               "verdant": {
-                "value": { "min": 20000, "max": 30000 }
+                "value": { "min": 40000, "max": 60000 }
               },
               "eradication": {
-                "value": { "min": 20000, "max": 30000 }
+                "value": { "min": 40000, "max": 60000 }
               },
               "nether": {
-                "value": { "min": 20000, "max": 30000 }
+                "value": { "min": 40000, "max": 60000 }
               },
               "phantasm": {
-                "value": { "min": 20000, "max": 30000 }
+                "value": { "min": 40000, "max": 60000 }
               }
             }
           }

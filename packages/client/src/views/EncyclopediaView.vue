@@ -98,7 +98,8 @@
               </router-link>
             </div>
           </td>
-          <td>
+          <td style="max-width: 25rem">
+            {{ skill.description }}
           </td>
         </tr>
       </tbody>

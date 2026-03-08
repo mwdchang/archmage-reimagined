@@ -3,7 +3,7 @@
     "id": "firstAid",
     "name": "First Aid",
     "magic": "ascendant",
-    "description": "First aid",
+    "description": "Provides healing support for your armies in battle",
     "maxLevel": 10,
     "prereqs": {},
     "effects": [
@@ -35,7 +35,7 @@
     "id": "consecratedGround",
     "name": "Consecrated Ground",
     "magic": "ascendant",
-    "description": "",
+    "description": "Your units fight better on lands that have been blessed",
     "maxLevel": 10,
     "prereqs": {
       "firstAid": 5
@@ -55,6 +55,7 @@
           {
             "effectType": "UnitAttrEffect",
             "checkResistance": false,
+            "activation": "defence",
             "attributes": {
               "hitPoints": {
                 "rule": "addPercentageBase",

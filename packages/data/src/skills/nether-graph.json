@@ -10,7 +10,7 @@
       {
         "effectType": "BattleEffect",
         "target": "opponent",
-        "targetType": "random",
+        "targetType": "all",
         "filters": null,
         "trigger": null,
         "effects": [
@@ -21,19 +21,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 10000, "max": 20000 }
+                "value": { "min": 30000, "max": 40000 }
               },
               "verdant": {
-                "value": { "min": 10000, "max": 20000 }
+                "value": { "min": 30000, "max": 40000 }
               },
               "eradication": {
-                "value": { "min": 10000, "max": 20000 }
+                "value": { "min": 30000, "max": 40000 }
               },
               "nether": {
-                "value": { "min": 10000, "max": 20000 }
+                "value": { "min": 30000, "max": 40000 }
               },
               "phantasm": {
-                "value": { "min": 10000, "max": 20000 }
+                "value": { "min": 30000, "max": 40000 }
               }
             }
           }
@@ -45,7 +45,7 @@
     "id": "blight",
     "name": "Blight",
     "magic": "nether",
-    "description": "Blight transfer from amry to amry, destroying crops and farming land",
+    "description": "Blight transfer from army to army, destroying crops and farming land",
     "maxLevel": 10,
     "prereqs": {
       "miasma": 3
