@@ -3,7 +3,7 @@
     "id": "bountifulHarvest",
     "name": "Bountiful Harvest",
     "magic": "verdant",
-    "description": "Foreward outpost",
+    "description": "Your kingdom is enriched by surplus harvests",
     "maxLevel": 10,
     "prereqs": {},
     "effects": [
@@ -25,7 +25,7 @@
     "id": "forestWatch",
     "name": "Forest Watch",
     "magic": "verdant",
-    "description": "Foreward outpost",
+    "description": "Elite archers can snipe your enemies before they come into range",
     "maxLevel": 10,
     "prereqs": {
       "bountifulHarvest": 2
@@ -48,19 +48,19 @@
             "rule": "direct",
             "magic": {
               "ascendant": {
-                "value": { "min": 9000, "max": 11000 }
+                "value": { "min": 15000, "max": 31000 }
               },
               "verdant": {
-                "value": { "min": 9000, "max": 11000 }
+                "value": { "min": 15000, "max": 31000 }
               },
               "eradication": {
-                "value": { "min": 9000, "max": 11000 }
+                "value": { "min": 15000, "max": 31000 }
               },
               "nether": {
-                "value": { "min": 9000, "max": 11000 }
+                "value": { "min": 15000, "max": 31000 }
               },
               "phantasm": {
-                "value": { "min": 9000, "max": 11000 }
+                "value": { "min": 15000, "max": 31000 }
               }
             }
           }
@@ -72,7 +72,7 @@
     "id": "animalMastery",
     "name": "Animal Mastery",
     "magic": "verdant",
-    "description": "",
+    "description": "Tougher animals",
     "maxLevel": 20,
     "prereqs": {
       "bountifulHarvest": 4

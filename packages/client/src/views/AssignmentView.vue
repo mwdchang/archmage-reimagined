@@ -14,7 +14,9 @@
       <div class="row" style="align-items: baseline">
         <label style="width: 12rem"> Spell </label>
         <select v-model="selectedSpellId" @change="setAssignment()">
-          <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost ) }}) </option>
+          <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">
+            {{ spell.name }} <span v-if="spell.id"> ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost ) }}) </span> 
+          </option>
         </select>
       </div>
 
@@ -28,7 +30,9 @@
       <div class="row" style="align-items: baseline">
         <label style="width: 12rem"> Item </label>
         <select v-model="selectedItemId" @change="setAssignment()">
-          <option v-for="item of usableItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
+          <option v-for="item of usableItems" :key="item.id" :value="item.id">
+            {{ item.name }} <span v-if="item.id"> ({{ item.amount }}) </span>
+          </option>
         </select>
       </div>
 

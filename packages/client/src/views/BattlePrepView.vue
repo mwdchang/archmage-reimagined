@@ -47,13 +47,17 @@
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
           <label style="width:6rem">Spell</label>
           <select v-model="battleSpell">
-            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})  </option>
+            <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">
+              {{ spell.name }} <span v-if="spell.id">({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})</span>  
+            </option>
           </select>
         </div>
         <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
           <label style="width:6rem">Item</label>
           <select v-model="battleItem">
-            <option v-for="item of battleItems" :key="item.id" :value="item.id">{{ item.name }} ({{ item.amount }})</option>
+            <option v-for="item of battleItems" :key="item.id" :value="item.id">
+              {{ item.name }} <span v-if="item.id">({{ item.amount }})</span>
+            </option>
           </select>
         </div>
 

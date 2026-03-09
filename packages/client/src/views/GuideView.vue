@@ -12,7 +12,9 @@
     <section class="row" style="align-items: baseline; width: 50rem">
       <div style="width: 8rem">
         <div class="doc-nav" :class="{ 'active': key === 'quickstart' }" @click="openMarkdown('quickstart')">Quick Start</div>
+        <div class="doc-nav" :class="{ 'active': key === 'kingdom' }" @click="openMarkdown('kingdom')">Kingdom</div>
         <div class="doc-nav" :class="{ 'active': key === 'battle' }" @click="openMarkdown('battle')">Battle</div>
+        <div class="doc-nav" :class="{ 'active': key === 'skills' }" @click="openMarkdown('skills')">Skills</div>
       </div>
       <div class="markdown-body" style="margin-left: 1rem; flex: 1; min-height: 10rem" v-html="guide" />
     </section>
