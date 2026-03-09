@@ -5,7 +5,7 @@ export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
   turnRate: 120, // *fixme: testing*
-  endTurn: 4000, // *fixme: testing*
+  endTurn: 16000, // *fixme: testing*
   apprenticeTurn: 120,
 
   itemGenerationRate: 0.08,
