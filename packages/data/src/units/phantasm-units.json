@@ -628,7 +628,7 @@
     },
     "upkeepCost": {
       "geld": 6400,
-      "mana": 60,
+      "mana": 120,
       "population": 0.0 
     },
     "spellResistances": {

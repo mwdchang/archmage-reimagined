@@ -25,7 +25,7 @@
     },
     "upkeepCost": {
       "geld": 1.20,
-      "mana": 0.06,
+      "mana": 0.03,
       "population": 0 
     },
     "spellResistances": {
@@ -133,7 +133,7 @@
     },
     "upkeepCost": {
       "geld": 1.00,
-      "mana": 0.02,
+      "mana": 0.01,
       "population": 0 
     },
     "spellResistances": {
@@ -168,7 +168,7 @@
     "name": "Hell Hound",
     "magic": "eradication",
     "description": "Hell hounds are fire-breathing canines of extra-planar origin that guard the borders of Hell. They resemble huge hounds with glowing red eyes, sharp teeth, and patches of rust-red and red-brown skin. In combat, they breathe fire at their opponents before engaging their sharp teeth.",
-    "powerRank": 150,
+    "powerRank": 159,
     "hitPoints": 700,
     "race": ["demon"],
     "attributes": ["summon"],
@@ -578,7 +578,7 @@
     },
     "upkeepCost": {
       "geld": 130.0,
-      "mana": 3.0,
+      "mana": 1.5,
       "population": 0 
     },
     "spellResistances": {
