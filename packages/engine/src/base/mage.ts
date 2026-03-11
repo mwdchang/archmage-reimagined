@@ -104,10 +104,8 @@ export const createMage = (id: number, name: string, magic: string, override?:Pa
 // }
 
 
-export const totalNetPower = (mage: Mage) => {
+export const totalNetPowerLand = (mage: Mage) => {
   let netpower = 0;
-
-  // Land
   netpower += 1000 * (
     mage.wilderness +
     mage.farms + 
@@ -120,8 +118,11 @@ export const totalNetPower = (mage: Mage) => {
     mage.barriers);
   netpower += mage.forts * 19360;
   netpower += mage.barriers * 6500;
+  return netpower;
+};
 
-  // Mana, geld, items ... etc 
+export const totalNetPowerResources = (mage: Mage) => {
+  let netpower = 0;
   netpower += Math.floor(0.05 * mage.currentMana);
   netpower += Math.floor(0.0005 * mage.currentGeld);
   netpower += Math.floor(0.02 * mage.currentPopulation);
@@ -131,12 +132,31 @@ export const totalNetPower = (mage: Mage) => {
     if (!mage.items[key]) return;
     netpower += 1000 * mage.items[key];
   });
+  return netpower;
+};
 
-  // Army
+
+export const totalNetPowerArmy = (mage: Mage) => {
+  let netpower = 0;
   mage.army.forEach(stack => {
     const u = getUnitById(stack.id);
     netpower += u.powerRank * stack.size;
   });
+  return netpower;
+};
+
+
+export const totalNetPower = (mage: Mage) => {
+  let netpower = 0;
+
+  // Land
+  netpower += totalNetPowerLand(mage);
+
+  // Mana, geld, items ... etc 
+  netpower += totalNetPowerResources(mage);
+
+  // Army
+  netpower += totalNetPowerArmy(mage);
 
   // TODO: allies and heroes??
   return netpower;
