@@ -21,7 +21,6 @@
             :label="'Mark all read'" />
         </div>
 
-
       </div>
     </section>
 
@@ -135,6 +134,7 @@ import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
 import { MageRank, Mail } from 'shared/types/common';
 import { useMageStore } from '@/stores/mage';
+import { useRoute } from 'vue-router';
 import ActionButton from './action-button.vue';
 import { readableDate } from '@/util/util';
 import { AutocompleteCandidate, BlackMarketId } from 'shared/src/common';
@@ -142,6 +142,7 @@ import Autocomplete from './autocomplete.vue';
 import SvgIcon from './svg-icon.vue';
 
 const mageStore = useMageStore();
+const route = useRoute();
 
 const currentView = ref('listView');
 const targetMage = ref<AutocompleteCandidate | null>(null);
@@ -192,6 +193,9 @@ const searchMageRank = async (val: string) => {
 const compose = async () => {
   currentView.value = 'composeView';
   currentMail.value = blankMail;
+
+  currentMail.value.target = undefined;
+  targetMage.value = null;
 };
 
 const back = async () => {
@@ -294,9 +298,20 @@ const replyMail = async () => {
 };
 
 
-onMounted(() => {
+onMounted(async () => {
   refreshMails();
   currentView.value = 'listView';
+
+  if (route.query.target) {
+    const m = (await API.get(`mage/${route.query.target}`)).data;
+    if (!m) return;
+    targetMage.value = {
+      id: m.mageSummary.id,
+      label: m.mageSummary.name
+    };
+    currentMail.value.target = +targetMage.value.id;
+    currentView.value = 'composeView';
+  }
 });
 </script>
 
