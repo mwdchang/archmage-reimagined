@@ -56,6 +56,26 @@
       </tbody>
     </table>
 
+    <div class="section-header">Power Distribution</div>
+    <table v-if="mage">
+      <tbody>
+        <tr>
+          <td>Land</td>
+          <td class="text-right">{{ readableNumber(totalNetPowerLand(mage)) }}</td>
+        </tr>
+        <tr>
+          <td>Army</td>
+          <td class="text-right">{{ readableNumber(totalNetPowerArmy(mage)) }}</td>
+        </tr>
+        <tr>
+          <td>Resources</td>
+          <td class="text-right">{{ readableNumber(totalNetPowerResources(mage)) }}</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+
     <div class="section-header">Spell Resistance</div>
     <table v-if="mage">
       <tbody>
@@ -336,7 +356,10 @@ import {
   totalLand,
   totalUnits,
   currentSpellLevel, 
-  totalNetPower
+  totalNetPower,
+  totalNetPowerLand,
+  totalNetPowerArmy,
+  totalNetPowerResources
 } from 'engine/src/base/mage';
 import { 
   maxSpellLevel,

@@ -1,8 +1,17 @@
 <template>
   <main>
-    <div class="section-header row" style="margin-bottom: 0.5rem">
-      <magic :magic="mageSummary.magic" />
-      {{ mageSummary.name }} (#{{ mageSummary.id }}) 
+    <div class="section-header" style="margin-bottom: 1rem">Lookup</div>
+
+    <div class="row" style="margin-bottom: 0.5rem; justify-content: space-between;">
+      <div class="row">
+        <magic :magic="mageSummary.magic" />
+        {{ mageSummary.name }} (#{{ mageSummary.id }}) 
+      </div>
+      <div>
+        <router-link :to="{ name: 'manage', query: { target: mageSummary.id } }"> 
+          Message
+        </router-link>
+      </div>
     </div>
 
     <table style="min-width: 20rem" v-if="mageSummary.id">
