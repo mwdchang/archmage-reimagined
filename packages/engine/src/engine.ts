@@ -1588,7 +1588,7 @@ class Engine {
 
     // now check for counter status, which negates the next checks
     const end = Date.now();
-    const start = end - 86400000;
+    const start = end - (gameTable.war.window * 60 * 60 * 1000);
     const prevAttacks = await this.adapter.getBattles({
       attackerId: mage.id,
       defenderId: defenderMage.id,
@@ -2046,7 +2046,7 @@ class Engine {
   async removeMage(mage: Mage) {
     const res = await this.getMageBattles(mage, { 
       targetId: mage.id,
-      window: 24 
+      window: gameTable.war.window
     })
     if (res.some(d => d.attackerId === mage.id)) {
       throw new Error('Cannot leave Terra with blood on hands');
@@ -2324,6 +2324,7 @@ class Engine {
   async deleteMails(mage: Mage, ids: string[]) {
     return this.adapter.deleteMails(mage.id, ids);
   }
+
 
 
   // === Handle unique items ===

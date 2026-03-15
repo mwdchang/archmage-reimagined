@@ -10,7 +10,7 @@
           <br>- Siege destroys 10% land
           <br>- Pillage steals geld
           <br>
-          Counters last for 24 hours.
+          Counters last for {{ mageStore.gameTable?.war.window}} hours.
         </div>
       </div>
     </div>

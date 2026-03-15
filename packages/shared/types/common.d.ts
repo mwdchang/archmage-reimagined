@@ -37,6 +37,8 @@ export interface GameTable {
   war: {
     obfuscateReport: boolean,
     damagedPercentage: number,
+    window: number, // In hours
+
     range: {
       min: number;
       max: number;

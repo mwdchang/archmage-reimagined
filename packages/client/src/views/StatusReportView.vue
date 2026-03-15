@@ -448,8 +448,7 @@ onMounted(async () => {
       const remainPercentage = defends.reduce((acc, br) => br.defenderPowerLossPercentage + acc, 0);
 
       if (remainPercentage < gameTable!.war.damagedPercentage) {
-        // Add 24 hour
-        damagedUntil.value = popped?.timestamp + 24 * 60 * 60 * 1000; 
+        damagedUntil.value = popped?.timestamp + gameTable!.war.window * 60 * 60 * 1000; 
         break;
       }
     }
