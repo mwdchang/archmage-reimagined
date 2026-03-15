@@ -21,7 +21,6 @@
             :label="'Mark all read'" />
         </div>
 
-
       </div>
     </section>
 
@@ -46,13 +45,19 @@
     <section class="message-list-pane" v-if="currentView === 'composeView'">
       <div class="form" v-if="currentMail">
         <div class="row" style="align-items: baseline; gap: 1.0rem">
-          <input type="text" placeholder="Sending to" 
-            @blur="checkMage"
-            @input="debounceCheckmage"
-            v-model="currentMail.target" style="width: 8rem" />
-          <span v-if="targetMage">
-            {{ targetMage.name }} (#{{targetMage.id}} )
-          </span>
+
+          <Autocomplete 
+            v-if="!targetMage"
+            @selected-value="setAutoComplete"
+            :options-fn="searchMageRank" 
+          />
+          <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+            <div>{{ targetMage.label }} (#{{ targetMage.id}})</div>
+            <svg-icon name="remove" size="1.5rem" @click="targetMage = null" /> 
+          </div>
+
+
+
         </div>
 
         <div class="row" style="align-items: baseline; gap: 5">
@@ -127,17 +132,20 @@
 import { onMounted, ref } from 'vue';
 import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
-import { Mail } from 'shared/types/common';
+import { MageRank, Mail } from 'shared/types/common';
 import { useMageStore } from '@/stores/mage';
+import { useRoute } from 'vue-router';
 import ActionButton from './action-button.vue';
 import { readableDate } from '@/util/util';
-import { MageSummary } from 'shared/types/mage';
-import { BlackMarketId } from 'shared/src/common';
+import { AutocompleteCandidate, BlackMarketId } from 'shared/src/common';
+import Autocomplete from './autocomplete.vue';
+import SvgIcon from './svg-icon.vue';
 
 const mageStore = useMageStore();
+const route = useRoute();
 
 const currentView = ref('listView');
-const targetMage = ref<MageSummary>();
+const targetMage = ref<AutocompleteCandidate | null>(null);
 
 const replyContent = ref('');
 const errorStr = ref('');
@@ -167,9 +175,27 @@ const openMail = (mail: Mail) => {
   }
 };
 
+
+const setAutoComplete = (val: any) => {
+  targetMage.value = val;
+  currentMail.value.target = +targetMage.value!.id;
+}
+const searchMageRank = async (val: string) => {
+  const results = await API.get<MageRank[]>(`/search-mage?searchStr=${val}`);
+  return results.data.map(d => {
+    return { 
+      label: d.name, id: d.id.toString() 
+    };
+  });
+}
+
+
 const compose = async () => {
   currentView.value = 'composeView';
   currentMail.value = blankMail;
+
+  currentMail.value.target = undefined;
+  targetMage.value = null;
 };
 
 const back = async () => {
@@ -271,21 +297,21 @@ const replyMail = async () => {
   await _send(replyMail);
 };
 
-const checkMage = async () => {
-  const id = currentMail.value.target;
-  const res = await API.get<{ mageSummary: MageSummary }>(`/mage/${id}`);
 
-  if (res.data && res.data.mageSummary) {
-    targetMage.value = res.data.mageSummary;
-  }
-};
-
-const debounceCheckmage = _.debounce(checkMage, 300);
-
-
-onMounted(() => {
+onMounted(async () => {
   refreshMails();
   currentView.value = 'listView';
+
+  if (route.query.target) {
+    const m = (await API.get(`mage/${route.query.target}`)).data;
+    if (!m) return;
+    targetMage.value = {
+      id: m.mageSummary.id,
+      label: m.mageSummary.name
+    };
+    currentMail.value.target = +targetMage.value.id;
+    currentView.value = 'composeView';
+  }
 });
 </script>
 

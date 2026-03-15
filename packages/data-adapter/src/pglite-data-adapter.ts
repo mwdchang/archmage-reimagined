@@ -186,7 +186,7 @@ const DB_INIT = (gameTable: GameTable) => `
     FROM
       battle_summary
     WHERE
-      timestamp >= (EXTRACT(EPOCH FROM now()) * 1000)::bigint - 86400000
+      timestamp >= (EXTRACT(EPOCH FROM now()) * 1000)::bigint - ${gameTable.war.window * 60 * 60 * 1000}
     GROUP BY
       defender_id
   ),

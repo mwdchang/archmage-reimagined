@@ -152,6 +152,8 @@ export interface UnitHealEffect extends Effect<E.UnitHealEffect> {
 
 
 /**
+ * Summon units
+ *
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
  * fixed = summonNetPower 
 **/
@@ -218,6 +220,10 @@ export interface ProductionEffect extends Effect<E.ProductionEffect> {
   }
 }
 
+
+/**
+ * Increase or decrease army upkeep per turn
+**/
 export interface ArmyUpkeepEffect extends Effect<E.ArmyUpkeepEffect> {
   rule: 'addSpellLevelPercentageBase' | 'addPercentageBase',
   filters: UnitFilter[] | null;
@@ -233,9 +239,7 @@ export interface ArmyUpkeepEffect extends Effect<E.ArmyUpkeepEffect> {
 }
 
 /**
- * type can be one of
- * - summon
- * - castingRate
+ * Increase or decrease casting success of spells
  */
 export interface CastingEffect extends Effect<E.CastingEffect> {
   rule: 'spellLevel',
@@ -247,6 +251,9 @@ export interface CastingEffect extends Effect<E.CastingEffect> {
   }
 }
 
+/**
+ * Generates "things" from a random roll
+**/
 export interface WishEffect extends Effect<E.WishEffect> {
   trigger: {
     min: number;
@@ -261,6 +268,9 @@ export interface WishEffect extends Effect<E.WishEffect> {
 }
 
 
+/**
+ * Removes between min and max number of enchantments
+**/
 export interface RemoveEnchantmentEffect extends Effect<E.RemoveEnchantmentEffect> {
   trigger: {
     min: number;
@@ -281,7 +291,10 @@ export interface StealEffect extends Effect<E.StealEffect> {
   }
 }
 
-// A percentage change to avoid opponent actions
+
+/**
+ * A percentage change to avoid opponent attacks
+**/
 export interface AvoidEffect extends Effect<E.AvoidEffect> {
   target: 'spell' | 'item' | 'attack';
   magic: {
@@ -292,7 +305,9 @@ export interface AvoidEffect extends Effect<E.AvoidEffect> {
 }
 
 
-// Reduce casting cost of spells
+/**
+ * Reduce casting cost of spells
+**/
 export interface CastingCostEffect extends Effect<E.CastingCostEffect> {
   rule: 'addPercentageBase'
   magic: {
@@ -302,6 +317,18 @@ export interface CastingCostEffect extends Effect<E.CastingCostEffect> {
         adjacent: number;
         opposite: number;
       }
+    }
+  }
+}
+
+
+/**
+ * Reveal between min and max number of facts about target's kingdom
+**/
+export interface ScryEffect extends Effect<E.ScryEffect> {
+  magic: {
+    [key in AllowedMagic]: {
+      value: { min: number, max: number }
     }
   }
 }

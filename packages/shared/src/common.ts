@@ -26,6 +26,7 @@ export const enum allowedEffect {
   CastingEffect = 'CastingEffect',
   CastingCostEffect = 'CastingCostEffect',
   AvoidEffect = 'AvoidEffect',
+  ScryEffect = 'ScryEffect',
 
   // Instants
   KingdomBuildingsEffect = 'KingdomBuildingsEffect',
