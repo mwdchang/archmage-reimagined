@@ -36,6 +36,10 @@
             <td>{{ 100 * gameTable.war.damagedPercentage }}%</td>
           </tr>
           <tr>
+            <td>Attack cycle</td>
+            <td>{{ gameTable.war.window }} hours </td>
+          </tr>
+          <tr>
             <td>Research point</td>
             <td>{{ readableNumber(productionTable.research) }} /node</td>
           </tr>
