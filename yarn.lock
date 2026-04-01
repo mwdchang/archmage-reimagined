@@ -70,10 +70,10 @@
   resolved "https://registry.yarnpkg.com/@dagrejs/graphlib/-/graphlib-2.2.4.tgz#d77bfa9ff49e2307c0c6e6b8b26b5dd3c05816c4"
   integrity sha512-mepCf/e9+SKYy1d02/UkvSy6+6MoyXhVxP8lLDfA7BPE1X1d4dR0sZznmbM8/XVJ1GPM+Svnx7Xj6ZweByWUkw==
 
-"@electric-sql/pglite@^0.3.6":
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/@electric-sql/pglite/-/pglite-0.3.6.tgz#b574828ab1c9cf431a1ed1c6a4f66d17cdac0e84"
-  integrity sha512-KFIoLIhiOzYQzT2TOxqWH9eAMZcZd4tzSGXDY+6qRboZY2P76yFDNTKS4SB2c3hy6vRqIrHSh24VDPi9FyNhlA==
+"@electric-sql/pglite@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@electric-sql/pglite/-/pglite-0.4.2.tgz#2bca314a6ceb21b1e7b24e4a5a7881bfaeea978f"
+  integrity sha512-1GUUl/MZpy5QWgWisD3Epho3GkJrZ1MzVgQpo2pifQWUs96F9rXKZxeVLPhkwFYck34CH/kQ8lis6wX9ifn3kg==
 
 "@esbuild/aix-ppc64@0.27.2":
   version "0.27.2"
