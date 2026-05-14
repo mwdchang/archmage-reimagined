@@ -521,7 +521,6 @@ class Engine {
 
 
     // Enchantment life and upkeep
-    // FIXME: when mana = 0
     for (const enchant of mage.enchantments) {
       if (enchant.casterId !== mage.id && enchant.casterId !== 0) {
         const spell = getSpellById(enchant.spellId);
@@ -2103,37 +2102,54 @@ class Engine {
     const mp = await this.adapter.getMarketPrices();
     if (mp.length > 0) return;
 
-    const defaultItemPrice = 1000000;
-    const defaultSpellPrice = 1000000;
-    const defaultUnitPrice = 1000000;
-
     logger('initialize market pricing');
     const items = getAllLesserItems();
     for (const item of items) {
+      const price = 2000000;
       await this.adapter.createMarketPrice(
         item.id,
         'item',
-        defaultItemPrice
+        price
       );
     }
 
     const spells = getMarketableSpells();
     for (const spell of spells) {
+      let basePrice = 1000000
+      let price = basePrice;
+
+      if (spell.rank === 'simple') {
+        price = basePrice * 1;
+      } else if (spell.rank === 'average') {
+        price = basePrice * 8;
+      } else if (spell.rank === 'complex') {
+        price = basePrice * 64;
+      } else if (spell.rank === 'ancient') {
+        price = basePrice * 120;
+      }
+
       await this.adapter.createMarketPrice(
         spell.id,
         'spell',
-        defaultSpellPrice
+        price
       );
     }
 
     const units = getMarketableUnits();
     for (const unit of units) {
+      let price = 5000000;
       await this.adapter.createMarketPrice(
         unit.id,
         'unit',
-        defaultSpellPrice
+        price
       );
     }
+
+    const mprices = await this.adapter.getMarketPrices();
+    const mpriceMap = new Map(
+      mprices.map(d => [d.id, d.price])
+    );
+
 
     logger('seeding market items');
     for (let i = 0; i < 10; i++) {
@@ -2141,7 +2157,7 @@ class Engine {
       await this.adapter.addMarketItem({
         id: uuidv4(),
         priceId: item.id,
-        basePrice: defaultItemPrice,
+        basePrice: mpriceMap.get(item.id),
         mageId: null,
         expiration: this.currentTurn + betweenInt(20, 50)
       });
@@ -2153,7 +2169,7 @@ class Engine {
       await this.adapter.addMarketItem({
         id: uuidv4(),
         priceId: spell.id,
-        basePrice: defaultSpellPrice,
+        basePrice: mpriceMap.get(spell.id),
         mageId: null,
         expiration: this.currentTurn + betweenInt(30, 70)
       });
@@ -2168,7 +2184,7 @@ class Engine {
       await this.adapter.addMarketItem({
         id: uuidv4(),
         priceId: unit.id,
-        basePrice: defaultUnitPrice,
+        basePrice: mpriceMap.get(unit.id),
         extra: { size },
         mageId: null,
         expiration: this.currentTurn + betweenInt(30, 70)
