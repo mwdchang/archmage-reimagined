@@ -3,3 +3,7 @@ archmage-db
 reports
 node_modules
 .DS_Store
+
+# Yarn 4
+.yarn
+.pnp.*

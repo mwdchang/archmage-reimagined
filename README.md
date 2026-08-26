@@ -6,8 +6,14 @@ Archmage was a rich and complex game enjoyed by those who likes deep strategy ga
 
 ### Development
 You will need to meet the following prerequisites
-- nodeJS version 20 or higher
-- yarn version 1.22.19 or higher
+- nodeJS version 24 or higher
+- yarn version 4 or higher
+
+#### Enable yarn 4
+```
+npm install -g corepack
+corepack enable
+```
 
 Code is written in [Typescript](https://www.typescriptlang.org/), with the UI written in [Vue 3](https://vuejs.org/).
 
