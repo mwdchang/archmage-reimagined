@@ -10,6 +10,7 @@
   "dependencies": {
     "@electric-sql/pglite": "^0.5.3",
     "@types/bcryptjs": "^3.0.0",
+    "shared": "workspace:*",
     "typescript": "^5.9.3"
   }
 }
