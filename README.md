@@ -20,9 +20,8 @@ Code is written in [Typescript](https://www.typescriptlang.org/), with the UI wr
 #### Running locally
 This setup has been tested on \*nix-based machines, it should work on Windows with a few tweaks to setup.sh file.
 - In the project folder, run `yarn`
-- Run `setup.sh` to link mono repo resources
-- Running the server `yarn run dev`, server should be listening on http://localhost:3000
-- Running the client `yarn run dev`, client should be running on http://localhost:9000
+- Running the server `yarn run server`, server should be listening on http://localhost:3000
+- Running the client `yarn run client`, client should be running on http://localhost:9000
 
 
 #### Organizational structure
