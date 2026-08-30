@@ -6,17 +6,22 @@ Archmage was a rich and complex game enjoyed by those who likes deep strategy ga
 
 ### Development
 You will need to meet the following prerequisites
-- nodeJS version 20 or higher
-- yarn version 1.22.19 or higher
+- nodeJS version 24 or higher
+- yarn version 4 or higher
+
+#### Enable yarn 4
+```
+npm install -g corepack
+corepack enable
+```
 
 Code is written in [Typescript](https://www.typescriptlang.org/), with the UI written in [Vue 3](https://vuejs.org/).
 
 #### Running locally
 This setup has been tested on \*nix-based machines, it should work on Windows with a few tweaks to setup.sh file.
 - In the project folder, run `yarn`
-- Run `setup.sh` to link mono repo resources
-- Running the server `yarn run dev`, server should be listening on http://localhost:3000
-- Running the client `yarn run dev`, client should be running on http://localhost:9000
+- Running the server `yarn run server`, server should be listening on http://localhost:3000
+- Running the client `yarn run client`, client should be running on http://localhost:9000
 
 
 #### Organizational structure

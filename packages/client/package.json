@@ -15,8 +15,10 @@
     "@types/d3": "^7.4.3",
     "axios": "^1.18.1",
     "d3": "^7.9.0",
+    "engine": "workspace:*",
     "marked": "^18.0.3",
     "pinia": "^3.0.1",
+    "shared": "workspace:*",
     "vite-svg-loader": "^5.1.0",
     "vue": "^3.5.10",
     "vue-router": "^5.1.0"
