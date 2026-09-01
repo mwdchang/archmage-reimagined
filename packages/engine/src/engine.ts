@@ -97,13 +97,13 @@ import { applyWishEffect } from './effects/apply-wish-effect';
 import { applyStealEffect } from './effects/apply-steal-effect';
 import { calcPillageProbability } from './battle/calc-pillage-probability';
 import { mageName, readableStr, readableNumber } from './util';
-import { 
+import {
   fromKingdomArmyEffectResult,
   fromKingdomBuildingsEffectResult,
   fromKingdomResourcesEffectResult,
   fromRemoveEnchantmentEffectResult,
   fromStealEffectResult,
-  fromWishEffectResult 
+  fromWishEffectResult
 } from './game-message';
 import { Item, Spell } from 'shared/types/magic';
 import { allowedMagicList } from 'shared/src/common';
@@ -111,7 +111,7 @@ import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
 import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/types/market';
-import { 
+import {
   generateMarketItems,
   getMarketableSpells,
   getMarketableUnits,
@@ -188,7 +188,7 @@ class Engine {
         currentTurn: 0,
         currentTurnTime: Date.now(),
         endTurn: gameTable.endTurn,
-        interval: gameTable.turnRate * 1000, 
+        interval: gameTable.turnRate * 1000,
         startTime: Date.now()
       });
 
@@ -455,8 +455,8 @@ class Engine {
     const turnLogs: GameMsg[] = [];
 
     // 1. use turn
-    mage.currentTurn --;
-    mage.turnsUsed ++;
+    mage.currentTurn--;
+    mage.turnsUsed++;
 
     // 2. calculate income
     const beforeGeld = mage.currentGeld;
@@ -487,8 +487,9 @@ class Engine {
 
     // 4. recruiting barrack units
     const doRecruit = (id: string, size: number) => {
-      if (mage.army.find(d => d.id === id)) {
-        mage.army.find(d => d.id === id).size += size;
+      const armyStack = mage.army.find(d => d.id === id);
+      if (armyStack) {
+        armyStack.size += size;
       } else {
         mage.army.push({ id, size });
       }
@@ -507,12 +508,12 @@ class Engine {
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
 
-    // 5. process enchantment
+    // 5. process enchantment effects
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
     const enchantSummmonResults = this.processTurnEnchantmentSummon(mage, enchantments);
-    const enchantDamageResults  = this.processTurnEnchantmentDamage(mage, enchantments);
+    const enchantDamageResults = this.processTurnEnchantmentDamage(mage, enchantments);
     const itemSummonResults = this.processUniqueItemSummon(mage);
 
     turnLogs.push(...enchantSummmonResults);
@@ -527,8 +528,10 @@ class Engine {
         const upkeep = spell.upkeep;
         if (!upkeep) continue;
 
-        // FIXME: optimize, don't get own mage
-        const casterMage = await this.getMage(enchant.casterId);
+        const casterMage = enchant.casterId === mage.id ?
+          mage :
+          await this.getMage(enchant.casterId);
+
         casterMage.currentGeld -= upkeep.geld;
         casterMage.currentMana -= upkeep.mana;
         casterMage.currentPopulation -= upkeep.population;
@@ -547,12 +550,16 @@ class Engine {
           enchant.life = 0;
           enchant.isActive = false;
         }
-        await this.adapter.updateMage(casterMage);
+
+        // if own mage, we update outside of the function
+        if (enchant.casterId !== mage.id) {
+          await this.adapter.updateMage(casterMage);
+        }
       }
 
       // If enchantment has life and target is self, update
       if (enchant.life && enchant.life > 0 && enchant.targetId === mage.id) {
-        enchant.life --;
+        enchant.life--;
       }
       if (enchant.life <= 0 && enchant.isPermanent === false) {
         enchant.isActive = false;
@@ -588,7 +595,7 @@ class Engine {
       { type: 'enchantment', data: spellCost }
     ]
 
-    const implodeArmy = ( compareFn: (a: ArmyUnit, b: ArmyUnit) => number) => {
+    const implodeArmy = (compareFn: (a: ArmyUnit, b: ArmyUnit) => number) => {
       const army = mage.army;
       army.sort(compareFn);
       army.shift();
@@ -599,7 +606,7 @@ class Engine {
       });
     };
 
-    const implodeEnchantments = ( checkFn: (s: Spell) => boolean ) => {
+    const implodeEnchantments = (checkFn: (s: Spell) => boolean) => {
       mage.enchantments = mage.enchantments.filter(enchant => {
         if (enchant.casterId !== mage.id) {
           return true;
@@ -616,8 +623,8 @@ class Engine {
       });
     };
 
-    if (mage.currentGeld < 0) { 
-      console.log('insufficient geld'); 
+    if (mage.currentGeld < 0) {
+      console.log('insufficient geld');
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient geld',
@@ -660,7 +667,7 @@ class Engine {
     }
 
     if (mage.currentMana < 0) {
-      console.log('insufficient mana'); 
+      console.log('insufficient mana');
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient mana',
@@ -698,7 +705,7 @@ class Engine {
     }
 
     if (mage.currentPopulation < 0) {
-      console.log('insufficient population'); 
+      console.log('insufficient population');
       this.saveMail(mage, {
         type: 'normal',
         subject: '[Alert] Insufficient population',
@@ -715,7 +722,7 @@ class Engine {
         implodeArmy((a, b) => {
           const aUnit = getUnitById(a.id);
           const bUnit = getUnitById(b.id);
-          return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population* a.size;
+          return bUnit.upkeepCost.population * b.size - aUnit.upkeepCost.population * a.size;
         });
       } else if (target.type === 'building') {
         ['farms', 'towns', 'workshops', 'barracks', 'guilds'].forEach(bType => {
@@ -790,7 +797,7 @@ class Engine {
         name: mage.name,
         turn: mage.turnsUsed,
         timestamp: Date.now(),
-        data: turnLogs 
+        data: turnLogs
       }
     ]);
     this.adapter.updateRank({
@@ -893,16 +900,14 @@ class Engine {
     mage.focusResearch = focus;
 
     const before = _.cloneDeep(mage.spellbook);
-    if (turns && turns > 0) {
-      for (let i = 0; i < turns; i++) {
-        doResearch(mage, researchPoints(mage));
-        await this.useTurn(mage);
-      }
+    for (let i = 0; i < turns; i++) {
+      doResearch(mage, researchPoints(mage));
+      await this.useTurn(mage);
     }
-    const after = _.cloneDeep(mage.spellbook);
 
     // Calculate new spells gained, if any
-    const learnedSpells: { [key: string]: string[]} = {};
+    const after = _.cloneDeep(mage.spellbook);
+    const learnedSpells: { [key: string]: string[] } = {};
     const keys = Object.keys(after);
     for (const key of keys) {
       if (before[key]) {
@@ -943,7 +948,7 @@ class Engine {
           });
           continue;
         } else {
-          mage.items[itemId] --;
+          mage.items[itemId]--;
           if (mage.items[itemId] <= 0) {
             delete mage.items[itemId];
           }
@@ -962,7 +967,7 @@ class Engine {
           });
           continue;
         } else {
-          mage.items[itemId] --;
+          mage.items[itemId]--;
           if (mage.items[itemId] <= 0) {
             delete mage.items[itemId];
           }
@@ -1070,7 +1075,7 @@ class Engine {
     return logs;
   }
 
-  async dispel(mage:Mage, enchantId: string, mana: number) {
+  async dispel(mage: Mage, enchantId: string, mana: number) {
     const enchantment = mage.enchantments.find(d => d.id === enchantId);
     let success = false;
 
@@ -1133,7 +1138,7 @@ class Engine {
         });
         continue;
       }
-      
+
       // Spend mana and check if casting is successful
       const rate = successCastingRate(mage, spellId);
       let castingSuccessful = true;
@@ -1158,7 +1163,7 @@ class Engine {
             message: `Your spell hit the barriers and fizzled.`
           });
           castingSuccessful = false;
-        } 
+        }
 
         // Check if spell miss due to enchantments
         // TODO: reflect spells?
@@ -1429,8 +1434,8 @@ class Engine {
         });
       });
     });
-    
-    await this.adapter.updateMage(mage);
+
+    // await this.adapter.updateMage(mage);
     return result;
   }
 
@@ -1450,7 +1455,7 @@ class Engine {
         throw new Error(`Building ${b.id} amount cannot be negative`);
       }
       landUsed += (+payload[b.id]);
-      turnsUsed += (+payload[b.id]) /  buildingRate(mage, b.id);
+      turnsUsed += (+payload[b.id]) / buildingRate(mage, b.id);
     });
     turnsUsed = Math.ceil(turnsUsed);
     landUsed = Math.ceil(landUsed);
@@ -1514,11 +1519,11 @@ class Engine {
         throw new Error(`Cannot recruit ${unit.id}`);
       }
 
-      if (unit.magic !== mage.magic && unit.magic !== 'plain') { 
+      if (unit.magic !== mage.magic && unit.magic !== 'plain') {
         throw new Error(`Cannot recruit ${unit.id}`);
       }
     }
-    
+
     mage.recruitments = _.cloneDeep(payload);
     await this.adapter.updateMage(mage);
   }
@@ -1566,10 +1571,10 @@ class Engine {
    * - in attack range
   **/
   async preBattleCheck(
-    mage: Mage, 
-    targetId: number, 
-    battleType: 'siege' | 'regular' | 'pillage' 
-  ): Promise<string[]>  {
+    mage: Mage,
+    targetId: number,
+    battleType: 'siege' | 'regular' | 'pillage'
+  ): Promise<string[]> {
     const errors = [];
     const defenderMage = await this.getMage(targetId);
 
@@ -1639,11 +1644,11 @@ class Engine {
 
 
   async doBattle(
-    mage: Mage, 
-    targetId: number, 
-    battleType: 'siege' | 'regular' | 'pillage', 
-    stackIds: string[], 
-    spellId: string, 
+    mage: Mage,
+    targetId: number,
+    battleType: 'siege' | 'regular' | 'pillage',
+    stackIds: string[],
+    spellId: string,
     itemId: string
   ) {
     const defenderMage = await this.getMage(targetId);
@@ -1668,7 +1673,7 @@ class Engine {
             timestamp: Date.now(),
             data: [
               {
-                type: 'log', 
+                type: 'log',
                 message: `You cound not find ${defenderMage.name} (#${defenderMage.id})'s kingdom`
               }
             ]
@@ -1686,7 +1691,7 @@ class Engine {
     // For attacker, the army is formed by selected ids
     const aBattleStackIds = stackIds.slice(0, MAX_STACKS);
     const attackerArmy = mage.army.filter(s => aBattleStackIds.includes(s.id));
-    const attacker: Combatant =  {
+    const attacker: Combatant = {
       mage: mage,
       spellId: spellId,
       itemId: itemId,
@@ -1753,8 +1758,8 @@ class Engine {
       await this.useTurn(mage);
     }
 
-    const battleReport = isPillageSuccess === false? 
-      battle(battleType, attacker, defender):
+    const battleReport = isPillageSuccess === false ?
+      battle(battleType, attacker, defender) :
       successPillage(attacker, defender);
     resolveBattle(mage, defenderMage, battleReport);
 
@@ -1794,7 +1799,7 @@ class Engine {
 
     const reportSummary: BattleReportSummary = {
       id: battleReport.id,
- 
+
       timestamp: battleReport.timestamp,
       attackType: battleReport.attackType,
 
@@ -1891,7 +1896,7 @@ class Engine {
         timestamp: battleReport.timestamp,
         data: [
           {
-            type: 'battleLog', 
+            type: 'battleLog',
             id: battleReport.id,
             message: `You ${verb} ${defenderMage.name} (#${defenderMage.id})'s kingdom`
           }
@@ -1913,7 +1918,7 @@ class Engine {
         ]
       }])
     }
-    return { errors: [], battleReport } ;
+    return { errors: [], battleReport };
   }
 
   async getBattleReport(mage: Mage, reportId: string) {
@@ -1952,11 +1957,11 @@ class Engine {
     */
   }
 
-  async getMageBattles(mage: Mage, options: { targetId: number; window: number}) {
+  async getMageBattles(mage: Mage, options: { targetId: number; window: number }) {
     const endTime = Date.now();
     const startTime = endTime - (options.window * 60 * 60 * 1000);
 
-    const results = await this.adapter.getBattles({ 
+    const results = await this.adapter.getBattles({
       mageId: options.targetId,
       endTime: endTime,
       startTime: startTime,
@@ -1985,12 +1990,12 @@ class Engine {
       r.isSuccessful = false;
       r.id = '???';
     }
-    
+
     return results;
   }
 
   async getChronicles(mage: Mage) {
-    return await this.adapter.getChronicles({ 
+    return await this.adapter.getChronicles({
       mageId: mage.id,
       limit: 30
     });
@@ -2024,7 +2029,7 @@ class Engine {
 
     // 2. Write to data store
     mage = await this.adapter.createMage(userName, mage);
-    
+
     await this.adapter.createRank({
       id: mage.id,
       name: mage.name,
@@ -2043,7 +2048,7 @@ class Engine {
   }
 
   async removeMage(mage: Mage) {
-    const res = await this.getMageBattles(mage, { 
+    const res = await this.getMageBattles(mage, {
       targetId: mage.id,
       window: gameTable.war.window
     })
@@ -2073,7 +2078,7 @@ class Engine {
   }
 
   async getMages(ids: number[]) {
-    const results:{ [key: number]: any } = {};
+    const results: { [key: number]: any } = {};
     // FIXME: replace with rank_view lookup
     for (const id of ids) {
       const m = await this.getMage(id);
@@ -2267,7 +2272,7 @@ class Engine {
           expiration: this.currentTurn + gameTable.blackmarket.sellingTimeOnMarket,
           mageId: mage.id // Need to mark the seller is human
         });
-        mage.items[item.itemId] --;
+        mage.items[item.itemId]--;
       }
       // Clean up
       if (mage.items[item.itemId] <= 0) {
@@ -2305,7 +2310,7 @@ class Engine {
 
     mage.skillPoints--;
     if (mage.skills[skillId]) {
-      mage.skills[skillId] ++;
+      mage.skills[skillId]++;
     } else {
       mage.skills[skillId] = 1;
     }
@@ -2344,7 +2349,7 @@ class Engine {
 
 
   // === Handle unique items ===
-  
+
   // Call back 
   async _assignRandomUniqueItem(mage: Mage) {
     const availableUniques = await this.adapter.getAvailableUniqueItems();
