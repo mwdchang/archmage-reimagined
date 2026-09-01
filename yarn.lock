@@ -89,19 +89,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dagrejs/dagre@npm:^1.1.8":
-  version: 1.1.8
-  resolution: "@dagrejs/dagre@npm:1.1.8"
+"@dagrejs/dagre@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@dagrejs/dagre@npm:3.1.1"
   dependencies:
-    "@dagrejs/graphlib": "npm:2.2.4"
-  checksum: 10c0/3f4f99beb1c791c4c35fcab7a6891731a712931f076ae27b380afa4077e81a1f46341cd0ac8f21df29bf7b458e631b780e819846140a9e4f89e36faf907cdc66
+    "@dagrejs/graphlib": "npm:4.0.5"
+  checksum: 10c0/e2607e941e54407d07650c13b7c4c6aca1466e12d56fd7d1e704eab686837b049700f05ca9a723aa34f027ec71bee61914594339a0e74b1f4ad7b69c5fa55242
   languageName: node
   linkType: hard
 
-"@dagrejs/graphlib@npm:2.2.4":
-  version: 2.2.4
-  resolution: "@dagrejs/graphlib@npm:2.2.4"
-  checksum: 10c0/14597ea9294c46b2571aee78bcaad3a24e3e5e0ebcdf198b6eae5b3805f99af727ac54a477dd9152e8b0a576efea0528fb7d4919c74801e9f669c90e5e6f5bd9
+"@dagrejs/graphlib@npm:4.0.5":
+  version: 4.0.5
+  resolution: "@dagrejs/graphlib@npm:4.0.5"
+  checksum: 10c0/698c9ceb996bc1da3a4a141858db57b8380854d412fcd5c9daa48f159f385fc0fb07ef84967409c224d3a82fb8460018d871657c90175bffd9b34ef9c538c1f7
   languageName: node
   linkType: hard
 
@@ -1940,7 +1940,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:packages/client"
   dependencies:
-    "@dagrejs/dagre": "npm:^1.1.8"
+    "@dagrejs/dagre": "npm:^3.1.1"
     "@rushstack/eslint-patch": "npm:^1.16.1"
     "@tsconfig/node18": "npm:^18.2.4"
     "@types/d3": "npm:^7.4.3"
