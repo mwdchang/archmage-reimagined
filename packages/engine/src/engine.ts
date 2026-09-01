@@ -487,8 +487,9 @@ class Engine {
 
     // 4. recruiting barrack units
     const doRecruit = (id: string, size: number) => {
-      if (mage.army.find(d => d.id === id)) {
-        mage.army.find(d => d.id === id).size += size;
+      const armyStack = mage.army.find(d => d.id === id);
+      if (armyStack) {
+        armyStack.size += size;
       } else {
         mage.army.push({ id, size });
       }
@@ -507,7 +508,7 @@ class Engine {
     }
     mage.recruitments = mage.recruitments.filter(d => d.size > 0);
 
-    // 5. process enchantment
+    // 5. process enchantment effects
     // - summoning effects
     // - damage effects
     const enchantments = mage.enchantments;
@@ -899,15 +900,13 @@ class Engine {
     mage.focusResearch = focus;
 
     const before = _.cloneDeep(mage.spellbook);
-    if (turns && turns > 0) {
-      for (let i = 0; i < turns; i++) {
-        doResearch(mage, researchPoints(mage));
-        await this.useTurn(mage);
-      }
+    for (let i = 0; i < turns; i++) {
+      doResearch(mage, researchPoints(mage));
+      await this.useTurn(mage);
     }
-    const after = _.cloneDeep(mage.spellbook);
 
     // Calculate new spells gained, if any
+    const after = _.cloneDeep(mage.spellbook);
     const learnedSpells: { [key: string]: string[] } = {};
     const keys = Object.keys(after);
     for (const key of keys) {
@@ -1436,7 +1435,7 @@ class Engine {
       });
     });
 
-    await this.adapter.updateMage(mage);
+    // await this.adapter.updateMage(mage);
     return result;
   }
 
