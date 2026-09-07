@@ -1,5 +1,5 @@
 <template>
-  <main style="display: flex; flex-direction: column; align-items: center">
+  <main class="flex flex-col items-center">
     <canvas id="arcane"></canvas>
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />

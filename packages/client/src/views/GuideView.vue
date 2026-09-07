@@ -27,8 +27,9 @@ import { onMounted, ref } from 'vue';
 import { marked } from 'marked';
 
 
-const pages = import.meta.glob('@/assets/docs/*.md', {
-  as: 'raw',
+const pages: Record<string, string> = import.meta.glob('@/assets/docs/*.md', {
+  query: '?raw',
+  import: 'default',
   eager: true
 })
 
