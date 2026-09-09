@@ -42,7 +42,7 @@ export const doItemDestruction = (mage: Mage) => {
   const idx = Math.floor(Math.random() * (itemKeys.length));
   const dkey = itemKeys[idx];
 
-  mage.items[dkey] --;
+  mage.items[dkey]--;
   if (mage.items[dkey] <= 0) {
     delete mage.items[dkey];
   }
@@ -57,7 +57,7 @@ export const doItemGeneration = (mage: Mage, force: boolean = false) => {
     if (!mage.items[item.id]) {
       mage.items[item.id] = 1;
     } else {
-      mage.items[item.id] ++;
+      mage.items[item.id]++;
     }
     return item;
   }
@@ -105,7 +105,6 @@ export const nextResearch = (mage: Mage, magicToAdvance: string) => {
 
 // Do research
 export const doResearch = (mage: Mage, points: number) => {
-  const researchTree = getResearchTree();
   const currentResearch = mage.currentResearch;
   let spillOverPoints = 0;
 
@@ -115,9 +114,8 @@ export const doResearch = (mage: Mage, points: number) => {
   allowedMagicList.forEach(magic => {
     if (!done && currentResearch[magic] && currentResearch[magic].active === true) {
       currentResearch[magic].remainingCost -= points;
-      if (currentResearch[magic].remainingCost <= 0 ) {
+      if (currentResearch[magic].remainingCost <= 0) {
         magicToAdvance = magic;
-        // console.log(`!!!!! mage ${mage.name} researchd ${currentResearch[magic].id}`);
         spillOverPoints = Math.abs(currentResearch[magic].remainingCost);
       }
       done = true;
@@ -260,7 +258,7 @@ export const manaIncome = (mage: Mage) => {
 /**
  * Check whether the spell can be successfully cast by the mage
 */
-export const successCastingRate = (mage:Mage, spellId: string) => {
+export const successCastingRate = (mage: Mage, spellId: string) => {
   const current = currentSpellLevel(mage);
   const spell = getSpellById(spellId);
 
@@ -320,11 +318,11 @@ export const castingCost = (mage: Mage, spellId: string, cachedActiveEffects?: A
   castingCost *= costModifier;
 
   const base = castingCost;
-  const activeEffects = cachedActiveEffects ? 
+  const activeEffects = cachedActiveEffects ?
     cachedActiveEffects :
     getActiveEffects(mage, E.CastingCostEffect);
 
-  for (const activeEffect of activeEffects) { 
+  for (const activeEffect of activeEffects) {
     for (const castingCostEffect of activeEffect.effects as CastingCostEffect[]) {
       if (magicAlignmentTable[mageMagic].innate.includes(spellMagic)) {
         castingCost += base * castingCostEffect.magic[mageMagic].value.innate;
