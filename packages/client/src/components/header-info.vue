@@ -19,7 +19,7 @@
             <svg-icon :name="'hourglass'" size="1rem" />
             <div>{{ readableNumber(mage.currentTurn) }} </div>
           </div>
-          <Barchart :value="turnVal" color="#8F8" class="h-[2px]" />
+          <Barchart :value="turnVal" color="#8F8" style="height: 2px" />
         </td>
 
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
@@ -27,14 +27,14 @@
             <svg-icon :name="'mana'" size="1rem" />
             <div>{{ readableNumber(mage.currentMana) }} </div>
           </div>
-          <Barchart :value="manaVal" color="#88F" class="h-[2px]" />
+          <Barchart :value="manaVal" color="#88F" style="height: 2px" />
         </td>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="flex flex-row items-center gap-[5px]"> 
             <svg-icon :name="'population'" size="1rem" />
             <div>{{ readableNumber(mage.currentPopulation) }} </div>
           </div>
-          <Barchart :value="populationVal" color="#F88" class="h-[2px]" />
+          <Barchart :value="populationVal" color="#F88" style="height: 2px" />
         </td>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="flex flex-row items-center gap-[1px]">

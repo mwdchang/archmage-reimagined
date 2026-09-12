@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/item.png" />
       <div>
         <div class="section-header">Item inventory</div>
@@ -14,10 +14,10 @@
       </div>
     </div>
 
-    <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
-      <div style="max-height: 400px; overflow-y: scroll; padding: 0">
-        <table v-if="itemList.length > 0 && layout === 'table'" style="min-width: 15rem">
-          <thead style="position: sticky; top: 0; z-index: 10">
+    <section class="flex flex-row items-start gap-2 mt-[10px]">
+      <div class="max-h-[400px] overflow-y-scroll p-0">
+        <table v-if="itemList.length > 0 && layout === 'table'" class="min-w-[15rem]">
+          <thead class="sticky top-0 z-10">
             <tr>
               <th>Name</th>
               <!--<th>Attributes</th>-->
@@ -34,22 +34,22 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="itemList.length > 0 && layout === 'cards'" style="min-width: 10rem">
-          <div v-for="(item, _idx) of usableItems" :key="item.id" class="card">
+        <div v-if="itemList.length > 0 && layout === 'cards'" class="min-w-[10rem]">
+          <div v-for="(item, _idx) of usableItems" :key="item.id" class="rounded border border-[#333] bg-[#181818] m-2 p-2">
             <router-link :to="{ name: 'viewItem', params: { id: item.id }}"> {{ item.name }} </router-link>
-            <div class="card-grid-2">
+            <div class="grid grid-cols-[1fr_2fr] gap-x-4">
               <div>Amount</div>
               <div>{{ item.amount }}</div>
             </div>
           </div>
         </div>
 
-        <div v-if="itemList.length === 0" style="width: 250px">
+        <div v-if="itemList.length === 0" class="w-[250px]">
           You do not have any items in your inventory.
         </div>
       </div>
       <div> 
-        <section class="form" style="max-width: 20rem">
+        <section class="form max-w-[20rem]">
           <div class="form-tabs">
             <div class="tab" :class="{ active: tabView === 'instant' }" @click="changeView('instant')">Instant</div>
             <div class="tab" :class="{ active: tabView === 'battle' }" @click="changeView('battle')">Battle</div>
@@ -72,7 +72,7 @@
               @selected-value="setAutoComplete"
               :options-fn="searchMageRank" 
             />
-            <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+            <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
               <div>{{ target.label }} (#{{ target.id}})</div>
               <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
             </div>

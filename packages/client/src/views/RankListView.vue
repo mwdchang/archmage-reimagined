@@ -1,13 +1,13 @@
 <template>
   <main>
     <div class="section-header">Rankings</div>
-    <section class="form" style="width: 25rem; margin-bottom: 10px; padding-bottom: 0">
-      <div class="row" style="align-items: baseline; gap: 10px">
-        <input type="checkbox" v-model="hideRange" style="width: 15px; height: 15px"> 
+    <section class="form w-[25rem] mb-[10px] pb-0">
+      <div class="flex flex-row items-baseline gap-[10px]">
+        <input type="checkbox" v-model="hideRange" class="w-[15px] h-[15px]"> 
         <label>Hide mages not in attack range</label>
       </div>
     </section>
-    <table v-if="mageStore.mage" style="min-width: 28rem">
+    <table v-if="mageStore.mage" class="min-w-[28rem]">
       <tbody>
         <tr>
           <td>Rank</td>

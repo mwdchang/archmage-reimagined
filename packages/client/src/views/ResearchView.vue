@@ -1,6 +1,6 @@
 <template>
-  <main v-if="mageStore.mage">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main v-if="mageStore.mage" class="flex flex-col justify-center items-start max-w-[40rem]">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/research.png" />
       <div>
         <div class="section-header">Research</div>
@@ -20,9 +20,9 @@
           <td>Cost (points)</td>
           <td>Turns remaining</td>
         </tr>
-        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" style="cursor: pointer">
+        <tr v-for="(magic, _idx) in filteredMagicTypes" :key="magic" @click="toggle(magic)" class="cursor-pointer">
           <td>
-            <span style="font-size: 125%">
+            <span class="text-[125%]">
               {{ currentResearch[magic]!.active ? '&check;' : '' }}
             </span>
           </td>
@@ -46,11 +46,11 @@
       <p>You have completed researching all spells in your school of magic</p>
     </section>
 
-    <section v-if="hasResearchRemaining" class="form" style="margin-top: 1rem">
+    <section v-if="hasResearchRemaining" class="form mt-4">
       <label>Spend turns to research faster</label>
-      <input type="number" v-model="turns" style="width: 6rem" @keyup.enter="submitResearch" />
-      <div class="row" style="align-items: baseline">
-        <input type="checkbox" v-model="focusResearch" style="width:15px; height: 15px" />
+      <input type="number" v-model="turns" class="w-24" @keyup.enter="submitResearch" />
+      <div class="flex flex-row items-baseline gap-[5px]">
+        <input type="checkbox" v-model="focusResearch" class="w-[15px] h-[15px]" />
         <label>&nbsp;Research all spells of this magic</label>
       </div>
 
@@ -59,10 +59,10 @@
         :label="'Research'" />
 
     </section>
-    <div style="display: flex; align-items: center; margin-top: 10px; max-width: 25rem;">
+    <div class="flex items-center mt-[10px] max-w-[25rem]">
       {{ researchResultStr }}
     </div>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
   </main>
 </template>
 
@@ -186,19 +186,6 @@ const submitResearch = async () => {
 </script>
 
 <style scoped>
-main {
-  max-width: 40rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-table > tr {
-  max-width: 40rem;
-  cursor: pointer;
-}
-
 tr:nth-child(odd) {
   background: #222222;
 }
