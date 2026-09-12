@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 38rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[38rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/market.png" />
       <div>
         <div class="section-header">Market</div>
@@ -10,8 +10,8 @@
       </div>
     </div>
 
-    <section class="form" style="margin-bottom: 10px">
-      <select style="width: 10rem; margin-bottom: 0" v-model="currentSelection" @change="changeSelection">
+    <section class="form mb-[10px]">
+      <select class="w-40 !mb-0" v-model="currentSelection" @change="changeSelection">
         <option value="item">Antique Store</option>
         <option value="spell">Exotic Mageware</option>
         <option value="unit">Spawning Hatchery</option>
@@ -28,7 +28,7 @@
           :label="'Bid'" />
 
       </div>
-      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+      <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">{{ errorStr }}</div>
       <div>
         {{ sellMsg }}
       </div>
@@ -51,7 +51,7 @@
             <td class="text-right">{{ readableNumber(item.price) }}</td>
             <td class="text-right">{{ item.size }}</td>
             <td>
-              <input type="number" v-model="item.sellAmt" style="height: 1.6rem; width: 5rem" @keyup.enter="sellItems" /> 
+              <input type="number" v-model="item.sellAmt" class="h-[1.6rem] w-20" @keyup.enter="sellItems" /> 
             </td>
           </tr>
         </tbody>
@@ -63,12 +63,12 @@
           :label="'Sell Items'" />
 
       </div>
-      <div v-if="errorStr" class="error">{{ errorStr }}</div>
+      <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">{{ errorStr }}</div>
 
     </section>
 
 
-    <table v-if="currentSelection === 'item'" style="min-width: 25rem">
+    <table v-if="currentSelection === 'item'" class="min-w-[25rem]">
       <thead>
         <tr>
           <th>Item name</th>

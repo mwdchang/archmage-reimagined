@@ -1,9 +1,9 @@
 <template>
-  <main class="about" v-if="mageStore.mage">
+  <main v-if="mageStore.mage" class="min-h-screen flex flex-col items-center">
     <h3> 
       <router-link to="/manage"> 
         {{ mageStore.mage.name }} (# {{ mageStore.mage.id }}) 
-        <sup class="unread-badge" style="color: #f80"
+        <sup class="animate-pulse text-[#f80]"
           v-if="unreadMails > 0">
           {{ unreadMails }} <svg-icon :name="'message'" />
         </sup>
@@ -22,56 +22,56 @@
     </p>
 
     <br>
-    <section class="row" style="gap: 25px; margin-bottom: 1rem">
+    <section class="flex flex-row items-center gap-[25px] mb-4">
       <section>
-        <img style="width: 10rem" :src="sigilPath" />
+        <img class="w-40" :src="sigilPath" />
       </section>
-      <section style="flex: 1"> 
-        <div class="about-row">
+      <section class="flex-1"> 
+        <div class="flex flex-row justify-between w-[20rem]">
           <div> Land </div>
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             {{ readableNumber(totalLand(mageStore.mage)) }} 
             <svg-icon :name="'land'" size="1.0rem" />
           </div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Forts</div>
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             {{ mageStore.mage.forts }} 
             <svg-icon :name="'fort'" size="1.0rem" />
           </div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Geld</div>
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             {{ readableNumber(mageStore.mage.currentGeld) }} 
             <svg-icon :name="'geld'" size="1.0rem" />
           </div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Population</div>
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             {{ readableNumber(mageStore.mage.currentPopulation) }} / {{ readableNumber(interior.maxPopulation(mageStore.mage)) }}
             <svg-icon :name="'population'" size="1.0rem" />
           </div>
         </div>
 
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Magic</div>
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             {{ readableNumber(mageStore.mage.currentMana) }} / {{ readableNumber(manaStorage(mageStore.mage)) }}
             <svg-icon :name="'mana'" size="1.0rem" />
           </div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Spell Power</div>
           <div>{{ spellLevel }} / {{ maxSpellLevel(mageStore.mage) }} </div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Items</div>
           <div>{{ numItems }}</div>
         </div>
-        <div class="about-row">
+        <div class="flex flex-row justify-between w-[20rem]">
           <div>Units</div>
           <div>{{ readableNumber(numArmy) }}</div>
         </div>
@@ -80,49 +80,49 @@
     </section>
 
 
-    <section class="grid-container">
+    <section class="grid grid-cols-5 gap-2">
       <!-- col 1-->
-      <router-link class="grid-item g-c1 g-r1" to="/explore">Explore</router-link>
-      <router-link class="grid-item g-c1 g-r2" to="/build">Build</router-link>
-      <router-link class="grid-item g-c1 g-r3" to="/destroy" style="color: #d80">Destroy</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-1 row-start-1" to="/explore">Explore</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-1 row-start-2" to="/build">Build</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-1 row-start-3 text-[#d80]" to="/destroy">Destroy</router-link>
 
       <!-- col 2-->
-      <router-link class="grid-item g-c2 g-r1" to="/spell">Cast Magic</router-link>
-      <router-link class="grid-item g-c2 g-r2" to="/item">Use Item</router-link>
-      <router-link class="grid-item g-c2 g-r3" to="/research">Research</router-link>
-      <router-link class="grid-item g-c2 g-r4" to="/dispel" style="color: #d80">Dispel Magic</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-2 row-start-1" to="/spell">Cast Magic</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-2 row-start-2" to="/item">Use Item</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-2 row-start-3" to="/research">Research</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-2 row-start-4 text-[#d80]" to="/dispel">Dispel Magic</router-link>
 
       <!-- col 3-->
-      <router-link class="grid-item g-c3 g-r1" to="/status">Status Report</router-link>
-      <router-link class="grid-item g-c3 g-r2" to="/rankList">Rankings</router-link>
-      <router-link class="grid-item g-c3 g-r3" to="/charge">Mana Charge</router-link>
-      <router-link class="grid-item g-c3 g-r4" to="/geld">Gelding</router-link>
-      <router-link class="grid-item g-c3 g-r5" to="/market">Market</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-3 row-start-1" to="/status">Status Report</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-3 row-start-2" to="/rankList">Rankings</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-3 row-start-3" to="/charge">Mana Charge</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-3 row-start-4" to="/geld">Gelding</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-3 row-start-5" to="/market">Market</router-link>
 
       <!-- col 4-->
-      <router-link class="grid-item g-c4 g-r1" to="/battle">Battle</router-link>
-      <router-link class="grid-item g-c4 g-r2" to="/assignment">Assignment</router-link>
-      <router-link class="grid-item g-c4 g-r3" to="/chronicles">Chronicles</router-link>
-      <router-link class="grid-item g-c4 g-r4" to="/recruit">Recruit</router-link>
-      <router-link class="grid-item g-c4 g-r5" to="/disband" style="color: #d80">Disband</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-4 row-start-1" to="/battle">Battle</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-4 row-start-2" to="/assignment">Assignment</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-4 row-start-3" to="/chronicles">Chronicles</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-4 row-start-4" to="/recruit">Recruit</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-4 row-start-5 text-[#d80]" to="/disband">Disband</router-link>
 
 
       <!-- col 5-->
-      <router-link class="grid-item g-c5 g-r1" to="/skills">Skills</router-link>
+      <router-link class="text-center bg-[#212120] py-2 px-3 rounded hover:brightness-125 transition-[filter] duration-400 col-start-5 row-start-1" to="/skills">Skills</router-link>
     </section>
 
-    <section class="row" style="gap: 30px; margin-top: 20px; margin-bottom: 1rem; background: #181818; border-radius: 3px">
+    <section class="flex flex-row items-center gap-[30px] mt-5 mb-4 p-2 bg-[#181818] rounded-[3px]">
       <router-link to="/encyclopedia/spell">Encyclopedia</router-link>
       <router-link to="/guide">Guide</router-link>
       <router-link to="/analysis">Analysis</router-link>
     </section>
 
     <div>Trail of Deeds</div>
-    <div class="chronicles" v-if="logs.length > 0">
+    <div class="flex flex-col max-w-[45rem] min-w-[30rem] max-h-[25rem] overflow-y-auto rounded-lg text-[0.9rem] leading-[1.2] p-6 m-2 bg-[#223] gap-4" v-if="logs.length > 0">
       <div v-for="(turn) in logs" :key="turn.turn">
-        <div class="row" style="gap: 0.5rem"> 
-          <span style="font-weight: 600">Turn {{turn.turn}}</span>
-          <span style="font-weight: 300; opacity: 0.75">({{ readableDate(turn.timestamp) }})</span> 
+        <div class="flex flex-row items-center gap-2"> 
+          <span class="font-semibold">Turn {{turn.turn}}</span>
+          <span class="font-light opacity-75">({{ readableDate(turn.timestamp) }})</span> 
         </div>
         <div v-for="(log) in turn.data">
           <div v-if="log.type === 'battleLog'">
@@ -193,68 +193,3 @@ onMounted(async () => {
 });
 
 </script>
-
-<style scoped>
-
-.chronicles {
-  display: flex;
-  max-width: 45rem;
-  min-width: 30rem;
-  max-height: 25rem;
-  overflow-y: scroll;
-  border-radius: 0.5rem;
-
-  flex-direction: column;
-  font-size: 0.9rem;
-  line-height: 120%;
-  padding: 1.5rem;
-  margin: 0.5rem;
-  background: #223;
-  gap: 1.0rem;
-}
-
-.about-row {
-  display: flex;
-  flex-direction: row;
-  width: 20rem;
-  justify-content: space-between;
-}
-
-.about {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
-  gap: 0.5rem 0.5rem; /* Optional spacing between columns */
-}
-
-.grid-item {
-  /* background-color: #8bc34a; */
-  background-color: #212120;
-  padding: 0.5rem 0.75rem;
-  text-align: center;
-  border-radius: 0.25rem;
-  /* transition: background-color 0.3s ease;  */
-  transition: filter 0.4s ease;
-}
-
-.grid-item:hover {
-  filter: brightness(1.2);
-}
-
-.unread-badge {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {  opacity: 1; }
-  50% {  opacity: 0.5; }
-  100% {  opacity: 1; }
-}
-
-</style>

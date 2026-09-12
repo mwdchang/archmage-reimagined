@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/spell.png" />
       <div>
         <div class="section-header">Cast Magic</div>
@@ -9,10 +9,10 @@
         </div>
       </div>
     </div>
-    <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
+    <section class="flex flex-row items-start gap-2 mt-[10px]">
 
       <div v-if="showArmy">
-        <table style="margin-bottom: 0.5rem"> 
+        <table class="mb-2"> 
           <tbody>
             <tr>
               <td>Unit</td>
@@ -27,7 +27,7 @@
               <td v-if="layout === 'table'" class="text-right"> 
                 {{ readableNumber(u.upkeep.geld) }} / {{ readableNumber(u.upkeep.mana) }} / {{ readableNumber(u.upkeep.population) }} 
               </td>
-              <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
+              <td class="text-right pl-[10px]"> {{ readableNumber(u.size) }} </td>
               <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
             </tr>
           </tbody>
@@ -52,9 +52,9 @@
         </table>
       </div>
 
-      <div v-if="showArmy === false" style="max-height: 400px; overflow-y: scroll; padding: 0">
+      <div v-if="showArmy === false" class="max-h-[400px] overflow-y-scroll p-0">
         <table v-if="spells.length > 0 && layout === 'table'">
-          <thead style="position: sticky; top: 0; z-index: 10">
+          <thead class="sticky top-0 z-10">
             <tr>
               <th>Name</th>
               <th>&nbsp;</th>
@@ -74,12 +74,12 @@
           </tbody>
         </table>
         <div v-if="spells.length > 0 && layout === 'cards'">
-          <div class="card" v-for="spell of castingSpells" :key="spell.id">
-            <div class="row">
+          <div class="rounded border border-[#333] bg-[#181818] m-2 p-2" v-for="spell of castingSpells" :key="spell.id">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="spell.magic" small />
               <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
             </div>
-            <div class="card-grid-2">
+            <div class="grid grid-cols-[1fr_2fr] gap-x-4">
               <div>Turns</div>
               <div class="text-right">{{ spell.castingTurn }}</div>
               <div>Mana cost</div>
@@ -88,14 +88,14 @@
           </div>
         </div>
 
-        <div v-if="spells.length === 0" style="max-width: 250px">
+        <div v-if="spells.length === 0" class="max-w-[250px]">
           You do not have any spells in your spellbook.
           Use <router-link :to="{ name: 'research' }">research</router-link> to learn new spells.
         </div>
       </div>
 
       <div>
-        <section class="form" style="max-width: 20rem">
+        <section class="form max-w-[20rem]">
           <div class="form-tabs">
             <div class="tab" :class="{ active: tabView === 'summon' }" @click="changeView('summon')">Summon</div>
             <div class="tab" :class="{ active: tabView === 'spell' }" @click="changeView('spell')">Spells</div>
@@ -104,7 +104,7 @@
 
           <div v-if="tabView !== 'battle'">
             <label>Select spell</label>
-            <select v-model="selected" v-if="spells.length > 0" style="max-width:175px" tabindex=1>
+            <select v-model="selected" v-if="spells.length > 0" class="max-w-[175px]" tabindex=1>
               <option v-for="spell of castingSpells" :key="spell.id" :value="spell.id">{{ spell.name }} ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})</option>
             </select>
 
@@ -118,7 +118,7 @@
                 @selected-value="setAutoComplete"
                 :options-fn="searchMageRank" 
               />
-              <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+              <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
                 <div>{{ target.label }} (#{{ target.id}})</div>
                 <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
               </div>
@@ -144,7 +144,7 @@
         </section>
 
         <div v-if="spellResult.length">
-          <div v-for="(d, idx) of spellResult" :key="idx" :class="{'error': d.type === 'error'}">
+          <div v-for="(d, idx) of spellResult" :key="idx" :class="d.type === 'error' ? 'text-[#e41] bg-[#200]' : ''">
             {{ d.message }}
           </div>
         </div>

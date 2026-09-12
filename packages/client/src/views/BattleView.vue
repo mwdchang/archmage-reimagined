@@ -1,6 +1,6 @@
 <template>
-  <main class="column" style="align-items: center">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main class="flex flex-col justify-center items-center gap-[5px]">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/battle.png" />
       <div>
         <div class="section-header">War</div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <section class="form" style="width: 25rem">
+    <section class="form w-[25rem]">
       <select v-model="battleType">
         <option value="regular">Regular</option>
         <option value="siege">Siege</option>
@@ -29,7 +29,7 @@
     </section>
 
     <div>Counters you given out</div>
-    <table style="min-width: 30rem">
+    <table class="min-w-[30rem]">
       <tbody>
         <tr>
           <td> Name </td>
@@ -40,7 +40,7 @@
         </tr>
         <tr v-for="(summary, idx) of offensiveBattles" :key="summary.id">
           <td> 
-            <div class="row">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="mages[summary.defenderId]?.magic" small /> 
               <router-link :to="{ name: 'mage', params: { mageId: summary.defenderId }}">
                 {{ summary.defenderName }} (#{{ summary.defenderId }}) 
@@ -66,7 +66,7 @@
     <br/>
 
     <div>Counters you received</div>
-    <table style="min-width: 30rem">
+    <table class="min-w-[30rem]">
       <tbody>
         <tr>
           <td> Name </td>
@@ -77,7 +77,7 @@
         </tr>
         <tr v-for="(summary, idx) of defensiveBattles" :key="summary.id">
           <td> 
-            <div class="row">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="mages[summary.attackerId]?.magic" small /> 
               <router-link :to="{ name: 'mage', params: { mageId: summary.attackerId }}">
                 {{ summary.attackerName }} (#{{ summary.attackerId }}) 

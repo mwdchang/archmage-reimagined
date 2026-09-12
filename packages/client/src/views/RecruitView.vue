@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/recruit.png" />
       <div>
         <div class="section-header">Recruitment</div>
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px">
+    <section class="flex flex-row items-start gap-2 mt-[10px]">
       <!-- left -->
       <table v-if="mageStore.mage && layout === 'table'">
         <tbody>
@@ -34,9 +34,9 @@
         </tbody>
       </table>
       <div v-if="mageStore.mage && layout === 'cards'">
-        <div class="card" v-for="(unit) of recruitableUnits">
+        <div class="rounded border border-[#333] bg-[#181818] m-2 p-2" v-for="(unit) of recruitableUnits">
           <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> {{ unit.name }} </router-link>
-          <div class="card-grid-2">
+          <div class="grid grid-cols-[1fr_2fr] gap-x-4">
             <div>Upkeep</div>
             <div>{{ resourceDisplay(unit.upkeepCost) }} </div>
             <div>Max/Turn</div>
@@ -48,10 +48,10 @@
 
       <!-- right -->
       <div>
-        <section class="form" style="width: 22rem">
+        <section class="form w-[22rem]">
           <label>Recruit units</label> 
 
-          <div class="row">
+          <div class="flex flex-row items-center gap-[5px]">
             <select v-model="rselect">
               <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
             </select>
@@ -59,26 +59,26 @@
           </div>
 
           <button @click="addOrder">Add</button>
-          <div v-if="errorStr" class="error">{{ errorStr }}</div>
+          <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
 
           <!-- current recruitment -->
-          <table style="margin-top: 0.5rem"> 
+          <table class="mt-2"> 
             <tr v-for="(r, idx) of currentRecruitments" :key="r.id">
-              <td style="min-width: 8rem">
+              <td class="min-w-[8rem]">
                 {{ readableStr(r.id) }}
               </td>
               <td class="text-right">{{ readableNumber(r.size) }}</td>
               <td> 
-                <div class="row" style="gap: 0.25rem; font-size: 0.8rem">
-                  <svg-icon class="sicon" name="remove" size="1.10rem" @click="deleteOrder(idx)" />
+                <div class="flex flex-row items-center gap-1 text-[0.8rem]">
+                  <svg-icon class="cursor-pointer hover:text-[#aaaaee] hover:bg-[#444444]" name="remove" size="1.10rem" @click="deleteOrder(idx)" />
                   <div>|</div>
-                  <svg-icon class="sicon" name="doubleCaretUp" size="1.25rem" @click="moveTop(idx)" />
+                  <svg-icon class="cursor-pointer hover:text-[#aaaaee] hover:bg-[#444444]" name="doubleCaretUp" size="1.25rem" @click="moveTop(idx)" />
                   <div>|</div>
-                  <svg-icon class="sicon" name="caretUp" size="1.25rem" @click="moveUp(idx)" />
+                  <svg-icon class="cursor-pointer hover:text-[#aaaaee] hover:bg-[#444444]" name="caretUp" size="1.25rem" @click="moveUp(idx)" />
                   <div>|</div>
-                  <svg-icon class="sicon" name="caretDown" size="1.25rem" @click="moveDown(idx)" />
+                  <svg-icon class="cursor-pointer hover:text-[#aaaaee] hover:bg-[#444444]" name="caretDown" size="1.25rem" @click="moveDown(idx)" />
                   <div>|</div>
-                  <svg-icon class="sicon" name="doubleCaretDown" size="1.25rem" @click="moveBottom(idx)" />
+                  <svg-icon class="cursor-pointer hover:text-[#aaaaee] hover:bg-[#444444]" name="doubleCaretDown" size="1.25rem" @click="moveBottom(idx)" />
                 </div>
               </td>
             </tr>
@@ -197,21 +197,3 @@ onMounted(() => {
 });
 
 </script>
-
-<style scoped>
-.row {
-  display: flex;
-}
-
-.sicon {
-  cursor: pointer;
-}
-
-.sicon:hover {
-  color: #aaaaee;
-  background: #444444;
-}
-
-
-
-</style>

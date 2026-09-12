@@ -1,28 +1,28 @@
 <template>
   <main>
-    <section class="form" style="width: 28rem; margin-left: 3rem; opacity: 0.8">
-      <h2 class="section-header" style="margin-bottom: 0.5rem">Enter Terra</h2>
-      <p style="margin-bottom: 0.5rem">
+    <section class="form w-[28rem] max-w-full ml-12 opacity-80">
+      <h2 class="section-header mb-2">Enter Terra</h2>
+      <p class="mb-2">
         Register a new account by clicking on "Create account", or login with your existing credentials.
       </p>
-      <div class="row" style="align-items: baseline; gap: 20px">
-        <span style="width:5rem">Username</span> 
+      <div class="flex flex-row items-baseline gap-5 py-1">
+        <span class="w-20 shrink-0">Username</span> 
         <input @keyup.enter="login" name="username" type="text" v-model="loginData.username">
       </div>
 
-      <div class="row" style="align-items: baseline; gap: 20px">
-        <span style="width:5rem">Password</span> 
+      <div class="flex flex-row items-baseline gap-5 py-1">
+        <span class="w-20 shrink-0">Password</span> 
         <input @keyup.enter="login" name="password" type="password" v-model="loginData.password">
       </div>
 
-      <div class="row" style="justify-content: space-between">
-        <button @click="emit('register')" style="background: #460"> Create account</button>
+      <div class="flex flex-row justify-between items-center py-1">
+        <button @click="emit('register')" class="!bg-[#460]"> Create account</button>
         <ActionButton 
           :proxy-fn="login"
           :label="'Sign in'" />
       </div>
 
-      <div v-if="error !== ''" style="color: #d34">{{ error }}</div>
+      <div v-if="error !== ''" class="text-[#d34] mt-2">{{ error }}</div>
     </section>
 
   </main>
@@ -66,13 +66,4 @@ const login = async () => {
   }
 };
 </script>
-
-<style scoped>
-.row {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  justify-items: flex-end;
-  display: flex;
-}
-</style>
 

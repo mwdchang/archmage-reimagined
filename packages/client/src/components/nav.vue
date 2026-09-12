@@ -1,39 +1,39 @@
 <template>
-  <div id="menu-toggle" class="menu-toggle hide-on-mobile">Menu</div>
-  <div class="sidenav" id="mySidenav">
-    <a href="javascript:void(0)" class="closebtn" id="closebtn">&times; Close</a>
+  <div id="menu-toggle" class="absolute top-[10px] left-[10px] p-[5px] text-[15px] text-white cursor-pointer max-sm:hidden">Menu</div>
+  <div class="absolute top-0 left-0 h-full w-0 z-[2] bg-[#1c1c1c] overflow-x-hidden transition-all duration-300 pt-[40px]" id="mySidenav">
+    <a href="javascript:void(0)" class="absolute top-[10px] block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300" id="closebtn">&times; Close</a>
 
     <!--
-    <router-link to="/about">Kingdom</router-link>
-    <router-link to="/status">Status</router-link>
-    <div class="divider"></div>
+    <router-link to="/about" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Kingdom</router-link>
+    <router-link to="/status" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Status</router-link>
+    <div class="border-b-2 border-[#333] my-[2px]"></div>
     -->
 
     <!--
-    <router-link to="/chronicles">Chronicles</router-link>
-    <router-link to="/rankList">Ranking</router-link>
+    <router-link to="/chronicles" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Chronicles</router-link>
+    <router-link to="/rankList" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Ranking</router-link>
     -->
 
     <!--
-    <router-link to="/battle">Battle</router-link>
-    <router-link to="/spell">Cast Spells</router-link>
-    <router-link to="/dispel">Dispel Magic</router-link>
-    <router-link to="/item">Use Item</router-link>
-    <div class="divider"></div>
+    <router-link to="/battle" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Battle</router-link>
+    <router-link to="/spell" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Cast Spells</router-link>
+    <router-link to="/dispel" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Dispel Magic</router-link>
+    <router-link to="/item" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Use Item</router-link>
+    <div class="border-b-2 border-[#333] my-[2px]"></div>
 
-    <router-link to="/assignment">Assignment</router-link>
-    <router-link to="/research">Research</router-link>
-    <router-link to="/explore">Explore</router-link>
-    <router-link to="/geld">Geld</router-link>
-    <router-link to="/charge">Mana Charge</router-link>
-    <router-link to="/build">Building</router-link> 
-    <router-link to="/destroy">Destroy</router-link> 
-    <router-link to="/recruit">Recruit</router-link> 
-    <router-link to="/disband">Disband</router-link> 
-    <div class="divider"></div>
+    <router-link to="/assignment" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Assignment</router-link>
+    <router-link to="/research" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Research</router-link>
+    <router-link to="/explore" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Explore</router-link>
+    <router-link to="/geld" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Geld</router-link>
+    <router-link to="/charge" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Mana Charge</router-link>
+    <router-link to="/build" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Building</router-link> 
+    <router-link to="/destroy" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Destroy</router-link> 
+    <router-link to="/recruit" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Recruit</router-link> 
+    <router-link to="/disband" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Disband</router-link> 
+    <div class="border-b-2 border-[#333] my-[2px]"></div>
     -->
     <div>
-      <a href="#" @click="logout()">Logout</a>
+      <a href="#" @click="logout()" class="block py-[4px] pr-[4px] pl-[20px] text-[15px] leading-none no-underline text-[#b1b1b1] hover:text-[#f1f1f1] transition-all duration-300">Logout</a>
     </div>
   </div>
 </template>
@@ -69,57 +69,3 @@ onMounted(() => {
 
 
 </script>
-
-
-<style scoped>
-.divider {
-  border-bottom: 2px solid #333;
-  margin-top: 2px;
-  margin-bottom: 2px;
-}
-
-.menu-toggle {
-  font-size: 15px;
-  cursor: pointer;
-  padding: 5px;
-  /* background-color: #333; */
-  color: white;
-  /* position: absolute; */
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  background-color: #1c1c1c;
-  overflow-x: hidden;
-  transition: 0.3s;
-  padding-top: 40px;
-}
-
-.sidenav a {
-  padding: 4px 4px 4px 20px;
-  text-decoration: none;
-  line-height: 1.0;
-  font-size: 15px;
-  color: #b1b1b1;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 10px;
-  font-size: 15px;
-}
-</style>

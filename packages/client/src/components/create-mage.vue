@@ -1,16 +1,16 @@
 <template>
-  <main style="width: 100%">
-    <section class="form" style="width: 100%; max-width: 100%"> 
+  <main class="w-full">
+    <section class="form w-full max-w-full"> 
       <div>
-        <h2 style="margin-bottom: 1rem">Create mage</h2>
-        <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
-          <span style="width: 5rem">Name</span> 
+        <h2 class="mb-4">Create mage</h2>
+        <div class="flex flex-row items-baseline gap-[10px] max-w-[25rem] py-1">
+          <span class="w-20 shrink-0">Name</span> 
           <input @keyup.enter="register" name="username" type="text"
             v-model="registerData.mageName">
         </div>
 
-        <div class="row" style="align-items: baseline; gap: 10px; max-width: 25rem">
-          <span style="width: 5rem">Magic 
+        <div class="flex flex-row items-baseline gap-[10px] max-w-[25rem] py-1">
+          <span class="w-20 shrink-0">Magic 
           </span>
           <select v-model="registerData.magic">
             <option value="ascendant">Ascendant</option>
@@ -22,19 +22,19 @@
         </div>
       </div>
 
-      <h2 class="row">
+      <h2 class="flex flex-row items-center gap-[5px] my-2">
         <magic :magic="registerData.magic" />  {{ readableStr(registerData.magic) }}
       </h2>
-      <div class="row" style="gap: 20px">
-        <section style="margin-left: 1rem">
-          <img v-show="registerData.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
-          <img v-show="registerData.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
-          <img v-show="registerData.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
-          <img v-show="registerData.magic === 'nether'" src="@/assets/images/nether-new.png" />
-          <img v-show="registerData.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
+      <div class="flex flex-row items-center gap-5">
+        <section class="ml-4 shrink-0">
+          <img class="h-[150px] object-contain" v-show="registerData.magic === 'ascendant'" src="@/assets/images/ascendant-new.png" />
+          <img class="h-[150px] object-contain" v-show="registerData.magic === 'verdant'" src="@/assets/images/verdant-new.png" />
+          <img class="h-[150px] object-contain" v-show="registerData.magic === 'eradication'" src="@/assets/images/eradication-new.png" />
+          <img class="h-[150px] object-contain" v-show="registerData.magic === 'nether'" src="@/assets/images/nether-new.png" />
+          <img class="h-[150px] object-contain" v-show="registerData.magic === 'phantasm'" src="@/assets/images/phantasm-new.png" />
         </section>
 
-        <section class="magic-desc">
+        <section class="max-w-[90vw] lg:max-w-[50vw] leading-[1.35rem]">
           <p v-show="registerData.magic === 'ascendant'">
             The guiding principle of Ascendant magic is one based on piety.
             Focussing on magic that heals rather than harms, Ascendant mages are fearsome
@@ -76,7 +76,7 @@
         :label="'Create'" />
     </section>
 
-    <div class="error">
+    <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">
       {{ errorStr }}
     </div>
   </main>
@@ -123,26 +123,3 @@ const register = async () => {
   }
 };
 </script>
-
-<style scoped>
-img {
-  height: 150px;
-}
-
-.magic-desc {
-  max-width: 55vw;
-  line-height: 1.35rem
-}
-
-.magic-desc {
-  max-width: 90vw;
-  line-height: 1.35rem
-}
-
-@media (min-width: 1024px) {
-  .magic-desc {
-    max-width: 50vw;
-    line-height: 1.35rem
-  }
-}
-</style>
