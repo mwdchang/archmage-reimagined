@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col items-center">
-    <canvas id="arcane"></canvas>
+    <canvas id="arcane" class="absolute pointer-events-none opacity-25"></canvas>
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
 
@@ -237,12 +237,5 @@ onMounted(async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-
-#arcane {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0.25;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/build.png" />
       <div>
         <div class="section-header">Build</div>
@@ -11,7 +11,7 @@
     </div>
     <build-table @build="build($event)" />
     <div v-if="buildStr">{{ buildStr }}</div>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">{{ errorStr }}</div>
   </main>
 </template>
 

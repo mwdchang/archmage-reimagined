@@ -1,9 +1,9 @@
 <template>
   <main>
-    <div class="section-header" style="margin-bottom: 1rem">Lookup</div>
+    <div class="section-header mb-4">Lookup</div>
 
-    <div class="row" style="margin-bottom: 0.5rem; justify-content: space-between;">
-      <div class="row">
+    <div class="flex flex-row items-center justify-between mb-2">
+      <div class="flex flex-row items-center gap-[5px]">
         <magic :magic="mageSummary.magic" />
         {{ mageSummary.name }} (#{{ mageSummary.id }}) 
       </div>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <table style="min-width: 20rem" v-if="mageSummary.id">
+    <table v-if="mageSummary.id" class="min-w-[20rem]">
       <tbody>
         <tr>
           <td>Specialty</td>
@@ -45,7 +45,7 @@
         <tr> 
           <td>Chronicles</td>
           <td>
-            <div class="row" style="padding: 0 1rem; justify-content: space-between; gap: 1.0rem">
+            <div class="flex flex-row items-center justify-between gap-4 px-4">
               <router-link :to="{ name: 'chronicles', query: { targetId: mageSummary.id, window: 1 } }">
                 1H
               </router-link>
@@ -64,7 +64,7 @@
         <tr v-if="mageStore.mage!.id !== mageId"> 
           <td>Action</td>
           <td>
-            <div class="row" style="padding: 0 1rem; gap: 1.0rem">
+            <div class="flex flex-row items-center gap-4 px-4">
               <router-link 
                 :to="{ name: 'spell', query: { targetId: mageSummary.id }}">
                 Magic 
@@ -79,7 +79,7 @@
         <tr v-if="mageStore.mage!.id !== mageId"> 
           <td>Attack</td>
           <td> 
-            <div class="row" style="padding: 0 1rem; justify-content: space-between; gap: 1.0rem">
+            <div class="flex flex-row items-center justify-between gap-4 px-4">
               <router-link 
                 :to="{ name: 'battlePrep', params: { targetId: mageSummary.id, battleType: 'siege' }}">
                 Siege
@@ -121,6 +121,3 @@ onMounted(async () => {
 });
 
 </script>
-
-<style scoped>
-</style>
