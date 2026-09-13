@@ -1,12 +1,12 @@
 <template>
-  <main>
-    <h2 v-if="item" class="row">
+  <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
+    <h2 v-if="item" class="flex flex-row items-center gap-[5px]">
       <magic :magic="'plain'" /> {{ item.name }}
     </h2>
 
     <section v-if="item">
-      <p style="margin: 1rem 1rem">{{ item.description }} </p>
-      <table style="margin-bottom: 25px">
+      <p class="m-4">{{ item.description }} </p>
+      <table class="w-[70%] mb-[25px]">
         <tbody>
           <tr>
             <td> Atrributes </td>
@@ -23,7 +23,7 @@
         </tbody>
       </table>
 
-      <div v-for="(effect, idx) in item.effects" :key="idx" style="margin-bottom: 10px">
+      <div v-for="(effect, idx) in item.effects" :key="idx" class="mb-[10px]">
         <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
         <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />
         <BattleEffect v-if="effect.effectType === 'PrebattleEffect'" :effect="effect as any" />
@@ -68,17 +68,5 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-main {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 22%;
-  line-height: 120%;
-  gap: 5px;
-}
 
-table {
-  width: 70%;
-}
-</style>
 

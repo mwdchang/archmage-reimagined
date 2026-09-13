@@ -1,7 +1,8 @@
 <template>
   <span
     v-html="iconSvg"
-    :style="{ width: sizePx, height: sizePx, display: 'inline-block' }"
+    class="inline-block"
+    :style="{ width: sizePx, height: sizePx }"
   />
 </template>
 

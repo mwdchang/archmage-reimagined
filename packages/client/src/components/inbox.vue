@@ -1,13 +1,13 @@
 <template>
-  <main style="display: flex; flex-direction: column; gap: 10">
+  <main class="flex flex-col gap-[10px] min-w-[35rem]">
 
     <section class="form"> 
-      <div class="row" style="justify-content: space-between">
+      <div class="flex flex-row items-center gap-[5px] justify-between">
         <ActionButton 
           :proxy-fn="compose"
           :label="'Compose'" />
 
-        <div class="row" style="gap: 0.5rem">
+        <div class="flex flex-row items-center gap-2">
           <ActionButton 
             v-if="currentView === 'listView'"
             :proxy-fn="deleteBM"
@@ -24,16 +24,16 @@
       </div>
     </section>
 
-    <section class="message-list-pane" v-if="currentView === 'listView'">
+    <section class="w-full flex flex-col text-[0.9rem]" v-if="currentView === 'listView'">
       <h3>Messages</h3>
-      <div class="message-list" id="messageList">
+      <div class="overflow-y-auto flex-grow" id="messageList">
         <div v-for="message of mails" 
           :key="message.id"
-          class="message-item"
+          class="p-[0.20rem] border-b border-[#888] cursor-pointer hover:bg-[#505050]"
           @click="openMail(message)">
-          <div class="row" style="justify-content:space-between" :class="{ 'unread': message.read === false}">
-            <div :class="{ 'unread': message.read === false }"> {{ message.subject }}</div>
-            <div :class="{ 'unread': message.read === false }" style="color: #888; font-size: 0.75rem"> {{ readableDate(message.timestamp) }}</div>
+          <div class="flex flex-row items-center gap-[5px] justify-between" :class="{ 'font-semibold bg-[#333]': message.read === false}">
+            <div :class="{ 'font-semibold bg-[#333]': message.read === false }"> {{ message.subject }}</div>
+            <div :class="{ 'font-semibold bg-[#333]': message.read === false }" class="text-[#888] text-[0.75rem]"> {{ readableDate(message.timestamp) }}</div>
           </div>
         </div>
         <div v-if="mails.length === 0">
@@ -42,16 +42,16 @@
       </div>
     </section>
 
-    <section class="message-list-pane" v-if="currentView === 'composeView'">
+    <section class="w-full flex flex-col text-[0.9rem]" v-if="currentView === 'composeView'">
       <div class="form" v-if="currentMail">
-        <div class="row" style="align-items: baseline; gap: 1.0rem">
+        <div class="flex flex-row items-baseline gap-4">
 
           <Autocomplete 
             v-if="!targetMage"
             @selected-value="setAutoComplete"
             :options-fn="searchMageRank" 
           />
-          <div v-else class="row" style="margin-bottom: 1.0rem; color: #18d">
+          <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
             <div>{{ targetMage.label }} (#{{ targetMage.id}})</div>
             <svg-icon name="remove" size="1.5rem" @click="targetMage = null" /> 
           </div>
@@ -60,15 +60,15 @@
 
         </div>
 
-        <div class="row" style="align-items: baseline; gap: 5">
+        <div class="flex flex-row items-baseline gap-[5px]">
           <input type="text" placeholder="subject..." v-model="currentMail.subject" />
         </div>
         <textarea
           v-model="currentMail.content"
-          class="content-area"
+          class="w-full h-[12rem] bg-[#2a2a2a] text-[#f1f1f1] border border-[#444] mb-2 p-[0.50rem]"
           placeholder="content..."></textarea>
 
-        <div class="row" style="gap: 2; justify-content: space-between;">
+        <div class="flex flex-row items-center gap-[2px] justify-between">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
@@ -81,32 +81,32 @@
       </div>
     </section>
 
-    <section class="message-view-pane" v-if="currentView === 'replyView'">
+    <section class="flex-grow flex flex-col text-[0.9rem]" v-if="currentView === 'replyView'">
       <div class="form">
-        <div class="row" style="justify-content:space-between; margin-bottom: 0.5rem">
-          <div style="font-weight: 600"> {{ currentMail?.subject }} </div>
-          <div v-if="currentMail.timestamp" style="color: #888"> {{ readableDate(currentMail.timestamp) }}</div>
+        <div class="flex flex-row items-center gap-[5px] justify-between mb-2">
+          <div class="font-semibold"> {{ currentMail?.subject }} </div>
+          <div v-if="currentMail.timestamp" class="text-[#888]"> {{ readableDate(currentMail.timestamp) }}</div>
         </div>
 
         <textarea 
-          class="content-area"
+          class="w-full h-[12rem] bg-[#2a2a2a] text-[#f1f1f1] border border-[#444] mb-2 p-[0.50rem]"
           v-if="currentMail.source! > 0"
           v-model="replyContent"
           placeholder="Reply...">
         </textarea>
 
         <textarea 
-          class="content-area"
+          class="w-full h-[12rem] bg-[#2a2a2a] text-[#f1f1f1] border border-[#444] mb-2 p-[0.50rem] disabled:text-[#bbb]"
           disabled 
           :value="currentMail?.content"></textarea>
 
 
-        <div class="row" style="justify-content:space-between">
+        <div class="flex flex-row items-center gap-[5px] justify-between">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />
 
-          <div class="row" style="gap: 0.5rem">
+          <div class="flex flex-row items-center gap-2">
             <ActionButton 
               :proxy-fn="deleteMail"
               :label="'Delete'" 
@@ -314,90 +314,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style scoped>
-main {
-  /* FIXME: mobile */
-  min-width: 35rem
-}
-
-.mobile-only {
-  display: none;
-}
-
-/* LEFT PANE */
-.message-list-pane {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.9rem;
-}
-
-.message-list {
-  overflow-y: auto;
-  flex-grow: 1;
-}
-
-.message-item {
-  padding: 0.20rem;
-  border-bottom: 1px solid #888;
-  cursor: pointer;
-}
-
-.message-item:hover {
-  background: #505050;
-}
-
-.message-item.active {
-  background: #dfeeff;
-}
-
-.message-view-pane {
-  flex-grow: 2;
-  /* display: flex; */
-  display: flex;
-  flex-direction: column;
-  font-size: 0.9rem;
-}
-
-.message-content {
-  padding: 16px;
-  overflow-y: auto;
-  flex-grow: 1;
-}
-
-.reply-box {
-  border-top: 1px solid #ccc;
-  padding: 10px;
-  background: #fff;
-  display: flex;
-  gap: 10px;
-}
-
-.reply-box textarea {
-  flex-grow: 1;
-  resize: none;
-  height: 80px;
-  padding: 8px;
-}
-
-.unread {
-  font-weight: 600;
-  background: #333;
-}
-
-textarea.content-area {
-  width: 100%;
-  height: 12rem;
-  background-color: #2a2a2a;
-  color: #f1f1f1;
-  border: 1px solid #444;
-  margin-bottom: 0.5rem;
-  padding: 0.50rem;
-}
-
-textarea.content-area[disabled] {
-  color: #bbb;
-}
-
-</style>

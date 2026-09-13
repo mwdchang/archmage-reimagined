@@ -1,5 +1,5 @@
 <template>
-  <div class="autocomplete">
+  <div class="relative w-[200px]">
     <input 
       type="text" 
       v-model="searchStr" 
@@ -12,11 +12,12 @@
       placeholder="search..."
     />
 
-    <ul v-if="showDropdown && filteredOptions.length" class="dropdown">
+    <ul v-if="showDropdown && filteredOptions.length" class="absolute top-full left-0 right-0 border border-[#ccc] rounded-lg bg-[#333] max-h-[150px] overflow-y-auto list-none m-0 p-0 z-10">
       <li 
         v-for="(option, index) in filteredOptions" 
         :key="option.id"
-        :class="{ highlighted: index === highlightedIndex }"
+        class="p-2 cursor-pointer"
+        :class="{ 'bg-[#007bff] text-white': index === highlightedIndex }"
         @mousedown.prevent="selectOption(option)"
       >
         {{ option.label }} (#{{ option.id }})
@@ -89,35 +90,4 @@ const selectHighlighted = () => {
 }
 </script>
 
-<style>
-.autocomplete {
-  position: relative;
-  width: 200px;
-}
 
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background: #333;
-  max-height: 150px;
-  overflow-y: auto;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  z-index: 10;
-}
-
-.dropdown li {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.dropdown li.highlighted {
-  background-color: #007bff;
-  color: white;
-}
-</style>

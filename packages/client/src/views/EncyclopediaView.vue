@@ -1,9 +1,9 @@
 <template>
-  <main class="column" style="align-items: center">
+  <main class="flex flex-col justify-center gap-[5px] items-center">
     <div class="section-header">Encyclopedia</div>
-    <section class="form" style="width: 20rem; margin-bottom: 10px">
-      <div class="row">
-        <select style="width: 10rem" v-model="currentSelection" @change="changeSelection">
+    <section class="form w-[20rem] mb-[10px]">
+      <div class="flex flex-row items-center gap-[5px]">
+        <select class="w-[10rem]" v-model="currentSelection" @change="changeSelection">
           <option value="spell">Spells</option>
           <option value="unit">Units</option>
           <option value="item">Items</option>
@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="spell of filteredSpells"> 
           <td>
-            <div class="row">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="spell.magic" small />
               <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> 
                 <div>{{ readableStr(spell.id) }}</div>
@@ -45,7 +45,7 @@
       <tbody>
         <tr v-for="unit of filteredUnits"> 
           <td>
-            <div class="row">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="unit.magic" small />
               <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> 
                 {{ unit.name }}
@@ -91,14 +91,14 @@
       <tbody>
         <tr v-for="skill of filteredSkills">
           <td>
-            <div class="row">
+            <div class="flex flex-row items-center gap-[5px]">
               <magic :magic="skill.magic" small />
               <router-link :to="{ name: 'viewSkill', params: { id: skill.id }}"> 
                 {{ skill.name }}
               </router-link>
             </div>
           </td>
-          <td style="max-width: 25rem">
+          <td class="max-w-[25rem]">
             {{ skill.description }}
           </td>
         </tr>
