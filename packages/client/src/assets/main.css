@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./display.css";
 @source not "**/*.md";
 
 @theme {
@@ -156,7 +157,7 @@
   }
 }
 
-/* Custom utilities & bridge during migration */
+/* Custom utilities */
 @utility section-header {
   color: #F80;
 }
@@ -165,13 +166,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
-}
-
-@utility column {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   gap: 5px;
 }
 
@@ -190,27 +184,6 @@
   font-weight: 600;
 }
 
-@utility display-section {
-  border-left: 1px solid #8ab;
-  padding-left: 20px;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  background: #1D1D1D;
-}
-
-@utility gen-img {
-  height: 15rem;
-  @media (max-width: 600px) {
-    width: 80vw;
-  }
-}
-
-@utility hide-on-mobile {
-  @media (max-width: 600px) {
-    display: none;
-  }
-}
-
 @utility spinner {
   animation: rotate 2s linear infinite;
 }
@@ -222,27 +195,6 @@
   margin: 0.5rem;
   padding: 0.5rem;
 }
-
-@utility card-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 0.0rem 1.0rem;
-}
-
-/* grid shortcuts */
-@utility g-c1 { grid-column: 1; }
-@utility g-c2 { grid-column: 2; }
-@utility g-c3 { grid-column: 3; }
-@utility g-c4 { grid-column: 4; }
-@utility g-c5 { grid-column: 5; }
-@utility g-c6 { grid-column: 6; }
-
-@utility g-r1 { grid-row: 1; }
-@utility g-r2 { grid-row: 2; }
-@utility g-r3 { grid-row: 3; }
-@utility g-r4 { grid-row: 4; }
-@utility g-r5 { grid-row: 5; }
-@utility g-r6 { grid-row: 6; }
 
 @keyframes rotate {
   100% {

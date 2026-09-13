@@ -1,5 +1,5 @@
 <template>
-  <main class="column items-center">
+  <main class="flex flex-col justify-center gap-[5px] items-center">
     <section class="row">
       <img src="@/assets/images/ascendant-new.png" class="w-[64px]"/>
       <img src="@/assets/images/verdant-new.png" class="w-[64px]"/>

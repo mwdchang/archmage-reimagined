@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="section-header mb-2">Server configurations</div>
-    <section class="column max-w-[35rem]">
+    <section class="flex flex-col justify-center gap-[5px] max-w-[35rem]">
       <table v-if="gameTable" class="min-w-[20rem] mb-2">
         <tbody>
           <tr>
