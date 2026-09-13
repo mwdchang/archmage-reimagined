@@ -3,7 +3,7 @@
     <div v-if="attr.rule === 'set'">
       Set {{ attr.key.split(",").join(",&nbsp;") }} to:&nbsp;
     </div>
-    <div v-else style="line-height: 120%">
+    <div v-else class="effect-desc">
       Modify {{ attr.key.split(",").map(readableStr).join(",&nbsp;") }} by:&nbsp;
       <span class="special-text">
         <span v-if="attr.rule === 'add'"> value </span>
@@ -14,10 +14,10 @@
       </span>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 2px">
+    <div class="flex flex-col gap-[2px]">
       <div 
         v-for="(val, magic) of attr.magic"
-        style="display: flex; flex-direction: row; align-items: center; margin-left: 1rem; gap: 15px">
+        class="magic-value-row">
         <magic :magic="magic as string" small />
         <span v-if="attr.key === 'abilities'">
           {{ val.value.name }} <span v-if="val.value.extra">({{ val.value.extra }})</span>
@@ -50,9 +50,4 @@ const attributes = computed(() => {
       magic: props.effect.attributes[key].magic
     };
   });
-});
-
-</script>
-
-<style scoped>
-</style>
+});</script>

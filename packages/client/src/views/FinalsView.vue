@@ -1,7 +1,7 @@
 <template>
   <section v-if="serverClock && resetEnded === false">
     <div class="row">
-      <img src="@/assets/images/hourglass.png" style="height: 250px" />
+      <img src="@/assets/images/hourglass.png" class="h-[250px]" />
     </div>
     <p>
       There are still time left in Terra ... 
@@ -11,11 +11,11 @@
   </section>
   <section v-if="serverClock && resetEnded === true">
     <h1> Terra is obliterated</h1>
-    <p style="margin-bottom: 0.5rem"> 
+    <p class="mb-2"> 
      These are the mages who have gained their place in the Hall of Immmortality. The cycle will restart soon.
     </p>
 
-    <table style="min-width: 30rem"> 
+    <table class="min-w-[30rem]"> 
       <thead>
         <tr>
           <td>Rank</td>

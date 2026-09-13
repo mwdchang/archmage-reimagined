@@ -12,7 +12,7 @@
       </div>
     </p>
     <div>&nbsp;</div>
-    <div v-for="battleEffect in effect.effects" style="margin-bottom: 10px">
+    <div v-for="battleEffect in effect.effects" class="mb-2.5">
       <UnitAttrEffect v-if="battleEffect.effectType === 'UnitAttrEffect'" :effect="battleEffect as any" />
       <HealEffect v-if="battleEffect.effectType === 'UnitHealEffect'" :effect="battleEffect as any" />
       <DamageEffect v-if="battleEffect.effectType === 'UnitDamageEffect'" :effect="battleEffect as any" />

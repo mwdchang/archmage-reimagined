@@ -1,8 +1,8 @@
 <template>
   <main>
-    <div class="section-header" style="margin-bottom: 0.5rem">Server configurations</div>
-    <section class="column" style="max-width: 35rem">
-      <table v-if="gameTable" style="min-width: 20rem; margin-bottom: 0.5rem">
+    <div class="section-header mb-2">Server configurations</div>
+    <section class="column max-w-[35rem]">
+      <table v-if="gameTable" class="min-w-[20rem] mb-2">
         <tbody>
           <tr>
             <td>Exploration limit</td>
@@ -62,11 +62,11 @@
         </tbody>
       </table>
 
-      <section class="grid-container" v-if="clock">
-        <div class="grid-item">
-          <img src="@/assets/images/hourglass.png" style="height: 12rem" />
+      <section class="grid min-w-[20rem] grid-cols-[1fr_2fr] gap-2" v-if="clock">
+        <div class="text-center">
+          <img src="@/assets/images/hourglass.png" class="h-[12rem]" />
         </div>
-        <div class="grid-item clock-display"> 
+        <div class="text-center flex flex-col justify-center text-[1.10rem] leading-[125%]"> 
           <p>Current server turn is {{ readableNumber(clock.currentTurn) }}.</p>
           <p>Terra will be destroyed on turn {{ readableNumber(clock.endTurn) }} 
           ({{ readableDate(approxEndTime) }}).</p>
@@ -125,24 +125,3 @@ onMounted(async () => {
   gameTable.value = (await API.get<GameTable>('/game-table')).data;
 });
 </script>
-
-<style scoped>
-.grid-container {
-  min-width: 20rem;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 0.5rem 0.5rem;
-}
-
-.grid-item {
-  text-align: center;
-}
-
-.clock-display {
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center;
-  font-size: 1.10rem;
-  line-height: 125%;
-}
-</style>

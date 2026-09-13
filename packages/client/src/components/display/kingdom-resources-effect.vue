@@ -14,7 +14,7 @@
 
     <div 
       v-for="(magic) of allowedMagicList"
-      style="align-items: center; margin-left: 1rem; gap: 15px">
+      class="magic-value-row">
       <div class="row" v-if="effect.magic[magic]">
         <magic :magic="magic as string" small />
         <span>
