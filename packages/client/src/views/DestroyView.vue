@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/destroy.png" />
       <div>
         <div class="section-header">Destroy Buildings</div>
@@ -14,7 +14,7 @@
     </div>
     <destroy-table @destroy="destroy($event)" />
     <div v-if="destroyStr">{{ destroyStr }}</div>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
   </main>
 </template>
 

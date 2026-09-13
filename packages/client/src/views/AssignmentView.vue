@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/assignment.png" />
       <div>
         <div class="section-header">Assignment</div>
@@ -11,8 +11,8 @@
     </div>
 
     <section class="form">
-      <div class="row" style="align-items: baseline">
-        <label style="width: 12rem"> Spell </label>
+      <div class="flex flex-row items-baseline gap-[5px]">
+        <label class="w-48"> Spell </label>
         <select v-model="selectedSpellId" @change="setAssignment()">
           <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">
             {{ spell.name }} <span v-if="spell.id"> ({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost ) }}) </span> 
@@ -20,15 +20,15 @@
         </select>
       </div>
 
-      <div class="row" style="align-items: baseline">
-        <label style="width: 12rem"> Spell condition</label>
+      <div class="flex flex-row items-baseline gap-[5px]">
+        <label class="w-48"> Spell condition</label>
         <select v-model="selectedSpellCondition" @change="setAssignment()">
           <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
         </select>
       </div>
 
-      <div class="row" style="align-items: baseline">
-        <label style="width: 12rem"> Item </label>
+      <div class="flex flex-row items-baseline gap-[5px]">
+        <label class="w-48"> Item </label>
         <select v-model="selectedItemId" @change="setAssignment()">
           <option v-for="item of usableItems" :key="item.id" :value="item.id">
             {{ item.name }} <span v-if="item.id"> ({{ item.amount }}) </span>
@@ -36,9 +36,9 @@
         </select>
       </div>
 
-      <div class="row" style="align-items: baseline">
-        <label style="width: 12rem"> Item condition </label>
-        <select v-model="selectedItemCondition" @change="setAssignment()" style="margin-bottom: 0">
+      <div class="flex flex-row items-baseline gap-[5px]">
+        <label class="w-48"> Item condition </label>
+        <select v-model="selectedItemCondition" @change="setAssignment()" class="mb-0">
           <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
         </select>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <main>
     <section v-if="targetSummary">
-      <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+      <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
         <ImageProxy src="/images/ui/battle2.png" />
         <div>
           <div class="section-header">War</div>
@@ -12,7 +12,7 @@
           </span>
         </div>
       </div>
-      <table style="min-width: 20rem">
+      <table class="min-w-[20rem]">
         <tbody>
           <tr>
             <td>Unit</td> 
@@ -43,17 +43,17 @@
 
       <br>
 
-      <section class="form" style="width: 25rem">
-        <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
-          <label style="width:6rem">Spell</label>
+      <section class="form w-[25rem]">
+        <div class="flex flex-row items-baseline gap-[5px]" v-if="battleType !== 'pillage'">
+          <label class="w-24">Spell</label>
           <select v-model="battleSpell">
             <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">
               {{ spell.name }} <span v-if="spell.id">({{ Math.floor(mageStore.mage!.currentMana / spell.castingCost) }})</span>  
             </option>
           </select>
         </div>
-        <div class="row" style="align-items: baseline" v-if="battleType !== 'pillage'">
-          <label style="width:6rem">Item</label>
+        <div class="flex flex-row items-baseline gap-[5px]" v-if="battleType !== 'pillage'">
+          <label class="w-24">Item</label>
           <select v-model="battleItem">
             <option v-for="item of battleItems" :key="item.id" :value="item.id">
               {{ item.name }} <span v-if="item.id">({{ item.amount }})</span>
@@ -74,7 +74,7 @@
 
       </section>
     </section>
-    <div v-for="error of errorStrs" class="error">
+    <div v-for="error of errorStrs" class="text-[#e41] bg-[#200]">
       {{ error }}
     </div>
   </main>

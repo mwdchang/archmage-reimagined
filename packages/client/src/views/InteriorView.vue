@@ -1,5 +1,5 @@
 <template>
-  <main v-if="mageStore.mage">
+  <main v-if="mageStore.mage" class="max-w-[30rem]">
     <h2> Interior </h2>
     <section> 
       Taxation
@@ -7,7 +7,7 @@
         In times of war and empty treasuries the people have to fullfil their obligations. 
         Your income is about {{ geldIncome(mageStore.mage) }} geld
       </p>
-      <input type="number" placeholder="# turns" size="10" v-model="turnsToTax">
+      <input type="number" placeholder="# turns" size="10" v-model="turnsToTax" class="text-right">
       <button @click="geld"> Tax </button>
       <div>
         {{ geldMsg }}
@@ -20,7 +20,7 @@
         You get an average of {{ exploreRate }} acres of land per turn. 
         The amount of land explored per turn decreases as your land increases.
       </p>
-      <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore">
+      <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore" class="text-right">
       <button @click="exploreLand"> Explore </button>
       <div>
         {{ exploreMsg }}
@@ -64,14 +64,3 @@ onMounted(() => {
 });
 
 </script>
-
-
-<style scoped>
-input {
-  text-align: right;
-}
-
-main {
-  max-width: 30rem;
-}
-</style>

@@ -1,11 +1,11 @@
 <template>
   <main>
     <div class="section-header">Market</div>
-    <div class="row" style="margin-bottom: 10px">
-      <img src="@/assets/images/market.png" class="gen-img" />
+    <div class="flex flex-row items-center gap-[5px] mb-[10px]">
+      <img src="@/assets/images/market.png" class="h-60" />
     </div>
 
-    <div style="margin-bottom: 0.5rem">
+    <div class="mb-2">
       Bidding status for 
       <router-link :to="{ name: 'viewItem', params: { id: priceId }}"> 
         {{ readableStr(priceId) }} 
@@ -26,7 +26,7 @@
         :label="'Bid'" />
 
     </section>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
   </main>
 </template>
 

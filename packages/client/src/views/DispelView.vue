@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/dispel.png" />
       <div>
         <div class="section-header">Dispel Magic</div>
@@ -73,7 +73,7 @@
 
     </section>
     <div v-if="resultStr">{{ resultStr }}</div>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
   </main>
 </template>
 
@@ -139,8 +139,5 @@ const dispelEnchant = async () => {
     mageStore.setMage(data.mage);
   }
 };
+
 </script>
-
-<style scoped>
-</style>
-
