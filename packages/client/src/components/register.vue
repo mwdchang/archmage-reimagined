@@ -20,7 +20,7 @@
         :label="'Create'" />
     </section>
 
-    <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">
+    <div v-if="errorStr" class="error p-1 mt-2">
       {{ errorStr }}
     </div>
   </main>

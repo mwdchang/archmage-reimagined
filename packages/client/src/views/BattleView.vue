@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col justify-center items-center gap-[5px]">
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/battle.png" />
       <div>
         <div class="section-header">War</div>
@@ -40,7 +40,7 @@
         </tr>
         <tr v-for="(summary, idx) of offensiveBattles" :key="summary.id">
           <td> 
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="mages[summary.defenderId]?.magic" small /> 
               <router-link :to="{ name: 'mage', params: { mageId: summary.defenderId }}">
                 {{ summary.defenderName }} (#{{ summary.defenderId }}) 
@@ -77,7 +77,7 @@
         </tr>
         <tr v-for="(summary, idx) of defensiveBattles" :key="summary.id">
           <td> 
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="mages[summary.attackerId]?.magic" small /> 
               <router-link :to="{ name: 'mage', params: { mageId: summary.attackerId }}">
                 {{ summary.attackerName }} (#{{ summary.attackerId }}) 

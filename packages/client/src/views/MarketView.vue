@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[38rem] max-w-full mb-2">
+    <div class="row w-[38rem] max-w-full mb-2">
       <ImageProxy src="/images/ui/market.png" />
       <div>
         <div class="section-header">Market</div>
@@ -28,7 +28,7 @@
           :label="'Bid'" />
 
       </div>
-      <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">{{ errorStr }}</div>
+      <div v-if="errorStr" class="error p-1 mt-2">{{ errorStr }}</div>
       <div>
         {{ sellMsg }}
       </div>
@@ -63,7 +63,7 @@
           :label="'Sell Items'" />
 
       </div>
-      <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">{{ errorStr }}</div>
+      <div v-if="errorStr" class="error p-1 mt-2">{{ errorStr }}</div>
 
     </section>
 

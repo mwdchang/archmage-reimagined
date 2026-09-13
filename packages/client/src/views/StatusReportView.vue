@@ -81,7 +81,7 @@
       <tbody>
         <tr>
           <td> 
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="''" />
               Barrier 
             </div>
@@ -92,7 +92,7 @@
         </tr>
         <tr v-for="(magic) of allowedMagicList" :key="magic">
           <td> 
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="magic" />
               {{ readableStr(magic) }}
             </div>
@@ -226,7 +226,7 @@
       <tbody>
         <tr v-for="entry of Object.entries(mage.skills)" :key="entry[0]">
           <td>
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="getSkillById(entry[0])!.magic" />
               <router-link :to="{ name: 'viewSkill', params: { id: entry[0] }}"> 
                 {{ readableStr(entry[0]) }} 

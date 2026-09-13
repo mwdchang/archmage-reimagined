@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
-    <h2 v-if="item" class="flex flex-row items-center gap-[5px]">
+    <h2 v-if="item" class="row">
       <magic :magic="'plain'" /> {{ item.name }}
     </h2>
 

@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <h2 class="flex flex-row items-center gap-[5px] my-2">
+      <h2 class="row my-2">
         <magic :magic="registerData.magic" />  {{ readableStr(registerData.magic) }}
       </h2>
       <div class="flex flex-row items-center gap-5">
@@ -76,7 +76,7 @@
         :label="'Create'" />
     </section>
 
-    <div v-if="errorStr" class="text-[#e41] bg-[#200] p-1 mt-2">
+    <div v-if="errorStr" class="error p-1 mt-2">
       {{ errorStr }}
     </div>
   </main>

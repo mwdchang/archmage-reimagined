@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
-    <h2 v-if="skill" class="flex flex-row items-center gap-[5px]">
+    <h2 v-if="skill" class="row">
       <magic :magic="skill.magic" /> {{ skill.name }}
     </h2>
     <section v-if="skill">

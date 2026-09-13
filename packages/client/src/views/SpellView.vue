@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/spell.png" />
       <div>
         <div class="section-header">Cast Magic</div>
@@ -75,7 +75,7 @@
         </table>
         <div v-if="spells.length > 0 && layout === 'cards'">
           <div class="rounded border border-[#333] bg-[#181818] m-2 p-2" v-for="spell of castingSpells" :key="spell.id">
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="spell.magic" small />
               <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> {{ spell.name }} </router-link>
             </div>
@@ -118,7 +118,7 @@
                 @selected-value="setAutoComplete"
                 :options-fn="searchMageRank" 
               />
-              <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
+              <div v-else class="row mb-4 text-[#18d]">
                 <div>{{ target.label }} (#{{ target.id}})</div>
                 <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
               </div>
@@ -144,7 +144,7 @@
         </section>
 
         <div v-if="spellResult.length">
-          <div v-for="(d, idx) of spellResult" :key="idx" :class="d.type === 'error' ? 'text-[#e41] bg-[#200]' : ''">
+          <div v-for="(d, idx) of spellResult" :key="idx" :class="d.type === 'error' ? 'error' : ''">
             {{ d.message }}
           </div>
         </div>

@@ -2,7 +2,7 @@
   <main class="flex flex-col justify-center gap-[5px] items-center">
     <div class="section-header">Encyclopedia</div>
     <section class="form w-[20rem] mb-[10px]">
-      <div class="flex flex-row items-center gap-[5px]">
+      <div class="row">
         <select class="w-[10rem]" v-model="currentSelection" @change="changeSelection">
           <option value="spell">Spells</option>
           <option value="unit">Units</option>
@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="spell of filteredSpells"> 
           <td>
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="spell.magic" small />
               <router-link :to="{ name: 'viewSpell', params: { id: spell.id }}"> 
                 <div>{{ readableStr(spell.id) }}</div>
@@ -45,7 +45,7 @@
       <tbody>
         <tr v-for="unit of filteredUnits"> 
           <td>
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="unit.magic" small />
               <router-link :to="{ name: 'viewUnit', params: { id: unit.id }}"> 
                 {{ unit.name }}
@@ -91,7 +91,7 @@
       <tbody>
         <tr v-for="skill of filteredSkills">
           <td>
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <magic :magic="skill.magic" small />
               <router-link :to="{ name: 'viewSkill', params: { id: skill.id }}"> 
                 {{ skill.name }}

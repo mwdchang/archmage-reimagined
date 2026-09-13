@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage" class="flex flex-col max-w-[30rem]">
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/explore.png" />
       <div>
         <div class="section-header">Explore</div>
@@ -21,7 +21,7 @@
       <div>
         {{ exploreMsg }}
       </div>
-      <div class="text-[#e41] bg-[#200]" v-if="errorStr">
+      <div class="error" v-if="errorStr">
         {{ errorStr }}
       </div>
     </section> 

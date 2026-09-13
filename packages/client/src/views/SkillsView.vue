@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/skill.png" />
       <div>
         <div class="section-header">Skills</div>
@@ -23,7 +23,7 @@
 
     <!-- Tech tree/graph -->
     <section v-if="selectedGraph">
-      <div v-if="errorStr" class="text-[#e41] bg-[#200] absolute">{{ errorStr }}</div>
+      <div v-if="errorStr" class="error absolute">{{ errorStr }}</div>
       <SkillGraphDisplay 
         :graph="selectedGraph" 
         :mage="mageStore.mage!"

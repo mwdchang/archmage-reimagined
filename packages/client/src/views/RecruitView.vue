@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/recruit.png" />
       <div>
         <div class="section-header">Recruitment</div>
@@ -51,7 +51,7 @@
         <section class="form w-[22rem]">
           <label>Recruit units</label> 
 
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             <select v-model="rselect">
               <option v-for="unit of recruitableUnits" :key="unit.id" :value="unit.id">{{ unit.name }}</option>
             </select>
@@ -59,7 +59,7 @@
           </div>
 
           <button @click="addOrder">Add</button>
-          <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
+          <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
           <!-- current recruitment -->
           <table class="mt-2"> 

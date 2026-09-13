@@ -47,7 +47,7 @@
         class="mb-[0.80rem] border-t border-[#333]">
         <div>{{ readableStr(res.spellId) }}</div>
         <div v-for="(v, k) of res.data" class="grid grid-cols-2 gap-[0.6rem_1.25rem]">
-          <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out flex flex-row items-center gap-[5px]">
+          <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
             <Magic :magic="getUnitMagic(k)" tiny/>
             {{ readableStr(k) }}
           </div>
@@ -59,13 +59,13 @@
     <!-- dispell -->
     <main v-if="tabView === 'dispel'" class="text-[0.9rem] p-[0.25rem] h-[40rem] overflow-y-scroll">
       <div>Caster spell level: {{ casterSpellLevel }} </div>
-      <div class="flex flex-row items-center gap-[5px]">
+      <div class="row">
         <input type="range" 
           v-model="casterSpellLevel"
           min="1" max="999" />
       </div>
       <div>Mana used: {{ dispelMana }} </div>
-      <div class="flex flex-row items-center gap-[5px]">
+      <div class="row">
         <input type="range" 
           v-model="dispelMana"
           min="0" max="500000" step="500" />
@@ -74,7 +74,7 @@
       <div 
         class="grid grid-cols-2 gap-[0.6rem_1.25rem]"
         v-for="dd of dispelData" :key="dd.spellId">
-        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out flex flex-row items-center gap-[5px]">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic :magic="getSpellMagic(dd.spellId)" tiny/>
           {{ readableStr(dd.spellId) }}
         </div>
@@ -98,13 +98,13 @@
 
       <div class="grid grid-rows-4 grid-cols-4 gap-[0.6rem_1.25rem]">
         <div class="bg-[#212120] px-4 py-[0.45rem] rounded">&nbsp;</div>
-        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out flex flex-row items-center gap-[5px]">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic :magic="castingData.meta.self" />
         </div>
-        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out flex flex-row items-center gap-[5px]">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic v-for="m of castingData.meta.adjacent" :magic="m" />
         </div>
-        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out flex flex-row items-center gap-[5px]">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic v-for="m of castingData.meta.opposite" :magic="m" />
         </div>
 

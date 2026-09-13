@@ -1,6 +1,6 @@
 <template>
   <button @click="handleClick" :disabled="showSpinner || disabled" :class="type"> 
-    <div class="flex flex-row items-center gap-[5px]">
+    <div class="row">
       <SpinnerIcon v-if="showSpinner === true" class="spinner" />
       <span>{{ label }}</span>
     </div>

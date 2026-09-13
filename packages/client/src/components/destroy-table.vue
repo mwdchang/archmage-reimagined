@@ -20,7 +20,7 @@
   </table>
 
   <div class="form mt-4">
-    <div class="flex flex-row items-baseline gap-[5px]">
+    <div class="row-baseline">
       <input type="checkbox" v-model="confirmDestroy" class="w-[15px] h-[15px]"> 
       <label>Destroy confirmation</label>
     </div>

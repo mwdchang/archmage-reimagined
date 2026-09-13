@@ -2,7 +2,7 @@
   <main class="flex flex-col gap-[10px] min-w-[35rem]">
 
     <section class="form"> 
-      <div class="flex flex-row items-center gap-[5px] justify-between">
+      <div class="row justify-between">
         <ActionButton 
           :proxy-fn="compose"
           :label="'Compose'" />
@@ -31,7 +31,7 @@
           :key="message.id"
           class="p-[0.20rem] border-b border-[#888] cursor-pointer hover:bg-[#505050]"
           @click="openMail(message)">
-          <div class="flex flex-row items-center gap-[5px] justify-between" :class="{ 'font-semibold bg-[#333]': message.read === false}">
+          <div class="row justify-between" :class="{ 'font-semibold bg-[#333]': message.read === false}">
             <div :class="{ 'font-semibold bg-[#333]': message.read === false }"> {{ message.subject }}</div>
             <div :class="{ 'font-semibold bg-[#333]': message.read === false }" class="text-[#888] text-[0.75rem]"> {{ readableDate(message.timestamp) }}</div>
           </div>
@@ -51,7 +51,7 @@
             @selected-value="setAutoComplete"
             :options-fn="searchMageRank" 
           />
-          <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
+          <div v-else class="row mb-4 text-[#18d]">
             <div>{{ targetMage.label }} (#{{ targetMage.id}})</div>
             <svg-icon name="remove" size="1.5rem" @click="targetMage = null" /> 
           </div>
@@ -60,7 +60,7 @@
 
         </div>
 
-        <div class="flex flex-row items-baseline gap-[5px]">
+        <div class="row-baseline">
           <input type="text" placeholder="subject..." v-model="currentMail.subject" />
         </div>
         <textarea
@@ -83,7 +83,7 @@
 
     <section class="flex-grow flex flex-col text-[0.9rem]" v-if="currentView === 'replyView'">
       <div class="form">
-        <div class="flex flex-row items-center gap-[5px] justify-between mb-2">
+        <div class="row justify-between mb-2">
           <div class="font-semibold"> {{ currentMail?.subject }} </div>
           <div v-if="currentMail.timestamp" class="text-[#888]"> {{ readableDate(currentMail.timestamp) }}</div>
         </div>
@@ -101,7 +101,7 @@
           :value="currentMail?.content"></textarea>
 
 
-        <div class="flex flex-row items-center gap-[5px] justify-between">
+        <div class="row justify-between">
           <ActionButton 
             :proxy-fn="back"
             :label="'Back'" />

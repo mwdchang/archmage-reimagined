@@ -29,28 +29,28 @@
       <section class="flex-1"> 
         <div class="flex flex-row justify-between w-[20rem]">
           <div> Land </div>
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             {{ readableNumber(totalLand(mageStore.mage)) }} 
             <svg-icon :name="'land'" size="1.0rem" />
           </div>
         </div>
         <div class="flex flex-row justify-between w-[20rem]">
           <div>Forts</div>
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             {{ mageStore.mage.forts }} 
             <svg-icon :name="'fort'" size="1.0rem" />
           </div>
         </div>
         <div class="flex flex-row justify-between w-[20rem]">
           <div>Geld</div>
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             {{ readableNumber(mageStore.mage.currentGeld) }} 
             <svg-icon :name="'geld'" size="1.0rem" />
           </div>
         </div>
         <div class="flex flex-row justify-between w-[20rem]">
           <div>Population</div>
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             {{ readableNumber(mageStore.mage.currentPopulation) }} / {{ readableNumber(interior.maxPopulation(mageStore.mage)) }}
             <svg-icon :name="'population'" size="1.0rem" />
           </div>
@@ -58,7 +58,7 @@
 
         <div class="flex flex-row justify-between w-[20rem]">
           <div>Magic</div>
-          <div class="flex flex-row items-center gap-[5px]">
+          <div class="row">
             {{ readableNumber(mageStore.mage.currentMana) }} / {{ readableNumber(manaStorage(mageStore.mage)) }}
             <svg-icon :name="'mana'" size="1.0rem" />
           </div>

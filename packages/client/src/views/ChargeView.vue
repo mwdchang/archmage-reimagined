@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage" class="max-w-[30rem]">
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/charge.png" />
       <div>
         <div class="section-header">Mana Charge</div>
@@ -19,7 +19,7 @@
       <div>
         {{ manaMsg }}
       </div>
-      <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
+      <div v-if="errorStr" class="error">{{ errorStr }}</div>
     </section>
   </main>
 </template>

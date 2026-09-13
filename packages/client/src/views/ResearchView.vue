@@ -1,6 +1,6 @@
 <template>
   <main v-if="mageStore.mage" class="flex flex-col justify-center items-start max-w-[40rem]">
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/research.png" />
       <div>
         <div class="section-header">Research</div>
@@ -49,7 +49,7 @@
     <section v-if="hasResearchRemaining" class="form mt-4">
       <label>Spend turns to research faster</label>
       <input type="number" v-model="turns" class="w-24" @keyup.enter="submitResearch" />
-      <div class="flex flex-row items-baseline gap-[5px]">
+      <div class="row-baseline">
         <input type="checkbox" v-model="focusResearch" class="w-[15px] h-[15px]" />
         <label>&nbsp;Research all spells of this magic</label>
       </div>
@@ -62,7 +62,7 @@
     <div class="flex items-center mt-[10px] max-w-[25rem]">
       {{ researchResultStr }}
     </div>
-    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
   </main>
 </template>
 

@@ -3,7 +3,7 @@
     <div class="section-header mb-4">Lookup</div>
 
     <div class="flex flex-row items-center justify-between mb-2">
-      <div class="flex flex-row items-center gap-[5px]">
+      <div class="row">
         <magic :magic="mageSummary.magic" />
         {{ mageSummary.name }} (#{{ mageSummary.id }}) 
       </div>

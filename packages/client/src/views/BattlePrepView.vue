@@ -1,7 +1,7 @@
 <template>
   <main>
     <section v-if="targetSummary">
-      <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+      <div class="view-header-row">
         <ImageProxy src="/images/ui/battle2.png" />
         <div>
           <div class="section-header">War</div>
@@ -44,7 +44,7 @@
       <br>
 
       <section class="form w-[25rem]">
-        <div class="flex flex-row items-baseline gap-[5px]" v-if="battleType !== 'pillage'">
+        <div class="row-baseline" v-if="battleType !== 'pillage'">
           <label class="w-24">Spell</label>
           <select v-model="battleSpell">
             <option v-for="spell of battleSpells" :key="spell.id" :value="spell.id">
@@ -52,7 +52,7 @@
             </option>
           </select>
         </div>
-        <div class="flex flex-row items-baseline gap-[5px]" v-if="battleType !== 'pillage'">
+        <div class="row-baseline" v-if="battleType !== 'pillage'">
           <label class="w-24">Item</label>
           <select v-model="battleItem">
             <option v-for="item of battleItems" :key="item.id" :value="item.id">
@@ -74,7 +74,7 @@
 
       </section>
     </section>
-    <div v-for="error of errorStrs" class="text-[#e41] bg-[#200]">
+    <div v-for="error of errorStrs" class="error">
       {{ error }}
     </div>
   </main>

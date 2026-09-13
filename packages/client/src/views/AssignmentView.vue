@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/assignment.png" />
       <div>
         <div class="section-header">Assignment</div>
@@ -11,7 +11,7 @@
     </div>
 
     <section class="form">
-      <div class="flex flex-row items-baseline gap-[5px]">
+      <div class="row-baseline">
         <label class="w-48"> Spell </label>
         <select v-model="selectedSpellId" @change="setAssignment()">
           <option v-for="spell of usableSpells" :key="spell.id" :value="spell.id">
@@ -20,14 +20,14 @@
         </select>
       </div>
 
-      <div class="flex flex-row items-baseline gap-[5px]">
+      <div class="row-baseline">
         <label class="w-48"> Spell condition</label>
         <select v-model="selectedSpellCondition" @change="setAssignment()">
           <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>
         </select>
       </div>
 
-      <div class="flex flex-row items-baseline gap-[5px]">
+      <div class="row-baseline">
         <label class="w-48"> Item </label>
         <select v-model="selectedItemId" @change="setAssignment()">
           <option v-for="item of usableItems" :key="item.id" :value="item.id">
@@ -36,7 +36,7 @@
         </select>
       </div>
 
-      <div class="flex flex-row items-baseline gap-[5px]">
+      <div class="row-baseline">
         <label class="w-48"> Item condition </label>
         <select v-model="selectedItemCondition" @change="setAssignment()" class="mb-0">
           <option v-for="c of activateConditions" :key="c" :value="c">{{ conditionString(c) }}</option>

@@ -169,6 +169,23 @@
   gap: 5px;
 }
 
+@utility row-baseline {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+}
+
+@utility view-header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  width: 35rem;
+  max-width: 100%;
+  margin-bottom: 0.5rem;
+}
+
 @utility error {
   color: #e41;
   background: #200;

@@ -3,19 +3,19 @@
     <tbody>
       <tr>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
-          <div class="flex flex-row items-center gap-[5px]"> 
+          <div class="row"> 
             <svg-icon :name="'land'" size="1rem" />
             <div>{{ readableNumber(totalLand(mage)) }}</div>
           </div>
         </td>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
-          <div class="flex flex-row items-center gap-[5px]"> 
+          <div class="row"> 
             <svg-icon :name="'geld'" size="1rem" />
             <div>{{ readableNumber(mage.currentGeld) }} </div>
           </div>
         </td>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
-          <div class="flex flex-row items-center gap-[5px]"> 
+          <div class="row"> 
             <svg-icon :name="'hourglass'" size="1rem" />
             <div>{{ readableNumber(mage.currentTurn) }} </div>
           </div>
@@ -23,14 +23,14 @@
         </td>
 
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
-          <div class="flex flex-row items-center gap-[5px]"> 
+          <div class="row"> 
             <svg-icon :name="'mana'" size="1rem" />
             <div>{{ readableNumber(mage.currentMana) }} </div>
           </div>
           <Barchart :value="manaVal" color="#88F" style="height: 2px" />
         </td>
         <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
-          <div class="flex flex-row items-center gap-[5px]"> 
+          <div class="row"> 
             <svg-icon :name="'population'" size="1rem" />
             <div>{{ readableNumber(mage.currentPopulation) }} </div>
           </div>

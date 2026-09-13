@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col justify-center gap-[5px] items-center">
-    <h2 v-if="unit" class="flex flex-row items-center gap-[5px]">
+    <h2 v-if="unit" class="row">
       <magic :magic="unit.magic" />{{unit.name}}
     </h2>
     <p class="m-[1rem_10rem] leading-[120%]" v-if="unit">{{ unit.description }} </p>

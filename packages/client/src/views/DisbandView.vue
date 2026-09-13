@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/disband.png" />
       <div>
         <div class="section-header">Disband Units</div>
@@ -76,11 +76,11 @@
               v-model="u.checked"
               @change="toggleWholeStack(u)"
               type="checkbox">
-            <div class="flex flex-row items-center gap-[5px]">
+            <div class="row">
               <router-link :to="{ name: 'viewUnit', params: { id: u.id }}" class="min-w-[7rem]"> 
                 {{ u.name }} 
               </router-link>
-              <div @click="disbandPayload[u.id] = u.moveDown" class="flex flex-row items-center gap-[5px]"> 
+              <div @click="disbandPayload[u.id] = u.moveDown" class="row"> 
                 {{ readableNumber(u.size) }}
                 <svg-icon name="caretDown" size="1.25rem" /> 
               </div>
@@ -107,7 +107,7 @@
           :disabled="confirmDisband === false"
           :label="'Disband'" />
 
-        <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
+        <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
         <p class="my-2"> Net Income </p>
         <table class="min-w-[16rem]">

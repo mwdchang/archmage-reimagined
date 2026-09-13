@@ -51,7 +51,7 @@
                 {{ mageStore.mage.rank }}
               </td>
               <td>
-                <div class="flex flex-row items-center gap-[5px]">
+                <div class="row">
                   <Magic :magic="mageStore.mage.magic" small />
                   <div>{{ mageStore.mage.name }} (#{{mageStore.mage.id}})</div>
                 </div>

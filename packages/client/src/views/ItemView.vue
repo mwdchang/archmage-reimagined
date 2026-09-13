@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex flex-row items-center gap-[5px] w-[35rem] max-w-full mb-2">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/item.png" />
       <div>
         <div class="section-header">Item inventory</div>
@@ -72,7 +72,7 @@
               @selected-value="setAutoComplete"
               :options-fn="searchMageRank" 
             />
-            <div v-else class="flex flex-row items-center gap-[5px] mb-4 text-[#18d]">
+            <div v-else class="row mb-4 text-[#18d]">
               <div>{{ target.label }} (#{{ target.id}})</div>
               <svg-icon name="remove" size="1.5rem" @click="target = null" /> 
             </div>

@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="section-header">Market</div>
-    <div class="flex flex-row items-center gap-[5px] mb-[10px]">
+    <div class="row mb-[10px]">
       <img src="@/assets/images/market.png" class="h-60" />
     </div>
 
@@ -26,7 +26,7 @@
         :label="'Bid'" />
 
     </section>
-    <div v-if="errorStr" class="text-[#e41] bg-[#200]">{{ errorStr }}</div>
+    <div v-if="errorStr" class="error">{{ errorStr }}</div>
   </main>
 </template>
 

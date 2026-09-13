@@ -3,7 +3,7 @@
     <div class="section-header">
       Engagements
     </div>
-    <div class="flex flex-row items-center gap-[5px]">
+    <div class="row">
       {{ readableDate(viewingWindow[1]) }} =>
       {{ readableDate(viewingWindow[0]) }}
     </div>
