@@ -1,7 +1,7 @@
 <template>
-  <section class="form" style="min-width: 35rem">
-    <div class="row" style="gap: 2rem">
-      <select v-model="selectedMagic" style="max-width:175px" :disabled="tabView === 'buffs'"> 
+  <section class="form min-w-[35rem]">
+    <div class="flex flex-row items-center gap-8">
+      <select v-model="selectedMagic" class="max-w-[175px]" :disabled="tabView === 'buffs'"> 
         <option value="ascendant">Ascendant</option>
         <option value="verdant">Verdant</option>
         <option value="eradication">Eradication</option>
@@ -30,7 +30,7 @@
 
 
     <!-- Main content here -->
-    <section style="margin-bottom: 0.5rem">
+    <section class="mb-2">
       <p v-if="tabView === 'summon'">
         Average summon over {{ NUM_SIMULATIONS}} simulations. 
         Spells that summons more than one type of unit will show averages as if all units are summoned.
@@ -41,23 +41,23 @@
     </section>
 
     <!-- summon -->
-    <main v-if="tabView === 'summon'" style="width: 25rem">
+    <main v-if="tabView === 'summon'" class="w-[25rem] text-[0.9rem] p-[0.25rem] h-[40rem] overflow-y-scroll">
       <div v-for="res of summonData" 
         :key="res.spellId + selectedMagic" 
-        style="margin-bottom: 0.80rem; border-top: 1px solid #333">
+        class="mb-[0.80rem] border-t border-[#333]">
         <div>{{ readableStr(res.spellId) }}</div>
-        <div v-for="(v, k) of res.data" class="grid-container">
-          <div class="grid-item row">
+        <div v-for="(v, k) of res.data" class="grid grid-cols-2 gap-[0.6rem_1.25rem]">
+          <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
             <Magic :magic="getUnitMagic(k)" tiny/>
             {{ readableStr(k) }}
           </div>
-          <div class="grid-item text-right">{{ readableNumber(v) }}</div>
+          <div class="bg-[#212120] px-4 py-[0.45rem] rounded text-right">{{ readableNumber(v) }}</div>
         </div>
       </div>
     </main>
 
     <!-- dispell -->
-    <main v-if="tabView === 'dispel'">
+    <main v-if="tabView === 'dispel'" class="text-[0.9rem] p-[0.25rem] h-[40rem] overflow-y-scroll">
       <div>Caster spell level: {{ casterSpellLevel }} </div>
       <div class="row">
         <input type="range" 
@@ -72,19 +72,19 @@
       </div>
 
       <div 
-        class="grid-container"
+        class="grid grid-cols-2 gap-[0.6rem_1.25rem]"
         v-for="dd of dispelData" :key="dd.spellId">
-        <div class="grid-item row">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic :magic="getSpellMagic(dd.spellId)" tiny/>
           {{ readableStr(dd.spellId) }}
         </div>
-        <div class="grid-item text-right">{{ (100 * dd.prob).toFixed(2)}}%</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded text-right">{{ (100 * dd.prob).toFixed(2)}}%</div>
       </div>
     </main>
 
 
     <!-- summon -->
-    <main v-if="tabView === 'casting'">
+    <main v-if="tabView === 'casting'" class="text-[0.9rem] p-[0.25rem] h-[40rem] overflow-y-scroll">
       <div>
         Concentration: {{ concentrationLevel }}
 
@@ -96,47 +96,47 @@
           :max="maxSpellLevels[selectedMagic]" />
       </div>
 
-      <div class="grid-container4x3">
-        <div class="grid-item">&nbsp;</div>
-        <div class="grid-item row">
+      <div class="grid grid-rows-4 grid-cols-4 gap-[0.6rem_1.25rem]">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">&nbsp;</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic :magic="castingData.meta.self" />
         </div>
-        <div class="grid-item row">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic v-for="m of castingData.meta.adjacent" :magic="m" />
         </div>
-        <div class="grid-item row">
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded transition-[filter] duration-[400ms] ease-out row">
           <Magic v-for="m of castingData.meta.opposite" :magic="m" />
         </div>
 
-        <div class="grid-item">Simple</div>
-        <div class="grid-item">{{ castingData.simple.onColor }}</div>
-        <div class="grid-item">{{ castingData.simple.adjacent }}</div>
-        <div class="grid-item">{{ castingData.simple.opposite }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">Simple</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.simple.onColor }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.simple.adjacent }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.simple.opposite }}</div>
 
-        <div class="grid-item">Average</div>
-        <div class="grid-item">{{ castingData.average.onColor }}</div>
-        <div class="grid-item">{{ castingData.average.adjacent }}</div>
-        <div class="grid-item">{{ castingData.average.opposite }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">Average</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.average.onColor }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.average.adjacent }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.average.opposite }}</div>
 
-        <div class="grid-item">Complex</div>
-        <div class="grid-item">{{ castingData.complex.onColor }}</div>
-        <div class="grid-item">{{ castingData.complex.adjacent }}</div>
-        <div class="grid-item">{{ castingData.complex.opposite }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">Complex</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.complex.onColor }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.complex.adjacent }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.complex.opposite }}</div>
 
-        <div class="grid-item">Ultimate</div>
-        <div class="grid-item">{{ castingData.ultimate.onColor }}</div>
-        <div class="grid-item" style="text-decoration: line-through;">{{ castingData.ultimate.adjacent }}</div>
-        <div class="grid-item" style="text-decoration: line-through;">{{ castingData.ultimate.opposite }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">Ultimate</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded">{{ castingData.ultimate.onColor }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded line-through">{{ castingData.ultimate.adjacent }}</div>
+        <div class="bg-[#212120] px-4 py-[0.45rem] rounded line-through">{{ castingData.ultimate.opposite }}</div>
 
 
       </div>
     </main>
 
     <!-- buffs -->
-    <main v-if="tabView === 'buffs'">
+    <main v-if="tabView === 'buffs'" class="text-[0.9rem] p-[0.25rem] h-[40rem] overflow-y-scroll">
       <h3>Healing</h3>
       <p>Healing buffs stack multiplicatively</p>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           v-model="healBuffs1"
           :min="0" 
@@ -144,7 +144,7 @@
           :step="1" />
         <div>{{healBuffs1}}%</div>
       </div>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           v-model="healBuffs2"
           :min="0" 
@@ -152,7 +152,7 @@
           :step="1" />
         <div>{{healBuffs2}}%</div>
       </div>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           key="healBuffs3"
           :min="0" 
@@ -160,14 +160,14 @@
           :step="1" />
         <div>{{healBuffs3}}%</div>
       </div>
-      <div style="margin-bottom: 2rem">
+      <div class="mb-8">
         Starting with {{ healStartingUnits }} units, {{ healingBuffData }} units will be revived. 
       </div>
 
 
       <h3>Accuracy</h3>
       <p>Accuracy buffs are added on a power scale</p>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           v-model="accuracyBuffs1"
           :min="-15" 
@@ -175,7 +175,7 @@
           :step="1" />
         <div>{{ accuracyBuffs1 }}</div>
       </div>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           v-model="accuracyBuffs2"
           :min="-15" 
@@ -183,7 +183,7 @@
           :step="1" />
         <div>{{ accuracyBuffs2 }}</div>
       </div>
-      <div class="row" style="width: 25rem; align-items: unset; gap: 1rem">
+      <div class="flex flex-row items-stretch gap-4 w-[25rem]">
         <input type="range" 
           v-model="accuracyBuffs3"
           :min="-15" 
@@ -191,7 +191,7 @@
           :step="1" />
         <div>{{ accuracyBuffs3 }}</div>
       </div>
-      <div style="margin-bottom: 2rem">
+      <div class="mb-8">
         Starting with {{ accuracyStart }} accuracy, resulting accuracy is {{ accuracyBuffData }}
       </div>
 
@@ -458,38 +458,3 @@ onMounted(() => {
   selectedSpellLevel.value = maxSpellLevels[selectedMagic.value];
 });
 </script>
-
-
-<style scoped>
-main {
-  font-size: 0.9rem;
-  padding: 0.25rem;
-  height: 40rem;
-  overflow-y: scroll;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem 1.25rem;
-}
-
-.grid-container4x3 {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem 1.25rem;
-}
-
-.grid-item {
-  background-color: #212120;
-  padding: 0.45rem 1rem;
-  text-align: left;
-  border-radius: 0.25rem;
-  transition: filter 0.4s ease;
-}
-
-.grid-item.text-right {
-  text-align: right;
-}
-</style>

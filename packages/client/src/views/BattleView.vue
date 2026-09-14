@@ -1,6 +1,6 @@
 <template>
-  <main class="column" style="align-items: center">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main class="flex flex-col justify-center items-center gap-[5px]">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/battle.png" />
       <div>
         <div class="section-header">War</div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <section class="form" style="width: 25rem">
+    <section class="form w-[25rem]">
       <select v-model="battleType">
         <option value="regular">Regular</option>
         <option value="siege">Siege</option>
@@ -29,7 +29,7 @@
     </section>
 
     <div>Counters you given out</div>
-    <table style="min-width: 30rem">
+    <table class="min-w-[30rem]">
       <tbody>
         <tr>
           <td> Name </td>
@@ -66,7 +66,7 @@
     <br/>
 
     <div>Counters you received</div>
-    <table style="min-width: 30rem">
+    <table class="min-w-[30rem]">
       <tbody>
         <tr>
           <td> Name </td>

@@ -1,10 +1,10 @@
 <template>
-  <main>
-    <h3 class="section-header">Status Report</h3>
-    <p v-if="damagedUntil" style="max-width: 25rem; text-align: center">
+  <main class="flex flex-col items-center bg-[#282828] p-2">
+    <h3 class="section-header mt-[15px]">Status Report</h3>
+    <p v-if="damagedUntil" class="max-w-[25rem] text-center">
       Your kingdom is heavily damaged, clogging traffic until {{readableDate(damagedUntil)}}
     </p>
-    <p v-else style="max-width: 25rem; text-align: center">
+    <p v-else class="max-w-[25rem] text-center">
       Today is just another normal day in your kingdom.
     </p>
     <div class="section-header">General Info</div>
@@ -332,7 +332,7 @@
           <td class="text-right"> 
             {{ readableNumber(u.upkeep.geld) }} / {{ readableNumber(u.upkeep.mana) }} / {{ readableNumber(u.upkeep.population) }} 
           </td>
-          <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
+          <td class="text-right pl-[10px]"> {{ readableNumber(u.size) }} </td>
           <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
         </tr>
       </tbody>
@@ -460,14 +460,6 @@ onMounted(async () => {
 
 
 <style scoped>
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #282828;
-  padding: 0.5rem;
-}
-
 table {
   border: none;
 }
@@ -475,11 +467,6 @@ table {
 td {
   border: none;
   min-width: 80px;
-  padding: 0;
-  padding-right: 10px;
-}
-
-.section-header {
-  margin-top: 15px;
+  padding: 0 10px 0 0;
 }
 </style>

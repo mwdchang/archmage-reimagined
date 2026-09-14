@@ -1,5 +1,5 @@
 <template>
-  <main class="column" style="align-items: center">
+  <main class="flex flex-col justify-center items-center gap-[5px]">
     <div class="form-tabs">
       <div class="tab" :class="{ active: tabView === 'message' }" @click="changeView('message')">Messages</div>
       <div class="tab" :class="{ active: tabView === 'option' }" @click="changeView('option')">Options</div>

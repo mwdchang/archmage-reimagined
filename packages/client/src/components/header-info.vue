@@ -1,20 +1,20 @@
 <template>
-  <table v-if="mageStore.mage" class="header-info">
+  <table v-if="mageStore.mage" class="w-[35rem] max-w-full text-[0.8rem] mb-[10px]">
     <tbody>
       <tr>
-        <td> 
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="row"> 
             <svg-icon :name="'land'" size="1rem" />
             <div>{{ readableNumber(totalLand(mage)) }}</div>
           </div>
         </td>
-        <td> 
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="row"> 
             <svg-icon :name="'geld'" size="1rem" />
             <div>{{ readableNumber(mage.currentGeld) }} </div>
           </div>
         </td>
-        <td> 
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="row"> 
             <svg-icon :name="'hourglass'" size="1rem" />
             <div>{{ readableNumber(mage.currentTurn) }} </div>
@@ -22,22 +22,22 @@
           <Barchart :value="turnVal" color="#8F8" style="height: 2px" />
         </td>
 
-        <td> 
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="row"> 
             <svg-icon :name="'mana'" size="1rem" />
             <div>{{ readableNumber(mage.currentMana) }} </div>
           </div>
           <Barchart :value="manaVal" color="#88F" style="height: 2px" />
         </td>
-        <td> 
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
           <div class="row"> 
             <svg-icon :name="'population'" size="1rem" />
             <div>{{ readableNumber(mage.currentPopulation) }} </div>
           </div>
           <Barchart :value="populationVal" color="#F88" style="height: 2px" />
         </td>
-        <td> 
-          <div class="row" style="gap: 1px">
+        <td class="p-0 pl-[2px] leading-5 w-[20%] border border-[#333333]"> 
+          <div class="flex flex-row items-center gap-[1px]">
             <magic v-for="(enchant) of mage.enchantments" 
               :key="enchant.id" 
               :magic="enchantMagic(enchant)" 
@@ -82,19 +82,3 @@ const populationVal = computed(() => {
 
 
 </script>
-
-<style scoped>
-.header-info {
-  width: 35rem;
-  font-size: 0.8rem;
-  margin-bottom: 10px;
-}
-
-table > tbody > tr > td {
-  padding: 0px;
-  padding-left: 2px;
-  line-height: 1.25rem;
-  width: 20%;
-  border: 1px solid #333333;
-}
-</style>

@@ -1,7 +1,7 @@
 <template>
-  <div class="bar-container">
+  <div class="w-full h-[20px] bg-black/10 rounded overflow-visible">
     <div
-      class="bar-fill"
+      class="h-full transition-[width] duration-300 ease-out opacity-80"
       :style="{
         width: computedWidth,
         backgroundColor: color,
@@ -28,19 +28,5 @@ const props = defineProps({
 const computedWidth = computed(() => `${props.value * 100}%`)
 </script>
 
-<style scoped>
-.bar-container {
-  width: 100%;
-  height: 20px;
-  background-color: rgba(0, 0, 0, 0.1); /* semi-transparent background */
-  border-radius: 4px;
-  overflow: visible;
-}
 
-.bar-fill {
-  height: 100%;
-  transition: width 0.3s ease;
-  opacity: 0.8;
-}
-</style>
 

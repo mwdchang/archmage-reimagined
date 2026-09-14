@@ -1,9 +1,9 @@
 <template>
-  <main class="column" style="align-items: center">
+  <main class="flex flex-col justify-center gap-[5px] items-center">
     <div class="section-header">Encyclopedia</div>
-    <section class="form" style="width: 20rem; margin-bottom: 10px">
+    <section class="form w-[20rem] mb-[10px]">
       <div class="row">
-        <select style="width: 10rem" v-model="currentSelection" @change="changeSelection">
+        <select class="w-[10rem]" v-model="currentSelection" @change="changeSelection">
           <option value="spell">Spells</option>
           <option value="unit">Units</option>
           <option value="item">Items</option>
@@ -98,7 +98,7 @@
               </router-link>
             </div>
           </td>
-          <td style="max-width: 25rem">
+          <td class="max-w-[25rem]">
             {{ skill.description }}
           </td>
         </tr>

@@ -1,6 +1,6 @@
 <template>
-  <main v-if="mageStore.mage">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main v-if="mageStore.mage" class="max-w-[30rem]">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/charge.png" />
       <div>
         <div class="section-header">Mana Charge</div>
@@ -11,7 +11,7 @@
     </div>
     <section> 
       <div class="form">
-        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge" @keyup.enter="charge">
+        <input type="number" placeholder="# turns" size="8" v-model="turnsToCharge" @keyup.enter="charge" class="text-right">
         <ActionButton 
           :proxy-fn="charge"
           :label="'Charge'" />
@@ -57,13 +57,3 @@ const charge = async () => {
 };
 
 </script>
-
-<style scoped>
-input {
-  text-align: right;
-}
-
-main {
-  max-width: 30rem;
-}
-</style>

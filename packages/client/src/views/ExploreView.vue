@@ -1,6 +1,6 @@
 <template>
-  <main v-if="mageStore.mage">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main v-if="mageStore.mage" class="flex flex-col max-w-[30rem]">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/explore.png" />
       <div>
         <div class="section-header">Explore</div>
@@ -12,7 +12,7 @@
     </div>
     <section> 
       <div class="form">
-        <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore" @keyup.enter="exploreLand">
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToExplore" @keyup.enter="exploreLand" class="text-right">
         <ActionButton 
           :proxy-fn="exploreLand"
           :label="'Explore'" />
@@ -70,16 +70,3 @@ onMounted(() => {
 });
 
 </script>
-
-
-<style scoped>
-input {
-  text-align: right;
-}
-
-main {
-  max-width: 30rem;
-  display: flex;
-  flex-direction: column
-}
-</style>

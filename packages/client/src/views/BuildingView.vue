@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/build.png" />
       <div>
         <div class="section-header">Build</div>
@@ -11,7 +11,7 @@
     </div>
     <build-table @build="build($event)" />
     <div v-if="buildStr">{{ buildStr }}</div>
-    <div v-if="errorStr" class="error">{{ errorStr }}</div>
+    <div v-if="errorStr" class="error p-1 mt-2">{{ errorStr }}</div>
   </main>
 </template>
 

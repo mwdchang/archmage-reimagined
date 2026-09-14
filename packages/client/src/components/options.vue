@@ -2,19 +2,19 @@
   <main>
     <section class="form">
       <h3 class="section-header">Description</h3>
-      <p style="margin-bottom: 0.5rem">Change your mage's description</p>
-      <textarea style="margin-bottom: 0.5rem; width: 80%; height: 5rem">
+      <p class="mb-2">Change your mage's description</p>
+      <textarea class="mb-2 w-[80%] h-[5rem]">
       </textarea>
 
       <h3 class="section-header">Depart from Terra</h3>
-      <div style="margin-bottom: 0.5rem">
+      <div class="mb-2">
         Your mage will be banished. You can only leave if you have no blood on your hands for the last 24 hours.
       </div>
       <div v-if="hasBloodOnHand" class="error">
         You cannot leave Terra with blood on your hands in the last 24 hours.
       </div>
-      <div class="row" style="align-items: baseline; gap: 1rem">
-        <input type="checkbox" v-model="confirmDelete" style="width:15px; height:15px"> 
+      <div class="flex flex-row items-baseline gap-4">
+        <input type="checkbox" v-model="confirmDelete" class="w-[15px] h-[15px]"> 
         <label>Confirm disband</label>
         <ActionButton 
           :proxy-fn="deleteMage"

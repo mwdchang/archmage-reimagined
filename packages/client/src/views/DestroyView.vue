@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/destroy.png" />
       <div>
         <div class="section-header">Destroy Buildings</div>

@@ -19,13 +19,13 @@
         <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
         <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
         <td> 
-          <input type="number" v-model="userInput[bType.id]" style="height: 1.6rem" @keyup.enter="build">
+          <input type="number" v-model="userInput[bType.id]" class="w-[5rem] text-right bg-[#eee] h-[1.6rem]" @keyup.enter="build">
         </td>
       </tr>
     </tbody>
   </table>
-  <section class="form" style="margin-top: 1.0rem">
-    <div style="margin-bottom: 0.25rem"> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
+  <section class="form mt-4">
+    <div class="mb-1"> Land required {{ summary.landUsed }}, Turns required {{ summary.turnsUsed }} </div>
     <button @click="build" :disabled="buildingDisabled"> Build </button>
   </section>
 </template>
@@ -76,14 +76,7 @@ const build = () => {
 </script>
 
 <style scoped>
-input {
-  width: 5rem;
-  text-align: right;
-  background: #eee;
-}
-
 tr:nth-child(odd) {
   background: #333;
 }
-
 </style>

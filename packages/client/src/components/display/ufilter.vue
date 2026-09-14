@@ -1,6 +1,6 @@
 <template>
   <span v-for="(val, key, idx) of filter">
-    <span v-if="idx > 0" style="color: #f80">&nbsp;and&nbsp;</span>
+    <span v-if="idx > 0" class="text-[#f80]">&nbsp;and&nbsp;</span>
 
     <!-- magic -->
     <span v-if="key === 'magic'">

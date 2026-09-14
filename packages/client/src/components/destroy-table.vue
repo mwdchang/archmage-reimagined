@@ -13,15 +13,15 @@
         <td>{{ readableStr(bType.id) }}</td>
         <td class="text-right">{{ readableNumber(mage[bType.id]) }} </td>
         <td> 
-          <input type="number" size="6" v-model="userInput[bType.id]"> 
+          <input type="number" size="6" class="w-[5rem] text-right bg-[#eee]" v-model="userInput[bType.id]"> 
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="form" style="margin-top: 1rem">
-    <div class="row" style="align-items: baseline">
-      <input type="checkbox" v-model="confirmDestroy" style="width: 15px; height: 15px"> 
+  <div class="form mt-4">
+    <div class="row-baseline">
+      <input type="checkbox" v-model="confirmDestroy" class="w-[15px] h-[15px]"> 
       <label>Destroy confirmation</label>
     </div>
     <button @click="destroy" :disabled="confirmDestroy === false"> Destroy </button>
@@ -54,12 +54,6 @@ const destroy = () => {
 </script>
 
 <style scoped>
-input {
-  width: 5rem;
-  text-align: right;
-  background: #eee;
-}
-
 tr:nth-child(odd) {
   background: #333;
 }

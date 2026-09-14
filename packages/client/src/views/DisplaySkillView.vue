@@ -1,16 +1,16 @@
 <template>
-  <main>
+  <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
     <h2 v-if="skill" class="row">
       <magic :magic="skill.magic" /> {{ skill.name }}
     </h2>
     <section v-if="skill">
-      <p style="margin: 1rem 1rem">{{ skill.description }} </p>
+      <p class="m-4">{{ skill.description }} </p>
 
-      <p style="margin-bottom: 1rem">
+      <p class="mb-4">
         Effect values are multipled by skill level
       </p>
 
-      <div v-for="(effect, idx) in skill.effects" :key="idx" style="margin-bottom: 10px">
+      <div v-for="(effect, idx) in skill.effects" :key="idx" class="mb-[10px]">
         <SummonEffect v-if="effect.effectType === 'UnitSummonEffect'" :effect="effect as any" />
         <BattleEffect v-if="effect.effectType === 'BattleEffect'" :effect="effect as any" />
         <BattleEffect v-if="effect.effectType === 'PrebattleEffect'" :effect="effect as any" />
@@ -56,17 +56,5 @@ onMounted(() => {
 
 </script>
 
-<style scoped>
-main {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 22%;
-  line-height: 120%;
-  gap: 5px;
-}
 
-table {
-  width: 70%;
-}
-</style>
 

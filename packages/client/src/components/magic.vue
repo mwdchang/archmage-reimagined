@@ -1,5 +1,5 @@
 <template>
-  <div class="magic-glyph" :class="_class" :style="{ 'background-image': color }"></div>
+  <div class="rounded-[48%] border border-[#999] p-[2px] m-[2px]" :class="_class" :style="{ 'background-image': color }"></div>
 </template>
 
 <script setup lang="ts">
@@ -30,37 +30,10 @@ const color = computed(() => {
 });
 
 const _class = computed(() => {
-  if (props.tiny) return 'tiny';
-  if (props.small) return 'small';
-  return 'regular';
+  if (props.tiny) return 'w-[0.65rem] h-[0.65rem] p-0 m-0';
+  if (props.small) return 'w-[0.85rem] h-[0.85rem]';
+  return 'w-[1.0rem] h-[1.0rem]';
 });
 
 </script>
 
-<style scoped>
-.magic-glyph {
-  border-radius: 48%;
-  border: 1px solid #999999;
-  padding: 2px;
-  margin: 2px;
-}
-
-.regular {
-  width: 1.0rem;
-  height: 1.0rem;
-}
-
-.small {
-  width: 0.85rem;
-  height: 0.85rem;
-}
-
-.tiny {
-  width: 0.65rem;
-  height: 0.65rem;
-  padding: 0px;
-  margin: 0px;
-}
-
-
-</style>

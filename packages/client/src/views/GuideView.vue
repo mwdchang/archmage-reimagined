@@ -1,22 +1,22 @@
 <template>
-  <main class="column" style="align-items: center">
+  <main class="flex flex-col justify-center gap-[5px] items-center">
     <section class="row">
-      <img src="@/assets/images/ascendant-new.png" style="width: 64px"/>
-      <img src="@/assets/images/verdant-new.png" style="width: 64px"/>
-      <img src="@/assets/images/eradication-new.png" style="width: 64px"/>
-      <img src="@/assets/images/nether-new.png" style="width: 64px"/>
-      <img src="@/assets/images/phantasm-new.png" style="width: 64px"/>
-      <img src="@/assets/images/exiled-new.png" style="width: 64px"/>
+      <img src="@/assets/images/ascendant-new.png" class="w-[64px]"/>
+      <img src="@/assets/images/verdant-new.png" class="w-[64px]"/>
+      <img src="@/assets/images/eradication-new.png" class="w-[64px]"/>
+      <img src="@/assets/images/nether-new.png" class="w-[64px]"/>
+      <img src="@/assets/images/phantasm-new.png" class="w-[64px]"/>
+      <img src="@/assets/images/exiled-new.png" class="w-[64px]"/>
     </section>
 
-    <section class="row" style="align-items: baseline; width: 50rem">
-      <div style="width: 8rem">
-        <div class="doc-nav" :class="{ 'active': key === 'quickstart' }" @click="openMarkdown('quickstart')">Quick Start</div>
-        <div class="doc-nav" :class="{ 'active': key === 'kingdom' }" @click="openMarkdown('kingdom')">Kingdom</div>
-        <div class="doc-nav" :class="{ 'active': key === 'battle' }" @click="openMarkdown('battle')">Battle</div>
-        <div class="doc-nav" :class="{ 'active': key === 'skills' }" @click="openMarkdown('skills')">Skills</div>
+    <section class="row items-baseline w-[50rem]">
+      <div class="w-[8rem]">
+        <div class="cursor-pointer leading-[150%] hover:text-[#f80]" :class="{ 'text-[#f80] font-semibold': key === 'quickstart' }" @click="openMarkdown('quickstart')">Quick Start</div>
+        <div class="cursor-pointer leading-[150%] hover:text-[#f80]" :class="{ 'text-[#f80] font-semibold': key === 'kingdom' }" @click="openMarkdown('kingdom')">Kingdom</div>
+        <div class="cursor-pointer leading-[150%] hover:text-[#f80]" :class="{ 'text-[#f80] font-semibold': key === 'battle' }" @click="openMarkdown('battle')">Battle</div>
+        <div class="cursor-pointer leading-[150%] hover:text-[#f80]" :class="{ 'text-[#f80] font-semibold': key === 'skills' }" @click="openMarkdown('skills')">Skills</div>
       </div>
-      <div class="markdown-body" style="margin-left: 1rem; flex: 1; min-height: 10rem" v-html="guide" />
+      <div class="markdown-body ml-4 flex-1 min-h-[10rem]" v-html="guide" />
     </section>
   </main>
 </template>
@@ -27,8 +27,9 @@ import { onMounted, ref } from 'vue';
 import { marked } from 'marked';
 
 
-const pages = import.meta.glob('@/assets/docs/*.md', {
-  as: 'raw',
+const pages: Record<string, string> = import.meta.glob('@/assets/docs/*.md', {
+  query: '?raw',
+  import: 'default',
   eager: true
 })
 
@@ -49,7 +50,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>;
+<style scoped>
 .markdown-body {
   font-size: 100%;
   line-height: 125%;
@@ -78,21 +79,4 @@ onMounted(async () => {
   font-size: 90%;
   border-radius: 2px;
 }
-
-.doc-nav {
-  cursor: pointer;
-  line-height: 150%;
-}
-
-
-.doc-nav.active {
-  color: #f80;
-  font-weight: 600;
-}
-
-.doc-nav:hover {
-  color: #f80;
-}
-
-
 </style>

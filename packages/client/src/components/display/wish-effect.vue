@@ -1,10 +1,10 @@
 <template>
   <section class="display-section">
-    <div v-if="effect.trigger" style="margin-bottom: 10px">  
+    <div v-if="effect.trigger" class="mb-2.5">  
       Rolls {{ effect.trigger.min }} to {{ effect.trigger.max }} times, <span class="special-text">weight</span> indicates the proportional likelihood of the result happening.
     </div>
 
-    <table style="min-width: 25rem">
+    <table class="min-w-[25rem]">
       <thead>
         <tr>
           <th class="text-left">Result</th>

@@ -1,17 +1,17 @@
 <template>
-  <main class="column" style="align-items: center">
+  <main class="flex flex-col justify-center gap-[5px] items-center">
     <h2 v-if="unit" class="row">
       <magic :magic="unit.magic" />{{unit.name}}
     </h2>
-    <p style="margin: 1rem 10rem; line-height: 120%" v-if="unit">{{ unit.description }} </p>
-    <section v-if="unit">
+    <p class="m-[1rem_10rem] leading-[120%]" v-if="unit">{{ unit.description }} </p>
+    <section v-if="unit" class="flex flex-row">
       <table>
         <tbody>
-          <tr style="background: #333">
+          <tr class="bg-[#333]">
             <td colspan="2">Unit Statistics</td>
           </tr>
 
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Name</td>
             <td>{{ unit.name }}</td>
           </tr>
@@ -32,7 +32,7 @@
             <td class="text-right">{{ unit.powerRank }}</td>
           </tr>
 
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Attack Power</td>
             <td class="text-right">{{ unit.primaryAttackPower }}</td>
           </tr>
@@ -49,7 +49,7 @@
             <td class="text-right">{{ unit.counterAttackPower}}</td>
           </tr>
 
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Extra Attack Power</td>
             <td class="text-right">{{ unit.secondaryAttackPower }}</td>
           </tr>
@@ -62,7 +62,7 @@
             <td class="text-right">{{ unit.secondaryAttackInit }}</td>
           </tr>
 
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Hit Points</td>
             <td class="text-right">{{ unit.hitPoints }}</td>
           </tr>
@@ -79,7 +79,7 @@
             </td>
           </tr>
 
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Abilities</td>
             <td> 
               <div v-for="(ability, idx) of unit.abilities" :key="idx">
@@ -90,11 +90,11 @@
         </tbody>
       </table>
 
-      <div style="width: 2rem">&nbsp;</div>
+      <div class="w-[2rem]">&nbsp;</div>
 
       <table>
         <tbody>
-          <tr style="background: #333; border-bottom: solid 2px #555">
+          <tr class="bg-[#333] border-b-2 border-[#555]">
             <td colspan="2">Spell Resistances</td>
           </tr>
           <tr v-for="(magic) of allowedMagicList" :key="magic">
@@ -102,10 +102,10 @@
             <td class="text-right">{{ unit.spellResistances[magic] }}</td>
           </tr>
 
-          <tr style="background: #333">
+          <tr class="bg-[#333]">
             <td colspan="2">Attack Resistances</td>
           </tr>
-          <tr style="border-top: solid 2px #555">
+          <tr class="border-t-2 border-[#555]">
             <td>Missile</td>
             <td class="text-right">{{ unit.attackResistances.missile }}</td>
           </tr>
@@ -176,10 +176,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-section {
-  display: flex;
-  flex-direction: row;
-}
 
-</style>

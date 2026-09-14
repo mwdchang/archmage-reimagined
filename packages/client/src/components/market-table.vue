@@ -1,5 +1,5 @@
 <template>
-  <table style="margin-bottom: 0.5rem" v-if="ready">
+  <table class="mb-2" v-if="ready">
     <thead>
       <tr>
         <th v-if="showName"> Name </th>
@@ -32,7 +32,7 @@
             {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
-            <input type="number" v-model="item.bid" style="height: 1.6rem" @keyup.enter="emit('confirm')" /> 
+            <input type="number" v-model="item.bid" class="h-[1.6rem]" @keyup.enter="emit('confirm')" /> 
           </div>
         </td>
       </tr>

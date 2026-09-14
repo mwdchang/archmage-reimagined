@@ -1,19 +1,19 @@
 <template>
-  <main class="sidebar" :style="computedStyle">
+  <main class="border border-[#888] p-[1px]" :style="computedStyle">
     <div @click="isCollapsed = !isCollapsed">close</div>
-    <div class="sidebar-item"> 
+    <div class="m-[1px]"> 
       <div v-if="!isCollapsed"> Item A </div>
       <div v-if="isCollapsed"> A </div>
     </div>
-    <div class="sidebar-item"> 
+    <div class="m-[1px]"> 
       <div v-if="!isCollapsed"> Item B </div>
       <div v-if="isCollapsed"> B </div>
     </div>
-    <div class="sidebar-item"> 
+    <div class="m-[1px]"> 
       <div v-if="!isCollapsed"> Item C </div>
       <div v-if="isCollapsed"> C </div>
     </div>
-    <div class="sidebar-item"> 
+    <div class="m-[1px]"> 
       <div v-if="!isCollapsed"> Item D </div>
       <div v-if="isCollapsed"> D </div>
     </div>
@@ -30,13 +30,3 @@ const computedStyle = computed(() => {
 
 </script>
 
-<style scoped>
-.sidebar {
-  border: 1px solid #888;
-  padding: 1px 1px;
-}
-
-.sidebar-item {
-  margin: 1px 1px;
-}
-</style>

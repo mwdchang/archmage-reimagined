@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/disband.png" />
       <div>
         <div class="section-header">Disband Units</div>
@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-    <section class="row" style="align-items: flex-start; gap: 0.5rem; margin-top: 10px" v-if="mageStore.mage">
+    <section class="flex flex-row items-start gap-2 mt-[10px]" v-if="mageStore.mage">
       <!-- left -->
       <table v-if="layout === 'table'"> 
         <thead>
@@ -41,17 +41,17 @@
             <!--
             <td class="text-right"> {{ u.upkeep.geld }} / {{ u.upkeep.mana }} / {{ u.upkeep.population }} </td>
             -->
-            <td class="text-right" style="padding-left: 10px"> {{ readableNumber(u.size) }} </td>
+            <td class="text-right pl-[10px]"> {{ readableNumber(u.size) }} </td>
             <td class="text-right"> {{ (100 * u.powerPercentage).toFixed(2) }}%</td>
-            <td class="text-right" style="font-size: 75%; color: #888" :title="u.moveUp + ' units'" > 
-              <div class="row" style="justify-content: end; gap: 0">
+            <td class="text-right text-[75%] text-[#888]" :title="u.moveUp + ' units'">
+              <div class="flex flex-row items-center justify-end gap-0">
                 {{ u.moveUp }}
-                <svg-icon name="caretUp" size="1.25rem" /> 
+                <svg-icon name="caretUp" size="1.25rem" />
               </div>
             </td>
-            <td class="text-right" style="font-size: 75%" :title="u.moveDown + ' units'"
-              @click="disbandPayload[u.id] = u.moveDown"> 
-              <div class="row" style="justify-content: end; gap: 0">
+            <td class="text-right text-[75%]" :title="u.moveDown + ' units'"
+              @click="disbandPayload[u.id] = u.moveDown">
+              <div class="flex flex-row items-center justify-end gap-0">
                 {{ u.moveDown }}
                 <svg-icon name="caretDown" size="1.25rem" /> 
               </div>
@@ -61,7 +61,7 @@
                 :disabled="u.attributes.includes('undisbandable') === true" 
                 type="text" 
                 size=9 
-                style="height: 1.6rem"
+                class="h-[1.6rem]"
                 v-model="disbandPayload[u.id]">
             </td>
           </tr>
@@ -69,15 +69,15 @@
       </table>
 
       <div v-if="layout === 'cards'"> 
-        <div class="card" v-for="(u) of unitsStatus" :key="u.id">
-          <div class="row" style="gap: 0.5rem; justify-content:space-between">
+        <div class="rounded border border-[#333] bg-[#181818] m-2 p-2" v-for="(u) of unitsStatus" :key="u.id">
+          <div class="flex flex-row items-center justify-between gap-2">
             <input 
               :disabled="u.attributes.includes('undisbandable') === true" 
               v-model="u.checked"
               @change="toggleWholeStack(u)"
               type="checkbox">
             <div class="row">
-              <router-link :to="{ name: 'viewUnit', params: { id: u.id }}" style="min-width: 7rem"> 
+              <router-link :to="{ name: 'viewUnit', params: { id: u.id }}" class="min-w-[7rem]"> 
                 {{ u.name }} 
               </router-link>
               <div @click="disbandPayload[u.id] = u.moveDown" class="row"> 
@@ -89,7 +89,7 @@
               :disabled="u.attributes.includes('undisbandable') === true" 
               type="text" 
               size=9 
-              style="height: 1.6rem; right: 0"
+              class="h-[1.6rem] right-0"
               v-model="disbandPayload[u.id]">
           </div>
         </div>
@@ -97,8 +97,8 @@
       
       <!-- left -->
       <section class="form">
-        <div class="row" style="align-items: baseline; gap: 10px">
-          <input type="checkbox" v-model="confirmDisband" style="width:15px; height:15px"> 
+        <div class="flex flex-row items-baseline gap-[10px]">
+          <input type="checkbox" v-model="confirmDisband" class="w-[15px] h-[15px]"> 
           <label>Confirm disband</label>
         </div>
 
@@ -109,11 +109,11 @@
 
         <div v-if="errorStr" class="error">{{ errorStr }}</div>
 
-        <p style="margin-top: 0.5rem; margin-bottom: 0.5rem"> Net Income </p>
-        <table style="min-width: 16rem;">
+        <p class="my-2"> Net Income </p>
+        <table class="min-w-[16rem]">
           <tbody>
             <tr>
-              <td style="width: 7rem"> Geld </td>
+              <td class="w-[7rem]"> Geld </td>
               <td class="text-right">{{ readableNumber(estimatedIncome.geld) }} </td>
             </tr>
             <tr>
@@ -264,6 +264,3 @@ watch(
 );
 
 </script>
-
-<style>
-</style>

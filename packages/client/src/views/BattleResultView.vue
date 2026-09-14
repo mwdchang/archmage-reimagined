@@ -1,5 +1,5 @@
 <template>
-  <main v-if="report" style="font-size: 0.90rem; display: flex; flex-direction: column; align-items: center">
+  <main v-if="report" class="flex flex-col items-center text-[0.9rem]">
     <h3 class="section-header"> Attacker {{ attackerStr }} </h3>
     <table>
       <tbody>
@@ -28,7 +28,7 @@
           <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
-            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+            <div v-if="stack.appliedEffects" class="row" :title="effectsToString(stack.appliedEffects)">
               <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
             </div>
           </td>
@@ -65,7 +65,7 @@
           <td class="text-right">{{ readableNumber(stack.unit.hitPoints) }}</td>
           <td class="text-right">{{ stack.accuracy }}</td>
           <td>
-            <div v-if="stack.appliedEffects" class="row" style="gap: 0x" :title="effectsToString(stack.appliedEffects)">
+            <div v-if="stack.appliedEffects" class="row" :title="effectsToString(stack.appliedEffects)">
               <magic v-for="e of stack.appliedEffects" :magic="getEffectMagic(e)" tiny />
             </div>
           </td>
@@ -201,7 +201,7 @@
           {{ nameById(log.attacker.id) }}'s {{ unitName(log.attacker.unitId) }} missed
         </p>
       </div>
-      <div v-if="checkGap(report.engagement.logs[idx], report.engagement.logs[idx+1])" style="margin-bottom: 0.5rem" />
+      <div v-if="checkGap(report.engagement.logs[idx], report.engagement.logs[idx+1])" class="mb-2" />
     </div>
     <br>
 

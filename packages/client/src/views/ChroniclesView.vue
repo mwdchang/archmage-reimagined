@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="max-w-[40rem] max-h-[30rem] overflow-y-scroll">
     <div class="section-header">
       Engagements
     </div>
@@ -8,32 +8,32 @@
       {{ readableDate(viewingWindow[0]) }}
     </div>
     <br>
-    <div v-for="(d, idx) of chronicles" :key="idx" style="margin-bottom: 10px"> 
-      <div class="row" style="max-width: 35rem; gap: 10px; align-items: flex-start">
+    <div v-for="(d, idx) of chronicles" :key="idx" class="mb-[10px]"> 
+      <div class="flex flex-row items-start gap-[10px] max-w-[35rem]">
         <img 
           v-if="mage.id === d.attackerId && d.isSuccessful === true"
           src="@/assets/images/attack-win.png" 
-          class="icon win"
+          class="w-[58px] rounded-[12px] bg-[#228833]"
         />
         <img 
           v-if="mage.id === d.attackerId && d.isSuccessful === false"
           src="@/assets/images/attack-loss.png" 
-          class="icon loss"
+          class="w-[58px] rounded-[12px] bg-[#882233]"
         />
         <img 
           v-if="mage.id === d.defenderId && d.isSuccessful === false"
           src="@/assets/images/defend-win.png" 
-          class="icon win"
+          class="w-[58px] rounded-[12px] bg-[#228833]"
         />
         <img 
           v-if="mage.id === d.defenderId && d.isSuccessful === true"
           src="@/assets/images/defend-loss.png" 
-          class="icon loss"
+          class="w-[58px] rounded-[12px] bg-[#882233]"
         />
         <img 
           v-if="mage.id !== d.defenderId && mage.id !== d.attackerId"
           src="@/assets/images/spy.png" 
-          class="icon spy"
+          class="w-[58px] rounded-[12px] bg-[#888888]"
         />
         <div>
           <div>{{ formatEpochToUTC(d.timestamp) }}</div>
@@ -117,29 +117,3 @@ onMounted(async () => {
   });;
 });
 </script>
-
-<style scoped>
-main {
-  max-width: 40rem;
-  max-height: 30rem;
-  overflow-y: scroll;
-}
-p { line-height: 125% }
-
-.icon {
-  width: 58px;
-  border-radius: 12px;
-}
-
-.icon.win {
-  background: #228833;
-}
-.icon.loss {
-  background: #882233;
-}
-.icon.spy {
-  background: #888888;
-}
-
-
-</style>

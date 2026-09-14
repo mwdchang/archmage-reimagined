@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/dispel.png" />
       <div>
         <div class="section-header">Dispel Magic</div>
@@ -139,8 +139,5 @@ const dispelEnchant = async () => {
     mageStore.setMage(data.mage);
   }
 };
+
 </script>
-
-<style scoped>
-</style>
-

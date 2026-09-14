@@ -1,6 +1,6 @@
 <template>
-  <main v-if="mageStore.mage">
-    <div class="row" style="width: 35rem; margin-bottom: 0.5rem">
+  <main v-if="mageStore.mage" class="max-w-[30rem]">
+    <div class="view-header-row">
       <ImageProxy src="/images/ui/geld.png" />
       <div>
         <div class="section-header">Gelding</div>
@@ -9,8 +9,8 @@
       </div>
     </div>
     <section> 
-      <section class="form" style="width: 25rem">
-        <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld" @keyup.enter="geld">
+      <section class="form w-[25rem]">
+        <input type="number" placeholder="# turns" size="10" v-model="turnsToGeld" @keyup.enter="geld" class="text-right">
         <ActionButton 
           :proxy-fn="geld"
           :label="'Geld'" />
@@ -56,13 +56,3 @@ const geld = async () => {
   }
 };
 </script>
-
-<style scoped>
-input {
-  text-align: right;
-}
-
-main {
-  max-width: 30rem;
-}
-</style>

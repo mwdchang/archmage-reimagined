@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" style="margin-top: 10px; gap: 15px" v-if="mageStore.mage">
+  <div v-if="mageStore.mage" class="w-full h-[20px] flex justify-center items-center border-t border-[#333] mt-[10px] gap-[15px]">
     <router-link to="/about">Main</router-link>
 
     <!-- short cuts -->
@@ -12,7 +12,7 @@
     </router-link>
   </div>
 
-  <div style="font-size: 75%; margin-top: 5px">
+  <div class="text-[75%] mt-[5px]">
     Server Time: {{ readableDate(new Date()) }}.
     Commit <a :href="link" target="_blank">{{commitHash}}</a>
   </div>
@@ -30,16 +30,4 @@ const mageStore = useMageStore();
 const commitHash = import.meta.env.VITE_GIT_COMMIT_HASH;
 const link = `https://github.com/mwdchang/archmage-reimagined/commit/${commitHash}`;
 </script>
-
-
-<style scoped>
-.footer {
-  width: 100%;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid #333;
-}
-</style>
 
