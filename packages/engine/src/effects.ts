@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
 import type { Mage } from 'shared/types/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
-import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect, PostbattleEffect, KingdomResourcesEffect, StealEffect, KingdomBuildingsEffect } from "shared/types/effects";
+import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect, PostbattleEffect, KingdomResourcesEffect, StealEffect, KingdomBuildingsEffect } from "shared/src/effects";
 import { currentSpellLevel } from "./base/mage";
 import { AllowedMagic } from 'shared/types/common';
 
@@ -10,7 +10,7 @@ import { AllowedMagic } from 'shared/types/common';
 export interface ActiveEffect {
   objId: string;
   objType: string;
-  effects: Effect<any>[];
+  effects: Effect[];
   origin: EffectOrigin;
 }
 
@@ -18,8 +18,8 @@ export interface ActiveEffect {
  * Scans through enchantments, skills, and unique items
 **/
 export const getActiveEffects = (
-  mage: Mage, 
-  effectType: E, 
+  mage: Mage,
+  effectType: E,
   targetId?: number
 ) => {
   const results: ActiveEffect[] = [];
@@ -60,7 +60,7 @@ export const getActiveEffects = (
       objId: uniqueItem.id,
       objType: 'item',
       origin: origin,
-      effects: itemEffects 
+      effects: itemEffects
     });
   }
 
@@ -79,17 +79,17 @@ export const getActiveEffects = (
       objId: skill.id,
       objType: 'skill',
       origin: origin,
-      effects: skillEffects.map(s => applySkillLevelToEffect(s, level)) 
+      effects: skillEffects.map(s => applySkillLevelToEffect(s, level))
     });
   }
-  
+
   return results;
 }
 
 
 export const getActiveEffectsForBattle = (
-  mage: Mage, 
-  effectType: E, 
+  mage: Mage,
+  effectType: E,
   spellId: string | null,
   itemId: string | null,
   targetId?: number
@@ -127,18 +127,18 @@ export const getActiveEffectsForBattle = (
       objId: item.id,
       objType: 'item',
       origin: origin,
-      effects: itemEffects 
+      effects: itemEffects
     });
   }
   return results;
 }
 
 
-const applySkillLevelToEffect = (effect: Effect<any>, level: number) => {
+const applySkillLevelToEffect = (effect: Effect, level: number) => {
   const effectClone = _.cloneDeep(effect);
   if (effectClone.effectType === E.BattleEffect || effectClone.effectType === E.PrebattleEffect) {
     return applySkillLevelToBattleEffect(effectClone as any, level);
-  } 
+  }
   if (effectClone.effectType === E.PostbattleEffect) {
     return applySkillLevelToPostbattleEffect(effectClone as any, level);
   }

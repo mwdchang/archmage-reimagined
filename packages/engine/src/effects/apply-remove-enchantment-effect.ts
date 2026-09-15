@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { EffectOrigin, RemoveEnchantmentEffect } from "shared/types/effects";
+import { EffectOrigin, RemoveEnchantmentEffect } from "shared/src/effects";
 import { Mage } from "shared/types/mage";
 import { betweenInt } from "../random";
 

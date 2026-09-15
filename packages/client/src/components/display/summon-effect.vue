@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UnitSummonEffect } from 'shared/types/effects';
+import { UnitSummonEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { readableNumber, readableStr } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';

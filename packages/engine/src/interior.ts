@@ -7,7 +7,7 @@ import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
 
-import { ArmyUpkeepEffect, ProductionEffect } from 'shared/types/effects';
+import { ArmyUpkeepEffect, ProductionEffect } from 'shared/src/effects';
 import { matchesFilter } from './base/unit';
 import { ActiveEffect, getActiveEffects } from './effects';
 
@@ -96,7 +96,7 @@ export const getBuildingTypes = () => {
 export const buildingRate = (mage: Mage, buildType: string) => {
   if (buildType === 'farms') return (mage.workshops + 1) / 5;
   if (buildType === 'towns') return (mage.workshops + 1) / 30;
-  if (buildType === 'workshops') return (mage.workshops + 1 ) / 10;
+  if (buildType === 'workshops') return (mage.workshops + 1) / 10;
   if (buildType === 'barracks') return (mage.workshops + 1) / 5;
   if (buildType === 'nodes') return (mage.workshops + 1) / 30;
   if (buildType === 'guilds') return (mage.workshops + 1) / 20;
@@ -258,7 +258,7 @@ export const populationIncome = (mage: Mage) => {
     }
   }
 
-  return baseIncome + delta; 
+  return baseIncome + delta;
 }
 
 export const geldIncome = (mage: Mage) => {
@@ -289,7 +289,7 @@ export const geldIncome = (mage: Mage) => {
       }
     }
   }
-  return baseIncome + delta; 
+  return baseIncome + delta;
 }
 
 

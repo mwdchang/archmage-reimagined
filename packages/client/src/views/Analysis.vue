@@ -210,7 +210,7 @@ import { calcHealing } from 'engine/src/battle/calc-stack-healing';
 import { applyAccuracyBuff } from 'engine/src/battle/calc-accuracy-modifier';
 import { AllowedMagic } from 'shared/types/common';
 import { StackType } from 'shared/src/common';
-import { EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
+import { EffectOrigin, UnitSummonEffect } from 'shared/src/effects';
 import { dispelEnchantment, successCastingRate, summonUnit } from 'engine/src/magic';
 import { readableNumber, readableStr } from '@/util/util';
 import { Enchantment, Mage } from 'shared/types/mage';

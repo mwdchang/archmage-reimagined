@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { WishEffect } from 'shared/types/effects';
+import { WishEffect } from 'shared/src/effects';
 import { readableNumber, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 

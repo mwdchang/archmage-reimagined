@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { CastingCostEffect, EffectOrigin, UnitSummonEffect } from 'shared/types/effects';
 import {
   gameTable, magicAlignmentTable, productionTable
 } from './base/config';
@@ -14,10 +13,13 @@ import {
 import { totalLand, currentSpellLevel } from './base/mage';
 import { randomBM, randomInt } from './random';
 import {
+  CastingCostEffect,
+  EffectOrigin,
+  UnitSummonEffect,
   ProductionEffect,
   KingdomResistanceEffect,
   CastingEffect
-} from 'shared/types/effects';
+} from 'shared/src/effects';
 import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
 import { ActiveEffect, getActiveEffects } from './effects';
 import { AllowedMagic } from 'shared/types/common';

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BattleEffect } from 'shared/types/effects';
+import { BattleEffect } from 'shared/src/effects';
 import UnitAttrEffect from '@/components/display/unit-attr-effect.vue';
 import HealEffect from '@/components/display/heal-effect.vue';
 import DamageEffect from '@/components/display/damage-effect.vue';

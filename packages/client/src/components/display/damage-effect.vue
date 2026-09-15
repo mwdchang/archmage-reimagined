@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UnitDamageEffect } from 'shared/types/effects';
+import { UnitDamageEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
 import { readableStr, readableNumber } from '@/util/util';

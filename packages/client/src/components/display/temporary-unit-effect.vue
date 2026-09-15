@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { TemporaryUnitEffect } from 'shared/types/effects';
+import { TemporaryUnitEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { readableNumber, readableStr } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';

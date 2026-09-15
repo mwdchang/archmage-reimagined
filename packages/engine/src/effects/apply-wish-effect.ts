@@ -1,4 +1,4 @@
-import { EffectOrigin, WishEffect } from "shared/types/effects";
+import { EffectOrigin, WishEffect } from "shared/src/effects";
 import { Mage } from "shared/types/mage";
 import { betweenInt, randomWeighted, WeightEntry } from "../random";
 import { getRandomItem } from "../base/references";
@@ -22,7 +22,7 @@ export const applyWishEffect = async (
   // Kind of a hack in order to access DataAdapter, we need this for things that
   // do not only exist at the mage level, such as unque-items which requires the 
   // global unique pool to be updated as well.
-  uniqueItemHook: (mage: Mage) => Promise<null|string> 
+  uniqueItemHook: (mage: Mage) => Promise<null | string>
 ) => {
   let num = 1;
   if (effect.trigger) {
@@ -66,7 +66,7 @@ export const applyWishEffect = async (
       mage.currentGeld += value;
 
       wishResult.results.push({
-        target: 'geld', 
+        target: 'geld',
         value: value
       });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} geld`);
@@ -77,7 +77,7 @@ export const applyWishEffect = async (
       mage.currentMana += value;
 
       wishResult.results.push({
-        target: 'mana', 
+        target: 'mana',
         value: value
       });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} mana`);
@@ -88,7 +88,7 @@ export const applyWishEffect = async (
       mage.currentPopulation += value;
 
       wishResult.results.push({
-        target: 'population', 
+        target: 'population',
         value: value
       });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} population`);
@@ -97,9 +97,9 @@ export const applyWishEffect = async (
         value = -mage.currentTurn;
       }
       mage.currentTurn += value;
-      
+
       wishResult.results.push({
-        target: 'turn', 
+        target: 'turn',
         value: value
       });
       console.log(`You ${value < 0 ? 'lost' : 'gained'} ${Math.abs(value)} turns`);
@@ -109,7 +109,7 @@ export const applyWishEffect = async (
         if (!mage.items[item.id]) {
           mage.items[item.id] = 1;
         } else {
-          mage.items[item.id] ++;
+          mage.items[item.id]++;
         }
       }
 

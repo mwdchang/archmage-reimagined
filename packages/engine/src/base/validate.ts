@@ -6,7 +6,7 @@ import {
   PostbattleEffect, ProductionEffect, StealEffect,
   TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect,
   UnitHealEffect, WishEffect
-} from "shared/types/effects";
+} from "shared/src/effects";
 import { Item, Spell } from "shared/types/magic";
 import { Unit } from "shared/src/unit";
 import { SkillGraph } from "shared/types/skills";

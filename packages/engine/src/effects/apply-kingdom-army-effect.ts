@@ -1,4 +1,4 @@
-import { EffectOrigin, KingdomArmyEffect } from "shared/types/effects";
+import { EffectOrigin, KingdomArmyEffect } from "shared/src/effects";
 import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels, getUnitById } from "../base/references";
 import { between, randomBM } from "../random";

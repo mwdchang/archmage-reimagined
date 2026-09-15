@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { KingdomArmyEffect } from 'shared/types/effects';
+import { KingdomArmyEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
 

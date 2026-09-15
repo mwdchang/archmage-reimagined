@@ -1,4 +1,4 @@
-import { EffectOrigin, StealEffect } from "shared/types/effects";
+import { EffectOrigin, StealEffect } from "shared/src/effects";
 import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
@@ -91,7 +91,7 @@ export const applyStealEffect = (
       }
 
       if (mage.items[itemId]) {
-        mage.items[itemId] ++;
+        mage.items[itemId]++;
       } else {
         mage.items[itemId] = 1;
       }

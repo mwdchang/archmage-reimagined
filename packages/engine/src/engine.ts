@@ -64,7 +64,7 @@ import {
   EffectOrigin,
   KingdomArmyEffect,
   AvoidEffect
-} from 'shared/types/effects';
+} from 'shared/src/effects';
 import { GameMsg } from 'shared/types/common';
 
 import { betweenInt, randomBM, randomInt } from './random';

@@ -1,4 +1,4 @@
-import { EffectOrigin, KingdomResourcesEffect } from "shared/types/effects";
+import { EffectOrigin, KingdomResourcesEffect } from "shared/src/effects";
 import { Mage } from "shared/types/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between, randomBM } from "../random";
@@ -37,7 +37,7 @@ export const applyKingdomResourcesEffect = (
       value = mage.currentPopulation * base * spellPowerScale;
     } else if (effect.target === 'mana') {
       value = mage.currentMana * base * spellPowerScale;
-    } else  if (effect.target === 'geld') {
+    } else if (effect.target === 'geld') {
       value = mage.currentGeld * base * spellPowerScale;
     } else if (effect.target === 'turn') {
       throw new Error('addSpellLevelPercentage not supported for turns');
@@ -47,7 +47,7 @@ export const applyKingdomResourcesEffect = (
   } else {
     throw new Error(`Unable to find rule ${effect.rule}`);
   }
-  value = Math.floor(value); 
+  value = Math.floor(value);
 
   const result: KingdomResourcesEffectResult = {
     effectType: 'KingdomResourcesEffect',
