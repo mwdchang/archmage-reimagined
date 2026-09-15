@@ -93,7 +93,7 @@
 import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
 import { ref, onMounted } from 'vue';
-import { Unit } from 'shared/types/unit';
+import { Unit } from 'shared/src/unit';
 import { useMageStore } from '@/stores/mage';
 import { getRecruitableUnits } from 'engine/src/base/references'; 
 import { recruitmentAmount } from 'engine/src/interior';

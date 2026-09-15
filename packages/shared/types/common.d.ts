@@ -61,7 +61,7 @@ export interface ChronicleTurn {
   turn: number;
   timestamp: number;
   // FIXME: string for now, maybe structured
-  data: any[]; 
+  data: any[];
 }
 
 

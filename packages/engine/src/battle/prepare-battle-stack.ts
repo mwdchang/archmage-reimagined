@@ -1,6 +1,6 @@
 import type { ArmyUnit } from "shared/types/mage";
 import type { BattleStack } from "shared/types/battle";
-import type { Unit } from "shared/types/unit";
+import type { Unit } from "shared/src/unit";
 import { getUnitById } from "../base/references";
 import { isFlying, isRanged } from "../base/unit";
 
@@ -17,7 +17,7 @@ enum StackType {
 // - ranged
 // - everything else
 export const getPowerModifier = (u: Unit) => {
-  if (isFlying(u)) return  1.5 * 1.5;
+  if (isFlying(u)) return 1.5 * 1.5;
   if (isRanged(u)) return 1.0;
   return 1.5;
 };

@@ -1,4 +1,4 @@
-import type { Unit } from "shared/types/unit";
+import type { Unit } from "shared/src/unit";
 import type { BattleStack } from 'shared/types/battle';
 import { isFlying, isRanged } from "../base/unit";
 
@@ -30,11 +30,11 @@ export const calcPairings = (a: BattleStack[], b: BattleStack[]) => {
   a.forEach((aStack, aIdx) => {
     log(`calculating by power`, aStack.unit.name);
     b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
+      if (aStack.targetIdx > -1) return;
 
       log('\tchecking target', bStack.unit.name);
       const ratio = bStack.netPower / aStack.netPower;
-      if (( ratio > 0.02 && ratio <= 4.0) || aIdx === 0) {
+      if ((ratio > 0.02 && ratio <= 4.0) || aIdx === 0) {
         const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
         log('\tCan attack', canAttack);
         if (canAttack && bStack.isTarget === false) {
@@ -51,7 +51,7 @@ export const calcPairings = (a: BattleStack[], b: BattleStack[]) => {
     if (aStack.targetIdx > -1) return;
     log(`calculating by availability`, aStack.unit.name);
     b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
+      if (aStack.targetIdx > -1) return;
       log('\tchecking target', bStack.unit.name);
       const canAttack = canAttackPrimary(aStack.unit, bStack.unit);
       log('\tCan attack', canAttack);
@@ -68,7 +68,7 @@ export const calcPairings = (a: BattleStack[], b: BattleStack[]) => {
     if (aStack.targetIdx > -1) return;
     log(`calculating by availability`, aStack.unit.name);
     b.forEach((bStack, bIdx) => {
-      if (aStack.targetIdx > -1 ) return;
+      if (aStack.targetIdx > -1) return;
       log('\tchecking target', bStack.unit.name);
       const canAttack = canAttackSecondary(aStack.unit, bStack.unit);
       log('\tCan attack', canAttack);

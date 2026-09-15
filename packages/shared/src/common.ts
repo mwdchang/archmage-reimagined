@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const allowedMagicList = [
   'ascendant',
   'verdant',
@@ -5,6 +7,28 @@ export const allowedMagicList = [
   'nether',
   'phantasm',
 ] as const;
+
+export const AllowedMagicSchema = z.enum(allowedMagicList);
+export type AllowedMagic = z.infer<typeof AllowedMagicSchema>;
+
+
+export const allowedAttackTypeList = [
+  'missile',
+  'fire',
+  'poison',
+  'breath',
+  'magic',
+  'melee',
+  'ranged',
+  'lightning',
+  'cold',
+  'paralyse',
+  'psychic',
+  'holy'
+];
+
+export const AllowedAttackTypesSchema = z.enum(allowedAttackTypeList);
+
 
 
 export const enum allowedEffect {
@@ -36,7 +60,7 @@ export const enum allowedEffect {
   RemoveEnchantmentEffect = 'RemoveEnchantmentEffect',
   StealEffect = 'StealEffect',
   UnitSummonEffect = 'UnitSummonEffect'
-} 
+}
 
 export enum StackType {
   NORMAL,

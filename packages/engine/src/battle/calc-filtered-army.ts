@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import type { UnitFilter } from "shared/types/unit";
+import type { UnitFilter } from "shared/src/unit";
 import type { BattleStack } from 'shared/types/battle';
 import { matchesFilter } from '../base/unit';
 

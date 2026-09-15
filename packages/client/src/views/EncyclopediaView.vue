@@ -115,7 +115,7 @@ import Magic from '@/components/magic.vue';
 import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits, getAllSkills } from 'engine/src/base/references';
 import { Item, Spell } from 'shared/types/magic';
 import { readableStr, readableNumber } from '@/util/util';
-import { Unit } from 'shared/types/unit';
+import { Unit } from 'shared/src/unit';
 import { Skill } from 'shared/types/skills';
 
 
