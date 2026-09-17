@@ -110,7 +110,7 @@ import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
-import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/types/market';
+import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/src/market';
 import {
   generateMarketItems,
   getMarketableSpells,

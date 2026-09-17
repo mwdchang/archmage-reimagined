@@ -7,7 +7,7 @@ import { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { ChronicleTurn, GameTable, MageRank, Mail } from 'shared/src/common';
 import { ServerClock } from 'shared/src/common';
 import { NameError } from 'shared/src/errors';
-import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
 import { Item } from 'shared/types/magic';
 
 interface User {

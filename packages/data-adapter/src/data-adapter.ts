@@ -2,7 +2,7 @@ import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { ChronicleTurn, MageRank, Mail, GameTable } from 'shared/src/common';
 import { ServerClock } from 'shared/src/common';
-import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
 import { Item } from 'shared/types/magic';
 
 
