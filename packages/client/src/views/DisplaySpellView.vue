@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { getSpellById } from 'engine/src/base/references';
-import { Spell } from 'shared/types/magic';
+import { Spell } from 'shared/src/magic';
 import SummonEffect from '@/components/display/summon-effect.vue';
 import BattleEffect from '@/components/display/battle-effect.vue';
 import KingdomResourcesEffect from '@/components/display/kingdom-resources-effect.vue';

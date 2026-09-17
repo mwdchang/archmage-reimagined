@@ -7,7 +7,7 @@ import {
   TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect,
   UnitHealEffect, WishEffect
 } from "shared/src/effects";
-import { Item, Spell } from "shared/types/magic";
+import { Item, Spell } from "shared/src/magic";
 import { Unit } from "shared/src/unit";
 import { SkillGraph } from "shared/src/skills";
 

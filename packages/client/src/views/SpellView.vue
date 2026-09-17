@@ -162,7 +162,7 @@ import { getArmy, getSpells } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import { readableNumber } from '@/util/util';
-import { Spell } from 'shared/types/magic';
+import { Spell } from 'shared/src/magic';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/composables/useLayout';

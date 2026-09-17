@@ -3,7 +3,7 @@ import { Enchantment, Mage } from 'shared/types/mage';
 import { ChronicleTurn, MageRank, Mail, GameTable } from 'shared/src/common';
 import { ServerClock } from 'shared/src/common';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
-import { Item } from 'shared/types/magic';
+import { Item } from 'shared/src/magic';
 
 
 export interface SearchOptions {

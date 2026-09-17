@@ -8,7 +8,7 @@ import { ChronicleTurn, GameTable, MageRank, Mail } from 'shared/src/common';
 import { ServerClock } from 'shared/src/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
-import { Item } from 'shared/types/magic';
+import { Item } from 'shared/src/magic';
 
 interface UserTable {
   username: string;

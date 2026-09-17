@@ -113,7 +113,7 @@ import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Magic from '@/components/magic.vue';
 import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits, getAllSkills } from 'engine/src/base/references';
-import { Item, Spell } from 'shared/types/magic';
+import { Item, Spell } from 'shared/src/magic';
 import { readableStr, readableNumber } from '@/util/util';
 import { Unit } from 'shared/src/unit';
 import { Skill } from 'shared/src/skills';

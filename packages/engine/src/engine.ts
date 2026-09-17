@@ -105,7 +105,7 @@ import {
   fromStealEffectResult,
   fromWishEffectResult
 } from './game-message';
-import { Item, Spell } from 'shared/types/magic';
+import { Item, Spell } from 'shared/src/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';

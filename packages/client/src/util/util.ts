@@ -1,5 +1,5 @@
 import { magicAlignmentTable } from 'engine/src/base/config';
-import { 
+import {
   getSpellById,
   getItemById,
   getUnitById
@@ -8,7 +8,7 @@ import {
   unitUpkeep
 } from 'engine/src/interior';
 import { npMultiplier } from 'engine/src/base/unit';
-import { Spell } from 'shared/types/magic';
+import { Spell } from 'shared/src/magic';
 import { Enchantment, Mage } from 'shared/types/mage';
 import { allowedMagicList } from 'shared/src/common';
 import { castingCost } from 'engine/src/magic';
@@ -119,7 +119,7 @@ export const getArmy = (mage: Mage) => {
 
 export const getBattleArmy = (mage: Mage) => {
   const rawArmy = getArmy(mage);
-  let result: BattleArmyItem[] = []; 
+  let result: BattleArmyItem[] = [];
 
   rawArmy.forEach(d => {
     result.push({
