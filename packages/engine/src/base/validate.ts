@@ -8,9 +8,7 @@ import {
   UnitHealEffect, WishEffect
 } from "shared/src/effects";
 import { Item, Spell } from "shared/src/magic";
-import { Unit } from "shared/src/unit";
 import { SkillGraph } from "shared/src/skills";
-
 
 
 const attackTypes = new Set([
@@ -46,24 +44,6 @@ export const validateSkillGraph = (graph: SkillGraph) => {
 };
 
 
-// Validate a unit
-export const validateUnit = (u: Unit) => {
-  for (const type of u.primaryAttackType) {
-    if (!attackTypes.has(type)) {
-      throw new Error(`${u.id}: ${type} does not match valid attack types`);
-    }
-  }
-  for (const type of u.secondaryAttackType) {
-    if (!attackTypes.has(type)) {
-      throw new Error(`${u.id}: ${type} does not match valid attack types`);
-    }
-  }
-  for (const r of Object.keys(u.attackResistances)) {
-    if (!attackTypes.has(r)) {
-      throw new Error(`${u.id}: ${r} does not match valid resistances`);
-    }
-  }
-}
 
 export const validateSpellOrItem = (s: Spell | Item) => {
   for (const eff of s.effects) {
@@ -97,7 +77,7 @@ export const validateSpellOrItem = (s: Spell | Item) => {
   }
 }
 
-export const validateEffect = (eff: Effect<any>, refId: string) => {
+export const validateEffect = (eff: Effect, refId: string) => {
   const type = eff.effectType;
 
   if (eff.effectType === E.UnitAttrEffect) {

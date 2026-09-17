@@ -108,6 +108,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": true,
             "attributes": {
               "accuracy": {
                 "rule": "add",
@@ -185,6 +186,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "hitPoints": {
                 "rule": "addSpellLevelPercentageBase",
@@ -573,6 +575,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "primaryAttackPower,counterAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
@@ -619,6 +622,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
                 "rule": "addSpellLevelPercentageBase",
@@ -956,6 +960,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
@@ -967,6 +972,7 @@
           },
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "accuracy": {
                 "rule": "addSpellLevelPercentage",
@@ -991,6 +997,7 @@
         "effects": [
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "primaryAttackPower": {
                 "rule": "addSpellLevelPercentageBase",
@@ -1002,6 +1009,7 @@
           },
           {
             "effectType": "UnitAttrEffect",
+            "checkResistance": false,
             "attributes": {
               "hitPoints": {
                 "rule": "addSpellLevelPercentageBase",

@@ -1,12 +1,11 @@
 import _ from 'lodash';
-import { Unit } from 'shared/src/unit';
-import { Spell, Item } from 'shared/src/magic';
+import { Unit, UnitSchema } from 'shared/src/unit';
+import { Spell, Item, SpellSchema, ItemSchema } from 'shared/src/magic';
 import { Skill } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/src/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomWeighted } from '../random';
-import { validateSpellOrItem, validateUnit } from './validate';
 
 
 export const unitMap = new Map<string, Unit>();
@@ -40,7 +39,12 @@ const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
-    validateUnit(units[i]);
+    // validateUnit(units[i]);
+    try {
+      UnitSchema.parse(units[i]);
+    } catch (error) {
+      throw new Error(`Failed to load unit: ${units[i].id}`, { cause: error });
+    }
     unitMap.set(units[i].id, units[i]);
   }
 }
@@ -73,7 +77,12 @@ export const loadSpellData = (spells: Spell[]) => {
   for (let i = 0; i < spells.length; i++) {
     if (spells[i].disabled === true) continue;
 
-    validateSpellOrItem(spells[i])
+    try {
+      SpellSchema.parse(spells[i]);
+    } catch (error) {
+      throw new Error(`Failed to load spell: ${spells[i].id}`, { cause: error });
+    }
+
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
   }
@@ -91,7 +100,12 @@ export const getAllSpells = (): Spell[] => {
 
 export const loadItemData = (items: Item[]) => {
   for (let i = 0; i < items.length; i++) {
-    validateSpellOrItem(items[i])
+    try {
+      ItemSchema.parse(items[i]);
+    } catch (error) {
+      throw new Error(`Failed to load item: ${items[i].id}`, { cause: error });
+    }
+
     itemMap.set(items[i].id, items[i]);
     itemList.push(items[i]);
   }

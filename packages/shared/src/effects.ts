@@ -25,7 +25,7 @@ const TemporaryUnitEffectSchema = EffectSchema.extend({
   unitId: z.string(),
   rule: z.enum(['spellLevelPercentageBase', 'fixed']),
   target: z.enum(['population']).nullable(),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
@@ -33,7 +33,9 @@ const TemporaryUnitEffectSchema = EffectSchema.extend({
         max: z.number(),
       }),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type TemporaryUnitEffect = z.infer<typeof TemporaryUnitEffectSchema>;
 
@@ -61,12 +63,14 @@ export const UnitAttrEffectSchema = EffectSchema.extend({
         'addSpellLevelPercentage',
         'addSpellLevelPercentageBase',
       ]),
-      magic: z.record(
+      magic: z.partialRecord(
         AllowedMagicSchema,
         z.object({
           value: z.any()
         })
-      ),
+      ).refine((magic) => Object.keys(magic).length > 0, {
+        message: 'At least one magic type is required',
+      })
     })
   ),
 });
@@ -94,12 +98,14 @@ export const UnitDamageEffectSchema = EffectSchema.extend({
     'spellLevelUnitLoss',
     'spellLevelUnitDamage',
   ]),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: DamageValueSchema,
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type UnitDamageEffect = z.infer<typeof UnitDamageEffectSchema>;
 
@@ -109,12 +115,14 @@ export const UnitHealEffectSchema = EffectSchema.extend({
   checkResistance: z.boolean(),
   healType: z.enum(['points', 'percentage', 'units']),
   rule: z.enum(['none', 'spellLevel']),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.number(),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type UnitHealEffect = z.infer<typeof UnitHealEffectSchema>;
 
@@ -136,10 +144,12 @@ export const UnitSummonEffectSchema = EffectSchema.extend({
   rule: z.enum(['spellLevel', 'fixed', 'power']),
   summonNetPower: z.number(),
 
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.number(),
+    }).refine((magic) => Object.keys(magic).length > 0, {
+      message: 'At least one magic type is required',
     })
   ),
 });
@@ -151,10 +161,12 @@ export const KingdomResistanceEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomResistanceEffect),
   rule: z.literal('spellLevel'),
   resistance: z.string(),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.number(),
+    }).refine((magic) => Object.keys(magic).length > 0, {
+      message: 'At least one magic type is required',
     })
   ),
 });
@@ -170,13 +182,15 @@ export const KingdomBuildingsEffectSchema = EffectSchema.extend({
     'direct',
   ]),
   target: z.string(),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
         min: z.number(),
         max: z.number(),
       }),
+    }).refine((magic) => Object.keys(magic).length > 0, {
+      message: 'At least one magic type is required',
     })
   ),
 });
@@ -197,13 +211,15 @@ export const KingdomResourcesEffectSchema = EffectSchema.extend({
     'item',
     'turn',
   ]),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
         min: z.number(),
         max: z.number(),
       }),
+    }).refine((magic) => Object.keys(magic).length > 0, {
+      message: 'At least one magic type is required',
     })
   ),
 });
@@ -215,13 +231,15 @@ export const KingdomArmyEffectSchema = EffectSchema.extend({
   rule: z.literal('addSpellLevelPercentageBase'),
   filters: z.array(UnitFilterSchema).nullable(),
   checkResistance: z.boolean(),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
         min: z.number(),
         max: z.number(),
       }),
+    }).refine((magic) => Object.keys(magic).length > 0, {
+      message: 'At least one magic type is required',
     })
   ),
 });
@@ -245,12 +263,14 @@ export const ProductionEffectSchema = EffectSchema.extend({
     'land',
     'barrack',
   ]),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.number(),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type ProductionEffect = z.infer<typeof ProductionEffectSchema>;
 
@@ -265,7 +285,7 @@ export const ArmyUpkeepEffectSchema = EffectSchema.extend({
     'addPercentageBase',
   ]),
   filters: z.array(UnitFilterSchema).nullable(),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
@@ -274,7 +294,9 @@ export const ArmyUpkeepEffectSchema = EffectSchema.extend({
         population: z.any(),
       }),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type ArmyUpkeepEffect = z.infer<typeof ArmyUpkeepEffectSchema>;
 
@@ -286,12 +308,14 @@ export const CastingEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.CastingEffect),
   rule: z.literal('spellLevel'),
   type: z.literal('castingSuccess'),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.number(),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type CastingEffect = z.infer<typeof CastingEffectSchema>;
 
@@ -400,7 +424,7 @@ export type AvoidEffect = z.infer<typeof AvoidEffectSchema>;
 export const CastingCostEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.CastingCostEffect),
   rule: z.literal('addPercentageBase'),
-  magic: z.record(
+  magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
       value: z.object({
@@ -409,7 +433,9 @@ export const CastingCostEffectSchema = EffectSchema.extend({
         opposite: z.number(),
       }),
     })
-  ),
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
 });
 export type CastingCostEffect = z.infer<typeof CastingCostEffectSchema>;
 
@@ -475,3 +501,27 @@ export const PostbattleEffectSchema = EffectSchema.extend({
 
 export type PostbattleEffect = z.infer<typeof PostbattleEffectSchema>;
 
+
+
+export const AnyEffectSchema = z.discriminatedUnion('effectType', [
+  TemporaryUnitEffectSchema,
+  UnitAttrEffectSchema,
+  UnitDamageEffectSchema,
+  UnitHealEffectSchema,
+  UnitSummonEffectSchema,
+  KingdomResistanceEffectSchema,
+  KingdomBuildingsEffectSchema,
+  KingdomResourcesEffectSchema,
+  KingdomArmyEffectSchema,
+  ProductionEffectSchema,
+  ArmyUpkeepEffectSchema,
+  CastingEffectSchema,
+  WishEffectSchema,
+  RemoveEnchantmentEffectSchema,
+  StealEffectSchema,
+  AvoidEffectSchema,
+  CastingCostEffectSchema,
+  BattleEffectSchema,
+  PrebattleEffectSchema,
+  PostbattleEffectSchema
+]);
