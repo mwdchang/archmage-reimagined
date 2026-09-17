@@ -13,6 +13,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -73,6 +74,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -108,6 +110,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -159,6 +162,7 @@
         "target": "opponent",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -233,6 +237,7 @@
         "target": "opponent",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -268,6 +273,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -303,6 +309,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -338,6 +345,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -474,6 +482,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -509,6 +518,7 @@
         "target": "opponent",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -544,6 +554,7 @@
         "target": "opponent",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -583,6 +594,7 @@
         "effects": [
           {
             "effectType": "TemporaryUnitEffect",
+            "checkResistance": false,
             "unitId": "capsuleMonster",
             "rule": "fixed", 
             "target": null,
@@ -701,7 +713,7 @@
             "race": ["undead"]
           }
         ],
-        "triger": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitDamageEffect",
@@ -734,7 +746,7 @@
         "target": "opponent",
         "targetType": "random",
         "filters": null,
-        "triger": {
+        "trigger": {
           "min": 3,
           "max": 3
         },

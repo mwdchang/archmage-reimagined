@@ -59,6 +59,7 @@
         "target": "self",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
@@ -94,6 +95,7 @@
         "target": "opponent",
         "targetType": "all",
         "filters": null,
+        "trigger": null,
         "effects": [
           {
             "effectType": "UnitAttrEffect",
