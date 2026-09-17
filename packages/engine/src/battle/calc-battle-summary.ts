@@ -1,4 +1,4 @@
-import type { BattleStack } from "shared/types/battle";
+import type { BattleStack } from "shared/src/battle";
 
 /**
  * Sum up unit NP losses
@@ -33,13 +33,13 @@ export const calcBattleSummary = (attackingArmy: BattleStack[], defendingArmy: B
       netPower: attackerStartingNP,
       netPowerLoss: attackerPowerLoss,
       unitsLoss: attackerUnitLoss,
-      armyLoss: attackingArmy.map(d => ({id: d.unit.id, size: d.loss}))
+      armyLoss: attackingArmy.map(d => ({ id: d.unit.id, size: d.loss }))
     },
     defender: {
       netPower: defenderStartingNP,
       netPowerLoss: defenderPowerLoss,
       unitsLoss: defenderUnitLoss,
-      armyLoss: defendingArmy.map(d => ({id: d.unit.id, size: d.loss}))
+      armyLoss: defendingArmy.map(d => ({ id: d.unit.id, size: d.loss }))
     }
   }
 }

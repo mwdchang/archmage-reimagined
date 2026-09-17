@@ -1,8 +1,8 @@
-import { BattleItemResult, BattleSpellResult } from "shared/types/battle";
-import { Combatant } from "shared/types/mage";
+import { BattleItemResult, BattleSpellResult } from "shared/src/battle";
+import { Combatant } from "shared/src/mage";
 import { getSpellById } from "../base/references";
 import { calcKingdomResistance, castingCost, successCastingRate } from "../magic";
-import { AvoidEffect } from "shared/types/effects";
+import { AvoidEffect } from "shared/src/effects";
 import { allowedEffect as E } from "shared/src/common";
 
 /**
@@ -12,8 +12,8 @@ import { allowedEffect as E } from "shared/src/common";
 **/
 
 
-export const attackerSpellResult = (attacker: Combatant, defender: Combatant): BattleSpellResult=> {
-  if (defender.army.length === 0)  {
+export const attackerSpellResult = (attacker: Combatant, defender: Combatant): BattleSpellResult => {
+  if (defender.army.length === 0) {
     return 'notUsed';
   }
 
@@ -23,7 +23,7 @@ export const attackerSpellResult = (attacker: Combatant, defender: Combatant): B
   }
 
   const cost = castingCost(attacker.mage, attacker.spellId);
-  if (cost > attacker.mage.currentMana) { 
+  if (cost > attacker.mage.currentMana) {
     return 'noMana';
   }
   attacker.mage.currentMana -= cost;
@@ -37,7 +37,7 @@ export const attackerSpellResult = (attacker: Combatant, defender: Combatant): B
   }
 
   const kingdomResistances = calcKingdomResistance(defender.mage);
-  if (roll1 <= kingdomResistances['barriers']) { 
+  if (roll1 <= kingdomResistances['barriers']) {
     return 'barriers';
   }
   if (roll2 <= kingdomResistances[spell.magic]) {
@@ -60,13 +60,13 @@ export const attackerSpellResult = (attacker: Combatant, defender: Combatant): B
 
   if (avoidSpell === true) {
     return 'missed';
-  } 
+  }
   return 'success';
 }
 
 
-export const defenderSpellResult = (_attacker: Combatant, defender: Combatant): BattleSpellResult=> {
-  if (defender.army.length === 0)  {
+export const defenderSpellResult = (_attacker: Combatant, defender: Combatant): BattleSpellResult => {
+  if (defender.army.length === 0) {
     return 'notUsed';
   }
 
@@ -90,34 +90,34 @@ export const defenderSpellResult = (_attacker: Combatant, defender: Combatant): 
 
 
 export const attackerItemResult = (attacker: Combatant, defender: Combatant): BattleItemResult => {
-  if (defender.army.length === 0)  {
+  if (defender.army.length === 0) {
     return 'notUsed';
   }
 
   if (!attacker.mage.items[attacker.itemId] || attacker.mage[attacker.itemId] <= 0) {
     return 'noItem';
   }
-  attacker.mage.items[attacker.itemId] --;
+  attacker.mage.items[attacker.itemId]--;
   if (attacker.mage.items[attacker.itemId] <= 0) {
     delete attacker.mage.items[attacker.itemId];
   }
 
   const roll = Math.random() * 100;
   const kingdomResistances = calcKingdomResistance(defender.mage);
-  if (roll <= kingdomResistances['barriers']) { 
+  if (roll <= kingdomResistances['barriers']) {
     return 'barriers';
   }
   return 'success';
 }
 
 export const defenderItemResult = (attacker: Combatant, defender: Combatant): BattleItemResult => {
-  if (defender.army.length === 0)  {
+  if (defender.army.length === 0) {
     return 'notUsed';
   }
   if (!defender.mage.items[defender.itemId] || defender.mage[defender.itemId] <= 0) {
     return 'noItem';
   }
-  defender.mage.items[defender.itemId] --;
+  defender.mage.items[defender.itemId]--;
   if (defender.mage.items[defender.itemId] <= 0) {
     delete defender.mage.items[defender.itemId];
   }

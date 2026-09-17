@@ -1,5 +1,5 @@
 /* Various configuration and rules */
-import { GameTable } from "shared/types/common"
+import { GameTable } from "shared/src/common"
 
 export const gameTable: GameTable = {
   explorationLimit: 6000,
@@ -34,9 +34,9 @@ export const mageStartTable = {
   army: [
     { id: 'militia', size: 1000 },
     { id: 'phalanx', size: 300 },
-    { id: 'pikeman', size: 300 }, 
-    { id: 'archer', size: 300 }, 
-    { id: 'calvary', size: 100 } 
+    { id: 'pikeman', size: 300 },
+    { id: 'archer', size: 300 },
+    { id: 'calvary', size: 100 }
   ],
   buildings: {
     farms: 150,

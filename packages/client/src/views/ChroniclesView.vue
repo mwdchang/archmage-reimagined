@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import { API } from '@/api/api';
-import type { BattleReportSummary } from 'shared/types/battle';
+import type { BattleReportSummary } from 'shared/src/battle';
 import { useMageStore } from '@/stores/mage';
 import { useRoute } from 'vue-router';
 import { readableDate } from '@/util/util';

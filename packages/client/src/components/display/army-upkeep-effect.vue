@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ArmyUpkeepEffect } from 'shared/types/effects';
+import { ArmyUpkeepEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import UFilter from '@/components/display/ufilter.vue';
 import { allowedMagicList } from 'shared/src/common';

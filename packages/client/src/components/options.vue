@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import ActionButton from './action-button.vue';
-import { BattleReportSummary } from 'shared/types/battle';
+import { BattleReportSummary } from 'shared/src/battle';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter } from 'vue-router';

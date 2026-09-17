@@ -1,4 +1,4 @@
-import type { BattleStack } from "shared/types/battle";
+import type { BattleStack } from "shared/src/battle";
 import _ from 'lodash';
 
 /**
@@ -17,7 +17,7 @@ export const resolveUnitAbilities = (stack: BattleStack[]) => {
         stack.unit.abilities.push(ability);
       }
     }
-    
+
     // 2. then remove if there are conflicts
     for (let i = 0; i < removedAbilities.length; i++) {
       const ability = removedAbilities[i];

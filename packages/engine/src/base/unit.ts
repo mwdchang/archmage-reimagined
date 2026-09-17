@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import type { Unit, UnitFilter } from 'shared/types/unit';
-import { ArmyUnit } from 'shared/types/mage';
+import type { Unit, UnitFilter } from 'shared/src/unit';
+import { ArmyUnit } from 'shared/src/mage';
 import { getUnitById } from './references';
 
 
-export const hasAbility = (u:Unit, abilityStr: string) => {
+export const hasAbility = (u: Unit, abilityStr: string) => {
   return u.abilities.map(d => d.name).includes(abilityStr);
 }
 
@@ -76,7 +76,7 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   if (filter.primaryAttackPower) {
     if (filter.primaryAttackPower.op === 'gte') {
       if (unit.primaryAttackPower < filter.primaryAttackPower.value) return false;
-    } 
+    }
     if (filter.primaryAttackPower.op === 'lte') {
       if (unit.primaryAttackPower > filter.primaryAttackPower.value) return false;
     }
@@ -89,7 +89,7 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   if (filter.primaryAttackInit) {
     if (filter.primaryAttackInit.op === 'gte') {
       if (unit.primaryAttackInit < filter.primaryAttackInit.value) return false;
-    } 
+    }
     if (filter.primaryAttackInit.op === 'lte') {
       if (unit.primaryAttackInit > filter.primaryAttackInit.value) return false;
     }
@@ -98,7 +98,7 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   if (filter.secondaryAttackPower) {
     if (filter.secondaryAttackPower.op === 'gte') {
       if (unit.secondaryAttackPower < filter.secondaryAttackPower.value) return false;
-    } 
+    }
     if (filter.secondaryAttackPower.op === 'lte') {
       if (unit.secondaryAttackPower > filter.secondaryAttackPower.value) return false;
     }
@@ -111,7 +111,7 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   if (filter.secondaryAttackInit) {
     if (filter.secondaryAttackInit.op === 'gte') {
       if (unit.secondaryAttackInit < filter.secondaryAttackInit.value) return false;
-    } 
+    }
     if (filter.secondaryAttackInit.op === 'lte') {
       if (unit.secondaryAttackInit > filter.secondaryAttackInit.value) return false;
     }
@@ -120,7 +120,7 @@ export const matchesFilter = (unit: Unit, filter: UnitFilter) => {
   if (filter.counterAttackPower) {
     if (filter.counterAttackPower.op === 'gte') {
       if (unit.counterAttackPower < filter.counterAttackPower.value) return false;
-    } 
+    }
     if (filter.counterAttackPower.op === 'lte') {
       if (unit.counterAttackPower > filter.counterAttackPower.value) return false;
     }

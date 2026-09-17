@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { Mage } from "shared/types/mage";
+import { Mage } from "shared/src/mage";
 import { totalLand } from "../base/mage";
 
 // Lose 10%
-const siegePercentage = 0.10; 
+const siegePercentage = 0.10;
 
 // Lose 5%
-const regularPercenage = 0.05; 
+const regularPercenage = 0.05;
 
 const unitsNeededPerAcre = 50;
 const attackerGain = 0.33;
@@ -30,8 +30,8 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
   const landGain = emptyLandCounts();
 
   const buildingTypes = [
-    'wilderness', 'farms', 'towns', 
-    'workshops', 'nodes', 'barracks', 
+    'wilderness', 'farms', 'towns',
+    'workshops', 'nodes', 'barracks',
     'guilds', 'barriers', 'forts'
   ];
 
@@ -50,7 +50,7 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
       let maxFortTaken = Math.floor(unitsRemaining / 1500);
       const forts = Math.floor(Math.min(1 + 0.1 * mage.forts, maxFortTaken));
       return Math.min(forts, tempMageBuildings['forts']);
-    } 
+    }
     return Math.floor(val * landTaken / mageLand);
   }
 
@@ -73,9 +73,9 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
     while (landTaken > 0) {
       for (const v of buildingTypes) {
         if (tempMageBuildings[v] > 0) {
-          landLoss[v] ++;
-          tempMageBuildings[v] --;
-          landTaken --;
+          landLoss[v]++;
+          tempMageBuildings[v]--;
+          landTaken--;
           break;
         }
       }

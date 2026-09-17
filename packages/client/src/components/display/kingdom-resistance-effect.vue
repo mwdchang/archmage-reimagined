@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { KingdomResistanceEffect } from 'shared/types/effects';
+import { KingdomResistanceEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
 

@@ -91,7 +91,7 @@ import {
   BattleArmyItem, readableStr
 } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';
-import { Spell } from 'shared/types/magic';
+import { Spell } from 'shared/src/magic';
 
 const mageStore = useMageStore();
 const router = useRouter();

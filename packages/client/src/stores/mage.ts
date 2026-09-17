@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { GameTable } from 'shared/types/common';
-import type { Mage } from 'shared/types/mage';
+import { GameTable } from 'shared/src/common';
+import type { Mage } from 'shared/src/mage';
 
 export const useMageStore = defineStore('mage', {
   state: () => ({
@@ -21,9 +21,9 @@ export const useMageStore = defineStore('mage', {
   },
   actions: {
     setLoginUser(v: string) {
-      this.$state._loginUser= v;
+      this.$state._loginUser = v;
     },
-    setMage(v: Mage | null) {
+    setMage(v: Mage) {
       this.$state._mage = v;
     },
     setGameTable(t: GameTable) {

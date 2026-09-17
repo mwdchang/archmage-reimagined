@@ -162,7 +162,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { getUnitById } from 'engine/src/base/references';
-import { Unit } from 'shared/types/unit';
+import { Unit } from 'shared/src/unit';
 import { readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';

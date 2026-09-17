@@ -100,13 +100,13 @@ import _ from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { API, APIWrapper } from '@/api/api';
-import { MarketItem, MarketPrice, BidContainer, Bid, SellItem } from 'shared/types/market';
+import { MarketItem, MarketPrice, BidContainer, Bid, SellItem } from 'shared/src/market';
 import { readableNumber, readableStr } from '@/util/util';
 import { useMageStore } from '@/stores/mage';
 import MarketTable from '@/components/market-table.vue';
 import ActionButton from '@/components/action-button.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 
 const props = defineProps<{ type: string }>(); 
 const router = useRouter();

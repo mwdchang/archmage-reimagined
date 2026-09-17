@@ -6,17 +6,17 @@ import {
   PostbattleEffect, ProductionEffect, StealEffect,
   TemporaryUnitEffect, UnitAttrEffect, UnitDamageEffect,
   UnitHealEffect, WishEffect
-} from "shared/types/effects";
-import { Item, Spell } from "shared/types/magic";
-import { Unit } from "shared/types/unit";
-import { SkillGraph } from "shared/types/skills";
+} from "shared/src/effects";
+import { Item, Spell } from "shared/src/magic";
+import { Unit } from "shared/src/unit";
+import { SkillGraph } from "shared/src/skills";
 
 
 
 const attackTypes = new Set([
-  'missile', 'fire', 'poison', 
-  'breath', 'magic', 'melee', 
-  'ranged', 'lightning', 'cold', 
+  'missile', 'fire', 'poison',
+  'breath', 'magic', 'melee',
+  'ranged', 'lightning', 'cold',
   'paralyse', 'psychic', 'holy'
 ]);
 
@@ -103,7 +103,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.UnitAttrEffect) {
     const effect = eff as UnitAttrEffect;
     for (const [k, v] of Object.entries(effect.attributes)) {
-      for (const attr of  k.split(',')) {
+      for (const attr of k.split(',')) {
         const [f1, f2] = attr.split('.');
 
         if (f1 === 'attackResistances' && f2) {
@@ -122,8 +122,8 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
       }
 
       if (![
-        'set', 'add', 'remove', 'addPercentageBase', 
-        'addSpellLevel', 'addSpellLevelPercentage', 
+        'set', 'add', 'remove', 'addPercentageBase',
+        'addSpellLevel', 'addSpellLevelPercentage',
         'addSpellLevelPercentageBase'
       ].includes(v.rule)) {
         throw new Error(`${refId}:${effect.effectType} rule ${v} not valid`);
@@ -228,7 +228,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
     }
 
     if (![
-      'population', 'mana', 'geld', 
+      'population', 'mana', 'geld',
       'item', 'turn'
     ].includes(effect.target)) {
       throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
@@ -244,7 +244,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.KingdomArmyEffect) {
     const effect = eff as KingdomArmyEffect;
 
-    if (![ 'addSpellLevelPercentageBase' ].includes(effect.rule)) {
+    if (!['addSpellLevelPercentageBase'].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
@@ -258,13 +258,13 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.ProductionEffect) {
     const effect = eff as ProductionEffect;
 
-    if (![ 
+    if (![
       'add', 'spellLevel', 'addPercentageBase', 'addSpellLevelPercentageBase'
     ].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
-    if (![ 
+    if (![
       'farms', 'guilds', 'mana', 'geld', 'population', 'land', 'barrack'
     ].includes(effect.production)) {
       throw new Error(`${refId}:${effect.effectType} production ${effect.production} not valid`);
@@ -280,7 +280,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.ArmyUpkeepEffect) {
     const effect = eff as ArmyUpkeepEffect;
 
-    if (![ 
+    if (![
       'addSpellLevelPercentageBase', 'addPercentageBase'
     ].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
@@ -296,11 +296,11 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.CastingEffect) {
     const effect = eff as CastingEffect;
 
-    if (![ 'spellLevel' ].includes(effect.rule)) {
+    if (!['spellLevel'].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
-    if (![ 'castingSuccess' ].includes(effect.type)) {
+    if (!['castingSuccess'].includes(effect.type)) {
       throw new Error(`${refId}:${effect.effectType} type ${effect.type} not valid`);
     }
 
@@ -314,7 +314,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.WishEffect) {
     const effect = eff as WishEffect;
 
-    for (const roll  of effect.rolls) {
+    for (const roll of effect.rolls) {
       if (![
         'geld', 'population', 'mana',
         'turn', 'item', 'uniqueItem', 'land', null
@@ -331,13 +331,13 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.StealEffect) {
     const effect = eff as StealEffect;
 
-    if (![ 
+    if (![
       'addSpellLevelPercentageBase', 'addSpellLevelPercentage', 'addPercentage'
     ].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
-    if (![ 'mana', 'geld', 'item' ].includes(effect.target)) {
+    if (!['mana', 'geld', 'item'].includes(effect.target)) {
       throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
     }
 
@@ -351,13 +351,13 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
   if (eff.effectType === E.TemporaryUnitEffect) {
     const effect = eff as TemporaryUnitEffect;
 
-    if (![ 
+    if (![
       'spellLevelPercentageBase', 'fixed'
     ].includes(effect.rule)) {
       throw new Error(`${refId}:${effect.effectType} rule ${effect.rule} not valid`);
     }
 
-    if (![ 'population', null ].includes(effect.target)) {
+    if (!['population', null].includes(effect.target)) {
       throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);
     }
 
@@ -370,7 +370,7 @@ export const validateEffect = (eff: Effect<any>, refId: string) => {
 
   if (eff.effectType === E.AvoidEffect) {
     const effect = eff as AvoidEffect;
-    if(![
+    if (![
       'spell', 'item', 'attack'
     ].includes(effect.target)) {
       throw new Error(`${refId}:${effect.effectType} target ${effect.target} not valid`);

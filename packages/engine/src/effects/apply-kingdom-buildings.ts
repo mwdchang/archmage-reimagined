@@ -1,5 +1,5 @@
-import { EffectOrigin, KingdomBuildingsEffect } from "shared/types/effects";
-import { Mage } from "shared/types/mage";
+import { EffectOrigin, KingdomBuildingsEffect } from "shared/src/effects";
+import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
 import { getBuildingTypes } from "../interior";
@@ -45,7 +45,7 @@ export const applyKingdomBuildingsEffect = (
       console.log('adj ratio', ratio);
 
       percent *= ratio;
-      console.log('netPowerRanged', origin.netPower, np, (100*percent).toFixed(2));
+      console.log('netPowerRanged', origin.netPower, np, (100 * percent).toFixed(2));
     }
 
     const buildingTypes = effect.target === 'all' ?
@@ -68,11 +68,11 @@ export const applyKingdomBuildingsEffect = (
       for (const buildingType of buildingTypes) {
         acc += mage[buildingType];
         if (r < acc) {
-          buffer[buildingType] ++;
+          buffer[buildingType]++;
           break;
         }
       }
-      counter --;
+      counter--;
     }
 
     // Resolve

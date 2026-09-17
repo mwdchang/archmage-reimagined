@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { KingdomResourcesEffect } from 'shared/types/effects';
+import { KingdomResourcesEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
 import { readableNumber } from '@/util/util';

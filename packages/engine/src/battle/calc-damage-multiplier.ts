@@ -1,4 +1,4 @@
-import type { Unit } from "shared/types/unit";
+import type { Unit } from "shared/src/unit";
 import { hasAbility } from "../base/unit";
 
 export const calcDamageMultiplier = (attackingUnit: Unit, defendingUnit: Unit, attackType: string[]) => {

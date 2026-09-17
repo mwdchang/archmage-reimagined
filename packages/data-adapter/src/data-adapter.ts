@@ -1,8 +1,9 @@
-import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { Enchantment, Mage } from 'shared/types/mage';
-import { ChronicleTurn, MageRank, Mail, ServerClock, GameTable } from 'shared/types/common';
-import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
-import { Item } from 'shared/types/magic';
+import type { BattleReport, BattleReportSummary } from 'shared/src/battle';
+import { Enchantment, Mage } from 'shared/src/mage';
+import { ChronicleTurn, MageRank, Mail, GameTable } from 'shared/src/common';
+import { ServerClock } from 'shared/src/common';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
+import { Item } from 'shared/src/magic';
 
 
 export interface SearchOptions {
@@ -13,7 +14,7 @@ export interface SearchOptions {
   mageName?: string,
   startTime?: number,
   endTime?: number,
-  
+
   // pagination
   limit?: number,
   from?: number,
@@ -26,13 +27,13 @@ export interface TurnOptions {
 
 // Models database/datastore CRUD operations
 export abstract class DataAdapter {
-  constructor() {}
+  constructor() { }
 
   abstract resetData(): Promise<void>;
   abstract initialize(gameTable: GameTable): Promise<void>
 
   // Authentication
-  abstract register(username: string, password: string): Promise<any> 
+  abstract register(username: string, password: string): Promise<any>
   abstract login(username: string, password: string): Promise<any>
   abstract logout(): Promise<any>
 
@@ -54,9 +55,9 @@ export abstract class DataAdapter {
   abstract setEnchantments(enchantments: Enchantment[]): Promise<void>
   abstract getEnchantments(mageId: number): Promise<Enchantment[]>
 
-  abstract createRank(mr :Omit<MageRank, 'rank'>): Promise<void>
+  abstract createRank(mr: Omit<MageRank, 'rank'>): Promise<void>
   abstract getRankList(): Promise<MageRank[]>
-  abstract updateRank(mr :Omit<MageRank, 'rank'>): Promise<void>
+  abstract updateRank(mr: Omit<MageRank, 'rank'>): Promise<void>
 
   // Battle reports
   abstract getBattles(options: SearchOptions): Promise<BattleReportSummary[]>
@@ -98,7 +99,7 @@ export abstract class DataAdapter {
   // Handling unique items
   abstract registerUniqueItems(items: Item[]): Promise<void>
   abstract getAvailableUniqueItems(): Promise<string[]>
-  abstract assignUniqueItem(id: string, mageId: number): Promise<void> 
+  abstract assignUniqueItem(id: string, mageId: number): Promise<void>
 
 
   abstract nextTurn(options: TurnOptions): Promise<void>

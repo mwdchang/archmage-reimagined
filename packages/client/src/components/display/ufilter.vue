@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UnitFilter } from 'shared/types/unit';
+import { UnitFilter } from 'shared/src/unit';
 
 defineProps<{
   filter: UnitFilter 

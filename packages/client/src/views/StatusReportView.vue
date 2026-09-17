@@ -374,8 +374,8 @@ import { readableNumber, readableStr, readableDate } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';
 import { getAllUniqueItems, getSkillById, getUnitById } from 'engine/src/base/references';
 import { API } from '@/api/api';
-import { MageRank } from 'shared/types/common';
-import { BattleReportSummary } from 'shared/types/battle';
+import { MageRank } from 'shared/src/common';
+import { BattleReportSummary } from 'shared/src/battle';
 
 const mageStore = useMageStore();
 const { mage } = storeToRefs(mageStore);

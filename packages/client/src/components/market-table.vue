@@ -42,9 +42,9 @@
 
 <script lang="ts" setup>
 import _ from 'lodash';
-import type { BidContainer, MarketItem, MarketBid } from 'shared/types/market';
+import type { BidContainer, MarketItem, MarketBid } from 'shared/src/market';
 import { API } from '@/api/api';
-import { ServerClock } from 'shared/types/common';
+import { ServerClock } from 'shared/src/common';
 import { readableStr, readableNumber } from '@/util/util';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useMageStore } from '@/stores/mage';

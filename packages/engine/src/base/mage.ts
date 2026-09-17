@@ -1,12 +1,11 @@
-import type { Mage, ResearchItem } from 'shared/types/mage';
+import type { Mage, ResearchItem } from 'shared/src/mage';
 import { createStackByNumber } from './unit';
 import { researchTree, getSpellById, getUnitById } from './references';
 import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
-import { allowedMagicList } from 'shared/src/common';
-import { AllowedMagic } from 'shared/types/common';
+import { allowedMagicList, AllowedMagic } from 'shared/src/common';
 
 
-export const createMage = (id: number, name: string, magic: string, override?:Partial<Mage>): Mage => {
+export const createMage = (id: number, name: string, magic: string, override?: Partial<Mage>): Mage => {
   const mage: Mage = {
     id: id,
     name: name,
@@ -108,13 +107,13 @@ export const totalNetPowerLand = (mage: Mage) => {
   let netpower = 0;
   netpower += 1000 * (
     mage.wilderness +
-    mage.farms + 
-    mage.towns + 
-    mage.workshops + 
-    mage.barracks + 
-    mage.nodes + 
-    mage.guilds + 
-    mage.forts + 
+    mage.farms +
+    mage.towns +
+    mage.workshops +
+    mage.barracks +
+    mage.nodes +
+    mage.guilds +
+    mage.forts +
     mage.barriers);
   netpower += mage.forts * 19360;
   netpower += mage.barriers * 6500;
@@ -128,10 +127,10 @@ export const totalNetPowerResources = (mage: Mage) => {
   netpower += Math.floor(0.02 * mage.currentPopulation);
   netpower += 1000 * currentSpellLevel(mage),
 
-  Object.keys(mage.items).forEach(key => {
-    if (!mage.items[key]) return;
-    netpower += 1000 * mage.items[key];
-  });
+    Object.keys(mage.items).forEach(key => {
+      if (!mage.items[key]) return;
+      netpower += 1000 * mage.items[key];
+    });
   return netpower;
 };
 
@@ -164,14 +163,14 @@ export const totalNetPower = (mage: Mage) => {
 
 // Calculate total land
 export const totalLand = (mage: Mage) => {
-  return mage.farms + 
-    mage.towns + 
+  return mage.farms +
+    mage.towns +
     mage.barracks +
     mage.workshops +
-    mage.nodes + 
-    mage.guilds + 
-    mage.forts + 
-    mage.barriers + 
+    mage.nodes +
+    mage.guilds +
+    mage.forts +
+    mage.barriers +
     mage.wilderness;
 }
 

@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { AllowedMagic } from "shared/types/common";
+import { AllowedMagic } from "shared/src/common";
 import { createMage } from "./base/mage";
 import { getMaxSpellLevels, getUnitById } from "./base/references";
 import { v4 as uuidv4 } from 'uuid';
-import { ArmyUnit, Mage } from "shared/types/mage";
+import { ArmyUnit, Mage } from "shared/src/mage";
 import { betweenInt, randomBM } from "./random";
 
 export const createBot = (id: number, name: string, magic: AllowedMagic) => {
@@ -39,7 +39,7 @@ export const createBot = (id: number, name: string, magic: AllowedMagic) => {
   const variableNP = 14000000;
   botMage.army = getBotArmy(magic, minimumNP + variableNP * randomBM());
 
-  switch(magic) {
+  switch (magic) {
     case 'ascendant':
       botMage.enchantments = [
         makeEnchantment(botMage, 'loveAndPeace'),
@@ -127,7 +127,7 @@ export const getBotAssignment = (magic: AllowedMagic): BotAssignment => {
 
 
 export const getBotArmy = (magic: AllowedMagic, armyNetPower: number): ArmyUnit[] => {
-  const botTable: Record<string, ArmyUnit[][]>  = {
+  const botTable: Record<string, ArmyUnit[][]> = {
     ascendant: [
       [
         { id: 'archangel', size: 11 },

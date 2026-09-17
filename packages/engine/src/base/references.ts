@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { Unit } from 'shared/types/unit';
-import { Spell, Item } from 'shared/types/magic';
-import { Skill } from 'shared/types/skills';
+import { Unit } from 'shared/src/unit';
+import { Spell, Item } from 'shared/src/magic';
+import { Skill } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
-import { AllowedMagic } from 'shared/types/common';
+import { AllowedMagic } from 'shared/src/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomWeighted } from '../random';
 import { validateSpellOrItem, validateUnit } from './validate';
@@ -116,8 +116,8 @@ export const getAllUniqueItems = (): Item[] => {
 export const getRandomItem = () => {
   const lessers = itemList.filter(item => item.attributes.includes('lesser'));
   const totalW = lessers.reduce((acc, item) => acc + item.weight, 0);
-  const weightTable = lessers.map((item, idx) => { 
-    return { value: idx, weight: 100 * item.weight / totalW }; 
+  const weightTable = lessers.map((item, idx) => {
+    return { value: idx, weight: 100 * item.weight / totalW };
   }).sort((a, b) => {
     return b.weight - a.weight;
   });
@@ -147,7 +147,7 @@ export const initializeResearchTree = () => {
     const tree = researchTree.get(magicType);
 
     magicTypes.forEach(researchMagicType => {
-      const researchRanks = research[researchMagicType]; 
+      const researchRanks = research[researchMagicType];
       const researchOrder = tree.get(researchMagicType);
       researchRanks.forEach((rank: string) => {
         const researchableSpells = spellList.filter(d => d.magic === researchMagicType && d.rank === rank);
@@ -180,5 +180,5 @@ export const getResearchTreeJSON = () => {
       key,
       Object.fromEntries(innerMap),
     ])
-  ) as { [key in AllowedMagic]: { [key in AllowedMagic]: string [] }}
+  ) as { [key in AllowedMagic]: { [key in AllowedMagic]: string[] } }
 }

@@ -52,7 +52,7 @@ import { useMageStore } from '@/stores/mage';
 import { storeToRefs } from 'pinia'
 import { getItemById } from 'engine/src/base/references';
 import { MageItem, getSpells, conditionString } from '@/util/util';
-import { Mage } from '../../../shared/types/mage';
+import { Mage } from 'shared/src/mage';
 import { API } from '@/api/api';
 import ImageProxy from '@/components/ImageProxy.vue';
 

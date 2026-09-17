@@ -3,8 +3,8 @@ import { DataAdapter } from "data-adapter/src/data-adapter";
 import { gameTable } from "./base/config"
 import { getAllSpells, getAllUnits, getRandomItem, getSpellById } from "./base/references";
 import { betweenInt, randomBM, randomInt } from "./random";
-import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
-import { Mage } from 'shared/types/mage';
+import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
+import { Mage } from 'shared/src/mage';
 import { nextResearch } from './magic';
 import { BlackMarketId } from 'shared/src/common';
 import { createLogger } from './logger';
@@ -21,7 +21,7 @@ export const priceDecrease = (base: number) => {
 // Spellbooks
 export const getMarketableSpells = () => {
   const candidateSpells = getAllSpells().filter(spell => {
-    return spell.rank !== 'ultimate'; 
+    return spell.rank !== 'ultimate';
   });
   return candidateSpells;
 }
@@ -57,7 +57,7 @@ export const getRandomMarketableUnit = () => {
  * - Remove all expired items
 **/
 export const resolveWinningBids = async (
-  currentTurn: number, 
+  currentTurn: number,
   winningBids: MarketBid[],
   priceMap: Map<string, MarketPrice>,
   itemMap: Map<string, MarketItem>,
@@ -94,7 +94,7 @@ export const resolveWinningBids = async (
     // Resolve item
     if (marketPrice.type === 'item') {
       if (mage.items[marketPrice.id]) {
-        mage.items[marketPrice.id] ++;
+        mage.items[marketPrice.id]++;
       } else {
         mage.items[marketPrice.id] = 1;
       }
@@ -150,7 +150,7 @@ export const resolveWinningBids = async (
       } else {
         soldTable.set(marketItem.priceId, [marketItem.basePrice]);
       }
-      expiredCounter ++;
+      expiredCounter++;
     }
   }
   logger(`${expiredCounter} expired items without bids`);
@@ -170,9 +170,9 @@ export const resolveWinningBids = async (
         mageMap.set(m.id, m);
       }
 
-      itemsSold ++;
+      itemsSold++;
 
-      const winningBid = winningBids.find(d => d.marketId === marketItem.id); 
+      const winningBid = winningBids.find(d => d.marketId === marketItem.id);
       if (winningBid) {
         mageMap.get(marketItem.mageId).currentGeld += marketItem.basePrice;
         sellerMessageMap.get(marketItem.mageId).push(`${marketItem.basePrice} for ${marketItem.priceId}`);
@@ -210,7 +210,7 @@ export const resolveWinningBids = async (
     const avgSellPrice = soldTable.get(key).reduce((acc, p) => acc + p, 0) / num;
     const currentPrice = priceMap.get(key).price;
 
-    let newPrice = avgSellPrice > currentPrice ? 
+    let newPrice = avgSellPrice > currentPrice ?
       currentPrice + Math.abs((avgSellPrice - currentPrice) * 0.33) :
       currentPrice * 0.95;
     newPrice = Math.ceil(newPrice);
@@ -218,7 +218,7 @@ export const resolveWinningBids = async (
     logger(`${key} ${currentPrice} => ${newPrice}`);
     await adapter.updateMarketPrice(key, newPrice);
   }
-  
+
   // Update mage
   for (const m of mageMap.values()) {
     await adapter.updateMage(m);
@@ -281,7 +281,7 @@ export const resolveWinningBids = async (
  * Generate new market items for the next turn
 **/
 export const generateMarketItems = async (
-  currentTurn: number, 
+  currentTurn: number,
   priceMap: Map<string, MarketPrice>,
   adapter: DataAdapter
 ) => {

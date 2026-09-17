@@ -45,7 +45,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useMageStore } from '@/stores/mage';
 import { API } from '@/api/api';
 import Magic from '@/components/magic.vue';
-import type { MageRank } from 'shared/types/common';
+import type { MageRank } from 'shared/src/common';
 import { readableNumber } from '@/util/util';
 import { gameTable } from 'engine/src/base/config';
 

@@ -23,10 +23,10 @@ import {
   totalUnits
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
-import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant, MageSummary } from 'shared/types/mage';
-import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import type { BuildPayload, DestroyPayload } from 'shared/types/api';
-import type { MageRank, Mail } from 'shared/types/common';
+import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant, MageSummary } from 'shared/src/mage';
+import type { BattleReport, BattleReportSummary } from 'shared/src/battle';
+import type { BuildPayload, DestroyPayload } from 'shared/src/api';
+import type { MageRank, Mail } from 'shared/src/common';
 import {
   explore,
   explorationRate,
@@ -64,8 +64,8 @@ import {
   EffectOrigin,
   KingdomArmyEffect,
   AvoidEffect
-} from 'shared/types/effects';
-import { GameMsg } from 'shared/types/common';
+} from 'shared/src/effects';
+import { GameMsg } from 'shared/src/common';
 
 import { betweenInt, randomBM, randomInt } from './random';
 
@@ -105,12 +105,12 @@ import {
   fromStealEffectResult,
   fromWishEffectResult
 } from './game-message';
-import { Item, Spell } from 'shared/types/magic';
+import { Item, Spell } from 'shared/src/magic';
 import { allowedMagicList } from 'shared/src/common';
 import { gameTable } from './base/config';
 import { createBot, getBotAssignment } from './bot';
 import { applyRemoveEnchantmentEffect } from './effects/apply-remove-enchantment-effect';
-import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/types/market';
+import { Bid, MarketItem, MarketPrice, SellItem } from 'shared/src/market';
 import {
   generateMarketItems,
   getMarketableSpells,

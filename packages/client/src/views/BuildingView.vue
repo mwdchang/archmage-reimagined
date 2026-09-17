@@ -19,7 +19,7 @@
 import { ref } from 'vue';
 import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 import BuildTable from '@/components/build-table.vue';
 import { readableNumber, readableStr } from '@/util/util';
 import ImageProxy from '@/components/ImageProxy.vue';

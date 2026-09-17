@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StealEffect } from 'shared/types/effects';
+import { StealEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { readableNumber } from '@/util/util';
 import { allowedMagicList } from 'shared/src/common';

@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { Item } from 'shared/types/magic';
+import { Item } from 'shared/src/magic';
 import { getItemById } from 'engine/src/base/references';
 import Magic from '@/components/magic.vue';
 import SummonEffect from '@/components/display/summon-effect.vue';

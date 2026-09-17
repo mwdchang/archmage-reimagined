@@ -1,4 +1,4 @@
-import type { Unit } from "shared/types/unit";
+import type { Unit } from "shared/src/unit";
 import { hasAbility } from "../base/unit";
 
 
@@ -41,8 +41,8 @@ export const applyAccuracyBuff = (currentAccuracy: number, buff: number) => {
 
 export const calcAttackAccuracy = (
   attackType: 'primary' | 'secondary' | 'counter',
-  accuracy: number, 
-  attackingUnit: Unit, 
+  accuracy: number,
+  attackingUnit: Unit,
   defendingUnit: Unit
 ) => {
   let acc = accuracy;

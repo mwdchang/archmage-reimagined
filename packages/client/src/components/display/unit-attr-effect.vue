@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { UnitAttrEffect } from 'shared/types/effects';
+import { UnitAttrEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { readableStr } from '@/util/util';
 

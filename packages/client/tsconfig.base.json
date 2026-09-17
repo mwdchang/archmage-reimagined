@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"composite": true,
+		"composite": false,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,

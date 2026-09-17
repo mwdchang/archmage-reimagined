@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import router from '@/router';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 
 export const API = axios.create({
   baseURL: '/api'
