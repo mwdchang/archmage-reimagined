@@ -3,7 +3,7 @@ import { Unit } from 'shared/src/unit';
 import { Spell, Item } from 'shared/types/magic';
 import { Skill } from 'shared/types/skills';
 import { allowedMagicList } from 'shared/src/common';
-import { AllowedMagic } from 'shared/types/common';
+import { AllowedMagic } from 'shared/src/common';
 import { magicAlignmentTable, spellRankTable } from './config';
 import { randomWeighted } from '../random';
 import { validateSpellOrItem, validateUnit } from './validate';

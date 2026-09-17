@@ -208,7 +208,7 @@ import Magic from '@/components/magic.vue';
 import { getAllSpells, getMaxSpellLevels, getSpellById, getUnitById } from 'engine/src/base/references';
 import { calcHealing } from 'engine/src/battle/calc-stack-healing';
 import { applyAccuracyBuff } from 'engine/src/battle/calc-accuracy-modifier';
-import { AllowedMagic } from 'shared/types/common';
+import { AllowedMagic } from 'shared/src/common';
 import { StackType } from 'shared/src/common';
 import { EffectOrigin, UnitSummonEffect } from 'shared/src/effects';
 import { dispelEnchantment, successCastingRate, summonUnit } from 'engine/src/magic';

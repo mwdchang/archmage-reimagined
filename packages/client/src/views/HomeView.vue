@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { ServerClock } from 'shared/types/common';
+import { ServerClock } from 'shared/src/common';
 import Register from '@/components/register.vue';
 import Login from '@/components/login.vue';
 import CreateMage from '@/components/create-mage.vue';

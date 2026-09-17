@@ -4,7 +4,8 @@ import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, GameTable, MageRank, Mail } from 'shared/src/common';
+import { ServerClock } from 'shared/src/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Item } from 'shared/types/magic';
@@ -48,12 +49,12 @@ export class SimpleDataAdapter extends DataAdapter {
     startTime: 0
   }
 
-  mageSeq:number = 0;
+  mageSeq: number = 0;
 
   constructor() { super(); }
 
-  async resetData(): Promise<void> {}
-  async initialize(_gameTable: GameTable): Promise<void> {}
+  async resetData(): Promise<void> { }
+  async initialize(_gameTable: GameTable): Promise<void> { }
 
 
   async register(username: string, password: string) {
@@ -66,10 +67,10 @@ export class SimpleDataAdapter extends DataAdapter {
 
     const token = getToken(username);
     this.userTable.set(username, {
-      username, hash , token
+      username, hash, token
     });
 
-    return { 
+    return {
       user: this.userTable.get(username)
     };
   }
@@ -88,17 +89,17 @@ export class SimpleDataAdapter extends DataAdapter {
     };
   }
 
-  async logout() {}
+  async logout() { }
 
   async nextTurn(options: TurnOptions) {
     for (const mage of this.mageTable) {
       if (mage.currentTurn < options.maxTurn) {
-        mage.currentTurn ++;
+        mage.currentTurn++;
       }
     }
 
     // Update clock
-    this.clock.currentTurn ++;
+    this.clock.currentTurn++;
     this.clock.currentTurnTime = Date.now();
   }
 
@@ -178,7 +179,7 @@ export class SimpleDataAdapter extends DataAdapter {
     });
   }
 
-  async createRank(mr :Omit<MageRank, 'rank'>) {
+  async createRank(mr: Omit<MageRank, 'rank'>) {
     // @ts-ignore
     this.rankTable.push(mr);
   }
@@ -187,7 +188,7 @@ export class SimpleDataAdapter extends DataAdapter {
     return this.rankTable.sort((a, b) => b.netPower - a.netPower);
   }
 
-  async updateRank(mr :Omit<MageRank, 'rank'>) {
+  async updateRank(mr: Omit<MageRank, 'rank'>) {
     const index = this.rankTable.findIndex(d => d.id === mr.id);
     // @ts-ignore
     this.rankTable[index] = mr;
@@ -348,10 +349,10 @@ export class SimpleDataAdapter extends DataAdapter {
       }
     }
 
-    return bids.filter(d => { 
+    return bids.filter(d => {
       const entry = tracker[d.marketId];
 
-      return entry.mageIds.length === 1 && 
+      return entry.mageIds.length === 1 &&
         entry.mageIds.includes(d.mageId);
     });
   }

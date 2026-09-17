@@ -79,9 +79,8 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import { API } from '@/api/api';
-import { GameTable } from 'shared/types/common';
 import { productionTable } from 'engine/src/base/config';
-import { ServerClock } from 'shared/types/common';
+import { ServerClock, GameTable } from 'shared/src/common';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import { buildingTypes } from 'engine/src/interior';
 

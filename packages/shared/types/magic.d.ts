@@ -1,4 +1,4 @@
-import type { Effect } from './effects.d.ts';
+import type { Effect } from '../src/effects';
 
 
 export interface Spell {
@@ -17,7 +17,7 @@ export interface Spell {
     mana: number,
     population: number
   } | null,
-  effects: Effect<any>[],
+  effects: Effect[],
 
   // For dev purpose
   disabled?: boolean
@@ -35,5 +35,5 @@ export interface Item {
     mana: number,
     population: number
   } | null,
-  effects: Effect<any>[]
+  effects: Effect[]
 }

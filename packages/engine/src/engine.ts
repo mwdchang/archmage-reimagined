@@ -26,7 +26,7 @@ import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant, MageSummary } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
 import type { BuildPayload, DestroyPayload } from 'shared/types/api';
-import type { MageRank, Mail } from 'shared/types/common';
+import type { MageRank, Mail } from 'shared/src/common';
 import {
   explore,
   explorationRate,
@@ -65,7 +65,7 @@ import {
   KingdomArmyEffect,
   AvoidEffect
 } from 'shared/src/effects';
-import { GameMsg } from 'shared/types/common';
+import { GameMsg } from 'shared/src/common';
 
 import { betweenInt, randomBM, randomInt } from './random';
 

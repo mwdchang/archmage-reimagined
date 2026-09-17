@@ -4,7 +4,8 @@ import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';
 import type { Enchantment, Mage } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { ChronicleTurn, GameTable, MageRank, Mail, ServerClock } from 'shared/types/common';
+import { ChronicleTurn, GameTable, MageRank, Mail } from 'shared/src/common';
+import { ServerClock } from 'shared/src/common';
 import { NameError } from 'shared/src/errors';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/types/market';
 import { Item } from 'shared/types/magic';
@@ -26,11 +27,14 @@ interface BattleReportTable {
   data: BattleReport
 }
 
+const DB_CLEAN_USER = `
+  DROP TABLE IF EXISTS archmage_user;
+`;
+
 const DB_CLEAN = `
   DROP MATERIALIZED VIEW IF EXISTS rank_view;
   DROP TABLE IF EXISTS clock;
   DROP TABLE IF EXISTS rank;
-  DROP TABLE IF EXISTS archmage_user;
   DROP TABLE IF EXISTS mage;
   DROP TABLE IF EXISTS enchantment;
   DROP TABLE IF EXISTS battle_report;
@@ -422,7 +426,7 @@ WHERE username = '${user.username}'
 
     const enchantments = await this.getEnchantments(mage.id);
 
-    mage.rank = mageRank.rows[0].rank; 
+    mage.rank = mageRank.rows[0].rank;
     mage.status = mageRank.rows[0].status;
     mage.enchantments = enchantments;
     return mage;
@@ -462,7 +466,7 @@ WHERE username = '${user.username}'
     `);
     const enchantments = await this.getEnchantments(mage.id);
 
-    mage.rank = mageRank.rows[0].rank; 
+    mage.rank = mageRank.rows[0].rank;
     mage.status = mageRank.rows[0].status;
     mage.enchantments = enchantments;
 
@@ -525,7 +529,7 @@ WHERE username = '${user.username}'
     return result.rows.map(toCamelCase<Enchantment>);
   }
 
-  async createRank(mr : MageRank) {
+  async createRank(mr: MageRank) {
     await this.db.exec(`
       INSERT INTO rank values(
         ${mr.id},
@@ -542,7 +546,7 @@ WHERE username = '${user.username}'
     await this.refreshRankView();
   }
 
-  async updateRank(mr : MageRank) {
+  async updateRank(mr: MageRank) {
     await this.db.exec(`
       UPDATE rank 
       SET forts = ${mr.forts}
@@ -582,7 +586,7 @@ WHERE username = '${user.username}'
     if (whereClauses.length > 0) {
       sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
     }
-    
+
     // paging and order
     sqlQuery += ' ORDER BY timestamp desc ';
     if (options.limit > 0) {
@@ -608,9 +612,9 @@ WHERE username = '${user.username}'
   }
 
   async saveBattleReport(
-    id: number, 
-    reportId: string, 
-    report: BattleReport, 
+    id: number,
+    reportId: string,
+    report: BattleReport,
     reportSummary: BattleReportSummary
   ) {
     await this.db.exec(`
@@ -671,7 +675,7 @@ WHERE username = '${user.username}'
 
   async saveChronicles(data: ChronicleTurn[]): Promise<void> {
     // Build parameter placeholders for each row
-    const valuePlaceholders = data.map((_, i) => 
+    const valuePlaceholders = data.map((_, i) =>
       `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3}, $${i * 3 + 4}, $${i * 3 + 5})`
     ).join(", ");
 
@@ -933,7 +937,7 @@ WHERE username = '${user.username}'
       WHERE mage.id = r.mage_id;
     `;
     await this.db.exec(sql);
-    
+
 
     // Remove bids
     sql = `
@@ -1025,7 +1029,7 @@ WHERE username = '${user.username}'
   }
 
   async getAvailableUniqueItems(): Promise<string[]> {
-    const results = await this.db.query<{item_id: string}>(`
+    const results = await this.db.query<{ item_id: string }>(`
       SELECT item_id
       FROM unique_table
       WHERE owner_id = 0

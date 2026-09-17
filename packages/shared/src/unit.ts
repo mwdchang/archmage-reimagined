@@ -89,4 +89,8 @@ export const UnitFilterSchema = z.object({
 export type UnitFilter = z.infer<typeof UnitFilterSchema>;
 
 
+export interface UnitAbility {
+  name: string,
+  extra?: any
+}
 

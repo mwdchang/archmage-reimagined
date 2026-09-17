@@ -22,7 +22,7 @@ import {
 } from 'shared/src/effects';
 import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
 import { ActiveEffect, getActiveEffects } from './effects';
-import { AllowedMagic } from 'shared/types/common';
+import { AllowedMagic } from 'shared/src/common';
 
 // Get normal max spell level, given the research tech tree
 export const maxSpellLevel = (mage: Mage) => {

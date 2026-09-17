@@ -39,7 +39,7 @@ import {
   initializeResearchTree, 
   loadSkillGroup
 } from 'engine/src/base/references';
-import { GameTable, ServerClock } from 'shared/types/common';
+import { GameTable, ServerClock } from 'shared/src/common';
 
 import plainUnits from 'data/src/units/plain-units.json';
 import ascendantUnits from 'data/src/units/ascendant-units.json';

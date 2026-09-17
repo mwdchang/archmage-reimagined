@@ -132,7 +132,7 @@
 import { onMounted, ref } from 'vue';
 import _ from 'lodash';
 import { API, APIWrapper } from '@/api/api';
-import { MageRank, Mail } from 'shared/types/common';
+import { MageRank, Mail } from 'shared/src/common';
 import { useMageStore } from '@/stores/mage';
 import { useRoute } from 'vue-router';
 import ActionButton from './action-button.vue';

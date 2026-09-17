@@ -45,7 +45,7 @@
 <script lang="ts" setup>
 import { API } from '@/api/api';
 import { onMounted, ref } from 'vue';
-import { MageRank, ServerClock } from 'shared/types/common';
+import { MageRank, ServerClock } from 'shared/src/common';
 import { readableNumber } from '@/util/util';
 import Magic from '@/components/magic.vue';
 

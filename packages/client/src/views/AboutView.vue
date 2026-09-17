@@ -149,7 +149,7 @@ import { manaStorage } from 'engine/src/magic';
 import { totalNetPower, currentSpellLevel } from 'engine/src/base/mage';
 import { maxSpellLevel } from 'engine/src/magic';
 import { API } from '@/api/api';
-import { ChronicleTurn, GameTable, Mail } from 'shared/types/common';
+import { ChronicleTurn, GameTable, Mail } from 'shared/src/common';
 import { readableNumber, readableDate } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 

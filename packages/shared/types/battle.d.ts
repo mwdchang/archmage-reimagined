@@ -1,5 +1,5 @@
 import { ArmyUnit } from "./mage.js";
-import type { Unit, UnitAbility } from "./unit.d.ts";
+import type { Unit, UnitAbility } from "../src/unit";
 import { StackType } from "../src/common.ts";
 
 /*
@@ -44,7 +44,7 @@ export interface BattleStack {
   appliedEffects: {
     origin: string; // For tracking only
     id: string;
-    type: 'item' | 'spell' | 'enchantment' | 'skill'; 
+    type: 'item' | 'spell' | 'enchantment' | 'skill';
   }[]
 }
 
@@ -77,7 +77,7 @@ export interface BattleReportSummary {
 
 
 export type BattleSpellResult = 'success' | 'lostConcentration' | 'barriers' | 'reflected' | 'noMana' | 'notUsed' | 'missed' | 'noSpell' | null;
-export type BattleItemResult = 'success' | 'barriers' | 'noItem' | 'notUsed' | 'missed' | null; 
+export type BattleItemResult = 'success' | 'barriers' | 'noItem' | 'notUsed' | 'missed' | null;
 
 export interface BattleEffectLog {
   id: number,

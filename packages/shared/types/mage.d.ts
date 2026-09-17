@@ -1,4 +1,4 @@
-import type { AllowedMagic } from './common.d.ts'
+import type { AllowedMagic } from '../src/common'
 
 export interface ArmyUnit {
   id: string; // Refers to unit ids
@@ -75,7 +75,7 @@ export interface Mage {
   currentResearch: {
     [k in AllowedMagic]: ResearchItem | null
   },
-  
+
   focusResearch: boolean,
 
   netPower: number;
@@ -118,7 +118,7 @@ export interface Combatant {
   itemId: string,
 
   // Army sent into battle, this is different than mage.army as you don't send all stacks
-  army: ArmyUnit[], 
+  army: ArmyUnit[],
 }
 
 export interface MageSummary {

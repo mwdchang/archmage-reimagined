@@ -1,4 +1,4 @@
-import type { Effect } from "../types/effects.d.ts";
+import type { Effect } from "../src/effects";
 
 export interface Skill {
   id: string;
@@ -9,7 +9,7 @@ export interface Skill {
   prereqs: {
     [k: string]: number
   } | {},
-  effects: Effect<any>[];
+  effects: Effect[];
 }
 
 export interface SkillGraph {

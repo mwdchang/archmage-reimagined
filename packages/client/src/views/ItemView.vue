@@ -120,7 +120,7 @@ import ImageProxy from '@/components/ImageProxy.vue';
 import Autocomplete from '@/components/autocomplete.vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/composables/useLayout';
-import { MageRank } from 'shared/types/common';
+import { MageRank } from 'shared/src/common';
 import { AutocompleteCandidate } from 'shared/src/common';
 import SvgIcon from '@/components/svg-icon.vue';
 

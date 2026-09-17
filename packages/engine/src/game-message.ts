@@ -1,4 +1,4 @@
-import { GameMsg } from "shared/types/common";
+import { GameMsg } from "shared/src/common";
 import { WishEffectResult } from "./effects/apply-wish-effect";
 import { StealEffectResult } from "./effects/apply-steal-effect";
 import { KingdomResourcesEffectResult } from "./effects/apply-kingdom-resources";
@@ -40,7 +40,7 @@ export const fromWishEffectResult = (result: WishEffectResult): GameMsg[] => {
 export const fromStealEffectResult = (result: StealEffectResult): GameMsg[] => {
   const logs: GameMsg[] = [];
   logs.push({
-    type: 'log', 
+    type: 'log',
     message: `${result.name} (#${result.targetId}) lost ${result.lossValue} ${result.target} ,you stole ${result.stealValue} ${result.target}.`
   });
   return logs;

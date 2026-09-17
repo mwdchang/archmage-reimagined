@@ -4,7 +4,7 @@ import type { Mage } from 'shared/types/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
 import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect, PostbattleEffect, KingdomResourcesEffect, StealEffect, KingdomBuildingsEffect } from "shared/src/effects";
 import { currentSpellLevel } from "./base/mage";
-import { AllowedMagic } from 'shared/types/common';
+import { AllowedMagic } from 'shared/src/common';
 
 
 export interface ActiveEffect {
