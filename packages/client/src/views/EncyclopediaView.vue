@@ -116,7 +116,7 @@ import { getAllLesserItems, getAllUniqueItems, getAllSpells, getAllUnits, getAll
 import { Item, Spell } from 'shared/types/magic';
 import { readableStr, readableNumber } from '@/util/util';
 import { Unit } from 'shared/src/unit';
-import { Skill } from 'shared/types/skills';
+import { Skill } from 'shared/src/skills';
 
 
 const props = defineProps<{ type: string }>(); 

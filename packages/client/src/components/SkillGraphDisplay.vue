@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import * as d3 from 'd3';
-import { SkillGraph } from 'shared/types/skills';
+import { SkillGraph } from 'shared/src/skills';
 import { onMounted, ref, watch } from 'vue';
 import { layoutSkillGraph, dagreBoundingBox } from '@/util/graph';
 import { Mage } from 'shared/types/mage';

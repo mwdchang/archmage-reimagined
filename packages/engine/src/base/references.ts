@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Unit } from 'shared/src/unit';
 import { Spell, Item } from 'shared/types/magic';
-import { Skill } from 'shared/types/skills';
+import { Skill } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/src/common';
 import { magicAlignmentTable, spellRankTable } from './config';

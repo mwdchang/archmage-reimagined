@@ -38,7 +38,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import SkillGraphDisplay from '@/components/SkillGraphDisplay.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
-import { Skill, SkillGraph } from 'shared/types/skills';
+import { Skill, SkillGraph } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { getAllSkills } from 'engine/src/base/references';
 import { useMageStore } from '@/stores/mage';

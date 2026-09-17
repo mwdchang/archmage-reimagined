@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { getSkillById } from 'engine/src/base/references';
-import { Skill } from 'shared/types/skills';
+import { Skill } from 'shared/src/skills';
 import { onMounted, ref } from 'vue';
 import Magic from '@/components/magic.vue';
 import SummonEffect from '@/components/display/summon-effect.vue';

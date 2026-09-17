@@ -13,7 +13,7 @@ export interface EffectOrigin {
 }
 
 
-const EffectSchema = z.object({
+export const EffectSchema = z.object({
   effectType: z.string(),
 });
 export type Effect = z.infer<typeof EffectSchema>;

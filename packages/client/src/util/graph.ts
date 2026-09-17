@@ -2,7 +2,7 @@ import _ from 'lodash';
 // check https://juejin.cn/post/7579179625461334058
 // check https://github.com/dagrejs/dagre/issues/492
 import dagre from "@dagrejs/dagre"
-import { SkillGraph } from "shared/types/skills"
+import { SkillGraph } from "shared/src/skills"
 
 const nodeW = 240;
 const nodeH = 70;
@@ -14,7 +14,7 @@ export const layoutSkillGraph = (skillGraph: SkillGraph) => {
     marginx: 0,
     marginy: 0
   });
-  g.setDefaultEdgeLabel(function() { return {}; });
+  g.setDefaultEdgeLabel(function () { return {}; });
 
 
   // Load in all the nodes
@@ -61,7 +61,7 @@ export const dagreBoundingBox = (g: dagre.graphlib.Graph) => {
     if (right > maxX) maxX = right;
     if (bottom > maxY) maxY = bottom;
   });
-  
+
   return {
     x: minX,
     y: minY,
