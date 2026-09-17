@@ -25,7 +25,7 @@ import {
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant, MageSummary } from 'shared/types/mage';
 import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import type { BuildPayload, DestroyPayload } from 'shared/types/api';
+import type { BuildPayload, DestroyPayload } from 'shared/src/api';
 import type { MageRank, Mail } from 'shared/src/common';
 import {
   explore,
