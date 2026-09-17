@@ -1,5 +1,5 @@
 import { EffectOrigin, KingdomResourcesEffect } from "shared/src/effects";
-import { Mage } from "shared/types/mage";
+import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between, randomBM } from "../random";
 import { doItemDestruction, doItemGeneration } from "../magic";

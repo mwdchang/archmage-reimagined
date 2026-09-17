@@ -1,4 +1,4 @@
-import type { BattleReport } from "shared/types/battle";
+import type { BattleReport } from "shared/src/battle";
 import { LPretty, RPretty } from "../util";
 
 /**

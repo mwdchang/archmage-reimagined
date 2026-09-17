@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import type { Unit, UnitFilter } from 'shared/src/unit';
-import { ArmyUnit } from 'shared/types/mage';
+import { ArmyUnit } from 'shared/src/mage';
 import { getUnitById } from './references';
 
 

@@ -1,5 +1,5 @@
 import type { Unit } from "shared/src/unit";
-import type { BattleStack } from 'shared/types/battle';
+import type { BattleStack } from 'shared/src/battle';
 import { isFlying, isRanged } from "../base/unit";
 
 const DEBUG = true;

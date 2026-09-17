@@ -3,7 +3,7 @@ import { AllowedMagic } from "shared/src/common";
 import { createMage } from "./base/mage";
 import { getMaxSpellLevels, getUnitById } from "./base/references";
 import { v4 as uuidv4 } from 'uuid';
-import { ArmyUnit, Mage } from "shared/types/mage";
+import { ArmyUnit, Mage } from "shared/src/mage";
 import { betweenInt, randomBM } from "./random";
 
 export const createBot = (id: number, name: string, magic: AllowedMagic) => {

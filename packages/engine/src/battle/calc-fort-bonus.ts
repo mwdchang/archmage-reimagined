@@ -1,4 +1,4 @@
-import type { Mage } from "shared/types/mage";
+import type { Mage } from "shared/src/mage";
 import { totalLand } from "../base/mage";
 
 /**
@@ -15,7 +15,7 @@ export const calcFortBonus = (defenderMage: Mage, attackType: string) => {
   if (attackType === 'regular' && fortsRatio > fortsMin) {
     const additionalBonus = 27.5 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);
     base += additionalBonus;
-  } 
+  }
 
   if (attackType === 'siege' && fortsRatio > fortsMin) {
     const additionalBonus = 55 * (fortsRatio - fortsMin) / (fortsMax - fortsMin);

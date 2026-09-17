@@ -1,5 +1,5 @@
-import type { BattleReport, BattleReportSummary } from "shared/types/battle";
-import type { Combatant, Mage } from "shared/types/mage";
+import type { BattleReport, BattleReportSummary } from "shared/src/battle";
+import type { Combatant, Mage } from "shared/src/mage";
 import { v4 as uuidv4 } from 'uuid';
 
 export const newBattleReport = (attacker: Combatant, defender: Combatant, attackType: string) => {
@@ -85,8 +85,8 @@ export const newBattleReport = (attacker: Combatant, defender: Combatant, attack
 
 
 export const spellOrItemReportSummary = (
-  attacker: Mage, 
-  defender: Mage, 
+  attacker: Mage,
+  defender: Mage,
   attackType: string,
   damagePercentage: number,
 ) => {

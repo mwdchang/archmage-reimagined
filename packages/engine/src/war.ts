@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Mage, Combatant } from "shared/types/mage";
+import { Mage, Combatant } from "shared/src/mage";
 import { allowedEffect as E } from "shared/src/common";
 import {
   UnitAttrEffect,
@@ -19,7 +19,7 @@ import {
   totalLand,
   totalNetPower,
 } from './base/mage';
-import { BattleReport, BattleStack, BattleEffectLog, EngagementLog, BattleSpellResult, BattleItemResult } from 'shared/types/battle';
+import { BattleReport, BattleStack, BattleEffectLog, EngagementLog, BattleSpellResult, BattleItemResult } from 'shared/src/battle';
 
 // Various battle helpers
 import { calcBattleOrders } from './battle/calc-battle-orders';

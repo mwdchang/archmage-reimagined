@@ -58,7 +58,7 @@ import magic from './magic.vue';
 import SvgIcon from './svg-icon.vue';
 import Barchart from './barchart.vue';
 import { readableNumber, readableStr, enchantMagic } from '@/util/util';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 import { maxMana } from 'engine/src/magic';
 import { maxPopulation } from 'engine/src/interior';
 

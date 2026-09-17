@@ -18,7 +18,7 @@ const UnitCostSchema = z.object({
 });
 
 
-const UnitAbilitySchema = z.object({
+export const UnitAbilitySchema = z.object({
   name: z.string(),
   extra: z.unknown().optional(),
 });

@@ -108,7 +108,7 @@ import { ref, computed, onMounted } from 'vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter, useRoute } from 'vue-router';
-import { BattleReportSummary } from 'shared/types/battle';
+import { BattleReportSummary } from 'shared/src/battle';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';

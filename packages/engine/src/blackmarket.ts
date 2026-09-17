@@ -4,7 +4,7 @@ import { gameTable } from "./base/config"
 import { getAllSpells, getAllUnits, getRandomItem, getSpellById } from "./base/references";
 import { betweenInt, randomBM, randomInt } from "./random";
 import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 import { nextResearch } from './magic';
 import { BlackMarketId } from 'shared/src/common';
 import { createLogger } from './logger';

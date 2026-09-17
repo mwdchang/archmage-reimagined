@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import type { UnitFilter } from "shared/src/unit";
-import type { BattleStack } from 'shared/types/battle';
+import type { BattleStack } from 'shared/src/battle';
 import { matchesFilter } from '../base/unit';
 
 export const calcFilteredArmy = (army: BattleStack[], filters: UnitFilter[] | null) => {

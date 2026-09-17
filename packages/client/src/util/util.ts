@@ -9,7 +9,7 @@ import {
 } from 'engine/src/interior';
 import { npMultiplier } from 'engine/src/base/unit';
 import { Spell } from 'shared/src/magic';
-import { Enchantment, Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/src/mage';
 import { allowedMagicList } from 'shared/src/common';
 import { castingCost } from 'engine/src/magic';
 import { ActiveEffect, getActiveEffects } from 'engine/src/effects';

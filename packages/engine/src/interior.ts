@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { randomBM } from "./random";
-import type { Mage } from "shared/types/mage";
+import type { Mage } from "shared/src/mage";
 import { getUnitById } from "./base/references";
 import { productionTable, gameTable } from "./base/config";
 import { totalLand } from "./base/mage";

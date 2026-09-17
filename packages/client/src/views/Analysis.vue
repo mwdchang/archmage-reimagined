@@ -213,9 +213,9 @@ import { StackType } from 'shared/src/common';
 import { EffectOrigin, UnitSummonEffect } from 'shared/src/effects';
 import { dispelEnchantment, successCastingRate, summonUnit } from 'engine/src/magic';
 import { readableNumber, readableStr } from '@/util/util';
-import { Enchantment, Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/src/mage';
 import { magicAlignmentTable } from 'engine/src/base/config';
-import type { BattleStack } from "shared/types/battle";
+import type { BattleStack } from "shared/src/battle";
 
 const maxSpellLevels = getMaxSpellLevels();
 const tabView = ref('summon');

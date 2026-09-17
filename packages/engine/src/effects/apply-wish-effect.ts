@@ -1,5 +1,5 @@
 import { EffectOrigin, WishEffect } from "shared/src/effects";
-import { Mage } from "shared/types/mage";
+import { Mage } from "shared/src/mage";
 import { betweenInt, randomWeighted, WeightEntry } from "../random";
 import { getRandomItem } from "../base/references";
 

@@ -106,7 +106,7 @@ import { useMageStore } from '@/stores/mage';
 import MarketTable from '@/components/market-table.vue';
 import ActionButton from '@/components/action-button.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 
 const props = defineProps<{ type: string }>(); 
 const router = useRouter();

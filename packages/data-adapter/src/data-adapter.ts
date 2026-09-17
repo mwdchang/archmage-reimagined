@@ -1,5 +1,5 @@
-import type { BattleReport, BattleReportSummary } from 'shared/types/battle';
-import { Enchantment, Mage } from 'shared/types/mage';
+import type { BattleReport, BattleReportSummary } from 'shared/src/battle';
+import { Enchantment, Mage } from 'shared/src/mage';
 import { ChronicleTurn, MageRank, Mail, GameTable } from 'shared/src/common';
 import { ServerClock } from 'shared/src/common';
 import { MarketBid, MarketItem, MarketPrice } from 'shared/src/market';

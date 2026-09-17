@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import type { BattleStack } from 'shared/types/battle';
+import type { BattleStack } from 'shared/src/battle';
 
 /**
  * Check if a stack matches effect filter criteria

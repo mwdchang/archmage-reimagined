@@ -1,4 +1,4 @@
-import type { Mage, ResearchItem } from 'shared/types/mage';
+import type { Mage, ResearchItem } from 'shared/src/mage';
 import { createStackByNumber } from './unit';
 import { researchTree, getSpellById, getUnitById } from './references';
 import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';

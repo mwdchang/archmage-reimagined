@@ -266,7 +266,7 @@ import { onMounted, ref, computed } from 'vue';
 import Magic from '@/components/magic.vue';
 import { API } from '@/api/api';
 import { readableStr, readableNumber, pluralize } from '@/util/util';
-import type { EngagementLog, BattleReport } from 'shared/types/battle';
+import type { EngagementLog, BattleReport } from 'shared/src/battle';
 import { getSkillById, getSpellById } from 'engine/src/base/references';
 
 const props = defineProps<{ id: string }>();

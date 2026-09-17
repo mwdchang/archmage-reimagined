@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { GameTable } from 'shared/src/common';
-import type { Mage } from 'shared/types/mage';
+import type { Mage } from 'shared/src/mage';
 
 export const useMageStore = defineStore('mage', {
   state: () => ({

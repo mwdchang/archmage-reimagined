@@ -38,7 +38,7 @@ import ActionButton from '@/components/action-button.vue';
 import { useMageStore } from '@/stores/mage';
 import { readableStr } from '@/util/util';
 import { MarketItem, Bid, BidContainer } from 'shared/src/market';
-import { Mage } from 'shared/types/mage';
+import { Mage } from 'shared/src/mage';
 
 const props = defineProps<{ 
   priceId: string;

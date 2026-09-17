@@ -1,5 +1,5 @@
-import type { ArmyUnit } from "shared/types/mage";
-import type { BattleStack } from "shared/types/battle";
+import type { ArmyUnit } from "shared/src/mage";
+import type { BattleStack } from "shared/src/battle";
 import type { Unit } from "shared/src/unit";
 import { getUnitById } from "../base/references";
 import { isFlying, isRanged } from "../base/unit";

@@ -1,5 +1,5 @@
-import { BattleItemResult, BattleSpellResult } from "shared/types/battle";
-import { Combatant } from "shared/types/mage";
+import { BattleItemResult, BattleSpellResult } from "shared/src/battle";
+import { Combatant } from "shared/src/mage";
 import { getSpellById } from "../base/references";
 import { calcKingdomResistance, castingCost, successCastingRate } from "../magic";
 import { AvoidEffect } from "shared/src/effects";

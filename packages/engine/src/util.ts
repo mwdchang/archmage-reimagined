@@ -1,4 +1,4 @@
-import { Mage } from "shared/types/mage";
+import { Mage } from "shared/src/mage";
 
 // Debugging pretty print
 export const LPretty = (v: any, n: number = 20) => {

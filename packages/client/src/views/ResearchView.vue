@@ -75,7 +75,7 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { getSpellById } from 'engine/src/base/references';
 import { itemGenerationRate, maxSpellLevel, researchPoints } from 'engine/src/magic';
-import { Mage } from '../../../shared/types/mage';
+import { Mage } from 'shared/src/mage';
 import { readableNumber, readableStr } from '@/util/util';
 import { currentSpellLevel } from 'engine/src/base/mage';
 import { allowedMagicList } from 'shared/src/common';

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {
   gameTable, magicAlignmentTable, productionTable
 } from './base/config';
-import { Enchantment, Mage } from 'shared/types/mage';
+import { Enchantment, Mage } from 'shared/src/mage';
 import {
   getUnitById,
   getSpellById,

@@ -1,4 +1,4 @@
-import type { BattleStack } from "shared/types/battle";
+import type { BattleStack } from "shared/src/battle";
 import { hasHealing, hasRegeneration } from "../base/unit";
 
 export const calcHealing = (stack: BattleStack) => {

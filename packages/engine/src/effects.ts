@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
-import type { Mage } from 'shared/types/mage';
+import type { Mage } from 'shared/src/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
 import type { EffectOrigin, Effect, PrebattleEffect, BattleEffect, UnitAttrEffect, UnitHealEffect, UnitDamageEffect, TemporaryUnitEffect, CastingCostEffect, ProductionEffect, ArmyUpkeepEffect, KingdomResistanceEffect, CastingEffect, PostbattleEffect, KingdomResourcesEffect, StealEffect, KingdomBuildingsEffect } from "shared/src/effects";
 import { currentSpellLevel } from "./base/mage";

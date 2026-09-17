@@ -97,7 +97,7 @@ import { Unit } from 'shared/src/unit';
 import { useMageStore } from '@/stores/mage';
 import { getRecruitableUnits } from 'engine/src/base/references'; 
 import { recruitmentAmount } from 'engine/src/interior';
-import { ArmyUnit } from 'shared/types/mage';
+import { ArmyUnit } from 'shared/src/mage';
 import { readableStr, readableNumber } from '@/util/util';
 import SvgIcon from '@/components/svg-icon.vue';
 import ImageProxy from '@/components/ImageProxy.vue';

@@ -34,7 +34,7 @@ import { API, APIWrapper } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { explorationRate } from 'engine/src/interior';
 import ActionButton from '@/components/action-button.vue';
-import type { Mage } from 'shared/types/mage';
+import type { Mage } from 'shared/src/mage';
 import ImageProxy from '@/components/ImageProxy.vue';
 
 const turnsToExplore = ref(0);
