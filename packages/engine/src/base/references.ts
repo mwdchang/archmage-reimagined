@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Unit, UnitSchema } from 'shared/src/unit';
 import { Spell, Item, SpellSchema, ItemSchema } from 'shared/src/magic';
-import { Skill } from 'shared/src/skills';
+import { Skill, SkillSchema } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/src/common';
 import { magicAlignmentTable, spellRankTable } from './config';
@@ -20,6 +20,11 @@ const itemList: Item[] = [];
 
 export const loadSkillGroup = (skills: Skill[]) => {
   for (const s of skills) {
+    try {
+      SkillSchema.parse(s);
+    } catch (error) {
+      throw new Error(`Failed to load skill: ${s.id}`, { cause: error });
+    }
     skillMap.set(s.id, s);
   }
 }
@@ -39,7 +44,6 @@ const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
 
 export const loadUnitData = (units: Unit[]) => {
   for (let i = 0; i < units.length; i++) {
-    // validateUnit(units[i]);
     try {
       UnitSchema.parse(units[i]);
     } catch (error) {
@@ -82,7 +86,6 @@ export const loadSpellData = (spells: Spell[]) => {
     } catch (error) {
       throw new Error(`Failed to load spell: ${spells[i].id}`, { cause: error });
     }
-
     spellMap.set(spells[i].id, spells[i]);
     spellList.push(spells[i]);
   }
@@ -105,7 +108,6 @@ export const loadItemData = (items: Item[]) => {
     } catch (error) {
       throw new Error(`Failed to load item: ${items[i].id}`, { cause: error });
     }
-
     itemMap.set(items[i].id, items[i]);
     itemList.push(items[i]);
   }
