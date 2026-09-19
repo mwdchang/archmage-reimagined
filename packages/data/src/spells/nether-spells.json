@@ -929,6 +929,7 @@
         "effects": [
           {
             "effectType": "TemporaryUnitEffect",
+            "checkResistance": false,
             "unitId": "devil",
             "rule": "fixed", 
             "target": null,
@@ -1002,6 +1003,7 @@
         "effects": [
           {
             "effectType": "TemporaryUnitEffect",
+            "checkResistance": false,
             "unitId": "succubus",
             "rule": "spellLevelPercentageBase", 
             "target": "population",

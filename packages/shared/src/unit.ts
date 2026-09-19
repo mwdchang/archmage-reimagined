@@ -3,7 +3,7 @@ import { AllowedAttackTypesSchema, AllowedMagicSchema } from "./common";
 
 const SpellResistancesSchema = z.record(
   AllowedMagicSchema,
-  z.number().min(0).max(100)
+  z.number().min(0).max(400)
 );
 
 const AttackResistancesSchema = z.record(

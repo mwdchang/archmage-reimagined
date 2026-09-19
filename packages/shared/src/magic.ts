@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EffectSchema } from "../src/effects";
+import { AnyEffectSchema } from "../src/effects";
 
 const UpkeepSchema = z.object({
   geld: z.number(),
@@ -19,7 +19,7 @@ export const SpellSchema = z.object({
   castingTurn: z.number(),
   life: z.number().optional(),
   upkeep: UpkeepSchema.nullable(),
-  effects: z.array(EffectSchema),
+  effects: z.array(AnyEffectSchema),
 
   // For dev purpose
   disabled: z.boolean().optional(),
@@ -35,7 +35,7 @@ export const ItemSchema = z.object({
   weight: z.number(),
   chargeTurns: z.number(), // not used
   upkeep: UpkeepSchema.nullable(),
-  effects: z.array(EffectSchema),
+  effects: z.array(AnyEffectSchema),
 });
 
 export type Item = z.infer<typeof ItemSchema>;
