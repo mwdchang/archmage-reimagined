@@ -1,19 +1,19 @@
 <template>
   <section class="display-section">
     <div v-if="effect.rule === 'spellLevel'" class="row">
-      Modify {{ productionStr(effect.production) }} by <span class="special-text">spell power * value</span>
+      Modify {{ productionStr(effect.production) }} production by <span class="special-text">spell power * value</span>
     </div>
 
     <div v-if="effect.rule === 'addPercentageBase'" class="row">
-      Modify {{ productionStr(effect.production) }} by <span class="special-text">value</span> percent
+      Modify {{ productionStr(effect.production) }} production by <span class="special-text">value</span> percent
     </div>
     
     <div v-if="effect.rule === 'addSpellLevelPercentageBase'" class="row">
-      Modify {{ productionStr(effect.production) }} by <span class="special-text">spell power / max spell power * value * base </span>
+      Modify {{ productionStr(effect.production) }} production by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 
     <div v-if="effect.rule === 'add'" class="row">
-      Modify {{ productionStr(effect.production) }} by <span class="special-text">value</span>
+      Modify {{ productionStr(effect.production) }} production by <span class="special-text">value</span>
     </div>
 
     <div 

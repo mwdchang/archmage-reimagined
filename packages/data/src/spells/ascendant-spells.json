@@ -912,6 +912,32 @@
         "targetType": "all",
         "filters": [
           {
+            "magic": ["ascendant"],
+            "allAttackType": ["melee", "holy"]
+          }
+        ],
+        "trigger": null,
+        "effects": [
+          {
+            "effectType": "UnitAttrEffect",
+            "checkResistance": false,
+            "attributes": {
+              "primaryAttackType": {
+                "rule": "add",
+                "magic": {
+                  "ascendant": { "value": "holy" }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "effectType": "BattleEffect",
+        "target": "self",
+        "targetType": "all",
+        "filters": [
+          {
             "magic": ["ascendant"]
           }
         ],
@@ -1006,7 +1032,7 @@
         "effectType": "UnitSummonEffect",
         "unitIds": ["preacher"],
         "summonType": "all",
-        "summonNetPower": 1800,
+        "summonNetPower": 1000,
         "rule": "spellLevel",
         "magic": {
           "ascendant": { "value": 1.0 }

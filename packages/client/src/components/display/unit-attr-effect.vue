@@ -1,32 +1,24 @@
 <template>
-  <template v-for="(attr) of attributes">
+  <template v-for="(attr) of attributes" :key="attr.key">
     <div v-if="attr.rule === 'set'">
-      Set {{ attr.key.split(",").join(",&nbsp;") }} to:&nbsp;
+      Set {{ displayKey(attr.key) }} to:
+    </div>
+    <div v-else-if="attr.rule === 'remove'">
+      Remove {{ displayKey(attr.key) }}:
     </div>
     <div v-else class="effect-desc">
-      Modify {{ attr.key.split(",").map(readableStr).join(",&nbsp;") }} by:&nbsp;
-      <span class="special-text">
-        <span v-if="attr.rule === 'add'"> value </span>
-        <span v-if="attr.rule === 'addPercentageBase'"> value * base </span>
-        <span v-if="attr.rule === 'addSpellLevel'"> spell power * value</span>
-        <span v-if="attr.rule === 'addSpellLevelPercentage'"> spell power / max spell power * value </span>
-        <span v-if="attr.rule === 'addSpellLevelPercentageBase'"> spell power / max spell power * value * attrbute</span>
-      </span>
+      Modify <span class="f600">{{ displayKey(attr.key) }}</span> by &nbsp;
+      <span class="special-text">{{ ruleFormula(attr.rule) }}</span>
     </div>
-
-    <div class="flex flex-col gap-[2px]">
-      <div 
+    <ul class="flex flex-col">
+      <li
         v-for="(val, magic) of attr.magic"
+        :key="magic"
         class="magic-value-row">
-        <magic :magic="magic as string" small />
-        <span v-if="attr.key === 'abilities'">
-          {{ val.value.name }} <span v-if="val.value.extra">({{ val.value.extra }})</span>
-        </span>
-        <span v-else>
-          {{ val.value }} 
-        </span>
-      </div>
-    </div>
+        <magic :magic="magic" small />
+        <span>{{ formatValue(val as any) }}</span>
+      </li>
+    </ul>
   </template>
 </template>
 
@@ -34,20 +26,64 @@
 import { computed } from 'vue';
 import { UnitAttrEffect } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
-import { readableStr } from '@/util/util';
+import { readableNumber, readableStr } from '@/util/util';
 
 const props = defineProps<{
   effect: UnitAttrEffect
 }>();
 
 const attributes = computed(() => {
-  const keys = Object.keys(props.effect.attributes) as string[];
-
-  return keys.map(key => {
+  return Object.entries(props.effect.attributes).map(([key, attr]) => {
     return {
-      key: key,
-      rule:  props.effect.attributes[key].rule,
-      magic: props.effect.attributes[key].magic
+      key,
+      rule: attr.rule,
+      magic: attr.magic
     };
   });
-});</script>
+});
+
+const displayKey = (key: string) =>
+  key.split(",").map(readableStr).join(", ");
+
+const ruleFormula = (rule: string) => {
+  switch (rule) {
+    case 'add': return 'value';
+    case 'addPercentageBase': return 'value * base';
+    case 'addSpellLevel': return 'spell power * value';
+    case 'addSpellLevelPercentage': return 'spell power / max spell power * value';
+    case 'addSpellLevelPercentageBase': return 'spell power / max spell power * value * attribute';
+    default: return '';
+  }
+};
+
+const formatExtra = (extra: unknown): string => {
+  if (extra === null || extra === undefined) return '';
+  if (typeof extra === 'number') return readableNumber(extra);
+  if (typeof extra === 'string') return readableStr(extra);
+  if (Array.isArray(extra)) return extra.map(formatExtra).join(', ');
+  if (typeof extra === 'object') {
+    return Object.entries(extra as Record<string, unknown>)
+      .filter(([, v]) => v !== null && v !== undefined)
+      .map(([k, v]) => `${readableStr(k)}${v === true ? '' : `: ${formatExtra(v)}`}`)
+      .join(', ');
+  }
+  return String(extra);
+};
+
+const formatValue = (val: Record<string, unknown>): string => {
+  const value = val.value;
+  const extra = val.extra;
+  if (typeof value === 'number') return readableNumber(value);
+  if (typeof value === 'string') {
+    const s = readableStr(value);
+    return extra == null ? s : `${s} (${formatExtra(extra)})`;
+  }
+  if (value && typeof value === 'object') {
+    const { name, extra: nestedExtra } = value as { name?: string; extra?: unknown };
+    const nameStr = name ? readableStr(name) : '';
+    const ext = nestedExtra ?? extra;
+    return ext == null ? nameStr : `${nameStr} (${formatExtra(ext)})`;
+  }
+  return String(value ?? '');
+};
+</script>

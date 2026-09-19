@@ -2,7 +2,9 @@
   <main class="flex flex-col items-center">
     <canvas id="arcane" class="absolute pointer-events-none opacity-25"></canvas>
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
+    <!--
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
+    -->
 
     <!--
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
