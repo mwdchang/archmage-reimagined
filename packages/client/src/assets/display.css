@@ -1,12 +1,39 @@
 /* Shared classes for the display effect components */
 
 @layer components {
-  .display-section {
+.display-section {
+    position: relative;
     border-left: 1px solid #8ab;
     padding-left: 20px;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    background: #1D1D1D;
+    padding-right: 20px;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    background: #1F1F1F;
+  }
+
+  /* decorative dots marking the top-left and bottom-left of a section */
+  .display-section::before,
+  .display-section::after {
+    content: '';
+    position: absolute;
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+    border: 1px solid #8ab;
+  }
+
+  /* black-filled dot at the top */
+  .display-section::before {
+    top: 0.15rem;
+    left: -0.24rem;
+    background: #000;
+  }
+
+  /* solid dot at the bottom, filled with the border color */
+  .display-section::after {
+    bottom: 0.15rem;
+    left: -0.24rem;
+    background: #8ab;
   }
 
   /* per-magic value row inside an effect */
@@ -15,6 +42,7 @@
     flex-direction: row;
     align-items: center;
     margin-left: 1rem;
+    margin-top: 0.15rem;
     gap: 15px;
   }
 

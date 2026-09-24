@@ -37,7 +37,7 @@
 
 
       <section v-if="mageStore.mage">
-        <table class="mb-4">
+        <table class="mb-4 w-full">
           <tbody>
             <tr>
               <td>Rank</td>

@@ -2,7 +2,9 @@
   <main class="flex flex-col items-center">
     <canvas id="arcane" class="absolute pointer-events-none opacity-25"></canvas>
     <header-info v-if="mage && !hideHeader.includes(route.name as string)" />
+    <!--
     <nav-bar v-if="mage && !publicRoutes.includes(route.name as string)" />
+    -->
 
     <!--
     <RouterView v-if="publicRoutes.includes(route.name as string)" /> 
@@ -72,10 +74,13 @@ const route = useRoute();
 const { mage } = storeToRefs(mageStore);
 
 
+let authChecked = false;
+
 const publicRoutes = [
   'home', 'guide', 'encyclopedia',
   'viewUnit', 'viewSpell', 'finals',
-  'analysis'
+  'analysis', 'viewItem', 'viewSkill',
+  'notFound'
 ];
 const hideHeader = [
   'home',
@@ -97,6 +102,15 @@ watch(
     document.body.dataset.bg = (bg as string) || 'default'
   },
   { immediate: true }
+)
+
+watch(
+  () => route.name,
+  (name) => {
+    if (authChecked && name && !publicRoutes.includes(name as string) && !mageStore.mage) {
+      router.push({ name: 'home' });
+    }
+  }
 )
 
 // Test to see if session already exist
@@ -164,9 +178,14 @@ onMounted(async () => {
     mageStore.setLoginUser('');
     mageStore.setMage(null);
     console.warn('need to login or register');
-    if (e.response.status === 403 || e.response.status === 401) {
-      router.push({ name: 'home' });
+    if (e.response?.status === 403 || e.response?.status === 401) {
+      await router.isReady();
+      if (!publicRoutes.includes(route.name as string)) {
+        router.push({ name: 'home' });
+      }
     }
+  } finally {
+    authChecked = true;
   }
 
   /*
