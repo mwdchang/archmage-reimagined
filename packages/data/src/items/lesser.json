@@ -81,7 +81,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.20 },
                   "verdant": { "value": 0.20 },
@@ -117,7 +117,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.10 },
                   "verdant": { "value": 0.10 },
@@ -133,7 +133,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.30 },
                   "verdant": { "value": 0.30 },
@@ -680,7 +680,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -8.0 },
                   "verdant": { "value": -8.0 },
@@ -1071,7 +1071,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 2.0 },
                   "verdant": { "value": 2.0 },
@@ -1111,7 +1111,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 1.0 },
                   "verdant": { "value": 1.0 },
@@ -1140,7 +1140,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -1.0 },
                   "verdant": { "value": -1.0 },

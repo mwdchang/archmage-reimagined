@@ -59,7 +59,7 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -5 },
                   "verdant": { "value": -2 },
@@ -182,7 +182,7 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -19 }, 
                   "verdant": { "value": -9 },
@@ -976,7 +976,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.5 },
                   "verdant": { "value": -0.20 },
@@ -1001,7 +1001,7 @@
             "checkResistance": true,
             "attributes": {
               "counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.5 },
                   "verdant": { "value": -0.20 },

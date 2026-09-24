@@ -19,6 +19,31 @@ export const EffectSchema = z.object({
 export type Effect = z.infer<typeof EffectSchema>;
 
 
+/**
+ * Effects are governed by rules, which dictates how a field 
+ * gets modified by a "value"
+**/
+export const UnitAttrEffectRules = {
+  // Add value to list field
+  add: 'add',
+  // Remove value from list field
+  remove: 'remove',
+  // Set field value 
+  set: 'set',
+  // A + current * value
+  spellLevel: 'spellLevel',
+  // A + A * value
+  percentage: 'percentage',
+  // A + current / max * value
+  spellLevelScaled: 'spellLevelScaled',
+  // A + A * current/max * value
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+} as const
+
+
+
+
+
 const TemporaryUnitEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.TemporaryUnitEffect),
   checkResistance: z.literal(false),
@@ -55,13 +80,13 @@ export const UnitAttrEffectSchema = EffectSchema.extend({
     z.string(),
     z.object({
       rule: z.enum([
-        'set',
-        'add',
-        'remove',
-        'addPercentageBase',
-        'addSpellLevel',
-        'addSpellLevelPercentage',
-        'addSpellLevelPercentageBase',
+        UnitAttrEffectRules.set,
+        UnitAttrEffectRules.add,
+        UnitAttrEffectRules.remove,
+        UnitAttrEffectRules.spellLevel,
+        UnitAttrEffectRules.percentage,
+        UnitAttrEffectRules.spellLevelScaled,
+        UnitAttrEffectRules.spellLevelScaledPercentage
       ]),
       magic: z.partialRecord(
         AllowedMagicSchema,

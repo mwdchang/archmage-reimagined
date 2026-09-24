@@ -1,6 +1,6 @@
 <template>
   <main class="mb-2">
-    <h1 class="mb-4"> Archmage Reimagined <small>alpha</small></h1>
+    <h1 class="mb-4 text-2xl text-shadow-md text-shadow-blue-500"> Archmage Reimagined <small>alpha</small></h1>
     <p class="max-w-[50rem] leading-[1.25] mb-4">
       Archmage Reimagined is a reimagination of the classica MMORPG Archmage. With new features and twists designed to be exciting for a modern audience.
     </p>

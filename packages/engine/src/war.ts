@@ -10,6 +10,7 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
+  UnitAttrEffectRules,
 } from 'shared/src/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -108,26 +109,26 @@ const applyUnitEffect = (
         }
 
         // Figure out the value to add
-        if (rule === 'add') {
+        if (rule === UnitAttrEffectRules.add) {
           finalValue = baseValue;
-        } else if (rule === 'addPercentageBase') {
+        } else if (rule === UnitAttrEffectRules.percentage) {
           finalValue = baseValue * originalRoot[field];
-        } else if (rule === 'addSpellLevel') {
+        } else if (rule === UnitAttrEffectRules.spellLevel) {
           finalValue = baseValue * casterSpellLevel;
-        } else if (rule === 'addSpellLevelPercentage') {
+        } else if (rule === UnitAttrEffectRules.spellLevelScaled) {
           finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue;
-        } else if (rule === 'addSpellLevelPercentageBase') {
+        } else if (rule === UnitAttrEffectRules.spellLevelScaledPercentage) {
           finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue * originalRoot[field];
-        } else if (rule === 'remove') {
+        } else if (rule === UnitAttrEffectRules.remove) {
           finalValue = baseValue;
-        } else if (rule === 'set') {
+        } else if (rule === UnitAttrEffectRules.set) {
           finalValue = baseValue;
         } else {
           throw new Error(`Unable to proces rule ${rule}`);
         }
 
         // Set overrides default
-        if (rule === 'set') {
+        if (rule === UnitAttrEffectRules.set) {
           root[field] = finalValue;
           return;
         }

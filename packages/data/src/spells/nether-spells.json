@@ -182,7 +182,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.13 },
                   "verdant": { "value": -0.13 },
@@ -335,7 +335,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.18 },
                   "verdant": { "value": 0.18 },
@@ -351,7 +351,7 @@
             "checkResistance": true,
             "attributes": {
               "hitPoints": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": -0.12 },
                   "verdant": { "value": -0.12 },
@@ -509,7 +509,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.08 },
                   "verdant": { "value": 0.08 },
@@ -874,7 +874,7 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances.holy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "nether": { "value": 32 }
                 }

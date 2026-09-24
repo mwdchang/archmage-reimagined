@@ -189,7 +189,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.20 },
                   "verdant": { "value": 0.37 },
@@ -578,7 +578,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.04708 },
                   "verdant": { "value": 0.4708 },
@@ -625,7 +625,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,counterAttackPower,hitPoints": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "verdant": { "value": 0.9524 }
                 }
@@ -714,7 +714,7 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances.melee": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -14 },
                   "verdant": { "value": -27.8 },
@@ -963,7 +963,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "verdant": { "value": 0.13 }
                 }
@@ -975,7 +975,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "verdant": { "value": 7 }
                 }
@@ -1000,7 +1000,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "verdant": { "value": 0.23 }
                 }
@@ -1012,7 +1012,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "verdant": { "value": 0.20 }
                 }

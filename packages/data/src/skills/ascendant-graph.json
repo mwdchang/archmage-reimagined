@@ -58,7 +58,7 @@
             "activation": "defence",
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.01 },
                   "verdant": { "value": 0.01 },
@@ -134,7 +134,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.02 },
@@ -150,7 +150,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.01 },
                   "verdant": { "value": 0.01 },
@@ -188,7 +188,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.02 },
