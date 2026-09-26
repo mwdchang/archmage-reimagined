@@ -185,7 +185,7 @@ export type UnitSummonEffect = z.infer<typeof UnitSummonEffectSchema>;
 export const KingdomResistanceEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomResistanceEffect),
   rule: z.literal('spellLevel'),
-  resistance: z.string(),
+  resistance: AllowedMagicSchema,
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
@@ -199,12 +199,16 @@ export type KingdomResistanceEffect = z.infer<typeof KingdomResistanceEffectSche
 
 
 
+export const KingdomBuildingsEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  ranged: 'ranged'
+} as const;
+
 export const KingdomBuildingsEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomBuildingsEffect),
   rule: z.enum([
-    'landPercentageLoss',
-    'netPowerRanged',
-    'direct',
+    KingdomBuildingsEffectRules.spellLevelScaled,
+    KingdomBuildingsEffectRules.ranged,
   ]),
   target: z.string(),
   magic: z.partialRecord(

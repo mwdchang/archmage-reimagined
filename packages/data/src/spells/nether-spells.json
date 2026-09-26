@@ -458,7 +458,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "landPercentageLoss",
+        "rule": "spellLevelScaled",
         "target": "all",
         "magic": {
           "ascendant": { "value": { "min": 0.1, "max": 0.2 } },
@@ -972,7 +972,7 @@
           },
           {
             "effectType": "KingdomBuildingsEffect",
-            "rule": "landPercentageLoss",
+            "rule": "spellLevelScaled",
             "target": "all",
             "magic": {
               "nether": {

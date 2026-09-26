@@ -753,7 +753,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "landPercentageLoss",
+        "rule": "spellLevelScaled",
         "target": "all",
         "magic": {
           "ascendant": { "value": { "min": 0.1, "max": 0.5 } },
@@ -1123,7 +1123,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "netPowerRanged",
+        "rule": "ranged",
         "target": "all",
         "magic": {
           "eradication": { "value": { "min": 1.5, "max": 5.5 } }
