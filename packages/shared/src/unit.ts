@@ -29,7 +29,7 @@ export const UnitSchema = z.object({
   name: z.string(),
   description: z.string(),
 
-  magic: z.string(),
+  magic: AllowedMagicSchema.or(z.literal('plain')),
   powerRank: z.number().positive(),
 
   race: z.array(z.string()),
@@ -37,11 +37,11 @@ export const UnitSchema = z.object({
 
   // Attacks
   primaryAttackPower: z.number(),
-  primaryAttackType: z.array(z.string()),
+  primaryAttackType: AllowedAttackTypesSchema.array(),
   primaryAttackInit: z.number(),
 
   secondaryAttackPower: z.number(),
-  secondaryAttackType: z.array(z.string()),
+  secondaryAttackType: AllowedAttackTypesSchema.array(),
   secondaryAttackInit: z.number(),
 
   counterAttackPower: z.number(),

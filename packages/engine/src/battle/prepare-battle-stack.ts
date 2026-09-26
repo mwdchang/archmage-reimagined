@@ -6,12 +6,6 @@ import { isFlying, isRanged } from "../base/unit";
 
 const NONE = -1;
 
-enum StackType {
-  NORMAL,
-  REINFORCEMENT,
-  TEMPORARY
-}
-
 // Returns power modifiers
 // - flyer
 // - ranged
@@ -37,7 +31,7 @@ export const prepareBattleStack = (army: ArmyUnit[], role: string) => {
     return {
       unit: u,
       size: stack.size,
-      stackType: StackType.NORMAL,
+      stackType: 'normal',
       role,
       isTarget: false,
       targetIdx: NONE,

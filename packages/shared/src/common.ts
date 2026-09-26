@@ -62,13 +62,13 @@ export const enum allowedEffect {
   UnitSummonEffect = 'UnitSummonEffect'
 }
 
-export enum StackType {
-  NORMAL,
-  REINFORCEMENT,
-  TEMPORARY
-}
 
-
+export const StackTypeSchema = z.enum([
+  'normal',
+  'reinforcement',
+  'temporary'
+]);
+export type StackType = z.infer<typeof StackTypeSchema>;
 
 
 
