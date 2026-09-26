@@ -53,7 +53,7 @@
         "unitIds": ["lizardman"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -81,7 +81,7 @@
         "unitIds": ["dwarvenDeathSeeker"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -109,7 +109,7 @@
         "unitIds": ["goblin"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -270,7 +270,7 @@
         "unitIds": ["wyvern"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -298,7 +298,7 @@
         "unitIds": ["salamander"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -326,7 +326,7 @@
         "unitIds": ["hellHound"],
         "summonType": "all",
         "summonNetPower": 260000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -533,7 +533,7 @@
         "unitIds": ["goblin"],
         "summonType": "all",
         "summonNetPower": 5500,
-        "rule": "spellLevel",
+        "rule": "none",
         "magic": {
           "eradication": { "value": 1.0 }
         }
@@ -837,7 +837,7 @@
         "unitIds": ["chimera"],
         "summonType": "all",
         "summonNetPower": 430000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -865,7 +865,7 @@
         "unitIds": ["efreeti"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -893,7 +893,7 @@
         "unitIds": ["hydra"],
         "summonType": "all",
         "summonNetPower": 540000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -921,7 +921,7 @@
         "unitIds": ["dwarvenShaman"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -949,7 +949,7 @@
         "unitIds": ["stormGiant"],
         "summonType": "all",
         "summonNetPower": 550000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -977,7 +977,7 @@
         "unitIds": ["fireElemental"],
         "summonType": "all",
         "summonNetPower": 2000000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -1005,7 +1005,7 @@
         "unitIds": ["redDragon"],
         "summonType": "all",
         "summonNetPower": 2500000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },

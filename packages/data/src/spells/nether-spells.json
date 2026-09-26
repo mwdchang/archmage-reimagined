@@ -16,7 +16,7 @@
         "unitIds": ["skeleton"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -44,7 +44,7 @@
         "unitIds": ["zombie"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -72,7 +72,7 @@
         "unitIds": ["shadow"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -215,7 +215,7 @@
         "unitIds": ["ghoul"],
         "summonType": "all",
         "summonNetPower": 180000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -273,7 +273,7 @@
         "unitIds": ["hornedDemon"],
         "summonType": "all",
         "summonNetPower": 185000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -301,7 +301,7 @@
         "unitIds": ["wraith"],
         "summonType": "all",
         "summonNetPower": 180000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -428,7 +428,7 @@
         "unitIds": ["ghoul"],
         "summonType": "all",
         "summonNetPower": 0,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "ascendant": { "value": 666 },
           "eradication": { "value": 666 },
@@ -663,7 +663,7 @@
         "unitIds": ["zombie", "wraith", "lich", "vampire", "shadow"],
         "summonType": "random",
         "summonNetPower": 120000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.2 },
@@ -725,7 +725,7 @@
         "unitIds": ["darkElfMagician"],
         "summonType": "all",
         "summonNetPower": 450000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -753,7 +753,7 @@
         "unitIds": ["bulwarkHorror"],
         "summonType": "all",
         "summonNetPower": 630000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -781,7 +781,7 @@
         "unitIds": ["lich"],
         "summonType": "all",
         "summonNetPower": 620000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -809,7 +809,7 @@
         "unitIds": ["vampire"],
         "summonType": "all",
         "summonNetPower": 640000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -837,7 +837,7 @@
         "unitIds": ["demonKnight"],
         "summonType": "all",
         "summonNetPower": 640000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.3 },
           "verdant": { "value": 0.3 },
@@ -890,7 +890,7 @@
         "unitIds": ["zombie", "skeleton"],
         "summonType": "all",
         "summonNetPower": 666,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "nether": { "value": 1.0 }
         }
@@ -1070,7 +1070,7 @@
         "unitIds": ["unholyReaver"],
         "summonType": "all",
         "summonNetPower": 2200000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },

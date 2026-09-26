@@ -49,7 +49,7 @@
         "unitIds": ["stoneGolem"],
         "summonType": "all",
         "summonNetPower": 40,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -381,7 +381,7 @@
         "unitIds": ["knight"],
         "summonType": "all",
         "summonNetPower": 100000,
-        "rule": "fixed",
+        "rule": "none",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -406,7 +406,7 @@
         "unitIds": ["lich", "vampire", "wraith", "ghoul", "zombie"],
         "summonType": "random",
         "summonNetPower": 100000,
-        "rule": "fixed",
+        "rule": "none",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -431,7 +431,7 @@
         "unitIds": ["gorilla"],
         "summonType": "all",
         "summonNetPower": 100000,
-        "rule": "power",
+        "rule": "none",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },
@@ -456,7 +456,7 @@
         "unitIds": ["frog", "squirrel", "sheep"],
         "summonType": "random",
         "summonNetPower": 10000,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 1.0 },

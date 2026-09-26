@@ -131,7 +131,7 @@
         "unitIds": ["chimera", "hydra"],
         "summonType": "all",
         "summonNetPower": 40,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "ascendant": { "value": 1.0 },
           "eradication": { "value": 1.0 },
@@ -145,7 +145,7 @@
         "unitIds": ["hellHound", "salamander"],
         "summonType": "all",
         "summonNetPower": 80,
-        "rule": "fixed",
+        "rule": "set",
         "magic": {
           "ascendant": { "value": 1.0 },
           "eradication": { "value": 1.0 },

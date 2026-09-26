@@ -18,7 +18,8 @@ import {
   UnitSummonEffect,
   ProductionEffect,
   KingdomResistanceEffect,
-  CastingEffect
+  CastingEffect,
+  UnitSummonEffectRules
 } from 'shared/src/effects';
 import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
 import { ActiveEffect, getActiveEffects } from './effects';
@@ -154,7 +155,7 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
 
   let power = effect.summonNetPower;
 
-  if (effect.rule === 'spellLevel') {
+  if (effect.rule === UnitSummonEffectRules.spellLevelScaled) {
     // Randomness
     power *= (0.5 + 0.75 * randomBM());
 
@@ -163,9 +164,9 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
 
     // Magic
     power *= magicBase;
-  } else if (effect.rule === 'fixed') {
+  } else if (effect.rule === UnitSummonEffectRules.set) {
     power = effect.summonNetPower;
-  } else if (effect.rule === 'power') {
+  } else if (effect.rule === UnitSummonEffectRules.none) {
     power = (0.5 + 0.75 * randomBM()) * effect.summonNetPower;
   }
 
@@ -173,7 +174,7 @@ export const summonUnit = (effect: UnitSummonEffect, origin: EffectOrigin) => {
   unitIds.forEach(unitId => {
     const unit = getUnitById(unitId);
     const unitPower = unit.powerRank;
-    const unitsSummoned = effect.rule === 'fixed' ?
+    const unitsSummoned = effect.rule === UnitSummonEffectRules.set ?
       power :
       Math.floor(power / unitPower);
 

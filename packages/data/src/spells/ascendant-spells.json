@@ -130,7 +130,7 @@
         "unitIds": ["pegasus"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -158,7 +158,7 @@
         "unitIds": ["soulSpeaker"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -212,7 +212,7 @@
         "unitIds": ["astralMagician"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -240,7 +240,7 @@
         "unitIds": ["angel"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -652,7 +652,7 @@
         "unitIds": ["archangel", "angel", "knight", "unicorn"],
         "summonType": "random",
         "summonNetPower": 120000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -680,7 +680,7 @@
         "unitIds": ["archangel"],
         "summonType": "all",
         "summonNetPower": 540000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -708,7 +708,7 @@
         "unitIds": ["spiritWarrior"],
         "summonType": "all",
         "summonNetPower": 430000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -736,7 +736,7 @@
         "unitIds": ["unicorn"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -764,7 +764,7 @@
         "unitIds": ["empyreanInquisitor"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -792,7 +792,7 @@
         "unitIds": ["nagaQueen"],
         "summonType": "all",
         "summonNetPower": 560000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -820,7 +820,7 @@
         "unitIds": ["dominion"],
         "summonType": "all",
         "summonNetPower": 2200000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.0 },
@@ -848,7 +848,7 @@
         "unitIds": ["titan"],
         "summonType": "all",
         "summonNetPower": 2200000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.0 },
@@ -1034,7 +1034,7 @@
         "unitIds": ["preacher"],
         "summonType": "all",
         "summonNetPower": 1000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 }
         }

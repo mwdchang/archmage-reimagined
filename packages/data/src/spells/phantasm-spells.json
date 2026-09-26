@@ -92,7 +92,7 @@
         "unitIds": ["sprite"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -120,7 +120,7 @@
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -148,7 +148,7 @@
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 150000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -524,7 +524,7 @@
         "unitIds": ["siren"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -552,7 +552,7 @@
         "unitIds": ["medusa"],
         "summonType": "all",
         "summonNetPower": 275000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -580,7 +580,7 @@
         "unitIds": ["yeti"],
         "summonType": "all",
         "summonNetPower": 260000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -1095,7 +1095,7 @@
         "unitIds": ["djinni"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -1123,7 +1123,7 @@
         "unitIds": ["mindRipper"],
         "summonType": "all",
         "summonNetPower": 650000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -1151,7 +1151,7 @@
         "unitIds": ["iceElemental", "airElemental", "waterElemental"],
         "summonType": "random",
         "summonNetPower": 2100000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -1179,7 +1179,7 @@
         "unitIds": ["leviathan"],
         "summonType": "random",
         "summonNetPower": 2400000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },

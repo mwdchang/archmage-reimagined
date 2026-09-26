@@ -16,7 +16,7 @@
         "unitIds": ["gorilla"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -44,7 +44,7 @@
         "unitIds": ["dryad"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -72,7 +72,7 @@
         "unitIds": ["creepingVines"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -221,7 +221,7 @@
         "unitIds": ["mandrake"],
         "summonType": "all",
         "summonNetPower": 180000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -328,7 +328,7 @@
         "unitIds": ["nymph"],
         "summonType": "all",
         "summonNetPower": 180000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -356,7 +356,7 @@
         "unitIds": ["werebear"],
         "summonType": "all",
         "summonNetPower": 185000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -384,7 +384,7 @@
         "unitIds": ["griffon"],
         "summonType": "all",
         "summonNetPower": 450000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -412,7 +412,7 @@
         "unitIds": ["venusFlytrap"],
         "summonType": "all",
         "summonNetPower": 540000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -440,7 +440,7 @@
         "unitIds": ["elvenBladeDancer"],
         "summonType": "all",
         "summonNetPower": 510000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -468,7 +468,7 @@
         "unitIds": ["highElf"],
         "summonType": "all",
         "summonNetPower": 430000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -496,7 +496,7 @@
         "unitIds": ["treant"],
         "summonType": "all",
         "summonNetPower": 420000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 1.0 },
@@ -848,7 +848,7 @@
         "unitIds": ["phoenix"],
         "summonType": "all",
         "summonNetPower": 1900000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 1.0 },
@@ -876,7 +876,7 @@
         "unitIds": ["earthElemental"],
         "summonType": "all",
         "summonNetPower": 2000000, 
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 1.0 },
@@ -908,7 +908,7 @@
         "unitIds": ["dryad", "nymph", "treant"],
         "summonType": "all",
         "summonNetPower": 5000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "verdant": { "value": 1.0 }
         }

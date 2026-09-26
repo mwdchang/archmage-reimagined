@@ -23,30 +23,6 @@ export type Effect = z.infer<typeof EffectSchema>;
  * Effects are governed by rules, which dictates how a field 
  * gets modified by a "value"
 **/
-export const UnitAttrEffectRules = {
-  // Add value to list field
-  add: 'add',
-  // Remove value from list field
-  remove: 'remove',
-  // Set field value 
-  set: 'set',
-  // A + current * value
-  spellLevel: 'spellLevel',
-  // A + A * value
-  percentage: 'percentage',
-  // A + current / max * value
-  spellLevelScaled: 'spellLevelScaled',
-  // A + A * current/max * value
-  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
-} as const
-
-
-export const UnitHealEffectRules = {
-  // healTypeValue = value
-  set: 'set',
-  // healTypeValue = value * spellLevel
-  spellLevel: 'spellLevel'
-} as const
 
 
 
@@ -72,13 +48,23 @@ const TemporaryUnitEffectSchema = EffectSchema.extend({
 export type TemporaryUnitEffect = z.infer<typeof TemporaryUnitEffectSchema>;
 
 
-/**
- * add:                          value
- * addPercentageBase:            value * base
- * addSpellLevel:                value * spellLevel
- * addSpellLevelPercentage:      value * spellLevel / maxSpellLevel  
- * addSpellLevelPercentageBase:  value * spellLevel / maxSpellLevel * base
-**/
+
+export const UnitAttrEffectRules = {
+  // Add value to list field
+  add: 'add',
+  // Remove value from list field
+  remove: 'remove',
+  // Set field value 
+  set: 'set',
+  // A + current * value
+  spellLevel: 'spellLevel',
+  // A + A * value
+  percentage: 'percentage',
+  // A + current / max * value
+  spellLevelScaled: 'spellLevelScaled',
+  // A + A * current/max * value
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+} as const
 export const UnitAttrEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitAttrEffect),
   checkResistance: z.boolean(),
@@ -109,13 +95,6 @@ export const UnitAttrEffectSchema = EffectSchema.extend({
 export type UnitAttrEffect = z.infer<typeof UnitAttrEffectSchema>;
 
 
-/**
- * direct: damage = value
- * spellLevel: damage = spellLevel * value
- * spellLevelUnitLoss: unitloss = spellLevel * value
- * spellLevelUnitDamage: damage = numUnits * spellLevel * value
-**/
-
 export const UnitDamageEffectRules = {
   // damage = value
   set: 'set',
@@ -123,8 +102,6 @@ export const UnitDamageEffectRules = {
   // damage = spellLevel * value
   spellLevel: 'spellLevel'
 } as const
-
-
 export const DamageValueSchema = z.object({
   min: z.number(),
   max: z.number(),
@@ -138,15 +115,6 @@ export const UnitDamageEffectSchema = EffectSchema.extend({
     UnitDamageEffectRules.set,
     UnitDamageEffectRules.spellLevel
   ]),
-  /*
-  rule: z.enum([
-    'direct',
-    'unitLoss',
-    'spellLevel',
-    'spellLevelUnitLoss',
-    'spellLevelUnitDamage',
-  ]),
-  */
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
@@ -159,6 +127,12 @@ export const UnitDamageEffectSchema = EffectSchema.extend({
 export type UnitDamageEffect = z.infer<typeof UnitDamageEffectSchema>;
 
 
+export const UnitHealEffectRules = {
+  // healTypeValue = value
+  set: 'set',
+  // healTypeValue = value * spellLevel
+  spellLevel: 'spellLevel'
+} as const
 export const UnitHealEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitHealEffect),
   checkResistance: z.boolean(),
@@ -180,20 +154,27 @@ export type UnitHealEffect = z.infer<typeof UnitHealEffectSchema>;
 
 
 
-
-
-
 /**
  * Summon units
  *
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
  * fixed = summonNetPower 
 **/
+
+export const UnitSummonEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  set: 'set',
+  none: 'none'
+} as const;
 export const UnitSummonEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitSummonEffect),
   unitIds: z.array(z.string()),
   summonType: z.enum(['random', 'all']),
-  rule: z.enum(['spellLevel', 'fixed', 'power']),
+  rule: z.enum([
+    UnitSummonEffectRules.spellLevelScaled,
+    UnitSummonEffectRules.set,
+    UnitSummonEffectRules.none
+  ]),
   summonNetPower: z.number(),
 
   magic: z.partialRecord(
