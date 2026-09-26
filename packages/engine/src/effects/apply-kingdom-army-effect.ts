@@ -1,4 +1,4 @@
-import { EffectOrigin, KingdomArmyEffect } from "shared/src/effects";
+import { EffectOrigin, KingdomArmyEffect, KingdomArmyEffectRules } from "shared/src/effects";
 import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels, getUnitById } from "../base/references";
 import { between, randomBM } from "../random";
@@ -60,7 +60,7 @@ export const applyKingdomArmyEffect = (
   // Apply
   const rule = effect.rule;
   for (const armyUnit of filteredArmy) {
-    if (rule === 'addSpellLevelPercentageBase') {
+    if (rule === KingdomArmyEffectRules.spellLevelScaledPercentage) {
       let value = Math.floor(armyUnit.size * spellPowerScale * base);
       if (armyUnit.size + value < 0) {
         value = - armyUnit.size;

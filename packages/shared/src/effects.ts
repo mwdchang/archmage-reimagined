@@ -226,12 +226,18 @@ export const KingdomBuildingsEffectSchema = EffectSchema.extend({
 export type KingdomBuildingsEffect = z.infer<typeof KingdomBuildingsEffectSchema>;
 
 
+export const KingdomResourcesffectRules = {
+  add: 'add',
+  spellLevelScaled: 'spellLevelScaled',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
+
 export const KingdomResourcesEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomResourcesEffect),
   rule: z.enum([
-    'add',
-    'addSpellLevelPercentage',
-    'addSpellLevelPercentageBase',
+    KingdomResourcesffectRules.add,
+    KingdomResourcesffectRules.spellLevelScaled,
+    KingdomResourcesffectRules.spellLevelScaledPercentage
   ]),
   target: z.enum([
     'population',
@@ -255,9 +261,13 @@ export const KingdomResourcesEffectSchema = EffectSchema.extend({
 export type KingdomResourcesEffect = z.infer<typeof KingdomResourcesEffectSchema>;
 
 
+export const KingdomArmyEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
+
 export const KingdomArmyEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomArmyEffect),
-  rule: z.literal('addSpellLevelPercentageBase'),
+  rule: z.literal(KingdomArmyEffectRules.spellLevelScaledPercentage),
   filters: z.array(UnitFilterSchema).nullable(),
   checkResistance: z.boolean(),
   magic: z.partialRecord(

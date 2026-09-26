@@ -470,7 +470,7 @@
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "population",
         "magic": {
           "ascendant": { "value": { "min": -400, "max": -5000 } },
@@ -948,7 +948,7 @@
         "effects": [
            {
             "effectType": "KingdomResourcesEffect",
-            "rule": "addSpellLevelPercentageBase",
+            "rule": "spellLevelScaledPercentage",
             "target": "mana",
             "magic": {
               "nether": { "value": { "min": -0.5, "max": -0.5 } }
@@ -956,7 +956,7 @@
           },
           {
             "effectType": "KingdomResourcesEffect",
-            "rule": "addSpellLevelPercentageBase",
+            "rule": "spellLevelScaledPercentage",
             "target": "population",
             "magic": {
               "nether": { "value": { "min": -0.5, "max": -0.5 } }
@@ -964,7 +964,7 @@
           },
           {
             "effectType": "KingdomResourcesEffect",
-            "rule": "addSpellLevelPercentageBase",
+            "rule": "spellLevelScaledPercentage",
             "target": "geld",
             "magic": {
               "nether": { "value": { "min": -0.5, "max": -0.5 } }
@@ -1036,7 +1036,7 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "target": "population",
         "magic": {
           "nether": { "value": { "min": -0.04, "max": -0.12 } }
@@ -1044,7 +1044,7 @@
       },
       {
         "effectType": "KingdomArmyEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "filters": null,
         "checkResistance": false,
         "magic": {

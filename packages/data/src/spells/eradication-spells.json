@@ -559,7 +559,7 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "population",
         "magic": {
           "ascendant": { "value": { "min": -1200, "max": -3000 } },
@@ -571,7 +571,7 @@
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "mana",
         "magic": {
           "ascendant": { "value": { "min": -1200, "max": -2000 } },
@@ -1131,7 +1131,7 @@
       },
       {
         "effectType": "KingdomArmyEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "filters": null,
         "checkResistance": false,
         "magic": {
