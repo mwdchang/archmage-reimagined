@@ -11,6 +11,7 @@ import {
   PostbattleEffect,
   StealEffect,
   UnitAttrEffectRules,
+  UnitHealEffectRules,
 } from 'shared/src/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -283,9 +284,9 @@ const applyHealEffect = (
   const rule = healEffect.rule;
 
   let healBase = 0;
-  if (rule === 'spellLevel') {
+  if (rule === UnitHealEffectRules.spellLevel) {
     healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
-  } else if (rule === 'none') {
+  } else if (rule === UnitHealEffectRules.set) {
     healBase = healEffect.magic[casterMagic].value;
   }
 

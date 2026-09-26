@@ -41,6 +41,12 @@ export const UnitAttrEffectRules = {
 } as const
 
 
+export const UnitHealEffectRules = {
+  // healTypeValue = value
+  set: 'set',
+  // healTypeValue = value * spellLevel
+  spellLevel: 'spellLevel'
+} as const
 
 
 
@@ -139,7 +145,10 @@ export const UnitHealEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitHealEffect),
   checkResistance: z.boolean(),
   healType: z.enum(['points', 'percentage', 'units']),
-  rule: z.enum(['none', 'spellLevel']),
+  rule: z.enum([
+    UnitHealEffectRules.set,
+    UnitHealEffectRules.spellLevel,
+  ]),
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
