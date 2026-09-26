@@ -19,7 +19,8 @@ import {
   ProductionEffect,
   KingdomResistanceEffect,
   CastingEffect,
-  UnitSummonEffectRules
+  UnitSummonEffectRules,
+  ProductionEffectRules
 } from 'shared/src/effects';
 import { allowedMagicList, allowedEffect as E } from 'shared/src/common';
 import { ActiveEffect, getActiveEffects } from './effects';
@@ -243,11 +244,11 @@ export const manaIncome = (mage: Mage) => {
       const rule = productionEffect.rule;
       if (rule === 'spellLevel') {
         delta += base.value * origin.spellLevel;
-      } else if (rule === 'addPercentageBase') {
+      } else if (rule === ProductionEffectRules.percentage) {
         delta += manaYield * base.value;
-      } else if (rule === 'add') {
+      } else if (rule === ProductionEffectRules.add) {
         delta += base.value;
-      } else if (rule === 'addSpellLevelPercentageBase') {
+      } else if (rule === ProductionEffectRules.spellLevelScaledPercentage) {
         delta += manaYield * base.value * origin.spellLevel / getMaxSpellLevels()[origin.magic];
       } else {
         throw new Error(`Unknown rule ${rule}`);

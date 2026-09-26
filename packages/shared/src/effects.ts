@@ -261,10 +261,10 @@ export const KingdomResourcesEffectSchema = EffectSchema.extend({
 export type KingdomResourcesEffect = z.infer<typeof KingdomResourcesEffectSchema>;
 
 
+
 export const KingdomArmyEffectRules = {
   spellLevelScaledPercentage: 'spellLevelScaledPercentage'
 } as const;
-
 export const KingdomArmyEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomArmyEffect),
   rule: z.literal(KingdomArmyEffectRules.spellLevelScaledPercentage),
@@ -285,13 +285,23 @@ export const KingdomArmyEffectSchema = EffectSchema.extend({
 export type KingdomArmyEffect = z.infer<typeof KingdomArmyEffectSchema>;
 
 
+export const ProductionEffectRules = {
+  add: 'add',
+  spellLevel: 'spellLevel',
+  percentage: 'percentage',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
 export const ProductionEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.ProductionEffect),
   rule: z.enum([
-    'spellLevel',
-    'addPercentageBase',
-    'addSpellLevelPercentageBase',
-    'add',
+    ProductionEffectRules.add,
+    ProductionEffectRules.percentage,
+    ProductionEffectRules.spellLevel,
+    ProductionEffectRules.spellLevelScaledPercentage
+    // 'spellLevel',
+    // 'addPercentageBase',
+    // 'addSpellLevelPercentageBase',
+    // 'add',
   ]),
   production: z.enum([
     'farms',

@@ -621,7 +621,7 @@
       },
       {
         "effectType": "ProductionEffect",
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "production": "geld",
         "magic": {
           "ascendant": { "value": -0.25 },
@@ -772,7 +772,7 @@
     "effects": [
       {
         "effectType": "ProductionEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "production": "geld",
         "magic": {
           "ascendant": { "value": -0.35 },

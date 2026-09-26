@@ -7,7 +7,7 @@ import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
 
-import { ArmyUpkeepEffect, ProductionEffect } from 'shared/src/effects';
+import { ArmyUpkeepEffect, ProductionEffect, ProductionEffectRules } from 'shared/src/effects';
 import { matchesFilter } from './base/unit';
 import { ActiveEffect, getActiveEffects } from './effects';
 
@@ -121,7 +121,7 @@ export const explorationRate = (mage: Mage) => {
         continue;
       }
 
-      if (effect.rule === 'addPercentageBase') {
+      if (effect.rule === ProductionEffectRules.percentage) {
         extra += Math.max(1, rate * effect.magic[activeEffect.origin.magic].value);
       }
     }
@@ -205,11 +205,11 @@ export const recruitGeldCapacity = (mage: Mage) => {
         continue;
       }
 
-      if (effect.rule === 'spellLevel') {
+      if (effect.rule === ProductionEffectRules.spellLevel) {
         buffer += activeEffect.origin.spellLevel * effect.magic[magic].value;
-      } else if (effect.rule === 'addPercentageBase') {
+      } else if (effect.rule === ProductionEffectRules.percentage) {
         buffer += base * effect.magic[magic].value;
-      } else if (effect.rule === 'addSpellLevelPercentageBase') {
+      } else if (effect.rule === ProductionEffectRules.spellLevelScaledPercentage) {
         buffer += base * effect.magic[magic].value * spellPowerScale;
       } else {
         throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
@@ -246,11 +246,11 @@ export const populationIncome = (mage: Mage) => {
         continue;
       }
 
-      if (effect.rule === 'spellLevel') {
+      if (effect.rule === ProductionEffectRules.spellLevel) {
         delta += effect.magic[activeEffect.origin.magic].value * activeEffect.origin.spellLevel;
-      } else if (effect.rule === 'addPercentageBase') {
+      } else if (effect.rule === ProductionEffectRules.percentage) {
         delta += effect.magic[activeEffect.origin.magic].value * baseIncome;
-      } else if (effect.rule === 'add') {
+      } else if (effect.rule === ProductionEffectRules.add) {
         delta += effect.magic[mage.magic].value;
       } else {
         throw new Error(`unspported production rule ${effect.rule} for ${activeEffect.objId}`);
@@ -275,14 +275,14 @@ export const geldIncome = (mage: Mage) => {
       }
 
 
-      if (effect.rule === 'spellLevel') {
+      if (effect.rule === ProductionEffectRules.spellLevel) {
         delta += effect.magic[magic].value * activeEffect.origin.spellLevel;
-      } else if (effect.rule === 'addPercentageBase') {
+      } else if (effect.rule === ProductionEffectRules.percentage) {
         delta += effect.magic[magic].value * baseIncome;
-      } else if (effect.rule === 'addSpellLevelPercentageBase') {
+      } else if (effect.rule === ProductionEffectRules.spellLevelScaledPercentage) {
         const maxSpellLevel = getMaxSpellLevels()[activeEffect.origin.magic];
         delta += effect.magic[magic].value * activeEffect.origin.spellLevel / maxSpellLevel * baseIncome;
-      } else if (effect.rule === 'add') {
+      } else if (effect.rule === ProductionEffectRules.add) {
         delta += effect.magic[magic].value;
       } else {
         throw new Error(`Unimplemented rule ${effect.rule} for ${activeEffect.objId}`);

@@ -376,7 +376,7 @@
     "effects": [
       {
         "effectType": "ProductionEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "production": "barrack",
         "magic": {
           "ascendant": { "value": 0.08 },
@@ -972,7 +972,7 @@
       },
       {
         "effectType": "ProductionEffect",
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "production": "mana",
         "magic": {
           "ascendant": { "value": -0.15 }
