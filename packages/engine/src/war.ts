@@ -12,6 +12,7 @@ import {
   StealEffect,
   UnitAttrEffectRules,
   UnitHealEffectRules,
+  UnitDamageEffectRules,
 } from 'shared/src/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -209,6 +210,8 @@ const applyDamageEffect = (
 
   affectedArmy.forEach(stack => {
     const rule = damageEffect.rule;
+
+    /*
     if (rule === 'spellLevel') {
       rawDamage = base * casterSpellLevel;
     } else if (rule === 'spellLevelUnitLoss') {
@@ -220,8 +223,19 @@ const applyDamageEffect = (
     } else if (rule === 'unitLoss') {
       rawDamage = base;
     }
+    */
 
-    if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
+    if (rule === UnitDamageEffectRules.spellLevel) {
+      rawDamage = base * casterSpellLevel;
+    } else {
+      rawDamage = base;
+    }
+    if (damageEffect.target === 'perUnitDamage') {
+      rawDamage *= stack.size;
+    }
+
+    // if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
+    if (damageEffect.target === 'unit') {
       let unitsLoss = Math.floor(rawDamage);
       // Give it a bit of randomness
       unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);

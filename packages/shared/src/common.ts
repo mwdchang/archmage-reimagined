@@ -25,7 +25,7 @@ export const allowedAttackTypeList = [
   'paralyse',
   'psychic',
   'holy'
-];
+] as const;
 
 export const AllowedAttackTypesSchema = z.enum(allowedAttackTypeList);
 

@@ -23,6 +23,7 @@
             "checkResistance": true,
             "damageType": ["fire"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 100, "max": 100 } },
               "verdant": { "value": { "min": 180, "max": 180 } },
@@ -186,6 +187,7 @@
             "checkResistance": true,
             "damageType": ["lightning"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 80, "max": 80 } },
               "verdant": { "value": { "min": 150, "max": 150 } },
@@ -237,7 +239,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["lightning"],
-            "rule": "spellLevelUnitDamage",
+            "target": "perUnitDamage",
+            "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 0.04, "max": 0.04 } },
               "verdant": { "value": { "min": 0.11, "max": 0.11 } },
@@ -358,6 +361,7 @@
             "checkResistance": true,
             "damageType": ["fire"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 800, "max": 800 } },
               "verdant": { "value": { "min": 1000, "max": 1000 } },
@@ -436,6 +440,7 @@
             "checkResistance": true,
             "damageType": ["lightning"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 1000, "max": 1000 } },
               "verdant": { "value": { "min": 2000, "max": 2000 } },
@@ -601,7 +606,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnitLoss",
+            "target": "unit",
+            "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 0.019, "max": 0.019 } },
               "verdant": { "value": { "min": 0.035, "max": 0.035 } },
@@ -1093,7 +1099,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnitDamage",
+            "target": "perUnitDamage",
+            "rule": "spellLevel",
             "magic": {
               "eradication": { "value": { "min": 0.33, "max": 0.33 } }
             }

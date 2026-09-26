@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AllowedMagicSchema } from "./common";
+import { AllowedAttackTypesSchema, AllowedMagicSchema } from "./common";
 import { allowedEffect as E } from "./common";
 import { UnitFilterSchema } from "./unit";
 
@@ -47,6 +47,7 @@ export const UnitHealEffectRules = {
   // healTypeValue = value * spellLevel
   spellLevel: 'spellLevel'
 } as const
+
 
 
 
@@ -114,6 +115,16 @@ export type UnitAttrEffect = z.infer<typeof UnitAttrEffectSchema>;
  * spellLevelUnitLoss: unitloss = spellLevel * value
  * spellLevelUnitDamage: damage = numUnits * spellLevel * value
 **/
+
+export const UnitDamageEffectRules = {
+  // damage = value
+  set: 'set',
+
+  // damage = spellLevel * value
+  spellLevel: 'spellLevel'
+} as const
+
+
 export const DamageValueSchema = z.object({
   min: z.number(),
   max: z.number(),
@@ -121,7 +132,13 @@ export const DamageValueSchema = z.object({
 export const UnitDamageEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitDamageEffect),
   checkResistance: z.boolean(),
-  damageType: z.array(z.string()),
+  damageType: AllowedAttackTypesSchema.array(),
+  target: z.enum(['unit', 'perUnitDamage', 'damage']),
+  rule: z.enum([
+    UnitDamageEffectRules.set,
+    UnitDamageEffectRules.spellLevel
+  ]),
+  /*
   rule: z.enum([
     'direct',
     'unitLoss',
@@ -129,6 +146,7 @@ export const UnitDamageEffectSchema = EffectSchema.extend({
     'spellLevelUnitLoss',
     'spellLevelUnitDamage',
   ]),
+  */
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({

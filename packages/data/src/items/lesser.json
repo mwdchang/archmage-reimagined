@@ -633,7 +633,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["lightning"],
-            "rule": "direct",
+            "target": "damage",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 500, "max": 250000 }}, 
               "verdant": { "value": { "min": 500, "max": 250000 }},
@@ -666,7 +667,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "direct",
+            "target": "damage",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 80000, "max": 100000 }}, 
               "verdant": { "value": { "min": 80000, "max": 100000 }},
@@ -719,7 +721,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["holy"],
-            "rule": "direct",
+            "target": "damage",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 150000, "max": 150000 } },
               "verdant": { "value": { "min": 1500000, "max": 150000 } },
@@ -755,7 +758,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["magic"],
-            "rule": "direct",
+            "target": "damage",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 120000, "max": 120000 } },
               "verdant": { "value": { "min": 1200000, "max": 120000 } },
@@ -768,7 +772,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["psychic"],
-            "rule": "direct",
+            "target": "damage",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 120000, "max": 120000 } },
               "verdant": { "value": { "min": 1200000, "max": 120000 } },
@@ -1198,7 +1203,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["melee"],
-            "rule": "unitLoss",
+            "target": "unit",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": { "min": 2, "max": 12 }},
               "verdant": { "value":  { "min": 2, "max": 12 }},

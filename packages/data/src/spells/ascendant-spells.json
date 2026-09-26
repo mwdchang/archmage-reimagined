@@ -344,6 +344,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["holy"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 550, "max": 550 } },

@@ -22,6 +22,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["psychic"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 140, "max": 140 } },
@@ -333,6 +334,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["psychic"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 1000, "max": 1000 } },
