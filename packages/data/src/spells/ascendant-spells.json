@@ -23,7 +23,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevel",
+                "rule": "spellLevel",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.006 },
@@ -304,7 +304,7 @@
             "effectType": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
-            "rule": "none",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": 20 },
               "verdant": { "value": 5 },
@@ -411,7 +411,7 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -6.315 },
                   "verdant": { "value": -3.37488 }, 
@@ -454,7 +454,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.43 },
                   "verdant": { "value": 0.20 },
@@ -513,7 +513,7 @@
             "checkResistance": false,
             "attributes": {
               "spellResistances.eradication": {
-                "rule": "addSpellLevel",
+                "rule": "spellLevel",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.02 },
@@ -619,7 +619,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": -0.15 },
                   "verdant": { "value": -0.07 },
@@ -881,7 +881,7 @@
             "effectType": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
-            "rule": "none",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": 50 }
             }
@@ -948,7 +948,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.13 }
                 }
@@ -960,7 +960,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": 6.3 }
                 }
@@ -1007,7 +1007,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.20 }
                 }
@@ -1019,7 +1019,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.25 }
                 }
