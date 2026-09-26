@@ -19,13 +19,6 @@ export const EffectSchema = z.object({
 export type Effect = z.infer<typeof EffectSchema>;
 
 
-/**
- * Effects are governed by rules, which dictates how a field 
- * gets modified by a "value"
-**/
-
-
-
 
 const TemporaryUnitEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.TemporaryUnitEffect),
@@ -160,7 +153,6 @@ export type UnitHealEffect = z.infer<typeof UnitHealEffectSchema>;
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
  * fixed = summonNetPower 
 **/
-
 export const UnitSummonEffectRules = {
   spellLevelScaled: 'spellLevelScaled',
   set: 'set',

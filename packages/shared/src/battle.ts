@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UnitSchema, UnitAbilitySchema } from "./unit";
 import { ArmyUnitSchema } from "./mage";
-import { StackType, StackTypeSchema } from "./common";
+import { StackTypeSchema } from "./common";
 
 export const AppliedEffectSchema = z.object({
   origin: z.string(),

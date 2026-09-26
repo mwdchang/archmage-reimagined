@@ -29,6 +29,7 @@ export const UnitSchema = z.object({
   name: z.string(),
   description: z.string(),
 
+  // Expand for "plain" units
   magic: AllowedMagicSchema.or(z.literal('plain')),
   powerRank: z.number().positive(),
 
@@ -66,7 +67,9 @@ const NumberFilterExprSchema = z.object({
 });
 
 export const UnitFilterSchema = z.object({
-  magic: z.array(z.string()).optional(),
+  // magic: z.array(z.string()).optional(),
+  magick: AllowedMagicSchema.or(z.literal('plain')).array().optional(),
+
   race: z.array(z.string()).optional(),
 
   primaryAttackPower: NumberFilterExprSchema.optional(),
