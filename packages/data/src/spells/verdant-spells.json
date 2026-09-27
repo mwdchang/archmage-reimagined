@@ -641,7 +641,7 @@
             "race": ["treefolk"]
           }
         ],
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "magic": {
           "verdant": {
             "value": {

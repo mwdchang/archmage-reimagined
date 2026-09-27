@@ -610,7 +610,7 @@
       {
         "effectType": "ArmyUpkeepEffect",
         "filters": null,
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "magic": {
           "ascendant": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
           "verdant": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
@@ -817,7 +817,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "mana",
         "magic": {
           "ascendant": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
@@ -921,7 +921,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "item",
         "magic": {
           "ascendant": { "value": { "min": 1, "max": 1, "stealPercent": null } },
@@ -1255,7 +1255,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "geld",
         "magic": {
           "phantasm": { "value": { "min": 1000000, "max": 45000000, "stealPercent": 0.3 } }

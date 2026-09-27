@@ -697,7 +697,7 @@
             "race": ["undead", "demon"]
           }
         ],
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "magic": {
           "ascendant": { "value": { "geld": 0, "mana": -0.01, "population": -0.01 } },
           "verdant": { "value": { "geld": 0, "mana": -0.01, "population": -0.01 } },

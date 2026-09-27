@@ -1042,7 +1042,7 @@
       {
         "effectType": "ArmyUpkeepEffect",
         "filters": null,
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "magic": {
           "ascendant": {
             "value": {

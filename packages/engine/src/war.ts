@@ -491,10 +491,16 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
 
   const stealEffect: StealEffect = {
     effectType: E.StealEffect,
-    rule: 'addPercentage',
+    rule: 'percentage',
     target: 'geld',
     magic: {
-      [mage.magic]: { value: { min: 0.03 * pillagePower, max: 0.08 * pillagePower, stealPercent: 1.0 } }
+      [mage.magic]: {
+        value: {
+          min: 0.03 * pillagePower,
+          max: 0.08 * pillagePower,
+          stealPercent: 1.0
+        }
+      }
     }
   };
 

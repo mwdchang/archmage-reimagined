@@ -7,7 +7,7 @@ import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
 
-import { ArmyUpkeepEffect, ProductionEffect, ProductionEffectRules } from 'shared/src/effects';
+import { ArmyUpkeepEffect, ArmyUpkeepEffectRules, ProductionEffect, ProductionEffectRules } from 'shared/src/effects';
 import { matchesFilter } from './base/unit';
 import { ActiveEffect, getActiveEffects } from './effects';
 
@@ -344,7 +344,7 @@ export const unitUpkeep = (unitId: string, activeEffects: ActiveEffect[]) => {
 
       const base = effect.magic[activeEffect.origin.magic];
 
-      if (effect.rule === 'addSpellLevelPercentageBase') {
+      if (effect.rule === ArmyUpkeepEffectRules.spellLevelScaledPercentage) {
         const percentage = (activeEffect.origin.spellLevel / getMaxSpellLevels()[activeEffect.origin.magic]);
         if (base.value.geld) {
           upkeep.geld += percentage * u.upkeepCost.geld * base.value.geld;
@@ -355,7 +355,7 @@ export const unitUpkeep = (unitId: string, activeEffects: ActiveEffect[]) => {
         if (base.value.population) {
           upkeep.population += percentage * u.upkeepCost.population * base.value.population;
         }
-      } else if (effect.rule === 'addPercentageBase') {
+      } else if (effect.rule === ArmyUpkeepEffectRules.percentage) {
         if (base.value.geld) {
           upkeep.geld += u.upkeepCost.geld * base.value.geld;
         }

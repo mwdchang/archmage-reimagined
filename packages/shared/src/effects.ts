@@ -298,10 +298,6 @@ export const ProductionEffectSchema = EffectSchema.extend({
     ProductionEffectRules.percentage,
     ProductionEffectRules.spellLevel,
     ProductionEffectRules.spellLevelScaledPercentage
-    // 'spellLevel',
-    // 'addPercentageBase',
-    // 'addSpellLevelPercentageBase',
-    // 'add',
   ]),
   production: z.enum([
     'farms',
@@ -327,11 +323,15 @@ export type ProductionEffect = z.infer<typeof ProductionEffectSchema>;
 /**
  * Increase or decrease army upkeep per turn
 **/
+export const ArmyUpkeepEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+  percentage: 'percentage'
+} as const
 export const ArmyUpkeepEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.ArmyUpkeepEffect),
   rule: z.enum([
-    'addSpellLevelPercentageBase',
-    'addPercentageBase',
+    ArmyUpkeepEffectRules.percentage,
+    ArmyUpkeepEffectRules.spellLevelScaledPercentage,
   ]),
   filters: z.array(UnitFilterSchema).nullable(),
   magic: z.partialRecord(
@@ -418,18 +418,38 @@ export type RemoveEnchantmentEffect = z.infer<typeof RemoveEnchantmentEffectSche
 /**
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/
+export const StealEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  percentage: 'percentage',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+} as const;
 export const StealEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.StealEffect),
   rule: z.enum([
-    'addSpellLevelPercentageBase',
-    'addSpellLevelPercentage',
-    'addPercentage',
+    StealEffectRules.percentage,
+    StealEffectRules.spellLevelScaled,
+    StealEffectRules.spellLevelScaledPercentage,
   ]),
   target: z.enum([
     'mana',
     'geld',
     'item',
   ]),
+  magic: z.partialRecord(
+    AllowedMagicSchema,
+    z.object({
+      value: z.object({
+        min: z.number(),
+        max: z.number(),
+        stealPercent: z.number().nullable(),
+      })
+    })
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
+
+
+  /*
   magic: z.record(
     AllowedMagicSchema,
     z
@@ -442,6 +462,7 @@ export const StealEffectSchema = EffectSchema.extend({
       })
       .optional()
   ),
+  */
 });
 export type StealEffect = z.infer<typeof StealEffectSchema>;
 
@@ -472,7 +493,7 @@ export type AvoidEffect = z.infer<typeof AvoidEffectSchema>;
 **/
 export const CastingCostEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.CastingCostEffect),
-  rule: z.literal('addPercentageBase'),
+  rule: z.literal('percentage'),
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({

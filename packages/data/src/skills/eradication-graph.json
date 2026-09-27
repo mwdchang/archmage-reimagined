@@ -65,7 +65,7 @@
             "allAttackType": ["fire"]
           }
         ],
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "magic": {
           "verdant": {
             "value": {

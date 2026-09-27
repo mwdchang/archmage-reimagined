@@ -1,4 +1,4 @@
-import { EffectOrigin, StealEffect } from "shared/src/effects";
+import { EffectOrigin, StealEffect, StealEffectRules } from "shared/src/effects";
 import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
@@ -36,7 +36,7 @@ export const applyStealEffect = (
   let stealValue = 0;
 
   // Figuire out the amount target mage loses
-  if (effect.rule === 'addSpellLevelPercentageBase') {
+  if (effect.rule === StealEffectRules.spellLevelScaledPercentage) {
     if (effect.target === 'geld') {
       lossValue = Math.floor(base * targetMage.currentGeld * spellPowerScale);
       lossValue = Math.min(targetMage.currentGeld, lossValue);
@@ -46,7 +46,7 @@ export const applyStealEffect = (
     } else if (effect.target === 'item') {
       lossValue = base
     }
-  } else if (effect.rule === 'addSpellLevelPercentage') {
+  } else if (effect.rule === StealEffectRules.spellLevelScaled) {
     if (effect.target === 'geld') {
       lossValue = Math.floor(base * spellPowerScale);
       lossValue = Math.min(targetMage.currentGeld, lossValue);
@@ -56,7 +56,7 @@ export const applyStealEffect = (
     } else if (effect.target === 'item') {
       lossValue = base
     }
-  } else if (effect.rule === 'addPercentage') {
+  } else if (effect.rule === StealEffectRules.percentage) {
     if (effect.target === 'geld') {
       lossValue = Math.floor(base * targetMage.currentGeld);
       lossValue = Math.min(targetMage.currentGeld, lossValue);

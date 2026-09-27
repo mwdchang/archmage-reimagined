@@ -518,7 +518,7 @@
         "effects": [
           {
             "effectType": "StealEffect",
-            "rule": "addSpellLevelPercentageBase",
+            "rule": "spellLevelScaledPercentage",
             "target": "geld",
             "magic": {
               "eradication": { 
