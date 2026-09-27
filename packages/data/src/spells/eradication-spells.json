@@ -23,6 +23,7 @@
             "checkResistance": true,
             "damageType": ["fire"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 100, "max": 100 } },
               "verdant": { "value": { "min": 180, "max": 180 } },
@@ -52,7 +53,7 @@
         "unitIds": ["lizardman"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -80,7 +81,7 @@
         "unitIds": ["dwarvenDeathSeeker"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -108,7 +109,7 @@
         "unitIds": ["goblin"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -186,6 +187,7 @@
             "checkResistance": true,
             "damageType": ["lightning"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 80, "max": 80 } },
               "verdant": { "value": { "min": 150, "max": 150 } },
@@ -199,7 +201,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": -0.01 },
                   "verdant": { "value": -0.02 },
@@ -237,7 +239,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["lightning"],
-            "rule": "spellLevelUnitDamage",
+            "target": "perUnitDamage",
+            "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 0.04, "max": 0.04 } },
               "verdant": { "value": { "min": 0.11, "max": 0.11 } },
@@ -267,7 +270,7 @@
         "unitIds": ["wyvern"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -295,7 +298,7 @@
         "unitIds": ["salamander"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -323,7 +326,7 @@
         "unitIds": ["hellHound"],
         "summonType": "all",
         "summonNetPower": 260000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -358,6 +361,7 @@
             "checkResistance": true,
             "damageType": ["fire"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 800, "max": 800 } },
               "verdant": { "value": { "min": 1000, "max": 1000 } },
@@ -394,7 +398,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.10 },
@@ -436,6 +440,7 @@
             "checkResistance": true,
             "damageType": ["lightning"],
             "rule": "spellLevel",
+            "target": "damage",
             "magic": {
               "ascendant": { "value": { "min": 1000, "max": 1000 } },
               "verdant": { "value": { "min": 2000, "max": 2000 } },
@@ -476,7 +481,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.10 },
@@ -492,7 +497,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": -0.025 },
                   "verdant": { "value": -0.05 },
@@ -513,7 +518,7 @@
         "effects": [
           {
             "effectType": "StealEffect",
-            "rule": "addSpellLevelPercentageBase",
+            "rule": "spellLevelScaledPercentage",
             "target": "geld",
             "magic": {
               "eradication": { 
@@ -528,7 +533,7 @@
         "unitIds": ["goblin"],
         "summonType": "all",
         "summonNetPower": 5500,
-        "rule": "spellLevel",
+        "rule": "none",
         "magic": {
           "eradication": { "value": 1.0 }
         }
@@ -554,7 +559,7 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "population",
         "magic": {
           "ascendant": { "value": { "min": -1200, "max": -3000 } },
@@ -566,7 +571,7 @@
       },
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "mana",
         "magic": {
           "ascendant": { "value": { "min": -1200, "max": -2000 } },
@@ -601,7 +606,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnitLoss",
+            "target": "unit",
+            "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 0.019, "max": 0.019 } },
               "verdant": { "value": { "min": 0.035, "max": 0.035 } },
@@ -642,7 +648,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.04 },
@@ -747,7 +753,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "landPercentageLoss",
+        "rule": "spellLevelScaled",
         "target": "all",
         "magic": {
           "ascendant": { "value": { "min": 0.1, "max": 0.5 } },
@@ -783,7 +789,7 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -4.5 },
                   "verdant": { "value": -9 },
@@ -799,7 +805,7 @@
             "checkResistance": true,
             "attributes": {
               "efficiency": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -5 },
                   "verdant": { "value": -11 },
@@ -831,7 +837,7 @@
         "unitIds": ["chimera"],
         "summonType": "all",
         "summonNetPower": 430000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -859,7 +865,7 @@
         "unitIds": ["efreeti"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -887,7 +893,7 @@
         "unitIds": ["hydra"],
         "summonType": "all",
         "summonNetPower": 540000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -915,7 +921,7 @@
         "unitIds": ["dwarvenShaman"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -943,7 +949,7 @@
         "unitIds": ["stormGiant"],
         "summonType": "all",
         "summonNetPower": 550000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.2 },
           "verdant": { "value": 0.6 },
@@ -971,7 +977,7 @@
         "unitIds": ["fireElemental"],
         "summonType": "all",
         "summonNetPower": 2000000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -999,7 +1005,7 @@
         "unitIds": ["redDragon"],
         "summonType": "all",
         "summonNetPower": 2500000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -1093,7 +1099,8 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["fire"],
-            "rule": "spellLevelUnitDamage",
+            "target": "perUnitDamage",
+            "rule": "spellLevel",
             "magic": {
               "eradication": { "value": { "min": 0.33, "max": 0.33 } }
             }
@@ -1116,7 +1123,7 @@
     "effects": [
       {
         "effectType": "KingdomBuildingsEffect",
-        "rule": "netPowerRanged",
+        "rule": "ranged",
         "target": "all",
         "magic": {
           "eradication": { "value": { "min": 1.5, "max": 5.5 } }
@@ -1124,7 +1131,7 @@
       },
       {
         "effectType": "KingdomArmyEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "filters": null,
         "checkResistance": false,
         "magic": {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AllowedMagicSchema } from "./common";
 
 export const ArmyUnitSchema = z.object({
   id: z.string(),
@@ -53,7 +54,7 @@ export const EnchantmentSchema = z.object({
   id: z.string(),
 
   casterId: z.number(),
-  casterMagic: z.string(),
+  casterMagic: AllowedMagicSchema,
   targetId: z.number(),
 
   spellId: z.string(),
@@ -86,7 +87,7 @@ export const MageSchema = z.object({
   type: z.string(),
 
   // magic
-  magic: z.string(),
+  magic: AllowedMagicSchema,
   testingSpellLevel: z.number(),
 
   // FIXME: customize adjacent/opposite alignment
@@ -149,7 +150,7 @@ export type Combatant = z.infer<typeof CombatantSchema>;
 export const MageSummarySchema = z.object({
   id: z.number(),
   name: z.string(),
-  magic: z.string(),
+  magic: AllowedMagicSchema,
   rank: z.number(),
   status: z.string(),
   land: z.number(),

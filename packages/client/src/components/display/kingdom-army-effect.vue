@@ -1,6 +1,6 @@
 <template>
   <section class="display-section">
-    <div v-if="effect.rule === 'addSpellLevelPercentageBase'">
+    <div v-if="effect.rule === 'spellLevelScaledPercentage'">
       Modifies army  by
       <span class="special-text"> spell power / max spell power * base * value </span>
     </div>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { AnyEffectSchema } from "../src/effects";
+import { AllowedMagicSchema } from "./common";
 
 const UpkeepSchema = z.object({
   geld: z.number(),
@@ -11,7 +12,7 @@ export const SpellSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  magic: z.string(),
+  magic: AllowedMagicSchema,
   rank: z.string(),
   attributes: z.array(z.string()),
   researchCost: z.number(),

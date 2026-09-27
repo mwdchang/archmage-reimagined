@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { UnitAttrEffect } from 'shared/src/effects';
+import { UnitAttrEffect, UnitAttrEffectRules } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { readableNumber, readableStr } from '@/util/util';
 
@@ -47,11 +47,11 @@ const displayKey = (key: string) =>
 
 const ruleFormula = (rule: string) => {
   switch (rule) {
-    case 'add': return 'value';
-    case 'addPercentageBase': return 'value * base';
-    case 'addSpellLevel': return 'spell power * value';
-    case 'addSpellLevelPercentage': return 'spell power / max spell power * value';
-    case 'addSpellLevelPercentageBase': return 'spell power / max spell power * value * attribute';
+    case UnitAttrEffectRules.add : return 'value';
+    case UnitAttrEffectRules.percentage: return 'value * base';
+    case UnitAttrEffectRules.spellLevel: return 'spell power * value';
+    case UnitAttrEffectRules.spellLevelScaled: return 'spell power / max spell power * value';
+    case UnitAttrEffectRules.spellLevelScaledPercentage: return 'spell power / max spell power * value * attribute';
     default: return '';
   }
 };

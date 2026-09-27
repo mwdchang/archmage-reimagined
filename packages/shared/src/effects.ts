@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AllowedMagicSchema } from "./common";
+import { AllowedAttackTypesSchema, AllowedMagicSchema } from "./common";
 import { allowedEffect as E } from "./common";
 import { UnitFilterSchema } from "./unit";
 
@@ -19,11 +19,20 @@ export const EffectSchema = z.object({
 export type Effect = z.infer<typeof EffectSchema>;
 
 
+
+export const TemporaryUnitEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+  set: 'set'
+} as const;
+
 const TemporaryUnitEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.TemporaryUnitEffect),
   checkResistance: z.literal(false),
   unitId: z.string(),
-  rule: z.enum(['spellLevelPercentageBase', 'fixed']),
+  rule: z.enum([
+    TemporaryUnitEffectRules.set,
+    TemporaryUnitEffectRules.spellLevelScaledPercentage
+  ]),
   target: z.enum(['population']).nullable(),
   magic: z.partialRecord(
     AllowedMagicSchema,
@@ -40,13 +49,23 @@ const TemporaryUnitEffectSchema = EffectSchema.extend({
 export type TemporaryUnitEffect = z.infer<typeof TemporaryUnitEffectSchema>;
 
 
-/**
- * add:                          value
- * addPercentageBase:            value * base
- * addSpellLevel:                value * spellLevel
- * addSpellLevelPercentage:      value * spellLevel / maxSpellLevel  
- * addSpellLevelPercentageBase:  value * spellLevel / maxSpellLevel * base
-**/
+
+export const UnitAttrEffectRules = {
+  // Add value to list field
+  add: 'add',
+  // Remove value from list field
+  remove: 'remove',
+  // Set field value 
+  set: 'set',
+  // A + current * value
+  spellLevel: 'spellLevel',
+  // A + A * value
+  percentage: 'percentage',
+  // A + current / max * value
+  spellLevelScaled: 'spellLevelScaled',
+  // A + A * current/max * value
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+} as const
 export const UnitAttrEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitAttrEffect),
   checkResistance: z.boolean(),
@@ -55,13 +74,13 @@ export const UnitAttrEffectSchema = EffectSchema.extend({
     z.string(),
     z.object({
       rule: z.enum([
-        'set',
-        'add',
-        'remove',
-        'addPercentageBase',
-        'addSpellLevel',
-        'addSpellLevelPercentage',
-        'addSpellLevelPercentageBase',
+        UnitAttrEffectRules.set,
+        UnitAttrEffectRules.add,
+        UnitAttrEffectRules.remove,
+        UnitAttrEffectRules.spellLevel,
+        UnitAttrEffectRules.percentage,
+        UnitAttrEffectRules.spellLevelScaled,
+        UnitAttrEffectRules.spellLevelScaledPercentage
       ]),
       magic: z.partialRecord(
         AllowedMagicSchema,
@@ -77,12 +96,13 @@ export const UnitAttrEffectSchema = EffectSchema.extend({
 export type UnitAttrEffect = z.infer<typeof UnitAttrEffectSchema>;
 
 
-/**
- * direct: damage = value
- * spellLevel: damage = spellLevel * value
- * spellLevelUnitLoss: unitloss = spellLevel * value
- * spellLevelUnitDamage: damage = numUnits * spellLevel * value
-**/
+export const UnitDamageEffectRules = {
+  // damage = value
+  set: 'set',
+
+  // damage = spellLevel * value
+  spellLevel: 'spellLevel'
+} as const
 export const DamageValueSchema = z.object({
   min: z.number(),
   max: z.number(),
@@ -90,13 +110,11 @@ export const DamageValueSchema = z.object({
 export const UnitDamageEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitDamageEffect),
   checkResistance: z.boolean(),
-  damageType: z.array(z.string()),
+  damageType: AllowedAttackTypesSchema.array(),
+  target: z.enum(['unit', 'perUnitDamage', 'damage']),
   rule: z.enum([
-    'direct',
-    'unitLoss',
-    'spellLevel',
-    'spellLevelUnitLoss',
-    'spellLevelUnitDamage',
+    UnitDamageEffectRules.set,
+    UnitDamageEffectRules.spellLevel
   ]),
   magic: z.partialRecord(
     AllowedMagicSchema,
@@ -110,11 +128,20 @@ export const UnitDamageEffectSchema = EffectSchema.extend({
 export type UnitDamageEffect = z.infer<typeof UnitDamageEffectSchema>;
 
 
+export const UnitHealEffectRules = {
+  // healTypeValue = value
+  set: 'set',
+  // healTypeValue = value * spellLevel
+  spellLevel: 'spellLevel'
+} as const
 export const UnitHealEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitHealEffect),
   checkResistance: z.boolean(),
   healType: z.enum(['points', 'percentage', 'units']),
-  rule: z.enum(['none', 'spellLevel']),
+  rule: z.enum([
+    UnitHealEffectRules.set,
+    UnitHealEffectRules.spellLevel,
+  ]),
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
@@ -128,20 +155,26 @@ export type UnitHealEffect = z.infer<typeof UnitHealEffectSchema>;
 
 
 
-
-
-
 /**
  * Summon units
  *
  * spellLevel = summonNetPower * randomn * currentSpellLevel / maxSpellLevel
  * fixed = summonNetPower 
 **/
+export const UnitSummonEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  set: 'set',
+  none: 'none'
+} as const;
 export const UnitSummonEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.UnitSummonEffect),
   unitIds: z.array(z.string()),
   summonType: z.enum(['random', 'all']),
-  rule: z.enum(['spellLevel', 'fixed', 'power']),
+  rule: z.enum([
+    UnitSummonEffectRules.spellLevelScaled,
+    UnitSummonEffectRules.set,
+    UnitSummonEffectRules.none
+  ]),
   summonNetPower: z.number(),
 
   magic: z.partialRecord(
@@ -160,7 +193,7 @@ export type UnitSummonEffect = z.infer<typeof UnitSummonEffectSchema>;
 export const KingdomResistanceEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomResistanceEffect),
   rule: z.literal('spellLevel'),
-  resistance: z.string(),
+  resistance: AllowedMagicSchema,
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({
@@ -174,12 +207,16 @@ export type KingdomResistanceEffect = z.infer<typeof KingdomResistanceEffectSche
 
 
 
+export const KingdomBuildingsEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  ranged: 'ranged'
+} as const;
+
 export const KingdomBuildingsEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomBuildingsEffect),
   rule: z.enum([
-    'landPercentageLoss',
-    'netPowerRanged',
-    'direct',
+    KingdomBuildingsEffectRules.spellLevelScaled,
+    KingdomBuildingsEffectRules.ranged,
   ]),
   target: z.string(),
   magic: z.partialRecord(
@@ -197,12 +234,18 @@ export const KingdomBuildingsEffectSchema = EffectSchema.extend({
 export type KingdomBuildingsEffect = z.infer<typeof KingdomBuildingsEffectSchema>;
 
 
+export const KingdomResourcesffectRules = {
+  add: 'add',
+  spellLevelScaled: 'spellLevelScaled',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
+
 export const KingdomResourcesEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomResourcesEffect),
   rule: z.enum([
-    'add',
-    'addSpellLevelPercentage',
-    'addSpellLevelPercentageBase',
+    KingdomResourcesffectRules.add,
+    KingdomResourcesffectRules.spellLevelScaled,
+    KingdomResourcesffectRules.spellLevelScaledPercentage
   ]),
   target: z.enum([
     'population',
@@ -226,9 +269,13 @@ export const KingdomResourcesEffectSchema = EffectSchema.extend({
 export type KingdomResourcesEffect = z.infer<typeof KingdomResourcesEffectSchema>;
 
 
+
+export const KingdomArmyEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
 export const KingdomArmyEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.KingdomArmyEffect),
-  rule: z.literal('addSpellLevelPercentageBase'),
+  rule: z.literal(KingdomArmyEffectRules.spellLevelScaledPercentage),
   filters: z.array(UnitFilterSchema).nullable(),
   checkResistance: z.boolean(),
   magic: z.partialRecord(
@@ -246,13 +293,19 @@ export const KingdomArmyEffectSchema = EffectSchema.extend({
 export type KingdomArmyEffect = z.infer<typeof KingdomArmyEffectSchema>;
 
 
+export const ProductionEffectRules = {
+  add: 'add',
+  spellLevel: 'spellLevel',
+  percentage: 'percentage',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage'
+} as const;
 export const ProductionEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.ProductionEffect),
   rule: z.enum([
-    'spellLevel',
-    'addPercentageBase',
-    'addSpellLevelPercentageBase',
-    'add',
+    ProductionEffectRules.add,
+    ProductionEffectRules.percentage,
+    ProductionEffectRules.spellLevel,
+    ProductionEffectRules.spellLevelScaledPercentage
   ]),
   production: z.enum([
     'farms',
@@ -278,11 +331,15 @@ export type ProductionEffect = z.infer<typeof ProductionEffectSchema>;
 /**
  * Increase or decrease army upkeep per turn
 **/
+export const ArmyUpkeepEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+  percentage: 'percentage'
+} as const
 export const ArmyUpkeepEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.ArmyUpkeepEffect),
   rule: z.enum([
-    'addSpellLevelPercentageBase',
-    'addPercentageBase',
+    ArmyUpkeepEffectRules.percentage,
+    ArmyUpkeepEffectRules.spellLevelScaledPercentage,
   ]),
   filters: z.array(UnitFilterSchema).nullable(),
   magic: z.partialRecord(
@@ -369,18 +426,38 @@ export type RemoveEnchantmentEffect = z.infer<typeof RemoveEnchantmentEffectSche
 /**
  * The target loses between [min, max] resources, some some stealPercentage is transferred to the caster
 **/
+export const StealEffectRules = {
+  spellLevelScaled: 'spellLevelScaled',
+  percentage: 'percentage',
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+} as const;
 export const StealEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.StealEffect),
   rule: z.enum([
-    'addSpellLevelPercentageBase',
-    'addSpellLevelPercentage',
-    'addPercentage',
+    StealEffectRules.percentage,
+    StealEffectRules.spellLevelScaled,
+    StealEffectRules.spellLevelScaledPercentage,
   ]),
   target: z.enum([
     'mana',
     'geld',
     'item',
   ]),
+  magic: z.partialRecord(
+    AllowedMagicSchema,
+    z.object({
+      value: z.object({
+        min: z.number(),
+        max: z.number(),
+        stealPercent: z.number().nullable(),
+      })
+    })
+  ).refine((magic) => Object.keys(magic).length > 0, {
+    message: 'At least one magic type is required',
+  })
+
+
+  /*
   magic: z.record(
     AllowedMagicSchema,
     z
@@ -393,6 +470,7 @@ export const StealEffectSchema = EffectSchema.extend({
       })
       .optional()
   ),
+  */
 });
 export type StealEffect = z.infer<typeof StealEffectSchema>;
 
@@ -423,7 +501,7 @@ export type AvoidEffect = z.infer<typeof AvoidEffectSchema>;
 **/
 export const CastingCostEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.CastingCostEffect),
-  rule: z.literal('addPercentageBase'),
+  rule: z.literal('percentage'),
   magic: z.partialRecord(
     AllowedMagicSchema,
     z.object({

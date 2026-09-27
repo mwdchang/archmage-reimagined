@@ -1,4 +1,4 @@
-import { EffectOrigin, KingdomResourcesEffect } from "shared/src/effects";
+import { EffectOrigin, KingdomResourcesEffect, KingdomResourcesffectRules } from "shared/src/effects";
 import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between, randomBM } from "../random";
@@ -27,10 +27,10 @@ export const applyKingdomResourcesEffect = (
   const base = between(min, max);
 
   let value = 0;
-  if (effect.rule === 'addSpellLevelPercentage') {
+  if (effect.rule === KingdomResourcesffectRules.spellLevelScaled) {
     // Give it a little bit of randomness
     value = (1.0 + 0.4 * randomBM()) * spellPowerScale * base;
-  } else if (effect.rule === 'addSpellLevelPercentageBase') {
+  } else if (effect.rule === KingdomResourcesffectRules.spellLevelScaledPercentage) {
     if (effect.target === 'item') {
       value = Object.keys(mage.items).length * base * spellPowerScale;
     } else if (effect.target === 'population') {
@@ -40,9 +40,9 @@ export const applyKingdomResourcesEffect = (
     } else if (effect.target === 'geld') {
       value = mage.currentGeld * base * spellPowerScale;
     } else if (effect.target === 'turn') {
-      throw new Error('addSpellLevelPercentage not supported for turns');
+      throw new Error(`${KingdomResourcesffectRules.spellLevelScaledPercentage} not supported for turns`);
     }
-  } else if (effect.rule === 'add') {
+  } else if (effect.rule === KingdomResourcesffectRules.add) {
     value = base;
   } else {
     throw new Error(`Unable to find rule ${effect.rule}`);

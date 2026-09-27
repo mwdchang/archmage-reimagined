@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { EffectSchema } from "../src/effects";
+import { AllowedMagicSchema } from "./common";
 
 export const SkillSchema = z.object({
   id: z.string(),
   name: z.string(),
-  magic: z.string(),
+  magic: AllowedMagicSchema,
   description: z.string(),
   maxLevel: z.number(),
   prereqs: z.record(z.string(), z.number()),

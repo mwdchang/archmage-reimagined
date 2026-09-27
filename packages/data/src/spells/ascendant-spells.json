@@ -23,7 +23,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevel",
+                "rule": "spellLevel",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.006 },
@@ -130,7 +130,7 @@
         "unitIds": ["pegasus"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -158,7 +158,7 @@
         "unitIds": ["soulSpeaker"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -183,7 +183,7 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "item",
         "magic": {
           "ascendant": { "value": { "min": 1, "max": 3 } },
@@ -212,7 +212,7 @@
         "unitIds": ["astralMagician"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -240,7 +240,7 @@
         "unitIds": ["angel"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -304,7 +304,7 @@
             "effectType": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
-            "rule": "none",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": 20 },
               "verdant": { "value": 5 },
@@ -344,6 +344,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["holy"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 550, "max": 550 } },
@@ -375,7 +376,7 @@
     "effects": [
       {
         "effectType": "ProductionEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "production": "barrack",
         "magic": {
           "ascendant": { "value": 0.08 },
@@ -411,7 +412,7 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -6.315 },
                   "verdant": { "value": -3.37488 }, 
@@ -454,7 +455,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.43 },
                   "verdant": { "value": 0.20 },
@@ -513,7 +514,7 @@
             "checkResistance": false,
             "attributes": {
               "spellResistances.eradication": {
-                "rule": "addSpellLevel",
+                "rule": "spellLevel",
                 "magic": {
                   "ascendant": { "value": 0.05 },
                   "verdant": { "value": 0.02 },
@@ -578,7 +579,7 @@
     "effects": [
       {
         "effectType": "KingdomResourcesEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "item",
         "magic": {
           "ascendant": { "value": { "min": -1, "max": -10 } },
@@ -619,7 +620,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": -0.15 },
                   "verdant": { "value": -0.07 },
@@ -651,7 +652,7 @@
         "unitIds": ["archangel", "angel", "knight", "unicorn"],
         "summonType": "random",
         "summonNetPower": 120000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -679,7 +680,7 @@
         "unitIds": ["archangel"],
         "summonType": "all",
         "summonNetPower": 540000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -707,7 +708,7 @@
         "unitIds": ["spiritWarrior"],
         "summonType": "all",
         "summonNetPower": 430000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -735,7 +736,7 @@
         "unitIds": ["unicorn"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -763,7 +764,7 @@
         "unitIds": ["empyreanInquisitor"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -791,7 +792,7 @@
         "unitIds": ["nagaQueen"],
         "summonType": "all",
         "summonNetPower": 560000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -819,7 +820,7 @@
         "unitIds": ["dominion"],
         "summonType": "all",
         "summonNetPower": 2200000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.0 },
@@ -847,7 +848,7 @@
         "unitIds": ["titan"],
         "summonType": "all",
         "summonNetPower": 2200000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.0 },
@@ -881,7 +882,7 @@
             "effectType": "UnitHealEffect",
             "checkResistance": false,
             "healType": "percentage",
-            "rule": "none",
+            "rule": "set",
             "magic": {
               "ascendant": { "value": 50 }
             }
@@ -948,7 +949,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addSpellLevelPercentageBase",
+                "rule": "spellLevelScaledPercentage",
                 "magic": {
                   "ascendant": { "value": 0.13 }
                 }
@@ -960,7 +961,7 @@
             "checkResistance": false,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": 6.3 }
                 }
@@ -971,7 +972,7 @@
       },
       {
         "effectType": "ProductionEffect",
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "production": "mana",
         "magic": {
           "ascendant": { "value": -0.15 }
@@ -1007,7 +1008,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.20 }
                 }
@@ -1019,7 +1020,7 @@
             "checkResistance": false,
             "attributes": {
               "hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.25 }
                 }
@@ -1033,7 +1034,7 @@
         "unitIds": ["preacher"],
         "summonType": "all",
         "summonNetPower": 1000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 }
         }
@@ -1041,7 +1042,7 @@
       {
         "effectType": "ArmyUpkeepEffect",
         "filters": null,
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "magic": {
           "ascendant": {
             "value": {

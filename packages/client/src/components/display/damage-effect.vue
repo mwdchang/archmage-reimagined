@@ -1,15 +1,9 @@
 <template>
-  <div class="effect-desc" v-if="effect.rule === 'direct'">
-    Deal <span class="f600">{{ effect.damageType.map(readableStr).join(", ") }}</span> damage
+  <div class="effect-desc" v-if="effect.target !== 'unit'">
+    Deal  <span class="f600">{{ effect.damageType.map(readableStr).join(", ") }}</span> {{ targetStr }}, {{ ruleStr }}
   </div>
-  <div class="effect-desc" v-if="effect.rule === 'spellLevel'">
-    Deal <span class="f600">{{ effect.damageType.map(readableStr).join(", ") }}</span> damage by <span class="special-text">spell level * value</span>
-  </div>
-  <div class="effect-desc" v-if="effect.rule === 'spellLevelUnitLoss'">
-    Destroys units by <span class="special-text">spell level * value</span>
-  </div>
-  <div class="effect-desc" v-if="effect.rule === 'spellLevelUnitDamage'">
-    Deal <span class="f600">{{ effect.damageType.map(readableStr).join(", ") }}</span> damage by <span class="special-text">spell level * value * stack size</span>
+  <div class="effect-desc" v-else>
+    Destroy units directly, {{ ruleStr }}
   </div>
 
   <div 
@@ -29,13 +23,36 @@
 </template>
 
 <script lang="ts" setup>
-import { UnitDamageEffect } from 'shared/src/effects';
+import { UnitDamageEffect, UnitDamageEffectRules } from 'shared/src/effects';
 import Magic from '@/components/magic.vue';
 import { allowedMagicList } from 'shared/src/common';
 import { readableStr, readableNumber } from '@/util/util';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   effect: UnitDamageEffect
 }>();
+
+
+const ruleStr = computed(() => {
+  let label = '';
+  if (props.effect.rule === UnitDamageEffectRules.set) {
+    label = 'fixed';
+  } else {
+    label = 'scaled by spell level';
+  }
+  return label;
+});
+
+const targetStr = computed(() => {
+  let t = props.effect.target;
+  if (t === 'damage') {
+    return 'damage';
+  } else if (t === 'perUnitDamage') {
+    return 'damage per unit';
+  } 
+  return ''
+});
+
 
 </script>

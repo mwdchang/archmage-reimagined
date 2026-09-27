@@ -95,7 +95,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower,hitPoints": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.02 },
@@ -134,7 +134,7 @@
             "checkResistance": false,
             "attributes": {
               "primaryAttackPower,secondaryAttackPower,counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": 0.02 },
                   "verdant": { "value": 0.02 },

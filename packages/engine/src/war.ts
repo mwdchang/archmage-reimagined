@@ -10,6 +10,10 @@ import {
   TemporaryUnitEffect,
   PostbattleEffect,
   StealEffect,
+  UnitAttrEffectRules,
+  UnitHealEffectRules,
+  UnitDamageEffectRules,
+  TemporaryUnitEffectRules,
 } from 'shared/src/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -108,26 +112,26 @@ const applyUnitEffect = (
         }
 
         // Figure out the value to add
-        if (rule === 'add') {
+        if (rule === UnitAttrEffectRules.add) {
           finalValue = baseValue;
-        } else if (rule === 'addPercentageBase') {
+        } else if (rule === UnitAttrEffectRules.percentage) {
           finalValue = baseValue * originalRoot[field];
-        } else if (rule === 'addSpellLevel') {
+        } else if (rule === UnitAttrEffectRules.spellLevel) {
           finalValue = baseValue * casterSpellLevel;
-        } else if (rule === 'addSpellLevelPercentage') {
+        } else if (rule === UnitAttrEffectRules.spellLevelScaled) {
           finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue;
-        } else if (rule === 'addSpellLevelPercentageBase') {
+        } else if (rule === UnitAttrEffectRules.spellLevelScaledPercentage) {
           finalValue = casterSpellLevel / casterMaxSpellLevel * baseValue * originalRoot[field];
-        } else if (rule === 'remove') {
+        } else if (rule === UnitAttrEffectRules.remove) {
           finalValue = baseValue;
-        } else if (rule === 'set') {
+        } else if (rule === UnitAttrEffectRules.set) {
           finalValue = baseValue;
         } else {
           throw new Error(`Unable to proces rule ${rule}`);
         }
 
         // Set overrides default
-        if (rule === 'set') {
+        if (rule === UnitAttrEffectRules.set) {
           root[field] = finalValue;
           return;
         }
@@ -207,6 +211,8 @@ const applyDamageEffect = (
 
   affectedArmy.forEach(stack => {
     const rule = damageEffect.rule;
+
+    /*
     if (rule === 'spellLevel') {
       rawDamage = base * casterSpellLevel;
     } else if (rule === 'spellLevelUnitLoss') {
@@ -218,8 +224,19 @@ const applyDamageEffect = (
     } else if (rule === 'unitLoss') {
       rawDamage = base;
     }
+    */
 
-    if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
+    if (rule === UnitDamageEffectRules.spellLevel) {
+      rawDamage = base * casterSpellLevel;
+    } else {
+      rawDamage = base;
+    }
+    if (damageEffect.target === 'perUnitDamage') {
+      rawDamage *= stack.size;
+    }
+
+    // if (rule === 'spellLevelUnitLoss' || rule === 'unitLoss') {
+    if (damageEffect.target === 'unit') {
       let unitsLoss = Math.floor(rawDamage);
       // Give it a bit of randomness
       unitsLoss = Math.ceil(0.7 * unitsLoss) + Math.ceil(0.3 * randomBM() * unitsLoss);
@@ -282,9 +299,9 @@ const applyHealEffect = (
   const rule = healEffect.rule;
 
   let healBase = 0;
-  if (rule === 'spellLevel') {
+  if (rule === UnitHealEffectRules.spellLevel) {
     healBase = healEffect.magic[casterMagic].value * casterSpellLevel;
-  } else if (rule === 'none') {
+  } else if (rule === UnitHealEffectRules.set) {
     healBase = healEffect.magic[casterMagic].value;
   }
 
@@ -313,11 +330,11 @@ const applyTemporaryUnitEffect = (
   const { min, max } = tempEffect.magic[magic].value;
   const base = between(min, max);
 
-  if (tempEffect.rule === 'spellLevelPercentageBase') {
+  if (tempEffect.rule === TemporaryUnitEffectRules.spellLevelScaledPercentage) {
     if (tempEffect.target === 'population') {
       value = Math.floor(mage.currentPopulation * base * spellPowerScale);
     }
-  } else if (tempEffect.rule === 'fixed') {
+  } else if (tempEffect.rule === TemporaryUnitEffectRules.set) {
     value = Math.floor(base);
   }
 
@@ -475,10 +492,16 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
 
   const stealEffect: StealEffect = {
     effectType: E.StealEffect,
-    rule: 'addPercentage',
+    rule: 'percentage',
     target: 'geld',
     magic: {
-      [mage.magic]: { value: { min: 0.03 * pillagePower, max: 0.08 * pillagePower, stealPercent: 1.0 } }
+      [mage.magic]: {
+        value: {
+          min: 0.03 * pillagePower,
+          max: 0.08 * pillagePower,
+          stealPercent: 1.0
+        }
+      }
     }
   };
 

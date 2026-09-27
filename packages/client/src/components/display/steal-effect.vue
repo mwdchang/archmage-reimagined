@@ -1,14 +1,14 @@
 <template>
   <section class="display-section">
-    <div v-if="effect.rule === 'addSpellLevelPercentage'">
+    <div v-if="effect.rule === 'spellLevelScaled'">
       Steal {{ effect.target }} by <span class="special-text">spell power / max spell power * value</span>
     </div>
 
-    <div v-if="effect.rule === 'addSpellLevelPercentageBase'">
+    <div v-if="effect.rule === 'spellLevelScaledPercentage'">
       Steal {{ effect.target }} by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 
-    <div v-if="effect.rule === 'addPercentage'">
+    <div v-if="effect.rule === 'percentage'">
       Steal {{ effect.target }} by <span class="special-text">value</span> percentage
     </div>
 

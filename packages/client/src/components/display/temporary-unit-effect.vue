@@ -1,9 +1,9 @@
 <template>
-  <div v-if="effect.rule === 'fixed'">
+  <div v-if="effect.rule === 'set'">
     Create <span class="special-text">value</span> {{ effect.unitId }} 
     <span v-if="effect.target"> from kingdom's {{ effect.target }} </span>
   </div>
-  <div v-if="effect.rule === 'spellLevelPercentageBase'">
+  <div v-if="effect.rule === 'spellLevelScaledPercentage'">
     Create <span class="special-text">spell power / max spell power * value * base </span>
     {{ effect.unitId }} 
     <span v-if="effect.target"> from kingdom's {{ effect.target }} </span>

@@ -7,11 +7,11 @@
       </div>
     </div>
 
-    <div class="row" v-if="effect.rule === 'addSpellLevelPercentageBase'">
+    <div class="row" v-if="effect.rule === 'spellLevelScaledPercentage'">
       Modify upkeep by <span class="special-text"> spell power / max spell power * value * base </span>
     </div>
 
-    <div class="row" v-if="effect.rule === 'addPercentageBase'">
+    <div class="row" v-if="effect.rule === 'percentage'">
       Modify upkeep by <span class="special-text"> value </span> percent
     </div>
 

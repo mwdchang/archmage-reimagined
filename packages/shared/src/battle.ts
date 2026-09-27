@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UnitSchema, UnitAbilitySchema } from "./unit";
 import { ArmyUnitSchema } from "./mage";
-import { StackType } from "./common";
+import { StackTypeSchema } from "./common";
 
 export const AppliedEffectSchema = z.object({
   origin: z.string(),
@@ -13,7 +13,7 @@ export const BattleStackSchema = z.object({
   unit: UnitSchema,
   size: z.number(),
 
-  stackType: z.nativeEnum(StackType),
+  stackType: StackTypeSchema,
   role: z.string(),
 
   isTemporary: z.boolean(),

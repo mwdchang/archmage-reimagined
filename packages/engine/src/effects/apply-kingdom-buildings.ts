@@ -1,4 +1,4 @@
-import { EffectOrigin, KingdomBuildingsEffect } from "shared/src/effects";
+import { EffectOrigin, KingdomBuildingsEffect, KingdomBuildingsEffectRules } from "shared/src/effects";
 import { Mage } from "shared/src/mage";
 import { getMaxSpellLevels } from "../base/references";
 import { between } from "../random";
@@ -31,12 +31,12 @@ export const applyKingdomBuildingsEffect = (
     buildings: {}
   };
 
-  if (effect.rule === 'landPercentageLoss' || effect.rule === 'netPowerRanged') {
+  if (effect.rule === KingdomBuildingsEffectRules.spellLevelScaled || effect.rule === KingdomBuildingsEffectRules.ranged) {
     const { min, max } = effect.magic[magic].value as { min: number, max: number };
     let percent = between(min, max) / 100 * spellPowerScale;
     console.log('base percent', (100 * percent).toFixed(2));
 
-    if (effect.rule === 'netPowerRanged') {
+    if (effect.rule === KingdomBuildingsEffectRules.ranged) {
       const np = totalNetPower(mage);
       let ratio = (origin.netPower - np) / np;
       console.log('raw ratio', ratio);

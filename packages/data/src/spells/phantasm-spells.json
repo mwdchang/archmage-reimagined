@@ -22,6 +22,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["psychic"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 140, "max": 140 } },
@@ -59,7 +60,7 @@
             "checkResistance": true,
             "attributes": {
               "accuracy": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -5 },
                   "verdant": { "value": -2 },
@@ -91,7 +92,7 @@
         "unitIds": ["sprite"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -119,7 +120,7 @@
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 70000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -147,7 +148,7 @@
         "unitIds": ["psychicWisp"],
         "summonType": "all",
         "summonNetPower": 150000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 1.0 },
           "verdant": { "value": 0.6 },
@@ -182,7 +183,7 @@
             "checkResistance": true,
             "attributes": {
               "attackResistances": {
-                "rule": "addSpellLevelPercentage",
+                "rule": "spellLevelScaled",
                 "magic": {
                   "ascendant": { "value": -19 }, 
                   "verdant": { "value": -9 },
@@ -333,6 +334,7 @@
             "effectType": "UnitDamageEffect",
             "checkResistance": true,
             "damageType": ["psychic"],
+            "target": "damage",
             "rule": "spellLevel",
             "magic": {
               "ascendant": { "value": { "min": 1000, "max": 1000 } },
@@ -522,7 +524,7 @@
         "unitIds": ["siren"],
         "summonType": "all",
         "summonNetPower": 270000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -550,7 +552,7 @@
         "unitIds": ["medusa"],
         "summonType": "all",
         "summonNetPower": 275000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -578,7 +580,7 @@
         "unitIds": ["yeti"],
         "summonType": "all",
         "summonNetPower": 260000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -608,7 +610,7 @@
       {
         "effectType": "ArmyUpkeepEffect",
         "filters": null,
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "magic": {
           "ascendant": { "value": { "geld": 0, "mana": -0.05, "population": 0 } },
           "verdant": { "value": { "geld": 0, "mana": -0.01, "population": 0 } },
@@ -619,7 +621,7 @@
       },
       {
         "effectType": "ProductionEffect",
-        "rule": "addPercentageBase",
+        "rule": "percentage",
         "production": "geld",
         "magic": {
           "ascendant": { "value": -0.25 },
@@ -770,7 +772,7 @@
     "effects": [
       {
         "effectType": "ProductionEffect",
-        "rule": "addSpellLevelPercentageBase",
+        "rule": "spellLevelScaledPercentage",
         "production": "geld",
         "magic": {
           "ascendant": { "value": -0.35 },
@@ -815,7 +817,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "mana",
         "magic": {
           "ascendant": { "value": { "min": 1000, "max": 15000, "stealPercent": null } },
@@ -919,7 +921,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "item",
         "magic": {
           "ascendant": { "value": { "min": 1, "max": 1, "stealPercent": null } },
@@ -976,7 +978,7 @@
             "checkResistance": true,
             "attributes": {
               "primaryAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.5 },
                   "verdant": { "value": -0.20 },
@@ -1001,7 +1003,7 @@
             "checkResistance": true,
             "attributes": {
               "counterAttackPower": {
-                "rule": "addPercentageBase",
+                "rule": "percentage",
                 "magic": {
                   "ascendant": { "value": -0.5 },
                   "verdant": { "value": -0.20 },
@@ -1093,7 +1095,7 @@
         "unitIds": ["djinni"],
         "summonType": "all",
         "summonNetPower": 440000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -1121,7 +1123,7 @@
         "unitIds": ["mindRipper"],
         "summonType": "all",
         "summonNetPower": 650000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.6 },
           "verdant": { "value": 0.2 },
@@ -1149,7 +1151,7 @@
         "unitIds": ["iceElemental", "airElemental", "waterElemental"],
         "summonType": "random",
         "summonNetPower": 2100000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -1177,7 +1179,7 @@
         "unitIds": ["leviathan"],
         "summonType": "random",
         "summonNetPower": 2400000,
-        "rule": "spellLevel",
+        "rule": "spellLevelScaled",
         "magic": {
           "ascendant": { "value": 0.0 },
           "verdant": { "value": 0.0 },
@@ -1253,7 +1255,7 @@
     "effects": [
       {
         "effectType": "StealEffect",
-        "rule": "addSpellLevelPercentage",
+        "rule": "spellLevelScaled",
         "target": "geld",
         "magic": {
           "phantasm": { "value": { "min": 1000000, "max": 45000000, "stealPercent": 0.3 } }
