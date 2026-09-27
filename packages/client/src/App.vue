@@ -16,7 +16,7 @@
           v-if="publicRoutes.includes(route.name as string)
             || mageStore.mage"
           :is="Component"
-          :key="route.fullPath"
+          :key="route.meta.preserveOnQuery ? route.path : route.fullPath"
         />
       </Transition>
     </RouterView>

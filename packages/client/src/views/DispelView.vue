@@ -11,7 +11,7 @@
     </div>
 
     <div> Your enchantments in effect </div>
-    <table>
+    <table v-if="selfEnchantments && selfEnchantments.length">
       <thead>
         <tr>
           <th>&nbsp</th>
@@ -38,7 +38,7 @@
 
     <br/>
     <div> Other enchantments in effect </div>
-    <table>
+    <table v-if="otherEnchantments && otherEnchantments.length">
       <thead>
         <tr>
           <th>&nbsp</th>

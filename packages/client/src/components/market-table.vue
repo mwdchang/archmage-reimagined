@@ -22,7 +22,7 @@
         </td>
         <td class="text-right">{{ readableNumber(item.marketItem.basePrice) }} </td>
         <td class="text-right">
-          {{ timeRemaining(item.marketItem) }} min
+          {{ timeRemaining(item.marketItem) }}
         </td>
         <td class="text-right">
           {{ currentBidMap[item.marketItem.id] ? currentBidMap[item.marketItem.id] : 0 }}
@@ -69,10 +69,28 @@ const mageBidMap = ref<{[key: string]: number}>({});
 const timeRemaining = (marketItem: MarketItem) => {
   if (!clock.value) return '';
 
+  const turns = marketItem.expiration - clock.value.currentTurn;
+  const remainTime =
+    turns * clock.value.interval +
+    clock.value.currentTurnTime -
+    Date.now();
+
+  const totalMinutes = Math.max(0, Math.floor(remainTime / 1000 / 60));
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h ${minutes}m`;
+};
+
+/*
+const timeRemaining = (marketItem: MarketItem) => {
+  if (!clock.value) return '';
+
   const turns = (marketItem.expiration - clock.value.currentTurn);
   const remainTime = (turns * clock.value.interval + clock.value.currentTurnTime) - Date.now();
   return (remainTime / 1000 / 60).toFixed(0);
 }
+*/
 
 const encyclopediaView = computed(() => {
   if (props.itemType === 'item') return 'viewItem';
