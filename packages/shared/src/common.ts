@@ -134,6 +134,16 @@ export const GameTableSchema = z.object({
     priceDecreaseFactor: z.number(),
     sellingTimeOnMarket: z.number(),
   }),
+
+  production: z.object({
+    food: z.record(z.string(), z.number()),
+    space: z.record(z.string(), z.number()),
+    research: z.number(),
+    skill: z.number(),
+    manaStorage: z.number(),
+  }),
+
+  spellRank: z.record(z.string(), z.number()),
 });
 
 export type GameTable = z.infer<typeof GameTableSchema>;

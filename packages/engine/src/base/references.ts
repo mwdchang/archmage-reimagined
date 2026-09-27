@@ -4,7 +4,7 @@ import { Spell, Item, SpellSchema, ItemSchema } from 'shared/src/magic';
 import { Skill, SkillSchema } from 'shared/src/skills';
 import { allowedMagicList } from 'shared/src/common';
 import { AllowedMagic } from 'shared/src/common';
-import { magicAlignmentTable, spellRankTable } from './config';
+import { magicAlignmentTable, gameTable } from './config';
 import { randomWeighted } from '../random';
 
 
@@ -169,7 +169,7 @@ export const initializeResearchTree = () => {
         const researchableSpells = spellList.filter(d => d.magic === researchMagicType && d.rank === rank);
 
         // Calculate and cache max spell level for each color
-        const spellLevel = spellRankTable[rank] * researchableSpells.length;
+        const spellLevel = gameTable.spellRank[rank] * researchableSpells.length;
         maxSpellLevels[magicType] += spellLevel;
 
         _.shuffle(researchableSpells).forEach(spell => {

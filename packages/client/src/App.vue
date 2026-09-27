@@ -240,8 +240,8 @@ onMounted(async () => {
   background-image: 
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
     url('@/assets/images/splash.png');
-  background-size: contain;
-  background-position: center 2rem;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   height: 90vh;
   font-size: 1.0rem;

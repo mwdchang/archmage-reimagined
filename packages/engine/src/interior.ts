@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { randomBM } from "./random";
 import type { Mage } from "shared/src/mage";
 import { getUnitById } from "./base/references";
-import { productionTable, gameTable } from "./base/config";
+import { gameTable } from "./base/config";
 import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
@@ -141,8 +141,8 @@ export const spacesForUnits = (mage: Mage) => {
 
 export const maxPopulation = (mage: Mage) => {
   let space = 0
-  Object.keys(productionTable.space).forEach(key => {
-    space += mage[key] * productionTable.space[key];
+  Object.keys(gameTable.production.space).forEach(key => {
+    space += mage[key] * gameTable.production.space[key];
   });
   return space;
 }
@@ -165,8 +165,8 @@ export const realMaxPopulation = (mage: Mage) => {
 
 export const maxFood = (mage: Mage) => {
   let food = 0;
-  Object.keys(productionTable.food).forEach(key => {
-    food += mage[key] * productionTable.food[key];
+  Object.keys(gameTable.production.food).forEach(key => {
+    food += mage[key] * gameTable.production.food[key];
   });
 
   const activeEffects = getActiveEffects(mage, E.ProductionEffect);
