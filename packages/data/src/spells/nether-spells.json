@@ -933,7 +933,7 @@
             "effectType": "TemporaryUnitEffect",
             "checkResistance": false,
             "unitId": "devil",
-            "rule": "fixed", 
+            "rule": "set", 
             "target": null,
             "magic": {
               "nether": { "value": { "min": 2000, "max": 10000 } }
@@ -1007,7 +1007,7 @@
             "effectType": "TemporaryUnitEffect",
             "checkResistance": false,
             "unitId": "succubus",
-            "rule": "spellLevelPercentageBase", 
+            "rule": "spellLevelScaledPercentage", 
             "target": "population",
             "magic": {
               "nether": { "value": { "min": 0.05, "max": 0.05 } }

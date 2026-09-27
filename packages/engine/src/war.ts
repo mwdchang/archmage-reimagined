@@ -13,6 +13,7 @@ import {
   UnitAttrEffectRules,
   UnitHealEffectRules,
   UnitDamageEffectRules,
+  TemporaryUnitEffectRules,
 } from 'shared/src/effects';
 import { between, betweenInt, randomBM, randomInt, randomWeighted } from './random';
 import { hasAbility, isRanged } from "./base/unit";
@@ -329,11 +330,11 @@ const applyTemporaryUnitEffect = (
   const { min, max } = tempEffect.magic[magic].value;
   const base = between(min, max);
 
-  if (tempEffect.rule === 'spellLevelPercentageBase') {
+  if (tempEffect.rule === TemporaryUnitEffectRules.spellLevelScaledPercentage) {
     if (tempEffect.target === 'population') {
       value = Math.floor(mage.currentPopulation * base * spellPowerScale);
     }
-  } else if (tempEffect.rule === 'fixed') {
+  } else if (tempEffect.rule === TemporaryUnitEffectRules.set) {
     value = Math.floor(base);
   }
 

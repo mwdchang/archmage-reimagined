@@ -20,11 +20,19 @@ export type Effect = z.infer<typeof EffectSchema>;
 
 
 
+export const TemporaryUnitEffectRules = {
+  spellLevelScaledPercentage: 'spellLevelScaledPercentage',
+  set: 'set'
+} as const;
+
 const TemporaryUnitEffectSchema = EffectSchema.extend({
   effectType: z.literal(E.TemporaryUnitEffect),
   checkResistance: z.literal(false),
   unitId: z.string(),
-  rule: z.enum(['spellLevelPercentageBase', 'fixed']),
+  rule: z.enum([
+    TemporaryUnitEffectRules.set,
+    TemporaryUnitEffectRules.spellLevelScaledPercentage
+  ]),
   target: z.enum(['population']).nullable(),
   magic: z.partialRecord(
     AllowedMagicSchema,

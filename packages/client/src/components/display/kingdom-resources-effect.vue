@@ -1,10 +1,10 @@
 <template>
   <section class="display-section">
-    <div v-if="effect.rule === 'addSpellLevelPercentage'">
+    <div v-if="effect.rule === 'spellLevelScaled'">
       Modify {{ effect.target }} by <span class="special-text">spell power / max spell power * value</span>
     </div>
 
-    <div v-if="effect.rule === 'addSpellLevelPercentageBase'">
+    <div v-if="effect.rule === 'spellLevelScaledPercentage'">
       Modify {{ effect.target }} by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 

@@ -40,7 +40,7 @@ export const applyKingdomResourcesEffect = (
     } else if (effect.target === 'geld') {
       value = mage.currentGeld * base * spellPowerScale;
     } else if (effect.target === 'turn') {
-      throw new Error('addSpellLevelPercentage not supported for turns');
+      throw new Error(`${KingdomResourcesffectRules.spellLevelScaledPercentage} not supported for turns`);
     }
   } else if (effect.rule === KingdomResourcesffectRules.add) {
     value = base;

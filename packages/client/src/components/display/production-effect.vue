@@ -4,11 +4,11 @@
       Modify {{ productionStr(effect.production) }} production by <span class="special-text">spell power * value</span>
     </div>
 
-    <div v-if="effect.rule === 'addPercentageBase'" class="row">
+    <div v-if="effect.rule === 'percentage'" class="row">
       Modify {{ productionStr(effect.production) }} production by <span class="special-text">value</span> percent
     </div>
     
-    <div v-if="effect.rule === 'addSpellLevelPercentageBase'" class="row">
+    <div v-if="effect.rule === 'spellLevelScaledPercentage'" class="row">
       Modify {{ productionStr(effect.production) }} production by <span class="special-text">spell power / max spell power * value * base </span>
     </div>
 

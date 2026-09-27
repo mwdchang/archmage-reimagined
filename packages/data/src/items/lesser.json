@@ -596,7 +596,7 @@
             "effectType": "TemporaryUnitEffect",
             "checkResistance": false,
             "unitId": "capsuleMonster",
-            "rule": "fixed", 
+            "rule": "set", 
             "target": null,
             "magic": {
               "ascendant": { "value": { "min": 3000, "max": 3000 } },
