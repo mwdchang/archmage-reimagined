@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { PGlite } from "@electric-sql/pglite";
 import { getToken } from 'shared/src/auth';

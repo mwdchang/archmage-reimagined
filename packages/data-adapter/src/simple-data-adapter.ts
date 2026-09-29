@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { DataAdapter, SearchOptions, TurnOptions } from './data-adapter';
 import { getToken } from 'shared/src/auth';

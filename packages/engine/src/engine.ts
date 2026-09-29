@@ -24,7 +24,7 @@ import {
 } from './base/mage';
 import { DataAdapter } from 'data-adapter/src/data-adapter';
 import type { ArmyUnit, Assignment, Enchantment, Mage, Combatant, MageSummary } from 'shared/src/mage';
-import type { BattleReport, BattleReportSummary } from 'shared/src/battle';
+import type { BattleReportSummary } from 'shared/src/battle';
 import type { BuildPayload, DestroyPayload } from 'shared/src/api';
 import type { MageRank, Mail } from 'shared/src/common';
 import {
@@ -121,6 +121,8 @@ import {
 } from './blackmarket';
 import { spellOrItemReportSummary } from './battle/new-battle-report';
 import { createLogger } from './logger';
+import { Unit } from 'shared/src/unit';
+import { Skill } from 'shared/src/skills';
 
 const EPIDEMIC_RATE = 0.5;
 const ITEM_WINK_RATE = 0.2;
@@ -153,28 +155,28 @@ class Engine {
    * @resetData whether to reset the database
   **/
   async initialize(resetData: boolean) {
-    loadUnitData(plainUnits);
-    loadUnitData(ascendantUnits);
-    loadUnitData(verdantUnits);
-    loadUnitData(eradicationUnits);
-    loadUnitData(netherUnits);
-    loadUnitData(phantasmUnits);
+    loadUnitData(plainUnits as Unit[]);
+    loadUnitData(ascendantUnits as Unit[]);
+    loadUnitData(verdantUnits as Unit[]);
+    loadUnitData(eradicationUnits as Unit[]);
+    loadUnitData(netherUnits as Unit[]);
+    loadUnitData(phantasmUnits as Unit[]);
 
-    loadSpellData(ascendantSpells);
-    loadSpellData(verdantSpells);
-    loadSpellData(eradicationSpells);
-    loadSpellData(netherSpells);
-    loadSpellData(phantasmSpells);
+    loadSpellData(ascendantSpells as Spell[]);
+    loadSpellData(verdantSpells as Spell[]);
+    loadSpellData(eradicationSpells as Spell[]);
+    loadSpellData(netherSpells as Spell[]);
+    loadSpellData(phantasmSpells as Spell[]);
     initializeResearchTree();
 
-    loadItemData(lesserItems);
-    loadItemData(uniqueItems);
+    loadItemData(lesserItems as Item[]);
+    loadItemData(uniqueItems as Item[]);
 
-    loadSkillGroup(ascendantSkills);
-    loadSkillGroup(verdantSkills);
-    loadSkillGroup(eradicationSkills);
-    loadSkillGroup(netherSkills);
-    loadSkillGroup(phantasmSkills);
+    loadSkillGroup(ascendantSkills as Skill[]);
+    loadSkillGroup(verdantSkills as Skill[]);
+    loadSkillGroup(eradicationSkills as Skill[]);
+    loadSkillGroup(netherSkills as Skill[]);
+    loadSkillGroup(phantasmSkills as Skill[]);
 
 
     // Reset server data and defaults
@@ -200,7 +202,7 @@ class Engine {
     }
 
     // We need to (re)regiter unique items to ensure uniqueness
-    await this.adapter.registerUniqueItems(uniqueItems);
+    await this.adapter.registerUniqueItems(uniqueItems as Item[]);
 
 
     // Create a several dummy mages for testing

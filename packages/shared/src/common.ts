@@ -28,6 +28,7 @@ export const allowedAttackTypeList = [
 ] as const;
 
 export const AllowedAttackTypesSchema = z.enum(allowedAttackTypeList);
+export type AllowedAttackType = z.infer<typeof AllowedAttackTypesSchema>;
 
 
 

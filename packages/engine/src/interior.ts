@@ -7,7 +7,12 @@ import { totalLand } from "./base/mage";
 import { getMaxSpellLevels } from './base/references';
 import { allowedEffect as E } from 'shared/src/common';
 
-import { ArmyUpkeepEffect, ArmyUpkeepEffectRules, ProductionEffect, ProductionEffectRules } from 'shared/src/effects';
+import {
+  ArmyUpkeepEffect,
+  ArmyUpkeepEffectRules,
+  ProductionEffect,
+  ProductionEffectRules
+} from 'shared/src/effects';
 import { matchesFilter } from './base/unit';
 import { ActiveEffect, getActiveEffects } from './effects';
 
