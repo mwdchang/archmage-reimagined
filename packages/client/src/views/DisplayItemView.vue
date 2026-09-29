@@ -1,5 +1,8 @@
 <template>
   <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
+    <router-link :to="{ name: 'encyclopedia', params: { type: 'item' } }" class="text-xl"> 
+      Items
+    </router-link>
     <h2 v-if="item" class="row">
       <magic :magic="'plain'" /> {{ item.name }}
     </h2>
