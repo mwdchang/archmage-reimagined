@@ -1,6 +1,6 @@
 <template>
   <img
-    class="h-60 max-[600px]:w-[80vw]"
+    class="h-56 max-[600px]:w-[80vw]"
     :src="currentSrc"
     @error="handleError"
     v-bind="$attrs"

@@ -126,13 +126,16 @@ const router = createRouter({
     },
     {
       path: '/market',
-      redirect: '/market/item'
+      name: 'market',
+      component: MarketView,
+      props: (route) => ({ type: (route.query.type as string) || 'item' }),
+      meta: {
+        preserveOnQuery: true
+      }
     },
     {
       path: '/market/:type',
-      name: 'market',
-      component: MarketView,
-      props: true
+      redirect: (to) => ({ path: '/market', query: { type: to.params.type } })
     },
     {
       path: '/submarket/:priceId',

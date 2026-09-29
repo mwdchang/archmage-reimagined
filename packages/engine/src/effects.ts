@@ -94,9 +94,7 @@ export const getActiveEffectsForBattle = (
   itemId: string | null,
   targetId?: number
 ) => {
-
   const results = getActiveEffects(mage, effectType, targetId);
-  console.log('!!', results);
 
   if (spellId) {
     const spell = getSpellById(spellId);

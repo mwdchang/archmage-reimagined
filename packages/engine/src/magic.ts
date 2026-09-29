@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {
-  gameTable, magicAlignmentTable, productionTable
+  gameTable, magicAlignmentTable
 } from './base/config';
 import { Enchantment, Mage } from 'shared/src/mage';
 import {
@@ -190,11 +190,11 @@ export const maxMana = (mage: Mage) => {
 }
 
 export const manaStorage = (mage: Mage) => {
-  return mage.nodes * productionTable.manaStorage;
+  return mage.nodes * gameTable.production.manaStorage;
 }
 
 export const skillPoints = (mage: Mage) => {
-  const rawPoints = Math.sqrt(mage.guilds) * (productionTable.skill);
+  const rawPoints = Math.sqrt(mage.guilds) * (gameTable.production.skill);
   return Math.min(0.1, rawPoints);
 }
 
@@ -216,7 +216,7 @@ export const researchPoints = (mage: Mage) => {
     }
   }
 
-  const rawPoints = Math.sqrt(mage.guilds) * (productionTable.research + modifier);
+  const rawPoints = Math.sqrt(mage.guilds) * (gameTable.production.research + modifier);
   return Math.floor(rawPoints);
 }
 

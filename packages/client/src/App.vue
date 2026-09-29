@@ -16,7 +16,7 @@
           v-if="publicRoutes.includes(route.name as string)
             || mageStore.mage"
           :is="Component"
-          :key="route.fullPath"
+          :key="route.meta.preserveOnQuery ? route.path : route.fullPath"
         />
       </Transition>
     </RouterView>
@@ -240,8 +240,8 @@ onMounted(async () => {
   background-image: 
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
     url('@/assets/images/splash.png');
-  background-size: contain;
-  background-position: center 2rem;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   height: 90vh;
   font-size: 1.0rem;

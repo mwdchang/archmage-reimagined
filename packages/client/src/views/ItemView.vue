@@ -9,7 +9,7 @@
           <br>
           <br>
           You can sell your surplus items in 
-          <router-link :to="{ name: 'market', params: { type: 'sell' }}"> Peddler's Lane </router-link>
+          <router-link :to="{ name: 'market', query: { type: 'sell' }}"> Peddler's Lane </router-link>
         </div>
       </div>
     </div>

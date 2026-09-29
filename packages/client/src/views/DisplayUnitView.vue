@@ -1,9 +1,14 @@
 <template>
-  <main class="flex flex-col justify-center gap-[5px] items-center">
+  <!--<main class="flex flex-col justify-center gap-[5px] items-center"> -->
+  <main class="flex flex-col m-[1rem_22%] leading-[120%] gap-[5px]">
+    <router-link :to="{ name: 'encyclopedia', params: { type: 'unit' } }" class="text-xl"> 
+      Units
+    </router-link>
+
     <h2 v-if="unit" class="row">
       <magic :magic="unit.magic" />{{unit.name}}
     </h2>
-    <p class="m-[1rem_10rem] leading-[120%]" v-if="unit">{{ unit.description }} </p>
+    <p class="m-4">{{ unit?.description }} </p>
     <section v-if="unit" class="flex flex-row">
       <table>
         <tbody>
@@ -92,7 +97,7 @@
 
       <div class="w-[2rem]">&nbsp;</div>
 
-      <table>
+      <table class="w-55">
         <tbody>
           <tr class="bg-[#333] border-b-2 border-[#555]">
             <td colspan="2">Spell Resistances</td>
@@ -175,5 +180,4 @@ onMounted(() => {
   unit.value = getUnitById(props.id);
 });
 </script>
-
 

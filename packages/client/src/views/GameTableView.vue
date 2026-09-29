@@ -41,11 +41,11 @@
           </tr>
           <tr>
             <td>Research point</td>
-            <td>{{ readableNumber(productionTable.research) }} /node</td>
+            <td>{{ readableNumber(gameTable.production.research) }} /node</td>
           </tr>
           <tr>
             <td>Mana storage</td>
-            <td>{{ readableNumber(productionTable.manaStorage) }} / node</td>
+            <td>{{ readableNumber(gameTable.production.manaStorage) }} / node</td>
           </tr>
           <tr>
             <td>Food production</td>
@@ -79,7 +79,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import { API } from '@/api/api';
-import { productionTable } from 'engine/src/base/config';
 import { ServerClock, GameTable } from 'shared/src/common';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import { buildingTypes } from 'engine/src/interior';
@@ -100,9 +99,10 @@ const approxEndTime = computed(() => {
 
 const foodProduction = computed(() => {
   const results: string[] = [];
+  if (!gameTable.value) return results;
   buildingTypes.forEach(b => {
-    if (b.id in productionTable.food) {
-      results.push(`${readableStr(b.id)} = ${readableNumber(productionTable.food[b.id])}`);
+    if (b.id in gameTable.value!.production.food) {
+      results.push(`${readableStr(b.id)} = ${readableNumber(gameTable.value!.production.food[b.id])}`);
     }
   });
   return results;
@@ -110,9 +110,10 @@ const foodProduction = computed(() => {
 
 const spaceProduction = computed(() => {
   const results: string[] = [];
+  if (!gameTable.value) return results;
   buildingTypes.forEach(b => {
-    if (b.id in productionTable.space) {
-      results.push(`${readableStr(b.id)} = ${readableNumber(productionTable.space[b.id])}`);
+    if (b.id in gameTable.value!.production.space) {
+      results.push(`${readableStr(b.id)} = ${readableNumber(gameTable.value!.production.space[b.id])}`);
     }
   });
   return results;

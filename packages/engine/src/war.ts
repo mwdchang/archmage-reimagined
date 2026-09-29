@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Mage, Combatant } from "shared/src/mage";
-import { allowedEffect as E } from "shared/src/common";
+import { AllowedAttackType, allowedEffect as E } from "shared/src/common";
 import {
   UnitAttrEffect,
   UnitDamageEffect,
@@ -787,7 +787,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       // Evade primary attack
       if (hasAbility(dUnit, 'evade')) {
         const evadeAttr = dUnit.abilities.find(ability => ability.name === 'evade');
-        if (Math.random() < evadeAttr.extra) {
+        if (Math.random() < (evadeAttr.extra as number)) {
           battleReport.engagement.logs.push({
             type: `evade`,
             attacker: {
@@ -822,7 +822,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
           let burstingPower = dUnit.powerRank * 1.25;
 
           if (burstingAbility.extra) {
-            const extra = burstingAbility.extra;
+            const extra = burstingAbility.extra as { type: AllowedAttackType[], value: any };
             if (extra.type) burstingType = extra.type;
             if (extra.value) burstingPower = extra.value;
           }
@@ -949,7 +949,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
       // Steallife
       if (hasAbility(aUnit, 'stealLife')) {
         const stealPower = aUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
-        const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+        const stealLifePoints = (stealPower as number) / 100 * (totalDamage - sustainedDamage);
         const newUnits = Math.floor(stealLifePoints / getUnitById(aUnit.id).hitPoints);
         console.log(`${newUnits} ${aUnit.id} are created`);
         attackingStack.size += newUnits;
@@ -1003,7 +1003,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         // Steallife
         if (hasAbility(aUnit, 'stealLife')) {
           const stealPower = aUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
-          const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+          const stealLifePoints = (stealPower as number) / 100 * (totalDamage - sustainedDamage);
           const newUnits = Math.floor(stealLifePoints / getUnitById(aUnit.id).hitPoints);
           console.log(`${newUnits} ${aUnit.id} are created`);
           attackingStack.size += newUnits;
@@ -1077,7 +1077,7 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
         // Steallife
         if (hasAbility(dUnit, 'stealLife')) {
           const stealPower = dUnit.abilities.find(d => d.name === 'stealLife').extra || 5;
-          const stealLifePoints = stealPower / 100 * (totalDamage - sustainedDamage);
+          const stealLifePoints = (stealPower as number) / 100 * (totalDamage - sustainedDamage);
           const newUnits = Math.floor(stealLifePoints / getUnitById(dUnit.id).hitPoints);
           console.log(`${newUnits} ${dUnit.id} are created`);
           defendingStack.size += newUnits;

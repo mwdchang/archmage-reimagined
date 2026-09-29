@@ -108,7 +108,9 @@ import ActionButton from '@/components/action-button.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
 import { Mage } from 'shared/src/mage';
 
-const props = defineProps<{ type: string }>(); 
+const props = withDefaults(defineProps<{ type?: string }>(), {
+  type: 'item'
+}); 
 const router = useRouter();
 
 const mageStore = useMageStore();
@@ -130,7 +132,7 @@ const encyclopediaView = computed(() => {
 const itemsToSell = ref<SellItem[]>([]);
 
 const changeSelection = () => {
-  router.push({ name: 'market', params: { type: currentSelection.value } });
+  router.push({ name: 'market', query: { type: currentSelection.value } });
 }
 
 interface ItemSummary {

@@ -4,10 +4,10 @@ import { GameTable } from "shared/src/common"
 export const gameTable: GameTable = {
   explorationLimit: 6000,
   maxTurns: 1000,
-  turnRate: 120, // *fixme: testing*
-  endTurn: 16000, // *fixme: testing*
-  apprenticeTurn: 120,
+  turnRate: 120,  // *fixme: testing*
+  endTurn: 50000, // *fixme: testing*
 
+  apprenticeTurn: 120,
   itemGenerationRate: 0.08,
 
   war: {
@@ -24,6 +24,31 @@ export const gameTable: GameTable = {
     priceIncreaseFactor: 0.30,
     priceDecreaseFactor: 0.20,
     sellingTimeOnMarket: 15 // *fixme: testing*
+  },
+
+  production: {
+    food: {
+      farms: 500
+    },
+    space: {
+      farms: 100,
+      towns: 1000,
+      workshops: 30,
+      barracks: 20,
+      forts: 500,
+      wilderness: 10
+    },
+    research: 20,
+    skill: 0.00042,
+    manaStorage: 1000
+  },
+
+  spellRank: {
+    simple: 1,
+    average: 3,
+    complex: 7,
+    ultimate: 20,
+    ancient: 15
   }
 }
 
@@ -49,40 +74,6 @@ export const mageStartTable = {
     barriers: 0,
     wilderness: 181
   }
-
-  /*
-  buildings: {
-    farms: 150,
-    towns: 60,
-    workshops: 150,
-    nodes: 30,
-    barracks: 10,
-    guilds: 10,
-    forts: 9,
-    barriers: 0,
-    wilderness: 181
-  }
-  */
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Interiors
-////////////////////////////////////////////////////////////////////////////////
-export const productionTable = {
-  food: {
-    farms: 500
-  },
-  space: {
-    farms: 100,
-    towns: 1000,
-    workshops: 30,
-    barracks: 20,
-    forts: 500,
-    wilderness: 10
-  },
-  research: 20,
-  skill: 0.00042,
-  manaStorage: 1000
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -184,12 +175,4 @@ export const magicAlignmentTable = {
       phantasm: 1.0
     }
   }
-}
-
-export const spellRankTable = {
-  simple: 1,
-  average: 3,
-  complex: 7,
-  ultimate: 20,
-  ancient: 15
 }

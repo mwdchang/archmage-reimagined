@@ -1,7 +1,7 @@
 import type { Mage, ResearchItem } from 'shared/src/mage';
 import { createStackByNumber } from './unit';
 import { researchTree, getSpellById, getUnitById } from './references';
-import { mageStartTable, magicAlignmentTable, spellRankTable } from './config';
+import { mageStartTable, magicAlignmentTable, gameTable } from './config';
 import { allowedMagicList, AllowedMagic } from 'shared/src/common';
 
 
@@ -189,7 +189,7 @@ export const currentSpellLevel = (mage: Mage) => {
   let result = 0;
   const addSpellPower = (id: string) => {
     const spell = getSpellById(id);
-    const rankPower = spellRankTable[spell.rank];
+    const rankPower = gameTable.spellRank[spell.rank];
     result += rankPower;
   }
 
