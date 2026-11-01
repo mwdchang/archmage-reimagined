@@ -2100,7 +2100,7 @@ __metadata:
     engine: "workspace:*"
     eslint: "npm:^10.9.1"
     eslint-plugin-vue: "npm:^10.10.0"
-    marked: "npm:^18.0.3"
+    marked: "npm:^18.1.2"
     npm-run-all: "npm:^4.1.5"
     pinia: "npm:^4.0.3"
     shared: "workspace:*"
@@ -4528,12 +4528,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^18.0.3":
-  version: 18.0.11
-  resolution: "marked@npm:18.0.11"
+"marked@npm:^18.1.2":
+  version: 18.1.2
+  resolution: "marked@npm:18.1.2"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/6c2a2bea05974f08f869d591a8eb6aa7fe68e56edbfe74c2d15eea3b85d45aabfea9dada6914d6f4a7917d612059b64eb8b9e5fd190c74ad8ab79c1f48a249b3
+  checksum: 10c0/0e7312138d6cf866f59a28d2d97ab332ef1b6d1d09263306375a8e9c0e5a4ee892ff1e6ecb668a4959fab0c5f1008c3ddec16c861396fe7cce8f7810521484c9
   languageName: node
   linkType: hard
 
