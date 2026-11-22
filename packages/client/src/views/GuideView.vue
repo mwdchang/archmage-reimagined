@@ -38,9 +38,12 @@ const guide = ref('');
 
 const openMarkdown = async (filename: string) => {
   key.value = filename;
-  const path = `/src/assets/docs/${filename}.md`;
-  const content = pages[path];
-  console.log(content);
+  const matchingKey = Object.keys(pages).find(k => k.endsWith(`/${filename}.md`));
+  if (!matchingKey) {
+    console.error(`Markdown file not found: ${filename}.md`);
+    return;
+  }
+  const content = pages[matchingKey];
   guide.value = await marked(content);
 }
 
