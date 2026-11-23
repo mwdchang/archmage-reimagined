@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/express": "^5.0.6",
     "bcryptjs": "^3.0.2",
-    "body-parser": "^2.3.0",
+    "body-parser": "^2.4.0",
     "cookie-parser": "^1.4.6",
     "data-adapter": "workspace:*",
     "engine": "workspace:*",
