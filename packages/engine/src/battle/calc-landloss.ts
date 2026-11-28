@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Mage } from "shared/src/mage";
 import { totalLand } from "../base/mage";
+import { drawN } from '../random';
 
 // Lose 10%
 const siegePercentage = 0.10;
@@ -44,43 +45,25 @@ export const calcLandLoss = (mage: Mage, attackType: string, unitsRemaining: num
 
   const tempMageBuildings = _.pick(mage, buildingTypes);
 
-  const calcLoss = (buildingType: string, val: number) => {
+  const calcFortLoss = () => {
     // Handle forts, say 1500 units to take a fort 
-    if (buildingType === 'forts') {
-      let maxFortTaken = Math.floor(unitsRemaining / 1500);
-      const forts = Math.floor(Math.min(1 + 0.1 * mage.forts, maxFortTaken));
-      return Math.min(forts, tempMageBuildings['forts']);
-    }
-    return Math.floor(val * landTaken / mageLand);
+    let maxFortTaken = Math.floor(unitsRemaining / 1500);
+    const forts = Math.floor(Math.min(1 + 0.1 * mage.forts, maxFortTaken));
+    return Math.min(forts, tempMageBuildings['forts']);
   }
 
-  // To a first round calculation
   // Do forts first, then proportionally distribute over remainder building types
-  landLoss.forts = calcLoss('forts', null);
+  landLoss.forts = calcFortLoss();
   landTaken -= landLoss.forts;
 
-  let c = 0;
-  buildingTypes.forEach(buildingType => {
-    if (buildingType === 'forts') return;
-    landLoss[buildingType] = calcLoss(buildingType, tempMageBuildings[buildingType]);
-    tempMageBuildings[buildingType] -= landLoss[buildingType];
-    c += landLoss[buildingType];
-  });
-  landTaken -= c;
+  // Do remainder
+  delete tempMageBuildings['forts'];
+  const lossDraws = drawN(tempMageBuildings as Record<string, number>, landTaken);
 
-  // Resolve any mathematic remainder
-  if (landTaken > 0) {
-    while (landTaken > 0) {
-      for (const v of buildingTypes) {
-        if (tempMageBuildings[v] > 0) {
-          landLoss[v]++;
-          tempMageBuildings[v]--;
-          landTaken--;
-          break;
-        }
-      }
-    }
-  }
+  Object.keys(lossDraws).forEach(key => {
+    landLoss[key] = lossDraws[key];
+  });
+
 
   landGain.forts = Math.max(1, Math.floor(attackerGain * landLoss.forts));
   buildingTypes.forEach(buildingType => {

@@ -3,9 +3,9 @@
 // https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
 export const randomBM = () => {
   let u = 0, v = 0;
-  while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-  while(v === 0) v = Math.random();
-  let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+  while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+  while (v === 0) v = Math.random();
+  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
   num = num / 10.0 + 0.5; // Translate to 0 -> 1
   // if (num > 1 || num < 0) return randn_bm() // resample between 0 and 1
   if (num > 0.75 || num < 0.25) return randomBM(); // resample
@@ -57,4 +57,44 @@ export const randomWeighted = (weightEntries?: WeightEntry[]) => {
       return item.value;
     }
   }
+}
+
+
+// Multivariate hypergeometric sampling
+export const drawN = (categories: Record<string, number>, N: number) => {
+  const entries = Object.entries(categories);
+  const total = entries.reduce((sum, [, count]) => sum + count, 0);
+
+  if (!Number.isInteger(N) || N < 0 || N > total) {
+    throw new Error("Invalid removal count");
+  }
+
+  const removedBuildings = Object.fromEntries(
+    entries.map(([type]) => [type, 0])
+  );
+
+  let remaining = total;
+  let toRemove = N;
+
+  for (let i = 0; i < entries.length; i++) {
+    const [type, count] = entries[i];
+
+    if (i === entries.length - 1) {
+      removedBuildings[type] = toRemove;
+      break;
+    }
+
+    let removed = 0;
+
+    for (let j = 0; j < toRemove; j++) {
+      if (Math.random() < count / remaining) {
+        removed++;
+      }
+      remaining--;
+    }
+
+    removedBuildings[type] = removed;
+    toRemove -= removed;
+  }
+  return removedBuildings;
 }

@@ -32,7 +32,8 @@
             {{ readableNumber(mageBidMap[item.marketItem.id]) }}
           </div>
           <div v-else>
-            <input type="number" v-model="item.bid" class="h-[1.6rem]" @keyup.enter="emit('confirm')" /> 
+            <input type="number" v-model="item.bid" class="dark-input table-input table-input-wide text-right h-[1.6rem]"
+              @keyup.enter="emit('confirm')" /> 
           </div>
         </td>
       </tr>

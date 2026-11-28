@@ -16,7 +16,7 @@
     "server": "yarn workspace server run dev",
     "server-resume": "yarn workspace server run dev -- false",
     "client": "yarn workspace client run dev",
-    "dev": "concurrently -n server,client -c blue,green \"yarn run server\" \"yarn run client\""
+    "dev": "concurrently -n server,client -c magenta,green \"yarn run server\" \"yarn run client\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

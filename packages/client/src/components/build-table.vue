@@ -18,8 +18,9 @@
         <td class="text-right"> {{ (100 * mage[bType.id] / land).toFixed(2) }} </td>
         <td class="text-right"> {{ bType.geldCost }} / {{ bType.manaCost }} </td>
         <td class="text-right"> {{ buildingRate(mage, bType.id).toFixed(2) }} </td>
-        <td> 
-          <input type="number" v-model="userInput[bType.id]" class="w-[5rem] text-right bg-[#eee] h-[1.6rem]" @keyup.enter="build">
+        <td>
+          <input type="number" v-model="userInput[bType.id]" class="dark-input table-input text-right h-[1.6rem]"
+            @keyup.enter="build" @blur="userInput[bType.id] = userInput[bType.id] || 0">
         </td>
       </tr>
     </tbody>
@@ -49,7 +50,7 @@ const summary = computed(() => {
 
   buildingTypes.forEach(b => {
     landUsed += userInput.value[b.id];
-    turnsUsed += userInput.value[b.id] /  buildingRate(mage.value!, b.id);
+    turnsUsed += userInput.value[b.id] / buildingRate(mage.value!, b.id);
   });
   turnsUsed = Math.ceil(turnsUsed);
 
@@ -57,11 +58,11 @@ const summary = computed(() => {
 });
 
 const buildingDisabled = computed(() => {
-  return summary.value.landUsed > mage.value.wilderness || 
+  return summary.value.landUsed > mage.value.wilderness ||
     summary.value.turnsUsed > mage.value.currentTurn;
 });
 
-const userInput =  ref<{ [key: string]: number }>({});
+const userInput = ref<{ [key: string]: number }>({});
 buildingTypes.forEach(b => {
   userInput.value[b.id] = 0;
 });
