@@ -238,7 +238,8 @@
     color: #e0e0e0;
   }
   .form input,
-  .form select {
+  .form select,
+  .dark-input {
     width: 100%;
     padding: 0.25rem;
     margin-bottom: 1.0rem;
@@ -251,10 +252,23 @@
   }
 
   .form input:focus,
-  .form select:focus {
+  .form select:focus,
+  .dark-input:focus {
     border-color: #4a90e2;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
     outline: none;
+  }
+
+  /* Compact dark inputs used inside table rows. */
+  .table-input {
+    width: 5rem;
+    margin: 2px 2px;
+    background-color: #303945;
+    border-color: #596b80;
+  }
+
+  .table-input-wide {
+    width: 10rem;
   }
   .form button {
     display: inline-block;

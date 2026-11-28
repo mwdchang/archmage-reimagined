@@ -16,12 +16,20 @@
     </div>
 
     <section class="form w-[25rem]">
-      <select v-model="battleType">
+      <select v-model="battleType" class="w-[200px]">
         <option value="regular">Regular</option>
         <option value="siege">Siege</option>
         <option value="pillage">Pillage</option>
       </select>
-      <input type="text" placeholder="mage id" v-model="targetId" /> 
+      <Autocomplete
+        v-if="!targetMage"
+        :options-fn="searchMageRank"
+        @selected-value="setAutoComplete"
+      />
+      <div v-else class="row mb-4 text-[#18d]">
+        <div>{{ targetMage.label }} (#{{ targetMage.id }})</div>
+        <SvgIcon name="remove" size="1.5rem" @click="targetMage = null" />
+      </div>
 
       <ActionButton 
         :proxy-fn="prepBattle"
@@ -108,15 +116,19 @@ import { ref, computed, onMounted } from 'vue';
 import { API } from '@/api/api';
 import { useMageStore } from '@/stores/mage';
 import { useRouter, useRoute } from 'vue-router';
+import { AutocompleteCandidate, MageRank } from 'shared/src/common';
 import { BattleReportSummary } from 'shared/src/battle';
 import { readableNumber, readableDate, readableStr } from '@/util/util';
 import Magic from '@/components/magic.vue';
 import ActionButton from '@/components/action-button.vue';
 import ImageProxy from '@/components/ImageProxy.vue';
+import Autocomplete from '@/components/autocomplete.vue';
+import SvgIcon from '@/components/svg-icon.vue';
 
 const router = useRouter();
 const mageStore = useMageStore();
 const targetId = ref('');
+const targetMage = ref<AutocompleteCandidate | null>(null);
 const involvedBattles = ref<BattleReportSummary[]>([]);
 const mages = ref<{[key: number]: any}>({});
 
@@ -133,15 +145,25 @@ const defensiveBattles = computed(() => {
 
 const prepBattle = async () => {
   if (!mageStore.mage) return;
-  if (!targetId.value || targetId.value === '') return;
+  const selectedTargetId = targetMage.value?.id ?? targetId.value;
+  if (!selectedTargetId) return;
 
   router.push({
     name: 'battlePrep',
     params: {
-      targetId: targetId.value,
+      targetId: selectedTargetId,
       battleType: battleType.value
     }
   });
+};
+
+const searchMageRank = async (val: string) => {
+  const results = await API.get<MageRank[]>(`/search-mage?searchStr=${val}`);
+  return results.data.map(d => ({ label: d.name, id: d.id.toString() }));
+};
+
+const setAutoComplete = (val: AutocompleteCandidate) => {
+  targetMage.value = val;
 };
 
 onMounted(async () => {

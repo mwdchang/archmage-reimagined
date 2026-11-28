@@ -12,8 +12,9 @@
         <td>-</td>
         <td>{{ readableStr(bType.id) }}</td>
         <td class="text-right">{{ readableNumber(mage[bType.id]) }} </td>
-        <td> 
-          <input type="number" size="6" class="w-[5rem] text-right bg-[#eee]" v-model="userInput[bType.id]"> 
+        <td>
+          <input type="number" size="6" class="dark-input table-input text-right h-[1.6rem]" v-model="userInput[bType.id]"
+            @blur="userInput[bType.id] = userInput[bType.id] || 0"> 
         </td>
       </tr>
     </tbody>
@@ -21,7 +22,7 @@
 
   <div class="form mt-4">
     <div class="row-baseline">
-      <input type="checkbox" v-model="confirmDestroy" class="w-[15px] h-[15px]"> 
+      <input type="checkbox" v-model="confirmDestroy" class="w-[15px] h-[15px]">
       <label>Destroy confirmation</label>
     </div>
     <button @click="destroy" :disabled="confirmDestroy === false"> Destroy </button>
@@ -41,7 +42,7 @@ const mage = computed(() => mageStore.mage);
 
 const confirmDestroy = ref(false);
 
-const userInput =  ref<{ [key: string]: number }>({});
+const userInput = ref<{ [key: string]: number }>({});
 buildingTypes.forEach(b => {
   userInput.value[b.id] = 0;
 });

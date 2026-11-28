@@ -51,17 +51,21 @@
             <td class="text-right">{{ readableNumber(item.price) }}</td>
             <td class="text-right">{{ item.size }}</td>
             <td>
-              <input type="number" v-model="item.sellAmt" class="h-[1.6rem] w-20" @keyup.enter="sellItems" /> 
+              <input type="number" v-model="item.sellAmt" class="dark-input table-input text-right h-[1.6rem]"
+                @keyup.enter="sellItems" /> 
             </td>
           </tr>
         </tbody>
       </table>
 
       <div class="form">
-        <ActionButton 
-          :proxy-fn="sellItems"
-          :label="'Sell Items'" />
-
+        <div class="flex items-center gap-4">
+          <ActionButton
+            :proxy-fn="sellItems"
+            :label="'Sell Items'"
+            :disabled="!canSellItems" />
+          <span v-if="!hasInvalidSellAmounts">Estimated total: {{ readableNumber(estimatedSellTotal) }}</span>
+        </div>
       </div>
       <div v-if="errorStr" class="error p-1 mt-2">{{ errorStr }}</div>
 
@@ -130,6 +134,17 @@ const encyclopediaView = computed(() => {
 });
 
 const itemsToSell = ref<SellItem[]>([]);
+const hasInvalidSellAmounts = computed(() =>
+  itemsToSell.value.some(item =>
+    !Number.isInteger(item.sellAmt) || item.sellAmt < 0 || item.sellAmt > item.size
+  )
+);
+const canSellItems = computed(() =>
+  !hasInvalidSellAmounts.value && itemsToSell.value.some(item => item.sellAmt > 0)
+);
+const estimatedSellTotal = computed(() =>
+  itemsToSell.value.reduce((total, item) => total + item.price * item.sellAmt, 0)
+);
 
 const changeSelection = () => {
   router.push({ name: 'market', query: { type: currentSelection.value } });
@@ -198,6 +213,8 @@ const refresh = async () => {
 // This needs a double check server side, as the item being sold might be 
 // consumed while selling.
 const sellItems = async () => {
+  if (!canSellItems.value) return;
+
   errorStr.value = '';
   sellMsg.value = '';
 
