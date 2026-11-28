@@ -328,7 +328,7 @@ export const recruitUpkeep = (mage: Mage) => {
 
 export const unitUpkeep = (unitId: string, activeEffects: ActiveEffect[]) => {
   const u = getUnitById(unitId);
-  const upkeep = _.cloneDeep(u.upkeepCost);
+  const upkeep = structuredClone(u.upkeepCost);
 
   for (const activeEffect of activeEffects) {
     for (const effect of activeEffect.effects as ArmyUpkeepEffect[]) {

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { allowedEffect as E } from "shared/src/common";
 import type { Mage } from 'shared/src/mage';
 import { getAllUniqueItems, getItemById, getSkillById, getSpellById } from "./base/references";
@@ -133,7 +132,7 @@ export const getActiveEffectsForBattle = (
 
 
 const applySkillLevelToEffect = (effect: Effect, level: number) => {
-  const effectClone = _.cloneDeep(effect);
+  const effectClone = structuredClone(effect);
   if (effectClone.effectType === E.BattleEffect || effectClone.effectType === E.PrebattleEffect) {
     return applySkillLevelToBattleEffect(effectClone as any, level);
   }

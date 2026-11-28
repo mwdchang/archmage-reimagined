@@ -33,8 +33,8 @@ export const getAllSkills = () => {
   return _.cloneDeep([...skillMap.values()]);
 }
 
-export const getSkillById = (id: string) => {
-  return _.cloneDeep(skillMap.get(id));
+export const getSkillById = (id: string): Readonly<Skill> => {
+  return skillMap.get(id);
 }
 
 const maxSpellLevels: Record<AllowedMagic, number> = Object.fromEntries(
@@ -59,8 +59,8 @@ export const getUnitById = (id: string): Unit => {
   return _.cloneDeep(unit);
 }
 
-export const getAllUnits = (): Unit[] => {
-  return _.clone([...unitMap.values()]);
+export const getAllUnits = (): Readonly<Unit[]> => {
+  return [...unitMap.values()];
 }
 
 export const getRecruitableUnits = (magic: string): Unit[] => {
@@ -91,14 +91,14 @@ export const loadSpellData = (spells: Spell[]) => {
   }
 }
 
-export const getSpellById = (id: string): Spell => {
+export const getSpellById = (id: string): Readonly<Spell> => {
   const spell = spellMap.get(id);
   if (!spell) throw new Error(`Cannot find spell ${id}`);
-  return _.cloneDeep(spell);
+  return spell;
 }
 
-export const getAllSpells = (): Spell[] => {
-  return _.cloneDeep(spellList);
+export const getAllSpells = (): Readonly<Spell[]> => {
+  return spellList;
 };
 
 export const loadItemData = (items: Item[]) => {
@@ -113,10 +113,10 @@ export const loadItemData = (items: Item[]) => {
   }
 }
 
-export const getItemById = (id: string): Item => {
+export const getItemById = (id: string): Readonly<Item> => {
   const item = itemMap.get(id);
   if (!item) throw new Error(`Cannot find item ${id}`);
-  return _.cloneDeep(item);
+  return item;
 }
 
 export const getAllLesserItems = (): Item[] => {
@@ -182,11 +182,11 @@ export const initializeResearchTree = () => {
 }
 
 export const getResearchTree = () => {
-  return _.cloneDeep(researchTree);
+  return structuredClone(researchTree);
 }
 
-export const getMaxSpellLevels = () => {
-  return _.clone(maxSpellLevels);
+export const getMaxSpellLevels = (): Readonly<Record<AllowedMagic, number>> => {
+  return maxSpellLevels;
 }
 
 // For debugging

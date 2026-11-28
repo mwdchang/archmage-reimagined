@@ -472,8 +472,8 @@ export const successPillage = (attacker: Combatant, defender: Combatant) => {
 
   const attackingArmy = prepareBattleStack(attacker.army, 'attacker');
   const defendingArmy = prepareBattleStack(defender.army, 'defender');
-  battleReport.attacker.army = _.cloneDeep(attackingArmy);
-  battleReport.defender.army = _.cloneDeep(defendingArmy);
+  battleReport.attacker.army = structuredClone(attackingArmy);
+  battleReport.defender.army = structuredClone(defendingArmy);
 
 
   const pillageStack = attacker.army[0];
@@ -751,8 +751,8 @@ export const battle = (battleType: string, attacker: Combatant, defender: Combat
   const battleOrders = calcBattleOrders(attackingArmy, defendingArmy);
 
   // FIXME: early damage already calculated so size not accurate
-  battleReport.attacker.army = _.cloneDeep(attackingArmy);
-  battleReport.defender.army = _.cloneDeep(defendingArmy);
+  battleReport.attacker.army = structuredClone(attackingArmy);
+  battleReport.defender.army = structuredClone(defendingArmy);
 
   console.log('=== Engagement ===');
   for (let i = 0; i < battleOrders.length; i++) {
@@ -1357,7 +1357,7 @@ export const resolveBattle = (attacker: Mage, defender: Mage, battleReport: Batt
   Object.keys(landResult.landGain).forEach(key => {
     attacker[key] += landResult.landGain[key];
   });
-  battleReport.landResult = _.cloneDeep(landResult);
+  battleReport.landResult = structuredClone(landResult);
 
   if (defender.forts <= 0) {
     defender.status = 'defeated';

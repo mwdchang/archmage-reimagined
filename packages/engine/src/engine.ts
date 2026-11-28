@@ -901,14 +901,14 @@ class Engine {
     mage.currentResearch[magic].active = true;
     mage.focusResearch = focus;
 
-    const before = _.cloneDeep(mage.spellbook);
+    const before = structuredClone(mage.spellbook);
     for (let i = 0; i < turns; i++) {
       doResearch(mage, researchPoints(mage));
       await this.useTurn(mage);
     }
 
     // Calculate new spells gained, if any
-    const after = _.cloneDeep(mage.spellbook);
+    const after = structuredClone(mage.spellbook);
     const learnedSpells: { [key: string]: string[] } = {};
     const keys = Object.keys(after);
     for (const key of keys) {
@@ -1506,7 +1506,7 @@ class Engine {
   }
 
   async setAssignment(mage: Mage, payload: Assignment) {
-    mage.assignment = _.cloneDeep(payload);
+    mage.assignment = structuredClone(payload);
     await this.adapter.updateMage(mage);
   }
 
@@ -1846,7 +1846,7 @@ class Engine {
           return d.spellId === enchantment.spellId;
         });
         if (!existingEnchantment) {
-          defenderMage.enchantments.push(_.cloneDeep(enchantment));
+          defenderMage.enchantments.push(structuredClone(enchantment));
         }
       }
     });
@@ -1858,7 +1858,7 @@ class Engine {
           return d.spellId === enchantment.spellId;
         });
         if (!existingEnchantment) {
-          mage.enchantments.push(_.cloneDeep(enchantment));
+          mage.enchantments.push(structuredClone(enchantment));
         }
       }
     });
@@ -2101,7 +2101,7 @@ class Engine {
   }
 
   async getGameTable() {
-    return _.clone(gameTable);
+    return structuredClone(gameTable);
   }
 
   // === Market related APIs ===
